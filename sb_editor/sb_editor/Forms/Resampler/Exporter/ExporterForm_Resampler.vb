@@ -1,7 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.IO
+Imports System.Runtime.InteropServices
 Imports EngineXMarkersTool
-Imports MusxBuilder
 Imports NAudio.Wave
 
 Partial Public Class ExporterForm
@@ -11,6 +11,13 @@ Partial Public Class ExporterForm
     ReadOnly waveFunctions As New WaveFunctions
     Private ReadOnly textFileReaders As New FileParsers
     Private ReadOnly textFileWritters As New FileWriters
+
+    '*===============================================================================================
+    '* DLL FUNCTIONS
+    '*===============================================================================================
+    <DllImport("SystemFiles\\EuroSound_Utils.dll", CallingConvention:=CallingConvention.Cdecl)>
+    Friend Shared Sub BuildStreamFile(binFilePath As String, lutFilePath As String, outputFilePath As String, bigEndian As Boolean)
+    End Sub
 
     '*===============================================================================================
     '* MAIN METHOD
@@ -317,8 +324,6 @@ Partial Public Class ExporterForm
     End Sub
 
     Private Sub GenerateStreamFile(resampleForPlaforms As String(), streamslist As String(), e As DoWorkEventArgs)
-        Dim musxBuilder As New MusxStreamFile
-
         'Get items count
         Dim streamsCount = streamslist.Length - 1
 
@@ -371,7 +376,12 @@ Partial Public Class ExporterForm
 
                     'Create Stream File
                     BuildTemporalFile(streamsCount, streamsFolder, outputFolder)
-                    musxBuilder.BuildFinalFile(fullDirPath, fso.BuildPath(outputFolder, "STREAMS.bin"), fso.BuildPath(outputFolder, "STREAMS.lut"))
+                    If StrComp(outPlatform, "GameCube") = 0 Then
+                        BuildStreamFile(fso.BuildPath(outputFolder, "STREAMS.bin"), fso.BuildPath(outputFolder, "STREAMS.lut"), fso.BuildPath(outputFolder, "HC" & Hex(&HFFFF).PadLeft(6, "0"c) & ".SFX"), True)
+                    Else
+                        BuildStreamFile(fso.BuildPath(outputFolder, "STREAMS.bin"), fso.BuildPath(outputFolder, "STREAMS.lut"), fso.BuildPath(outputFolder, "HC" & Hex(&HFFFF).PadLeft(6, "0"c) & ".SFX"), False)
+                    End If
+
                 End If
             End If
         Next

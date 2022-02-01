@@ -1,6 +1,11 @@
-﻿Imports System.IO
+﻿Imports System.Globalization
+Imports System.IO
+Imports NAudio.Wave
 
 Partial Public Class MusicsExporter
+    '*===============================================================================================
+    '* GET OUTPUT FOLDER (DEPENDING OF THE HASHCODE)
+    '*===============================================================================================
     Private Function GetOutputFolder(fileHashCode As UInteger, currentPlatform As String) As String
         Dim folderNumber = (fileHashCode And &HF0) >> 4
         Dim markersFilePath As String = fso.BuildPath(WorkingDirectory, "TempOutputFolder\" & currentPlatform & "\Music\" & "MFX_" & folderNumber)
@@ -8,6 +13,9 @@ Partial Public Class MusicsExporter
         Return markersFilePath
     End Function
 
+    '*===============================================================================================
+    '* MERGE CHANNELS (CREATES THE .SSD FILE)
+    '*===============================================================================================
     Private Sub MergeChannels(leftChannelFile As String, rightChannelFile As String, interleave_block_size As Integer, outputFilePath As String)
         Dim IndexLC As Integer = 0
         Dim IndexRC As Integer = 0
@@ -37,4 +45,33 @@ Partial Public Class MusicsExporter
         Next
         File.WriteAllBytes(outputFilePath, interleavedData)
     End Sub
+
+    '*===============================================================================================
+    '* GET DATA FOR MFX_DATA FILE
+    '*===============================================================================================
+    'Use dot instead of comma for numbers
+    Dim provider As New NumberFormatInfo With {
+            .NumberDecimalSeparator = "."
+    }
+
+    Private Function GetMfxDataDict() As Dictionary(Of UInteger, String())
+        Dim dictionaryData As New Dictionary(Of UInteger, String())
+
+        'Dictionary Data
+        For Each rowData As KeyValuePair(Of String, UInteger) In hashCodesCollection
+            Dim filePath As String = fso.BuildPath(WorkingDirectory, "Music\" & rowData.Key & ".wav")
+            Using waveReader As New WaveFileReader(filePath)
+                Dim duration As Single = (waveReader.Length / waveReader.WaveFormat.AverageBytesPerSecond) + 0.0
+                Dim stringDuration As String
+                If duration Mod 1 = 0 Then
+                    stringDuration = duration.ToString("F1", provider)
+                Else
+                    stringDuration = duration.ToString("G7", provider)
+                End If
+                dictionaryData.Add(rowData.Value, New String() {stringDuration & "f", "FALSE"})
+            End Using
+        Next
+
+        Return dictionaryData
+    End Function
 End Class

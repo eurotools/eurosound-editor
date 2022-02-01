@@ -412,10 +412,6 @@
       <Project>{2b01bdae-6e12-47ff-805f-a4818e66adc1}</Project>
       <Name>RecentFilesMenu</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\dll\SoundBankBuilder\MusxFilesBuilder.vbproj">
-      <Project>{13cf5d69-471d-4743-aba2-6939709e5222}</Project>
-      <Name>MusxFilesBuilder</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Scripting">

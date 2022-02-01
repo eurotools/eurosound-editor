@@ -12,6 +12,7 @@ extern "C"
 	//-------------------------------------------------------------------------------------------------------------------------------
 	u32 GetMusicLoopOffsetPCandGC(u32 baseLoopOffset)
 	{
+		// 1.378125 comes from 44100/32000
 		double ruleOfThree = baseLoopOffset / 1.378125;
 		u32 multiplyRounded = (u32)round(ruleOfThree) * 4;
 		return multiplyRounded;

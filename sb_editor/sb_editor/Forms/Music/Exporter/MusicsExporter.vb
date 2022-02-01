@@ -1,7 +1,7 @@
 ﻿Imports System.IO
+Imports System.Runtime.InteropServices
 Imports EngineXMarkersTool
 Imports HashTablesBuilder
-Imports MusxBuilder
 
 Partial Public Class MusicsExporter
     '*===============================================================================================
@@ -14,6 +14,13 @@ Partial Public Class MusicsExporter
     Private ReadOnly parentMusicForm As MusicMaker
     Private ReadOnly hashTablesFunctions As New MfxDefines
     Private ReadOnly hashCodesCollection As SortedDictionary(Of String, UInteger)
+
+    '*===============================================================================================
+    '* DLL FUNCTIONS
+    '*===============================================================================================
+    <DllImport("SystemFiles\\EuroSound_Utils.dll", CallingConvention:=CallingConvention.Cdecl)>
+    Friend Shared Sub BuildMusicFile(soundMarkerFile As String, soundSampleData As String, filePath As String, hashcode As UInteger, bigEndian As Boolean)
+    End Sub
 
     '*===============================================================================================
     '* FORM EVENTS
@@ -175,7 +182,6 @@ Partial Public Class MusicsExporter
         'Create MusX Files
         Invoke(Sub() ProgressBar1.Value = 0)
         counter = 0
-        Dim musicFunctions As New MusxMusicFile
         'Read properties file
         Dim propsFile = textFileReaders.ReadPropertiesFile(SysFileProperties)
         'Update listview
@@ -203,7 +209,11 @@ Partial Public Class MusicsExporter
                         Dim musxFilename As String = "HCE" & Hex(musicHashCode).PadLeft(5, "0"c) & ".SFX"
                         'Create final file
                         Dim fullDirPath = Path.Combine(propsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder(currentPlatform), "music", musxFilename)
-                        musicFunctions.BuildFinalFile(soundMarkerFile, soundSampleData, fullDirPath, musicHashCode, False)
+                        If StrComp(outputPlatforms(index), "GameCube") = 0 Then
+                            BuildMusicFile(soundMarkerFile, soundSampleData, fullDirPath, musicHashCode, True)
+                        Else
+                            BuildMusicFile(soundMarkerFile, soundSampleData, fullDirPath, musicHashCode, False)
+                        End If
                         'Update progress bar
                         counter += 1
                         BackgroundWorker.ReportProgress(counter)
@@ -215,8 +225,8 @@ Partial Public Class MusicsExporter
         'Create Music HashCodes
         Invoke(Sub() ProgressBar1.Value = 0)
         counter = 0
-        Dim testHashTableFilePath As String = fso.BuildPath(propsFile.MiscProps.HashCodeFileFolder, "MFX_Defines.h")
-        hashTablesFunctions.CreateMfxHashTable(testHashTableFilePath, hashCodesCollection)
+        Dim musicDefinesFilePath As String = fso.BuildPath(propsFile.MiscProps.HashCodeFileFolder, "MFX_Defines.h")
+        hashTablesFunctions.CreateMfxHashTable(musicDefinesFilePath, hashCodesCollection)
         For Each musicItem As DataRow In outputQueue.Rows
             'Check for cancellation
             If BackgroundWorker.CancellationPending Then
@@ -227,7 +237,7 @@ Partial Public Class MusicsExporter
                 Dim jumpMarkersFilePath As String = fso.BuildPath(WorkingDirectory, "Music\ESWork\" & musicItem.ItemArray(0) & ".jmp")
                 Dim jumpHashCodes As String() = textFileReaders.ReadJumpFile(jumpMarkersFilePath)
                 'Append data
-                FileOpen(1, testHashTableFilePath, OpenMode.Append)
+                FileOpen(1, musicDefinesFilePath, OpenMode.Append)
                 PrintLine(1, "")
                 PrintLine(1, "// Music Jump Codes For Level MFX_" & musicItem.ItemArray(0))
                 For jumpHashCode As Integer = 0 To jumpHashCodes.Length - 1
@@ -243,6 +253,11 @@ Partial Public Class MusicsExporter
                 BackgroundWorker.ReportProgress(counter)
             End If
         Next
+
+        'Create MFX Data
+        Dim dataDictionary As Dictionary(Of UInteger, String()) = GetMfxDataDict()
+        Dim musicDataFilePath As String = fso.BuildPath(propsFile.MiscProps.HashCodeFileFolder, "MFX_Data.h")
+        hashTablesFunctions.CreateMfxData(musicDataFilePath, dataDictionary)
         watch.Stop()
         Invoke(Sub() parentMusicForm.TextBox_OutputTime.Text = "Output Time = " & watch.ElapsedTicks)
     End Sub
