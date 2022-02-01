@@ -1,0 +1,439 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\ILMerge.3.0.41\build\ILMerge.props" Condition="Exists('..\packages\ILMerge.3.0.41\build\ILMerge.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{97B19F35-03A3-4422-A360-632419E2551F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>sb_editor.Program</StartupObject>
+    <RootNamespace>sb_editor</RootNamespace>
+    <AssemblyName>sb_editor</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>..\..\OutputFolder\Debug\</OutputPath>
+    <DocumentationFile>sb_editor.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>none</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\OutputFolder\Release\</OutputPath>
+    <DocumentationFile>sb_editor.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>EuroSoundIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic.Compatibility" />
+    <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classes\Debug\MyTraceListener.vb" />
+    <Compile Include="Files Functions\Objects\MfxFile.vb" />
+    <Compile Include="Files Functions\Readers\FileParsers_JumpHashCodes.vb" />
+    <Compile Include="Files Functions\Readers\FileParsers_SamplesFile.vb" />
+    <Compile Include="Files Functions\Readers\Music\FileParsers_MfxFile.vb" />
+    <Compile Include="Files Functions\Writers\FileWriters_MfxFile.vb" />
+    <Compile Include="Files Functions\Writers\FileWriters_SamplesFile.vb" />
+    <Compile Include="Forms\About.Designer.vb">
+      <DependentUpon>About.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\About.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Classes\GenericFunctions.vb" />
+    <Compile Include="Custom Controls\MultiSelListBox.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Files Functions\Readers\FileParsers.vb" />
+    <Compile Include="Files Functions\Readers\FileParsers_DataBases.vb" />
+    <Compile Include="Files Functions\Readers\FileParsers_ProjectFile.vb" />
+    <Compile Include="Files Functions\Readers\FileParsers_PropertiesFile.vb" />
+    <Compile Include="Files Functions\Readers\FileParsers_ReadMiscFile.vb" />
+    <Compile Include="Files Functions\Readers\FileParsers_RefineList.vb" />
+    <Compile Include="Files Functions\Readers\FileParsers_SFXs.vb" />
+    <Compile Include="Files Functions\Readers\FileParsers_SoundBanks.vb" />
+    <Compile Include="Files Functions\Objects\DataBaseFile.vb" />
+    <Compile Include="Files Functions\Objects\FileHeader.vb" />
+    <Compile Include="Files Functions\Objects\ProjectFile.vb" />
+    <Compile Include="Files Functions\Objects\PropertiesFile.vb" />
+    <Compile Include="Files Functions\Objects\SfxFile.vb" />
+    <Compile Include="Files Functions\Objects\SoundbankFile.vb" />
+    <Compile Include="Files Functions\Writers\FileWriters_DataBase.vb" />
+    <Compile Include="Files Functions\Writers\FileWriters_Misc.vb" />
+    <Compile Include="Files Functions\Writers\FileWriters_ProjectFile.vb" />
+    <Compile Include="Files Functions\Writers\FileWriters_Properties.vb" />
+    <Compile Include="Files Functions\Writers\FileWriters_RefineList.vb" />
+    <Compile Include="Files Functions\Writers\FileWriters_Sfx.vb" />
+    <Compile Include="Files Functions\Writers\FileWriters_SfxDefaults.vb" />
+    <Compile Include="Files Functions\Writers\FileWriters_Soundbanks.vb" />
+    <Compile Include="Forms\Debug Watcher\DebugConsole.Designer.vb">
+      <DependentUpon>DebugConsole.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Debug Watcher\DebugConsole.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Debug Watcher\GlobalVariablesWatcher.Designer.vb">
+      <DependentUpon>GlobalVariablesWatcher.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Debug Watcher\GlobalVariablesWatcher.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Resampler\Exporter\ExporterForm.Designer.vb">
+      <DependentUpon>ExporterForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Resampler\Exporter\ExporterForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Resampler\Exporter\ExporterForm_Resampler.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Music\Maker\MusicMaker.Designer.vb">
+      <DependentUpon>MusicMaker.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Music\Maker\MusicMaker.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Music\Maker\MusicMaker_Methods.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Music\Exporter\MusicsExporter.Designer.vb">
+      <DependentUpon>MusicsExporter.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Music\Exporter\MusicsExporter.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Music\Exporter\MusicsExporter_Methods.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Properties Forms\DataBase_Properties.Designer.vb">
+      <DependentUpon>DataBase_Properties.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Properties Forms\DataBase_Properties.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Properties Forms\Project Properties\Project_Properties_Methods.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Resampler\Exporter\ExporterForm_StreamFiles.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Resampler\ResampleForm.Designer.vb">
+      <DependentUpon>ResampleForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Resampler\ResampleForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Resampler\ResampleForm_Methods.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Samples\MissingSamples.Designer.vb">
+      <DependentUpon>MissingSamples.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Samples\MissingSamples.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Samples\NewSamples.Designer.vb">
+      <DependentUpon>NewSamples.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Samples\NewSamples.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SetMaxBankSize.Designer.vb">
+      <DependentUpon>SetMaxBankSize.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SetMaxBankSize.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MainFrame\MainFrame_Methods.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Exporters\EXObjects\EXAudio.vb" />
+    <Compile Include="Exporters\EXObjects\EXSample.vb" />
+    <Compile Include="Exporters\EXObjects\EXSound.vb" />
+    <Compile Include="Forms\MainFrame\MainFrame.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MainFrame\MainFrame.Designer.vb">
+      <DependentUpon>MainFrame.vb</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Classes\GlobalVariables.vb" />
+    <Compile Include="Forms\MainFrame\MainFrame_Project.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MainFrame\MainFrame_TreeView.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Sfx Editor\Frm_SfxEditor.Designer.vb">
+      <DependentUpon>Frm_SfxEditor.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Sfx Editor\Frm_SfxEditor.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Sfx Editor\Frm_SfxEditor_Methods.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Custom Controls\SfxControl.Designer.vb">
+      <DependentUpon>SfxControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Custom Controls\SfxControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Forms\Properties Forms\Project Properties\Project_Properties.Designer.vb">
+      <DependentUpon>Project_Properties.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Properties Forms\Project Properties\Project_Properties.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Properties Forms\SFX_Properties.Designer.vb">
+      <DependentUpon>SFX_Properties.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Properties Forms\SFX_Properties.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Properties Forms\Soundbank_Properties.Designer.vb">
+      <DependentUpon>Soundbank_Properties.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Properties Forms\Soundbank_Properties.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Sfx Editor\Sfx Default\SfxDefault.Designer.vb">
+      <DependentUpon>SfxDefault.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Sfx Editor\Sfx Default\SfxDefault.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Sfx Editor\HashCodesList.Designer.vb">
+      <DependentUpon>HashCodesList.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Sfx Editor\HashCodesList.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Classes\WaveFunctions.vb" />
+    <Compile Include="Program.vb" />
+    <Compile Include="Forms\SplashScreen.Designer.vb">
+      <DependentUpon>SplashScreen.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SplashScreen.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Custom Controls\UserControl_SFXs.Designer.vb">
+      <DependentUpon>UserControl_SFXs.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Custom Controls\UserControl_SFXs.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\About.resx">
+      <DependentUpon>About.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Debug Watcher\DebugConsole.resx">
+      <DependentUpon>DebugConsole.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Debug Watcher\GlobalVariablesWatcher.resx">
+      <DependentUpon>GlobalVariablesWatcher.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Resampler\Exporter\ExporterForm.resx">
+      <DependentUpon>ExporterForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Music\Maker\MusicMaker.resx">
+      <DependentUpon>MusicMaker.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Music\Exporter\MusicsExporter.resx">
+      <DependentUpon>MusicsExporter.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Properties Forms\DataBase_Properties.resx">
+      <DependentUpon>DataBase_Properties.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Samples\MissingSamples.resx">
+      <DependentUpon>MissingSamples.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Samples\NewSamples.resx">
+      <DependentUpon>NewSamples.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SetMaxBankSize.resx">
+      <DependentUpon>SetMaxBankSize.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MainFrame\MainFrame.resx">
+      <DependentUpon>MainFrame.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Sfx Editor\Frm_SfxEditor.resx">
+      <DependentUpon>Frm_SfxEditor.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Custom Controls\SfxControl.resx">
+      <DependentUpon>SfxControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Properties Forms\Project Properties\Project_Properties.resx">
+      <DependentUpon>Project_Properties.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Properties Forms\SFX_Properties.resx">
+      <DependentUpon>SFX_Properties.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Properties Forms\Soundbank_Properties.resx">
+      <DependentUpon>Soundbank_Properties.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Resampler\ResampleForm.resx">
+      <DependentUpon>ResampleForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Sfx Editor\Sfx Default\SfxDefault.resx">
+      <DependentUpon>SfxDefault.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Sfx Editor\HashCodesList.resx">
+      <DependentUpon>HashCodesList.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SplashScreen.resx">
+      <DependentUpon>SplashScreen.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Custom Controls\UserControl_SFXs.resx">
+      <DependentUpon>UserControl_SFXs.vb</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\app.manifest" />
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="EuroSoundIcon.ico" />
+    <None Include="Resources\ChristmasTree.cur" />
+    <None Include="Resources\arrow_left.cur" />
+    <None Include="Resources\lang_english.cur" />
+    <None Include="Resources\arrow_right.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\dll\listview-col_sort_click\ListView_ColumnSortingClickVb\ListView_ColumnSortingClickVb.vbproj">
+      <Project>{93164b1d-479a-470b-b090-86c8506522bd}</Project>
+      <Name>ListView_ColumnSortingClickVb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\dll\EngineXMarkersTool\ExMarkersTool.csproj">
+      <Project>{976e04c9-6b03-43f4-8cd5-3d1e8da18095}</Project>
+      <Name>ExMarkersTool</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\dll\HashTablesBuilder\HashTablesBuilder.vbproj">
+      <Project>{7b4c1a2b-58b7-495b-a237-513559ade26b}</Project>
+      <Name>HashTablesBuilder</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\dll\IniFile\IniFileFunctions.vbproj">
+      <Project>{37ceff5c-0be8-44da-ada0-7e176f09e5c7}</Project>
+      <Name>IniFileFunctions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\dll\MostRecentFilesMenu\RecentFilesMenu.csproj">
+      <Project>{2b01bdae-6e12-47ff-805f-a4818e66adc1}</Project>
+      <Name>RecentFilesMenu</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\dll\SoundBankBuilder\MusxFilesBuilder.vbproj">
+      <Project>{13cf5d69-471d-4743-aba2-6939709e5222}</Project>
+      <Name>MusxFilesBuilder</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Scripting">
+      <Guid>{420B2830-E718-11CF-893D-00A0C9054228}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\ILMerge.3.0.41\build\ILMerge.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILMerge.3.0.41\build\ILMerge.props'))" />
+  </Target>
+</Project>

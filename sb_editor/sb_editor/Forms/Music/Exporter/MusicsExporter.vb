@@ -1,0 +1,289 @@
+﻿Imports System.IO
+Imports EngineXMarkersTool
+Imports HashTablesBuilder
+Imports MusxBuilder
+
+Partial Public Class MusicsExporter
+    '*===============================================================================================
+    '* GLOBAL VARIABLES 
+    '*===============================================================================================
+    Private ReadOnly outputQueue As DataTable
+    Private ReadOnly outputPlatforms As String()
+    Private ReadOnly MarkerFileOnly As Boolean
+    Private ReadOnly textFileReaders As New FileParsers
+    Private ReadOnly parentMusicForm As MusicMaker
+    Private ReadOnly hashTablesFunctions As New MfxDefines
+    Private ReadOnly hashCodesCollection As SortedDictionary(Of String, UInteger)
+
+    '*===============================================================================================
+    '* FORM EVENTS
+    '*===============================================================================================
+    Sub New(outputFileList As DataTable, outputFormats As String(), onlyMarkerFile As Boolean, parentForm As MusicMaker, hashCodesDict As SortedDictionary(Of String, UInteger))
+        ' Esta llamada es exigida por el diseñador.
+        InitializeComponent()
+
+        ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
+        outputQueue = outputFileList
+        outputPlatforms = outputFormats
+        MarkerFileOnly = onlyMarkerFile
+        parentMusicForm = parentForm
+        hashCodesCollection = hashCodesDict
+
+        'Custom cursors
+        Cursor = New Cursor(New MemoryStream(My.Resources.ChristmasTree))
+    End Sub
+
+    Private Sub MusicsExporter_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        'Hide parent form
+        parentMusicForm.Hide()
+
+        'Start process
+        If Not BackgroundWorker.IsBusy Then
+            BackgroundWorker.RunWorkerAsync()
+        End If
+    End Sub
+
+    '*===============================================================================================
+    '* BACKGROUND WORKER EVENTS
+    '*===============================================================================================
+    Private Sub BackgroundWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker.DoWork
+        'Update form title
+        Invoke(Sub() Text = "Waiting")
+
+        'Call libs
+        Dim markersFunctions As New ExMarkersTool
+
+        'Create ESWork folder if required
+        Dim waveOutputFolder As String = fso.BuildPath(WorkingDirectory, "Music\ESWork")
+        CreateFolderIfNotExists(waveOutputFolder)
+
+        'Calculate execution time
+        Dim watch = Stopwatch.StartNew
+
+        'Create Music Stream (.ssd)
+        Invoke(Sub() ProgressBar1.Maximum = outputQueue.Rows.Count * outputPlatforms.Length)
+        Invoke(Sub() ProgressBar1.Value = 0)
+        Dim counter = 0
+        If Not MarkerFileOnly Then
+            For Each musicItem As DataRow In outputQueue.Rows
+                'Check for cancellation
+                If BackgroundWorker.CancellationPending Then
+                    e.Cancel = True
+                    Exit For
+                Else
+                    'Get music files path
+                    Dim waveFilePath As String = fso.BuildPath(WorkingDirectory, "Music\" & musicItem.ItemArray(0) & ".wav")
+                    'Split Wave channels with SoX (PC & GC)
+                    For index As Integer = 0 To outputPlatforms.Length - 1
+                        'Check for cancellation
+                        If BackgroundWorker.CancellationPending Then
+                            e.Cancel = True
+                            Exit For
+                        Else
+                            'Get the current platform
+                            Dim musicHashCode As Integer = musicItem.ItemArray(2)
+                            Dim currentPlatform As String = outputPlatforms(index)
+                            Dim soundSampleData As String = fso.BuildPath(GetOutputFolder(musicHashCode, currentPlatform), "MFX_" & musicHashCode & ".ssd")
+                            Invoke(Sub() Text = "Making Music Stream: " & musicItem.ItemArray(0) & " for " & currentPlatform)
+                            If StrComp(currentPlatform, "PC") = 0 Or StrComp(currentPlatform, "GameCube") = 0 Then
+                                Dim PcOutLeft As String = fso.BuildPath(waveOutputFolder, musicItem.ItemArray(0)) & "_L.ima"
+                                Dim PcOutRight As String = fso.BuildPath(waveOutputFolder, musicItem.ItemArray(0)) & "_R.ima"
+                                'Split channels
+                                RunProcess("SystemFiles\Sox.exe", """" & waveFilePath & """ -t ima -r 32000 """ & PcOutLeft & """ remix 1")
+                                RunProcess("SystemFiles\Sox.exe", """" & waveFilePath & """ -t ima -r 32000 """ & PcOutRight & """ remix 2")
+                                'Music Stream (.ssd)
+                                MergeChannels(PcOutLeft, PcOutRight, 1, soundSampleData)
+                            End If
+                            If StrComp(currentPlatform, "PlayStation2") = 0 Then
+                                Dim Ps2OutLeft As String = fso.BuildPath(waveOutputFolder, musicItem.ItemArray(0)) & "_L.wav"
+                                Dim Ps2OutRight As String = fso.BuildPath(waveOutputFolder, musicItem.ItemArray(0)) & "_R.wav"
+                                'Split channels
+                                RunProcess("SystemFiles\Sox.exe", """" & waveFilePath & """ -t wav -r 32000 """ & Ps2OutLeft & """ remix 1")
+                                RunProcess("SystemFiles\Sox.exe", """" & waveFilePath & """ -t wav -r 32000 """ & Ps2OutRight & """ remix 2")
+                                'Vag Tool
+                                Dim ps2VagL As String = fso.BuildPath(waveOutputFolder, musicItem.ItemArray(0)) & "_L.vag"
+                                Dim ps2VagR As String = fso.BuildPath(waveOutputFolder, musicItem.ItemArray(0)) & "_R.vag"
+                                RunProcess("SystemFiles\VagCodec.exe", """" & Ps2OutLeft & """ """ & ps2VagL & """")
+                                RunProcess("SystemFiles\VagCodec.exe", """" & Ps2OutRight & """ """ & ps2VagR & """")
+                                'Music Stream (.ssd)
+                                MergeChannels(ps2VagL, ps2VagR, 128, soundSampleData)
+                            End If
+                            If StrComp(currentPlatform, "X Box") = 0 Then
+                                Dim XboxOutLeft As String = fso.BuildPath(waveOutputFolder, musicItem.ItemArray(0)) & "_XbL.wav"
+                                Dim XboxOutRight As String = fso.BuildPath(waveOutputFolder, musicItem.ItemArray(0)) & "_XbR.wav"
+                                'Split Channels
+                                RunProcess("SystemFiles\Sox.exe", """" & waveFilePath & """ -t wav -r 44100 """ & XboxOutLeft & """ remix 1")
+                                RunProcess("SystemFiles\Sox.exe", """" & waveFilePath & """ -t wav -r 44100 """ & XboxOutRight & """ remix 2")
+                                'Xbox Tool
+                                Dim xbxVagL As String = fso.BuildPath(waveOutputFolder, musicItem.ItemArray(0)) & "_L.adpcm"
+                                Dim xbxVagR As String = fso.BuildPath(waveOutputFolder, musicItem.ItemArray(0)) & "_R.adpcm"
+                                RunProcess("SystemFiles\XboxCodec.exe", "Encode """ & XboxOutLeft & """ """ & xbxVagL & """")
+                                RunProcess("SystemFiles\XboxCodec.exe", "Encode """ & XboxOutRight & """ """ & xbxVagR & """")
+                                MergeChannels(xbxVagL, xbxVagR, 4, soundSampleData)
+                            End If
+                            'Update progress bar
+                            counter += 1
+                            BackgroundWorker.ReportProgress(counter)
+                        End If
+                    Next
+                End If
+            Next
+        End If
+
+        'Create Marker Files (.smf)
+        Invoke(Sub() ProgressBar1.Value = 0)
+        counter = 0
+        For Each musicItem As DataRow In outputQueue.Rows
+            'Check for cancellation
+            If BackgroundWorker.CancellationPending Then
+                e.Cancel = True
+                Exit For
+            Else
+                Invoke(Sub() Text = "Making Marker File: " & musicItem.ItemArray(0))
+                For index As Integer = 0 To outputPlatforms.Length - 1
+                    'Check for cancellation
+                    If BackgroundWorker.CancellationPending Then
+                        e.Cancel = True
+                        Exit For
+                    Else
+                        'Get the current platform
+                        Dim currentPlatform As String = outputPlatforms(index)
+                        Dim musicHashCode As Integer = musicItem.ItemArray(2)
+                        'Get file data and output path
+                        Dim outputFilePath As String = GetOutputFolder(musicHashCode, currentPlatform)
+                        'Get Common files paths and create the jump maker file
+                        Dim jumpMarkersFile As String = fso.BuildPath(waveOutputFolder, musicItem.ItemArray(0) & ".jmp")
+                        Dim soundMarkerFile As String = fso.BuildPath(outputFilePath, "MFX_" & musicHashCode & ".smf")
+                        'Get Marker file path
+                        Dim mrkFilePath As String = fso.BuildPath(WorkingDirectory, "Music\" & musicItem.ItemArray(0) & ".mrk")
+                        If StrComp(currentPlatform, "PC") = 0 Or StrComp(currentPlatform, "GameCube") = 0 Then
+                            'Get Ima files
+                            Dim PcOutLeft As String = fso.BuildPath(waveOutputFolder, musicItem.ItemArray(0)) & "_L.ima"
+                            Dim PcOutRight As String = fso.BuildPath(waveOutputFolder, musicItem.ItemArray(0)) & "_R.ima"
+                            markersFunctions.CreateMusicMarkers(PcOutLeft, PcOutRight, mrkFilePath, jumpMarkersFile, soundMarkerFile, currentPlatform, musicItem.ItemArray(1))
+                        Else
+                            markersFunctions.CreateMusicMarkers(Nothing, Nothing, mrkFilePath, jumpMarkersFile, soundMarkerFile, currentPlatform, musicItem.ItemArray(1))
+                        End If
+                        'Update progress bar
+                        counter += 1
+                        BackgroundWorker.ReportProgress(counter)
+                    End If
+                Next
+            End If
+        Next
+
+        'Create MusX Files
+        Invoke(Sub() ProgressBar1.Value = 0)
+        counter = 0
+        Dim musicFunctions As New MusxMusicFile
+        'Read properties file
+        Dim propsFile = textFileReaders.ReadPropertiesFile(SysFileProperties)
+        'Update listview
+        For Each musicItem As DataRow In outputQueue.Rows
+            'Check for cancellation
+            If BackgroundWorker.CancellationPending Then
+                e.Cancel = True
+                Exit For
+            Else
+                Invoke(Sub() Text = "Binding Files: " & musicItem.ItemArray(0))
+                For index As Integer = 0 To outputPlatforms.Length - 1
+                    'Check for cancellation
+                    If BackgroundWorker.CancellationPending Then
+                        e.Cancel = True
+                        Exit For
+                    Else
+                        Dim musicHashCode As Integer = musicItem.ItemArray(2)
+                        'Get the current platform
+                        Dim currentPlatform As String = outputPlatforms(index)
+                        'Get file data and output path
+                        Dim outputFilePath As String = GetOutputFolder(musicHashCode, currentPlatform)
+                        'Get output file paths
+                        Dim soundMarkerFile As String = fso.BuildPath(outputFilePath, "MFX_" & musicHashCode & ".smf")
+                        Dim soundSampleData As String = fso.BuildPath(outputFilePath, "MFX_" & musicHashCode & ".ssd")
+                        Dim musxFilename As String = "HCE" & Hex(musicHashCode).PadLeft(5, "0"c) & ".SFX"
+                        'Create final file
+                        Dim fullDirPath = Path.Combine(propsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder(currentPlatform), "music", musxFilename)
+                        musicFunctions.BuildFinalFile(soundMarkerFile, soundSampleData, fullDirPath, musicHashCode, False)
+                        'Update progress bar
+                        counter += 1
+                        BackgroundWorker.ReportProgress(counter)
+                    End If
+                Next
+            End If
+        Next
+
+        'Create Music HashCodes
+        Invoke(Sub() ProgressBar1.Value = 0)
+        counter = 0
+        Dim testHashTableFilePath As String = fso.BuildPath(propsFile.MiscProps.HashCodeFileFolder, "MFX_Defines.h")
+        hashTablesFunctions.CreateMfxHashTable(testHashTableFilePath, hashCodesCollection)
+        For Each musicItem As DataRow In outputQueue.Rows
+            'Check for cancellation
+            If BackgroundWorker.CancellationPending Then
+                e.Cancel = True
+                Exit For
+            Else
+                Invoke(Sub() Text = "Appending Jump HashCodes: " & musicItem.ItemArray(0))
+                Dim jumpMarkersFilePath As String = fso.BuildPath(WorkingDirectory, "Music\ESWork\" & musicItem.ItemArray(0) & ".jmp")
+                Dim jumpHashCodes As String() = textFileReaders.ReadJumpFile(jumpMarkersFilePath)
+                'Append data
+                FileOpen(1, testHashTableFilePath, OpenMode.Append)
+                PrintLine(1, "")
+                PrintLine(1, "// Music Jump Codes For Level MFX_" & musicItem.ItemArray(0))
+                For jumpHashCode As Integer = 0 To jumpHashCodes.Length - 1
+                    Dim jumpIndex As Short = jumpHashCode
+                    Dim mfxHashCode As Short = musicItem.ItemArray(2)
+                    Dim hashCode As UInteger = ((&H1BE And &HFFF) << 20) Or ((jumpIndex And &HFF) << 8) Or ((mfxHashCode And &HFF) << 0)
+                    Dim hashCodeLabel As String = "JMP_" & jumpHashCodes(jumpHashCode)
+                    PrintLine(1, "#define " & hashCodeLabel & " 0x" & Hex(hashCode))
+                Next
+                FileClose(1)
+                'Update progress bar
+                counter += 1
+                BackgroundWorker.ReportProgress(counter)
+            End If
+        Next
+        watch.Stop()
+        Invoke(Sub() parentMusicForm.TextBox_OutputTime.Text = "Output Time = " & watch.ElapsedTicks)
+    End Sub
+
+    Private Sub BackgroundWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker.ProgressChanged
+        ProgressBar1.Value = e.ProgressPercentage
+    End Sub
+
+    Private Sub BackgroundWorker_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker.RunWorkerCompleted
+        If e.Cancelled = False Then
+            'Update listview
+            For Each listItem As ListViewItem In parentMusicForm.ListView_MusicFiles.Items
+                If MarkerFileOnly Then
+                    listItem.SubItems(4).Text = "OK"
+                Else
+                    listItem.SubItems(4).Text = "OK"
+                    listItem.SubItems(5).Text = "OK"
+                End If
+            Next
+        End If
+
+        'Show parent form
+        parentMusicForm.Show()
+
+        'Close task form
+        Close()
+    End Sub
+
+    Private Sub MusicsExporter_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If e.CloseReason = CloseReason.UserClosing Then
+            'Check if the background worker is running
+            If BackgroundWorker.IsBusy Then
+                'Cancel form closing
+                e.Cancel = True
+                'Ask user what he wants to do
+                Dim diagRes As MsgBoxResult = MsgBox("Are you sure you want to cancel this process?", vbQuestion + vbYesNo, "Question")
+                If diagRes = MsgBoxResult.Yes Then
+                    'Cancell task
+                    BackgroundWorker.CancelAsync()
+                End If
+            End If
+        End If
+    End Sub
+End Class
