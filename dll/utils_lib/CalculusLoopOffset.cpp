@@ -13,7 +13,7 @@ extern "C"
 	u32 GetMusicLoopOffsetPCandGC(u32 baseLoopOffset)
 	{
 		double ruleOfThree = baseLoopOffset / 1.378125;
-		u32 multiplyRounded = round(ruleOfThree) * 4;
+		u32 multiplyRounded = (u32)round(ruleOfThree) * 4;
 		return multiplyRounded;
 	}
 
@@ -21,7 +21,7 @@ extern "C"
 	u32 GetMusicLoopOffsetPlayStation2(u32 baseLoopOffset)
 	{
 		u32 pcResult = GetMusicLoopOffsetPCandGC(baseLoopOffset);
-		u32 ps2Value = pcResult / 3.5;
+		u32 ps2Value = (u32)(pcResult / 3.5);
 		return ps2Value;
 	}
 
@@ -29,7 +29,7 @@ extern "C"
 	u32 GetMusicLoopOffsetXbox(u32 loopOffset)
 	{
 		double division = loopOffset / 0.88888887;
-		u32 roundedDivision = floor(division);
+		u32 roundedDivision = (u32)floor(division);
 		return roundedDivision;
 	}
 
@@ -37,7 +37,7 @@ extern "C"
 	u32 GetStreamLoopOffsetPlayStation2(u32 baseLoopOffset)
 	{
 		u32 PositionAligned = GetStreamLoopOffsetPCandGC(baseLoopOffset);
-		u32 division = PositionAligned / 3.5;
+		u32 division = (u32)(PositionAligned / 3.5);
 		return division;
 	}
 
@@ -46,7 +46,7 @@ extern "C"
 	{
 		u32 PositionAligned = GetStreamLoopOffsetPCandGC(baseLoopOffset);
 		u32 parsedLoopOffset = PositionAligned / 2;
-		u32 division = parsedLoopOffset / 1.7777777777;
+		u32 division = (u32)(parsedLoopOffset / 1.7777777777);
 		return division;
 	}
 

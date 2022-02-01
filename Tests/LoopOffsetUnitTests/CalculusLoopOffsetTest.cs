@@ -27,7 +27,7 @@ namespace LoopOffsetUnitTests
         [TestCase((uint)44444, ExpectedResult = 129000)]
         [TestCase((uint)777777, ExpectedResult = 2257492)]
         [TestCase((uint)2095108, ExpectedResult = 6081040)]
-        [DllImport("..\\..\\OutputFolder\\Debug\\SystemFiles\\EuroSound_Utils.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("EuroSound_Utils.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern uint GetMusicLoopOffsetPCandGC(uint inputLoopOffset);
 
         //Aby_Council_Int1
@@ -51,7 +51,7 @@ namespace LoopOffsetUnitTests
         [TestCase((uint)44444, ExpectedResult = 36857)]
         [TestCase((uint)777777, ExpectedResult = 644997)]
         [TestCase((uint)2095108, ExpectedResult = 1737440)]
-        [DllImport("..\\..\\OutputFolder\\Debug\\SystemFiles\\EuroSound_Utils.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("EuroSound_Utils.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern uint GetMusicLoopOffsetPlayStation2(uint inputLoopOffset);
 
         //Aby_Council_Int1
@@ -75,7 +75,7 @@ namespace LoopOffsetUnitTests
         [TestCase((uint)44444, ExpectedResult = 49999)]
         [TestCase((uint)777777, ExpectedResult = 874999)]
         [TestCase((uint)2095108, ExpectedResult = 2356996)]
-        [DllImport("..\\..\\OutputFolder\\Debug\\SystemFiles\\EuroSound_Utils.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("EuroSound_Utils.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern uint GetMusicLoopOffsetXbox(uint inputLoopOffset);
 
         [TestCase((uint)380928, ExpectedResult = 108836)]
@@ -83,7 +83,7 @@ namespace LoopOffsetUnitTests
         [TestCase((uint)262183, ExpectedResult = 74909)]
         [TestCase((uint)501759, ExpectedResult = 143360)]
         [TestCase((uint)923161, ExpectedResult = 263760)]
-        [DllImport("..\\..\\OutputFolder\\Debug\\SystemFiles\\EuroSound_Utils.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("EuroSound_Utils.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern uint GetStreamLoopOffsetPlayStation2(uint inputLoopOffset);
 
         [TestCase((uint)380928, ExpectedResult = 107136)]
@@ -91,7 +91,7 @@ namespace LoopOffsetUnitTests
         [TestCase((uint)262183, ExpectedResult = 73739)]
         [TestCase((uint)501759, ExpectedResult = 141120)]
         [TestCase((uint)923161, ExpectedResult = 259638)]
-        [DllImport("..\\..\\OutputFolder\\Debug\\SystemFiles\\EuroSound_Utils.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("EuroSound_Utils.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern uint GetStreamLoopOffsetXbox(uint inputLoopOffset);
     }
 }
