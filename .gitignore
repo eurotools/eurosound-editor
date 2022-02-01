@@ -20,6 +20,7 @@ mono_crash.*
 [Dd]ocumentation/
 [Ii]cons/
 [Oo]utput[Ff]older/
+[Oo]utput[Tt]ests/
 
 # Build results
 [Dd]ebug/

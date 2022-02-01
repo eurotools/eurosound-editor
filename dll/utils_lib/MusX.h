@@ -32,9 +32,22 @@ struct MusicBanksHeader
 	u32 FileStart3Length;
 };
 
+struct SoundBanksHeader
+{
+	u32	SFXStart;
+	u32 SFXLength;
+	u32 SampleInfoStart;
+	u32	SampleInfoLength;
+	u32	SpecialSampleInfoStart;
+	u32	SpecialSampleInfoLength;
+	u32	SampleDataStart;
+	u32	SampleDataLength;
+};
+
 //Functions to export
 DLL_EXPORT(void) BuildMusicFile(char* soundMarkerFile, char* soundSampleData, char* filePath, u32 hashcode, bool bigEndian);
 DLL_EXPORT(void) BuildStreamFile(char* binFilePath, char* lutFilePath, char* outputFilePath, bool bigEndian);
+DLL_EXPORT(void) BuildSoundbankFile(char* sfxFilePath, char* sifFilePath, char* sbFilePath, char* ssFilePath, char* outputFilePath, u32 fileHashCode, bool bigEndian);
 
 EUROSOUND_MUSX_END
 

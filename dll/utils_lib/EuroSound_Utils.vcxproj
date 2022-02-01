@@ -169,6 +169,7 @@
     </ClCompile>
     <ClCompile Include="ImaCodec.cpp" />
     <ClCompile Include="MusXBuild_MusicFile.cpp" />
+    <ClCompile Include="MusXBuild_Soundbank.cpp" />
     <ClCompile Include="MusXBuild_StreamFile.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

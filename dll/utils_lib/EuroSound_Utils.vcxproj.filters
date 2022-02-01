@@ -50,5 +50,8 @@
     <ClCompile Include="MusXBuild_StreamFile.cpp">
       <Filter>Archivos de origen\MusX</Filter>
     </ClCompile>
+    <ClCompile Include="MusXBuild_Soundbank.cpp">
+      <Filter>Archivos de origen\MusX</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
