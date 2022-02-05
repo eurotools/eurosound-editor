@@ -46,10 +46,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -64,7 +63,6 @@
   <ItemGroup>
     <Compile Include="FormatFunctions.vb" />
     <Compile Include="MfxDefines.vb" />
-    <Compile Include="SfxDebug.vb" />
     <Compile Include="SfxDefines.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">

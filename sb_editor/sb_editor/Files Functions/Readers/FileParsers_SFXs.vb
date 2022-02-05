@@ -1,6 +1,4 @@
 ﻿Imports System.ComponentModel
-Imports System.Globalization
-Imports NAudio.Wave
 
 Partial Public Class FileParsers
     '*===============================================================================================
@@ -8,11 +6,6 @@ Partial Public Class FileParsers
     '*===============================================================================================
     Public Function ReadSFXFile(textFilePath As String) As SfxFile
         Dim waveReadFunctions As New WaveFunctions
-
-        'Use dot instead of comma for numbers
-        Dim provider As New NumberFormatInfo With {
-            .NumberDecimalSeparator = "."
-        }
 
         'Create a new object to store the data
         Dim sfxObj As New SfxFile
@@ -138,9 +131,9 @@ Partial Public Class FileParsers
                                             Case "BASEVOLUME"
                                                 samplesList(SampleIndex).BaseVolume = CSByte(lineData(1))
                                             Case "PITCHOFFSET"
-                                                samplesList(SampleIndex).PitchOffset = Convert.ToDouble(lineData(1), provider)
+                                                samplesList(SampleIndex).PitchOffset = Convert.ToDouble(lineData(1), numericProvider)
                                             Case "RANDOMPITCHOFFSET"
-                                                samplesList(SampleIndex).RandomPitchOffset = Convert.ToDouble(lineData(1), provider)
+                                                samplesList(SampleIndex).RandomPitchOffset = Convert.ToDouble(lineData(1), numericProvider)
                                             Case "RANDOMVOLUMEOFFSET"
                                                 samplesList(SampleIndex).RandomVolumeOffset = CSByte(lineData(1))
                                             Case "PAN"

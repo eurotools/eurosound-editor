@@ -31,7 +31,7 @@ Public Class DataBase_Properties
         Label_SfxCount_Value.Text = CountFolderFiles(fso.BuildPath(WorkingDirectory, "SFXs"), "*.txt")
 
         'Show SFXs info
-        Dim dataBaseName = Path.GetFileNameWithoutExtension(dataBaseFilePath)
+        Dim dataBaseName = GetOnlyFileName(dataBaseFilePath)
         TextBox_DataBaseName.Text = dataBaseName
         ListBox_TotalSfx.Items.AddRange(dataBaseObj.Dependencies)
         Label_TotalSfx_Count.Text = "Total: " & ListBox_TotalSfx.Items.Count
@@ -72,7 +72,7 @@ Public Class DataBase_Properties
             For index As Integer = 0 To soundbankDataBases.Count - 1
                 Dim currentDataBase As String = soundbankDataBases(index)
                 If StrComp(currentDataBase, dataBaseName) = 0 Then
-                    ListBox_SoundBank_Dependencies.Items.Add(Path.GetFileNameWithoutExtension(soundbankFile.Name))
+                    ListBox_SoundBank_Dependencies.Items.Add(GetOnlyFileName(soundbankFile.Name))
                     Exit For
                 End If
             Next

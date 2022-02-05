@@ -45,8 +45,24 @@ Partial Public Class ExporterForm
         'Update form title
         Invoke(Sub() Text = "Waiting")
 
+        'Get sound table from the Samples.txt
+        Dim soundsTable As DataTable = textFileReaders.SamplesFileToDatatable(SysFileSamples)
+
         'Start waves resampling
-        ResampleWaves(propsFile.sampleRateFormats, e)
+        'ResampleWaves(propsFile.sampleRateFormats, soundsTable, e)
+
+        'Check if we need to rebuild the stream file
+        If ReSampleStreams = 1 Then
+            'Get stream samples list
+            Dim streamSamplesList As String() = textFileReaders.GetStreamSoundsList(SysFileSamples)
+
+            'Generate Stream Files
+            GenerateStreamFolder(outPlatforms, streamSamplesList, e)
+            GenerateStreamFile(outPlatforms, streamSamplesList, e)
+        End If
+
+        'Create SFX Data
+        CreateSfxDataFolder(soundsTable, e)
     End Sub
 
     Private Sub BackgroundWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker.ProgressChanged

@@ -1,5 +1,4 @@
-﻿Imports System.Globalization
-Imports EngineXMarkersTool
+﻿Imports EngineXMarkersTool
 Imports HashTablesBuilder
 
 Partial Public Class MusicMaker
@@ -8,7 +7,6 @@ Partial Public Class MusicMaker
     '*===============================================================================================
     Private ReadOnly textFileReaders As New FileParsers
     Private ReadOnly writers As New FileWriters
-    Private ReadOnly customCulture As New NumberFormatInfo
     Private ReadOnly musicStuffPath = fso.BuildPath(WorkingDirectory, "Music")
     Private ReadOnly hashTablesFunctions As New MfxDefines
 
@@ -16,7 +14,6 @@ Partial Public Class MusicMaker
     '* FORM EVENTS
     '*===============================================================================================
     Private Sub MusicMaker_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        customCulture.NumberDecimalSeparator = "."
         ComboBox_OutputFormat.SelectedIndex = 0
         'Ensure that the data and work directory exists
         Dim musicFolder = fso.BuildPath(WorkingDirectory, "Music")
@@ -153,7 +150,7 @@ Partial Public Class MusicMaker
 
     Private Sub TextBox_UserValue_TextChanged(sender As Object, e As EventArgs) Handles TextBox_UserValue.TextChanged
         If IsNumeric(TextBox_UserValue.Text) AndAlso TextBox_UserValue.Text < Single.MaxValue Then
-            TextBox_UserValue.Text = TextBox_UserValue.Text.ToString(customCulture)
+            TextBox_UserValue.Text = TextBox_UserValue.Text.ToString(numericProvider)
             If ListView_MusicFiles.SelectedItems.Count > 0 Then
                 'Update ListView
                 Dim selectedItem As ListViewItem = ListView_MusicFiles.SelectedItems(0)

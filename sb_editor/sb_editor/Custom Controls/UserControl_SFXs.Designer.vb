@@ -183,6 +183,7 @@ Partial Class UserControl_SFXs
         Me.ListBox_SFXs.Name = "ListBox_SFXs"
         Me.ListBox_SFXs.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
         Me.ListBox_SFXs.Size = New System.Drawing.Size(277, 552)
+        Me.ListBox_SFXs.Sorted = True
         Me.ListBox_SFXs.TabIndex = 1
         '
         'UserControl_SFXs

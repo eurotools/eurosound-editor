@@ -1,5 +1,4 @@
-﻿Imports System.Globalization
-Imports System.IO
+﻿Imports System.IO
 Imports IniFileFunctions
 
 Public Class SfxDefault
@@ -7,7 +6,6 @@ Public Class SfxDefault
     '* Global Variables
     '*===============================================================================================
     Private ReadOnly textFileReaders As New FileParsers()
-    Private ReadOnly numericProvider As New NumberFormatInfo With {.NumberDecimalSeparator = "."}
     Private promptSave As Boolean = True
 
     '*===============================================================================================
@@ -19,7 +17,7 @@ Public Class SfxDefault
             'Read SFX File
             Dim objSFX As SfxFile = textFileReaders.ReadSFXFile(SysFileSfxDefaults)
             'Set properties
-            SfxParamsAndSamplePool1.Textbox_SfxName.Text = Path.GetFileNameWithoutExtension(SysFileSfxDefaults)
+            SfxParamsAndSamplePool1.Textbox_SfxName.Text = GetOnlyFileName(SysFileSfxDefaults)
 
             PutDataToControls(objSFX)
         End If

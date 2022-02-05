@@ -48,6 +48,7 @@ Partial Class HashCodesList
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Available SFXs"
+        Me.TopMost = True
         Me.ResumeLayout(False)
 
     End Sub

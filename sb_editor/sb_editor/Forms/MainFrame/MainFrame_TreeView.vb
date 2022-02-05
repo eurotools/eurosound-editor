@@ -56,7 +56,7 @@
 
     Private Sub AddDatabaseToSoundbank(dataBasesToAdd As ListBox.SelectedObjectCollection, soundBank As TreeNode)
         'Variables
-        Dim sortTreeView As Boolean = False
+        Dim updateControlAndFile As Boolean = False
 
         'Delete empty node if exists
         If soundBank.Nodes.Count = 1 Then
@@ -67,21 +67,24 @@
 
         'Add new nodes
         For Each database In dataBasesToAdd
-            'Add databases
-            soundBank.Nodes.Add(database, database, 2, 2)
-            'Update boolean
-            sortTreeView = True
+            'Ensure that this database does not exists in this soundbank
+            Dim results As TreeNode() = soundBank.Nodes.Find(database, True)
+            If results.Length = 0 Then
+                'Add databases
+                soundBank.Nodes.Add(database, database, 2, 2)
+                'Update boolean
+                updateControlAndFile = True
+            End If
         Next
 
         'Sort nodes
-        If sortTreeView = True Then
+        If updateControlAndFile = True Then
             'Sort control
             TreeView_SoundBanks.Sort()
             'Select soundbank again
             TreeView_SoundBanks.SelectedNode = soundBank
+            'Update text file
+            writers.CreateSoundbankFile(soundBank, textFileReaders)
         End If
-
-        'Update text file
-        writers.CreateSoundbankFile(soundBank, textFileReaders)
     End Sub
 End Class

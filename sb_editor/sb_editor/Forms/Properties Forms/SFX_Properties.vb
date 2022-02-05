@@ -33,7 +33,7 @@ Public Class SFX_Properties
             Do Until EOF(1)
                 Dim currentLine As String = LineInput(1)
                 If StrComp(currentLine, sfxName) = 0 Then
-                    ListBox_DataBase_Dependencies.Items.Add(Path.GetFileNameWithoutExtension(dataBaseObj.Name))
+                    ListBox_DataBase_Dependencies.Items.Add(GetOnlyFileName(dataBaseObj.Name))
                     'Quit loop
                     Exit Do
                 End If

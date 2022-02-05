@@ -18,7 +18,7 @@ Partial Public Class MusicsExporter
     '*===============================================================================================
     '* DLL FUNCTIONS
     '*===============================================================================================
-    <DllImport("SystemFiles\\EuroSound_Utils.dll", CallingConvention:=CallingConvention.Cdecl)>
+    <DllImport("SystemFiles\EuroSound_Utils.dll", CallingConvention:=CallingConvention.Cdecl)>
     Friend Shared Sub BuildMusicFile(soundMarkerFile As String, soundSampleData As String, filePath As String, hashcode As UInteger, bigEndian As Boolean)
     End Sub
 
@@ -223,31 +223,33 @@ Partial Public Class MusicsExporter
         Next
 
         'Create Music HashCodes
+        Invoke(Sub() ProgressBar1.Maximum = hashCodesCollection.Count)
         Invoke(Sub() ProgressBar1.Value = 0)
         counter = 0
         Dim musicDefinesFilePath As String = fso.BuildPath(propsFile.MiscProps.HashCodeFileFolder, "MFX_Defines.h")
         hashTablesFunctions.CreateMfxHashTable(musicDefinesFilePath, hashCodesCollection)
-        For Each musicItem As DataRow In outputQueue.Rows
+        For Each musicItem As KeyValuePair(Of String, UInteger) In hashCodesCollection
             'Check for cancellation
             If BackgroundWorker.CancellationPending Then
                 e.Cancel = True
                 Exit For
             Else
-                Invoke(Sub() Text = "Appending Jump HashCodes: " & musicItem.ItemArray(0))
-                Dim jumpMarkersFilePath As String = fso.BuildPath(WorkingDirectory, "Music\ESWork\" & musicItem.ItemArray(0) & ".jmp")
-                Dim jumpHashCodes As String() = textFileReaders.ReadJumpFile(jumpMarkersFilePath)
-                'Append data
-                FileOpen(1, musicDefinesFilePath, OpenMode.Append)
-                PrintLine(1, "")
-                PrintLine(1, "// Music Jump Codes For Level MFX_" & musicItem.ItemArray(0))
-                For jumpHashCode As Integer = 0 To jumpHashCodes.Length - 1
-                    Dim jumpIndex As Short = jumpHashCode
-                    Dim mfxHashCode As Short = musicItem.ItemArray(2)
-                    Dim hashCode As UInteger = ((&H1BE And &HFFF) << 20) Or ((jumpIndex And &HFF) << 8) Or ((mfxHashCode And &HFF) << 0)
-                    Dim hashCodeLabel As String = "JMP_" & jumpHashCodes(jumpHashCode)
-                    PrintLine(1, "#define " & hashCodeLabel & " 0x" & Hex(hashCode))
-                Next
-                FileClose(1)
+                Invoke(Sub() Text = "Appending Jump HashCodes: " & musicItem.Key)
+                Dim jumpMarkersFilePath As String = fso.BuildPath(WorkingDirectory, "Music\ESWork\" & musicItem.Key & ".jmp")
+                If fso.FileExists(jumpMarkersFilePath) Then
+                    Dim jumpHashCodes As String() = textFileReaders.ReadJumpFile(jumpMarkersFilePath)
+                    'Append data
+                    FileOpen(1, musicDefinesFilePath, OpenMode.Append)
+                    PrintLine(1, "")
+                    PrintLine(1, "// Music Jump Codes For Level MFX_" & musicItem.Key)
+                    For jumpHashCode As Integer = 0 To jumpHashCodes.Length - 1
+                        Dim mfxHashCode As Short = musicItem.Value
+                        Dim hashCode As UInteger = ((&H1BE And &HFFF) << 20) Or ((jumpHashCode And &HFF) << 8) Or ((mfxHashCode And &HFF) << 0)
+                        PrintLine(1, "#define " & "JMP_" & jumpHashCodes(jumpHashCode) & " 0x" & Hex(hashCode))
+                    Next
+                    FileClose(1)
+                End If
+
                 'Update progress bar
                 counter += 1
                 BackgroundWorker.ReportProgress(counter)
@@ -258,6 +260,34 @@ Partial Public Class MusicsExporter
         Dim dataDictionary As Dictionary(Of UInteger, String()) = GetMfxDataDict()
         Dim musicDataFilePath As String = fso.BuildPath(propsFile.MiscProps.HashCodeFileFolder, "MFX_Data.h")
         hashTablesFunctions.CreateMfxData(musicDataFilePath, dataDictionary)
+
+        'Create Valid list
+        Invoke(Sub() ProgressBar1.Maximum = hashCodesCollection.Count)
+        Invoke(Sub() ProgressBar1.Value = 0)
+        counter = 0
+        Dim musicValidListFilePath As String = fso.BuildPath(propsFile.MiscProps.HashCodeFileFolder, "MFX_ValidList.h")
+        Dim jumpHashCodesDictionary As New Dictionary(Of UInteger, String)
+        For Each musicItem As KeyValuePair(Of String, UInteger) In hashCodesCollection
+            'Check for cancellation
+            If BackgroundWorker.CancellationPending Then
+                e.Cancel = True
+                Exit For
+            Else
+                Invoke(Sub() Text = "Creating MFX Valid List: " & musicItem.Key)
+                Dim jumpMarkersFilePath As String = fso.BuildPath(WorkingDirectory, "Music\ESWork\" & musicItem.Key & ".jmp")
+                If fso.FileExists(jumpMarkersFilePath) Then
+                    Dim jumpHashCodes As String() = textFileReaders.ReadJumpFile(jumpMarkersFilePath)
+                    For jumpHashCode As Integer = 0 To jumpHashCodes.Length - 1
+                        Dim mfxHashCode As Short = musicItem.Value
+                        Dim hashCode As UInteger = ((jumpHashCode And &HFF) << 8) Or ((mfxHashCode And &HFF) << 0)
+                        jumpHashCodesDictionary.Add(hashCode, "JMP_" & jumpHashCodes(jumpHashCode))
+                    Next
+                End If
+            End If
+        Next
+        hashTablesFunctions.CreateMfxValidList(musicValidListFilePath, jumpHashCodesDictionary)
+
+        'Get Output time
         watch.Stop()
         Invoke(Sub() parentMusicForm.TextBox_OutputTime.Text = "Output Time = " & watch.ElapsedTicks)
     End Sub

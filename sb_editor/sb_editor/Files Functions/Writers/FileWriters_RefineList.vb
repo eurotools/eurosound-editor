@@ -1,15 +1,13 @@
 ﻿Partial Public Class FileWriters
-    Friend Sub CreateRefineList(refineSearchFilePath As String, keywords As SortedDictionary(Of String, Integer))
+    Friend Sub CreateRefineList(refineSearchFilePath As String, keywords As List(Of String))
         FileOpen(1, refineSearchFilePath, OpenMode.Output, OpenAccess.Write, OpenShare.LockReadWrite)
         PrintLine(1, "#RefineSearch")
         PrintLine(1, "All")
         PrintLine(1, "HighLighted")
         'Iterate over list items
         If keywords IsNot Nothing Then
-            For Each refineSeachItem As KeyValuePair(Of String, Integer) In keywords
-                If refineSeachItem.Value > 2 Then
-                    PrintLine(1, refineSeachItem.Key)
-                End If
+            For Each refineSeachItem As String In keywords
+                PrintLine(1, refineSeachItem)
             Next
         End If
         PrintLine(1, "#END")

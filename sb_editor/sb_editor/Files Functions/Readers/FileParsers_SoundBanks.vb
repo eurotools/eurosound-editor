@@ -64,7 +64,7 @@ Partial Public Class FileParsers
                     Do
                         'Split line and get number
                         objSB.HashCode = Split(currentLine, " ")(1)
-                        objSB.HashCodeLabel = Path.GetFileNameWithoutExtension(textFilePath)
+                        objSB.HashCodeLabel = GetOnlyFileName(textFilePath)
 
                         'Continue Reading
                         currentLine = LineInput(1)

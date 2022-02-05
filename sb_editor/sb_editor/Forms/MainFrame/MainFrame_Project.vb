@@ -46,7 +46,7 @@ Partial Public Class MainFrame
         'Add items to listbox
         ListBox_DataBases.BeginUpdate()
         For i = 0 To databaseFiles.Length - 1
-            Dim DataBaseName = Path.GetFileNameWithoutExtension(databaseFiles(i))
+            Dim DataBaseName = GetOnlyFileName(databaseFiles(i))
             ListBox_DataBases.Items.Add(DataBaseName)
         Next
         Label_DataBasesCount.Text = "Total: " & ListBox_DataBases.Items.Count
@@ -60,7 +60,7 @@ Partial Public Class MainFrame
         'Add items to tree view
         TreeView_SoundBanks.BeginUpdate()
         For i = 0 To soundBankFiles.Length - 1
-            Dim soundBankName As String = Path.GetFileNameWithoutExtension(soundBankFiles(i))
+            Dim soundBankName As String = GetOnlyFileName(soundBankFiles(i))
             Dim SoundBankNode As TreeNode = TreeView_SoundBanks.Nodes.Add(soundBankName, soundBankName, 0, 0)
             textFileReaders.GetSoundbankDependencies(soundBankFiles(i), SoundBankNode)
         Next

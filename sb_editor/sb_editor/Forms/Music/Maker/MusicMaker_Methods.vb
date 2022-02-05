@@ -9,7 +9,7 @@ Partial Public Class MusicMaker
             Dim filesToRead As New List(Of String)
             Dim availableMarkerFiles As String() = Directory.GetFiles(musicStuffPath, "*.mrk", SearchOption.TopDirectoryOnly)
             For itemIndex As Integer = 0 To availableMarkerFiles.Length - 1
-                Dim fileName As String = Path.GetFileNameWithoutExtension(availableMarkerFiles(itemIndex))
+                Dim fileName As String = GetOnlyFileName(availableMarkerFiles(itemIndex))
                 If Not filesToRead.Contains(fileName) Then
                     filesToRead.Add(fileName)
                 End If
@@ -123,20 +123,22 @@ Partial Public Class MusicMaker
 
         'Append text
         For index As Integer = 0 To jumpTextFiles.Length - 1
-            Dim jumpHashCodes As String() = textFileReaders.ReadJumpFile(jumpTextFiles(index))
-            Dim mfxName As String = Path.GetFileNameWithoutExtension(jumpTextFiles(index))
-            FileOpen(1, hashTableFilePath, OpenMode.Append)
-            PrintLine(1, "")
-            PrintLine(1, "// Music Jump Codes For Level MFX_" & mfxName)
-            For jumpHashCode As Integer = 0 To jumpHashCodes.Length - 1
-                Dim jumpIndex As Short = jumpHashCode
-                Dim mfxHashCode As Short = hashCodesDict(mfxName)
-                Dim hashCode As UInteger = ((&H1BE And &HFFF) << 20) Or ((jumpIndex And &HFF) << 8) Or ((mfxHashCode And &HFF) << 0)
-                Dim hashCodeLabel As String = "JMP_" & jumpHashCodes(jumpHashCode)
-                PrintLine(1, "#define " & hashCodeLabel & " 0x" & Hex(hashCode))
-                jumpDefinesList.Add(hashCodeLabel)
-            Next
-            FileClose(1)
+            If fso.FileExists(jumpTextFiles(index)) Then
+                Dim jumpHashCodes As String() = textFileReaders.ReadJumpFile(jumpTextFiles(index))
+                Dim mfxName As String = GetOnlyFileName(jumpTextFiles(index))
+                FileOpen(1, hashTableFilePath, OpenMode.Append)
+                PrintLine(1, "")
+                PrintLine(1, "// Music Jump Codes For Level MFX_" & mfxName)
+                For jumpHashCode As Integer = 0 To jumpHashCodes.Length - 1
+                    Dim jumpIndex As Short = jumpHashCode
+                    Dim mfxHashCode As Short = hashCodesDict(mfxName)
+                    Dim hashCode As UInteger = ((&H1BE And &HFFF) << 20) Or ((jumpIndex And &HFF) << 8) Or ((mfxHashCode And &HFF) << 0)
+                    Dim hashCodeLabel As String = "JMP_" & jumpHashCodes(jumpHashCode)
+                    PrintLine(1, "#define " & hashCodeLabel & " 0x" & Hex(hashCode))
+                    jumpDefinesList.Add(hashCodeLabel)
+                Next
+                FileClose(1)
+            End If
         Next
         AppendJumpHashCodes = jumpDefinesList
     End Function

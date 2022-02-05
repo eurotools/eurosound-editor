@@ -15,16 +15,15 @@ Partial Public Class ExporterForm
     '*===============================================================================================
     '* DLL FUNCTIONS
     '*===============================================================================================
-    <DllImport("SystemFiles\\EuroSound_Utils.dll", CallingConvention:=CallingConvention.Cdecl)>
+    <DllImport("SystemFiles\EuroSound_Utils.dll", CallingConvention:=CallingConvention.Cdecl)>
     Friend Shared Sub BuildStreamFile(binFilePath As String, lutFilePath As String, outputFilePath As String, bigEndian As Boolean)
     End Sub
 
     '*===============================================================================================
     '* MAIN METHOD
     '*===============================================================================================
-    Private Sub ResampleWaves(sampleRates As Dictionary(Of String, Dictionary(Of String, UInteger)), e As DoWorkEventArgs)
+    Private Sub ResampleWaves(sampleRates As Dictionary(Of String, Dictionary(Of String, UInteger)), soundsTable As DataTable, e As DoWorkEventArgs)
         'Get Wave files to include
-        Dim soundsTable As DataTable = textFileReaders.SamplesFileToDatatable(SysFileSamples)
         Dim samplesCount As Integer = soundsTable.Rows.Count - 1
 
         'Ensure that we have files to resample
@@ -48,7 +47,7 @@ Partial Public Class ExporterForm
 
                         'Get Wave full path
                         Dim waveMasterPath = fso.BuildPath(ProjMasterFolder, "Master" & waveRelFilePath)
-                        Dim WaveName As String = Path.GetFileNameWithoutExtension(waveMasterPath)
+                        Dim WaveName As String = GetOnlyFileName(waveMasterPath)
 
                         'Resample for each platform
                         For Each outPlatform As String In outPlatforms
@@ -80,10 +79,10 @@ Partial Public Class ExporterForm
                                     End If
                                 End If
                                 If StrComp(outPlatform, "PlayStation2") = 0 Then
-                                    ResampleForPlayStation2(soundsTable.Rows(index), waveMasterPath, waveRelDirectoryPath, outputFilePath, WaveName, waveRelFilePath)
+                                    ResampleForPlayStation2(soundsTable.Rows(index), waveMasterPath, waveRelDirectoryPath, outputFilePath, WaveName)
                                 End If
                                 If StrComp(outPlatform, "GameCube") = 0 Then
-                                    ResampleForGameCube(soundsTable.Rows(index), waveMasterPath, waveRelDirectoryPath, outputFilePath, WaveName, waveRelFilePath)
+                                    ResampleForGameCube(soundsTable.Rows(index), waveMasterPath, waveRelDirectoryPath, outputFilePath, WaveName)
                                     'IMA ADPCM
                                     If StrComp(soundsTable.Rows(index).Item(5), "True") = 0 Then
                                         CreateSoftwareAdpcm(outPlatform, waveMasterPath, waveRelDirectoryPath, waveRate)
@@ -114,23 +113,13 @@ Partial Public Class ExporterForm
 
             'Update text file
             textFileWritters.SaveSamplesFile(SysFileSamples, soundsTable)
-
-            'Check if we need to rebuild the stream file
-            If ReSampleStreams = 1 Then
-                'Get stream samples list
-                Dim streamSamplesList As String() = textFileReaders.GetStreamSoundsList(SysFileSamples)
-
-                'Generate Stream Files
-                GenerateStreamFolder(outPlatforms, streamSamplesList, e)
-                GenerateStreamFile(outPlatforms, streamSamplesList, e)
-            End If
         End If
     End Sub
 
     '*===============================================================================================
     '* PLAYSTATION RESAMPLE FUNCTIONS
     '*===============================================================================================
-    Private Sub ResampleForPlayStation2(streamSamplesList As DataRow, waveMasterPath As String, waveRelDirectoryPath As String, outputFilePath As String, WaveName As String, waveRelFilePath As String)
+    Private Sub ResampleForPlayStation2(streamSamplesList As DataRow, waveMasterPath As String, waveRelDirectoryPath As String, outputFilePath As String, WaveName As String)
         'Output folder Path
         Dim playStationOutputFolder = fso.BuildPath(WorkingDirectory, "PlayStation2_VAG")
         CreateFolderIfNotExists(playStationOutputFolder)
@@ -170,7 +159,7 @@ Partial Public Class ExporterForm
     '*===============================================================================================
     '* GAMECUBE RESAMPLE FUNCTIONS
     '*===============================================================================================
-    Private Sub ResampleForGameCube(streamSamplesList As DataRow, waveMasterPath As String, waveRelDirectoryPath As String, outputFilePath As String, WaveName As String, waveRelFilePath As String)
+    Private Sub ResampleForGameCube(streamSamplesList As DataRow, waveMasterPath As String, waveRelDirectoryPath As String, outputFilePath As String, WaveName As String)
         'Output folder Path
         Dim gameCubeOutputFolder = fso.BuildPath(WorkingDirectory, "GameCube_dsp_adpcm")
         CreateFolderIfNotExists(gameCubeOutputFolder)
@@ -231,7 +220,7 @@ Partial Public Class ExporterForm
         'Output to save converted data
         Dim BaseOutputFolder = fso.BuildPath(WorkingDirectory, outPlatform & "_Software_adpcm")
         Dim fullOutputFolder = BaseOutputFolder & waveRelDirectoryPath
-        Dim outFilepath As String = fso.BuildPath(fullOutputFolder, Path.GetFileNameWithoutExtension(waveMasterPath))
+        Dim outFilepath As String = fso.BuildPath(fullOutputFolder, GetOnlyFileName(waveMasterPath))
         Dim outFilePathWav As String = outFilepath & ".smd"
         Dim outFilePathIma As String = outFilepath & ".ssp"
 
@@ -302,7 +291,7 @@ Partial Public Class ExporterForm
 
                 'Get IMA ADPCM file path 
                 Dim waveRelDirectoryPath As String = fso.GetParentFolderName(waveName)
-                Dim streamFilePath As String = fso.BuildPath(streamsBaseDir & waveRelDirectoryPath, Path.GetFileNameWithoutExtension(waveName) & fileExtension)
+                Dim streamFilePath As String = fso.BuildPath(streamsBaseDir & waveRelDirectoryPath, GetOnlyFileName(waveName) & fileExtension)
 
                 'Ensure that the file exists
                 If fso.FileExists(streamFilePath) Then
@@ -312,7 +301,7 @@ Partial Public Class ExporterForm
 
                     'Marker File
                     Dim MasterWaveFilePath = fso.BuildPath(ProjMasterFolder, "Master" & waveName)
-                    Dim MasterMarkerFilePath = fso.BuildPath(fso.GetParentFolderName(MasterWaveFilePath), Path.GetFileNameWithoutExtension(MasterWaveFilePath) & ".mrk")
+                    Dim MasterMarkerFilePath = fso.BuildPath(fso.GetParentFolderName(MasterWaveFilePath), GetOnlyFileName(MasterWaveFilePath) & ".mrk")
 
                     'Ensure that the marker file exists
                     If fso.FileExists(MasterMarkerFilePath) Then

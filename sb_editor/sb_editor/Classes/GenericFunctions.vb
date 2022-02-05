@@ -1,12 +1,20 @@
-﻿Imports System.Runtime.InteropServices
+﻿Imports System.Globalization
+Imports System.Runtime.InteropServices
 Imports IniFileFunctions
 Imports Scripting
 
 Module GenericFunctions
     '*===============================================================================================
+    '* FORMAT INFO
+    '*===============================================================================================
+    Friend ReadOnly numericProvider As New NumberFormatInfo With {
+        .NumberDecimalSeparator = "."
+    }
+
+    '*===============================================================================================
     '* DLL UTILS FUNCTIONS
     '*===============================================================================================
-    <DllImport("SystemFiles\\EuroSound_Utils.dll", CallingConvention:=CallingConvention.Cdecl)>
+    <DllImport("SystemFiles\EuroSound_Utils.dll", CallingConvention:=CallingConvention.Cdecl)>
     Private Function FormatBytes(BytesCaller As Long) As IntPtr
     End Function
 
@@ -66,21 +74,102 @@ Module GenericFunctions
     '*===============================================================================================
     '* FILES FUNCTIONS
     '*===============================================================================================
+    Friend Function GetOnlyFileName(fullFileName As String) As String
+        Dim a As Integer = InStrRev(fullFileName, "\") + 1
+        Dim b As Integer = InStrRev(fullFileName, ".")
+        Return Mid(fullFileName, a, b - a)
+    End Function
+
     Friend Function CountFolderFiles(Folder As String, Filter As String) As Integer
         Dim CountFilesDir As Integer = 0
-
         Dim sFile As String = Dir(Folder & "\" & Filter)
         Do While Len(sFile) > 0
             CountFilesDir += 1
             sFile = Dir()
         Loop
-
-        'Return count results
         Return CountFilesDir
     End Function
 
     Friend Function BytesStringFormat(BytesCaller As Long) As String
         Return Marshal.PtrToStringAnsi(FormatBytes(BytesCaller))
+    End Function
+
+    Friend Function RenameFile(objectName As String, objectType As String, objectFolder As String) As String
+        'Ask name for first time
+        Dim inputName As String = InputBox("Enter New Name For " & objectName, "Rename " & objectType, objectName)
+        Dim inputFilePath As String = fso.BuildPath(objectFolder, inputName & ".txt")
+        Dim finalName As String = inputName
+
+        'Ask continously if the file exists
+        If StrComp(objectName, inputName) <> 0 AndAlso fso.FileExists(inputFilePath) Then
+            Do
+                'Inform user and ask again
+                MsgBox(objectType & " Label '" & inputName & "' already exists, please use another name!", vbOKOnly + vbCritical, "Duplicate " & objectType & " Name")
+                inputName = InputBox("Enter New Name For " & objectName, "Rename " & objectType, objectName)
+
+                'If the input name is the same as the object name or is null, exit loop!
+                If StrComp(objectName, inputName) = 0 Or inputName = "" Then
+                    finalName = ""
+                    Exit Do
+                Else
+                    finalName = inputName
+                End If
+            Loop While fso.FileExists(fso.BuildPath(objectFolder, inputName & ".txt"))
+        End If
+
+        RenameFile = finalName
+    End Function
+
+    Friend Function CopyFile(objectName As String, objectType As String, objectFolder As String) As String
+        'Ask name for first time
+        Dim inputName As String = InputBox("Enter Copy Name For " & objectType & " " & objectName, "Copy " & objectType, objectName).Trim
+        Dim inputFilePath As String = fso.BuildPath(objectFolder, inputName & ".txt")
+        Dim finalName As String = inputName
+
+        'Ask continously if the file exists
+        If StrComp(objectName, inputName) <> 0 AndAlso fso.FileExists(inputFilePath) Then
+            Do
+                'Inform user and ask again
+                MsgBox(objectType & " Label '" & inputName & "' already exists, please use another name!", vbOKOnly + vbCritical, "Duplicate " & objectType & " Name")
+                inputName = InputBox("Enter Copy Name For " & objectName, "Copy " & objectType, objectName).Trim
+
+                'If the input name is the same as the object name or is null, exit loop!
+                If StrComp(objectName, inputName) = 0 Or inputName = "" Then
+                    finalName = ""
+                    Exit Do
+                Else
+                    finalName = inputName
+                End If
+            Loop While fso.FileExists(fso.BuildPath(objectFolder, inputName & ".txt"))
+        End If
+
+        CopyFile = finalName
+    End Function
+
+    Friend Function NewFile(objectName As String, objectFolder As String) As String
+        'Ask name for first time
+        Dim inputName As String = InputBox("Enter Name", "Create New", objectName)
+        Dim inputFilePath As String = fso.BuildPath(objectFolder, inputName & ".txt")
+        Dim finalName As String = inputName
+
+        'Ask continously if the file exists
+        If StrComp(objectName, inputName) <> 0 AndAlso fso.FileExists(inputFilePath) Then
+            Do
+                'Inform user and ask again
+                MsgBox("Label '" & inputName & "' already exists, please use another name!", vbOKOnly + vbCritical, "Duplicate Name")
+                inputName = InputBox("Enter Name", "Create New", objectName)
+
+                'If the input name is the same as the object name or is null, exit loop!
+                If StrComp(objectName, inputName) = 0 Or inputName = "" Then
+                    finalName = ""
+                    Exit Do
+                Else
+                    finalName = inputName
+                End If
+            Loop While fso.FileExists(fso.BuildPath(objectFolder, inputName & ".txt"))
+        End If
+
+        NewFile = finalName
     End Function
 
     '*===============================================================================================

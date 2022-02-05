@@ -71,7 +71,6 @@
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +171,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Properties Forms\Project Properties\Project_Properties_Methods.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Resampler\Exporter\ExporterForm_SfxData.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Resampler\Exporter\ExporterForm_StreamFiles.vb">

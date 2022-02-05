@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Text.RegularExpressions
 
 Public Class UserControl_SFXs
     '*===============================================================================================
@@ -26,6 +27,8 @@ Public Class UserControl_SFXs
             If ComboBox_SFX_Section.Items.Count > 0 Then
                 ComboBox_SFX_Section.SelectedIndex = 0
             End If
+            'Erase Array
+            Erase keywords
         End If
     End Sub
 
@@ -33,35 +36,62 @@ Public Class UserControl_SFXs
     '* BUTTON EVENTS
     '*===============================================================================================
     Private Sub Button_UpdateList_Click(sender As Object, e As EventArgs) Handles Button_UpdateList.Click
-        Dim keywords As New SortedDictionary(Of String, Integer)
-        Dim sfxFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly)
-        For index As Integer = 0 To sfxFiles.Count - 1
-            'Get filename and split
-            Dim fileName As String = Path.GetFileNameWithoutExtension(sfxFiles(index))
-            Dim fileWords As String() = Split(fileName, "_")
-            If fileWords.Count > 0 Then
-                'Remove SFX Prefix
-                If StrComp(fileWords(0), "SFX") = 0 Then
-                    Dim keysItemCount As Integer = 0
-                    For wordIndex As Integer = 1 To fileWords.Count - 1
-                        Dim keyWordName As String = fileWords(wordIndex)
-                        If Len(keyWordName) > 2 AndAlso keysItemCount < 3 Then
-                            'Add item if not exsist
-                            If keywords.ContainsKey(keyWordName) Then
-                                keywords(keyWordName) = keywords(keyWordName) + 1
-                                keysItemCount += 1
-                            Else
-                                keywords.Add(keyWordName, 1)
-                                keysItemCount += 1
-                            End If
+        Dim keywordsDict As New Dictionary(Of String, Integer)()
+        Dim refineList As New List(Of String)()
+        Dim rgx As New Regex("\d+$")
+        Dim inputLines As String() = GetSfxNamesArray()
+
+        'Get keywords count
+        For i As Integer = 0 To inputLines.Length - 1
+            Dim lineData As String() = inputLines(i).Split("_"c)
+            For j As Integer = 0 To lineData.Length - 1
+                Dim currentKeyword As String = lineData(j)
+                If currentKeyword.Length < 3 OrElse currentKeyword.Equals("SFX") Then
+                    Continue For
+                Else
+                    If keywordsDict.ContainsKey(currentKeyword) Then
+                        keywordsDict(currentKeyword) += 1
+                    Else
+                        keywordsDict.Add(currentKeyword, 1)
+                    End If
+                End If
+            Next
+        Next
+        Erase inputLines
+
+        'Get Refine List
+        For Each dictItem As KeyValuePair(Of String, Integer) In keywordsDict
+            If dictItem.Value > 2 Then
+                refineList.Add(dictItem.Key)
+            End If
+        Next
+
+        Dim keywordsWithNumber As New Dictionary(Of String, Integer)()
+        For Each keyWithNum As KeyValuePair(Of String, Integer) In keywordsDict
+            If keyWithNum.Key.Length > 2 Then
+                If Char.IsDigit(keyWithNum.Key(keyWithNum.Key.Length - 1)) Then
+                    Dim keywordWithoutNum As String = rgx.Replace(keyWithNum.Key, "")
+                    If keywordsDict.ContainsKey(keywordWithoutNum) Then
+                        If keywordsWithNumber.ContainsKey(keywordWithoutNum) Then
+                            keywordsWithNumber(keywordWithoutNum) += 1
+                        Else
+                            keywordsWithNumber.Add(keywordWithoutNum, 1)
                         End If
-                    Next
+                    End If
                 End If
             End If
         Next
 
+        'Get Refine List
+        For Each dictItem As KeyValuePair(Of String, Integer) In keywordsWithNumber
+            If dictItem.Value > 1 AndAlso Not refineList.Contains(dictItem.Key) Then
+                refineList.Add(dictItem.Key)
+            End If
+        Next
+        refineList.Sort()
+
         'Update file
-        writers.CreateRefineList(fso.BuildPath(WorkingDirectory, "System\RefineSearch.txt"), keywords)
+        writers.CreateRefineList(fso.BuildPath(WorkingDirectory, "System\RefineSearch.txt"), refineList)
 
         'Update combobox
         ComboBox_SFX_Section.Items.Clear()
@@ -175,6 +205,31 @@ Public Class UserControl_SFXs
         End If
     End Sub
 
+    Private Sub ContextMenuSfx_Copy_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_Copy.Click
+        If ListBox_SFXs.SelectedItems.Count = 1 Then
+            'Ask user
+            Dim sfxCopyName As String = CopyFile(vbCrLf & ListBox_SFXs.SelectedItem, "SFX", fso.BuildPath(WorkingDirectory, "SFXs\"))
+            If sfxCopyName IsNot "" Then
+                'Read original file content
+                Dim originalFilePath As String = fso.BuildPath(WorkingDirectory, "SFXs\" & ListBox_SFXs.SelectedItem & ".txt")
+                Dim fileContent As String() = File.ReadAllLines(originalFilePath)
+                'Update HashCode
+                Dim hashCodePosition As Integer = Array.IndexOf(fileContent, "#HASHCODE") + 1
+                If (hashCodePosition < fileContent.Length) Then
+                    fileContent(hashCodePosition) = "HashCodeNumber " & SFXHashCodeNumber
+                    SFXHashCodeNumber += 1
+                    'Write new file
+                    File.WriteAllLines(fso.BuildPath(WorkingDirectory, "SFXs\" & sfxCopyName & ".txt"), fileContent)
+                    ListBox_SFXs.Items.Add(sfxCopyName)
+                End If
+                Erase fileContent
+            End If
+        Else
+            My.Computer.Audio.PlaySystemSound(Media.SystemSounds.Asterisk)
+        End If
+
+    End Sub
+
     Private Sub ContextMenuSfx_Delete_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_Delete.Click
         Dim maxItemsToShow As Byte = 33
         'Create a list with the items that we have to remove
@@ -230,6 +285,7 @@ Public Class UserControl_SFXs
                     File.WriteAllLines(databaseFiles(i), databaseFileLines.ToArray)
                 End If
             Next
+            Erase databaseFiles
             'Update Project file
             writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), mainForm.TreeView_SoundBanks, mainForm.ListBox_DataBases, mainForm.UserControl_SFXs.ListBox_SFXs)
         End If
@@ -240,6 +296,7 @@ Public Class UserControl_SFXs
         For index As Integer = 0 To fileList.Length - 1
             fso.MoveFile(fileList(index), trashFolder)
         Next
+        Erase fileList
     End Sub
 
     '*===============================================================================================
@@ -298,7 +355,7 @@ Public Class UserControl_SFXs
 
         'Read text files
         For i = 0 To itemsToAdd.Length - 1
-            Dim sfxName = Path.GetFileNameWithoutExtension(itemsToAdd(i))
+            Dim sfxName = GetOnlyFileName(itemsToAdd(i))
             ListBox_SFXs.Items.Add(sfxName)
         Next
 
@@ -308,4 +365,16 @@ Public Class UserControl_SFXs
         'Disable listbox update mode
         ListBox_SFXs.EndUpdate()
     End Sub
+
+    '*===============================================================================================
+    '* FUNCTIONS
+    '*===============================================================================================
+    Private Function GetSfxNamesArray() As String()
+        Dim listOfNames As New List(Of String)
+        For index As Integer = 0 To ListBox_SFXs.Items.Count - 1
+            listOfNames.Add(ListBox_SFXs.Items(index))
+        Next
+
+        Return listOfNames.ToArray
+    End Function
 End Class

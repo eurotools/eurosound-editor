@@ -701,8 +701,6 @@ Partial Public Class MainFrame
     '*===============================================================================================
     Private Sub Button_FullOutput_Click(sender As Object, e As EventArgs) Handles Button_FullOutput.Click
         Dim hastableBuilder As New SfxDefines
-        Dim debugHashTables As New SfxDebug
-
         Dim test As Boolean = True
 
         'Read properties file

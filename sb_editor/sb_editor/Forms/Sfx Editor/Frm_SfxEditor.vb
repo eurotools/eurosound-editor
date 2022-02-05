@@ -1,5 +1,4 @@
-﻿Imports System.Globalization
-Imports System.Media
+﻿Imports System.Media
 
 Partial Public Class Frm_SfxEditor
     '*===============================================================================================
@@ -11,7 +10,6 @@ Partial Public Class Frm_SfxEditor
     Private ReadOnly sfxFilesData As New Dictionary(Of String, SfxFile)
     Private ReadOnly waveReadFunctions As New WaveFunctions
     Private StreamSamplesList As String()
-    Private ReadOnly numericProvider As New NumberFormatInfo With {.NumberDecimalSeparator = "."}
     Private promptSave As Boolean = True
 
     Sub New(fileName As String)

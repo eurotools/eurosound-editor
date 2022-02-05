@@ -27,6 +27,7 @@
             End If
         Loop
         FileClose(1)
+
         Return jumpHashCodesList.ToArray
     End Function
 End Class

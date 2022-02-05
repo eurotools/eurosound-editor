@@ -27,7 +27,7 @@ Public Class SetMaxBankSize
             'Get file data
             Dim soundbankFile As SoundbankFile = textFileReaders.ReadSoundBankFile(soundBankFilePath)
             'Get filename
-            TextBox_BankName.Text = Path.GetFileNameWithoutExtension(soundBankFilePath)
+            TextBox_BankName.Text = GetOnlyFileName(soundBankFilePath)
             'Put info in the numerics
             Numeric_PlayStationSize.Value = soundbankFile.MaxBankSizes.PlayStationSize
             Numeric_PcSize.Value = soundbankFile.MaxBankSizes.PCSize

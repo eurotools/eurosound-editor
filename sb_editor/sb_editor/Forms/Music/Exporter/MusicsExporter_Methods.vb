@@ -1,5 +1,4 @@
-﻿Imports System.Globalization
-Imports System.IO
+﻿Imports System.IO
 Imports NAudio.Wave
 
 Partial Public Class MusicsExporter
@@ -49,11 +48,6 @@ Partial Public Class MusicsExporter
     '*===============================================================================================
     '* GET DATA FOR MFX_DATA FILE
     '*===============================================================================================
-    'Use dot instead of comma for numbers
-    Dim provider As New NumberFormatInfo With {
-            .NumberDecimalSeparator = "."
-    }
-
     Private Function GetMfxDataDict() As Dictionary(Of UInteger, String())
         Dim dictionaryData As New Dictionary(Of UInteger, String())
 
@@ -64,9 +58,9 @@ Partial Public Class MusicsExporter
                 Dim duration As Single = (waveReader.Length / waveReader.WaveFormat.AverageBytesPerSecond) + 0.0
                 Dim stringDuration As String
                 If duration Mod 1 = 0 Then
-                    stringDuration = duration.ToString("F1", provider)
+                    stringDuration = duration.ToString("F1", numericProvider)
                 Else
-                    stringDuration = duration.ToString("G7", provider)
+                    stringDuration = duration.ToString("G7", numericProvider)
                 End If
                 dictionaryData.Add(rowData.Value, New String() {stringDuration & "f", "FALSE"})
             End Using
