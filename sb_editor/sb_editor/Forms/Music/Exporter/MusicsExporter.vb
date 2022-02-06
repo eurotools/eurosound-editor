@@ -1,6 +1,6 @@
 ﻿Imports System.IO
-Imports System.Runtime.InteropServices
 Imports EngineXMarkersTool
+Imports ESUtils.MusXBuild_MusicFile
 Imports HashTablesBuilder
 
 Partial Public Class MusicsExporter
@@ -14,13 +14,6 @@ Partial Public Class MusicsExporter
     Private ReadOnly parentMusicForm As MusicMaker
     Private ReadOnly hashTablesFunctions As New MfxDefines
     Private ReadOnly hashCodesCollection As SortedDictionary(Of String, UInteger)
-
-    '*===============================================================================================
-    '* DLL FUNCTIONS
-    '*===============================================================================================
-    <DllImport("SystemFiles\EuroSound_Utils.dll", CallingConvention:=CallingConvention.Cdecl)>
-    Friend Shared Sub BuildMusicFile(soundMarkerFile As String, soundSampleData As String, filePath As String, hashcode As UInteger, bigEndian As Boolean)
-    End Sub
 
     '*===============================================================================================
     '* FORM EVENTS
@@ -208,7 +201,7 @@ Partial Public Class MusicsExporter
                         Dim soundSampleData As String = fso.BuildPath(outputFilePath, "MFX_" & musicHashCode & ".ssd")
                         Dim musxFilename As String = "HCE" & Hex(musicHashCode).PadLeft(5, "0"c) & ".SFX"
                         'Create final file
-                        Dim fullDirPath = Path.Combine(propsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder(currentPlatform), "music", musxFilename)
+                        Dim fullDirPath = fso.BuildPath(propsFile.MiscProps.EngineXFolder, "Binary\" & GetEngineXFolder(currentPlatform) & "\music\" & musxFilename)
                         If StrComp(outputPlatforms(index), "GameCube") = 0 Then
                             BuildMusicFile(soundMarkerFile, soundSampleData, fullDirPath, musicHashCode, True)
                         Else

@@ -14,7 +14,7 @@ extern "C"
 	{
 		// 1.378125 comes from 44100/32000
 		double ruleOfThree = baseLoopOffset / 1.378125;
-		u32 multiplyRounded = (u32)round(ruleOfThree) * 4;
+		u32 multiplyRounded = (u32)roundNum(ruleOfThree) * 4;
 		return multiplyRounded;
 	}
 
@@ -66,6 +66,12 @@ extern "C"
 			PositionAligned = AlignNumber(markerPosition, 4);
 		}
 		return PositionAligned;
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------------------
+	double roundNum(double value)
+	{
+		return value < 0 ? -floor(0.5 - value) : floor(0.5 + value);
 	}
 }
 

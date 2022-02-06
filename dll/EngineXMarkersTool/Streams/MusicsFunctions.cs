@@ -3,6 +3,8 @@ using EngineXMarkersTool.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using static ESUtils.CalculusLoopOffset;
+using static ESUtils.ImaCodec;
 
 namespace EngineXMarkersTool
 {
@@ -27,11 +29,11 @@ namespace EngineXMarkersTool
                     //Calculate VAG offsets
                     if (startMarker.Position > 0)
                     {
-                        startMarker.Position = UtilsFunctions.GetMusicLoopOffsetPCandGC(startMarker.Position);
+                        startMarker.Position = GetMusicLoopOffsetPCandGC(startMarker.Position);
                     }
                     if (startMarker.LoopStart > 0)
                     {
-                        startMarker.LoopStart = UtilsFunctions.GetMusicLoopOffsetPCandGC(startMarker.LoopStart);
+                        startMarker.LoopStart = GetMusicLoopOffsetPCandGC(startMarker.LoopStart);
                     }
                 }
 
@@ -40,11 +42,11 @@ namespace EngineXMarkersTool
                 {
                     if (marker.Position > 0)
                     {
-                        marker.Position = UtilsFunctions.GetMusicLoopOffsetPCandGC(marker.Position);
+                        marker.Position = GetMusicLoopOffsetPCandGC(marker.Position);
                     }
                     if (marker.LoopStart > 0)
                     {
-                        marker.LoopStart = UtilsFunctions.GetMusicLoopOffsetPCandGC(marker.LoopStart);
+                        marker.LoopStart = GetMusicLoopOffsetPCandGC(marker.LoopStart);
                     }
                 }
 
@@ -57,12 +59,8 @@ namespace EngineXMarkersTool
 
                     //Get IMA Adpcm States
                     uint[][] pcImaDecodedStates = new uint[2][];
-                    pcImaDecodedStates[0] = new uint[imaData[0].Length * 2];
-                    pcImaDecodedStates[1] = new uint[imaData[1].Length * 2];
-                    UtilsFunctions.ImaAdpcmState states = new UtilsFunctions.ImaAdpcmState();
-                    UtilsFunctions.DecodeStatesIma(ref states, imaData[0], imaData[0].Length * 2, pcImaDecodedStates[0]);
-                    states = new UtilsFunctions.ImaAdpcmState();
-                    UtilsFunctions.DecodeStatesIma(ref states, imaData[1], imaData[1].Length * 2, pcImaDecodedStates[1]);
+                    pcImaDecodedStates[0] = DecodeStatesIma(imaData[0], imaData[0].Length * 2);
+                    pcImaDecodedStates[1]= DecodeStatesIma(imaData[1], imaData[1].Length * 2);
 
                     //Update Markers states
                     EXMarkersFunctions markersFunctions = new EXMarkersFunctions();
@@ -95,11 +93,11 @@ namespace EngineXMarkersTool
                     //Calculate VAG offsets
                     if (startMarker.Position > 0)
                     {
-                        startMarker.Position = UtilsFunctions.GetMusicLoopOffsetPlayStation2(startMarker.Position);
+                        startMarker.Position = GetMusicLoopOffsetPlayStation2(startMarker.Position);
                     }
                     if (startMarker.LoopStart > 0)
                     {
-                        startMarker.LoopStart = UtilsFunctions.GetMusicLoopOffsetPlayStation2(startMarker.LoopStart);
+                        startMarker.LoopStart = GetMusicLoopOffsetPlayStation2(startMarker.LoopStart);
                     }
                 }
 
@@ -108,11 +106,11 @@ namespace EngineXMarkersTool
                 {
                     if (marker.Position > 0)
                     {
-                        marker.Position = UtilsFunctions.GetMusicLoopOffsetPlayStation2(marker.Position);
+                        marker.Position = GetMusicLoopOffsetPlayStation2(marker.Position);
                     }
                     if (marker.LoopStart > 0)
                     {
-                        marker.LoopStart = UtilsFunctions.GetMusicLoopOffsetPlayStation2(marker.LoopStart);
+                        marker.LoopStart = GetMusicLoopOffsetPlayStation2(marker.LoopStart);
                     }
                 }
             }
@@ -126,11 +124,11 @@ namespace EngineXMarkersTool
                     //Calculate VAG offsets
                     if (startMarker.Position > 0)
                     {
-                        startMarker.Position = UtilsFunctions.GetMusicLoopOffsetXbox(startMarker.Position);
+                        startMarker.Position = GetMusicLoopOffsetXbox(startMarker.Position);
                     }
                     if (startMarker.LoopStart > 0)
                     {
-                        startMarker.LoopStart = UtilsFunctions.GetMusicLoopOffsetXbox(startMarker.LoopStart);
+                        startMarker.LoopStart = GetMusicLoopOffsetXbox(startMarker.LoopStart);
                     }
                 }
 
@@ -139,11 +137,11 @@ namespace EngineXMarkersTool
                 {
                     if (marker.Position > 0)
                     {
-                        marker.Position = UtilsFunctions.GetMusicLoopOffsetXbox(marker.Position);
+                        marker.Position = GetMusicLoopOffsetXbox(marker.Position);
                     }
                     if (marker.LoopStart > 0)
                     {
-                        marker.LoopStart = UtilsFunctions.GetMusicLoopOffsetXbox(marker.LoopStart);
+                        marker.LoopStart = GetMusicLoopOffsetXbox(marker.LoopStart);
                     }
                 }
             }

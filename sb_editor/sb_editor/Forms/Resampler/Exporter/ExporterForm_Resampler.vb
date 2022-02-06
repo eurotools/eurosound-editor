@@ -1,7 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.IO
-Imports System.Runtime.InteropServices
 Imports EngineXMarkersTool
+Imports ESUtils.MusXBuild_StreamFile
 Imports NAudio.Wave
 
 Partial Public Class ExporterForm
@@ -11,13 +11,6 @@ Partial Public Class ExporterForm
     ReadOnly waveFunctions As New WaveFunctions
     Private ReadOnly textFileReaders As New FileParsers
     Private ReadOnly textFileWritters As New FileWriters
-
-    '*===============================================================================================
-    '* DLL FUNCTIONS
-    '*===============================================================================================
-    <DllImport("SystemFiles\EuroSound_Utils.dll", CallingConvention:=CallingConvention.Cdecl)>
-    Friend Shared Sub BuildStreamFile(binFilePath As String, lutFilePath As String, outputFilePath As String, bigEndian As Boolean)
-    End Sub
 
     '*===============================================================================================
     '* MAIN METHOD

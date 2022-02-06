@@ -1,5 +1,5 @@
 ﻿Imports System.Globalization
-Imports System.Runtime.InteropServices
+Imports ESUtils.BytesFunctions
 Imports IniFileFunctions
 Imports Scripting
 
@@ -10,13 +10,6 @@ Module GenericFunctions
     Friend ReadOnly numericProvider As New NumberFormatInfo With {
         .NumberDecimalSeparator = "."
     }
-
-    '*===============================================================================================
-    '* DLL UTILS FUNCTIONS
-    '*===============================================================================================
-    <DllImport("SystemFiles\EuroSound_Utils.dll", CallingConvention:=CallingConvention.Cdecl)>
-    Private Function FormatBytes(BytesCaller As Long) As IntPtr
-    End Function
 
     '*===============================================================================================
     '* TOOLS FUNCTIONS
@@ -91,7 +84,7 @@ Module GenericFunctions
     End Function
 
     Friend Function BytesStringFormat(BytesCaller As Long) As String
-        Return Marshal.PtrToStringAnsi(FormatBytes(BytesCaller))
+        Return FormatBytes(BytesCaller)
     End Function
 
     Friend Function RenameFile(objectName As String, objectType As String, objectFolder As String) As String

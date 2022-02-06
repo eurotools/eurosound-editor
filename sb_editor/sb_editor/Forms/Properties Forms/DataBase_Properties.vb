@@ -41,7 +41,7 @@ Public Class DataBase_Properties
         If fso.FolderExists(MasterFilePath) Then
             Label_SampleCount_Value.Text = Directory.GetFiles(MasterFilePath, "*.wav", SearchOption.AllDirectories).Length
             Dim fold As Folder = fso.GetFolder(MasterFilePath)
-            Label_Value_Size.Text = BytesStringFormat(fold.Size) & " (" & Format(fold.Size, "#,#") & " bytes)"
+            Label_Value_Size.Text = BytesStringFormat(fold.Size)
         End If
 
         'Get Soundbank dependencies

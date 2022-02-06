@@ -425,7 +425,7 @@ Partial Class Frm_SfxEditor
         'Label_SampleInfo_StreamedValue
         '
         Me.Label_SampleInfo_StreamedValue.AutoSize = True
-        Me.Label_SampleInfo_StreamedValue.Location = New System.Drawing.Point(72, 71)
+        Me.Label_SampleInfo_StreamedValue.Location = New System.Drawing.Point(66, 71)
         Me.Label_SampleInfo_StreamedValue.Name = "Label_SampleInfo_StreamedValue"
         Me.Label_SampleInfo_StreamedValue.Size = New System.Drawing.Size(70, 13)
         Me.Label_SampleInfo_StreamedValue.TabIndex = 9
@@ -434,7 +434,7 @@ Partial Class Frm_SfxEditor
         'Label_SampleInfo_LoopValue
         '
         Me.Label_SampleInfo_LoopValue.AutoSize = True
-        Me.Label_SampleInfo_LoopValue.Location = New System.Drawing.Point(72, 58)
+        Me.Label_SampleInfo_LoopValue.Location = New System.Drawing.Point(66, 58)
         Me.Label_SampleInfo_LoopValue.Name = "Label_SampleInfo_LoopValue"
         Me.Label_SampleInfo_LoopValue.Size = New System.Drawing.Size(70, 13)
         Me.Label_SampleInfo_LoopValue.TabIndex = 8
@@ -443,7 +443,7 @@ Partial Class Frm_SfxEditor
         'Label_SampleInfo_LengthValue
         '
         Me.Label_SampleInfo_LengthValue.AutoSize = True
-        Me.Label_SampleInfo_LengthValue.Location = New System.Drawing.Point(72, 45)
+        Me.Label_SampleInfo_LengthValue.Location = New System.Drawing.Point(66, 45)
         Me.Label_SampleInfo_LengthValue.Name = "Label_SampleInfo_LengthValue"
         Me.Label_SampleInfo_LengthValue.Size = New System.Drawing.Size(70, 13)
         Me.Label_SampleInfo_LengthValue.TabIndex = 7
@@ -452,7 +452,7 @@ Partial Class Frm_SfxEditor
         'Label_SampleInfo_SizeValue
         '
         Me.Label_SampleInfo_SizeValue.AutoSize = True
-        Me.Label_SampleInfo_SizeValue.Location = New System.Drawing.Point(72, 32)
+        Me.Label_SampleInfo_SizeValue.Location = New System.Drawing.Point(66, 32)
         Me.Label_SampleInfo_SizeValue.Name = "Label_SampleInfo_SizeValue"
         Me.Label_SampleInfo_SizeValue.Size = New System.Drawing.Size(70, 13)
         Me.Label_SampleInfo_SizeValue.TabIndex = 6
@@ -461,7 +461,7 @@ Partial Class Frm_SfxEditor
         'Label_SampleInfo_FreqValue
         '
         Me.Label_SampleInfo_FreqValue.AutoSize = True
-        Me.Label_SampleInfo_FreqValue.Location = New System.Drawing.Point(72, 16)
+        Me.Label_SampleInfo_FreqValue.Location = New System.Drawing.Point(66, 16)
         Me.Label_SampleInfo_FreqValue.Name = "Label_SampleInfo_FreqValue"
         Me.Label_SampleInfo_FreqValue.Size = New System.Drawing.Size(70, 13)
         Me.Label_SampleInfo_FreqValue.TabIndex = 5

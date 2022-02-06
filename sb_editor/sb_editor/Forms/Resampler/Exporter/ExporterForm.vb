@@ -49,7 +49,7 @@ Partial Public Class ExporterForm
         Dim soundsTable As DataTable = textFileReaders.SamplesFileToDatatable(SysFileSamples)
 
         'Start waves resampling
-        'ResampleWaves(propsFile.sampleRateFormats, soundsTable, e)
+        ResampleWaves(propsFile.sampleRateFormats, soundsTable, e)
 
         'Check if we need to rebuild the stream file
         If ReSampleStreams = 1 Then

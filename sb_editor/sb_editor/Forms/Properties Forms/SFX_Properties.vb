@@ -100,7 +100,7 @@ Public Class SFX_Properties
             Label_SampleCount_Value.Text = Directory.GetFiles(MasterFilePath, "*.wav", SearchOption.AllDirectories).Length
             'Get sample folder size
             Dim fold As Folder = fso.GetFolder(MasterFilePath)
-            Label_Value_Size.Text = BytesStringFormat(fold.Size) & " (" & Format(fold.Size, "#,#") & " bytes)"
+            Label_Value_Size.Text = BytesStringFormat(fold.Size)
         End If
     End Sub
 

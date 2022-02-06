@@ -112,6 +112,10 @@ Public Class UserControl_SFXs
         End If
     End Sub
 
+    Private Sub Button_UnUsedHashCodes_Click(sender As Object, e As EventArgs) Handles Button_UnUsedHashCodes.Click
+
+    End Sub
+
     '*===============================================================================================
     '* COMBOBOX EVENTS
     '*===============================================================================================

@@ -22,6 +22,7 @@ DLL_EXPORT(u32) GetMusicLoopOffsetXbox(u32 loopOffset);
 DLL_EXPORT(u32) GetStreamLoopOffsetPlayStation2(u32 baseLoopOffset);
 DLL_EXPORT(u32) GetStreamLoopOffsetXbox(u32 baseLoopOffset);
 DLL_EXPORT(u32) GetStreamLoopOffsetPCandGC(u32 markerPosition);
+DLL_EXPORT(double) roundNum(double value);
 
 //-------------------------------------------------------------------------------------------------------------------------------
 EUROSOUND_FUNCTIONS_END

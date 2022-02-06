@@ -3,6 +3,8 @@ using EngineXMarkersTool.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using static ESUtils.CalculusLoopOffset;
+using static ESUtils.ImaCodec;
 
 namespace EngineXMarkersTool
 {
@@ -26,10 +28,7 @@ namespace EngineXMarkersTool
             {
                 //Read IMA Data
                 byte[] imaData = File.ReadAllBytes(imaFilePath);
-
-                uint[] pcImaDecodedStates = new uint[imaData.Length * 2];
-                UtilsFunctions.ImaAdpcmState states = new UtilsFunctions.ImaAdpcmState();
-                UtilsFunctions.DecodeStatesIma(ref states, imaData, imaData.Length * 2, pcImaDecodedStates);
+                uint[] pcImaDecodedStates = DecodeStatesIma(imaData, imaData.Length * 2);
 
                 //Update Markers states
                 EXMarkersFunctions markersFunctions = new EXMarkersFunctions();
@@ -56,11 +55,11 @@ namespace EngineXMarkersTool
                     //Calculate VAG offsets
                     if (startMarker.Position > 0)
                     {
-                        startMarker.Position = UtilsFunctions.GetStreamLoopOffsetPCandGC(startMarker.Position);
+                        startMarker.Position = GetStreamLoopOffsetPCandGC(startMarker.Position);
                     }
                     if (startMarker.LoopStart > 0)
                     {
-                        startMarker.LoopStart = UtilsFunctions.GetStreamLoopOffsetPCandGC(startMarker.LoopStart);
+                        startMarker.LoopStart = GetStreamLoopOffsetPCandGC(startMarker.LoopStart);
                     }
                 }
 
@@ -69,11 +68,11 @@ namespace EngineXMarkersTool
                 {
                     if (marker.Position > 0)
                     {
-                        marker.Position = UtilsFunctions.GetStreamLoopOffsetPCandGC(marker.Position);
+                        marker.Position = GetStreamLoopOffsetPCandGC(marker.Position);
                     }
                     if (marker.LoopStart > 0)
                     {
-                        marker.LoopStart = UtilsFunctions.GetStreamLoopOffsetPCandGC(marker.LoopStart);
+                        marker.LoopStart = GetStreamLoopOffsetPCandGC(marker.LoopStart);
                     }
                 }
             }
@@ -87,11 +86,11 @@ namespace EngineXMarkersTool
                     //Calculate VAG offsets
                     if (startMarker.Position > 0)
                     {
-                        startMarker.Position = UtilsFunctions.GetStreamLoopOffsetPlayStation2(startMarker.Position);
+                        startMarker.Position = GetStreamLoopOffsetPlayStation2(startMarker.Position);
                     }
                     if (startMarker.LoopStart > 0)
                     {
-                        startMarker.LoopStart = UtilsFunctions.GetStreamLoopOffsetPlayStation2(startMarker.LoopStart);
+                        startMarker.LoopStart = GetStreamLoopOffsetPlayStation2(startMarker.LoopStart);
                     }
                 }
 
@@ -100,11 +99,11 @@ namespace EngineXMarkersTool
                 {
                     if (marker.Position > 0)
                     {
-                        marker.Position = UtilsFunctions.GetStreamLoopOffsetPlayStation2(marker.Position);
+                        marker.Position = GetStreamLoopOffsetPlayStation2(marker.Position);
                     }
                     if (marker.LoopStart > 0)
                     {
-                        marker.LoopStart = UtilsFunctions.GetStreamLoopOffsetPlayStation2(marker.LoopStart);
+                        marker.LoopStart = GetStreamLoopOffsetPlayStation2(marker.LoopStart);
                     }
                 }
             }
@@ -118,11 +117,11 @@ namespace EngineXMarkersTool
                     //Calculate VAG offsets
                     if (startMarker.Position > 0)
                     {
-                        startMarker.Position = UtilsFunctions.GetStreamLoopOffsetXbox(startMarker.Position);
+                        startMarker.Position = GetStreamLoopOffsetXbox(startMarker.Position);
                     }
                     if (startMarker.LoopStart > 0)
                     {
-                        startMarker.LoopStart = UtilsFunctions.GetStreamLoopOffsetXbox(startMarker.LoopStart);
+                        startMarker.LoopStart = GetStreamLoopOffsetXbox(startMarker.LoopStart);
                     }
                 }
 
@@ -131,11 +130,11 @@ namespace EngineXMarkersTool
                 {
                     if (marker.Position > 0)
                     {
-                        marker.Position = UtilsFunctions.GetStreamLoopOffsetXbox(marker.Position);
+                        marker.Position = GetStreamLoopOffsetXbox(marker.Position);
                     }
                     if (marker.LoopStart > 0)
                     {
-                        marker.LoopStart = UtilsFunctions.GetStreamLoopOffsetXbox(marker.LoopStart);
+                        marker.LoopStart = GetStreamLoopOffsetXbox(marker.LoopStart);
                     }
                 }
             }

@@ -63,7 +63,7 @@ Public Class Soundbank_Properties
 
             'Get sample folder size
             Dim fold As Folder = fso.GetFolder(MasterFilePath)
-            Label_Value_Size.Text = BytesStringFormat(fold.Size) & " (" & Format(fold.Size, "#,#") & " bytes)"
+            Label_Value_Size.Text = BytesStringFormat(fold.Size)
         End If
     End Sub
     '*===============================================================================================
