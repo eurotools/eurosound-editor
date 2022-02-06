@@ -6,9 +6,5 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="adpcm.h" />
-    <ClInclude Include="resource.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
 </Project>

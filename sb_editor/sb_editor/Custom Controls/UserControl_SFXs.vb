@@ -38,7 +38,6 @@ Public Class UserControl_SFXs
     Private Sub Button_UpdateList_Click(sender As Object, e As EventArgs) Handles Button_UpdateList.Click
         Dim keywordsDict As New Dictionary(Of String, Integer)()
         Dim refineList As New List(Of String)()
-        Dim rgx As New Regex("\d+$")
         Dim inputLines As String() = GetSfxNamesArray()
 
         'Get keywords count
@@ -66,6 +65,7 @@ Public Class UserControl_SFXs
             End If
         Next
 
+        Dim rgx As New Regex("\d+$")
         Dim keywordsWithNumber As New Dictionary(Of String, Integer)()
         For Each keyWithNum As KeyValuePair(Of String, Integer) In keywordsDict
             If keyWithNum.Key.Length > 2 Then

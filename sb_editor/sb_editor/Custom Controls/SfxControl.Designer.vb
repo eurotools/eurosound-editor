@@ -135,7 +135,7 @@ Partial Class SfxControl
         Me.GroupBox_SamplePoolControl.Dock = System.Windows.Forms.DockStyle.Right
         Me.GroupBox_SamplePoolControl.Location = New System.Drawing.Point(510, 0)
         Me.GroupBox_SamplePoolControl.Name = "GroupBox_SamplePoolControl"
-        Me.GroupBox_SamplePoolControl.Size = New System.Drawing.Size(381, 280)
+        Me.GroupBox_SamplePoolControl.Size = New System.Drawing.Size(381, 274)
         Me.GroupBox_SamplePoolControl.TabIndex = 11
         Me.GroupBox_SamplePoolControl.TabStop = False
         Me.GroupBox_SamplePoolControl.Text = "Sample Pool Control"
@@ -406,7 +406,7 @@ Partial Class SfxControl
         Me.GroupBox_SfxParams.Dock = System.Windows.Forms.DockStyle.Left
         Me.GroupBox_SfxParams.Location = New System.Drawing.Point(0, 0)
         Me.GroupBox_SfxParams.Name = "GroupBox_SfxParams"
-        Me.GroupBox_SfxParams.Size = New System.Drawing.Size(504, 280)
+        Me.GroupBox_SfxParams.Size = New System.Drawing.Size(504, 274)
         Me.GroupBox_SfxParams.TabIndex = 12
         Me.GroupBox_SfxParams.TabStop = False
         Me.GroupBox_SfxParams.Text = "SFX Parameters"
@@ -450,7 +450,7 @@ Partial Class SfxControl
         Me.GroupBox_GlobalSettings.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox_GlobalSettings.Location = New System.Drawing.Point(8, 40)
         Me.GroupBox_GlobalSettings.Name = "GroupBox_GlobalSettings"
-        Me.GroupBox_GlobalSettings.Size = New System.Drawing.Size(490, 233)
+        Me.GroupBox_GlobalSettings.Size = New System.Drawing.Size(490, 227)
         Me.GroupBox_GlobalSettings.TabIndex = 2
         Me.GroupBox_GlobalSettings.TabStop = False
         Me.GroupBox_GlobalSettings.Text = "Locked On All Formats"
@@ -459,7 +459,7 @@ Partial Class SfxControl
         '
         Me.Checkbox_Doppler.AutoSize = True
         Me.Checkbox_Doppler.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Checkbox_Doppler.Location = New System.Drawing.Point(375, 208)
+        Me.Checkbox_Doppler.Location = New System.Drawing.Point(375, 202)
         Me.Checkbox_Doppler.Name = "Checkbox_Doppler"
         Me.Checkbox_Doppler.Size = New System.Drawing.Size(63, 17)
         Me.Checkbox_Doppler.TabIndex = 30
@@ -470,7 +470,7 @@ Partial Class SfxControl
         '
         Me.Checkbox_MusicType.AutoSize = True
         Me.Checkbox_MusicType.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Checkbox_MusicType.Location = New System.Drawing.Point(288, 208)
+        Me.Checkbox_MusicType.Location = New System.Drawing.Point(288, 202)
         Me.Checkbox_MusicType.Name = "Checkbox_MusicType"
         Me.Checkbox_MusicType.Size = New System.Drawing.Size(81, 17)
         Me.Checkbox_MusicType.TabIndex = 29
@@ -481,7 +481,7 @@ Partial Class SfxControl
         '
         Me.CheckBox_IgnoreAge.AutoSize = True
         Me.CheckBox_IgnoreAge.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckBox_IgnoreAge.Location = New System.Drawing.Point(204, 208)
+        Me.CheckBox_IgnoreAge.Location = New System.Drawing.Point(204, 202)
         Me.CheckBox_IgnoreAge.Name = "CheckBox_IgnoreAge"
         Me.CheckBox_IgnoreAge.Size = New System.Drawing.Size(78, 17)
         Me.CheckBox_IgnoreAge.TabIndex = 28
@@ -492,7 +492,7 @@ Partial Class SfxControl
         '
         Me.Checkbox_PauseInNis.AutoSize = True
         Me.Checkbox_PauseInNis.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Checkbox_PauseInNis.Location = New System.Drawing.Point(103, 208)
+        Me.Checkbox_PauseInNis.Location = New System.Drawing.Point(103, 202)
         Me.Checkbox_PauseInNis.Name = "Checkbox_PauseInNis"
         Me.Checkbox_PauseInNis.Size = New System.Drawing.Size(95, 17)
         Me.Checkbox_PauseInNis.TabIndex = 27
@@ -503,7 +503,7 @@ Partial Class SfxControl
         '
         Me.CheckBox_UnderWater.AutoSize = True
         Me.CheckBox_UnderWater.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckBox_UnderWater.Location = New System.Drawing.Point(10, 208)
+        Me.CheckBox_UnderWater.Location = New System.Drawing.Point(10, 202)
         Me.CheckBox_UnderWater.Name = "CheckBox_UnderWater"
         Me.CheckBox_UnderWater.Size = New System.Drawing.Size(87, 17)
         Me.CheckBox_UnderWater.TabIndex = 26
@@ -513,7 +513,7 @@ Partial Class SfxControl
         'Numeric_DuckerLength
         '
         Me.Numeric_DuckerLength.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Numeric_DuckerLength.Location = New System.Drawing.Point(421, 182)
+        Me.Numeric_DuckerLength.Location = New System.Drawing.Point(421, 176)
         Me.Numeric_DuckerLength.Maximum = New Decimal(New Integer() {32767, 0, 0, 0})
         Me.Numeric_DuckerLength.Minimum = New Decimal(New Integer() {32768, 0, 0, -2147483648})
         Me.Numeric_DuckerLength.Name = "Numeric_DuckerLength"
@@ -525,7 +525,7 @@ Partial Class SfxControl
         '
         Me.Label_DuckerLength.AutoSize = True
         Me.Label_DuckerLength.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label_DuckerLength.Location = New System.Drawing.Point(372, 184)
+        Me.Label_DuckerLength.Location = New System.Drawing.Point(372, 178)
         Me.Label_DuckerLength.Name = "Label_DuckerLength"
         Me.Label_DuckerLength.Size = New System.Drawing.Size(43, 13)
         Me.Label_DuckerLength.TabIndex = 24
@@ -534,7 +534,7 @@ Partial Class SfxControl
         'Numeric_Ducker
         '
         Me.Numeric_Ducker.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Numeric_Ducker.Location = New System.Drawing.Point(310, 182)
+        Me.Numeric_Ducker.Location = New System.Drawing.Point(310, 176)
         Me.Numeric_Ducker.Name = "Numeric_Ducker"
         Me.Numeric_Ducker.Size = New System.Drawing.Size(56, 20)
         Me.Numeric_Ducker.TabIndex = 23
@@ -543,7 +543,7 @@ Partial Class SfxControl
         '
         Me.Label_Ducker.AutoSize = True
         Me.Label_Ducker.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label_Ducker.Location = New System.Drawing.Point(248, 184)
+        Me.Label_Ducker.Location = New System.Drawing.Point(248, 178)
         Me.Label_Ducker.Name = "Label_Ducker"
         Me.Label_Ducker.Size = New System.Drawing.Size(56, 13)
         Me.Label_Ducker.TabIndex = 22
@@ -553,7 +553,7 @@ Partial Class SfxControl
         '
         Me.CheckBox_StealOnLouder.AutoSize = True
         Me.CheckBox_StealOnLouder.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckBox_StealOnLouder.Location = New System.Drawing.Point(136, 183)
+        Me.CheckBox_StealOnLouder.Location = New System.Drawing.Point(136, 177)
         Me.CheckBox_StealOnLouder.Name = "CheckBox_StealOnLouder"
         Me.CheckBox_StealOnLouder.Size = New System.Drawing.Size(109, 17)
         Me.CheckBox_StealOnLouder.TabIndex = 21
@@ -564,7 +564,7 @@ Partial Class SfxControl
         '
         Me.Label_Alertness.AutoSize = True
         Me.Label_Alertness.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label_Alertness.Location = New System.Drawing.Point(6, 184)
+        Me.Label_Alertness.Location = New System.Drawing.Point(6, 178)
         Me.Label_Alertness.Name = "Label_Alertness"
         Me.Label_Alertness.Size = New System.Drawing.Size(62, 13)
         Me.Label_Alertness.TabIndex = 20
@@ -573,7 +573,7 @@ Partial Class SfxControl
         'Numeric_Alertness
         '
         Me.Numeric_Alertness.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Numeric_Alertness.Location = New System.Drawing.Point(74, 182)
+        Me.Numeric_Alertness.Location = New System.Drawing.Point(74, 176)
         Me.Numeric_Alertness.Name = "Numeric_Alertness"
         Me.Numeric_Alertness.Size = New System.Drawing.Size(56, 20)
         Me.Numeric_Alertness.TabIndex = 19
@@ -581,7 +581,7 @@ Partial Class SfxControl
         'Numeric_MaxVoices
         '
         Me.Numeric_MaxVoices.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Numeric_MaxVoices.Location = New System.Drawing.Point(74, 156)
+        Me.Numeric_MaxVoices.Location = New System.Drawing.Point(74, 153)
         Me.Numeric_MaxVoices.Name = "Numeric_MaxVoices"
         Me.Numeric_MaxVoices.Size = New System.Drawing.Size(56, 20)
         Me.Numeric_MaxVoices.TabIndex = 18
@@ -589,7 +589,7 @@ Partial Class SfxControl
         'Numeric_Priority
         '
         Me.Numeric_Priority.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Numeric_Priority.Location = New System.Drawing.Point(421, 156)
+        Me.Numeric_Priority.Location = New System.Drawing.Point(421, 153)
         Me.Numeric_Priority.Name = "Numeric_Priority"
         Me.Numeric_Priority.Size = New System.Drawing.Size(60, 20)
         Me.Numeric_Priority.TabIndex = 17
@@ -598,7 +598,7 @@ Partial Class SfxControl
         '
         Me.Label_Priority.AutoSize = True
         Me.Label_Priority.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label_Priority.Location = New System.Drawing.Point(363, 158)
+        Me.Label_Priority.Location = New System.Drawing.Point(363, 155)
         Me.Label_Priority.Name = "Label_Priority"
         Me.Label_Priority.Size = New System.Drawing.Size(52, 13)
         Me.Label_Priority.TabIndex = 16
@@ -608,7 +608,7 @@ Partial Class SfxControl
         '
         Me.RadioButton_ActionReject.AutoSize = True
         Me.RadioButton_ActionReject.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RadioButton_ActionReject.Location = New System.Drawing.Point(279, 156)
+        Me.RadioButton_ActionReject.Location = New System.Drawing.Point(279, 153)
         Me.RadioButton_ActionReject.Name = "RadioButton_ActionReject"
         Me.RadioButton_ActionReject.Size = New System.Drawing.Size(56, 17)
         Me.RadioButton_ActionReject.TabIndex = 15
@@ -620,7 +620,7 @@ Partial Class SfxControl
         '
         Me.RadioButton_ActionSteal.AutoSize = True
         Me.RadioButton_ActionSteal.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RadioButton_ActionSteal.Location = New System.Drawing.Point(215, 156)
+        Me.RadioButton_ActionSteal.Location = New System.Drawing.Point(215, 153)
         Me.RadioButton_ActionSteal.Name = "RadioButton_ActionSteal"
         Me.RadioButton_ActionSteal.Size = New System.Drawing.Size(49, 17)
         Me.RadioButton_ActionSteal.TabIndex = 14
@@ -632,7 +632,7 @@ Partial Class SfxControl
         '
         Me.Label_Action.AutoSize = True
         Me.Label_Action.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label_Action.Location = New System.Drawing.Point(169, 158)
+        Me.Label_Action.Location = New System.Drawing.Point(169, 155)
         Me.Label_Action.Name = "Label_Action"
         Me.Label_Action.Size = New System.Drawing.Size(40, 13)
         Me.Label_Action.TabIndex = 13
@@ -642,7 +642,7 @@ Partial Class SfxControl
         '
         Me.Label_MaxVoice.AutoSize = True
         Me.Label_MaxVoice.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label_MaxVoice.Location = New System.Drawing.Point(8, 158)
+        Me.Label_MaxVoice.Location = New System.Drawing.Point(8, 155)
         Me.Label_MaxVoice.Name = "Label_MaxVoice"
         Me.Label_MaxVoice.Size = New System.Drawing.Size(60, 13)
         Me.Label_MaxVoice.TabIndex = 11
@@ -877,20 +877,20 @@ Partial Class SfxControl
         '
         Me.Label_SubSfxEnabled.AutoSize = True
         Me.Label_SubSfxEnabled.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label_SubSfxEnabled.Location = New System.Drawing.Point(6, 255)
+        Me.Label_SubSfxEnabled.Location = New System.Drawing.Point(6, 251)
         Me.Label_SubSfxEnabled.Name = "Label_SubSfxEnabled"
         Me.Label_SubSfxEnabled.Size = New System.Drawing.Size(154, 13)
         Me.Label_SubSfxEnabled.TabIndex = 12
         Me.Label_SubSfxEnabled.Text = "Do Grouping Page Stuff..."
         '
-        'SfxParamsAndSamplePool
+        'SfxControl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.GroupBox_SfxParams)
         Me.Controls.Add(Me.GroupBox_SamplePoolControl)
-        Me.Name = "SfxParamsAndSamplePool"
-        Me.Size = New System.Drawing.Size(891, 280)
+        Me.Name = "SfxControl"
+        Me.Size = New System.Drawing.Size(891, 274)
         Me.GroupBox_SamplePoolControl.ResumeLayout(False)
         Me.GroupBox_SamplePoolControl.PerformLayout()
         Me.GroupBox_SampleProps.ResumeLayout(False)
