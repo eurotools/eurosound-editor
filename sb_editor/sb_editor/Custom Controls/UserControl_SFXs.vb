@@ -295,12 +295,58 @@ Public Class UserControl_SFXs
         End If
     End Sub
 
+    Private Sub ContextMenuSfx_Rename_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_Rename.Click
+        If ListBox_SFXs.SelectedItems.Count = 1 Then
+            'Get current fileName
+            Dim selectedName As String = ListBox_SFXs.SelectedItem
+            Dim currentFileName As String = fso.BuildPath(WorkingDirectory, "SFXs\" & selectedName & ".txt")
+            'Ask for a new name
+            Dim diagResult As String = RenameFile(selectedName, "SFX", fso.BuildPath(WorkingDirectory, "SFXs\"))
+            If diagResult IsNot "" Then
+                Dim mainForm As MainFrame = CType(Application.OpenForms("MainFrame"), MainFrame)
+                'Update UI and text file
+                fso.MoveFile(currentFileName, fso.BuildPath(WorkingDirectory, "SFXs\" & diagResult & ".txt"))
+                ListBox_SFXs.Items(ListBox_SFXs.SelectedIndex) = diagResult
+                'Clear Selection
+                mainForm.TreeView_SoundBanks.SelectedNode = Nothing
+                mainForm.ListBox_DataBases.SelectedItems.Clear()
+                mainForm.ListBox_DataBaseSFX.Items.Clear()
+                'Update project file
+                writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), mainForm.TreeView_SoundBanks, mainForm.ListBox_DataBases, ListBox_SFXs)
+                'Update databases
+                Dim databaseFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "Databases"), "*.txt", SearchOption.TopDirectoryOnly)
+                For index As Integer = 0 To databaseFiles.Length - 1
+                    'Read file
+                    Dim fileLines As String() = File.ReadAllLines(databaseFiles(index))
+                    'Update file and save changes
+                    Dim sfxItemIndex = Array.IndexOf(fileLines, selectedName)
+                    If sfxItemIndex >= 0 Then
+                        fileLines(sfxItemIndex) = diagResult
+                        File.WriteAllLines(databaseFiles(index), fileLines)
+                    End If
+                Next
+                'Liberate Memmory
+                Erase databaseFiles
+            End If
+        End If
+    End Sub
+
     Private Sub RemoveSfxAllFolders(filename As String, trashFolder As String)
         Dim fileList As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "SFXs"), filename & ".txt", SearchOption.AllDirectories)
         For index As Integer = 0 To fileList.Length - 1
             fso.MoveFile(fileList(index), trashFolder)
         Next
         Erase fileList
+    End Sub
+
+    Private Sub ContextMenuSfx_NewMultiple_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_NewMultiple.Click
+        Dim newMultiple As New SfxNewMultiple
+        newMultiple.ShowDialog()
+    End Sub
+
+    Private Sub ContextMenuSfx_MultiEditor_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_MultiEditor.Click
+        Dim multiEditor As New SfxMultiEditor
+        multiEditor.ShowDialog()
     End Sub
 
     '*===============================================================================================

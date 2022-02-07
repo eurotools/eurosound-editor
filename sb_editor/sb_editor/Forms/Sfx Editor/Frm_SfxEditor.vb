@@ -35,7 +35,7 @@ Partial Public Class Frm_SfxEditor
         'Check if the misc folder exists
         Dim miscFolder As String = fso.BuildPath(WorkingDirectory, "SFXs\Misc")
         If Not fso.FolderExists(miscFolder) Then
-            fso.CreateFolder(miscFolder)
+            MkDir(miscFolder)
         End If
 
         'Add Common Tab Page
@@ -52,7 +52,7 @@ Partial Public Class Frm_SfxEditor
             'Create folder if not exists
             Dim folderPath As String = fso.BuildPath(WorkingDirectory, "SFXs\" & availablePlatforms(index))
             If Not fso.FolderExists(folderPath) Then
-                fso.CreateFolder(folderPath)
+                MkDir(folderPath)
             End If
             'Check if the request file exists
             baseFilePath = fso.BuildPath(folderPath, sfxFileName & ".txt")

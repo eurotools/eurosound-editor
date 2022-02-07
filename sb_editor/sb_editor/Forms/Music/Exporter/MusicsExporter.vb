@@ -201,7 +201,11 @@ Partial Public Class MusicsExporter
                         Dim soundSampleData As String = fso.BuildPath(outputFilePath, "MFX_" & musicHashCode & ".ssd")
                         Dim musxFilename As String = "HCE" & Hex(musicHashCode).PadLeft(5, "0"c) & ".SFX"
                         'Create final file
-                        Dim fullDirPath = fso.BuildPath(propsFile.MiscProps.EngineXFolder, "Binary\" & GetEngineXFolder(currentPlatform) & "\music\" & musxFilename)
+                        Dim folderPath = fso.BuildPath(propsFile.MiscProps.EngineXFolder, "Binary\" & GetEngineXFolder(currentPlatform) & "\music")
+                        If Not fso.FolderExists(folderPath) Then
+                            MkDir(folderPath)
+                        End If
+                        Dim fullDirPath = fso.BuildPath(folderPath, musxFilename)
                         If StrComp(outputPlatforms(index), "GameCube") = 0 Then
                             BuildMusicFile(soundMarkerFile, soundSampleData, fullDirPath, musicHashCode, True)
                         Else

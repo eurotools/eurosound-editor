@@ -39,6 +39,8 @@ Partial Class UserControl_SFXs
         Me.ContextMenuSfx_Rename = New System.Windows.Forms.MenuItem()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.ListBox_SFXs = New sb_editor.MultiSelListBox()
+        Me.ContextMenuSfx_NewMultiple = New System.Windows.Forms.MenuItem()
+        Me.ContextMenuSfx_MultiEditor = New System.Windows.Forms.MenuItem()
         Me.GroupBox_SFX_List.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
@@ -47,7 +49,7 @@ Partial Class UserControl_SFXs
         '
         Me.Label_TotalSfx.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label_TotalSfx.AutoSize = True
-        Me.Label_TotalSfx.Location = New System.Drawing.Point(3, 587)
+        Me.Label_TotalSfx.Location = New System.Drawing.Point(3, 566)
         Me.Label_TotalSfx.Name = "Label_TotalSfx"
         Me.Label_TotalSfx.Size = New System.Drawing.Size(43, 13)
         Me.Label_TotalSfx.TabIndex = 1
@@ -63,7 +65,7 @@ Partial Class UserControl_SFXs
         Me.GroupBox_SFX_List.Controls.Add(Me.Button_ShowAll)
         Me.GroupBox_SFX_List.Controls.Add(Me.Button_UpdateList)
         Me.GroupBox_SFX_List.Controls.Add(Me.ComboBox_SFX_Section)
-        Me.GroupBox_SFX_List.Location = New System.Drawing.Point(3, 606)
+        Me.GroupBox_SFX_List.Location = New System.Drawing.Point(3, 585)
         Me.GroupBox_SFX_List.Name = "GroupBox_SFX_List"
         Me.GroupBox_SFX_List.Size = New System.Drawing.Size(271, 72)
         Me.GroupBox_SFX_List.TabIndex = 2
@@ -123,7 +125,7 @@ Partial Class UserControl_SFXs
         '
         'ContextMenu_SFXs
         '
-        Me.ContextMenu_SFXs.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.ContextMenuSfx_AddToDb, Me.ContextMenuSfx_Properties, Me.ContextMenuSfx_EditSfx, Me.ContextMenuSfx_AddNewSfx, Me.ContextMenuSfx_Copy, Me.ContextMenuSfx_Delete, Me.ContextMenuSfx_Rename})
+        Me.ContextMenu_SFXs.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.ContextMenuSfx_AddToDb, Me.ContextMenuSfx_Properties, Me.ContextMenuSfx_EditSfx, Me.ContextMenuSfx_AddNewSfx, Me.ContextMenuSfx_Copy, Me.ContextMenuSfx_Delete, Me.ContextMenuSfx_Rename, Me.ContextMenuSfx_NewMultiple, Me.ContextMenuSfx_MultiEditor})
         '
         'ContextMenuSfx_AddToDb
         '
@@ -168,7 +170,7 @@ Partial Class UserControl_SFXs
         Me.Panel1.Controls.Add(Me.ListBox_SFXs)
         Me.Panel1.Location = New System.Drawing.Point(0, 32)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(277, 552)
+        Me.Panel1.Size = New System.Drawing.Size(277, 531)
         Me.Panel1.TabIndex = 3
         '
         'ListBox_SFXs
@@ -182,9 +184,19 @@ Partial Class UserControl_SFXs
         Me.ListBox_SFXs.Location = New System.Drawing.Point(0, 0)
         Me.ListBox_SFXs.Name = "ListBox_SFXs"
         Me.ListBox_SFXs.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBox_SFXs.Size = New System.Drawing.Size(277, 552)
+        Me.ListBox_SFXs.Size = New System.Drawing.Size(277, 531)
         Me.ListBox_SFXs.Sorted = True
         Me.ListBox_SFXs.TabIndex = 1
+        '
+        'ContextMenuSfx_NewMultiple
+        '
+        Me.ContextMenuSfx_NewMultiple.Index = 7
+        Me.ContextMenuSfx_NewMultiple.Text = "New Multiple"
+        '
+        'ContextMenuSfx_MultiEditor
+        '
+        Me.ContextMenuSfx_MultiEditor.Index = 8
+        Me.ContextMenuSfx_MultiEditor.Text = "Multi Editor"
         '
         'UserControl_SFXs
         '
@@ -194,7 +206,7 @@ Partial Class UserControl_SFXs
         Me.Controls.Add(Me.Label_TotalSfx)
         Me.Controls.Add(Me.GroupBox_SFX_List)
         Me.Name = "UserControl_SFXs"
-        Me.Size = New System.Drawing.Size(277, 681)
+        Me.Size = New System.Drawing.Size(277, 660)
         Me.GroupBox_SFX_List.ResumeLayout(False)
         Me.GroupBox_SFX_List.PerformLayout()
         Me.Panel1.ResumeLayout(False)
@@ -220,4 +232,6 @@ Partial Class UserControl_SFXs
     Friend WithEvents ContextMenuSfx_Copy As MenuItem
     Friend WithEvents ContextMenuSfx_Delete As MenuItem
     Friend WithEvents ContextMenuSfx_Rename As MenuItem
+    Friend WithEvents ContextMenuSfx_NewMultiple As MenuItem
+    Friend WithEvents ContextMenuSfx_MultiEditor As MenuItem
 End Class

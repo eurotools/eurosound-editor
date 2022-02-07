@@ -48,16 +48,16 @@ namespace ESUtils
         {
             uint[] outBuff = new uint[numSamples];
             int inp;            /* Input buffer pointer */
-            int outIndex = 0;   /* output buffer pointer */
+            int outIndex = 0;   /* Output buffer pointer */
             int sign;           /* Current adpcm sign bit */
             int delta;          /* Current adpcm output value */
             int step;           /* Stepsize */
             int valpred;        /* Predicted value */
             int vpdiff;         /* Current change to valpred */
             int index;          /* Current step change index */
-            int inputbuffer;    /* place to keep next 4-bit value */
-            bool bufferstep;    /* toggle between inputbuffer/input */
-            uint EngineXState;   /* EngineX StateA and StateB field */
+            int inputbuffer;    /* Place to keep next 4-bit value */
+            bool bufferstep;    /* Toggle between inputbuffer/input */
+            uint EngineXState;  /* EngineX StateA and StateB field */
 
             ImaAdpcmState state = new ImaAdpcmState();
             inp = 0;
@@ -90,7 +90,7 @@ namespace ESUtils
 
                 /* Step 3 - Separate sign and magnitude */
                 sign = delta & 8;
-                delta = delta & 7;
+                delta &= 7;
 
                 /* Step 4 - Compute difference and new predicted value */
                 /*
@@ -119,11 +119,11 @@ namespace ESUtils
                 /* Step 7 - Calculate States */
                 byte bufferstepInt = Convert.ToByte(bufferstep);
                 EngineXState = ((uint)(
-                    (((short)valpred & 0xffff) << 0) | /* 0xPPPP....   swy: signed 16-bit predictor */
-                    ((inputbuffer & 0xff) << 16) |     /* 0x....II..   swy: full byte that contains a staging buffer */
-                    (((bufferstepInt & 0x1) << 7) |    /* 0x......OO   swy: boolean, top bit of the last byte */
-                    ((index & 0x7f) << 0))             /* 0x......OO   swy: remaining seven bits of the last byte */
-                    << 24));
+                    (((short)valpred & 0xffff) << 0) | /* 0xPPPP.... swy: signed 16-bit predictor */
+                    ((inputbuffer & 0xff) << 16) |     /* 0x....II.. swy: full byte that contains a staging buffer */
+                    (((bufferstepInt & 0x1) << 7) |    /* 0x......OO swy: boolean, top bit of the last byte */
+                    ((index & 0x7f) << 0)) << 24));    /* 0x......OO swy: remaining seven bits of the last byte */
+
 
                 /* Step 8 - Output value */
                 outBuff[outIndex++] = EngineXState;

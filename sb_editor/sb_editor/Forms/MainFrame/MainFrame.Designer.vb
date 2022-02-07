@@ -69,6 +69,7 @@ Partial Class MainFrame
         Me.Button_AddDataBases = New System.Windows.Forms.Button()
         Me.splitContainer2 = New System.Windows.Forms.SplitContainer()
         Me.GroupBox_SFXsInDataBase = New System.Windows.Forms.GroupBox()
+        Me.ListBox_DataBaseSFX = New sb_editor.MultiSelListBox()
         Me.ContextMenu_DataBasesSFX = New System.Windows.Forms.ContextMenu()
         Me.DataBasesSFX_Remove = New System.Windows.Forms.MenuItem()
         Me.DataBasesSFX_Properties = New System.Windows.Forms.MenuItem()
@@ -78,6 +79,7 @@ Partial Class MainFrame
         Me.Button_RemoveSFXs = New System.Windows.Forms.Button()
         Me.GroupBox_AvailableSFXs = New System.Windows.Forms.GroupBox()
         Me.Button_AddSFXs = New System.Windows.Forms.Button()
+        Me.UserControl_SFXs = New sb_editor.UserControl_SFXs()
         Me.GroupBox_SoundBanks = New System.Windows.Forms.GroupBox()
         Me.MainMenu_EuroSound = New System.Windows.Forms.MainMenu(Me.components)
         Me.MenuItemFile = New System.Windows.Forms.MenuItem()
@@ -94,8 +96,7 @@ Partial Class MainFrame
         Me.ToolTip_Buttons = New System.Windows.Forms.ToolTip(Me.components)
         Me.FolderBrowserDialog = New System.Windows.Forms.FolderBrowserDialog()
         Me.OpenFileDialog = New System.Windows.Forms.OpenFileDialog()
-        Me.ListBox_DataBaseSFX = New sb_editor.MultiSelListBox()
-        Me.UserControl_SFXs = New sb_editor.UserControl_SFXs()
+        Me.DataBasesSFX_MultiEditor = New System.Windows.Forms.MenuItem()
         Me.GroupBox_Output.SuspendLayout()
         Me.GroupBox_Misc.SuspendLayout()
         CType(Me.splitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -557,7 +558,7 @@ Partial Class MainFrame
         '
         Me.splitContainer2.Panel2.Controls.Add(Me.GroupBox_AvailableSFXs)
         Me.splitContainer2.Size = New System.Drawing.Size(552, 796)
-        Me.splitContainer2.SplitterDistance = 220
+        Me.splitContainer2.SplitterDistance = 219
         Me.splitContainer2.TabIndex = 1
         '
         'GroupBox_SFXsInDataBase
@@ -569,14 +570,30 @@ Partial Class MainFrame
         Me.GroupBox_SFXsInDataBase.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox_SFXsInDataBase.Location = New System.Drawing.Point(0, 0)
         Me.GroupBox_SFXsInDataBase.Name = "GroupBox_SFXsInDataBase"
-        Me.GroupBox_SFXsInDataBase.Size = New System.Drawing.Size(220, 796)
+        Me.GroupBox_SFXsInDataBase.Size = New System.Drawing.Size(219, 796)
         Me.GroupBox_SFXsInDataBase.TabIndex = 0
         Me.GroupBox_SFXsInDataBase.TabStop = False
         Me.GroupBox_SFXsInDataBase.Text = "SFXs In DataBase"
         '
+        'ListBox_DataBaseSFX
+        '
+        Me.ListBox_DataBaseSFX.AllowDrop = True
+        Me.ListBox_DataBaseSFX.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ListBox_DataBaseSFX.ContextMenu = Me.ContextMenu_DataBasesSFX
+        Me.ListBox_DataBaseSFX.DragDropEffectVal = System.Windows.Forms.DragDropEffects.Move
+        Me.ListBox_DataBaseSFX.FormattingEnabled = True
+        Me.ListBox_DataBaseSFX.HorizontalScrollbar = True
+        Me.ListBox_DataBaseSFX.Location = New System.Drawing.Point(6, 48)
+        Me.ListBox_DataBaseSFX.Name = "ListBox_DataBaseSFX"
+        Me.ListBox_DataBaseSFX.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.ListBox_DataBaseSFX.Size = New System.Drawing.Size(207, 706)
+        Me.ListBox_DataBaseSFX.TabIndex = 3
+        '
         'ContextMenu_DataBasesSFX
         '
-        Me.ContextMenu_DataBasesSFX.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.DataBasesSFX_Remove, Me.DataBasesSFX_Properties, Me.DataBasesSFX_Edit, Me.DataBasesSFX_SelectSFX})
+        Me.ContextMenu_DataBasesSFX.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.DataBasesSFX_Remove, Me.DataBasesSFX_Properties, Me.DataBasesSFX_Edit, Me.DataBasesSFX_SelectSFX, Me.DataBasesSFX_MultiEditor})
         '
         'DataBasesSFX_Remove
         '
@@ -619,7 +636,7 @@ Partial Class MainFrame
         Me.Button_RemoveSFXs.Cursor = System.Windows.Forms.Cursors.Default
         Me.Button_RemoveSFXs.Location = New System.Drawing.Point(8, 16)
         Me.Button_RemoveSFXs.Name = "Button_RemoveSFXs"
-        Me.Button_RemoveSFXs.Size = New System.Drawing.Size(208, 23)
+        Me.Button_RemoveSFXs.Size = New System.Drawing.Size(207, 23)
         Me.Button_RemoveSFXs.TabIndex = 0
         Me.Button_RemoveSFXs.Text = "Remove SFXs >>>"
         Me.ToolTip_Buttons.SetToolTip(Me.Button_RemoveSFXs, "Remove Selected SFX(s) From Selected DataBase")
@@ -633,7 +650,7 @@ Partial Class MainFrame
         Me.GroupBox_AvailableSFXs.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox_AvailableSFXs.Location = New System.Drawing.Point(0, 0)
         Me.GroupBox_AvailableSFXs.Name = "GroupBox_AvailableSFXs"
-        Me.GroupBox_AvailableSFXs.Size = New System.Drawing.Size(328, 796)
+        Me.GroupBox_AvailableSFXs.Size = New System.Drawing.Size(329, 796)
         Me.GroupBox_AvailableSFXs.TabIndex = 0
         Me.GroupBox_AvailableSFXs.TabStop = False
         Me.GroupBox_AvailableSFXs.Text = "Available SFXs"
@@ -645,11 +662,19 @@ Partial Class MainFrame
         Me.Button_AddSFXs.Cursor = System.Windows.Forms.Cursors.Default
         Me.Button_AddSFXs.Location = New System.Drawing.Point(3, 16)
         Me.Button_AddSFXs.Name = "Button_AddSFXs"
-        Me.Button_AddSFXs.Size = New System.Drawing.Size(322, 23)
+        Me.Button_AddSFXs.Size = New System.Drawing.Size(323, 23)
         Me.Button_AddSFXs.TabIndex = 0
         Me.Button_AddSFXs.Text = "<<< Add SFXs"
         Me.ToolTip_Buttons.SetToolTip(Me.Button_AddSFXs, "Add Selected SFX(s) To Selected DataBase")
         Me.Button_AddSFXs.UseVisualStyleBackColor = True
+        '
+        'UserControl_SFXs
+        '
+        Me.UserControl_SFXs.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UserControl_SFXs.Location = New System.Drawing.Point(3, 16)
+        Me.UserControl_SFXs.Name = "UserControl_SFXs"
+        Me.UserControl_SFXs.Size = New System.Drawing.Size(323, 777)
+        Me.UserControl_SFXs.TabIndex = 2
         '
         'GroupBox_SoundBanks
         '
@@ -729,29 +754,10 @@ Partial Class MainFrame
         Me.MenuItemDebug_Console.Index = 1
         Me.MenuItemDebug_Console.Text = "Console"
         '
-        'ListBox_DataBaseSFX
+        'DataBasesSFX_MultiEditor
         '
-        Me.ListBox_DataBaseSFX.AllowDrop = True
-        Me.ListBox_DataBaseSFX.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ListBox_DataBaseSFX.ContextMenu = Me.ContextMenu_DataBasesSFX
-        Me.ListBox_DataBaseSFX.DragDropEffectVal = System.Windows.Forms.DragDropEffects.Move
-        Me.ListBox_DataBaseSFX.FormattingEnabled = True
-        Me.ListBox_DataBaseSFX.HorizontalScrollbar = True
-        Me.ListBox_DataBaseSFX.Location = New System.Drawing.Point(6, 48)
-        Me.ListBox_DataBaseSFX.Name = "ListBox_DataBaseSFX"
-        Me.ListBox_DataBaseSFX.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBox_DataBaseSFX.Size = New System.Drawing.Size(208, 706)
-        Me.ListBox_DataBaseSFX.TabIndex = 3
-        '
-        'UserControl_SFXs
-        '
-        Me.UserControl_SFXs.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UserControl_SFXs.Location = New System.Drawing.Point(3, 16)
-        Me.UserControl_SFXs.Name = "UserControl_SFXs"
-        Me.UserControl_SFXs.Size = New System.Drawing.Size(322, 777)
-        Me.UserControl_SFXs.TabIndex = 2
+        Me.DataBasesSFX_MultiEditor.Index = 4
+        Me.DataBasesSFX_MultiEditor.Text = "Multi Editor"
         '
         'MainFrame
         '
@@ -864,4 +870,5 @@ Partial Class MainFrame
     Friend WithEvents MenuItemDebug As MenuItem
     Friend WithEvents MenuItemDebug_ShowGlobalVars As MenuItem
     Friend WithEvents MenuItemDebug_Console As MenuItem
+    Friend WithEvents DataBasesSFX_MultiEditor As MenuItem
 End Class

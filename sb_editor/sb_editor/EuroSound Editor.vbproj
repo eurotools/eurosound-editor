@@ -137,6 +137,18 @@
     <Compile Include="Forms\Debug Watcher\GlobalVariablesWatcher.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\Others\SfxNewMultiple.Designer.vb">
+      <DependentUpon>SfxNewMultiple.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Others\SfxNewMultiple.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Others\SfxMultiEditor.Designer.vb">
+      <DependentUpon>SfxMultiEditor.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Others\SfxMultiEditor.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\Resampler\Exporter\ExporterForm.Designer.vb">
       <DependentUpon>ExporterForm.vb</DependentUpon>
     </Compile>
@@ -311,6 +323,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Debug Watcher\GlobalVariablesWatcher.resx">
       <DependentUpon>GlobalVariablesWatcher.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Others\SfxNewMultiple.resx">
+      <DependentUpon>SfxNewMultiple.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Others\SfxMultiEditor.resx">
+      <DependentUpon>SfxMultiEditor.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Resampler\Exporter\ExporterForm.resx">
       <DependentUpon>ExporterForm.vb</DependentUpon>

@@ -549,6 +549,11 @@ Partial Public Class MainFrame
         End If
     End Sub
 
+    Private Sub DataBasesSFX_MultiEditor_Click(sender As Object, e As EventArgs) Handles DataBasesSFX_MultiEditor.Click
+        Dim multiEditor As New SfxMultiEditor
+        multiEditor.ShowDialog()
+    End Sub
+
     '*===============================================================================================
     '* AVAILABLE SFXs SECTION
     '*===============================================================================================

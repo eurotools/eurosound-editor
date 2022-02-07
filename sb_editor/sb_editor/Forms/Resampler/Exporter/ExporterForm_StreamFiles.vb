@@ -15,7 +15,7 @@ Partial Public Class ExporterForm
 
         'Create directory if not exists
         If Not fso.FolderExists(outputFolder) Then
-            fso.CreateFolder(outputFolder)
+            MkDir(outputFolder)
         End If
 
         'Create a new binary writer for the binary file
