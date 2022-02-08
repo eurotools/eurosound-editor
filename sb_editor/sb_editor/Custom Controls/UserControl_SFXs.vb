@@ -237,7 +237,7 @@ Public Class UserControl_SFXs
     Private Sub ContextMenuSfx_Delete_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_Delete.Click
         Dim maxItemsToShow As Byte = 33
         'Create a list with the items that we have to remove
-        Dim itemsToDelete As New Collection
+        Dim itemsToDelete As New List(Of String)
         For Each itemToRemove As String In ListBox_SFXs.SelectedItems
             itemsToDelete.Add(itemToRemove)
         Next
@@ -245,7 +245,7 @@ Public Class UserControl_SFXs
         'Create message to inform user
         Dim filesListToDelete As String = "Are you sure you want to delete SFX(s)" & vbNewLine & vbNewLine
         Dim numItems As Integer = Math.Min(maxItemsToShow, itemsToDelete.Count)
-        For index As Integer = 1 To numItems
+        For index As Integer = 0 To numItems
             filesListToDelete += "'" & itemsToDelete(index) & "'" & vbNewLine
         Next
         If itemsToDelete.Count > maxItemsToShow Then
@@ -268,28 +268,31 @@ Public Class UserControl_SFXs
             End If
             'Get database files
             Dim databaseFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "DataBases"), "*.txt", SearchOption.TopDirectoryOnly)
-            For i = 0 To databaseFiles.Length - 1
-                'Read database file info
-                Dim databaseFileLines As List(Of String) = File.ReadAllLines(databaseFiles(i)).ToList
-                Dim updateTextFile As Boolean = False
-                'iterate over all items to remove
-                For Each fileName As String In itemsToDelete
-                    'Remove text file
-                    RemoveSfxAllFolders(fileName, fso.BuildPath(sfxsTrash, fileName & ".txt"))
-                    'Remove database dependency
-                    If databaseFileLines.Contains(fileName) Then
-                        databaseFileLines.Remove(fileName)
-                        updateTextFile = True
-                    End If
-                    'Remove item from listbox
-                    ListBox_SFXs.Items.Remove(fileName)
-                Next
-                'Update database text file if required
-                If updateTextFile Then
-                    File.WriteAllLines(databaseFiles(i), databaseFileLines.ToArray)
+            For i As Integer = 0 To databaseFiles.Length - 1
+                'Update database files
+                Dim databaseFile As DataBaseFile = textFileReaders.ReadDataBaseFile(databaseFiles(i))
+                Dim resultList As List(Of String) = databaseFile.Dependencies.Except(itemsToDelete).ToList
+                If resultList.Count < databaseFile.Dependencies.Length Then
+                    writers.UpdateDataBaseText(databaseFiles(i), resultList, textFileReaders, False)
                 End If
             Next
             Erase databaseFiles
+
+            'Update UI
+            ListBox_SFXs.BeginUpdate()
+            For i As Integer = 0 To itemsToDelete.Count - 1
+                ListBox_SFXs.Items.Remove(itemsToDelete(i))
+                'Remove text file
+                Dim filesToDelete As IEnumerable(Of String) = GetFileList(itemsToDelete(i) & ".txt", fso.BuildPath(WorkingDirectory, "SFXs"))
+                Using enumerator As IEnumerator(Of String) = filesToDelete.GetEnumerator
+                    While enumerator.MoveNext
+                        fso.CopyFile(enumerator.Current, fso.BuildPath(sfxsTrash, itemsToDelete(i) & ".txt"))
+                        fso.DeleteFile(enumerator.Current)
+                    End While
+                End Using
+            Next
+            ListBox_SFXs.EndUpdate()
+
             'Update Project file
             writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), mainForm.TreeView_SoundBanks, mainForm.ListBox_DataBases, mainForm.UserControl_SFXs.ListBox_SFXs)
         End If
@@ -334,10 +337,39 @@ Public Class UserControl_SFXs
     Private Sub RemoveSfxAllFolders(filename As String, trashFolder As String)
         Dim fileList As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "SFXs"), filename & ".txt", SearchOption.AllDirectories)
         For index As Integer = 0 To fileList.Length - 1
-            fso.MoveFile(fileList(index), trashFolder)
+            If fso.FileExists(fileList(index)) Then
+                fso.CopyFile(fileList(index), trashFolder)
+                fso.DeleteFile(fileList(index))
+            End If
         Next
         Erase fileList
     End Sub
+
+    Public Shared Iterator Function GetFileList(fileSearchPattern As String, rootFolderPath As String) As IEnumerable(Of String)
+        Dim pending As New Queue(Of String)()
+        pending.Enqueue(rootFolderPath)
+        Dim tmp As String()
+
+        While pending.Count > 0
+            rootFolderPath = pending.Dequeue()
+
+            Try
+                tmp = Directory.GetFiles(rootFolderPath, fileSearchPattern)
+            Catch __unusedUnauthorizedAccessException1__ As UnauthorizedAccessException
+                Continue While
+            End Try
+
+            For i As Integer = 0 To tmp.Length - 1
+                Yield tmp(i)
+            Next
+
+            tmp = Directory.GetDirectories(rootFolderPath)
+            For i As Integer = 0 To tmp.Length - 1
+                pending.Enqueue(tmp(i))
+            Next
+        End While
+    End Function
+
 
     Private Sub ContextMenuSfx_NewMultiple_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_NewMultiple.Click
         Dim newMultiple As New SfxNewMultiple

@@ -2,18 +2,6 @@
     '*===============================================================================================
     '* CLASS GLOBAL FUNCTIONS
     '*===============================================================================================
-    Private Function CollectionToArray(objCollection As Collection) As String()
-        'Create array
-        Dim stringArray = New String(objCollection.Count - 1) {}
-
-        'Loop collection
-        For i As Integer = 1 To objCollection.Count
-            stringArray(i - 1) = objCollection(i)
-        Next
-
-        Return stringArray
-    End Function
-
     Private Function GetStringValue(keyword As String, currentLine As String) As String
         Dim keyWordLength = keyword.Length
         Dim LineData As String = currentLine.Substring(keyWordLength).Trim

@@ -7,7 +7,7 @@
         Dim objSB As New SoundbankFile
 
         'List to store dependencies
-        Dim dependencies As New Collection
+        Dim dependencies As New List(Of String)
 
         'Open file and read it
         Dim currentLine As String
@@ -98,7 +98,9 @@
         FileClose(1)
 
         'Add data to object
-        objSB.Dependencies = CollectionToArray(dependencies)
+        If dependencies.Count > 0 Then
+            objSB.Dependencies = dependencies.ToArray
+        End If
 
         Return objSB
     End Function

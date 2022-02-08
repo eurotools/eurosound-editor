@@ -166,6 +166,47 @@ Module GenericFunctions
     End Function
 
     '*===============================================================================================
+    '* INI FILE FUNCTIONS
+    '*===============================================================================================
+    Friend Function GetDefaultSampleValues() As Double()
+        Dim sampleInfo As Double() = New Double() {0, 0, 0, 0, 0, 0}
+        Dim iniFunctions As New IniFile(SysFileProjectIniPath)
+        Dim IniPitchOffset As String = iniFunctions.Read("DTextNIndex_0", "SFXForm")
+        Dim IniRandomPitch As String = iniFunctions.Read("DTextNIndex_1", "SFXForm")
+        Dim IniBaseVolume As String = iniFunctions.Read("DTextNIndex_2", "SFXForm")
+        Dim IniRandomVol As String = iniFunctions.Read("DTextNIndex_3", "SFXForm")
+        Dim IniPan As String = iniFunctions.Read("DTextNIndex_4", "SFXForm")
+        Dim IniRandomPan As String = iniFunctions.Read("DTextNIndex_5", "SFXForm")
+
+        'Pitch Offset
+        If IsNumeric(IniPitchOffset) Then
+            sampleInfo(0) = Convert.ToDouble(IniPitchOffset, numericProvider)
+        End If
+        'Random Pitch
+        If IsNumeric(IniRandomPitch) Then
+            sampleInfo(1) = Convert.ToDouble(IniRandomPitch, numericProvider)
+        End If
+        'Base Volume
+        If IsNumeric(IniBaseVolume) Then
+            sampleInfo(2) = CInt(IniBaseVolume)
+        End If
+        'Random Volume Offset
+        If IsNumeric(IniRandomVol) Then
+            sampleInfo(3) = CInt(IniRandomVol)
+        End If
+        'Pan
+        If IsNumeric(IniPan) Then
+            sampleInfo(4) = CInt(IniPan)
+        End If
+        'Random Pan
+        If IsNumeric(IniRandomPan) Then
+            sampleInfo(5) = CInt(IniRandomPan)
+        End If
+
+        Return sampleInfo
+    End Function
+
+    '*===============================================================================================
     '* FOLDERS FUNCTIONS
     '*===============================================================================================
     Friend Sub CreateFolderIfNotExists(folderPath)

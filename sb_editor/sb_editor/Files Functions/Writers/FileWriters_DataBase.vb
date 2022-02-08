@@ -1,5 +1,5 @@
 ﻿Partial Public Class FileWriters
-    Friend Sub UpdateDataBaseText(databaseTxt As String, itemsListObject As List(Of String), headerLib As FileParsers)
+    Friend Sub UpdateDataBaseText(databaseTxt As String, itemsListObject As List(Of String), headerLib As FileParsers, Optional updateHeader As Boolean = True)
         'Replace current file   
         Dim headerData As New FileHeader
 
@@ -7,8 +7,10 @@
         Dim created = Date.Now.ToString(filesDateFormat)
         If fso.FileExists(databaseTxt) Then
             headerData = headerLib.GetFileHeaderInfo(databaseTxt)
-            headerData.LastModify = created
-            headerData.LastModifyBy = EuroSoundUser
+            If updateHeader Then
+                headerData.LastModify = created
+                headerData.LastModifyBy = EuroSoundUser
+            End If
         Else
             headerData.FirstCreated = created
             headerData.CreatedBy = EuroSoundUser

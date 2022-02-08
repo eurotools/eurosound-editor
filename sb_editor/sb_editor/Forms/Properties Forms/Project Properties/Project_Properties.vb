@@ -94,7 +94,7 @@ Partial Public Class Project_Properties
             If promptSave Then
                 'Ask user what wants to do
                 My.Computer.Audio.PlaySystemSound(Media.SystemSounds.Exclamation)
-                Dim save As MsgBoxResult = MsgBox("Are you sure you wish to quit without saving?", vbOKCancel + vbQuestion, "Confirm Quit")
+                Dim save As MsgBoxResult = MsgBox("Are you sure you wish to Quit Properties without saving?", vbOKCancel + vbQuestion, "Confirm Quit")
                 'Cancel close if user not want to quit
                 If save = MsgBoxResult.Cancel Then
                     e.Cancel = True

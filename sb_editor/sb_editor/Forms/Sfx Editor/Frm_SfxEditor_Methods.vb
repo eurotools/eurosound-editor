@@ -372,47 +372,6 @@ Partial Public Class Frm_SfxEditor
     End Sub
 
     '*===============================================================================================
-    '* INI FILE FUNCTIONS
-    '*===============================================================================================
-    Private Function GetDefaultSampleValues() As Double()
-        Dim sampleInfo As Double() = New Double() {0, 0, 0, 0, 0, 0}
-        Dim iniFunctions As New IniFile(SysFileProjectIniPath)
-        Dim IniPitchOffset As String = iniFunctions.Read("DTextNIndex_0", "SFXForm")
-        Dim IniRandomPitch As String = iniFunctions.Read("DTextNIndex_1", "SFXForm")
-        Dim IniBaseVolume As String = iniFunctions.Read("DTextNIndex_2", "SFXForm")
-        Dim IniRandomVol As String = iniFunctions.Read("DTextNIndex_3", "SFXForm")
-        Dim IniPan As String = iniFunctions.Read("DTextNIndex_4", "SFXForm")
-        Dim IniRandomPan As String = iniFunctions.Read("DTextNIndex_5", "SFXForm")
-
-        'Pitch Offset
-        If IsNumeric(IniPitchOffset) Then
-            sampleInfo(0) = Convert.ToDouble(IniPitchOffset, numericProvider)
-        End If
-        'Random Pitch
-        If IsNumeric(IniRandomPitch) Then
-            sampleInfo(1) = Convert.ToDouble(IniRandomPitch, numericProvider)
-        End If
-        'Base Volume
-        If IsNumeric(IniBaseVolume) Then
-            sampleInfo(2) = CInt(IniBaseVolume)
-        End If
-        'Random Volume Offset
-        If IsNumeric(IniRandomVol) Then
-            sampleInfo(3) = CInt(IniRandomVol)
-        End If
-        'Pan
-        If IsNumeric(IniPan) Then
-            sampleInfo(4) = CInt(IniPan)
-        End If
-        'Random Pan
-        If IsNumeric(IniRandomPan) Then
-            sampleInfo(5) = CInt(IniRandomPan)
-        End If
-
-        Return sampleInfo
-    End Function
-
-    '*===============================================================================================
     '* FORMATS FUNCTIONS
     '*===============================================================================================
     Private Sub CreateSpecificFormat(formatName As String)
@@ -421,5 +380,4 @@ Partial Public Class Frm_SfxEditor
         fso.CopyFile(fso.BuildPath(WorkingDirectory, "SFXs\Misc\Common.txt"), formatTextFile, True)
         sfxFilesData.Add(CreateTab(formatName).Text, reader.ReadSFXFile(formatTextFile))
     End Sub
-
 End Class

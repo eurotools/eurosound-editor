@@ -5,7 +5,7 @@
     Public Function ReadDataBaseFile(textFilePath As String) As DataBaseFile
         'Create an object
         Dim DatabaseObj As New DataBaseFile
-        Dim dependencies As New Collection
+        Dim dependencies As New List(Of String)
 
         'Open file and read it
         Dim currentLine As String
@@ -55,7 +55,7 @@
 
         'Parse items to an array
         If dependencies.Count > 0 Then
-            DatabaseObj.Dependencies = CollectionToArray(dependencies)
+            DatabaseObj.Dependencies = dependencies.ToArray
         End If
 
         Return DatabaseObj
