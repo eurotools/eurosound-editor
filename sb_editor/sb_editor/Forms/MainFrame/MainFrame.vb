@@ -241,8 +241,20 @@ Partial Public Class MainFrame
                     If soundbankNode.Nodes.Count = 0 Then
                         soundbankNode.Nodes.Add("Empty", "Empty Sound Bank", 3, 3)
                     End If
+                    'Get databases
+                    Dim databases As New List(Of String)
+                    For Each childNode As TreeNode In soundbankNode.Nodes
+                        If StrComp(childNode.Name, "Empty") = -1 Then
+                            databases.Add(childNode.Text)
+                        End If
+                    Next
                     'Update text file
-                    writers.CreateSoundbankFile(soundbankNode, textFileReaders)
+                    Dim soundbankFilePath As String = fso.BuildPath(WorkingDirectory, "Soundbanks\" & soundbankNode.Text & ".txt")
+                    Dim soundbankData As New SoundbankFile With {
+                        .HashCode = soundbankNode.Name,
+                        .Dependencies = databases.ToArray
+                    }
+                    writers.UpdateSoundbankFile(soundbankData, soundbankFilePath, textFileReaders)
                 End If
             End If
         End If
@@ -289,7 +301,7 @@ Partial Public Class MainFrame
             Dim soundbankFullPath As String = fso.BuildPath(WorkingDirectory, "SoundBanks\" & selectedNodeText & ".txt")
             'Ensure that the soundbank txt still exists
             If fso.FileExists(soundbankFullPath) Then
-                Dim maxSoundbankSize As New SetMaxBankSize(soundbankFullPath, soundbankNode)
+                Dim maxSoundbankSize As New SetMaxBankSize(soundbankFullPath)
                 maxSoundbankSize.ShowDialog()
             End If
         End If
@@ -354,43 +366,51 @@ Partial Public Class MainFrame
     Private Sub ContextMenuDataBases_Delete_Click(sender As Object, e As EventArgs) Handles ContextMenuDataBases_Delete.Click
         'Ensure that there is an item selected
         If ListBox_DataBases.SelectedItems.Count > 0 Then
-            Dim maxItemsToShow As Byte = 33
             'Create a list with the items that we have to remove
-            Dim itemsToDelete As New Collection
+            Dim itemsToDelete As New List(Of String)
             For Each itemToRemove As String In ListBox_DataBases.SelectedItems
                 itemsToDelete.Add(itemToRemove)
             Next
-            'Create message to inform user
-            Dim filesListToDelete As String = "Are you sure you want to delete Database(s)" & vbNewLine & vbNewLine
-            Dim numItems As Integer = Math.Min(maxItemsToShow, itemsToDelete.Count)
-            For index As Integer = 1 To numItems
-                filesListToDelete += "'" & itemsToDelete(index) & "'" & vbNewLine
-            Next
-            If itemsToDelete.Count > maxItemsToShow Then
-                filesListToDelete += "Plus Some More ....." & vbNewLine
-                filesListToDelete += "............" & vbNewLine
-            End If
-            filesListToDelete += vbNewLine & "Total Files: " & ListBox_DataBases.SelectedItems.Count
+
             'Ask user what he wants to do
-            Dim answerQuestion As MsgBoxResult = MsgBox(filesListToDelete, vbInformation + vbYesNo, "Confirm Database Deletion")
+            Dim answerQuestion As MsgBoxResult = MsgBox(MultipleDeletionMessage("Are you sure you want to delete Database(s)", itemsToDelete), vbInformation + vbYesNo, "Confirm Database Deletion")
             If answerQuestion = MsgBoxResult.Yes Then
                 'Create Trash Folder if required
                 Dim databaseTrash As String = fso.BuildPath(WorkingDirectory, "Databases_Trash")
                 If Not fso.FolderExists(databaseTrash) Then
                     fso.CreateFolder(databaseTrash)
                 End If
-                'Start deleting
-                For Each fileName As String In itemsToDelete
+
+                'Get Soundbanks files
+                Dim soundbankFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "Soundbanks"), "*.txt", SearchOption.TopDirectoryOnly)
+                For i As Integer = 0 To soundbankFiles.Length - 1
+                    'Update soundbank file
+                    Dim soundbankFile As SoundbankFile = textFileReaders.ReadSoundBankFile(soundbankFiles(i))
+                    Dim resultList As List(Of String) = soundbankFile.Dependencies.Except(itemsToDelete).ToList
+                    If resultList.Count < soundbankFile.Dependencies.Length Then
+                        soundbankFile.Dependencies = resultList.ToArray
+                        writers.UpdateSoundbankFile(soundbankFile, soundbankFiles(i), textFileReaders, False)
+                    End If
+                Next
+
+                'Update UI
+                ListBox_DataBases.BeginUpdate()
+                For i As Integer = 0 To itemsToDelete.Count - 1
                     'Delete file 
-                    Dim fileFullPath As String = fso.BuildPath(WorkingDirectory, "Databases\" & fileName & ".txt")
-                    fso.MoveFile(fileFullPath, fso.BuildPath(databaseTrash, fileName & ".txt"))
+                    Dim fileFullPath As String = fso.BuildPath(WorkingDirectory, "Databases\" & itemsToDelete(i) & ".txt")
+                    fso.CopyFile(fileFullPath, fso.BuildPath(databaseTrash, itemsToDelete(i) & ".txt"))
+                    fso.DeleteFile(fileFullPath)
                     'Delete item from the list 
-                    ListBox_DataBases.Items.RemoveAt(ListBox_DataBases.Items.IndexOf(fileName))
+                    ListBox_DataBases.Items.Remove(itemsToDelete(i))
                     'Delete from the soundbank
                     For Each soundbank As TreeNode In TreeView_SoundBanks.Nodes
-                        DeleteDatabaseFromSoundbank(soundbank, fileName)
+                        DeleteDatabaseFromSoundbank(soundbank, itemsToDelete(i))
                     Next
                 Next
+                ListBox_DataBases.EndUpdate()
+
+                'Update Project file
+                writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), TreeView_SoundBanks, ListBox_DataBases, UserControl_SFXs.ListBox_SFXs)
             End If
         End If
     End Sub
@@ -431,7 +451,7 @@ Partial Public Class MainFrame
                         End If
                         'Update text file
                         If updateTextFile Then
-                            writers.CreateSoundbankFile(node, textFileReaders)
+                            'writers.CreateSoundbankFile(node, textFileReaders)
                         End If
                     Next
                 End If

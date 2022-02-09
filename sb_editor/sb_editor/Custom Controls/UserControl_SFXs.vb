@@ -235,27 +235,14 @@ Public Class UserControl_SFXs
     End Sub
 
     Private Sub ContextMenuSfx_Delete_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_Delete.Click
-        Dim maxItemsToShow As Byte = 33
         'Create a list with the items that we have to remove
         Dim itemsToDelete As New List(Of String)
         For Each itemToRemove As String In ListBox_SFXs.SelectedItems
             itemsToDelete.Add(itemToRemove)
         Next
 
-        'Create message to inform user
-        Dim filesListToDelete As String = "Are you sure you want to delete SFX(s)" & vbNewLine & vbNewLine
-        Dim numItems As Integer = Math.Min(maxItemsToShow, itemsToDelete.Count)
-        For index As Integer = 0 To numItems
-            filesListToDelete += "'" & itemsToDelete(index) & "'" & vbNewLine
-        Next
-        If itemsToDelete.Count > maxItemsToShow Then
-            filesListToDelete += "Plus Some More ....." & vbNewLine
-            filesListToDelete += "............" & vbNewLine
-        End If
-        filesListToDelete += vbNewLine & "Total Files: " & ListBox_SFXs.SelectedItems.Count
-
         'Ask user what he wants to do
-        Dim answerQuestion As MsgBoxResult = MsgBox(filesListToDelete, vbInformation + vbYesNo, "Confirm SFX Deletion")
+        Dim answerQuestion As MsgBoxResult = MsgBox(MultipleDeletionMessage("Are you sure you want to delete SFX(s)", itemsToDelete), vbInformation + vbYesNo, "Confirm SFX Deletion")
         If answerQuestion = MsgBoxResult.Yes Then
             'Get mainframe and clear selection
             Dim mainForm As MainFrame = CType(Application.OpenForms("MainFrame"), MainFrame)

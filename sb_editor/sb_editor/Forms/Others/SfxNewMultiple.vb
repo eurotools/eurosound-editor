@@ -1,11 +1,12 @@
 ﻿Imports System.Text.RegularExpressions
+Imports IniFileFunctions
 
 Public Class SfxNewMultiple
     '*===============================================================================================
     '* GLOBAL VARIABLES
     '*===============================================================================================
     Private ReadOnly rgx As New Regex("\d+$")
-    Private ReadOnly samplesDictionary As New Dictionary(Of String, List(Of String))
+    Private samplesDictionary As New Dictionary(Of String, List(Of String))
     Private ReadOnly textFileReaders As New FileParsers
     Private ReadOnly writers As New FileWriters
 
@@ -19,6 +20,20 @@ Public Class SfxNewMultiple
                 AddFilesToListbox(OpenFile_WaveFiles.FileNames)
             End If
         End If
+
+        'Load config
+        Dim iniFunctions As New IniFile(SysFileProjectIniPath)
+        CheckBox_ForceUpperCase.Checked = CBool(iniFunctions.Read("Check1_Value", "Form11_Misc"))
+        CheckBox_RandomSequence.Checked = CBool(iniFunctions.Read("Check2_Value", "Form11_Misc"))
+        TextBox_SfxPrefix.Text = iniFunctions.Read("Text1_Text", "Form11_Misc")
+    End Sub
+
+    Private Sub SfxNewMultiple_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        'Save data in the Ini File
+        Dim iniFunctions As New IniFile(SysFileProjectIniPath)
+        iniFunctions.Write("Check1_Value", Convert.ToByte(CheckBox_ForceUpperCase.Checked), "Form11_Misc")
+        iniFunctions.Write("Check2_Value", Convert.ToByte(CheckBox_RandomSequence.Checked), "Form11_Misc")
+        iniFunctions.Write("Text1_Text", TextBox_SfxPrefix.Text, "Form11_Misc")
     End Sub
 
     '*===============================================================================================
@@ -74,6 +89,7 @@ Public Class SfxNewMultiple
             For Each waveFilePath As String In newSfx.Value
                 'Create new sample
                 Dim sampleObj As New Sample With {
+                    .FilePath = waveFilePath.Substring(Len(ProjMasterFolder & "\Master\")),
                     .PitchOffset = sampleDefaultValues(0),
                     .RandomPitchOffset = sampleDefaultValues(1),
                     .BaseVolume = sampleDefaultValues(2),
@@ -81,14 +97,8 @@ Public Class SfxNewMultiple
                     .Pan = sampleDefaultValues(4),
                     .RandomPan = sampleDefaultValues(5)
                 }
-                'Calculate Relative Path
-                Dim MasterFolderPath As String = ProjMasterFolder & "\Master\"
-                If InStr(waveFilePath, MasterFolderPath) = 1 Then
-                    Dim relativePath As String = waveFilePath.Substring(MasterFolderPath.Length)
-                    sampleObj.FilePath = relativePath
-                    'Add object to list
-                    sfxFileData.Samples.Add(sampleObj)
-                End If
+                'Add object to list
+                sfxFileData.Samples.Add(sampleObj)
             Next
             '#SFXSamplePoolControl
             sfxFileData.SamplePool.Action1 = sfxDefaults.SamplePool.Action1
@@ -143,7 +153,7 @@ Public Class SfxNewMultiple
     Private Sub GetSfxNames()
         ListBox_SfxNames.Items.Clear()
         ListBox_SfxNames.BeginUpdate()
-        samplesDictionary.Clear()
+        samplesDictionary = New Dictionary(Of String, List(Of String))
         'Add items
         For Each filePath As String In ListBox_SampleFiles.Items
             Dim fileName As String = GetOnlyFileName(filePath)
@@ -151,20 +161,21 @@ Public Class SfxNewMultiple
             If CheckBox_RandomSequence.Checked Then
                 fileName = rgx.Replace(fileName, "")
             End If
-            'Ensure that this item does not exists
+            'Get Hashcode name with the prefix, uppercase if required
             Dim hashCodeName As String = TextBox_SfxPrefix.Text & fileName
+            If CheckBox_ForceUpperCase.Checked Then
+                hashCodeName = TextBox_SfxPrefix.Text & UCase(fileName)
+            End If
+            'Ensure that this item does not exists
             If ListBox_SfxNames.FindString(hashCodeName) = ListBox.NoMatches Then
                 'Add item to listbox
-                If CheckBox_ForceUpperCase.Checked Then
-                    hashCodeName = TextBox_SfxPrefix.Text & UCase(fileName)
-                End If
                 ListBox_SfxNames.Items.Add(hashCodeName)
-                'Add item to dictionary
-                If samplesDictionary.ContainsKey(hashCodeName) Then
-                    samplesDictionary(hashCodeName).Add(filePath)
-                Else
-                    samplesDictionary.Add(hashCodeName, New List(Of String)(New String() {filePath}))
-                End If
+            End If
+            'Add item to dictionary
+            If samplesDictionary.ContainsKey(hashCodeName) Then
+                samplesDictionary(hashCodeName).Add(filePath)
+            Else
+                samplesDictionary.Add(hashCodeName, New List(Of String)(New String() {filePath}))
             End If
         Next
         ListBox_SfxNames.EndUpdate()

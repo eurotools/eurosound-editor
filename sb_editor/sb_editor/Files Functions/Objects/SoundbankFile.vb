@@ -1,6 +1,6 @@
 ﻿Public Class SoundbankFile
     Public HeaderInfo As New FileHeader
-    Public Dependencies As String()
+    Public Dependencies As String() = New String() {}
     Public HashCodeLabel As String
     Public HashCode As UInteger
     Public MaxBankSizes As New MaxBankSizes

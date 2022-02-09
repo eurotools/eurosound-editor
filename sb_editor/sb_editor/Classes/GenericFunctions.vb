@@ -58,6 +58,22 @@ Module GenericFunctions
         End If
     End Sub
 
+    Friend Function MultipleDeletionMessage(messageToShow As String, itemsToDelete As List(Of String)) As String
+        Dim maxItemsToShow As Byte = 33
+        'Create message to inform user
+        Dim filesListToDelete As String = messageToShow & vbNewLine & vbNewLine
+        Dim numItems As Integer = Math.Min(maxItemsToShow, itemsToDelete.Count)
+        For index As Integer = 1 To numItems
+            filesListToDelete += "'" & itemsToDelete(index) & "'" & vbNewLine
+        Next
+        If itemsToDelete.Count > maxItemsToShow Then
+            filesListToDelete += "Plus Some More ....." & vbNewLine
+            filesListToDelete += "............" & vbNewLine
+        End If
+        filesListToDelete += vbNewLine & "Total Files: " & itemsToDelete.Count
+        Return filesListToDelete
+    End Function
+
     Friend Sub RestartEuroSound()
         'Restart application
         Process.Start(Application.ExecutablePath)

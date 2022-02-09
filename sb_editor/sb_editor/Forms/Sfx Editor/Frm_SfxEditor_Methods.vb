@@ -1,5 +1,4 @@
 ﻿Imports System.Media
-Imports IniFileFunctions
 Imports NAudio.Wave
 
 Partial Public Class Frm_SfxEditor
