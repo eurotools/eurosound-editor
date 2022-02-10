@@ -50,7 +50,6 @@ Partial Public Class FileParsers
                     Do
                         'Add item to listbox
                         SoundBankList.Add(currentLine)
-
                         'Continue Reading
                         currentLine = LineInput(1)
                     Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0 AndAlso Not EOF(1)
@@ -65,7 +64,6 @@ Partial Public Class FileParsers
                     Do
                         'Add item to listbox
                         DataBaseList.Add(currentLine)
-
                         'Continue Reading
                         currentLine = LineInput(1)
                     Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0 AndAlso Not EOF(1)
@@ -80,7 +78,6 @@ Partial Public Class FileParsers
                     Do
                         'Add item to listbox
                         SFXList.Add(currentLine)
-
                         'Continue Reading
                         currentLine = LineInput(1)
                     Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0 AndAlso Not EOF(1)

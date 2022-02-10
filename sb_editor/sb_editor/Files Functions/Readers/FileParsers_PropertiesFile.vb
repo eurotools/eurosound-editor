@@ -58,7 +58,6 @@
                                 If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
                                     'Add item to listview
                                     propsFile.AvailableFormats(itemsCount, i) = currentLine
-
                                     'Update counter
                                     itemsCount += 1
                                 Else
@@ -78,7 +77,6 @@
                         Do
                             'Add item to listview
                             AvailableReSampleRates.Add(currentLine)
-
                             'Continue Reading
                             currentLine = LineInput(1)
                         Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
@@ -103,10 +101,8 @@
                         Do
                             'Add item to ArrayList
                             values.Add(AvailableReSampleRates(sampleRateIndex), currentLine)
-
                             'Continue Reading
                             currentLine = LineInput(1)
-
                             'Update index
                             sampleRateIndex += 1
                         Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0

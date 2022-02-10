@@ -24,6 +24,10 @@ Partial Public Class Frm_SfxEditor
     '* FORM EVENTS
     '*===============================================================================================
     Private Sub Frm_SfxEditor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        'Hide mainframe
+        Dim MainFrame As Form = CType(Application.OpenForms("MainFrame"), MainFrame)
+        MainFrame.Hide()
+
         Text = sfxFileName
         Label_SFX_Name.Text = ">Name: " & sfxFileName
         SfxParamsAndSamplePool.Textbox_SfxName.Text = sfxFileName
@@ -91,6 +95,10 @@ Partial Public Class Frm_SfxEditor
                 Dim save As MsgBoxResult = MsgBox("Are you sure you wish to quit without saving?", vbOKCancel + vbQuestion, "Confirm Quit")
                 If save = MsgBoxResult.Cancel Then
                     e.Cancel = True
+                Else
+                    'Show mainframe again
+                    Dim MainFrame As Form = CType(Application.OpenForms("MainFrame"), MainFrame)
+                    MainFrame.Show()
                 End If
             End If
         End If

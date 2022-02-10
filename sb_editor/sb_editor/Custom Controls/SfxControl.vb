@@ -31,17 +31,17 @@
     '* FROM EVENTS
     '*===============================================================================================
     Private Sub SfxParamsAndSamplePool_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'Reverb track bar
-        Textbox_Reverb.DataBindings.Add(New Binding("Text", TrackBar_Reverb, "Value"))
-        TrackBar_Reverb.DataBindings.Add(New Binding("Value", Textbox_Reverb, "Text"))
+        ''Reverb track bar
+        'Textbox_Reverb.DataBindings.Add(New Binding("Text", TrackBar_Reverb, "Value"))
+        'TrackBar_Reverb.DataBindings.Add(New Binding("Value", Textbox_Reverb, "Text"))
 
-        'Inner radius track bar
-        Textbox_InnerRadius.DataBindings.Add(New Binding("Text", TrackBar_InnerRadius, "Value"))
-        TrackBar_InnerRadius.DataBindings.Add(New Binding("Value", Textbox_InnerRadius, "Text"))
+        ''Inner radius track bar
+        'Textbox_InnerRadius.DataBindings.Add(New Binding("Text", TrackBar_InnerRadius, "Value"))
+        'TrackBar_InnerRadius.DataBindings.Add(New Binding("Value", Textbox_InnerRadius, "Text"))
 
-        'Outer radius track bar
-        Textbox_OuterRadius.DataBindings.Add(New Binding("Text", TrackBar_OuterRadius, "Value"))
-        TrackBar_OuterRadius.DataBindings.Add(New Binding("Value", Textbox_OuterRadius, "Text"))
+        ''Outer radius track bar
+        'Textbox_OuterRadius.DataBindings.Add(New Binding("Text", TrackBar_OuterRadius, "Value"))
+        'TrackBar_OuterRadius.DataBindings.Add(New Binding("Value", Textbox_OuterRadius, "Text"))
     End Sub
 
     '*===============================================================================================

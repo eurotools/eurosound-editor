@@ -10,8 +10,8 @@
         PrintLine(1, "#END")
         PrintLine(1, "")
         PrintLine(1, "#HASHCODES")
-        PrintLine(1, "SFXHashCodeNumber 0")
-        PrintLine(1, "SoundBankHashCodeNumber 0")
+        PrintLine(1, "SFXHashCodeNumber " & SFXHashCodeNumber)
+        PrintLine(1, "SoundBankHashCodeNumber " & SoundBankHashCodeNumber)
         If MFXHashCodeNumber > 0 Then
             PrintLine(1, "MFXHashCodeNumber " & MFXHashCodeNumber)
         End If

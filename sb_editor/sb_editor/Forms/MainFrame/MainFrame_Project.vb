@@ -59,10 +59,16 @@ Partial Public Class MainFrame
         Dim soundBankFiles As String() = Directory.GetFiles(projectFolder, "*.txt", SearchOption.TopDirectoryOnly)
         'Add items to tree view
         TreeView_SoundBanks.BeginUpdate()
-        For i = 0 To soundBankFiles.Length - 1
-            Dim soundBankName As String = GetOnlyFileName(soundBankFiles(i))
-            Dim SoundBankNode As TreeNode = TreeView_SoundBanks.Nodes.Add(soundBankName, soundBankName, 0, 0)
-            textFileReaders.GetSoundbankDependencies(soundBankFiles(i), SoundBankNode)
+        For i As Integer = 0 To soundBankFiles.Length - 1
+            Dim soundbankData As SoundbankFile = textFileReaders.ReadSoundBankFile(soundBankFiles(i))
+            Dim SoundBankNode As TreeNode = TreeView_SoundBanks.Nodes.Add(CStr(soundbankData.HashCode), GetOnlyFileName(soundBankFiles(i)), 0, 0)
+            For index As Integer = 0 To soundbankData.Dependencies.Count - 1
+                SoundBankNode.Nodes.Add(soundbankData.Dependencies(index), soundbankData.Dependencies(index), 2, 2)
+            Next
+            'Add empty node if required
+            If SoundBankNode.Nodes.Count = 0 Then
+                SoundBankNode.Nodes.Add("Empty", "Empty Sound Bank", 3, 3)
+            End If
         Next
         TreeView_SoundBanks.EndUpdate()
         'Update counter label

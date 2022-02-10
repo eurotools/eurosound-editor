@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports NAudio.Wave
 Imports Scripting
 
 Public Class Soundbank_Properties
@@ -30,42 +31,79 @@ Public Class Soundbank_Properties
         'Calculate Output Filename
         Label_Value_OutFileName.Text = "HC" & Hex(SoundbankHashCode).PadLeft(6, "0"c) & ".SFX"
 
-        'Read Soundbank File
+        'Read Soundbank File and put basic info
         Dim SoundbankObj As SoundbankFile = textFileReaders.ReadSoundBankFile(SoundbankFilePath)
-
-        'Add DataBases Sort and update counter
-        ListBox_Databases.Items.AddRange(SoundbankObj.Dependencies)
-        If ListBox_Databases.Items.Count > 0 Then
-            'Update counter
-            Label_DataBasesCount.Text = "DataBases: " & ListBox_Databases.Items.Count
-            'Sort items
-            ListBox_Databases.Sorted = True
-        End If
-
-        GetSfxList(SoundbankObj)
-        GetSamples()
-
-        'Update Controls
         Label_Value_FirstCreated.Text = SoundbankObj.HeaderInfo.FirstCreated
         Label_CreatedBy_Value.Text = SoundbankObj.HeaderInfo.CreatedBy
         Label_Value_LastModified.Text = SoundbankObj.HeaderInfo.LastModify
         Label_ModifiedBy_Value.Text = SoundbankObj.HeaderInfo.LastModifyBy
-
-        'Update counters
         Label_DatabaseCount_Value.Text = CountFolderFiles(fso.BuildPath(WorkingDirectory, "Databases"), "*.txt")
         Label_SfxCount_Value.Text = CountFolderFiles(fso.BuildPath(WorkingDirectory, "SFXs"), "*.txt")
+
+        'Add DataBases Sort and update counter
+        If SoundbankObj.Dependencies.Count > 0 Then
+            ListBox_Databases.Items.AddRange(SoundbankObj.Dependencies)
+            Label_DataBasesCount.Text = "DataBases: " & ListBox_Databases.Items.Count
+        End If
+
+        'Get soundbank Sfx list
+        Dim sfxList As String() = GetSfxList(SoundbankObj)
+        If sfxList.Length > 0 Then
+            ListBox_SFXs.Items.AddRange(sfxList)
+            Label_SfxCount.Text = "SFXs: " & sfxList.Length
+        End If
+
+        'Get Samples List
+        Dim samplesList As String() = GetSamples()
+        Dim samplesFullPath As String() = GetSamplesFullPath(samplesList)
+        If samplesFullPath.Length > 0 Then
+            ListBox_SamplesList.Items.AddRange(samplesFullPath)
+            Label_TotalSamples.Text = "Samples: " & samplesFullPath.Length
+        End If
 
         'Ensure that the Master folder exists
         Dim MasterFilePath = fso.BuildPath(ProjMasterFolder, "Master")
         If fso.FolderExists(MasterFilePath) Then
             'Count folder files
             Label_SampleCount_Value.Text = Directory.GetFiles(MasterFilePath, "*.wav", SearchOption.AllDirectories).Length
-
             'Get sample folder size
             Dim fold As Folder = fso.GetFolder(MasterFilePath)
             Label_Value_Size.Text = BytesStringFormat(fold.Size)
         End If
+
+        'Get streamed samples 
+        Dim streamSamplesList As String() = textFileReaders.GetStreamSoundsList(SysFileSamples)
+        Dim samplesInSoundbank As String() = GetSamplesFullPath(SamplesToIncludeInSoundbank(samplesList, streamSamplesList))
+
+        'Get estimated size PC
+        Label_SizeFile_PC.Text = BytesStringFormat(GetSamplesSize(samplesInSoundbank, WorkingDirectory & "\PC\", ".wav") + (20 * sfxList.Length))
+        Label_SizeFile_PlayStation2.Text = BytesStringFormat(GetSamplesSize(samplesInSoundbank, WorkingDirectory & "\PlayStation2_VAG\", ".vag") + (20 * sfxList.Length))
+        Label_SizeFile_GameCube.Text = BytesStringFormat(GetSamplesSize(samplesInSoundbank, WorkingDirectory & "\GameCube_dsp_adpcm\", ".dsp") + (20 * sfxList.Length))
+        Label_SizeFile_Xbox.Text = BytesStringFormat(GetSamplesSize(samplesInSoundbank, WorkingDirectory & "\XBox_adpcm\", ".wav") + (20 * sfxList.Length))
     End Sub
+
+    Private Function GetSamplesSize(soundbankSamples As String(), platformFolder As String, fileExtension As String) As Long
+        Dim fileLength As Long = 0
+        If fso.FolderExists(platformFolder) Then
+            Dim startString As Integer = Len(WorkingDirectory & "\Master\")
+            For index As Integer = 0 To soundbankSamples.Length - 1
+                Dim platformFilePath As String = Path.ChangeExtension(fso.BuildPath(platformFolder, Mid(soundbankSamples(index), startString)), fileExtension)
+                If fso.FileExists(platformFilePath) Then
+                    If platformFilePath.EndsWith(".wav", StringComparison.OrdinalIgnoreCase) Then
+                        Dim waveReader As New WaveFileReader(platformFilePath)
+                        fileLength += waveReader.Length
+                    ElseIf platformFilePath.EndsWith(".aif", StringComparison.OrdinalIgnoreCase) Then
+                        Dim aiffReader As New AiffFileReader(platformFilePath)
+                        fileLength += aiffReader.Length
+                    Else
+                        fileLength += FileLen(platformFilePath)
+                    End If
+                End If
+            Next
+        End If
+        Return fileLength
+    End Function
+
     '*===============================================================================================
     '* FORM BUTTONS
     '*===============================================================================================
@@ -77,82 +115,73 @@ Public Class Soundbank_Properties
     '*===============================================================================================
     '* FUNCTIONS
     '*===============================================================================================
-    Private Sub GetSamples()
+    Private Function GetSamples() As String()
         'Get Samples
         Dim Samples As New List(Of String)
         For Each item As String In ListBox_SFXs.Items
-            'Read SFX Dependencies
-            Dim sfxFullPath As String = Path.Combine(WorkingDirectory, "SFXs", item & ".txt")
-
             'Open file
             Dim currentLine As String
-            FileOpen(1, sfxFullPath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
+            FileOpen(1, fso.BuildPath(WorkingDirectory, "SFXs\" & item & ".txt"), OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
             Do Until EOF(1)
                 'Read text file
                 currentLine = LineInput(1)
-
                 'Read samples section
                 If StrComp(currentLine, "#SFXSamplePoolFiles") = 0 Then
                     'Read line
                     currentLine = LineInput(1)
                     Do
-                        'Get relative path
-                        Dim waveRelativePath = currentLine
-
-                        'Get Absolute Path
-                        Dim waveFilePath As String = UCase(fso.BuildPath(ProjMasterFolder, "Master\" & waveRelativePath))
-
-                        'Add item to list
-                        If Not Samples.Contains(waveFilePath) Then
-                            Samples.Add(waveFilePath)
-                        End If
-
+                        'Add path to list
+                        Samples.Add(currentLine)
                         'Continue Reading
                         currentLine = LineInput(1)
                     Loop While StrComp(currentLine, "#END") <> 0 AndAlso Not EOF(1)
+                    Exit Do
                 End If
             Loop
             FileClose(1)
         Next
+        Return Samples.Distinct().ToArray
+    End Function
 
-        'Add data to listbox, sort, and update counter
-        If Samples.Count > 0 Then
-            'Add items
-            ListBox_SamplesList.Items.AddRange(Samples.ToArray)
+    Private Function GetSamplesFullPath(samplesArray As String()) As String()
+        Dim samplesList As New List(Of String)
+        For index As Integer = 0 To samplesArray.Length - 1
+            'Get full path
+            Dim waveFilePath As String = UCase(fso.BuildPath(ProjMasterFolder, "Master\" & samplesArray(index)))
+            'Add path to list
+            samplesList.Add(waveFilePath)
+        Next
+        Return samplesList.ToArray
+    End Function
 
-            'Update counter
-            Label_TotalSamples.Text = "Samples: " & ListBox_SamplesList.Items.Count
-
-            'Sort items
-            ListBox_SamplesList.Sorted = True
-        End If
-    End Sub
-
-    Private Sub GetSfxList(SoundbankObj As SoundbankFile)
+    Private Function GetSfxList(SoundbankObj As SoundbankFile) As String()
+        Dim sfxList As New List(Of String)
         'Get used SFXs
         For Each item As String In SoundbankObj.Dependencies
             'Read SFX Dependencies
-            Dim sfxFullPath As String = Path.Combine(WorkingDirectory, "DataBases", item & ".txt")
+            Dim sfxFullPath As String = fso.BuildPath(WorkingDirectory, "DataBases\" & item & ".txt")
             Dim SFXs As String() = textFileReaders.ReadDataBaseFile(sfxFullPath).Dependencies
-
             'Add items to list
             For index As Integer = 0 To SFXs.Count - 1
-                'Search this SFX in the SFXs list
-                Dim itemIndex = ListBox_SFXs.FindString(SFXs(index))
-
-                'Ensure that the item does not exists
-                If itemIndex = ListBox.NoMatches Then
-                    ListBox_SFXs.Items.Add(SFXs(index))
-                End If
+                sfxList.Add(SFXs(index))
             Next
         Next
+        Return sfxList.Distinct().ToArray
+    End Function
 
-        'Sort and update counter
-        If ListBox_SFXs.Items.Count > 0 Then
-            'Update counter
-            Label_SfxCount.Text = "SFXs: " & ListBox_SFXs.Items.Count
-            'Sort items
-            ListBox_SFXs.Sorted = True
-        End If
-    End Sub
+    Private Function SamplesToIncludeInSoundbank(samplesList As String(), streamSamples As String()) As String()
+        Dim samplesToInclude As New List(Of String)
+
+        For index As Integer = 0 To samplesList.Length - 1
+            Dim sampleFullPath As String = samplesList(index)
+            If Not sampleFullPath.StartsWith("\") Then
+                sampleFullPath = "\" & samplesList(index)
+            End If
+            samplesToInclude.Add(sampleFullPath)
+        Next
+
+        Dim finalList = samplesToInclude.Except(streamSamples)
+
+        Return finalList.Distinct().ToArray
+    End Function
 End Class

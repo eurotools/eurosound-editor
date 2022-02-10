@@ -196,16 +196,20 @@ Public Class UserControl_SFXs
     End Sub
 
     Private Sub ContextMenuSfx_AddNewSfx_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_AddNewSfx.Click
-        'Ensure that the default file exists
-        If fso.FileExists(SysFileSfxDefaults) Then
-
+        If ListBox_SFXs.Items.Count > 0 AndAlso SFXHashCodeNumber = 0 Then
+            MsgBox("Please Re-Alloc Hashcodes under Advanced Menu", vbOKOnly + vbExclamation, "EuroSound")
         Else
-            'Inform user about this
-            MsgBox("Must Setup Default SFX file first!", vbOKOnly + vbCritical, "Setup SFX Defaults.")
-            'Open SFX Default Form
-            Using defaultSettingsForm As New SfxDefault
-                defaultSettingsForm.ShowDialog()
-            End Using
+            'Ensure that the default file exists
+            If fso.FileExists(SysFileSfxDefaults) Then
+
+            Else
+                'Inform user about this
+                MsgBox("Must Setup Default SFX file first!", vbOKOnly + vbCritical, "Setup SFX Defaults.")
+                'Open SFX Default Form
+                Using defaultSettingsForm As New SfxDefault
+                    defaultSettingsForm.ShowDialog()
+                End Using
+            End If
         End If
     End Sub
 

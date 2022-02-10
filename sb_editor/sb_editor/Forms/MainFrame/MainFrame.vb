@@ -437,6 +437,7 @@ Partial Public Class MainFrame
                     For Each node As TreeNode In TreeView_SoundBanks.Nodes
                         'Boolean
                         Dim updateTextFile As Boolean = False
+                        Dim dependenciesList As New List(Of String)
                         'Update nodes
                         If node.Nodes.Count > 0 Then
                             For Each childNode As TreeNode In node.Nodes
@@ -447,11 +448,16 @@ Partial Public Class MainFrame
                                     'Update boolean
                                     updateTextFile = True
                                 End If
+                                'Add item to list
+                                dependenciesList.Add(childNode.Text)
                             Next
                         End If
-                        'Update text file
+                        'Update text file if required
                         If updateTextFile Then
-                            'writers.CreateSoundbankFile(node, textFileReaders)
+                            Dim soundbankFilePath As String = fso.BuildPath(WorkingDirectory, "Soundbanks\" & node.Text & ".txt")
+                            Dim soundbankFile As SoundbankFile = textFileReaders.ReadSoundBankFile(soundbankFilePath)
+                            soundbankFile.Dependencies = dependenciesList.ToArray
+                            writers.UpdateSoundbankFile(soundbankFile, soundbankFilePath, textFileReaders)
                         End If
                     Next
                 End If
@@ -478,8 +484,6 @@ Partial Public Class MainFrame
             'Ensure that the file exists
             If fso.FileExists(SelectedSfxPath) Then
                 'Open editor
-                'Dim sfxEditor As New SfxEditor(selectedSFX)
-                'SfxEditor.ShowDialog()
                 Dim sfxEditor As New Frm_SfxEditor(selectedSFX)
                 sfxEditor.ShowDialog()
             End If
@@ -488,7 +492,6 @@ Partial Public Class MainFrame
 
     Private Sub ListBox_DataBaseSFX_DragOver(sender As Object, e As DragEventArgs) Handles ListBox_DataBaseSFX.DragOver
         e.Effect = DragDropEffects.Copy
-
     End Sub
 
     Private Sub ListBox_DataBaseSFX_DragDrop(sender As Object, e As DragEventArgs) Handles ListBox_DataBaseSFX.DragDrop
@@ -709,6 +712,11 @@ Partial Public Class MainFrame
         Else
             MsgBox("File not found", vbOKOnly + vbCritical, "EuroSound")
         End If
+    End Sub
+
+    Private Sub Button_Advanced_Click(sender As Object, e As EventArgs) Handles Button_Advanced.Click
+        Dim advancedMenuForm As New AdvancedMenu
+        advancedMenuForm.ShowDialog()
     End Sub
 
     Private Sub Button_MusicMaker_Click(sender As Object, e As EventArgs) Handles Button_MusicMaker.Click

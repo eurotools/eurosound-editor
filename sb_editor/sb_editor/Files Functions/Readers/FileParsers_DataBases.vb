@@ -44,7 +44,6 @@
                     Do
                         'Add item to listbox
                         dependencies.Add(currentLine)
-
                         'Continue Reading
                         currentLine = LineInput(1)
                     Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
