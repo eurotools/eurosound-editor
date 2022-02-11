@@ -198,10 +198,7 @@ Partial Public Class MainFrame
         'Ensure that we have selected a node
         If TreeView_SoundBanks.SelectedNode IsNot Nothing Then
             'Get parent if the user has selected a child node
-            Dim soundbankNode As TreeNode = TreeView_SoundBanks.SelectedNode
-            If TreeView_SoundBanks.SelectedNode.Level > 0 Then
-                soundbankNode = TreeView_SoundBanks.SelectedNode.Parent
-            End If
+            Dim soundbankNode As TreeNode = GetSoundbankNode(TreeView_SoundBanks.SelectedNode)
             'Ask user
             Dim soundbankCopyName As String = CopyFile(soundbankNode.Text, "Sound Bank", fso.BuildPath(WorkingDirectory, "Soundbanks\"))
             If soundbankCopyName IsNot "" Then
@@ -261,26 +258,34 @@ Partial Public Class MainFrame
     End Sub
 
     Private Sub ContextMenu_TreeView_Rename_Click(sender As Object, e As EventArgs) Handles ContextMenu_TreeView_Rename.Click
-
+        If TreeView_SoundBanks.SelectedNode IsNot Nothing Then
+            'Get parent if the user has selected a child node
+            Dim soundbankNode As TreeNode = GetSoundbankNode(TreeView_SoundBanks.SelectedNode)
+            'Ask for a new name
+            Dim diagResult As String = RenameFile(soundbankNode.Text, "Sound Bank", fso.BuildPath(WorkingDirectory, "SoundBanks\"))
+            If diagResult IsNot "" Then
+                'Move file
+                Dim currentFileName As String = fso.BuildPath(WorkingDirectory, "SoundBanks\" & soundbankNode.Text & ".txt")
+                fso.MoveFile(currentFileName, fso.BuildPath(WorkingDirectory, "SoundBanks\" & diagResult & ".txt"))
+                'Build new file path
+                soundbankNode.Text = diagResult
+            End If
+        End If
     End Sub
 
     Private Sub ContextMenu_TreeView_Properties_Click(sender As Object, e As EventArgs) Handles ContextMenu_TreeView_Properties.Click
         'Ensure that we have selected a node
         If TreeView_SoundBanks.SelectedNode IsNot Nothing Then
             'Get parent if the user has selected a child node
-            Dim soundbankNode As TreeNode = TreeView_SoundBanks.SelectedNode
-            If TreeView_SoundBanks.SelectedNode.Level > 0 Then
-                soundbankNode = TreeView_SoundBanks.SelectedNode.Parent
-            End If
+            Dim soundbankNode As TreeNode = GetSoundbankNode(TreeView_SoundBanks.SelectedNode)
             'Get Soundbank name and file path
-            Dim selectedNodeText As String = soundbankNode.Text
-            Dim soundbankFullPath As String = fso.BuildPath(WorkingDirectory, "SoundBanks\" & selectedNodeText & ".txt")
+            Dim soundbankFullPath As String = fso.BuildPath(WorkingDirectory, "SoundBanks\" & soundbankNode.Text & ".txt")
             'Ensure that the soundbank txt still exists
             If fso.FileExists(soundbankFullPath) Then
                 'Get Soundbank HashCode
                 Dim soundbankHashCode As Integer = soundbankNode.Name
                 'Show form
-                Dim sbProperties As New Soundbank_Properties(soundbankFullPath, selectedNodeText, soundbankHashCode)
+                Dim sbProperties As New Soundbank_Properties(soundbankFullPath, soundbankNode.Text, soundbankHashCode)
                 sbProperties.ShowDialog()
             End If
         Else
@@ -292,13 +297,9 @@ Partial Public Class MainFrame
         'Ensure that we have selected a node
         If TreeView_SoundBanks.SelectedNode IsNot Nothing Then
             'Get parent if the user has selected a child node
-            Dim soundbankNode As TreeNode = TreeView_SoundBanks.SelectedNode
-            If TreeView_SoundBanks.SelectedNode.Level > 0 Then
-                soundbankNode = TreeView_SoundBanks.SelectedNode.Parent
-            End If
+            Dim soundbankNode As TreeNode = GetSoundbankNode(TreeView_SoundBanks.SelectedNode)
             'Get Soundbank name and file path
-            Dim selectedNodeText As String = soundbankNode.Text
-            Dim soundbankFullPath As String = fso.BuildPath(WorkingDirectory, "SoundBanks\" & selectedNodeText & ".txt")
+            Dim soundbankFullPath As String = fso.BuildPath(WorkingDirectory, "SoundBanks\" & soundbankNode.Text & ".txt")
             'Ensure that the soundbank txt still exists
             If fso.FileExists(soundbankFullPath) Then
                 Dim maxSoundbankSize As New SetMaxBankSize(soundbankFullPath)
@@ -360,7 +361,15 @@ Partial Public Class MainFrame
     End Sub
 
     Private Sub ContextMenuDataBases_Copy_Click(sender As Object, e As EventArgs) Handles ContextMenuDataBases_Copy.Click
-
+        If ListBox_DataBases.SelectedItems.Count = 1 Then
+            'Ask user
+            Dim sfxCopyName As String = CopyFile(vbCrLf & ListBox_DataBases.SelectedItem, "Database", fso.BuildPath(WorkingDirectory, "DataBases\"))
+            If sfxCopyName IsNot "" Then
+                'Read original file content
+                Dim originalFilePath As String = fso.BuildPath(WorkingDirectory, "DataBases\" & ListBox_DataBases.SelectedItem & ".txt")
+                fso.CopyFile(originalFilePath, fso.BuildPath(WorkingDirectory, "DataBases\" & sfxCopyName & ".txt"))
+            End If
+        End If
     End Sub
 
     Private Sub ContextMenuDataBases_Delete_Click(sender As Object, e As EventArgs) Handles ContextMenuDataBases_Delete.Click
@@ -380,7 +389,6 @@ Partial Public Class MainFrame
                 If Not fso.FolderExists(databaseTrash) Then
                     fso.CreateFolder(databaseTrash)
                 End If
-
                 'Get Soundbanks files
                 Dim soundbankFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "Soundbanks"), "*.txt", SearchOption.TopDirectoryOnly)
                 For i As Integer = 0 To soundbankFiles.Length - 1
@@ -392,7 +400,6 @@ Partial Public Class MainFrame
                         writers.UpdateSoundbankFile(soundbankFile, soundbankFiles(i), textFileReaders, False)
                     End If
                 Next
-
                 'Update UI
                 ListBox_DataBases.BeginUpdate()
                 For i As Integer = 0 To itemsToDelete.Count - 1
@@ -408,7 +415,6 @@ Partial Public Class MainFrame
                     Next
                 Next
                 ListBox_DataBases.EndUpdate()
-
                 'Update Project file
                 writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), TreeView_SoundBanks, ListBox_DataBases, UserControl_SFXs.ListBox_SFXs)
             End If

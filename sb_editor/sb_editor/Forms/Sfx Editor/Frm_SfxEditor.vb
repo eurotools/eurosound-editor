@@ -15,7 +15,6 @@ Partial Public Class Frm_SfxEditor
     Sub New(fileName As String)
         ' Esta llamada es exigida por el diseñador.
         InitializeComponent()
-
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
         sfxFileName = fileName
     End Sub
@@ -95,10 +94,6 @@ Partial Public Class Frm_SfxEditor
                 Dim save As MsgBoxResult = MsgBox("Are you sure you wish to quit without saving?", vbOKCancel + vbQuestion, "Confirm Quit")
                 If save = MsgBoxResult.Cancel Then
                     e.Cancel = True
-                Else
-                    'Show mainframe again
-                    Dim MainFrame As Form = CType(Application.OpenForms("MainFrame"), MainFrame)
-                    MainFrame.Show()
                 End If
             End If
         End If
@@ -112,6 +107,9 @@ Partial Public Class Frm_SfxEditor
         End If
         'Stop audio playing
         My.Computer.Audio.Stop()
+        'Show mainframe again
+        Dim MainFrame As Form = CType(Application.OpenForms("MainFrame"), MainFrame)
+        MainFrame.Show()
     End Sub
 
     '*===============================================================================================
@@ -451,6 +449,14 @@ Partial Public Class Frm_SfxEditor
         CreateSpecificFormat("PC")
         'Disable Button
         Button_SpecVersion_PC.Enabled = False
+    End Sub
+
+    Private Sub Button_Clipboard_Copy_Click(sender As Object, e As EventArgs) Handles Button_Clipboard_Copy.Click
+
+    End Sub
+
+    Private Sub Button_ClipboardPaste_Click(sender As Object, e As EventArgs) Handles Button_ClipboardPaste.Click
+
     End Sub
 
     Private Sub Button_RemoveSpecificVersion_Click(sender As Object, e As EventArgs) Handles Button_RemoveSpecificVersion.Click

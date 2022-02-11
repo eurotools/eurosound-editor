@@ -87,4 +87,13 @@
             End If
         End If
     End Sub
+
+    Private Function GetSoundbankNode(currentSelectedNode As TreeNode) As TreeNode
+        'Get parent if the user has selected a child node
+        Dim soundbankNode As TreeNode = currentSelectedNode
+        If currentSelectedNode.Level > 0 Then
+            soundbankNode = currentSelectedNode.Parent
+        End If
+        Return soundbankNode
+    End Function
 End Class

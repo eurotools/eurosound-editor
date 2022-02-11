@@ -7,7 +7,7 @@ Partial Public Class MainFrame
     Private Sub LoadProject(projectFilePath As String)
         If fso.FileExists(projectFilePath) Then
             'Update GUI
-            Text = "EuroSound: " & WorkingDirectory
+            Text = "EuroSound: """ & WorkingDirectory & """"
             RecentFilesMenu.AddFile(WorkingDirectory)
             RecentFilesMenu.SaveToIniFile()
             LoadSoundbanks(fso.BuildPath(WorkingDirectory, "Soundbanks"))

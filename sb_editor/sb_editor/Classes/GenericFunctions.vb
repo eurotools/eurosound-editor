@@ -39,9 +39,9 @@ Module GenericFunctions
 
         'Modify EuroSound Ini
         Dim programIni As New IniFile(EuroSoundIniFilePath)
-        programIni.Write("UserName", inputUserName, "Form1_Misc")
+        programIni.Write("UserName", EuroSoundUser, "Form1_Misc")
 
-        Return inputUserName
+        Return EuroSoundUser
     End Function
 
     '*===============================================================================================
@@ -103,82 +103,45 @@ Module GenericFunctions
         Return FormatBytes(BytesCaller)
     End Function
 
-    Friend Function RenameFile(objectName As String, objectType As String, objectFolder As String) As String
-        'Ask name for first time
-        Dim inputName As String = InputBox("Enter New Name For " & objectName, "Rename " & objectType, objectName)
-        Dim inputFilePath As String = fso.BuildPath(objectFolder, inputName & ".txt")
-        Dim finalName As String = inputName
-
-        'Ask continously if the file exists
-        If StrComp(objectName, inputName) <> 0 AndAlso fso.FileExists(inputFilePath) Then
-            Do
-                'Inform user and ask again
-                MsgBox(objectType & " Label '" & inputName & "' already exists, please use another name!", vbOKOnly + vbCritical, "Duplicate " & objectType & " Name")
-                inputName = InputBox("Enter New Name For " & objectName, "Rename " & objectType, objectName)
-
-                'If the input name is the same as the object name or is null, exit loop!
-                If StrComp(objectName, inputName) = 0 Or inputName = "" Then
-                    finalName = ""
-                    Exit Do
-                Else
-                    finalName = inputName
-                End If
-            Loop While fso.FileExists(fso.BuildPath(objectFolder, inputName & ".txt"))
-        End If
-
-        RenameFile = finalName
+    Friend Function RenameFile(defaultResponse As String, objectType As String, objectFolder As String) As String
+        While True
+            Dim inputName As String = Trim(InputBox("Enter New Name For " & objectType & " " & defaultResponse, "Rename " & objectType, defaultResponse))
+            Dim inputFilePath As String = fso.BuildPath(objectFolder, inputName & ".txt")
+            If StrComp(defaultResponse, inputName) = 0 Then
+                Return ""
+            ElseIf fso.FileExists(inputFilePath) Then
+                MsgBox(objectType & " Label '" & inputName & "' already exists please use another name!", vbOKOnly + vbCritical, "Duplicate " & objectType & " Name")
+            Else
+                Return inputName
+            End If
+        End While
+        Return ""
     End Function
 
-    Friend Function CopyFile(objectName As String, objectType As String, objectFolder As String) As String
-        'Ask name for first time
-        Dim inputName As String = InputBox("Enter Copy Name For " & objectType & " " & objectName, "Copy " & objectType, objectName).Trim
-        Dim inputFilePath As String = fso.BuildPath(objectFolder, inputName & ".txt")
-        Dim finalName As String = inputName
-
-        'Ask continously if the file exists
-        If StrComp(objectName, inputName) <> 0 AndAlso fso.FileExists(inputFilePath) Then
-            Do
-                'Inform user and ask again
-                MsgBox(objectType & " Label '" & inputName & "' already exists, please use another name!", vbOKOnly + vbCritical, "Duplicate " & objectType & " Name")
-                inputName = InputBox("Enter Copy Name For " & objectName, "Copy " & objectType, objectName).Trim
-
-                'If the input name is the same as the object name or is null, exit loop!
-                If StrComp(objectName, inputName) = 0 Or inputName = "" Then
-                    finalName = ""
-                    Exit Do
-                Else
-                    finalName = inputName
-                End If
-            Loop While fso.FileExists(fso.BuildPath(objectFolder, inputName & ".txt"))
-        End If
-
-        CopyFile = finalName
+    Friend Function CopyFile(defaultResponse As String, objectType As String, objectFolder As String) As String
+        While True
+            Dim inputName As String = Trim(InputBox("Enter New Name For " & objectType & " " & defaultResponse, "Copy " & objectType, defaultResponse))
+            Dim inputFilePath As String = fso.BuildPath(objectFolder, inputName & ".txt")
+            If fso.FileExists(inputFilePath) Then
+                MsgBox(objectType & " Label '" & inputName & "' already exists please use another name!", vbOKOnly + vbCritical, "Duplicate " & objectType & " Name")
+            Else
+                Return inputName
+            End If
+        End While
+        Return ""
     End Function
 
     Friend Function NewFile(objectName As String, objectFolder As String) As String
-        'Ask name for first time
-        Dim inputName As String = InputBox("Enter Name", "Create New", objectName)
-        Dim inputFilePath As String = fso.BuildPath(objectFolder, inputName & ".txt")
-        Dim finalName As String = inputName
-
-        'Ask continously if the file exists
-        If StrComp(objectName, inputName) <> 0 AndAlso fso.FileExists(inputFilePath) Then
-            Do
-                'Inform user and ask again
-                MsgBox("Label '" & inputName & "' already exists, please use another name!", vbOKOnly + vbCritical, "Duplicate Name")
-                inputName = InputBox("Enter Name", "Create New", objectName)
-
-                'If the input name is the same as the object name or is null, exit loop!
-                If StrComp(objectName, inputName) = 0 Or inputName = "" Then
-                    finalName = ""
-                    Exit Do
-                Else
-                    finalName = inputName
-                End If
-            Loop While fso.FileExists(fso.BuildPath(objectFolder, inputName & ".txt"))
-        End If
-
-        NewFile = finalName
+        While True
+            Dim inputName As String = Trim(InputBox("Enter Name", "Create New", objectName))
+            Dim inputFilePath As String = fso.BuildPath(objectFolder, inputName & ".txt")
+            If fso.FileExists(inputFilePath) Then
+                MsgBox("Label '" & inputName & "' already exists please use another name!", vbOKOnly + vbCritical, "Duplicate Name")
+            Else
+                Return inputName
+            End If
+        End While
+        Return ""
     End Function
 
     '*===============================================================================================

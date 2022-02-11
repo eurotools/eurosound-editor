@@ -7,7 +7,6 @@
         If ListBox_DataBases.SelectedItems.Count > 0 AndAlso TreeView_SoundBanks.Nodes.Count > 0 Then
             'Get Soundbank node
             Dim selectedSoundBank As TreeNode = TreeView_SoundBanks.SelectedNode
-
             'Ensure that is not null
             If selectedSoundBank IsNot Nothing Then
                 'If we have selected a child node, select his parent node

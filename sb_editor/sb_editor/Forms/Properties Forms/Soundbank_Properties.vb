@@ -76,10 +76,12 @@ Public Class Soundbank_Properties
         Dim samplesInSoundbank As String() = GetSamplesFullPath(SamplesToIncludeInSoundbank(samplesList, streamSamplesList))
 
         'Get estimated size PC
-        Label_SizeFile_PC.Text = BytesStringFormat(GetSamplesSize(samplesInSoundbank, WorkingDirectory & "\PC\", ".wav") + (20 * sfxList.Length))
-        Label_SizeFile_PlayStation2.Text = BytesStringFormat(GetSamplesSize(samplesInSoundbank, WorkingDirectory & "\PlayStation2_VAG\", ".vag") + (20 * sfxList.Length))
-        Label_SizeFile_GameCube.Text = BytesStringFormat(GetSamplesSize(samplesInSoundbank, WorkingDirectory & "\GameCube_dsp_adpcm\", ".dsp") + (20 * sfxList.Length))
-        Label_SizeFile_Xbox.Text = BytesStringFormat(GetSamplesSize(samplesInSoundbank, WorkingDirectory & "\XBox_adpcm\", ".wav") + (20 * sfxList.Length))
+        Dim sfxSize As Integer = 20 * sfxList.Length
+        Dim samplesSize As Integer = 12 * sfxList.Length
+        Label_SizeFile_PC.Text = BytesStringFormat(GetSamplesSize(samplesInSoundbank, WorkingDirectory & "\PC\", ".wav") + sfxSize + samplesSize)
+        Label_SizeFile_PlayStation2.Text = BytesStringFormat(GetSamplesSize(samplesInSoundbank, WorkingDirectory & "\PlayStation2_VAG\", ".vag") + sfxSize + samplesSize)
+        Label_SizeFile_GameCube.Text = BytesStringFormat(GetSamplesSize(samplesInSoundbank, WorkingDirectory & "\GameCube_dsp_adpcm\", ".dsp") + sfxSize + samplesSize)
+        Label_SizeFile_Xbox.Text = BytesStringFormat(GetSamplesSize(samplesInSoundbank, WorkingDirectory & "\XBox_adpcm\", ".wav") + sfxSize + samplesSize)
     End Sub
 
     Private Function GetSamplesSize(soundbankSamples As String(), platformFolder As String, fileExtension As String) As Long

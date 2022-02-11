@@ -216,7 +216,7 @@ Public Class UserControl_SFXs
     Private Sub ContextMenuSfx_Copy_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_Copy.Click
         If ListBox_SFXs.SelectedItems.Count = 1 Then
             'Ask user
-            Dim sfxCopyName As String = CopyFile(vbCrLf & ListBox_SFXs.SelectedItem, "SFX", fso.BuildPath(WorkingDirectory, "SFXs\"))
+            Dim sfxCopyName As String = CopyFile(ListBox_SFXs.SelectedItem, "SFX", fso.BuildPath(WorkingDirectory, "SFXs\"))
             If sfxCopyName IsNot "" Then
                 'Read original file content
                 Dim originalFilePath As String = fso.BuildPath(WorkingDirectory, "SFXs\" & ListBox_SFXs.SelectedItem & ".txt")
