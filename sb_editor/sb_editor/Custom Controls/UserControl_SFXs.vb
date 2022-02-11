@@ -284,6 +284,9 @@ Public Class UserControl_SFXs
             Next
             ListBox_SFXs.EndUpdate()
 
+            'Update counter
+            Label_TotalSfx.Text = "Total: " & ListBox_SFXs.Items.Count
+
             'Update Project file
             writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), mainForm.TreeView_SoundBanks, mainForm.ListBox_DataBases, mainForm.UserControl_SFXs.ListBox_SFXs)
         End If

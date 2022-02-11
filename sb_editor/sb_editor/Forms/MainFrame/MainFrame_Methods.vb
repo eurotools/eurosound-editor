@@ -42,6 +42,9 @@
             Dim databaseTxt As String = fso.BuildPath(WorkingDirectory, "DataBases\" & ListBox_DataBases.SelectedItem & ".txt")
             Dim databaseDependencies As List(Of String) = ListBox_DataBaseSFX.Items.Cast(Of String).ToList
             writers.UpdateDataBaseText(databaseTxt, databaseDependencies, textFileReaders)
+
+            'Update label counter
+            Label_DataBaseSFX.Text = "Total: " & ListBox_DataBaseSFX.Items.Count
         Else
             My.Computer.Audio.PlaySystemSound(Media.SystemSounds.Asterisk)
         End If

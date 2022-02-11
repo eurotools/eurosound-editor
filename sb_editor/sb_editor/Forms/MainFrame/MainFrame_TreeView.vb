@@ -31,6 +31,8 @@
         soundbankNode.Expand()
         'Seect node
         TreeView_SoundBanks.SelectedNode = soundbankNode
+        'Update label
+        Label_SoundBanksCount.Text = "Total: " & TreeView_SoundBanks.Nodes.Count
     End Sub
 
     Private Sub CopySoundbank(soundbankName As String, sourceSoundbankNode As TreeNode)
@@ -51,6 +53,8 @@
         nodeToAdd.Expand()
         'Seect node
         TreeView_SoundBanks.SelectedNode = nodeToAdd
+        'Update label
+        Label_SoundBanksCount.Text = "Total: " & TreeView_SoundBanks.Nodes.Count
     End Sub
 
     Private Sub AddDatabaseToSoundbank(dataBasesToAdd As List(Of String), soundBank As TreeNode)

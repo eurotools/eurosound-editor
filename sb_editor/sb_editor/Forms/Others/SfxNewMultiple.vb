@@ -61,8 +61,11 @@ Public Class SfxNewMultiple
     End Sub
 
     Private Sub Button_Ok_Click(sender As Object, e As EventArgs) Handles Button_Ok.Click
+        Dim mainFrame As MainFrame = CType(Application.OpenForms("MainFrame"), MainFrame)
         Dim sfxDefaults As SfxFile = textFileReaders.ReadSFXFile(SysFileSfxDefaults)
         Dim sampleDefaultValues As Double() = GetDefaultSampleValues()
+        mainFrame.UserControl_SFXs.ListBox_SFXs.BeginUpdate()
+
         For Each newSfx As KeyValuePair(Of String, List(Of String)) In samplesDictionary
             Dim sfxFilePath As String = fso.BuildPath(WorkingDirectory, "SFXs\" & newSfx.Key & ".txt")
             Dim sfxFileData As New SfxFile
@@ -114,7 +117,10 @@ Public Class SfxNewMultiple
             SFXHashCodeNumber += 1
             'Write files
             writers.WriteSfxFile(sfxFileData, sfxFilePath)
+            'Add item to mainframe listbox
+            mainFrame.UserControl_SFXs.ListBox_SFXs.Items.Add(newSfx.Key)
         Next
+        mainFrame.UserControl_SFXs.ListBox_SFXs.EndUpdate()
         'Close form
         Close()
     End Sub

@@ -29,9 +29,11 @@
             PrintLine(1, "")
             PrintLine(1, "#DEPENDENCIES")
             'Iterate over list items
-            For Each dependency As String In itemsListObject
-                PrintLine(1, dependency)
-            Next
+            If itemsListObject IsNot Nothing Then
+                For Each dependency As String In itemsListObject
+                    PrintLine(1, dependency)
+                Next
+            End If
             'End dependencies block
             PrintLine(1, "#END")
             FileClose(1)

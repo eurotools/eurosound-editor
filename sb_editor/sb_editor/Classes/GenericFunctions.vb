@@ -1,4 +1,5 @@
 ﻿Imports System.Globalization
+Imports System.Text.RegularExpressions
 Imports ESUtils.BytesFunctions
 Imports IniFileFunctions
 Imports Scripting
@@ -63,7 +64,7 @@ Module GenericFunctions
         'Create message to inform user
         Dim filesListToDelete As String = messageToShow & vbNewLine & vbNewLine
         Dim numItems As Integer = Math.Min(maxItemsToShow, itemsToDelete.Count)
-        For index As Integer = 1 To numItems
+        For index As Integer = 0 To numItems - 1
             filesListToDelete += "'" & itemsToDelete(index) & "'" & vbNewLine
         Next
         If itemsToDelete.Count > maxItemsToShow Then
@@ -106,13 +107,18 @@ Module GenericFunctions
     Friend Function RenameFile(defaultResponse As String, objectType As String, objectFolder As String) As String
         While True
             Dim inputName As String = Trim(InputBox("Enter New Name For " & objectType & " " & defaultResponse, "Rename " & objectType, defaultResponse))
-            Dim inputFilePath As String = fso.BuildPath(objectFolder, inputName & ".txt")
-            If StrComp(defaultResponse, inputName) = 0 Then
-                Return ""
-            ElseIf fso.FileExists(inputFilePath) Then
-                MsgBox(objectType & " Label '" & inputName & "' already exists please use another name!", vbOKOnly + vbCritical, "Duplicate " & objectType & " Name")
+            Dim match As Match = Regex.Match(inputName, namesFormat)
+            If (match.Success) Then
+                Dim inputFilePath As String = fso.BuildPath(objectFolder, inputName & ".txt")
+                If StrComp(defaultResponse, inputName) = 0 Then
+                    Return ""
+                ElseIf fso.FileExists(inputFilePath) Then
+                    MsgBox(objectType & " Label '" & inputName & "' already exists please use another name!", vbOKOnly + vbCritical, "Duplicate " & objectType & " Name")
+                Else
+                    Return inputName
+                End If
             Else
-                Return inputName
+                MsgBox(objectType & " Label '" & inputName & "' uses invalid characters, only numbers, digits and underscore characters are allowed.", vbOKOnly + vbCritical, "EuroSound")
             End If
         End While
         Return ""
@@ -121,11 +127,16 @@ Module GenericFunctions
     Friend Function CopyFile(defaultResponse As String, objectType As String, objectFolder As String) As String
         While True
             Dim inputName As String = Trim(InputBox("Enter New Name For " & objectType & " " & defaultResponse, "Copy " & objectType, defaultResponse))
-            Dim inputFilePath As String = fso.BuildPath(objectFolder, inputName & ".txt")
-            If fso.FileExists(inputFilePath) Then
-                MsgBox(objectType & " Label '" & inputName & "' already exists please use another name!", vbOKOnly + vbCritical, "Duplicate " & objectType & " Name")
+            Dim match As Match = Regex.Match(inputName, namesFormat)
+            If (match.Success) Then
+                Dim inputFilePath As String = fso.BuildPath(objectFolder, inputName & ".txt")
+                If fso.FileExists(inputFilePath) Then
+                    MsgBox(objectType & " Label '" & inputName & "' already exists please use another name!", vbOKOnly + vbCritical, "Duplicate " & objectType & " Name")
+                Else
+                    Return inputName
+                End If
             Else
-                Return inputName
+                MsgBox(objectType & " Label '" & inputName & "' uses invalid characters, only numbers, digits and underscore characters are allowed.", vbOKOnly + vbCritical, "EuroSound")
             End If
         End While
         Return ""
@@ -134,11 +145,16 @@ Module GenericFunctions
     Friend Function NewFile(objectName As String, objectFolder As String) As String
         While True
             Dim inputName As String = Trim(InputBox("Enter Name", "Create New", objectName))
-            Dim inputFilePath As String = fso.BuildPath(objectFolder, inputName & ".txt")
-            If fso.FileExists(inputFilePath) Then
-                MsgBox("Label '" & inputName & "' already exists please use another name!", vbOKOnly + vbCritical, "Duplicate Name")
+            Dim match As Match = Regex.Match(inputName, namesFormat)
+            If (match.Success) Then
+                Dim inputFilePath As String = fso.BuildPath(objectFolder, inputName & ".txt")
+                If fso.FileExists(inputFilePath) Then
+                    MsgBox("Label '" & inputName & "' already exists please use another name!", vbOKOnly + vbCritical, "Duplicate Name")
+                Else
+                    Return inputName
+                End If
             Else
-                Return inputName
+                MsgBox("Label '" & inputName & "' uses invalid characters, only numbers, digits and underscore characters are allowed.", vbOKOnly + vbCritical, "EuroSound")
             End If
         End While
         Return ""
@@ -214,36 +230,6 @@ Module GenericFunctions
     End Function
 
     Friend Function GetEngineXLangFolder(outputLanguage As String) As String
-        Dim finalName As String = ""
-        Select Case outputLanguage
-            Case "English"
-                finalName = "_Eng"
-            Case "American"
-                finalName = "_Usa"
-            Case "Danish"
-                finalName = "_Dan"
-            Case "Dutch"
-                finalName = "_Dut"
-            Case "Finnish"
-                finalName = "_Fin"
-            Case "French"
-                finalName = "_Fre"
-            Case "German"
-                finalName = "_Ger"
-            Case "Italian"
-                finalName = "_Ita"
-            Case "Japanese"
-                finalName = "_Jap"
-            Case "Norwegian"
-                finalName = "_Nor"
-            Case "Portuguese"
-                finalName = "_Por"
-            Case "Spanish"
-                finalName = "_Spa"
-            Case "Swedish"
-                finalName = "_Swe"
-        End Select
-
-        GetEngineXLangFolder = finalName
+        GetEngineXLangFolder = "_" & Left(outputLanguage, 3)
     End Function
 End Module

@@ -254,6 +254,9 @@ Partial Public Class MainFrame
                     writers.UpdateSoundbankFile(soundbankData, soundbankFilePath, textFileReaders)
                 End If
             End If
+
+            'Update label
+            Label_SoundBanksCount.Text = "Total: " & TreeView_SoundBanks.Nodes.Count
         End If
     End Sub
 
@@ -352,11 +355,12 @@ Partial Public Class MainFrame
         If databaseName IsNot "" Then
             'Create txt
             Dim databaseTxt As String = fso.BuildPath(WorkingDirectory, "DataBases\" & databaseName & ".txt")
-            Dim databaseDependencies As List(Of String) = ListBox_DataBaseSFX.Items.Cast(Of String).ToList
-            writers.UpdateDataBaseText(databaseTxt, databaseDependencies, textFileReaders)
+            writers.UpdateDataBaseText(databaseTxt, Nothing, textFileReaders)
             'Add item to list
             Dim itemIndex As Integer = ListBox_DataBases.Items.Add(databaseName)
             ListBox_DataBases.SelectedIndex = itemIndex
+            'Update label
+            Label_DataBasesCount.Text = "Total: " & ListBox_DataBases.Items.Count
         End If
     End Sub
 
@@ -415,6 +419,8 @@ Partial Public Class MainFrame
                     Next
                 Next
                 ListBox_DataBases.EndUpdate()
+                'Update counter
+                Label_DataBasesCount.Text = "Total: " & ListBox_DataBases.Items.Count
                 'Update Project file
                 writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), TreeView_SoundBanks, ListBox_DataBases, UserControl_SFXs.ListBox_SFXs)
             End If
@@ -603,6 +609,8 @@ Partial Public Class MainFrame
             'Update text file
             Dim databaseTxt As String = fso.BuildPath(WorkingDirectory, "DataBases\" & ListBox_DataBases.SelectedItem & ".txt")
             writers.UpdateDataBaseText(databaseTxt, databaseDependencies, textFileReaders)
+            'Update label
+            Label_DataBaseSFX.Text = "Total: " & ListBox_DataBaseSFX.Items.Count
         Else
             My.Computer.Audio.PlaySystemSound(Media.SystemSounds.Asterisk)
         End If

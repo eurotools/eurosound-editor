@@ -8,7 +8,7 @@ Public Class SfxDefines
         Const EX_SFX_PREFIX As UInteger = &H1A000000
         Const EX_SONG_PREFIX As UInteger = &H1B000000
         Const EX_SOUNDBANK_PREFIX As UInteger = &H1C000000
-        Dim Languages As String() = New String() {"ENGLISH", "AMERICAN", "JAPANESE", "DANISH", "DUTCH", "FINNISH", "FRENCH", "GERMAN", "ITALIAN", "NORWEGIAN", "PORTUGUESE", "SPANISH", "SWEDISH"}
+        Dim Languages As String() = New String() {"English", "American", "Japanese", "Danish", "Dutch", "Finnish", "French", "German", "Italian", "Norwegian", "Portuguese", "Spanish", "Swedish"}
 
         FileOpen(1, filePath, OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
         'Misc defines section
@@ -24,7 +24,7 @@ Public Class SfxDefines
         PrintLine(1, WriteHashCode("LanguageHashCodeOffset", NumberToHex(&H10000)))
         PrintLine(1, vbNullString)
         For index As Integer = 0 To Languages.Length - 1
-            PrintLine(1, WriteNumber("SFXLanguage_" & Languages(index), index))
+            PrintLine(1, WriteNumber("SFXLanguage_" & UCase(Languages(index)), index))
         Next
         PrintLine(1, WriteNoAlign("StreamFileHashCode", NumberToHex(&HFFFF)))
         PrintLine(1, vbNullString)

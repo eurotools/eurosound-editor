@@ -29,7 +29,8 @@ Friend Module GlobalVariables
     Friend MFXHashCodeNumber As UInteger = 0
     Friend ReSampleStreams As Byte = 0
 
-    'Date Formats
+    'Date and Text Formats
     Friend ReadOnly dateFormat As String = "yyyy/dd/MM HH:mm:ss"
     Friend ReadOnly filesDateFormat As String = "MM-dd-yyyy HH:mm:ss"
+    Friend ReadOnly namesFormat As String = "^[a-zA-Z0-9_]*$"
 End Module
