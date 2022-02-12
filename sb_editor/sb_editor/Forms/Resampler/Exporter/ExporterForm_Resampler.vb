@@ -347,10 +347,11 @@ Partial Public Class ExporterForm
                     Dim fullDirPath = Path.Combine(propsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder(outPlatform), GetEngineXLangFolder(DefaultLanguage))
                     'Create Stream File
                     BuildTemporalFile(streamsCount, streamsFolder, outputFolder)
+                    Dim fileName As String = "HC" & Hex(GetSfxFileName(0, &HFFFF)).PadLeft(6, "0"c)
                     If StrComp(outPlatform, "GameCube") = 0 Then
-                        BuildStreamFile(fso.BuildPath(outputFolder, "STREAMS.bin"), fso.BuildPath(outputFolder, "STREAMS.lut"), fso.BuildPath(outputFolder, "HC" & Hex(&HFFFF).PadLeft(6, "0"c) & ".SFX"), True)
+                        BuildStreamFile(fso.BuildPath(outputFolder, "STREAMS.bin"), fso.BuildPath(outputFolder, "STREAMS.lut"), fso.BuildPath(outputFolder, fileName & ".SFX"), True)
                     Else
-                        BuildStreamFile(fso.BuildPath(outputFolder, "STREAMS.bin"), fso.BuildPath(outputFolder, "STREAMS.lut"), fso.BuildPath(outputFolder, "HC" & Hex(&HFFFF).PadLeft(6, "0"c) & ".SFX"), False)
+                        BuildStreamFile(fso.BuildPath(outputFolder, "STREAMS.bin"), fso.BuildPath(outputFolder, "STREAMS.lut"), fso.BuildPath(outputFolder, fileName & ".SFX"), False)
                     End If
                 End If
             End If

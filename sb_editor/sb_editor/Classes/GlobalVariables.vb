@@ -3,8 +3,11 @@
 Friend Module GlobalVariables
     Friend ReadOnly fso As New FileSystemObject
 
+    'Available languages
+    Friend ReadOnly SfxLanguages As String() = New String() {"English", "American", "Japanese", "Danish", "Dutch", "Finnish", "French", "German", "Italian", "Norwegian", "Portuguese", "Spanish", "Swedish"}
+
     'Globals
-    Friend DefaultLanguage As String = "English"
+    Friend DefaultLanguage As String = SfxLanguages(0)
     Friend WorkingDirectory As String = ""
     Friend EuroSoundIniFilePath As String = Application.StartupPath & "\EuroSound.ini"
     Friend EuroSoundUser As String = ""

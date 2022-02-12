@@ -14,16 +14,6 @@ Partial Public Class MainFrame
     '*===============================================================================================
     '* FORM EVENTS
     '*===============================================================================================
-    Private Sub MainFrame_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-#If DEBUG Then
-        MenuItemDebug.Visible = True
-        Dim debugListener As New MyTraceListener()
-        Debug.Listeners.Add(debugListener)
-#Else
-        MenuItemDebug.Visible = False
-#End If
-    End Sub
-
     Private Sub MainFrame_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
         If fso.FolderExists(WorkingDirectory) Then
             'Load Project
@@ -95,19 +85,6 @@ Partial Public Class MainFrame
     Private Sub MenuItemHelp_About_Click(sender As Object, e As EventArgs) Handles MenuItemHelp_About.Click
         Dim aboutForm As New About
         aboutForm.ShowDialog()
-    End Sub
-
-    '*===============================================================================================
-    '* MENU ITEM DEBUG
-    '*===============================================================================================
-    Private Sub MenuItemDebug_ShowGlobalVars_Click(sender As Object, e As EventArgs) Handles MenuItemDebug_ShowGlobalVars.Click
-        Dim debugVars As New GlobalVariablesWatcher
-        debugVars.Show()
-    End Sub
-
-    Private Sub MenuItemDebug_Console_Click(sender As Object, e As EventArgs) Handles MenuItemDebug_Console.Click
-        Dim debugConsole As New DebugConsole
-        debugConsole.Show()
     End Sub
 
     '*===============================================================================================

@@ -51,11 +51,15 @@ Module GenericFunctions
     Friend Sub EditWaveFile(waveFilePath As String)
         'Open tool if files exists
         If fso.FileExists(waveFilePath) AndAlso fso.FileExists(ProjAudioEditor) Then
-            Dim procInfo As New ProcessStartInfo With {
-                .FileName = """" & ProjAudioEditor & """",
-                .Arguments = """" & waveFilePath & """"
-            }
-            Process.Start(procInfo)
+            Try
+                Dim procInfo As New ProcessStartInfo With {
+                    .FileName = """" & ProjAudioEditor & """",
+                    .Arguments = """" & waveFilePath & """"
+                }
+                Process.Start(procInfo)
+            Catch ex As Exception
+                MsgBox(ex.Message, vbOKOnly + vbCritical, "EuroSound")
+            End Try
         End If
     End Sub
 
@@ -218,6 +222,10 @@ Module GenericFunctions
         End Select
 
         GetEngineXFolder = FolderName
+    End Function
+
+    Friend Function GetSfxFileName(language As Integer, fileHashCode As Integer) As Integer
+        Return ((language And &HF) << 16) Or ((fileHashCode And &HFFFF) << 0)
     End Function
 
     Friend Function GetEngineXLangFolder(outputLanguage As String) As String

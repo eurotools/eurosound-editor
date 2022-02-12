@@ -86,7 +86,6 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Debug\MyTraceListener.vb" />
     <Compile Include="Files Functions\Objects\MfxFile.vb" />
     <Compile Include="Files Functions\Readers\FileParsers_JumpHashCodes.vb" />
     <Compile Include="Files Functions\Readers\FileParsers_SamplesFile.vb" />
@@ -132,18 +131,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Advanced Menu\AdvancedMenu_Methods.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Debug Watcher\DebugConsole.Designer.vb">
-      <DependentUpon>DebugConsole.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Debug Watcher\DebugConsole.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Debug Watcher\GlobalVariablesWatcher.Designer.vb">
-      <DependentUpon>GlobalVariablesWatcher.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Debug Watcher\GlobalVariablesWatcher.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Others\SfxNewMultiple.Designer.vb">
@@ -335,12 +322,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Advanced Menu\AdvancedMenu.resx">
       <DependentUpon>AdvancedMenu.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Debug Watcher\DebugConsole.resx">
-      <DependentUpon>DebugConsole.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Debug Watcher\GlobalVariablesWatcher.resx">
-      <DependentUpon>GlobalVariablesWatcher.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Others\SfxNewMultiple.resx">
       <DependentUpon>SfxNewMultiple.vb</DependentUpon>

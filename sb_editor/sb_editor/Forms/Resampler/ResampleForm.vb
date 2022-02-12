@@ -158,6 +158,10 @@ Partial Public Class ResampleForm
         End If
     End Sub
 
+    Private Sub ListView_Samples_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles ListView_Samples.MouseDoubleClick
+        EditAudioFile()
+    End Sub
+
     '*===============================================================================================
     '* COMBOBOX EVENTS
     '*===============================================================================================

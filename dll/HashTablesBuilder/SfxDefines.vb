@@ -4,11 +4,10 @@ Public Class SfxDefines
     '*===============================================================================================
     '* SFX_Defines.h
     '*===============================================================================================
-    Public Sub CreateSfxDefines(sfxDict As SortedDictionary(Of String, UInteger), soundbanksDict As SortedDictionary(Of String, UInteger), filePath As String)
+    Public Sub CreateSfxDefines(sfxDict As SortedDictionary(Of String, UInteger), soundbanksDict As SortedDictionary(Of String, UInteger), Languages As String(), filePath As String)
         Const EX_SFX_PREFIX As UInteger = &H1A000000
         Const EX_SONG_PREFIX As UInteger = &H1B000000
         Const EX_SOUNDBANK_PREFIX As UInteger = &H1C000000
-        Dim Languages As String() = New String() {"English", "American", "Japanese", "Danish", "Dutch", "Finnish", "French", "German", "Italian", "Norwegian", "Portuguese", "Spanish", "Swedish"}
 
         FileOpen(1, filePath, OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
         'Misc defines section

@@ -58,7 +58,6 @@ Partial Public NotInheritable Class SplashScreen
         mainform.RecentFilesMenu.LoadFromIniFile()
         'Select first item by default
         mainform.ComboBox_Format.SelectedIndex = 0
-        mainform.ComboBox_OutputLanguage.SelectedIndex = 0
         'Read ini file
         Dim iniFunctions As New IniFile(SysFileProjectIniPath)
         mainform.ComboBox_Format.SelectedIndex = iniFunctions.Read("FormatCombo_ListIndex", "Form1_Misc")
@@ -69,6 +68,8 @@ Partial Public NotInheritable Class SplashScreen
         Dim languageIndex = iniFunctions.Read("LanguageCombo", "MainForm")
         If languageIndex < mainform.ComboBox_OutputLanguage.Items.Count Then
             mainform.ComboBox_OutputLanguage.SelectedIndex = languageIndex
+        ElseIf mainform.ComboBox_OutputLanguage.Items.Count > 0 Then
+            mainform.ComboBox_OutputLanguage.SelectedIndex = 0
         End If
         mainform.UserControl_SFXs.CheckBox_SortByDate.Checked = Convert.ToBoolean(CByte(iniFunctions.Read("Check2", "MainForm")))
         mainform.CheckBox_OutAllLanguages.Checked = Convert.ToBoolean(CByte(iniFunctions.Read("OutputAllLanguages", "MainForm")))
@@ -84,7 +85,10 @@ Partial Public NotInheritable Class SplashScreen
             'Add folders to combobox
             mainform.ComboBox_OutputLanguage.BeginUpdate()
             For index As Integer = 0 To languages.Length - 1
-                mainform.ComboBox_OutputLanguage.Items.Add(New DirectoryInfo(languages(index)).Name)
+                Dim folderName As String = Trim(StrConv(New DirectoryInfo(languages(index)).Name, vbProperCase))
+                If Array.IndexOf(SfxLanguages, folderName) <> -1 Then
+                    mainform.ComboBox_OutputLanguage.Items.Add(folderName)
+                End If
             Next
             mainform.ComboBox_OutputLanguage.EndUpdate()
         End If
