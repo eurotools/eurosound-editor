@@ -51,11 +51,9 @@ Partial Public Class ExporterForm
                             Else
                                 'Output folder Path
                                 Dim outputFolder As String = fso.BuildPath(WorkingDirectory, outPlatform)
-                                CreateFolderIfNotExists(outputFolder)
-
-                                'Get Wave output folder
-                                Dim fullOutputFolder = outputFolder & waveRelDirectoryPath
-                                CreateFolderIfNotExists(fullOutputFolder)
+                                If Not fso.FolderExists(outputFolder) Then
+                                    MkDir(outputFolder)
+                                End If
 
                                 'Get sample rate
                                 Dim waveRate As Integer = sampleRates(outPlatform)(soundsTable.Rows(index).Item(1))
@@ -97,7 +95,6 @@ Partial Public Class ExporterForm
                                 BackgroundWorker.ReportProgress(index + 1)
                             End If
                         Next
-
                         'Update Property
                         soundsTable.Rows(index).Item(4) = "False"
                     End If
@@ -113,13 +110,11 @@ Partial Public Class ExporterForm
     '* PLAYSTATION RESAMPLE FUNCTIONS
     '*===============================================================================================
     Private Sub ResampleForPlayStation2(streamSamplesList As DataRow, waveMasterPath As String, waveRelDirectoryPath As String, outputFilePath As String, WaveName As String)
-        'Output folder Path
-        Dim playStationOutputFolder = fso.BuildPath(WorkingDirectory, "PlayStation2_VAG")
-        CreateFolderIfNotExists(playStationOutputFolder)
-
         'Get Wave output folder
-        Dim playStationfullOutputFolder = playStationOutputFolder & waveRelDirectoryPath
-        CreateFolderIfNotExists(playStationfullOutputFolder)
+        Dim playStationfullOutputFolder = fso.BuildPath(WorkingDirectory & "\PlayStation2_VAG\", waveRelDirectoryPath)
+        If Not fso.FolderExists(playStationfullOutputFolder) Then
+            MkDir(playStationfullOutputFolder)
+        End If
 
         Dim playStationOutputFilePath As String = fso.BuildPath(playStationfullOutputFolder, WaveName & ".vag")
 
@@ -134,7 +129,6 @@ Partial Public Class ExporterForm
             Dim parsedWaveReader As New WaveFileReader(outputFilePath)
             Dim parsedLoop As UInteger = (loopInfo(1) / (waveReader.Length / parsedWaveReader.Length)) * 2
             parsedWaveReader.Close()
-
             'Vag pos
             Dim loopOffsetVag As UInteger = ((parsedLoop / 28 + (If(((parsedLoop Mod 28) <> 0), 2, 1))) / 2) - 1
             vagToolArgs = """" & outputFilePath & """ """ & playStationOutputFilePath & """ -l" & loopOffsetVag
@@ -153,13 +147,11 @@ Partial Public Class ExporterForm
     '* GAMECUBE RESAMPLE FUNCTIONS
     '*===============================================================================================
     Private Sub ResampleForGameCube(streamSamplesList As DataRow, waveMasterPath As String, waveRelDirectoryPath As String, outputFilePath As String, WaveName As String)
-        'Output folder Path
-        Dim gameCubeOutputFolder = fso.BuildPath(WorkingDirectory, "GameCube_dsp_adpcm")
-        CreateFolderIfNotExists(gameCubeOutputFolder)
-
         'Get Wave output folder
-        Dim gameCubefullOutputFolder = gameCubeOutputFolder & waveRelDirectoryPath
-        CreateFolderIfNotExists(gameCubefullOutputFolder)
+        Dim gameCubefullOutputFolder = fso.BuildPath(WorkingDirectory & "\GameCube_dsp_adpcm\", waveRelDirectoryPath)
+        If Not fso.FolderExists(gameCubefullOutputFolder) Then
+            MkDir(gameCubefullOutputFolder)
+        End If
 
         Dim gameCubeOutputFilePath As String = fso.BuildPath(gameCubefullOutputFolder, WaveName & ".dsp")
 
@@ -192,13 +184,11 @@ Partial Public Class ExporterForm
     '* XBOX RESAMPLE FUNCTIONS
     '*===============================================================================================
     Private Sub ResampleForXbox(waveRelDirectoryPath As String, outputFilePath As String, WaveName As String)
-        'Output folder Path
-        Dim XboxOutputFolder = fso.BuildPath(WorkingDirectory, "XBox_adpcm")
-        CreateFolderIfNotExists(XboxOutputFolder)
-
         'Get Wave output folder
-        Dim XboxOutputfullOutputFolder = XboxOutputFolder & waveRelDirectoryPath
-        CreateFolderIfNotExists(XboxOutputfullOutputFolder)
+        Dim XboxOutputfullOutputFolder = fso.BuildPath(WorkingDirectory & "\XBox_adpcm\", waveRelDirectoryPath)
+        If Not fso.FolderExists(XboxOutputfullOutputFolder) Then
+            MkDir(XboxOutputfullOutputFolder)
+        End If
 
         Dim xboxOutputFilePath As String = fso.BuildPath(XboxOutputfullOutputFolder, WaveName & ".adpcm")
 
@@ -218,7 +208,9 @@ Partial Public Class ExporterForm
         Dim outFilePathIma As String = outFilepath & ".ssp"
 
         'Create directory if not exists
-        CreateFolderIfNotExists(fullOutputFolder)
+        If Not fso.FolderExists(fullOutputFolder) Then
+            MkDir(fullOutputFolder)
+        End If
 
         'Resampled wav
         RunProcess("SystemFiles\Sox.exe", """" & waveMasterPath & """ -t raw -r " & sampleRate & " -c 1 -s """ & outFilePathWav & """")
@@ -264,7 +256,9 @@ Partial Public Class ExporterForm
 
         'Get directory
         Dim streamsFolder As String = fso.BuildPath(WorkingDirectory, outPlatform & "_Streams\English")
-        CreateFolderIfNotExists(streamsFolder)
+        If Not fso.FolderExists(streamsFolder) Then
+            MkDir(streamsFolder)
+        End If
 
         'Move files to stream folder
         For index As Integer = 0 To samplesCount
@@ -291,11 +285,9 @@ Partial Public Class ExporterForm
                     'ADPCM File
                     Dim adpcmFile = fso.BuildPath(streamsFolder, "STR_" & index & ".ssd")
                     FileCopy(streamFilePath, adpcmFile)
-
                     'Marker File
                     Dim MasterWaveFilePath = fso.BuildPath(ProjMasterFolder, "Master" & waveName)
                     Dim MasterMarkerFilePath = fso.BuildPath(fso.GetParentFolderName(MasterWaveFilePath), GetOnlyFileName(MasterWaveFilePath) & ".mrk")
-
                     'Ensure that the marker file exists
                     If fso.FileExists(MasterMarkerFilePath) Then
                         markersFunctions.CreateStreamMarkers(adpcmFile, MasterMarkerFilePath, streamsFolder, platformWaveFile, 100)
@@ -328,7 +320,6 @@ Partial Public Class ExporterForm
                     'Get files Path
                     Dim adpcmFile As String = fso.BuildPath(streamsFolder, "STR_" & index & ".ssd")
                     Dim markerFile As String = fso.BuildPath(streamsFolder, "STR_" & index & ".smf")
-
                     'Check if ADPCM File exists
                     If Not fso.FileExists(adpcmFile) Then
                         'Update boolan
@@ -338,7 +329,6 @@ Partial Public Class ExporterForm
                         'Exit loop
                         Exit For
                     End If
-
                     'Check if Markers file exists
                     If Not fso.FileExists(markerFile) Then
                         'Update boolan
@@ -355,7 +345,6 @@ Partial Public Class ExporterForm
                     'Stream paths and filenames
                     Dim outputFolder = Path.Combine(WorkingDirectory, "TempOutputFolder", outPlatform, "English", "Streams")
                     Dim fullDirPath = Path.Combine(propsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder(outPlatform), GetEngineXLangFolder(DefaultLanguage))
-
                     'Create Stream File
                     BuildTemporalFile(streamsCount, streamsFolder, outputFolder)
                     If StrComp(outPlatform, "GameCube") = 0 Then
@@ -363,7 +352,6 @@ Partial Public Class ExporterForm
                     Else
                         BuildStreamFile(fso.BuildPath(outputFolder, "STREAMS.bin"), fso.BuildPath(outputFolder, "STREAMS.lut"), fso.BuildPath(outputFolder, "HC" & Hex(&HFFFF).PadLeft(6, "0"c) & ".SFX"), False)
                     End If
-
                 End If
             End If
         Next

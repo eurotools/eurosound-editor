@@ -172,6 +172,7 @@ Public Class SfxNewMultiple
             If CheckBox_ForceUpperCase.Checked Then
                 hashCodeName = TextBox_SfxPrefix.Text & UCase(fileName)
             End If
+            hashCodeName = RemoveSpecialCharacters(hashCodeName)
             'Ensure that this item does not exists
             If ListBox_SfxNames.FindString(hashCodeName) = ListBox.NoMatches Then
                 'Add item to listbox
@@ -186,4 +187,14 @@ Public Class SfxNewMultiple
         Next
         ListBox_SfxNames.EndUpdate()
     End Sub
+
+    Private Function RemoveSpecialCharacters(str As String) As String
+        Dim sb As String = ""
+        For Each c As Char In str
+            If (c >= "0"c AndAlso c <= "9"c) OrElse (c >= "A"c AndAlso c <= "Z"c) OrElse (c >= "a"c AndAlso c <= "z"c) OrElse c = "_"c Then
+                sb &= c
+            End If
+        Next
+        Return sb
+    End Function
 End Class

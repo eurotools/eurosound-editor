@@ -1,30 +1,7 @@
 ﻿Imports IniFileFunctions
 
-Public NotInheritable Class SplashScreen
-    '*===============================================================================================
-    '* GLOBAL VARS
-    '*===============================================================================================
-    Private ReadOnly writers As New FileWriters
-    Private ReadOnly textFileReaders As New FileParsers
+Partial Public NotInheritable Class SplashScreen
 
-    '*===============================================================================================
-    '* FORM EVENTS
-    '*===============================================================================================
-    Private Sub SplashScreen_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
-        'Load ini file data
-        LoadIniData()
-        'Inform user if the working directory exists
-        If fso.FolderExists(WorkingDirectory) Then
-            LoadProjectData()
-            CheckProjectFiles()
-        Else
-            My.Computer.Audio.PlaySystemSound(Media.SystemSounds.Exclamation)
-            MsgBox("Project Not Found", vbOKOnly + vbCritical, "EuroSound Load Project Error")
-            Close()
-        End If
-        'Start timer
-        TimerSplash.Start()
-    End Sub
 
     '*===============================================================================================
     '* INI FILE FUNCTIONS
@@ -129,9 +106,5 @@ Public NotInheritable Class SplashScreen
                 End If
             Next
         End If
-    End Sub
-
-    Private Sub TimerSplash_Tick(sender As Object, e As EventArgs) Handles TimerSplash.Tick
-        Close()
     End Sub
 End Class

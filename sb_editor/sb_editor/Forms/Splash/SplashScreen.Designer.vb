@@ -53,7 +53,7 @@ Partial Class SplashScreen
         '
         'TimerSplash
         '
-        Me.TimerSplash.Interval = 1000
+        Me.TimerSplash.Interval = 900
         '
         'SplashScreen
         '

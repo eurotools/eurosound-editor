@@ -55,7 +55,9 @@ Partial Public Class MusicsExporter
 
         'Create ESWork folder if required
         Dim waveOutputFolder As String = fso.BuildPath(WorkingDirectory, "Music\ESWork")
-        CreateFolderIfNotExists(waveOutputFolder)
+        If Not fso.FolderExists(waveOutputFolder) Then
+            MkDir(waveOutputFolder)
+        End If
 
         'Calculate execution time
         Dim watch = Stopwatch.StartNew

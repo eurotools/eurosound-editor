@@ -15,12 +15,14 @@ Module Program
         Application.EnableVisualStyles()
         Application.SetCompatibleTextRenderingDefault(False)
 
+        Dim mainForm As New MainFrame
+
         'Show Splash Screen
-        Using ProgramSplash As New SplashScreen()
+        Using ProgramSplash As New SplashScreen(mainForm)
             ProgramSplash.ShowDialog()
         End Using
 
         'Start application
-        Application.Run(New MainFrame)
+        Application.Run(mainForm)
     End Sub
 End Module

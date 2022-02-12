@@ -82,6 +82,10 @@ Partial Public Class Frm_SfxEditor
         'Show common file
         ShowSfxSamplePoolControl(TabControl_Platforms.SelectedTab.Text)
         ShowSfxSamplePool(TabControl_Platforms.SelectedTab.Text)
+        'Enable clipboard
+        If fso.FileExists(fso.BuildPath(WorkingDirectory, "SFXs\Misc\ClipBoard.txt")) Then
+            Button_ClipboardPaste.Enabled = True
+        End If
     End Sub
 
     Private Sub Frm_SfxEditor_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -452,11 +456,23 @@ Partial Public Class Frm_SfxEditor
     End Sub
 
     Private Sub Button_Clipboard_Copy_Click(sender As Object, e As EventArgs) Handles Button_Clipboard_Copy.Click
-
+        If sfxFilesData.ContainsKey(TabControl_Platforms.SelectedTab.Text) Then
+            writers.WriteSfxFile(sfxFilesData(TabControl_Platforms.SelectedTab.Text), fso.BuildPath(WorkingDirectory, "SFXs\Misc\ClipBoard.txt"))
+            Button_ClipboardPaste.Enabled = True
+        End If
     End Sub
 
     Private Sub Button_ClipboardPaste_Click(sender As Object, e As EventArgs) Handles Button_ClipboardPaste.Click
-
+        Dim clipboardFilePath As String = fso.BuildPath(WorkingDirectory, "SFXs\Misc\ClipBoard.txt")
+        If fso.FileExists(clipboardFilePath) Then
+            Dim sfxFile As SfxFile = reader.ReadSFXFile(clipboardFilePath)
+            sfxFilesData(TabControl_Platforms.SelectedTab.Text) = sfxFile
+            'Inherited from common file and applied to all other formats
+            ShowSfxParameters(TabControl_Platforms.SelectedTab.Text)
+            'Show common file
+            ShowSfxSamplePoolControl(TabControl_Platforms.SelectedTab.Text)
+            ShowSfxSamplePool(TabControl_Platforms.SelectedTab.Text)
+        End If
     End Sub
 
     Private Sub Button_RemoveSpecificVersion_Click(sender As Object, e As EventArgs) Handles Button_RemoveSpecificVersion.Click

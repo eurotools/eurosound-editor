@@ -7,6 +7,7 @@ Public Class UserControl_SFXs
     '*===============================================================================================
     Private ReadOnly textFileReaders As New FileParsers
     Private ReadOnly writers As New FileWriters
+    Public Property AllowDoubleClick As Boolean = True
 
     '*===============================================================================================
     '* FORM EVENTS
@@ -180,7 +181,7 @@ Public Class UserControl_SFXs
 
     Private Sub ContextMenuSfx_EditSfx_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_EditSfx.Click
         'Get selected item
-        If ListBox_SFXs.SelectedItems.Count = 1 Then
+        If ListBox_SFXs.SelectedItems.Count = 1 AndAlso AllowDoubleClick Then
             'Get item and file path
             Dim selectedSFX As String = ListBox_SFXs.SelectedItem
             Dim SelectedSfxPath = fso.BuildPath(WorkingDirectory, "SFXs\" & selectedSFX & ".txt")
@@ -404,7 +405,7 @@ Public Class UserControl_SFXs
 
     Private Sub ListBox_SFXs_DoubleClick(sender As Object, e As EventArgs) Handles ListBox_SFXs.DoubleClick
         'Ensure that we have selected an item
-        If ListBox_SFXs.SelectedItems.Count > 0 Then
+        If ListBox_SFXs.SelectedItems.Count > 0 AndAlso AllowDoubleClick Then
             'Get item and file path
             Dim selectedSFX As String = ListBox_SFXs.SelectedItem
             Dim SelectedSfxPath = fso.BuildPath(WorkingDirectory, "SFXs\" & selectedSFX & ".txt")

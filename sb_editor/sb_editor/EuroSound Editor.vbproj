@@ -262,6 +262,12 @@
     <Compile Include="Custom Controls\SfxControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Forms\Splash\SplashScreen_Methods.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Splash\SplashScreen_ProjectMethods.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -310,10 +316,10 @@
     </Compile>
     <Compile Include="Classes\WaveFunctions.vb" />
     <Compile Include="Program.vb" />
-    <Compile Include="Forms\SplashScreen.Designer.vb">
+    <Compile Include="Forms\Splash\SplashScreen.Designer.vb">
       <DependentUpon>SplashScreen.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SplashScreen.vb">
+    <Compile Include="Forms\Splash\SplashScreen.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Custom Controls\UserControl_SFXs.Designer.vb">
@@ -396,7 +402,7 @@
     <EmbeddedResource Include="Forms\Sfx Editor\HashCodesList.resx">
       <DependentUpon>HashCodesList.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SplashScreen.resx">
+    <EmbeddedResource Include="Forms\Splash\SplashScreen.resx">
       <DependentUpon>SplashScreen.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Custom Controls\UserControl_SFXs.resx">

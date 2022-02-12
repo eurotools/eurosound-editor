@@ -202,15 +202,6 @@ Module GenericFunctions
     End Function
 
     '*===============================================================================================
-    '* FOLDERS FUNCTIONS
-    '*===============================================================================================
-    Friend Sub CreateFolderIfNotExists(folderPath)
-        If Dir$(folderPath, FileAttribute.Directory) = "" Then
-            MkDir(folderPath)
-        End If
-    End Sub
-
-    '*===============================================================================================
     '* STRINGS FUNCTIONS
     '*===============================================================================================
     Friend Function GetEngineXFolder(outputPlatform As String) As String

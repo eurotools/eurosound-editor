@@ -8,7 +8,9 @@ Partial Public Class MusicsExporter
     Private Function GetOutputFolder(fileHashCode As UInteger, currentPlatform As String) As String
         Dim folderNumber = (fileHashCode And &HF0) >> 4
         Dim markersFilePath As String = fso.BuildPath(WorkingDirectory, "TempOutputFolder\" & currentPlatform & "\Music\" & "MFX_" & folderNumber)
-        CreateFolderIfNotExists(markersFilePath)
+        If Not fso.FolderExists(markersFilePath) Then
+            MkDir(markersFilePath)
+        End If
         Return markersFilePath
     End Function
 

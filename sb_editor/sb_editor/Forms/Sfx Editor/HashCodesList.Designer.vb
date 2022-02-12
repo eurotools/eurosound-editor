@@ -28,6 +28,7 @@ Partial Class HashCodesList
         '
         'UserControl_SFXs1
         '
+        Me.UserControl_SFXs1.AllowDoubleClick = False
         Me.UserControl_SFXs1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.UserControl_SFXs1.Location = New System.Drawing.Point(0, 0)
         Me.UserControl_SFXs1.Name = "UserControl_SFXs1"

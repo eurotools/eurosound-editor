@@ -69,7 +69,6 @@ Partial Class MainFrame
         Me.Button_AddDataBases = New System.Windows.Forms.Button()
         Me.splitContainer2 = New System.Windows.Forms.SplitContainer()
         Me.GroupBox_SFXsInDataBase = New System.Windows.Forms.GroupBox()
-        Me.ListBox_DataBaseSFX = New sb_editor.MultiSelListBox()
         Me.ContextMenu_DataBasesSFX = New System.Windows.Forms.ContextMenu()
         Me.DataBasesSFX_Remove = New System.Windows.Forms.MenuItem()
         Me.DataBasesSFX_Properties = New System.Windows.Forms.MenuItem()
@@ -80,7 +79,6 @@ Partial Class MainFrame
         Me.Button_RemoveSFXs = New System.Windows.Forms.Button()
         Me.GroupBox_AvailableSFXs = New System.Windows.Forms.GroupBox()
         Me.Button_AddSFXs = New System.Windows.Forms.Button()
-        Me.UserControl_SFXs = New sb_editor.UserControl_SFXs()
         Me.GroupBox_SoundBanks = New System.Windows.Forms.GroupBox()
         Me.MainMenu_EuroSound = New System.Windows.Forms.MainMenu(Me.components)
         Me.MenuItemFile = New System.Windows.Forms.MenuItem()
@@ -97,6 +95,8 @@ Partial Class MainFrame
         Me.ToolTip_Buttons = New System.Windows.Forms.ToolTip(Me.components)
         Me.FolderBrowserDialog = New System.Windows.Forms.FolderBrowserDialog()
         Me.OpenFileDialog = New System.Windows.Forms.OpenFileDialog()
+        Me.ListBox_DataBaseSFX = New sb_editor.MultiSelListBox()
+        Me.UserControl_SFXs = New sb_editor.UserControl_SFXs()
         Me.GroupBox_Output.SuspendLayout()
         Me.GroupBox_Misc.SuspendLayout()
         CType(Me.splitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -126,7 +126,7 @@ Partial Class MainFrame
         '
         Me.Label_SoundBanksCount.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label_SoundBanksCount.AutoSize = True
-        Me.Label_SoundBanksCount.Location = New System.Drawing.Point(3, 441)
+        Me.Label_SoundBanksCount.Location = New System.Drawing.Point(3, 414)
         Me.Label_SoundBanksCount.Name = "Label_SoundBanksCount"
         Me.Label_SoundBanksCount.Size = New System.Drawing.Size(60, 13)
         Me.Label_SoundBanksCount.TabIndex = 2
@@ -147,7 +147,7 @@ Partial Class MainFrame
         Me.GroupBox_Output.Controls.Add(Me.RadioButton_Output_AllBanksAll)
         Me.GroupBox_Output.Controls.Add(Me.RadioButton_AllBanksSelectedFormat)
         Me.GroupBox_Output.Controls.Add(Me.RadioButton_Output_SelectedSoundBank)
-        Me.GroupBox_Output.Location = New System.Drawing.Point(12, 476)
+        Me.GroupBox_Output.Location = New System.Drawing.Point(12, 449)
         Me.GroupBox_Output.Name = "GroupBox_Output"
         Me.GroupBox_Output.Size = New System.Drawing.Size(261, 236)
         Me.GroupBox_Output.TabIndex = 8
@@ -272,7 +272,7 @@ Partial Class MainFrame
         '
         Me.Label_SoundBank_DataBases.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label_SoundBank_DataBases.AutoSize = True
-        Me.Label_SoundBank_DataBases.Location = New System.Drawing.Point(244, 441)
+        Me.Label_SoundBank_DataBases.Location = New System.Drawing.Point(244, 414)
         Me.Label_SoundBank_DataBases.Name = "Label_SoundBank_DataBases"
         Me.Label_SoundBank_DataBases.Size = New System.Drawing.Size(61, 13)
         Me.Label_SoundBank_DataBases.TabIndex = 1
@@ -289,7 +289,7 @@ Partial Class MainFrame
         Me.GroupBox_Misc.Controls.Add(Me.Button_MusicMaker)
         Me.GroupBox_Misc.Controls.Add(Me.Button_ReSampling)
         Me.GroupBox_Misc.Controls.Add(Me.Button_ProjectProperties)
-        Me.GroupBox_Misc.Location = New System.Drawing.Point(279, 476)
+        Me.GroupBox_Misc.Location = New System.Drawing.Point(279, 449)
         Me.GroupBox_Misc.Name = "GroupBox_Misc"
         Me.GroupBox_Misc.Size = New System.Drawing.Size(169, 236)
         Me.GroupBox_Misc.TabIndex = 9
@@ -390,7 +390,7 @@ Partial Class MainFrame
         Me.TreeView_SoundBanks.SelectedImageIndex = 0
         Me.TreeView_SoundBanks.ShowPlusMinus = False
         Me.TreeView_SoundBanks.ShowRootLines = False
-        Me.TreeView_SoundBanks.Size = New System.Drawing.Size(424, 408)
+        Me.TreeView_SoundBanks.Size = New System.Drawing.Size(424, 381)
         Me.TreeView_SoundBanks.TabIndex = 0
         '
         'ContextMenu_TreeView
@@ -447,8 +447,8 @@ Partial Class MainFrame
         'splitContainer1.Panel2
         '
         Me.splitContainer1.Panel2.Controls.Add(Me.splitContainer2)
-        Me.splitContainer1.Size = New System.Drawing.Size(675, 711)
-        Me.splitContainer1.SplitterDistance = 200
+        Me.splitContainer1.Size = New System.Drawing.Size(685, 684)
+        Me.splitContainer1.SplitterDistance = 202
         Me.splitContainer1.TabIndex = 5
         '
         'GroupBox_AvailableDataBases
@@ -461,7 +461,7 @@ Partial Class MainFrame
         Me.GroupBox_AvailableDataBases.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox_AvailableDataBases.Location = New System.Drawing.Point(0, 0)
         Me.GroupBox_AvailableDataBases.Name = "GroupBox_AvailableDataBases"
-        Me.GroupBox_AvailableDataBases.Size = New System.Drawing.Size(200, 711)
+        Me.GroupBox_AvailableDataBases.Size = New System.Drawing.Size(202, 684)
         Me.GroupBox_AvailableDataBases.TabIndex = 0
         Me.GroupBox_AvailableDataBases.TabStop = False
         Me.GroupBox_AvailableDataBases.Text = "Available DataBases"
@@ -470,7 +470,7 @@ Partial Class MainFrame
         '
         Me.Label_DataBasesCount.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label_DataBasesCount.AutoSize = True
-        Me.Label_DataBasesCount.Location = New System.Drawing.Point(6, 688)
+        Me.Label_DataBasesCount.Location = New System.Drawing.Point(6, 661)
         Me.Label_DataBasesCount.Name = "Label_DataBasesCount"
         Me.Label_DataBasesCount.Size = New System.Drawing.Size(43, 13)
         Me.Label_DataBasesCount.TabIndex = 2
@@ -487,7 +487,7 @@ Partial Class MainFrame
         Me.ListBox_DataBases.Location = New System.Drawing.Point(6, 48)
         Me.ListBox_DataBases.Name = "ListBox_DataBases"
         Me.ListBox_DataBases.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBox_DataBases.Size = New System.Drawing.Size(190, 628)
+        Me.ListBox_DataBases.Size = New System.Drawing.Size(192, 602)
         Me.ListBox_DataBases.Sorted = True
         Me.ListBox_DataBases.TabIndex = 1
         Me.ToolTip_Buttons.SetToolTip(Me.ListBox_DataBases, "All Available DataBases")
@@ -538,7 +538,7 @@ Partial Class MainFrame
         Me.Button_AddDataBases.Cursor = System.Windows.Forms.Cursors.Default
         Me.Button_AddDataBases.Location = New System.Drawing.Point(6, 16)
         Me.Button_AddDataBases.Name = "Button_AddDataBases"
-        Me.Button_AddDataBases.Size = New System.Drawing.Size(190, 23)
+        Me.Button_AddDataBases.Size = New System.Drawing.Size(192, 23)
         Me.Button_AddDataBases.TabIndex = 0
         Me.Button_AddDataBases.Text = "<<< Add DataBases"
         Me.ToolTip_Buttons.SetToolTip(Me.Button_AddDataBases, "Add Selected SFX(s) To Selected DataBase")
@@ -557,8 +557,8 @@ Partial Class MainFrame
         'splitContainer2.Panel2
         '
         Me.splitContainer2.Panel2.Controls.Add(Me.GroupBox_AvailableSFXs)
-        Me.splitContainer2.Size = New System.Drawing.Size(471, 711)
-        Me.splitContainer2.SplitterDistance = 202
+        Me.splitContainer2.Size = New System.Drawing.Size(479, 684)
+        Me.splitContainer2.SplitterDistance = 205
         Me.splitContainer2.TabIndex = 1
         '
         'GroupBox_SFXsInDataBase
@@ -570,26 +570,10 @@ Partial Class MainFrame
         Me.GroupBox_SFXsInDataBase.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox_SFXsInDataBase.Location = New System.Drawing.Point(0, 0)
         Me.GroupBox_SFXsInDataBase.Name = "GroupBox_SFXsInDataBase"
-        Me.GroupBox_SFXsInDataBase.Size = New System.Drawing.Size(202, 711)
+        Me.GroupBox_SFXsInDataBase.Size = New System.Drawing.Size(205, 684)
         Me.GroupBox_SFXsInDataBase.TabIndex = 0
         Me.GroupBox_SFXsInDataBase.TabStop = False
         Me.GroupBox_SFXsInDataBase.Text = "SFXs In DataBase"
-        '
-        'ListBox_DataBaseSFX
-        '
-        Me.ListBox_DataBaseSFX.AllowDrop = True
-        Me.ListBox_DataBaseSFX.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ListBox_DataBaseSFX.ContextMenu = Me.ContextMenu_DataBasesSFX
-        Me.ListBox_DataBaseSFX.DragDropEffectVal = System.Windows.Forms.DragDropEffects.Move
-        Me.ListBox_DataBaseSFX.FormattingEnabled = True
-        Me.ListBox_DataBaseSFX.HorizontalScrollbar = True
-        Me.ListBox_DataBaseSFX.Location = New System.Drawing.Point(6, 48)
-        Me.ListBox_DataBaseSFX.Name = "ListBox_DataBaseSFX"
-        Me.ListBox_DataBaseSFX.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBox_DataBaseSFX.Size = New System.Drawing.Size(190, 628)
-        Me.ListBox_DataBaseSFX.TabIndex = 3
         '
         'ContextMenu_DataBasesSFX
         '
@@ -628,7 +612,7 @@ Partial Class MainFrame
         '
         Me.Label_DataBaseSFX.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label_DataBaseSFX.AutoSize = True
-        Me.Label_DataBaseSFX.Location = New System.Drawing.Point(6, 688)
+        Me.Label_DataBaseSFX.Location = New System.Drawing.Point(6, 661)
         Me.Label_DataBaseSFX.Name = "Label_DataBaseSFX"
         Me.Label_DataBaseSFX.Size = New System.Drawing.Size(43, 13)
         Me.Label_DataBaseSFX.TabIndex = 2
@@ -641,7 +625,7 @@ Partial Class MainFrame
         Me.Button_RemoveSFXs.Cursor = System.Windows.Forms.Cursors.Default
         Me.Button_RemoveSFXs.Location = New System.Drawing.Point(6, 16)
         Me.Button_RemoveSFXs.Name = "Button_RemoveSFXs"
-        Me.Button_RemoveSFXs.Size = New System.Drawing.Size(190, 23)
+        Me.Button_RemoveSFXs.Size = New System.Drawing.Size(193, 23)
         Me.Button_RemoveSFXs.TabIndex = 0
         Me.Button_RemoveSFXs.Text = "Remove SFXs >>>"
         Me.ToolTip_Buttons.SetToolTip(Me.Button_RemoveSFXs, "Remove Selected SFX(s) From Selected DataBase")
@@ -655,7 +639,7 @@ Partial Class MainFrame
         Me.GroupBox_AvailableSFXs.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox_AvailableSFXs.Location = New System.Drawing.Point(0, 0)
         Me.GroupBox_AvailableSFXs.Name = "GroupBox_AvailableSFXs"
-        Me.GroupBox_AvailableSFXs.Size = New System.Drawing.Size(265, 711)
+        Me.GroupBox_AvailableSFXs.Size = New System.Drawing.Size(270, 684)
         Me.GroupBox_AvailableSFXs.TabIndex = 0
         Me.GroupBox_AvailableSFXs.TabStop = False
         Me.GroupBox_AvailableSFXs.Text = "Available SFXs"
@@ -667,19 +651,11 @@ Partial Class MainFrame
         Me.Button_AddSFXs.Cursor = System.Windows.Forms.Cursors.Default
         Me.Button_AddSFXs.Location = New System.Drawing.Point(3, 16)
         Me.Button_AddSFXs.Name = "Button_AddSFXs"
-        Me.Button_AddSFXs.Size = New System.Drawing.Size(259, 23)
+        Me.Button_AddSFXs.Size = New System.Drawing.Size(264, 23)
         Me.Button_AddSFXs.TabIndex = 0
         Me.Button_AddSFXs.Text = "<<< Add SFXs"
         Me.ToolTip_Buttons.SetToolTip(Me.Button_AddSFXs, "Add Selected SFX(s) To Selected DataBase")
         Me.Button_AddSFXs.UseVisualStyleBackColor = True
-        '
-        'UserControl_SFXs
-        '
-        Me.UserControl_SFXs.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UserControl_SFXs.Location = New System.Drawing.Point(3, 16)
-        Me.UserControl_SFXs.Name = "UserControl_SFXs"
-        Me.UserControl_SFXs.Size = New System.Drawing.Size(259, 692)
-        Me.UserControl_SFXs.TabIndex = 2
         '
         'GroupBox_SoundBanks
         '
@@ -691,7 +667,7 @@ Partial Class MainFrame
         Me.GroupBox_SoundBanks.Controls.Add(Me.TreeView_SoundBanks)
         Me.GroupBox_SoundBanks.Location = New System.Drawing.Point(12, 1)
         Me.GroupBox_SoundBanks.Name = "GroupBox_SoundBanks"
-        Me.GroupBox_SoundBanks.Size = New System.Drawing.Size(436, 469)
+        Me.GroupBox_SoundBanks.Size = New System.Drawing.Size(436, 442)
         Me.GroupBox_SoundBanks.TabIndex = 6
         Me.GroupBox_SoundBanks.TabStop = False
         Me.GroupBox_SoundBanks.Text = "Sound Banks"
@@ -759,12 +735,37 @@ Partial Class MainFrame
         Me.MenuItemDebug_Console.Index = 1
         Me.MenuItemDebug_Console.Text = "Console"
         '
+        'ListBox_DataBaseSFX
+        '
+        Me.ListBox_DataBaseSFX.AllowDrop = True
+        Me.ListBox_DataBaseSFX.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ListBox_DataBaseSFX.ContextMenu = Me.ContextMenu_DataBasesSFX
+        Me.ListBox_DataBaseSFX.DragDropEffectVal = System.Windows.Forms.DragDropEffects.Move
+        Me.ListBox_DataBaseSFX.FormattingEnabled = True
+        Me.ListBox_DataBaseSFX.HorizontalScrollbar = True
+        Me.ListBox_DataBaseSFX.Location = New System.Drawing.Point(6, 48)
+        Me.ListBox_DataBaseSFX.Name = "ListBox_DataBaseSFX"
+        Me.ListBox_DataBaseSFX.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.ListBox_DataBaseSFX.Size = New System.Drawing.Size(193, 602)
+        Me.ListBox_DataBaseSFX.TabIndex = 3
+        '
+        'UserControl_SFXs
+        '
+        Me.UserControl_SFXs.AllowDoubleClick = True
+        Me.UserControl_SFXs.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UserControl_SFXs.Location = New System.Drawing.Point(3, 16)
+        Me.UserControl_SFXs.Name = "UserControl_SFXs"
+        Me.UserControl_SFXs.Size = New System.Drawing.Size(264, 665)
+        Me.UserControl_SFXs.TabIndex = 2
+        '
         'MainFrame
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(1134, 717)
+        Me.ClientSize = New System.Drawing.Size(1144, 690)
         Me.Controls.Add(Me.GroupBox_Output)
         Me.Controls.Add(Me.GroupBox_Misc)
         Me.Controls.Add(Me.splitContainer1)
@@ -799,15 +800,10 @@ Partial Class MainFrame
     End Sub
 
     Private WithEvents SoundbanksImages As ImageList
-    Private WithEvents Label_SoundBanksCount As Label
     Private WithEvents GroupBox_Output As GroupBox
     Private WithEvents Label_Format As Label
-    Private WithEvents CheckBox_FastReSample As CheckBox
     Private WithEvents Button_QuickOutput As Button
     Private WithEvents Button_FullOutput As Button
-    Private WithEvents RadioButton_Output_AllBanksAll As RadioButton
-    Private WithEvents RadioButton_AllBanksSelectedFormat As RadioButton
-    Private WithEvents RadioButton_Output_SelectedSoundBank As RadioButton
     Private WithEvents Label_SoundBank_DataBases As Label
     Private WithEvents GroupBox_Misc As GroupBox
     Private WithEvents Button_Advanced As Button
@@ -817,14 +813,11 @@ Partial Class MainFrame
     Private WithEvents Button_ProjectProperties As Button
     Private WithEvents splitContainer1 As SplitContainer
     Private WithEvents GroupBox_AvailableDataBases As GroupBox
-    Private WithEvents Label_DataBasesCount As Label
     Private WithEvents splitContainer2 As SplitContainer
     Private WithEvents GroupBox_SFXsInDataBase As GroupBox
-    Private WithEvents Label_DataBaseSFX As Label
     Private WithEvents GroupBox_AvailableSFXs As GroupBox
     Private WithEvents GroupBox_SoundBanks As GroupBox
     Friend WithEvents MainMenu_EuroSound As MainMenu
-    Friend WithEvents MenuItemFile As MenuItem
     Friend WithEvents MenuItemFile_LoadProject As MenuItem
     Friend WithEvents MenuItemHelp As MenuItem
     Friend WithEvents MenuItemHelp_About As MenuItem
@@ -840,15 +833,8 @@ Partial Class MainFrame
     Friend WithEvents ContextMenu_TreeView_Delete As MenuItem
     Friend WithEvents ContextMenu_TreeView_Rename As MenuItem
     Friend WithEvents ContextMenu_TreeView_Properties As MenuItem
-    Friend WithEvents CheckBox_OutAllLanguages As CheckBox
     Friend WithEvents Label_Language As Label
-    Private WithEvents ComboBox_Format As ComboBox
-    Private WithEvents Button_AddDataBases As Button
-    Private WithEvents Button_RemoveSFXs As Button
-    Private WithEvents Button_AddSFXs As Button
-    Private WithEvents ComboBox_OutputLanguage As ComboBox
     Friend WithEvents MenuItemFile_NewProject As MenuItem
-    Friend WithEvents MenuItemFile_RecentProjects As MenuItem
     Friend WithEvents FolderBrowserDialog As FolderBrowserDialog
     Friend WithEvents OpenFileDialog As OpenFileDialog
     Friend WithEvents ContextMenu_DataBases As ContextMenu
@@ -864,11 +850,26 @@ Partial Class MainFrame
     Protected Friend WithEvents ListBox_DataBases As ListBox
     Protected Friend WithEvents ListBox_DataBaseSFX As MultiSelListBox
     Friend WithEvents TextBox_Debug As TextBox
-    Friend WithEvents MenuItemFile_RecentFiles As MenuItem
     Protected Friend WithEvents TreeView_SoundBanks As TreeView
     Friend WithEvents Button_MarkersEditor As Button
     Friend WithEvents MenuItemDebug As MenuItem
     Friend WithEvents MenuItemDebug_ShowGlobalVars As MenuItem
     Friend WithEvents MenuItemDebug_Console As MenuItem
     Friend WithEvents DataBasesSFX_MultiEditor As MenuItem
+    Protected Friend WithEvents Label_SoundBanksCount As Label
+    Protected Friend WithEvents Label_DataBasesCount As Label
+    Protected Friend WithEvents Label_DataBaseSFX As Label
+    Protected Friend WithEvents ComboBox_OutputLanguage As ComboBox
+    Protected Friend WithEvents Button_AddDataBases As Button
+    Protected Friend WithEvents Button_RemoveSFXs As Button
+    Protected Friend WithEvents Button_AddSFXs As Button
+    Protected Friend WithEvents MenuItemFile_RecentProjects As MenuItem
+    Protected Friend WithEvents MenuItemFile_RecentFiles As MenuItem
+    Protected Friend WithEvents MenuItemFile As MenuItem
+    Protected Friend WithEvents ComboBox_Format As ComboBox
+    Protected Friend WithEvents CheckBox_FastReSample As CheckBox
+    Protected Friend WithEvents RadioButton_Output_AllBanksAll As RadioButton
+    Protected Friend WithEvents RadioButton_AllBanksSelectedFormat As RadioButton
+    Protected Friend WithEvents RadioButton_Output_SelectedSoundBank As RadioButton
+    Protected Friend WithEvents CheckBox_OutAllLanguages As CheckBox
 End Class

@@ -9,24 +9,12 @@ Partial Public Class MainFrame
     '*===============================================================================================
     Private ReadOnly textFileReaders As New FileParsers
     Private ReadOnly writers As New FileWriters
-    Friend RecentFilesMenu As MostRecentFilesMenu
+    Protected Friend RecentFilesMenu As MostRecentFilesMenu
 
     '*===============================================================================================
     '* FORM EVENTS
     '*===============================================================================================
     Private Sub MainFrame_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'Custom cursors
-        Button_AddDataBases.Cursor = New Cursor(New MemoryStream(My.Resources.arrow_left))
-        Button_RemoveSFXs.Cursor = New Cursor(New MemoryStream(My.Resources.arrow_right))
-        Button_AddSFXs.Cursor = New Cursor(New MemoryStream(My.Resources.arrow_left))
-        ComboBox_OutputLanguage.Cursor = New Cursor(New MemoryStream(My.Resources.lang_english))
-        'Get recent files
-        RecentFilesMenu = New MruStripMenuInline(MenuItemFile_RecentProjects, MenuItemFile_RecentFiles, New MostRecentFilesMenu.ClickedHandler(AddressOf MenuItemFile_Recent_Click), EuroSoundIniFilePath, 5)
-        RecentFilesMenu.LoadFromIniFile()
-
-        'Update combo
-        ComboBox_Format.SelectedIndex = 0
-
 #If DEBUG Then
         MenuItemDebug.Visible = True
         Dim debugListener As New MyTraceListener()
@@ -48,6 +36,17 @@ Partial Public Class MainFrame
         If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System\")) Then
             writers.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
         End If
+        'Save data in the Ini File
+        Dim iniFunctions As New IniFile(SysFileProjectIniPath)
+        iniFunctions.Write("Last_Project_Opened", WorkingDirectory, "Form1_Misc")
+        iniFunctions.Write("FormatCombo_ListIndex", ComboBox_Format.SelectedIndex, "Form1_Misc")
+        iniFunctions.Write("AllBanksOption_Value", RadioButton_AllBanksSelectedFormat.Checked, "Form1_Misc")
+        iniFunctions.Write("SelectedlBankOption_Value", RadioButton_Output_SelectedSoundBank.Checked, "Form1_Misc")
+        iniFunctions.Write("AllFormatsOption_Value", RadioButton_Output_AllBanksAll.Checked, "Form1_Misc")
+        iniFunctions.Write("Check1", Convert.ToByte(CheckBox_FastReSample.Checked), "MainForm")
+        iniFunctions.Write("LanguageCombo", ComboBox_OutputLanguage.SelectedIndex, "MainForm")
+        iniFunctions.Write("Check2", Convert.ToByte(UserControl_SFXs.CheckBox_SortByDate.Checked), "MainForm")
+        iniFunctions.Write("OutputAllLanguages", Convert.ToByte(CheckBox_OutAllLanguages.Checked), "MainForm")
     End Sub
 
     '*===============================================================================================
@@ -69,7 +68,7 @@ Partial Public Class MainFrame
         End If
     End Sub
 
-    Private Sub MenuItemFile_Recent_Click(number As Integer, filename As String)
+    Friend Sub MenuItemFile_Recent_Click(number As Integer, filename As String)
         If fso.FolderExists(filename) Then
             OpenNewProject(filename)
         Else

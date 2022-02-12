@@ -98,14 +98,14 @@ Partial Public Class Frm_SfxEditor
     Private Sub ShowSfxSamplePoolControl(platformName As String)
         Dim sfxData As SfxFile = sfxFilesData(platformName)
         If sfxData IsNot Nothing Then
-            SfxParamsAndSamplePool.CheckBox_SamplePoolLoop.Checked = sfxData.SamplePool.isLooped
-            SfxParamsAndSamplePool.Numeric_MinDelay.Value = sfxData.SamplePool.MinDelay
-            SfxParamsAndSamplePool.Numeric_MaxDelay.Value = sfxData.SamplePool.MaxDelay
             If sfxData.SamplePool.Action1 = 0 Then
                 SfxParamsAndSamplePool.RadioButton_Single.Checked = True
             Else
                 SfxParamsAndSamplePool.RadioButton_MultiSample.Checked = True
             End If
+            SfxParamsAndSamplePool.CheckBox_SamplePoolLoop.Checked = sfxData.SamplePool.isLooped
+            SfxParamsAndSamplePool.Numeric_MinDelay.Value = sfxData.SamplePool.MinDelay
+            SfxParamsAndSamplePool.Numeric_MaxDelay.Value = sfxData.SamplePool.MaxDelay
             SfxParamsAndSamplePool.CheckBox_RandomPick.Checked = sfxData.SamplePool.RandomPick
             SfxParamsAndSamplePool.CheckBox_Shuffled.Checked = sfxData.SamplePool.Shuffled
             SfxParamsAndSamplePool.CheckBox_Polyphonic.Checked = sfxData.SamplePool.Polyphonic
