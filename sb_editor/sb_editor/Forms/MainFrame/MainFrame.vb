@@ -25,18 +25,19 @@ Partial Public Class MainFrame
         'Update text file
         If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System\")) Then
             writers.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
+
+            'Save data in the Ini File
+            Dim iniFunctions As New IniFile(SysFileProjectIniPath)
+            iniFunctions.Write("Last_Project_Opened", WorkingDirectory, "Form1_Misc")
+            iniFunctions.Write("FormatCombo_ListIndex", ComboBox_Format.SelectedIndex, "Form1_Misc")
+            iniFunctions.Write("AllBanksOption_Value", RadioButton_AllBanksSelectedFormat.Checked, "Form1_Misc")
+            iniFunctions.Write("SelectedlBankOption_Value", RadioButton_Output_SelectedSoundBank.Checked, "Form1_Misc")
+            iniFunctions.Write("AllFormatsOption_Value", RadioButton_Output_AllBanksAll.Checked, "Form1_Misc")
+            iniFunctions.Write("Check1", Convert.ToByte(CheckBox_FastReSample.Checked), "MainForm")
+            iniFunctions.Write("LanguageCombo", ComboBox_OutputLanguage.SelectedIndex, "MainForm")
+            iniFunctions.Write("Check2", Convert.ToByte(UserControl_SFXs.CheckBox_SortByDate.Checked), "MainForm")
+            iniFunctions.Write("OutputAllLanguages", Convert.ToByte(CheckBox_OutAllLanguages.Checked), "MainForm")
         End If
-        'Save data in the Ini File
-        Dim iniFunctions As New IniFile(SysFileProjectIniPath)
-        iniFunctions.Write("Last_Project_Opened", WorkingDirectory, "Form1_Misc")
-        iniFunctions.Write("FormatCombo_ListIndex", ComboBox_Format.SelectedIndex, "Form1_Misc")
-        iniFunctions.Write("AllBanksOption_Value", RadioButton_AllBanksSelectedFormat.Checked, "Form1_Misc")
-        iniFunctions.Write("SelectedlBankOption_Value", RadioButton_Output_SelectedSoundBank.Checked, "Form1_Misc")
-        iniFunctions.Write("AllFormatsOption_Value", RadioButton_Output_AllBanksAll.Checked, "Form1_Misc")
-        iniFunctions.Write("Check1", Convert.ToByte(CheckBox_FastReSample.Checked), "MainForm")
-        iniFunctions.Write("LanguageCombo", ComboBox_OutputLanguage.SelectedIndex, "MainForm")
-        iniFunctions.Write("Check2", Convert.ToByte(UserControl_SFXs.CheckBox_SortByDate.Checked), "MainForm")
-        iniFunctions.Write("OutputAllLanguages", Convert.ToByte(CheckBox_OutAllLanguages.Checked), "MainForm")
     End Sub
 
     '*===============================================================================================
@@ -717,6 +718,11 @@ Partial Public Class MainFrame
     Private Sub Button_SfxDefault_Click(sender As Object, e As EventArgs) Handles Button_SfxDefault.Click
         Dim sfxDefaultForm As New SfxDefault
         sfxDefaultForm.ShowDialog()
+    End Sub
+
+    Private Sub Button_MarkersEditor_Click(sender As Object, e As EventArgs) Handles Button_MarkersEditor.Click
+        Dim markersEditor As New MusicMarkersEditor
+        markersEditor.ShowDialog()
     End Sub
 
     '*===============================================================================================

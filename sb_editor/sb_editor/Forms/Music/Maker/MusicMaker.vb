@@ -15,18 +15,20 @@ Partial Public Class MusicMaker
     '*===============================================================================================
     Private Sub MusicMaker_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ComboBox_OutputFormat.SelectedIndex = 0
-        'Ensure that the data and work directory exists
-        Dim musicFolder = fso.BuildPath(WorkingDirectory, "Music")
-        Dim esDataFolder = fso.BuildPath(WorkingDirectory, "Music\ESData")
-        Dim EsWorkFolder = fso.BuildPath(WorkingDirectory, "Music\ESWork")
-        If Not fso.FolderExists(musicFolder) Then
-            fso.CreateFolder(musicFolder)
-        End If
-        If Not fso.FolderExists(esDataFolder) Then
-            fso.CreateFolder(esDataFolder)
-        End If
-        If Not fso.FolderExists(EsWorkFolder) Then
-            fso.CreateFolder(EsWorkFolder)
+        If fso.FolderExists(WorkingDirectory) Then
+            'Ensure that the data and work directory exists
+            Dim musicFolder = fso.BuildPath(WorkingDirectory, "Music")
+            Dim esDataFolder = fso.BuildPath(WorkingDirectory, "Music\ESData")
+            Dim EsWorkFolder = fso.BuildPath(WorkingDirectory, "Music\ESWork")
+            If Not fso.FolderExists(musicFolder) Then
+                fso.CreateFolder(musicFolder)
+            End If
+            If Not fso.FolderExists(esDataFolder) Then
+                fso.CreateFolder(esDataFolder)
+            End If
+            If Not fso.FolderExists(EsWorkFolder) Then
+                fso.CreateFolder(EsWorkFolder)
+            End If
         End If
         'Print available mfx files
         GetMusicFilesData()

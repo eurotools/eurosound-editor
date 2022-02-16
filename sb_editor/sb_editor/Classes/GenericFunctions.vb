@@ -91,7 +91,13 @@ Module GenericFunctions
     Friend Function GetOnlyFileName(fullFileName As String) As String
         Dim a As Integer = InStrRev(fullFileName, "\") + 1
         Dim b As Integer = InStrRev(fullFileName, ".")
-        Return Mid(fullFileName, a, b - a)
+        Dim fileName As String
+        If b > a Then
+            fileName = Mid(fullFileName, a, b - a)
+        Else
+            fileName = fullFileName
+        End If
+        Return fileName
     End Function
 
     Friend Function CountFolderFiles(Folder As String, Filter As String) As Integer

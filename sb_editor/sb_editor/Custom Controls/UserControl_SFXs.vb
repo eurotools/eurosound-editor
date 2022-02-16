@@ -14,8 +14,10 @@ Public Class UserControl_SFXs
     '*===============================================================================================
     Public Sub LoadHashCodes()
         'Get files from directory and add it to list
-        Dim sfxFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly)
-        AddItemsToList(sfxFiles)
+        If fso.FolderExists(fso.BuildPath(WorkingDirectory, "SFXs")) Then
+            Dim sfxFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly)
+            AddItemsToList(sfxFiles)
+        End If
     End Sub
 
     Public Sub LoadRefineList()
@@ -92,7 +94,9 @@ Public Class UserControl_SFXs
         refineList.Sort()
 
         'Update file
-        writers.CreateRefineList(fso.BuildPath(WorkingDirectory, "System\RefineSearch.txt"), refineList)
+        If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System")) Then
+            writers.CreateRefineList(fso.BuildPath(WorkingDirectory, "System\RefineSearch.txt"), refineList)
+        End If
 
         'Update combobox
         ComboBox_SFX_Section.Items.Clear()
@@ -122,12 +126,20 @@ Public Class UserControl_SFXs
     '*===============================================================================================
     Private Sub ComboBox_SFX_Section_SelectionChangeCommitted(sender As Object, e As EventArgs) Handles ComboBox_SFX_Section.SelectionChangeCommitted
         'Clear items
-        ListBox_SFXs.Items.Clear()
-        'Get keyword
-        Dim keywordSelected As String = ComboBox_SFX_Section.SelectedItem
-        'Get files from directory and add it to list
-        Dim sfxFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "SFXs"), "*" & keywordSelected & "*.txt", SearchOption.TopDirectoryOnly)
-        AddItemsToList(sfxFiles)
+        If ComboBox_SFX_Section.SelectedIndex > 1 Then
+            ListBox_SFXs.Items.Clear()
+            'Get keyword
+            Dim keywordSelected As String = ComboBox_SFX_Section.SelectedItem
+            'Get files from directory and add it to list
+            Dim sfxFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "SFXs"), "*" & keywordSelected & "*.txt", SearchOption.TopDirectoryOnly)
+            AddItemsToList(sfxFiles)
+        ElseIf ComboBox_SFX_Section.SelectedIndex = 1 AndAlso ListBox_SFXs.SelectedItems.Count > 0 Then 'Highlighted
+            Dim selectedIndices As String() = ListBox_SFXs.SelectedItems.Cast(Of String).ToArray
+            AddItemsToList(selectedIndices)
+        Else 'All
+            LoadHashCodes()
+        End If
+
     End Sub
 
     '*===============================================================================================

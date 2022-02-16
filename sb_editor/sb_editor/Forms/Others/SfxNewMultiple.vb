@@ -22,18 +22,22 @@ Public Class SfxNewMultiple
         End If
 
         'Load config
-        Dim iniFunctions As New IniFile(SysFileProjectIniPath)
-        CheckBox_ForceUpperCase.Checked = CBool(iniFunctions.Read("Check1_Value", "Form11_Misc"))
-        CheckBox_RandomSequence.Checked = CBool(iniFunctions.Read("Check2_Value", "Form11_Misc"))
-        TextBox_SfxPrefix.Text = iniFunctions.Read("Text1_Text", "Form11_Misc")
+        If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System")) Then
+            Dim iniFunctions As New IniFile(SysFileProjectIniPath)
+            CheckBox_ForceUpperCase.Checked = CBool(iniFunctions.Read("Check1_Value", "Form11_Misc"))
+            CheckBox_RandomSequence.Checked = CBool(iniFunctions.Read("Check2_Value", "Form11_Misc"))
+            TextBox_SfxPrefix.Text = iniFunctions.Read("Text1_Text", "Form11_Misc")
+        End If
     End Sub
 
     Private Sub SfxNewMultiple_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         'Save data in the Ini File
-        Dim iniFunctions As New IniFile(SysFileProjectIniPath)
-        iniFunctions.Write("Check1_Value", Convert.ToByte(CheckBox_ForceUpperCase.Checked), "Form11_Misc")
-        iniFunctions.Write("Check2_Value", Convert.ToByte(CheckBox_RandomSequence.Checked), "Form11_Misc")
-        iniFunctions.Write("Text1_Text", TextBox_SfxPrefix.Text, "Form11_Misc")
+        If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System")) Then
+            Dim iniFunctions As New IniFile(SysFileProjectIniPath)
+            iniFunctions.Write("Check1_Value", Convert.ToByte(CheckBox_ForceUpperCase.Checked), "Form11_Misc")
+            iniFunctions.Write("Check2_Value", Convert.ToByte(CheckBox_RandomSequence.Checked), "Form11_Misc")
+            iniFunctions.Write("Text1_Text", TextBox_SfxPrefix.Text, "Form11_Misc")
+        End If
     End Sub
 
     '*===============================================================================================
@@ -61,66 +65,72 @@ Public Class SfxNewMultiple
     End Sub
 
     Private Sub Button_Ok_Click(sender As Object, e As EventArgs) Handles Button_Ok.Click
-        Dim mainFrame As MainFrame = CType(Application.OpenForms("MainFrame"), MainFrame)
-        Dim sfxDefaults As SfxFile = textFileReaders.ReadSFXFile(SysFileSfxDefaults)
-        Dim sampleDefaultValues As Double() = GetDefaultSampleValues()
-        mainFrame.UserControl_SFXs.ListBox_SFXs.BeginUpdate()
+        If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System")) Then
+            Dim mainFrame As MainFrame = CType(Application.OpenForms("MainFrame"), MainFrame)
+            If fso.FileExists(SysFileSfxDefaults) Then
+                Dim sfxDefaults As SfxFile = textFileReaders.ReadSFXFile(SysFileSfxDefaults)
+                Dim sampleDefaultValues As Double() = GetDefaultSampleValues()
+                mainFrame.UserControl_SFXs.ListBox_SFXs.BeginUpdate()
 
-        For Each newSfx As KeyValuePair(Of String, List(Of String)) In samplesDictionary
-            Dim sfxFilePath As String = fso.BuildPath(WorkingDirectory, "SFXs\" & newSfx.Key & ".txt")
-            Dim sfxFileData As New SfxFile
-            '#SFXParameters
-            sfxFileData.Parameters.ReverbSend = sfxDefaults.Parameters.ReverbSend
-            sfxFileData.Parameters.TrackingType = sfxDefaults.Parameters.TrackingType
-            sfxFileData.Parameters.InnerRadius = sfxDefaults.Parameters.InnerRadius
-            sfxFileData.Parameters.OuterRadius = sfxDefaults.Parameters.OuterRadius
-            sfxFileData.Parameters.MaxVoices = sfxDefaults.Parameters.MaxVoices
-            sfxFileData.Parameters.Action1 = sfxDefaults.Parameters.Action1
-            sfxFileData.Parameters.Priority = sfxDefaults.Parameters.Priority
-            sfxFileData.Parameters.Group = sfxDefaults.Parameters.Group
-            sfxFileData.Parameters.Action2 = sfxDefaults.Parameters.Action2
-            sfxFileData.Parameters.Alertness = sfxDefaults.Parameters.Alertness
-            sfxFileData.Parameters.IgnoreAge = sfxDefaults.Parameters.IgnoreAge
-            sfxFileData.Parameters.Ducker = sfxDefaults.Parameters.Ducker
-            sfxFileData.Parameters.DuckerLenght = sfxDefaults.Parameters.DuckerLenght
-            sfxFileData.Parameters.MasterVolume = sfxDefaults.Parameters.MasterVolume
-            sfxFileData.Parameters.Outdoors = sfxDefaults.Parameters.Outdoors
-            sfxFileData.Parameters.PauseInNis = sfxDefaults.Parameters.PauseInNis
-            sfxFileData.Parameters.StealOnAge = sfxDefaults.Parameters.StealOnAge
-            sfxFileData.Parameters.Doppler = sfxDefaults.Parameters.Doppler
-            '#SFXSamplePoolFiles & #SFXSamplePoolModes
-            For Each waveFilePath As String In newSfx.Value
-                'Create new sample
-                Dim sampleObj As New Sample With {
-                    .FilePath = waveFilePath.Substring(Len(ProjMasterFolder & "\Master\")),
-                    .PitchOffset = sampleDefaultValues(0),
-                    .RandomPitchOffset = sampleDefaultValues(1),
-                    .BaseVolume = sampleDefaultValues(2),
-                    .RandomVolumeOffset = sampleDefaultValues(3),
-                    .Pan = sampleDefaultValues(4),
-                    .RandomPan = sampleDefaultValues(5)
-                }
-                'Add object to list
-                sfxFileData.Samples.Add(sampleObj)
-            Next
-            '#SFXSamplePoolControl
-            sfxFileData.SamplePool.Action1 = sfxDefaults.SamplePool.Action1
-            sfxFileData.SamplePool.RandomPick = sfxDefaults.SamplePool.RandomPick
-            sfxFileData.SamplePool.Shuffled = sfxDefaults.SamplePool.Shuffled
-            sfxFileData.SamplePool.isLooped = sfxDefaults.SamplePool.isLooped
-            sfxFileData.SamplePool.Polyphonic = sfxDefaults.SamplePool.Polyphonic
-            sfxFileData.SamplePool.MinDelay = sfxDefaults.SamplePool.MinDelay
-            sfxFileData.SamplePool.MaxDelay = sfxDefaults.SamplePool.MaxDelay
-            sfxFileData.SamplePool.EnableSubSFX = sfxDefaults.SamplePool.EnableSubSFX
-            '#HASHCODE
-            sfxFileData.HashCode = SFXHashCodeNumber
-            SFXHashCodeNumber += 1
-            'Write files
-            writers.WriteSfxFile(sfxFileData, sfxFilePath)
-            'Add item to mainframe listbox
-            mainFrame.UserControl_SFXs.ListBox_SFXs.Items.Add(newSfx.Key)
-        Next
-        mainFrame.UserControl_SFXs.ListBox_SFXs.EndUpdate()
+                For Each newSfx As KeyValuePair(Of String, List(Of String)) In samplesDictionary
+                    Dim sfxFilePath As String = fso.BuildPath(WorkingDirectory, "SFXs\" & newSfx.Key & ".txt")
+                    Dim sfxFileData As New SfxFile
+                    '#SFXParameters
+                    sfxFileData.Parameters.ReverbSend = sfxDefaults.Parameters.ReverbSend
+                    sfxFileData.Parameters.TrackingType = sfxDefaults.Parameters.TrackingType
+                    sfxFileData.Parameters.InnerRadius = sfxDefaults.Parameters.InnerRadius
+                    sfxFileData.Parameters.OuterRadius = sfxDefaults.Parameters.OuterRadius
+                    sfxFileData.Parameters.MaxVoices = sfxDefaults.Parameters.MaxVoices
+                    sfxFileData.Parameters.Action1 = sfxDefaults.Parameters.Action1
+                    sfxFileData.Parameters.Priority = sfxDefaults.Parameters.Priority
+                    sfxFileData.Parameters.Group = sfxDefaults.Parameters.Group
+                    sfxFileData.Parameters.Action2 = sfxDefaults.Parameters.Action2
+                    sfxFileData.Parameters.Alertness = sfxDefaults.Parameters.Alertness
+                    sfxFileData.Parameters.IgnoreAge = sfxDefaults.Parameters.IgnoreAge
+                    sfxFileData.Parameters.Ducker = sfxDefaults.Parameters.Ducker
+                    sfxFileData.Parameters.DuckerLenght = sfxDefaults.Parameters.DuckerLenght
+                    sfxFileData.Parameters.MasterVolume = sfxDefaults.Parameters.MasterVolume
+                    sfxFileData.Parameters.Outdoors = sfxDefaults.Parameters.Outdoors
+                    sfxFileData.Parameters.PauseInNis = sfxDefaults.Parameters.PauseInNis
+                    sfxFileData.Parameters.StealOnAge = sfxDefaults.Parameters.StealOnAge
+                    sfxFileData.Parameters.Doppler = sfxDefaults.Parameters.Doppler
+                    '#SFXSamplePoolFiles & #SFXSamplePoolModes
+                    For Each waveFilePath As String In newSfx.Value
+                        'Create new sample
+                        Dim sampleObj As New Sample With {
+                        .FilePath = waveFilePath.Substring(Len(ProjMasterFolder & "\Master\")),
+                        .PitchOffset = sampleDefaultValues(0),
+                        .RandomPitchOffset = sampleDefaultValues(1),
+                        .BaseVolume = sampleDefaultValues(2),
+                        .RandomVolumeOffset = sampleDefaultValues(3),
+                        .Pan = sampleDefaultValues(4),
+                        .RandomPan = sampleDefaultValues(5)
+                    }
+                        'Add object to list
+                        sfxFileData.Samples.Add(sampleObj)
+                    Next
+                    '#SFXSamplePoolControl
+                    sfxFileData.SamplePool.Action1 = sfxDefaults.SamplePool.Action1
+                    sfxFileData.SamplePool.RandomPick = sfxDefaults.SamplePool.RandomPick
+                    sfxFileData.SamplePool.Shuffled = sfxDefaults.SamplePool.Shuffled
+                    sfxFileData.SamplePool.isLooped = sfxDefaults.SamplePool.isLooped
+                    sfxFileData.SamplePool.Polyphonic = sfxDefaults.SamplePool.Polyphonic
+                    sfxFileData.SamplePool.MinDelay = sfxDefaults.SamplePool.MinDelay
+                    sfxFileData.SamplePool.MaxDelay = sfxDefaults.SamplePool.MaxDelay
+                    sfxFileData.SamplePool.EnableSubSFX = sfxDefaults.SamplePool.EnableSubSFX
+                    '#HASHCODE
+                    sfxFileData.HashCode = SFXHashCodeNumber
+                    SFXHashCodeNumber += 1
+                    'Write files
+                    writers.WriteSfxFile(sfxFileData, sfxFilePath)
+                    'Add item to mainframe listbox
+                    mainFrame.UserControl_SFXs.ListBox_SFXs.Items.Add(newSfx.Key)
+                Next
+                mainFrame.UserControl_SFXs.ListBox_SFXs.EndUpdate()
+            Else
+                MsgBox("Error, SFX Defaults file not found.", vbOKOnly + MsgBoxStyle.Critical, "EuroSound")
+            End If
+        End If
         'Close form
         Close()
     End Sub

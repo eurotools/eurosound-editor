@@ -59,20 +59,22 @@ Partial Public NotInheritable Class SplashScreen
         'Select first item by default
         mainform.ComboBox_Format.SelectedIndex = 0
         'Read ini file
-        Dim iniFunctions As New IniFile(SysFileProjectIniPath)
-        mainform.ComboBox_Format.SelectedIndex = iniFunctions.Read("FormatCombo_ListIndex", "Form1_Misc")
-        mainform.RadioButton_AllBanksSelectedFormat.Checked = iniFunctions.Read("AllBanksOption_Value", "Form1_Misc")
-        mainform.RadioButton_Output_SelectedSoundBank.Checked = iniFunctions.Read("SelectedlBankOption_Value", "Form1_Misc")
-        mainform.RadioButton_Output_AllBanksAll.Checked = iniFunctions.Read("AllFormatsOption_Value", "Form1_Misc")
-        mainform.CheckBox_FastReSample.Checked = Convert.ToBoolean(CByte(iniFunctions.Read("Check1", "MainForm")))
-        Dim languageIndex = iniFunctions.Read("LanguageCombo", "MainForm")
-        If languageIndex < mainform.ComboBox_OutputLanguage.Items.Count Then
-            mainform.ComboBox_OutputLanguage.SelectedIndex = languageIndex
-        ElseIf mainform.ComboBox_OutputLanguage.Items.Count > 0 Then
-            mainform.ComboBox_OutputLanguage.SelectedIndex = 0
+        If SysFileProjectIniPath IsNot "" Then
+            Dim iniFunctions As New IniFile(SysFileProjectIniPath)
+            mainform.ComboBox_Format.SelectedIndex = iniFunctions.Read("FormatCombo_ListIndex", "Form1_Misc")
+            mainform.RadioButton_AllBanksSelectedFormat.Checked = iniFunctions.Read("AllBanksOption_Value", "Form1_Misc")
+            mainform.RadioButton_Output_SelectedSoundBank.Checked = iniFunctions.Read("SelectedlBankOption_Value", "Form1_Misc")
+            mainform.RadioButton_Output_AllBanksAll.Checked = iniFunctions.Read("AllFormatsOption_Value", "Form1_Misc")
+            mainform.CheckBox_FastReSample.Checked = Convert.ToBoolean(CByte(iniFunctions.Read("Check1", "MainForm")))
+            Dim languageIndex = iniFunctions.Read("LanguageCombo", "MainForm")
+            If languageIndex < mainform.ComboBox_OutputLanguage.Items.Count Then
+                mainform.ComboBox_OutputLanguage.SelectedIndex = languageIndex
+            ElseIf mainform.ComboBox_OutputLanguage.Items.Count > 0 Then
+                mainform.ComboBox_OutputLanguage.SelectedIndex = 0
+            End If
+            mainform.UserControl_SFXs.CheckBox_SortByDate.Checked = Convert.ToBoolean(CByte(iniFunctions.Read("Check2", "MainForm")))
+            mainform.CheckBox_OutAllLanguages.Checked = Convert.ToBoolean(CByte(iniFunctions.Read("OutputAllLanguages", "MainForm")))
         End If
-        mainform.UserControl_SFXs.CheckBox_SortByDate.Checked = Convert.ToBoolean(CByte(iniFunctions.Read("Check2", "MainForm")))
-        mainform.CheckBox_OutAllLanguages.Checked = Convert.ToBoolean(CByte(iniFunctions.Read("OutputAllLanguages", "MainForm")))
 
         'Start timer
         TimerSplash.Start()

@@ -249,6 +249,8 @@ Partial Public Class ExporterForm
     Private Sub CopyStreamSamples(streamsBaseDir As String, outPlatform As String, fileList As String(), fileExtension As String, e As DoWorkEventArgs, markersFunctions As ExMarkersTool)
         'Get sample count
         Dim samplesCount As Integer = fileList.GetLength(0) - 1
+        Dim waveFunctions As New WaveFunctions
+        Dim markerFileFunctions As New MarkerFiles
 
         'Update progress bar
         Invoke(Sub() ProgressBar1.Value = 0)
@@ -289,9 +291,13 @@ Partial Public Class ExporterForm
                     Dim MasterWaveFilePath = fso.BuildPath(ProjMasterFolder, "Master" & waveName)
                     Dim MasterMarkerFilePath = fso.BuildPath(fso.GetParentFolderName(MasterWaveFilePath), GetOnlyFileName(MasterWaveFilePath) & ".mrk")
                     'Ensure that the marker file exists
-                    If fso.FileExists(MasterMarkerFilePath) Then
-                        markersFunctions.CreateStreamMarkers(adpcmFile, MasterMarkerFilePath, streamsFolder, platformWaveFile, 100)
+                    If Not fso.FileExists(MasterMarkerFilePath) Then
+                        Using waveReader As New WaveFileReader(MasterWaveFilePath)
+                            Dim sampleChunkData As Integer() = waveFunctions.ReadSampleChunk(waveReader)
+                            markerFileFunctions.CreateStreamMarkerFile(MasterMarkerFilePath, sampleChunkData, waveReader.Length / 2)
+                        End Using
                     End If
+                    markersFunctions.CreateStreamMarkers(adpcmFile, MasterMarkerFilePath, streamsFolder, platformWaveFile, 100)
                 End If
             End If
         Next

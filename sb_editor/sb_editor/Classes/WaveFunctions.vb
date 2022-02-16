@@ -16,16 +16,16 @@ Friend Class WaveFunctions
                 'Read Chunck info
                 Dim cuePointId = BitConverter.ToInt32(chunkData, offset)
                 Dim type = BitConverter.ToInt32(chunkData, offset + 4) ' 0 = loop forward, 1 = alternating loop, 2 = reverse
-                Dim start = BitConverter.ToInt32(chunkData, offset + 8)
-                Dim [end] = BitConverter.ToInt32(chunkData, offset + 12)
+                Dim loopStart = BitConverter.ToInt32(chunkData, offset + 8)
+                Dim loopEnd = BitConverter.ToInt32(chunkData, offset + 12)
                 Dim fraction = BitConverter.ToInt32(chunkData, offset + 16)
                 Dim playCount = BitConverter.ToInt32(chunkData, offset + 20)
                 offset += 24
 
                 'Save Data
                 loopInfo(0) = 1
-                loopInfo(1) = start
-                loopInfo(2) = [end]
+                loopInfo(1) = loopStart
+                loopInfo(2) = loopEnd
             Next
         End If
         Return loopInfo
