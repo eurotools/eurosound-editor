@@ -1,9 +1,7 @@
 ﻿Partial Public Class FileWriters
-    Friend Sub CreateRefineList(refineSearchFilePath As String, keywords As List(Of String))
+    Friend Sub CreateRefineList(refineSearchFilePath As String, keywords As String())
         FileOpen(1, refineSearchFilePath, OpenMode.Output, OpenAccess.Write, OpenShare.LockReadWrite)
         PrintLine(1, "#RefineSearch")
-        PrintLine(1, "All")
-        PrintLine(1, "HighLighted")
         'Iterate over list items
         If keywords IsNot Nothing Then
             For Each refineSeachItem As String In keywords

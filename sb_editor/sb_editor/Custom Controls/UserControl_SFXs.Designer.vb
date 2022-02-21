@@ -37,10 +37,11 @@ Partial Class UserControl_SFXs
         Me.ContextMenuSfx_Copy = New System.Windows.Forms.MenuItem()
         Me.ContextMenuSfx_Delete = New System.Windows.Forms.MenuItem()
         Me.ContextMenuSfx_Rename = New System.Windows.Forms.MenuItem()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.ListBox_SFXs = New sb_editor.MultiSelListBox()
         Me.ContextMenuSfx_NewMultiple = New System.Windows.Forms.MenuItem()
         Me.ContextMenuSfx_MultiEditor = New System.Windows.Forms.MenuItem()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.ListBox_SFXs = New sb_editor.MultiSelListBox()
+        Me.ComboBox_Temporal = New System.Windows.Forms.ComboBox()
         Me.GroupBox_SFX_List.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
@@ -162,11 +163,22 @@ Partial Class UserControl_SFXs
         Me.ContextMenuSfx_Rename.Index = 6
         Me.ContextMenuSfx_Rename.Text = "Rename"
         '
+        'ContextMenuSfx_NewMultiple
+        '
+        Me.ContextMenuSfx_NewMultiple.Index = 7
+        Me.ContextMenuSfx_NewMultiple.Text = "New Multiple"
+        '
+        'ContextMenuSfx_MultiEditor
+        '
+        Me.ContextMenuSfx_MultiEditor.Index = 8
+        Me.ContextMenuSfx_MultiEditor.Text = "Multi Editor"
+        '
         'Panel1
         '
         Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel1.Controls.Add(Me.ComboBox_Temporal)
         Me.Panel1.Controls.Add(Me.ListBox_SFXs)
         Me.Panel1.Location = New System.Drawing.Point(0, 32)
         Me.Panel1.Name = "Panel1"
@@ -188,15 +200,13 @@ Partial Class UserControl_SFXs
         Me.ListBox_SFXs.Sorted = True
         Me.ListBox_SFXs.TabIndex = 1
         '
-        'ContextMenuSfx_NewMultiple
+        'ComboBox_Temporal
         '
-        Me.ContextMenuSfx_NewMultiple.Index = 7
-        Me.ContextMenuSfx_NewMultiple.Text = "New Multiple"
-        '
-        'ContextMenuSfx_MultiEditor
-        '
-        Me.ContextMenuSfx_MultiEditor.Index = 8
-        Me.ContextMenuSfx_MultiEditor.Text = "Multi Editor"
+        Me.ComboBox_Temporal.FormattingEnabled = True
+        Me.ComboBox_Temporal.Location = New System.Drawing.Point(9, 202)
+        Me.ComboBox_Temporal.Name = "ComboBox_Temporal"
+        Me.ComboBox_Temporal.Size = New System.Drawing.Size(221, 21)
+        Me.ComboBox_Temporal.TabIndex = 2
         '
         'UserControl_SFXs
         '
@@ -234,4 +244,5 @@ Partial Class UserControl_SFXs
     Friend WithEvents ContextMenuSfx_Rename As MenuItem
     Friend WithEvents ContextMenuSfx_NewMultiple As MenuItem
     Friend WithEvents ContextMenuSfx_MultiEditor As MenuItem
+    Friend WithEvents ComboBox_Temporal As ComboBox
 End Class
