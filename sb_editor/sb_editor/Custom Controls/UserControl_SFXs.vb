@@ -39,112 +39,116 @@ Public Class UserControl_SFXs
     '* BUTTON EVENTS
     '*===============================================================================================
     Private Sub Button_UpdateList_Click(sender As Object, e As EventArgs) Handles Button_UpdateList.Click
-        'Clear comboboxes
-        ComboBox_Temporal.Items.Clear()
-        ComboBox_SFX_Section.Items.Clear()
+        'Get file list
+        Dim sfxFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly)
+        If sfxFiles.Length > 0 Then
+            'Get only filenames
+            Dim sfxFilesToCheck As String() = New String(sfxFiles.Length - 1) {}
+            For index As Integer = 0 To sfxFilesToCheck.Length - 1
+                Dim fileName As String = GetOnlyFileName(sfxFiles(index))
+                sfxFilesToCheck(index) = fileName
+            Next
 
-        'Start refining
-        Dim wordsDictionary As New Dictionary(Of String, Integer)
-        Dim listboxItemsCount As Integer = ListBox_SFXs.Items.Count - 1
-        'Split only six words
-        For numberOfIterations As Integer = 0 To 5
-            'Iterate listbox items
-            For sfxItemIndex As Integer = 0 To listboxItemsCount
-                'Iterate listbox items to find matches
-                For sfxItemIndexSub As Integer = 0 To listboxItemsCount
-                    'Skip the line that we are checking in the previus loop
-                    If sfxItemIndex = sfxItemIndexSub Then
-                        Continue For
-                    End If
-                    'Get item from listbox
-                    Dim currentSfx As String = ListBox_SFXs.Items(sfxItemIndex)
-                    Dim wordToCheck As String = currentSfx
-                    'Split words
-                    If numberOfIterations > 0 Then
-                        For wordIndex = 1 To numberOfIterations
-                            If InStr(1, wordToCheck, "_", CompareMethod.Binary) Then
-                                Dim wordLength As Integer = Len(wordToCheck) - InStr(1, wordToCheck, "_", CompareMethod.Binary)
-                                wordToCheck = Microsoft.VisualBasic.Right(wordToCheck, wordLength)
-                            End If
-                        Next
-                    End If
-                    If InStr(1, wordToCheck, "_", CompareMethod.Binary) Then
-                        Dim wordLength As Integer = InStr(1, wordToCheck, "_", CompareMethod.Binary) - 1
-                        wordToCheck = Microsoft.VisualBasic.Left(wordToCheck, wordLength)
-                    End If
-                    'Find matches
-                    If StrComp("SFX", wordToCheck) <> 0 Then
-                        If Len(wordToCheck) > 2 Then
-                            currentSfx = ListBox_SFXs.Items(sfxItemIndexSub)
-                            If InStr(1, currentSfx, wordToCheck, CompareMethod.Binary) Then
-                                'Get combo items count
-                                Dim addNewItem As Boolean = True
-                                For comboboxIndex As Integer = 0 To ComboBox_Temporal.Items.Count - 1
-                                    Dim comboWordItem As String = ComboBox_Temporal.Items(comboboxIndex)
-                                    'Check for duplicated
-                                    If InStr(1, comboWordItem, wordToCheck, CompareMethod.Binary) = 0 Then
-                                        Continue For
+            'Clear comboboxes
+            ComboBox_Temporal.Items.Clear()
+            ComboBox_SFX_Section.Items.Clear()
+
+            'Start refining
+            Dim wordsDictionary As New Dictionary(Of String, Integer)
+            Dim listboxItemsCount As Integer = sfxFilesToCheck.Length - 1
+            'Split only six words
+            For numberOfIterations As Integer = 0 To 5
+                'Iterate listbox items
+                For sfxItemIndex As Integer = 0 To listboxItemsCount
+                    'Iterate listbox items to find matches
+                    For sfxItemIndexSub As Integer = 0 To listboxItemsCount
+                        'Skip the line that we are checking in the previus loop
+                        If sfxItemIndex = sfxItemIndexSub Then
+                            Continue For
+                        End If
+                        'Get item from listbox
+                        Dim currentSfx As String = sfxFilesToCheck(sfxItemIndex)
+                        Dim wordToCheck As String = currentSfx
+                        'Split words
+                        If numberOfIterations > 0 Then
+                            For wordIndex = 1 To numberOfIterations
+                                If InStr(1, wordToCheck, "_", CompareMethod.Binary) Then
+                                    Dim wordLength As Integer = Len(wordToCheck) - InStr(1, wordToCheck, "_", CompareMethod.Binary)
+                                    wordToCheck = Microsoft.VisualBasic.Right(wordToCheck, wordLength)
+                                End If
+                            Next
+                        End If
+                        If InStr(1, wordToCheck, "_", CompareMethod.Binary) Then
+                            Dim wordLength As Integer = InStr(1, wordToCheck, "_", CompareMethod.Binary) - 1
+                            wordToCheck = Microsoft.VisualBasic.Left(wordToCheck, wordLength)
+                        End If
+                        'Find matches
+                        If StrComp("SFX", wordToCheck) <> 0 Then
+                            If Len(wordToCheck) > 2 Then
+                                currentSfx = sfxFilesToCheck(sfxItemIndexSub)
+                                If InStr(1, currentSfx, wordToCheck, CompareMethod.Binary) Then
+                                    'Get combo items count
+                                    Dim addNewItem As Boolean = True
+                                    For comboboxIndex As Integer = 0 To ComboBox_Temporal.Items.Count - 1
+                                        Dim comboWordItem As String = ComboBox_Temporal.Items(comboboxIndex)
+                                        'Check for duplicated
+                                        If InStr(1, comboWordItem, wordToCheck, CompareMethod.Binary) = 0 Then
+                                            Continue For
+                                        End If
+                                        'Add appearance to dictionary
+                                        currentSfx = ComboBox_Temporal.Items(comboboxIndex)
+                                        If StrComp(currentSfx, wordToCheck) = 0 Then
+                                            'Add line to dictionary
+                                            wordsDictionary(wordToCheck) += 1
+                                        End If
+                                        'Don't add items in the combobox and quit loop
+                                        addNewItem = False
+                                        Exit For
+                                    Next
+                                    'Check if we have to add the new item
+                                    If addNewItem Then
+                                        ComboBox_Temporal.Items.Add(wordToCheck)
+                                        wordsDictionary.Add(wordToCheck, 0)
                                     End If
-                                    'Add appearance to dictionary
-                                    currentSfx = ComboBox_Temporal.Items(comboboxIndex)
-                                    If StrComp(currentSfx, wordToCheck) = 0 Then
-                                        'Add line to dictionary
-                                        wordsDictionary(wordToCheck) += 1
-                                    End If
-                                    'Don't add items in the combobox and quit loop
-                                    addNewItem = False
-                                    Exit For
-                                Next
-                                'Check if we have to add the new item
-                                If addNewItem Then
-                                    ComboBox_Temporal.Items.Add(wordToCheck)
-                                    wordsDictionary.Add(wordToCheck, 0)
                                 End If
                             End If
                         End If
-                    End If
+                    Next
                 Next
             Next
-        Next
 
-        'Check final words
-        ComboBox_SFX_Section.Items.Add("All")
-        ComboBox_SFX_Section.Items.Add("HighLighted")
-        If ComboBox_Temporal.Items.Count > 0 Then
-            Dim quitLoop As Boolean = False
-            Do
-                Dim itemToRemove As Integer = -1
-                Dim maxWordAppearances As Integer = wordsDictionary.Values.Max
-                For index As Integer = 0 To ComboBox_Temporal.Items.Count - 1
-                    Dim itemData As Integer = wordsDictionary(ComboBox_Temporal.Items(index))
-                    If itemData = maxWordAppearances And itemToRemove = -1 Then
-                        itemData = wordsDictionary(ComboBox_Temporal.Items(index))
-                        itemToRemove = index
-                    End If
-                Next
-                'Remove and add items
-                Dim itemStringName As String = ComboBox_Temporal.Items(itemToRemove)
-                ComboBox_SFX_Section.Items.Add(itemStringName)
-                ComboBox_Temporal.Items.RemoveAt(itemToRemove)
-                wordsDictionary.Remove(itemStringName)
-                'Check if we have to skip this loop
-                If maxWordAppearances <= 5 Then
-                    quitLoop = True
-                End If
-            Loop While quitLoop <> True
+            'Get final words
+            ComboBox_SFX_Section.Items.Add("All")
+            ComboBox_SFX_Section.Items.Add("HighLighted")
+            If ComboBox_Temporal.Items.Count > 0 Then
+                Dim quitLoop As Boolean = False
+                Dim maxWordAppearances As Integer = -1
+                Do
+                    Dim itemToRemove As Integer = -1
+                    maxWordAppearances = wordsDictionary.Values.Max
+                    For index As Integer = 0 To ComboBox_Temporal.Items.Count - 1
+                        Dim itemData As Integer = wordsDictionary(ComboBox_Temporal.Items(index))
+                        If itemData = maxWordAppearances And itemToRemove = -1 Then
+                            itemData = wordsDictionary(ComboBox_Temporal.Items(index))
+                            itemToRemove = index
+                        End If
+                    Next
+                    'Remove and add items
+                    Dim itemStringName As String = ComboBox_Temporal.Items(itemToRemove)
+                    ComboBox_SFX_Section.Items.Add(itemStringName)
+                    ComboBox_Temporal.Items.RemoveAt(itemToRemove)
+                    wordsDictionary.Remove(itemStringName)
+                Loop While maxWordAppearances > 5
+            End If
+            'Select the first item
+            ComboBox_SFX_Section.SelectedIndex = 0
+
+            'Update file
+            If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System")) Then
+                Dim refineList() As String = (From item As String In ComboBox_SFX_Section.Items Select item).ToArray
+                writers.CreateRefineList(fso.BuildPath(WorkingDirectory, "System\RefineSearch.txt"), refineList)
+            End If
         End If
-        'Select the first item
-        ComboBox_SFX_Section.SelectedIndex = 0
-
-        'Update file
-        If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System")) Then
-            Dim refineList() As String = (From item As String In ComboBox_SFX_Section.Items Select item).ToArray
-            writers.CreateRefineList(fso.BuildPath(WorkingDirectory, "System\RefineSearch.txt"), refineList)
-        End If
-
-        'Update combobox
-        ComboBox_SFX_Section.Items.Clear()
-        LoadRefineList()
     End Sub
 
     Private Sub Button_ShowAll_Click(sender As Object, e As EventArgs) Handles Button_ShowAll.Click

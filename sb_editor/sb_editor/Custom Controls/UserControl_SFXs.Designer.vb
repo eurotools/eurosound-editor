@@ -40,8 +40,8 @@ Partial Class UserControl_SFXs
         Me.ContextMenuSfx_NewMultiple = New System.Windows.Forms.MenuItem()
         Me.ContextMenuSfx_MultiEditor = New System.Windows.Forms.MenuItem()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.ListBox_SFXs = New sb_editor.MultiSelListBox()
         Me.ComboBox_Temporal = New System.Windows.Forms.ComboBox()
+        Me.ListBox_SFXs = New sb_editor.MultiSelListBox()
         Me.GroupBox_SFX_List.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
@@ -185,6 +185,15 @@ Partial Class UserControl_SFXs
         Me.Panel1.Size = New System.Drawing.Size(277, 531)
         Me.Panel1.TabIndex = 3
         '
+        'ComboBox_Temporal
+        '
+        Me.ComboBox_Temporal.FormattingEnabled = True
+        Me.ComboBox_Temporal.Location = New System.Drawing.Point(9, 293)
+        Me.ComboBox_Temporal.Name = "ComboBox_Temporal"
+        Me.ComboBox_Temporal.Size = New System.Drawing.Size(221, 21)
+        Me.ComboBox_Temporal.TabIndex = 2
+        Me.ComboBox_Temporal.Visible = False
+        '
         'ListBox_SFXs
         '
         Me.ListBox_SFXs.AllowDrop = True
@@ -199,14 +208,6 @@ Partial Class UserControl_SFXs
         Me.ListBox_SFXs.Size = New System.Drawing.Size(277, 531)
         Me.ListBox_SFXs.Sorted = True
         Me.ListBox_SFXs.TabIndex = 1
-        '
-        'ComboBox_Temporal
-        '
-        Me.ComboBox_Temporal.FormattingEnabled = True
-        Me.ComboBox_Temporal.Location = New System.Drawing.Point(9, 202)
-        Me.ComboBox_Temporal.Name = "ComboBox_Temporal"
-        Me.ComboBox_Temporal.Size = New System.Drawing.Size(221, 21)
-        Me.ComboBox_Temporal.TabIndex = 2
         '
         'UserControl_SFXs
         '
