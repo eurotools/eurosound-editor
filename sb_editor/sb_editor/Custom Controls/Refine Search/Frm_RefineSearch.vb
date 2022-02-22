@@ -51,19 +51,16 @@
             'Clear comboboxes
             Invoke(Sub() mainframe.ComboBox_Temporal.Items.Clear())
             Invoke(Sub() mainframe.ComboBox_SFX_Section.Items.Clear())
-
-            'Start refining
-            Dim listboxItemsCount As Integer = sfxFilesToCheck.Count - 1
             'Split only six words
             For wordIndexCount As Integer = 0 To 5
                 'Iterate listbox items
+                Dim listboxItemsCount As Integer = sfxFilesToCheck.Count - 1
                 For sfxItemIndex As Integer = 0 To listboxItemsCount
                     'Calculate and report progress
                     Dim totalItems = listboxItemsCount * 6
                     Dim progFromPrevIterations = listboxItemsCount * wordIndexCount
                     Dim totalProgress As Double = Decimal.Divide(sfxItemIndex + progFromPrevIterations, totalItems) * 100.0
                     BackgroundWorker.ReportProgress(totalProgress)
-
                     'Iterate listbox items to find matches
                     For sfxItemIndexSub As Integer = 0 To listboxItemsCount
                         'Skip the line that we are checking in the previus loop
@@ -123,13 +120,12 @@
                 Next
             Next
 
-            'Check final words
+            'Get final words
             Invoke(Sub() mainframe.ComboBox_SFX_Section.Items.Add("All"))
             Invoke(Sub() mainframe.ComboBox_SFX_Section.Items.Add("HighLighted"))
-
-            Dim quitLoop As Boolean = False
-            Do
-                If mainframe.ComboBox_Temporal.Items.Count > 0 Then
+            If mainframe.ComboBox_Temporal.Items.Count > 0 Then
+                Dim quitLoop As Boolean = False
+                Do
                     Dim itemToRemove As Integer = -1
                     'Get max value from the remaining words
                     Dim maxWordAppearances As Integer = 0
@@ -152,8 +148,8 @@
                     If maxWordAppearances <= 5 Or mainframe.ComboBox_Temporal.Items.Count < 1 Then
                         quitLoop = True
                     End If
-                End If
-            Loop While quitLoop <> True
+                Loop While quitLoop <> True
+            End If
             'Select the first item
             Invoke(Sub() mainframe.ComboBox_SFX_Section.SelectedIndex = 0)
 
