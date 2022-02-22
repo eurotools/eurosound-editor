@@ -1,5 +1,4 @@
 ﻿Imports System.IO
-Imports System.Text.RegularExpressions
 
 Public Class UserControl_SFXs
     '*===============================================================================================
@@ -15,8 +14,20 @@ Public Class UserControl_SFXs
     Public Sub LoadHashCodes()
         'Get files from directory and add it to list
         If fso.FolderExists(fso.BuildPath(WorkingDirectory, "SFXs")) Then
-            Dim sfxFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly)
-            AddItemsToList(sfxFiles)
+            Dim fileToadd As String = Dir(fso.BuildPath(WorkingDirectory, "SFXs\*.txt"))
+            'Add item to listbox
+            ListBox_SFXs.BeginUpdate()
+            ListBox_SFXs.Items.Clear()
+            Do While fileToadd > ""
+                Dim fileNameLength As Integer = Len(fileToadd)
+                Dim fileName As String = Microsoft.VisualBasic.Left(fileToadd, fileNameLength - Len(".txt"))
+                ListBox_SFXs.Items.Add(fileName)
+                'Get new item
+                fileToadd = Dir()
+            Loop
+            ListBox_SFXs.EndUpdate()
+            'Update counter
+            Label_TotalSfx.Text = "Total: " & ListBox_SFXs.Items.Count
         End If
     End Sub
 
@@ -39,23 +50,32 @@ Public Class UserControl_SFXs
     '* BUTTON EVENTS
     '*===============================================================================================
     Private Sub Button_UpdateList_Click(sender As Object, e As EventArgs) Handles Button_UpdateList.Click
-        'Get file list
-        Dim sfxFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly)
-        If sfxFiles.Length > 0 Then
-            'Get only filenames
-            Dim sfxFilesToCheck As String() = New String(sfxFiles.Length - 1) {}
-            For index As Integer = 0 To sfxFilesToCheck.Length - 1
-                Dim fileName As String = GetOnlyFileName(sfxFiles(index))
-                sfxFilesToCheck(index) = fileName
-            Next
+        'Update list
+        Dim fileNameWithExtension As String = Dir(fso.BuildPath(WorkingDirectory, "SFXs\*.txt"))
+        Dim sfxFilesToCheck As New List(Of String)
+        'Add item to listbox
+        ListBox_SFXs.BeginUpdate()
+        ListBox_SFXs.Items.Clear()
+        Do While fileNameWithExtension > ""
+            Dim fileNameLength As Integer = Len(fileNameWithExtension)
+            Dim fileName As String = Microsoft.VisualBasic.Left(fileNameWithExtension, fileNameLength - Len(".txt"))
+            sfxFilesToCheck.Add(fileName)
+            'Get new item
+            fileNameWithExtension = Dir()
+        Loop
+        ListBox_SFXs.Items.AddRange(sfxFilesToCheck.ToArray)
+        ListBox_SFXs.EndUpdate()
+        'Update counter
+        Label_TotalSfx.Text = "Total: " & ListBox_SFXs.Items.Count
 
+        'Start refine list words search
+        If sfxFilesToCheck.Count > 0 Then
             'Clear comboboxes
             ComboBox_Temporal.Items.Clear()
             ComboBox_SFX_Section.Items.Clear()
 
             'Start refining
-            Dim wordsDictionary As New Dictionary(Of String, Integer)
-            Dim listboxItemsCount As Integer = sfxFilesToCheck.Length - 1
+            Dim listboxItemsCount As Integer = sfxFilesToCheck.Count - 1
             'Split only six words
             For numberOfIterations As Integer = 0 To 5
                 'Iterate listbox items
@@ -90,16 +110,19 @@ Public Class UserControl_SFXs
                                     'Get combo items count
                                     Dim addNewItem As Boolean = True
                                     For comboboxIndex As Integer = 0 To ComboBox_Temporal.Items.Count - 1
-                                        Dim comboWordItem As String = ComboBox_Temporal.Items(comboboxIndex)
+                                        Dim comboWordItem As String = CType(ComboBox_Temporal.Items(comboboxIndex), ComboItemData).Name
                                         'Check for duplicated
                                         If InStr(1, comboWordItem, wordToCheck, CompareMethod.Binary) = 0 Then
                                             Continue For
                                         End If
                                         'Add appearance to dictionary
-                                        currentSfx = ComboBox_Temporal.Items(comboboxIndex)
+                                        currentSfx = CType(ComboBox_Temporal.Items(comboboxIndex), ComboItemData).Name
                                         If StrComp(currentSfx, wordToCheck) = 0 Then
-                                            'Add line to dictionary
-                                            wordsDictionary(wordToCheck) += 1
+                                            'Get current item data
+                                            Dim currentItemData As Integer = CType(ComboBox_Temporal.Items(comboboxIndex), ComboItemData).ItemData
+                                            'Update value
+                                            currentItemData += 1
+                                            CType(ComboBox_Temporal.Items(comboboxIndex), ComboItemData).ItemData = currentItemData
                                         End If
                                         'Don't add items in the combobox and quit loop
                                         addNewItem = False
@@ -107,8 +130,7 @@ Public Class UserControl_SFXs
                                     Next
                                     'Check if we have to add the new item
                                     If addNewItem Then
-                                        ComboBox_Temporal.Items.Add(wordToCheck)
-                                        wordsDictionary.Add(wordToCheck, 0)
+                                        ComboBox_Temporal.Items.Add(New ComboItemData(wordToCheck, 0))
                                     End If
                                 End If
                             End If
@@ -117,29 +139,37 @@ Public Class UserControl_SFXs
                 Next
             Next
 
-            'Get final words
+            'Check final words
             ComboBox_SFX_Section.Items.Add("All")
             ComboBox_SFX_Section.Items.Add("HighLighted")
-            If ComboBox_Temporal.Items.Count > 0 Then
-                Dim quitLoop As Boolean = False
-                Dim maxWordAppearances As Integer = -1
-                Do
+
+            Dim quitLoop As Boolean = False
+            Do
+                If ComboBox_Temporal.Items.Count > 0 Then
                     Dim itemToRemove As Integer = -1
-                    maxWordAppearances = wordsDictionary.Values.Max
+                    'Get max value from the remaining words
+                    Dim maxWordAppearances As Integer = 0
+                    For itemIndex As Integer = 0 To ComboBox_Temporal.Items.Count - 1
+                        Dim itemData As Integer = CType(ComboBox_Temporal.Items(itemIndex), ComboItemData).ItemData
+                        maxWordAppearances = Math.Max(maxWordAppearances, itemData)
+                    Next
+                    'Get the item with the max value
                     For index As Integer = 0 To ComboBox_Temporal.Items.Count - 1
-                        Dim itemData As Integer = wordsDictionary(ComboBox_Temporal.Items(index))
+                        Dim itemData As Integer = CType(ComboBox_Temporal.Items(index), ComboItemData).ItemData
                         If itemData = maxWordAppearances And itemToRemove = -1 Then
-                            itemData = wordsDictionary(ComboBox_Temporal.Items(index))
                             itemToRemove = index
                         End If
                     Next
                     'Remove and add items
-                    Dim itemStringName As String = ComboBox_Temporal.Items(itemToRemove)
+                    Dim itemStringName As String = CType(ComboBox_Temporal.Items(itemToRemove), ComboItemData).Name
                     ComboBox_SFX_Section.Items.Add(itemStringName)
                     ComboBox_Temporal.Items.RemoveAt(itemToRemove)
-                    wordsDictionary.Remove(itemStringName)
-                Loop While maxWordAppearances > 5
-            End If
+                    'Check if we have to skip this loop
+                    If maxWordAppearances <= 5 Then
+                        quitLoop = True
+                    End If
+                End If
+            Loop While quitLoop <> True
             'Select the first item
             ComboBox_SFX_Section.SelectedIndex = 0
 
@@ -153,13 +183,17 @@ Public Class UserControl_SFXs
 
     Private Sub Button_ShowAll_Click(sender As Object, e As EventArgs) Handles Button_ShowAll.Click
         LoadHashCodes()
+        ComboBox_SFX_Section.SelectedIndex = 0
     End Sub
 
     Private Sub CheckBox_SortByDate_CheckStateChanged(sender As Object, e As EventArgs) Handles CheckBox_SortByDate.CheckStateChanged
         If CheckBox_SortByDate.Checked Then
             Dim di As New DirectoryInfo(fso.BuildPath(WorkingDirectory, "SFXs"))
             Dim fiArray As String() = di.GetFiles().OrderByDescending(Function(p) p.LastWriteTime).Select(Function(f) f.Name).ToArray()
-            AddItemsToList(fiArray)
+            'Add items to listbox
+            ListBox_SFXs.BeginUpdate()
+            ListBox_SFXs.Items.AddRange(fiArray)
+            ListBox_SFXs.EndUpdate()
         Else
             LoadHashCodes()
         End If
@@ -174,20 +208,33 @@ Public Class UserControl_SFXs
     '*===============================================================================================
     Private Sub ComboBox_SFX_Section_SelectionChangeCommitted(sender As Object, e As EventArgs) Handles ComboBox_SFX_Section.SelectionChangeCommitted
         'Clear items
-        If ComboBox_SFX_Section.SelectedIndex > 1 Then
-            ListBox_SFXs.Items.Clear()
-            'Get keyword
-            Dim keywordSelected As String = ComboBox_SFX_Section.SelectedItem
-            'Get files from directory and add it to list
-            Dim sfxFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "SFXs"), "*" & keywordSelected & "*.txt", SearchOption.TopDirectoryOnly)
-            AddItemsToList(sfxFiles)
-        ElseIf ComboBox_SFX_Section.SelectedIndex = 1 AndAlso ListBox_SFXs.SelectedItems.Count > 0 Then 'Highlighted
-            Dim selectedIndices As String() = ListBox_SFXs.SelectedItems.Cast(Of String).ToArray
-            AddItemsToList(selectedIndices)
-        Else 'All
+        If ComboBox_SFX_Section.SelectedIndex = 0 Then 'All
             LoadHashCodes()
+        ElseIf ComboBox_SFX_Section.SelectedIndex = 1 Then 'Highlighted
+            Dim selectedIndices As String() = ListBox_SFXs.SelectedItems.Cast(Of String).ToArray
+            ListBox_SFXs.BeginUpdate()
+            ListBox_SFXs.Items.Clear()
+            ListBox_SFXs.Items.AddRange(selectedIndices)
+            ListBox_SFXs.EndUpdate()
+            'Update counter
+            Label_TotalSfx.Text = "Total: " & ListBox_SFXs.Items.Count
+        Else 'Selected Keyword
+            LoadHashCodes()
+            'Remove items that doesn't match 
+            ListBox_SFXs.BeginUpdate()
+            Dim totalItemsCount As Integer = ListBox_SFXs.Items.Count - 1
+            For itemIndex As Integer = totalItemsCount To 0 Step -1
+                Dim currentItem As String = ListBox_SFXs.Items(itemIndex)
+                If InStr(1, currentItem, ComboBox_SFX_Section.SelectedItem, CompareMethod.Binary) Then
+                    Continue For
+                Else
+                    ListBox_SFXs.Items.Remove(currentItem)
+                End If
+            Next
+            ListBox_SFXs.EndUpdate()
+            'Update counter
+            Label_TotalSfx.Text = "Total: " & ListBox_SFXs.Items.Count
         End If
-
     End Sub
 
     '*===============================================================================================
@@ -476,31 +523,6 @@ Public Class UserControl_SFXs
                 sfxEditor.ShowDialog()
             End If
         End If
-    End Sub
-
-    '*===============================================================================================
-    '* LISTBOX EVENTS
-    '*===============================================================================================
-    Private Sub AddItemsToList(itemsToAdd As String())
-        'Enable listbox update mode
-        ListBox_SFXs.BeginUpdate()
-
-        'Remove existing items
-        If ListBox_SFXs.Items.Count > 0 Then
-            ListBox_SFXs.Items.Clear()
-        End If
-
-        'Read text files
-        For i = 0 To itemsToAdd.Length - 1
-            Dim sfxName = GetOnlyFileName(itemsToAdd(i))
-            ListBox_SFXs.Items.Add(sfxName)
-        Next
-
-        'Update counter
-        Label_TotalSfx.Text = "Total: " & itemsToAdd.Count
-
-        'Disable listbox update mode
-        ListBox_SFXs.EndUpdate()
     End Sub
 
     '*===============================================================================================

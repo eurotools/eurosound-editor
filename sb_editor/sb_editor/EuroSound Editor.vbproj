@@ -88,6 +88,13 @@
   <ItemGroup>
     <Compile Include="Classes\MarkerFiles.vb" />
     <Compile Include="Classes\MarkerObject.vb" />
+    <Compile Include="Custom Controls\Refine Search\Combobox With ItemData\ComboItemData.vb" />
+    <Compile Include="Custom Controls\Refine Search\Frm_RefineSearch.Designer.vb">
+      <DependentUpon>Frm_RefineSearch.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Custom Controls\Refine Search\Frm_RefineSearch.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Files Functions\Objects\MfxFile.vb" />
     <Compile Include="Files Functions\Readers\FileParsers_JumpHashCodes.vb" />
     <Compile Include="Files Functions\Readers\FileParsers_SamplesFile.vb" />
@@ -331,6 +338,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Custom Controls\Refine Search\Frm_RefineSearch.resx">
+      <DependentUpon>Frm_RefineSearch.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\About.resx">
       <DependentUpon>About.vb</DependentUpon>
     </EmbeddedResource>
