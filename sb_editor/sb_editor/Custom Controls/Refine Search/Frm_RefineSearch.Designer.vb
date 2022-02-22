@@ -67,6 +67,7 @@ Partial Class Frm_RefineSearch
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_RefineSearch"
+        Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Updating the SFX Refine List."
         Me.Groupbox_TaskTime.ResumeLayout(False)

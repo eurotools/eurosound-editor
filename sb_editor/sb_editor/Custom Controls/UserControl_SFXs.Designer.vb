@@ -230,7 +230,6 @@ Partial Class UserControl_SFXs
     Private WithEvents GroupBox_SFX_List As GroupBox
     Private WithEvents Button_ShowAll As Button
     Private WithEvents Button_UpdateList As Button
-    Private WithEvents ComboBox_SFX_Section As ComboBox
     Friend WithEvents Button_UnUsedHashCodes As Button
     Friend WithEvents CheckBox_SortByDate As CheckBox
     Friend WithEvents ContextMenu_SFXs As ContextMenu
@@ -246,4 +245,5 @@ Partial Class UserControl_SFXs
     Friend WithEvents ContextMenuSfx_NewMultiple As MenuItem
     Friend WithEvents ContextMenuSfx_MultiEditor As MenuItem
     Friend WithEvents ComboBox_Temporal As ComboBox
+    Protected Friend WithEvents ComboBox_SFX_Section As ComboBox
 End Class

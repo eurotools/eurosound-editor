@@ -83,7 +83,7 @@ Partial Public NotInheritable Class SplashScreen
                 Dim soundbankName As String = projectData.SoundBankList(index)
                 Dim soundbankFilePath As String = fso.BuildPath(WorkingDirectory, "SoundBanks\" & soundbankName & ".txt")
                 If Not fso.FileExists(soundbankFilePath) Then
-                    MsgBox("File not found: " & soundbankFilePath, vbOKOnly + vbCritical, "EuroSound Load Project Error")
+                    'MsgBox("File not found: " & soundbankFilePath, vbOKOnly + vbCritical, "EuroSound Load Project Error")
                     Close()
                 End If
             Next
@@ -92,7 +92,7 @@ Partial Public NotInheritable Class SplashScreen
                 Dim databaseName As String = projectData.DataBaseList(index)
                 Dim databaseFilePath As String = fso.BuildPath(WorkingDirectory, "Databases\" & databaseName & ".txt")
                 If Not fso.FileExists(databaseFilePath) Then
-                    MsgBox("File not found: " & databaseFilePath, vbOKOnly + vbCritical, "EuroSound Load Project Error")
+                    'MsgBox("File not found: " & databaseFilePath, vbOKOnly + vbCritical, "EuroSound Load Project Error")
                     Close()
                 End If
             Next
@@ -101,7 +101,7 @@ Partial Public NotInheritable Class SplashScreen
                 Dim sfxName As String = projectData.SFXList(index)
                 Dim sfxFilePath As String = fso.BuildPath(WorkingDirectory, "SFXs\" & sfxName & ".txt")
                 If Not fso.FileExists(sfxFilePath) Then
-                    MsgBox("File not found: " & sfxFilePath, vbOKOnly + vbCritical, "EuroSound Load Project Error")
+                    'MsgBox("File not found: " & sfxFilePath, vbOKOnly + vbCritical, "EuroSound Load Project Error")
                     Close()
                 End If
             Next
