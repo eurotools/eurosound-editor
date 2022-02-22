@@ -111,7 +111,7 @@
                                     Next
                                     'Check if we have to add the new item
                                     If addNewItem Then
-                                        mainframe.ComboBox_Temporal.Items.Add(New ComboItemData(wordToCheck, 0))
+                                        Invoke(Sub() mainframe.ComboBox_Temporal.Items.Add(New ComboItemData(wordToCheck, 0)))
                                     End If
                                 End If
                             End If
