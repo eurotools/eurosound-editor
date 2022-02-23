@@ -56,26 +56,28 @@ Partial Public NotInheritable Class SplashScreen
         'Get recent files
         mainform.RecentFilesMenu = New MruStripMenuInline(mainform.MenuItemFile_RecentProjects, mainform.MenuItemFile_RecentFiles, New MostRecentFilesMenu.ClickedHandler(AddressOf mainform.MenuItemFile_Recent_Click), EuroSoundIniFilePath, 5)
         mainform.RecentFilesMenu.LoadFromIniFile()
-        'Select first item by default
-        mainform.ComboBox_Format.SelectedIndex = 0
         'Read ini file
         If SysFileProjectIniPath IsNot "" Then
             Dim iniFunctions As New IniFile(SysFileProjectIniPath)
-            mainform.ComboBox_Format.SelectedIndex = iniFunctions.Read("FormatCombo_ListIndex", "Form1_Misc")
             mainform.RadioButton_AllBanksSelectedFormat.Checked = iniFunctions.Read("AllBanksOption_Value", "Form1_Misc")
             mainform.RadioButton_Output_SelectedSoundBank.Checked = iniFunctions.Read("SelectedlBankOption_Value", "Form1_Misc")
             mainform.RadioButton_Output_AllBanksAll.Checked = iniFunctions.Read("AllFormatsOption_Value", "Form1_Misc")
             mainform.CheckBox_FastReSample.Checked = Convert.ToBoolean(CByte(iniFunctions.Read("Check1", "MainForm")))
-            Dim languageIndex = iniFunctions.Read("LanguageCombo", "MainForm")
-            If languageIndex < mainform.ComboBox_OutputLanguage.Items.Count Then
-                mainform.ComboBox_OutputLanguage.SelectedIndex = languageIndex
-            ElseIf mainform.ComboBox_OutputLanguage.Items.Count > 0 Then
-                mainform.ComboBox_OutputLanguage.SelectedIndex = 0
-            End If
             mainform.UserControl_SFXs.CheckBox_SortByDate.Checked = Convert.ToBoolean(CByte(iniFunctions.Read("Check2", "MainForm")))
             mainform.CheckBox_OutAllLanguages.Checked = Convert.ToBoolean(CByte(iniFunctions.Read("OutputAllLanguages", "MainForm")))
+            'Combobox output language
+            mainform.ComboBox_OutputLanguage.SelectedIndex = 0
+            Dim languageIndex As Integer = iniFunctions.Read("LanguageCombo", "MainForm")
+            If languageIndex < mainform.ComboBox_OutputLanguage.Items.Count Then
+                mainform.ComboBox_OutputLanguage.SelectedIndex = languageIndex
+            End If
+            'Combobox output format
+            mainform.ComboBox_Format.SelectedIndex = 0
+            Dim outFormatIndex As Integer = iniFunctions.Read("FormatCombo_ListIndex", "Form1_Misc")
+            If outFormatIndex < mainform.ComboBox_Format.Items.Count Then
+                mainform.ComboBox_Format.SelectedIndex = outFormatIndex
+            End If
         End If
-
         'Start timer
         TimerSplash.Start()
     End Sub

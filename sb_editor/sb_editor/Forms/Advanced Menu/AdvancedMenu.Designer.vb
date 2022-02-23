@@ -24,6 +24,7 @@ Partial Class AdvancedMenu
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AdvancedMenu))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Button_ValidateSfx = New System.Windows.Forms.Button()
         Me.Button_LanguageFolder = New System.Windows.Forms.Button()
         Me.Button_CheckForDuplicateHashCodes = New System.Windows.Forms.Button()
         Me.Button_ReAllocateHashcodes = New System.Windows.Forms.Button()
@@ -36,6 +37,7 @@ Partial Class AdvancedMenu
         Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox1.Controls.Add(Me.Button_ValidateSfx)
         Me.GroupBox1.Controls.Add(Me.Button_LanguageFolder)
         Me.GroupBox1.Controls.Add(Me.Button_CheckForDuplicateHashCodes)
         Me.GroupBox1.Controls.Add(Me.Button_ReAllocateHashcodes)
@@ -45,6 +47,15 @@ Partial Class AdvancedMenu
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Advanced Options"
+        '
+        'Button_ValidateSfx
+        '
+        Me.Button_ValidateSfx.Location = New System.Drawing.Point(6, 231)
+        Me.Button_ValidateSfx.Name = "Button_ValidateSfx"
+        Me.Button_ValidateSfx.Size = New System.Drawing.Size(220, 23)
+        Me.Button_ValidateSfx.TabIndex = 3
+        Me.Button_ValidateSfx.Text = "Validate Platform SFX Versions"
+        Me.Button_ValidateSfx.UseVisualStyleBackColor = True
         '
         'Button_LanguageFolder
         '
@@ -113,4 +124,5 @@ Partial Class AdvancedMenu
     Friend WithEvents Button_ReAllocateHashcodes As Button
     Friend WithEvents Button_Ok As Button
     Friend WithEvents Button_LanguageFolder As Button
+    Friend WithEvents Button_ValidateSfx As Button
 End Class

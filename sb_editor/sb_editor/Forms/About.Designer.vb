@@ -65,14 +65,12 @@ Partial Class About
         'Label_Info
         '
         Me.Label_Info.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label_Info.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label_Info.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label_Info.Location = New System.Drawing.Point(0, 0)
         Me.Label_Info.Name = "Label_Info"
         Me.Label_Info.Size = New System.Drawing.Size(428, 224)
         Me.Label_Info.TabIndex = 3
-        Me.Label_Info.Text = "Tool Programmer:" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Jordi Martínez (Jmarti856)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Original Tool Developers:" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Euroco" &
-    "m Developments 2002" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "GameCube dsp Tool:" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Copyright (c) 2017 Alex Barney" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Spe" &
-    "cial Thanks:" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Ismael Ferreras (Swyter)"
+        Me.Label_Info.Text = resources.GetString("Label_Info.Text")
         Me.Label_Info.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'Label_ToolTitle

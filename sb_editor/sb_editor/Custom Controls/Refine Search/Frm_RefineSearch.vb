@@ -168,4 +168,10 @@
     Private Sub BackgroundWorker_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker.RunWorkerCompleted
         Close()
     End Sub
+
+    Private Sub Frm_RefineSearch_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If BackgroundWorker.IsBusy Then
+            e.Cancel = True
+        End If
+    End Sub
 End Class

@@ -1,21 +1,8 @@
 ﻿Partial Public Class FileWriters
     Friend Sub WriteSfxFile(sfxFileObj As SfxFile, textFilePath As String)
         'Replace current file   
-        Dim headerData As New FileHeader
         Dim headerLib As New FileParsers
-
-        'Get creation time if file exists
-        Dim created = Date.Now.ToString(filesDateFormat)
-        If fso.FileExists(textFilePath) Then
-            headerData = headerLib.GetFileHeaderInfo(textFilePath)
-            headerData.LastModify = created
-            headerData.LastModifyBy = EuroSoundUser
-        Else
-            headerData.FirstCreated = created
-            headerData.CreatedBy = EuroSoundUser
-            headerData.LastModify = created
-            headerData.LastModifyBy = EuroSoundUser
-        End If
+        Dim headerData As FileHeader = GetFileHeaderData(textFilePath, headerLib)
 
         'Update file
         FileOpen(1, textFilePath, OpenMode.Output, OpenAccess.Write, OpenShare.LockReadWrite)

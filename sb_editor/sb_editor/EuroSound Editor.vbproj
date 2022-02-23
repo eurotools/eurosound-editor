@@ -99,6 +99,7 @@
     <Compile Include="Files Functions\Readers\FileParsers_JumpHashCodes.vb" />
     <Compile Include="Files Functions\Readers\FileParsers_SamplesFile.vb" />
     <Compile Include="Files Functions\Readers\Music\FileParsers_MfxFile.vb" />
+    <Compile Include="Files Functions\Writers\FileWriters.vb" />
     <Compile Include="Files Functions\Writers\FileWriters_MfxFile.vb" />
     <Compile Include="Files Functions\Writers\FileWriters_SamplesFile.vb" />
     <Compile Include="Forms\About.Designer.vb">
@@ -146,6 +147,12 @@
       <DependentUpon>Language_FolderCompare.vb</DependentUpon>
     </Compile>
     <Compile Include="Forms\Advanced Menu\Language_FolderCompare.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Frm_DebugData.Designer.vb">
+      <DependentUpon>Frm_DebugData.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_DebugData.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Others\MusicMarkersEditor.Designer.vb">
@@ -349,6 +356,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Advanced Menu\Language_FolderCompare.resx">
       <DependentUpon>Language_FolderCompare.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_DebugData.resx">
+      <DependentUpon>Frm_DebugData.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Others\MusicMarkersEditor.resx">
       <DependentUpon>MusicMarkersEditor.vb</DependentUpon>

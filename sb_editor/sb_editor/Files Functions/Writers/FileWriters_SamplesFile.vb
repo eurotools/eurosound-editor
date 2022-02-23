@@ -1,21 +1,8 @@
 ﻿Partial Public Class FileWriters
     Friend Sub SaveSamplesFile(filePath As String, samplesFileTable As DataTable)
         'Replace current file   
-        Dim headerData As New FileHeader
         Dim readers As New FileParsers
-
-        'Get creation time if file exists
-        Dim created = Date.Now.ToString(filesDateFormat)
-        If fso.FileExists(filePath) Then
-            headerData = readers.GetFileHeaderInfo(filePath)
-            headerData.LastModify = created
-            headerData.LastModifyBy = EuroSoundUser
-        Else
-            headerData.FirstCreated = created
-            headerData.CreatedBy = EuroSoundUser
-            headerData.LastModify = created
-            headerData.LastModifyBy = EuroSoundUser
-        End If
+        Dim headerData As FileHeader = GetFileHeaderData(filePath, readers)
 
         'Update file
         FileOpen(1, filePath, OpenMode.Output, OpenAccess.Write, OpenShare.LockReadWrite)

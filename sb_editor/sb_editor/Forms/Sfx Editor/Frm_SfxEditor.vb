@@ -424,6 +424,11 @@ Partial Public Class Frm_SfxEditor
         End If
     End Sub
 
+    Private Sub Button_TestSfx_Click(sender As Object, e As EventArgs) Handles Button_TestSfx.Click
+        Dim swyterScriptcmd As String = "SystemFiles\testSounds.cmd"
+        Shell(swyterScriptcmd)
+    End Sub
+
     '*===============================================================================================
     '* BUTTON EVENTS
     '*===============================================================================================

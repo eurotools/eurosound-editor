@@ -178,7 +178,10 @@ Partial Public Class Frm_SfxEditor
         Label_SampleInfo_LoopValue.Visible = False
         Label_SampleInfo_StreamedValue.Visible = False
         'Show HashCodes List for Drag & Drop
-        Dim hashcodesList As New HashCodesList
+        Dim hashcodesList As New HashCodesList With {
+            .StartPosition = FormStartPosition.Manual
+        }
+        hashcodesList.Left = Left - hashcodesList.Width
         hashcodesList.Show()
     End Sub
 
@@ -211,7 +214,10 @@ Partial Public Class Frm_SfxEditor
             Dim subSfxListForm = CType(Application.OpenForms("HashCodesList"), HashCodesList)
             If subSfxListForm Is Nothing Then
                 'Show HashCodes List for Drag & Drop
-                Dim hashcodesList As New HashCodesList
+                Dim hashcodesList As New HashCodesList With {
+                    .StartPosition = FormStartPosition.Manual
+                }
+                hashcodesList.Left = Left - hashcodesList.Width
                 hashcodesList.Show()
             End If
         Else
