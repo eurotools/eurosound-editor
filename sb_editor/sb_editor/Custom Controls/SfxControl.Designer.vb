@@ -346,7 +346,7 @@ Partial Class SfxControl
         'Label_MaxDelay
         '
         Me.Label_MaxDelay.AutoSize = True
-        Me.Label_MaxDelay.Location = New System.Drawing.Point(144, 60)
+        Me.Label_MaxDelay.Location = New System.Drawing.Point(144, 61)
         Me.Label_MaxDelay.Name = "Label_MaxDelay"
         Me.Label_MaxDelay.Size = New System.Drawing.Size(63, 13)
         Me.Label_MaxDelay.TabIndex = 4
@@ -471,7 +471,7 @@ Partial Class SfxControl
         '
         Me.Checkbox_Doppler.AutoSize = True
         Me.Checkbox_Doppler.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Checkbox_Doppler.Location = New System.Drawing.Point(375, 202)
+        Me.Checkbox_Doppler.Location = New System.Drawing.Point(371, 202)
         Me.Checkbox_Doppler.Name = "Checkbox_Doppler"
         Me.Checkbox_Doppler.Size = New System.Drawing.Size(63, 17)
         Me.Checkbox_Doppler.TabIndex = 30
@@ -482,7 +482,7 @@ Partial Class SfxControl
         '
         Me.Checkbox_MusicType.AutoSize = True
         Me.Checkbox_MusicType.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Checkbox_MusicType.Location = New System.Drawing.Point(288, 202)
+        Me.Checkbox_MusicType.Location = New System.Drawing.Point(284, 202)
         Me.Checkbox_MusicType.Name = "Checkbox_MusicType"
         Me.Checkbox_MusicType.Size = New System.Drawing.Size(81, 17)
         Me.Checkbox_MusicType.TabIndex = 29
@@ -493,7 +493,7 @@ Partial Class SfxControl
         '
         Me.CheckBox_IgnoreAge.AutoSize = True
         Me.CheckBox_IgnoreAge.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckBox_IgnoreAge.Location = New System.Drawing.Point(204, 202)
+        Me.CheckBox_IgnoreAge.Location = New System.Drawing.Point(200, 202)
         Me.CheckBox_IgnoreAge.Name = "CheckBox_IgnoreAge"
         Me.CheckBox_IgnoreAge.Size = New System.Drawing.Size(78, 17)
         Me.CheckBox_IgnoreAge.TabIndex = 28
@@ -504,7 +504,7 @@ Partial Class SfxControl
         '
         Me.Checkbox_PauseInNis.AutoSize = True
         Me.Checkbox_PauseInNis.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Checkbox_PauseInNis.Location = New System.Drawing.Point(103, 202)
+        Me.Checkbox_PauseInNis.Location = New System.Drawing.Point(99, 202)
         Me.Checkbox_PauseInNis.Name = "Checkbox_PauseInNis"
         Me.Checkbox_PauseInNis.Size = New System.Drawing.Size(95, 17)
         Me.Checkbox_PauseInNis.TabIndex = 27
@@ -515,7 +515,7 @@ Partial Class SfxControl
         '
         Me.CheckBox_UnderWater.AutoSize = True
         Me.CheckBox_UnderWater.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckBox_UnderWater.Location = New System.Drawing.Point(10, 202)
+        Me.CheckBox_UnderWater.Location = New System.Drawing.Point(6, 201)
         Me.CheckBox_UnderWater.Name = "CheckBox_UnderWater"
         Me.CheckBox_UnderWater.Size = New System.Drawing.Size(87, 17)
         Me.CheckBox_UnderWater.TabIndex = 26
@@ -525,7 +525,7 @@ Partial Class SfxControl
         'Numeric_DuckerLength
         '
         Me.Numeric_DuckerLength.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Numeric_DuckerLength.Location = New System.Drawing.Point(421, 176)
+        Me.Numeric_DuckerLength.Location = New System.Drawing.Point(424, 176)
         Me.Numeric_DuckerLength.Maximum = New Decimal(New Integer() {32767, 0, 0, 0})
         Me.Numeric_DuckerLength.Minimum = New Decimal(New Integer() {32768, 0, 0, -2147483648})
         Me.Numeric_DuckerLength.Name = "Numeric_DuckerLength"
@@ -537,7 +537,7 @@ Partial Class SfxControl
         '
         Me.Label_DuckerLength.AutoSize = True
         Me.Label_DuckerLength.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label_DuckerLength.Location = New System.Drawing.Point(372, 178)
+        Me.Label_DuckerLength.Location = New System.Drawing.Point(375, 178)
         Me.Label_DuckerLength.Name = "Label_DuckerLength"
         Me.Label_DuckerLength.Size = New System.Drawing.Size(43, 13)
         Me.Label_DuckerLength.TabIndex = 24
@@ -546,7 +546,7 @@ Partial Class SfxControl
         'Numeric_Ducker
         '
         Me.Numeric_Ducker.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Numeric_Ducker.Location = New System.Drawing.Point(310, 176)
+        Me.Numeric_Ducker.Location = New System.Drawing.Point(313, 176)
         Me.Numeric_Ducker.Name = "Numeric_Ducker"
         Me.Numeric_Ducker.Size = New System.Drawing.Size(56, 20)
         Me.Numeric_Ducker.TabIndex = 23
@@ -555,7 +555,7 @@ Partial Class SfxControl
         '
         Me.Label_Ducker.AutoSize = True
         Me.Label_Ducker.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label_Ducker.Location = New System.Drawing.Point(248, 178)
+        Me.Label_Ducker.Location = New System.Drawing.Point(251, 178)
         Me.Label_Ducker.Name = "Label_Ducker"
         Me.Label_Ducker.Size = New System.Drawing.Size(56, 13)
         Me.Label_Ducker.TabIndex = 22
@@ -601,7 +601,7 @@ Partial Class SfxControl
         'Numeric_Priority
         '
         Me.Numeric_Priority.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Numeric_Priority.Location = New System.Drawing.Point(421, 153)
+        Me.Numeric_Priority.Location = New System.Drawing.Point(424, 153)
         Me.Numeric_Priority.Name = "Numeric_Priority"
         Me.Numeric_Priority.Size = New System.Drawing.Size(60, 20)
         Me.Numeric_Priority.TabIndex = 17
@@ -610,7 +610,7 @@ Partial Class SfxControl
         '
         Me.Label_Priority.AutoSize = True
         Me.Label_Priority.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label_Priority.Location = New System.Drawing.Point(363, 155)
+        Me.Label_Priority.Location = New System.Drawing.Point(366, 155)
         Me.Label_Priority.Name = "Label_Priority"
         Me.Label_Priority.Size = New System.Drawing.Size(52, 13)
         Me.Label_Priority.TabIndex = 16
@@ -654,7 +654,7 @@ Partial Class SfxControl
         '
         Me.Label_MaxVoice.AutoSize = True
         Me.Label_MaxVoice.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label_MaxVoice.Location = New System.Drawing.Point(8, 155)
+        Me.Label_MaxVoice.Location = New System.Drawing.Point(6, 155)
         Me.Label_MaxVoice.Name = "Label_MaxVoice"
         Me.Label_MaxVoice.Size = New System.Drawing.Size(60, 13)
         Me.Label_MaxVoice.TabIndex = 11
@@ -664,7 +664,7 @@ Partial Class SfxControl
         '
         Me.Textbox_OuterRadius.BackColor = System.Drawing.SystemColors.Window
         Me.Textbox_OuterRadius.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Textbox_OuterRadius.Location = New System.Drawing.Point(421, 120)
+        Me.Textbox_OuterRadius.Location = New System.Drawing.Point(424, 120)
         Me.Textbox_OuterRadius.MaxLength = 3
         Me.Textbox_OuterRadius.Name = "Textbox_OuterRadius"
         Me.Textbox_OuterRadius.Size = New System.Drawing.Size(60, 20)
@@ -685,7 +685,7 @@ Partial Class SfxControl
         '
         Me.Textbox_InnerRadius.BackColor = System.Drawing.SystemColors.Window
         Me.Textbox_InnerRadius.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Textbox_InnerRadius.Location = New System.Drawing.Point(421, 86)
+        Me.Textbox_InnerRadius.Location = New System.Drawing.Point(424, 86)
         Me.Textbox_InnerRadius.MaxLength = 3
         Me.Textbox_InnerRadius.Name = "Textbox_InnerRadius"
         Me.Textbox_InnerRadius.Size = New System.Drawing.Size(60, 20)
@@ -696,7 +696,7 @@ Partial Class SfxControl
         '
         Me.Label_InnerRadius.AutoSize = True
         Me.Label_InnerRadius.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label_InnerRadius.Location = New System.Drawing.Point(8, 89)
+        Me.Label_InnerRadius.Location = New System.Drawing.Point(6, 89)
         Me.Label_InnerRadius.Name = "Label_InnerRadius"
         Me.Label_InnerRadius.Size = New System.Drawing.Size(57, 13)
         Me.Label_InnerRadius.TabIndex = 5
@@ -711,9 +711,9 @@ Partial Class SfxControl
         Me.GroupBox_TrackingType.Controls.Add(Me.RadioButton_Tracking_2D)
         Me.GroupBox_TrackingType.Controls.Add(Me.ShapeContainer2)
         Me.GroupBox_TrackingType.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox_TrackingType.Location = New System.Drawing.Point(15, 45)
+        Me.GroupBox_TrackingType.Location = New System.Drawing.Point(6, 45)
         Me.GroupBox_TrackingType.Name = "GroupBox_TrackingType"
-        Me.GroupBox_TrackingType.Size = New System.Drawing.Size(466, 40)
+        Me.GroupBox_TrackingType.Size = New System.Drawing.Size(478, 40)
         Me.GroupBox_TrackingType.TabIndex = 1
         Me.GroupBox_TrackingType.TabStop = False
         Me.GroupBox_TrackingType.Text = "Tracking Type:"
@@ -790,7 +790,7 @@ Partial Class SfxControl
         Me.ShapeContainer2.Margin = New System.Windows.Forms.Padding(0)
         Me.ShapeContainer2.Name = "ShapeContainer2"
         Me.ShapeContainer2.Shapes.AddRange(New Microsoft.VisualBasic.PowerPacks.Shape() {Me.LineShape_Divider1, Me.LineShape_Divider2})
-        Me.ShapeContainer2.Size = New System.Drawing.Size(460, 21)
+        Me.ShapeContainer2.Size = New System.Drawing.Size(472, 21)
         Me.ShapeContainer2.TabIndex = 7
         Me.ShapeContainer2.TabStop = False
         '
@@ -817,16 +817,16 @@ Partial Class SfxControl
         'Numeric_MasterVolume
         '
         Me.Numeric_MasterVolume.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Numeric_MasterVolume.Location = New System.Drawing.Point(425, 19)
+        Me.Numeric_MasterVolume.Location = New System.Drawing.Point(424, 19)
         Me.Numeric_MasterVolume.Name = "Numeric_MasterVolume"
-        Me.Numeric_MasterVolume.Size = New System.Drawing.Size(56, 20)
+        Me.Numeric_MasterVolume.Size = New System.Drawing.Size(60, 20)
         Me.Numeric_MasterVolume.TabIndex = 4
         '
         'Label_MasterVolume
         '
         Me.Label_MasterVolume.AutoSize = True
         Me.Label_MasterVolume.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label_MasterVolume.Location = New System.Drawing.Point(339, 21)
+        Me.Label_MasterVolume.Location = New System.Drawing.Point(338, 20)
         Me.Label_MasterVolume.Name = "Label_MasterVolume"
         Me.Label_MasterVolume.Size = New System.Drawing.Size(80, 13)
         Me.Label_MasterVolume.TabIndex = 3
