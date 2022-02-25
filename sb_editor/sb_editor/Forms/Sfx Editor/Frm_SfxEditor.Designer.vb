@@ -241,7 +241,7 @@ Partial Class Frm_SfxEditor
         Me.GroupBox_SamplePool.Controls.Add(Me.CheckBox_EnableSubSFX)
         Me.GroupBox_SamplePool.Location = New System.Drawing.Point(3, 287)
         Me.GroupBox_SamplePool.Name = "GroupBox_SamplePool"
-        Me.GroupBox_SamplePool.Size = New System.Drawing.Size(778, 365)
+        Me.GroupBox_SamplePool.Size = New System.Drawing.Size(778, 368)
         Me.GroupBox_SamplePool.TabIndex = 15
         Me.GroupBox_SamplePool.TabStop = False
         Me.GroupBox_SamplePool.Text = "Sample Pool"
@@ -252,7 +252,7 @@ Partial Class Frm_SfxEditor
         Me.ComboBox1.Items.AddRange(New Object() {"Playstation2", "GameCube", "PC", "X Box"})
         Me.ComboBox1.Location = New System.Drawing.Point(622, 19)
         Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(130, 21)
+        Me.ComboBox1.Size = New System.Drawing.Size(138, 21)
         Me.ComboBox1.TabIndex = 15
         '
         'Label1
@@ -417,7 +417,7 @@ Partial Class Frm_SfxEditor
         Me.Groupbox_SampleInfo.Controls.Add(Me.Label_SampleInfo_Freq)
         Me.Groupbox_SampleInfo.Location = New System.Drawing.Point(545, 46)
         Me.Groupbox_SampleInfo.Name = "Groupbox_SampleInfo"
-        Me.Groupbox_SampleInfo.Size = New System.Drawing.Size(205, 89)
+        Me.Groupbox_SampleInfo.Size = New System.Drawing.Size(215, 89)
         Me.Groupbox_SampleInfo.TabIndex = 12
         Me.Groupbox_SampleInfo.TabStop = False
         Me.Groupbox_SampleInfo.Text = "Sample Information"
@@ -542,7 +542,7 @@ Partial Class Frm_SfxEditor
         'Button_StopSample
         '
         Me.Button_StopSample.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_StopSample.Location = New System.Drawing.Point(429, 325)
+        Me.Button_StopSample.Location = New System.Drawing.Point(429, 331)
         Me.Button_StopSample.Name = "Button_StopSample"
         Me.Button_StopSample.Size = New System.Drawing.Size(55, 23)
         Me.Button_StopSample.TabIndex = 8
@@ -552,7 +552,7 @@ Partial Class Frm_SfxEditor
         'Button_PlaySample
         '
         Me.Button_PlaySample.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_PlaySample.Location = New System.Drawing.Point(368, 325)
+        Me.Button_PlaySample.Location = New System.Drawing.Point(368, 331)
         Me.Button_PlaySample.Name = "Button_PlaySample"
         Me.Button_PlaySample.Size = New System.Drawing.Size(55, 23)
         Me.Button_PlaySample.TabIndex = 7
@@ -562,7 +562,7 @@ Partial Class Frm_SfxEditor
         'Button_EditSample
         '
         Me.Button_EditSample.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_EditSample.Location = New System.Drawing.Point(277, 325)
+        Me.Button_EditSample.Location = New System.Drawing.Point(277, 331)
         Me.Button_EditSample.Name = "Button_EditSample"
         Me.Button_EditSample.Size = New System.Drawing.Size(55, 23)
         Me.Button_EditSample.TabIndex = 6
@@ -572,7 +572,7 @@ Partial Class Frm_SfxEditor
         'Button_OpenSampleFolder
         '
         Me.Button_OpenSampleFolder.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_OpenSampleFolder.Location = New System.Drawing.Point(199, 325)
+        Me.Button_OpenSampleFolder.Location = New System.Drawing.Point(199, 331)
         Me.Button_OpenSampleFolder.Name = "Button_OpenSampleFolder"
         Me.Button_OpenSampleFolder.Size = New System.Drawing.Size(55, 23)
         Me.Button_OpenSampleFolder.TabIndex = 5
@@ -582,7 +582,7 @@ Partial Class Frm_SfxEditor
         'Button_CopySample
         '
         Me.Button_CopySample.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_CopySample.Location = New System.Drawing.Point(138, 325)
+        Me.Button_CopySample.Location = New System.Drawing.Point(138, 331)
         Me.Button_CopySample.Name = "Button_CopySample"
         Me.Button_CopySample.Size = New System.Drawing.Size(55, 23)
         Me.Button_CopySample.TabIndex = 4
@@ -592,7 +592,7 @@ Partial Class Frm_SfxEditor
         'Button_RemoveSample
         '
         Me.Button_RemoveSample.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_RemoveSample.Location = New System.Drawing.Point(77, 325)
+        Me.Button_RemoveSample.Location = New System.Drawing.Point(77, 331)
         Me.Button_RemoveSample.Name = "Button_RemoveSample"
         Me.Button_RemoveSample.Size = New System.Drawing.Size(55, 23)
         Me.Button_RemoveSample.TabIndex = 3
@@ -602,7 +602,7 @@ Partial Class Frm_SfxEditor
         'Button_AddSample
         '
         Me.Button_AddSample.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_AddSample.Location = New System.Drawing.Point(16, 325)
+        Me.Button_AddSample.Location = New System.Drawing.Point(16, 331)
         Me.Button_AddSample.Name = "Button_AddSample"
         Me.Button_AddSample.Size = New System.Drawing.Size(55, 23)
         Me.Button_AddSample.TabIndex = 2
@@ -620,7 +620,7 @@ Partial Class Frm_SfxEditor
         Me.ListBox_SamplePool.Location = New System.Drawing.Point(16, 74)
         Me.ListBox_SamplePool.Name = "ListBox_SamplePool"
         Me.ListBox_SamplePool.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBox_SamplePool.Size = New System.Drawing.Size(468, 238)
+        Me.ListBox_SamplePool.Size = New System.Drawing.Size(468, 251)
         Me.ListBox_SamplePool.TabIndex = 1
         '
         'ContextMenu_SamplePool
@@ -805,7 +805,7 @@ Partial Class Frm_SfxEditor
         'Button_OK
         '
         Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_OK.Location = New System.Drawing.Point(834, 766)
+        Me.Button_OK.Location = New System.Drawing.Point(836, 766)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(75, 23)
         Me.Button_OK.TabIndex = 19
@@ -816,7 +816,7 @@ Partial Class Frm_SfxEditor
         '
         Me.Button_Cancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Button_Cancel.Location = New System.Drawing.Point(753, 766)
+        Me.Button_Cancel.Location = New System.Drawing.Point(755, 766)
         Me.Button_Cancel.Name = "Button_Cancel"
         Me.Button_Cancel.Size = New System.Drawing.Size(75, 23)
         Me.Button_Cancel.TabIndex = 18
@@ -841,6 +841,7 @@ Partial Class Frm_SfxEditor
         Me.Controls.Add(Me.Button_Cancel)
         Me.Controls.Add(Me.Panel_SfxParameters)
         Me.Controls.Add(Me.TabControl_Platforms)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False

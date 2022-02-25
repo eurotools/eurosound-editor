@@ -46,6 +46,9 @@ Partial Class Project_Properties
         Me.Col_Format = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.Col_OutputFolder = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.Col_AutoResample = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ShapeContainer1 = New Microsoft.VisualBasic.PowerPacks.ShapeContainer()
+        Me.LineShape2 = New Microsoft.VisualBasic.PowerPacks.LineShape()
+        Me.LineShape1 = New Microsoft.VisualBasic.PowerPacks.LineShape()
         Me.GroupBox_AvailableRates = New System.Windows.Forms.GroupBox()
         Me.Button_AddSampleRate = New System.Windows.Forms.Button()
         Me.ListBox_SampleRates = New System.Windows.Forms.ListBox()
@@ -75,6 +78,9 @@ Partial Class Project_Properties
         Me.Button_Cancel = New System.Windows.Forms.Button()
         Me.OpenFileDialog = New System.Windows.Forms.OpenFileDialog()
         Me.FolderBrowserDialog = New System.Windows.Forms.FolderBrowserDialog()
+        Me.ShapeContainer2 = New Microsoft.VisualBasic.PowerPacks.ShapeContainer()
+        Me.LineShape4 = New Microsoft.VisualBasic.PowerPacks.LineShape()
+        Me.LineShape3 = New Microsoft.VisualBasic.PowerPacks.LineShape()
         Me.GroupBox_Master_Path.SuspendLayout()
         Me.GroupBox_SonixFolder.SuspendLayout()
         Me.GroupBox_EngineXFolder.SuspendLayout()
@@ -236,6 +242,7 @@ Partial Class Project_Properties
         Me.GroupBox_FormatProps.Controls.Add(Me.ComboBox_Platform)
         Me.GroupBox_FormatProps.Controls.Add(Me.Button_AddFormat)
         Me.GroupBox_FormatProps.Controls.Add(Me.ListView_Formats)
+        Me.GroupBox_FormatProps.Controls.Add(Me.ShapeContainer1)
         Me.GroupBox_FormatProps.Location = New System.Drawing.Point(12, 200)
         Me.GroupBox_FormatProps.Name = "GroupBox_FormatProps"
         Me.GroupBox_FormatProps.Size = New System.Drawing.Size(643, 169)
@@ -266,7 +273,7 @@ Partial Class Project_Properties
         'Button_BrowseOutput
         '
         Me.Button_BrowseOutput.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_BrowseOutput.Location = New System.Drawing.Point(233, 140)
+        Me.Button_BrowseOutput.Location = New System.Drawing.Point(280, 140)
         Me.Button_BrowseOutput.Name = "Button_BrowseOutput"
         Me.Button_BrowseOutput.Size = New System.Drawing.Size(127, 23)
         Me.Button_BrowseOutput.TabIndex = 3
@@ -279,7 +286,7 @@ Partial Class Project_Properties
         Me.ComboBox_Platform.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_Platform.FormattingEnabled = True
         Me.ComboBox_Platform.Items.AddRange(New Object() {"PlayStation2", "X Box", "Game Cube", "PC"})
-        Me.ComboBox_Platform.Location = New System.Drawing.Point(87, 142)
+        Me.ComboBox_Platform.Location = New System.Drawing.Point(69, 142)
         Me.ComboBox_Platform.Name = "ComboBox_Platform"
         Me.ComboBox_Platform.Size = New System.Drawing.Size(140, 21)
         Me.ComboBox_Platform.TabIndex = 2
@@ -289,7 +296,7 @@ Partial Class Project_Properties
         Me.Button_AddFormat.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Button_AddFormat.Location = New System.Drawing.Point(6, 140)
         Me.Button_AddFormat.Name = "Button_AddFormat"
-        Me.Button_AddFormat.Size = New System.Drawing.Size(75, 23)
+        Me.Button_AddFormat.Size = New System.Drawing.Size(57, 23)
         Me.Button_AddFormat.TabIndex = 1
         Me.Button_AddFormat.Text = "Add"
         Me.Button_AddFormat.UseVisualStyleBackColor = True
@@ -313,17 +320,47 @@ Partial Class Project_Properties
         'Col_Format
         '
         Me.Col_Format.Text = "Available Formats"
-        Me.Col_Format.Width = 190
+        Me.Col_Format.Width = 210
         '
         'Col_OutputFolder
         '
         Me.Col_OutputFolder.Text = "Output Folder"
-        Me.Col_OutputFolder.Width = 190
+        Me.Col_OutputFolder.Width = 250
         '
         'Col_AutoResample
         '
         Me.Col_AutoResample.Text = "Auto Re-Sample On/Off?"
-        Me.Col_AutoResample.Width = 190
+        Me.Col_AutoResample.Width = 165
+        '
+        'ShapeContainer1
+        '
+        Me.ShapeContainer1.Location = New System.Drawing.Point(3, 16)
+        Me.ShapeContainer1.Margin = New System.Windows.Forms.Padding(0)
+        Me.ShapeContainer1.Name = "ShapeContainer1"
+        Me.ShapeContainer1.Shapes.AddRange(New Microsoft.VisualBasic.PowerPacks.Shape() {Me.LineShape2, Me.LineShape1})
+        Me.ShapeContainer1.Size = New System.Drawing.Size(637, 150)
+        Me.ShapeContainer1.TabIndex = 6
+        Me.ShapeContainer1.TabStop = False
+        '
+        'LineShape2
+        '
+        Me.LineShape2.AccessibleRole = System.Windows.Forms.AccessibleRole.[Default]
+        Me.LineShape2.Name = "LineShape2"
+        Me.LineShape2.SelectionColor = System.Drawing.SystemColors.Control
+        Me.LineShape2.X1 = 215
+        Me.LineShape2.X2 = 215
+        Me.LineShape2.Y1 = 118
+        Me.LineShape2.Y2 = 150
+        '
+        'LineShape1
+        '
+        Me.LineShape1.AccessibleRole = System.Windows.Forms.AccessibleRole.[Default]
+        Me.LineShape1.Name = "LineShape1"
+        Me.LineShape1.SelectionColor = System.Drawing.SystemColors.Control
+        Me.LineShape1.X1 = 463
+        Me.LineShape1.X2 = 463
+        Me.LineShape1.Y1 = 118
+        Me.LineShape1.Y2 = 150
         '
         'GroupBox_AvailableRates
         '
@@ -361,9 +398,9 @@ Partial Class Project_Properties
         '
         Me.GroupBox_ResamplePerFormat.Controls.Add(Me.ListView_SampleRateValues)
         Me.GroupBox_ResamplePerFormat.Controls.Add(Me.ComboBox_RatesFormat)
-        Me.GroupBox_ResamplePerFormat.Location = New System.Drawing.Point(222, 375)
+        Me.GroupBox_ResamplePerFormat.Location = New System.Drawing.Point(266, 375)
         Me.GroupBox_ResamplePerFormat.Name = "GroupBox_ResamplePerFormat"
-        Me.GroupBox_ResamplePerFormat.Size = New System.Drawing.Size(433, 263)
+        Me.GroupBox_ResamplePerFormat.Size = New System.Drawing.Size(389, 263)
         Me.GroupBox_ResamplePerFormat.TabIndex = 8
         Me.GroupBox_ResamplePerFormat.TabStop = False
         Me.GroupBox_ResamplePerFormat.Text = "Re-Sample Rate Values per Format"
@@ -379,7 +416,7 @@ Partial Class Project_Properties
         Me.ListView_SampleRateValues.HideSelection = False
         Me.ListView_SampleRateValues.Location = New System.Drawing.Point(6, 46)
         Me.ListView_SampleRateValues.Name = "ListView_SampleRateValues"
-        Me.ListView_SampleRateValues.Size = New System.Drawing.Size(421, 211)
+        Me.ListView_SampleRateValues.Size = New System.Drawing.Size(377, 211)
         Me.ListView_SampleRateValues.TabIndex = 1
         Me.ListView_SampleRateValues.UseCompatibleStateImageBehavior = False
         Me.ListView_SampleRateValues.View = System.Windows.Forms.View.Details
@@ -597,6 +634,36 @@ Partial Class Project_Properties
         '
         Me.OpenFileDialog.Filter = "EXE Files (*.exe)|*.exe"
         '
+        'ShapeContainer2
+        '
+        Me.ShapeContainer2.Location = New System.Drawing.Point(0, 0)
+        Me.ShapeContainer2.Margin = New System.Windows.Forms.Padding(0)
+        Me.ShapeContainer2.Name = "ShapeContainer2"
+        Me.ShapeContainer2.Shapes.AddRange(New Microsoft.VisualBasic.PowerPacks.Shape() {Me.LineShape4, Me.LineShape3})
+        Me.ShapeContainer2.Size = New System.Drawing.Size(667, 818)
+        Me.ShapeContainer2.TabIndex = 12
+        Me.ShapeContainer2.TabStop = False
+        '
+        'LineShape4
+        '
+        Me.LineShape4.AccessibleRole = System.Windows.Forms.AccessibleRole.[Default]
+        Me.LineShape4.Name = "LineShape4"
+        Me.LineShape4.SelectionColor = System.Drawing.SystemColors.Control
+        Me.LineShape4.X1 = 13
+        Me.LineShape4.X2 = 654
+        Me.LineShape4.Y1 = 372
+        Me.LineShape4.Y2 = 372
+        '
+        'LineShape3
+        '
+        Me.LineShape3.AccessibleRole = System.Windows.Forms.AccessibleRole.[Default]
+        Me.LineShape3.Name = "LineShape3"
+        Me.LineShape3.SelectionColor = System.Drawing.SystemColors.Control
+        Me.LineShape3.X1 = 242
+        Me.LineShape3.X2 = 242
+        Me.LineShape3.Y1 = 372
+        Me.LineShape3.Y2 = 636
+        '
         'Project_Properties
         '
         Me.AcceptButton = Me.Button_OK
@@ -615,6 +682,8 @@ Partial Class Project_Properties
         Me.Controls.Add(Me.GroupBox_EngineXFolder)
         Me.Controls.Add(Me.GroupBox_SonixFolder)
         Me.Controls.Add(Me.GroupBox_Master_Path)
+        Me.Controls.Add(Me.ShapeContainer2)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
@@ -695,4 +764,10 @@ Partial Class Project_Properties
     Friend WithEvents Label_PcMaxSize As Label
     Friend WithEvents OpenFileDialog As OpenFileDialog
     Friend WithEvents FolderBrowserDialog As FolderBrowserDialog
+    Friend WithEvents ShapeContainer1 As PowerPacks.ShapeContainer
+    Friend WithEvents LineShape2 As PowerPacks.LineShape
+    Friend WithEvents LineShape1 As PowerPacks.LineShape
+    Friend WithEvents ShapeContainer2 As PowerPacks.ShapeContainer
+    Friend WithEvents LineShape4 As PowerPacks.LineShape
+    Friend WithEvents LineShape3 As PowerPacks.LineShape
 End Class

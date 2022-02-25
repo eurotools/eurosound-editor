@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 
 Partial Public Class ExporterForm
+    Inherits Frm_TimerForm
     '*===============================================================================================
     '* GLOBAL VARIABLES 
     '*===============================================================================================
@@ -23,9 +24,6 @@ Partial Public Class ExporterForm
 
         'Get mainframe
         mainFrame = CType(Application.OpenForms("MainFrame"), MainFrame)
-
-        'Custom cursors
-        Cursor = New Cursor(New MemoryStream(My.Resources.ChristmasTree))
     End Sub
 
     Private Sub ExporterForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load

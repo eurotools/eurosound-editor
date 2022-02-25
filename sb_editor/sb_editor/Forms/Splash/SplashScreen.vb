@@ -39,7 +39,6 @@ Partial Public NotInheritable Class SplashScreen
             writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), mainform.TreeView_SoundBanks, mainform.ListBox_DataBases, mainform.UserControl_SFXs.ListBox_SFXs)
             'Load Languages
             AddProjectLanguagesToCombo()
-
             'Update GUI
             mainform.Text = "EuroSound: """ & WorkingDirectory & """"
         Else
@@ -59,17 +58,18 @@ Partial Public NotInheritable Class SplashScreen
         'Read ini file
         If SysFileProjectIniPath IsNot "" Then
             Dim iniFunctions As New IniFile(SysFileProjectIniPath)
-            mainform.RadioButton_AllBanksSelectedFormat.Checked = iniFunctions.Read("AllBanksOption_Value", "Form1_Misc")
-            mainform.RadioButton_Output_SelectedSoundBank.Checked = iniFunctions.Read("SelectedlBankOption_Value", "Form1_Misc")
-            mainform.RadioButton_Output_AllBanksAll.Checked = iniFunctions.Read("AllFormatsOption_Value", "Form1_Misc")
+            mainform.RadioButton_AllBanksSelectedFormat.Checked = StrComp(iniFunctions.Read("AllBanksOption_Value", "Form1_Misc"), "True") = 0
+            mainform.RadioButton_Output_SelectedSoundBank.Checked = StrComp(iniFunctions.Read("SelectedlBankOption_Value", "Form1_Misc"), "True") = 0
+            mainform.RadioButton_Output_AllBanksAll.Checked = StrComp(iniFunctions.Read("AllFormatsOption_Value", "Form1_Misc"), "True") = 0
             mainform.CheckBox_FastReSample.Checked = Convert.ToBoolean(CByte(iniFunctions.Read("Check1", "MainForm")))
             mainform.UserControl_SFXs.CheckBox_SortByDate.Checked = Convert.ToBoolean(CByte(iniFunctions.Read("Check2", "MainForm")))
             mainform.CheckBox_OutAllLanguages.Checked = Convert.ToBoolean(CByte(iniFunctions.Read("OutputAllLanguages", "MainForm")))
             'Combobox output language
-            mainform.ComboBox_OutputLanguage.SelectedIndex = 0
             Dim languageIndex As Integer = iniFunctions.Read("LanguageCombo", "MainForm")
             If languageIndex < mainform.ComboBox_OutputLanguage.Items.Count Then
                 mainform.ComboBox_OutputLanguage.SelectedIndex = languageIndex
+            ElseIf mainform.ComboBox_OutputLanguage.Items.Count > 0 Then
+                mainform.ComboBox_OutputLanguage.SelectedIndex = 0
             End If
             'Combobox output format
             mainform.ComboBox_Format.SelectedIndex = 0

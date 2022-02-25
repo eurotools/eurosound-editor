@@ -2,7 +2,7 @@
     '*===============================================================================================
     '* GLOBAL VARIABLES 
     '*===============================================================================================
-    Private linesToPrint As String()
+    Private ReadOnly linesToPrint As String()
 
     '*===============================================================================================
     '* FORM EVENTS
@@ -16,7 +16,7 @@
     End Sub
 
     Private Sub Frm_DebugData_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
+        TextBox_DebugData.Text = String.Join(vbCrLf, linesToPrint)
     End Sub
 
     '*===============================================================================================

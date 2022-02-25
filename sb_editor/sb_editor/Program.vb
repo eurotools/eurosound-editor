@@ -15,9 +15,8 @@ Module Program
         Application.EnableVisualStyles()
         Application.SetCompatibleTextRenderingDefault(False)
 
-        Dim mainForm As New MainFrame
-
         'Show Splash Screen
+        Dim mainForm As New MainFrame
         Using ProgramSplash As New SplashScreen(mainForm)
             ProgramSplash.ShowDialog()
         End Using

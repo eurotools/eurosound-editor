@@ -1,4 +1,5 @@
 ﻿Public Class Frm_RefineSearch
+    Inherits Frm_TimerForm
     '*===============================================================================================
     '* GLOBAL VARS
     '*===============================================================================================
@@ -9,7 +10,6 @@
     '* FORM EVENTS
     '*===============================================================================================
     Sub New(parentControl As UserControl_SFXs)
-
         ' Esta llamada es exigida por el diseñador.
         InitializeComponent()
 

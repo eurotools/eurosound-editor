@@ -117,69 +117,27 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="LineShape2.Bounds" type="System.Drawing.Rectangle, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>215, 118, 0, 32</value>
-  </metadata>
-  <metadata name="LineShape2.Location" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>215, 118</value>
-  </metadata>
-  <metadata name="LineShape2.Size" type="System.Drawing.Size, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>0, 32</value>
-  </metadata>
-  <metadata name="LineShape1.Bounds" type="System.Drawing.Rectangle, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>463, 118, 0, 32</value>
-  </metadata>
-  <metadata name="LineShape1.Location" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>463, 118</value>
-  </metadata>
-  <metadata name="LineShape1.Size" type="System.Drawing.Size, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>0, 32</value>
-  </metadata>
-  <metadata name="OpenFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <metadata name="FolderBrowserDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>152, 17</value>
-  </metadata>
-  <metadata name="LineShape4.Bounds" type="System.Drawing.Rectangle, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>13, 372, 641, 0</value>
-  </metadata>
-  <metadata name="LineShape4.Location" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>13, 372</value>
-  </metadata>
-  <metadata name="LineShape4.Size" type="System.Drawing.Size, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>641, 0</value>
-  </metadata>
-  <metadata name="LineShape3.Bounds" type="System.Drawing.Rectangle, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>242, 372, 0, 264</value>
-  </metadata>
-  <metadata name="LineShape3.Location" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>242, 372</value>
-  </metadata>
-  <metadata name="LineShape3.Size" type="System.Drawing.Size, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>0, 264</value>
-  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        AAABAAIAICAQAAEABADoAgAAJgAAABAQEAABAAQAKAEAAA4DAAAoAAAAIAAAAEAAAAABAAQAAAAAAIAC
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwACAgIAAAAD/AAD/
-        AAAA//8A/wAAAP8A/wD//wAA////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAZmZgAAAAAAAACGZmZmZmZgAABmZmZmZmYAhgAAAAAAB4CHAAAAAAAGAIaP
-        iIiIiIiA+IiIiIiHBgCGj4//////gP//////hwAAho+P/////4D//////4fu4IaPj/////+Af/////+H
-        7uCGj4//////gPd3d3d/h2Zgho+P/////4B//////4cGAIaPj3d3d3eA93d3d3+HAACGj4//////gP//
-        ////h7uwho+Pd3d3d4B//////4e7sIaPj/////+A93d3d3+HMzCGj493d3d3gH//////hwYAho+P////
-        /4D3d3d3f4cAAIaPj/////+Af/////+H3dCGj493d3d3gPd3d3d/h93Qho+P/////4B//////4dVUIaP
-        j3d3d3eA93d3d3+HBgCGj4//////gH//////hwAAho+Pd3d3d4D3d3d3f4eqoIaPj/////+Af/////+H
-        qqCGj493d3d3gPd3d3d/hyIgiI+P/////4D//////4cIAACIj/////+Ij/////+IAAAAAIiIiIiIAAiI
-        iIiIgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////////
-        ////+D//AAAAAQAAAAEAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAA
-        AAEAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAABwAAAB/ADgB//////////////
-        //8oAAAAEAAAACAAAAABAAQAAAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAgAAAAICAAIAA
-        AACAAIAAgIAAAMDAwACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAI///wAP//8AjwAA8PAAAACPj/8A//8OAI+PAPD//wAAj4//8A//CwCPj/8A8A8AAI+P
-        APAP/w8Aj4//APAPAACPjwDw//8KAIiP/4CP/wAAAIiIAAiIgAAAAAAAAAAAAAAAAAAAAAAA//8AAP//
-        AAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAQEAAMOHAAD//wAA//8AAA==
+        AAABAAIAEBAQAAEABAAoAQAAJgAAACAgEAABAAQA6AIAAE4BAAAoAAAAEAAAACAAAAABAAQAAAAAAMAA
+        AAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwACAgIAAAAD/AAD/
+        AAAA//8A/wAAAP8A/wD//wAA////AAAAAAAAAAAAAAAJmZmQAAAACZkAAJmQAACZAP//CZkAAJD/+w/w
+        mQAJkPP//z8JkAkP//////CQCQ8P9ETw8JAJD7/0//vwkAkP//T///CQCZDz9P8/CZAAkP/7D/8JAACZ
+        AP//AJkAAAmZAACZkAAAAAmZmZAAAAAAAAAAAAAA+B///+AH///AA///gAH//4AB//8AAP//AAD//wAA
+        //8AAP//AAD//wAA//+AAf//gAH//8AD///gB///+B///ygAAAAgAAAAQAAAAAEABAAAAAAAgAIAAAAA
+        AAAAAAAAEAAAAAAAAAAAAAAAAACAAACAAAAAgIAAgAAAAIAAgACAgAAAwMDAAICAgAAAAP8AAP8AAAD/
+        /wD/AAAA/wD/AP//AAD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJmZmZkAAAAAAAAAAAAACZmZmZmZ
+        mZAAAAAAAAAACZmZmZmZmZmZkAAAAAAAAJmZmQAAAACZmZkAAAAAAAmZmQD/////AJmZkAAAAACZmZD/
+        //AP//8JmZkAAAAJmZkP///7D///8JmZkAAACZmQ/wD/////AP8JmZAAAJmZD/+w/////7D/8JmZAACZ
+        kP////////////8JmQAAmZDwD/+P//////APCZkACZkP+w//+P/////7D/CZkAmZD/////+P///////w
+        mZAJmQ//////9A//////8JmQCZkPAP//8AQAAAD/APCZkAmZD7D///RERERE/7DwmZAJmQ//////9A//
+        ////8JmQCZkP//////QP//////CZkAmZD/AP///0D///8A/wmZAAmZD7D///9A////sPCZkAAJmQ////
+        //QP/////wmZAACZmQ//AP/0D/8A//CZmQAACZkP/7D/////sP/wmZAAAAmZkP////AP////CZmQAAAA
+        mZkP///7D///8JmZAAAAAAmZkA//////8AmZkAAAAAAAmZmQAAAAAAmZmQAAAAAAAAmZmZmZmZmZmZAA
+        AAAAAAAACZmZmZmZmZAAAAAAAAAAAAAAmZmZmQAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/8A///4AB//4A
+        AH/8AAA/+AAAH/AAAA/gAAAHwAAAA8AAAAOAAAABgAAAAYAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAIAAAAGAAAABgAAAAcAAAAPAAAAD4AAAB/AAAA/4AAAf/AAAP/4AAH//gAH///AP/w==
 </value>
   </data>
 </root>

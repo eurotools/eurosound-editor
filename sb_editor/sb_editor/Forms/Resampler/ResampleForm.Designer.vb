@@ -160,7 +160,7 @@ Partial Class ResampleForm
         '
         Me.Label_SampleCount.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label_SampleCount.AutoSize = True
-        Me.Label_SampleCount.Location = New System.Drawing.Point(15, 510)
+        Me.Label_SampleCount.Location = New System.Drawing.Point(15, 489)
         Me.Label_SampleCount.Name = "Label_SampleCount"
         Me.Label_SampleCount.Size = New System.Drawing.Size(85, 13)
         Me.Label_SampleCount.TabIndex = 3
@@ -170,7 +170,7 @@ Partial Class ResampleForm
         '
         Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(339, 510)
+        Me.Label1.Location = New System.Drawing.Point(339, 489)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(185, 13)
         Me.Label1.TabIndex = 4
@@ -181,7 +181,7 @@ Partial Class ResampleForm
         Me.ComboBox_AvailableRates.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox_AvailableRates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_AvailableRates.FormattingEnabled = True
-        Me.ComboBox_AvailableRates.Location = New System.Drawing.Point(530, 507)
+        Me.ComboBox_AvailableRates.Location = New System.Drawing.Point(530, 486)
         Me.ComboBox_AvailableRates.Name = "ComboBox_AvailableRates"
         Me.ComboBox_AvailableRates.Size = New System.Drawing.Size(226, 21)
         Me.ComboBox_AvailableRates.TabIndex = 5
@@ -189,7 +189,7 @@ Partial Class ResampleForm
         'Button_ReSampleAll
         '
         Me.Button_ReSampleAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_ReSampleAll.Location = New System.Drawing.Point(762, 507)
+        Me.Button_ReSampleAll.Location = New System.Drawing.Point(762, 486)
         Me.Button_ReSampleAll.Name = "Button_ReSampleAll"
         Me.Button_ReSampleAll.Size = New System.Drawing.Size(93, 23)
         Me.Button_ReSampleAll.TabIndex = 6
@@ -199,7 +199,7 @@ Partial Class ResampleForm
         'Button_StreamSel
         '
         Me.Button_StreamSel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_StreamSel.Location = New System.Drawing.Point(861, 507)
+        Me.Button_StreamSel.Location = New System.Drawing.Point(861, 486)
         Me.Button_StreamSel.Name = "Button_StreamSel"
         Me.Button_StreamSel.Size = New System.Drawing.Size(93, 23)
         Me.Button_StreamSel.TabIndex = 7
@@ -209,7 +209,7 @@ Partial Class ResampleForm
         'Button_DeReSampleAll
         '
         Me.Button_DeReSampleAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_DeReSampleAll.Location = New System.Drawing.Point(762, 536)
+        Me.Button_DeReSampleAll.Location = New System.Drawing.Point(762, 515)
         Me.Button_DeReSampleAll.Name = "Button_DeReSampleAll"
         Me.Button_DeReSampleAll.Size = New System.Drawing.Size(93, 23)
         Me.Button_DeReSampleAll.TabIndex = 10
@@ -219,7 +219,7 @@ Partial Class ResampleForm
         'Button_UnStreamSel
         '
         Me.Button_UnStreamSel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_UnStreamSel.Location = New System.Drawing.Point(861, 536)
+        Me.Button_UnStreamSel.Location = New System.Drawing.Point(861, 515)
         Me.Button_UnStreamSel.Name = "Button_UnStreamSel"
         Me.Button_UnStreamSel.Size = New System.Drawing.Size(93, 23)
         Me.Button_UnStreamSel.TabIndex = 11
@@ -229,7 +229,7 @@ Partial Class ResampleForm
         'Button_EditSample
         '
         Me.Button_EditSample.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_EditSample.Location = New System.Drawing.Point(18, 536)
+        Me.Button_EditSample.Location = New System.Drawing.Point(18, 515)
         Me.Button_EditSample.Name = "Button_EditSample"
         Me.Button_EditSample.Size = New System.Drawing.Size(75, 23)
         Me.Button_EditSample.TabIndex = 8
@@ -241,7 +241,7 @@ Partial Class ResampleForm
         Me.GroupBox2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.GroupBox2.Controls.Add(Me.Button_MoveSelection)
         Me.GroupBox2.Controls.Add(Me.TextBox_MoveSamplesTo)
-        Me.GroupBox2.Location = New System.Drawing.Point(12, 565)
+        Me.GroupBox2.Location = New System.Drawing.Point(12, 544)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(720, 49)
         Me.GroupBox2.TabIndex = 12
@@ -269,7 +269,7 @@ Partial Class ResampleForm
         'Button_OK
         '
         Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_OK.Location = New System.Drawing.Point(798, 620)
+        Me.Button_OK.Location = New System.Drawing.Point(798, 599)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(75, 23)
         Me.Button_OK.TabIndex = 13
@@ -280,7 +280,7 @@ Partial Class ResampleForm
         '
         Me.Button_Cancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Button_Cancel.Location = New System.Drawing.Point(879, 620)
+        Me.Button_Cancel.Location = New System.Drawing.Point(879, 599)
         Me.Button_Cancel.Name = "Button_Cancel"
         Me.Button_Cancel.Size = New System.Drawing.Size(75, 23)
         Me.Button_Cancel.TabIndex = 14
@@ -290,7 +290,7 @@ Partial Class ResampleForm
         'Button1
         '
         Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button1.Location = New System.Drawing.Point(532, 536)
+        Me.Button1.Location = New System.Drawing.Point(532, 515)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 14
@@ -319,7 +319,7 @@ Partial Class ResampleForm
         'Button2
         '
         Me.Button2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button2.Location = New System.Drawing.Point(613, 536)
+        Me.Button2.Location = New System.Drawing.Point(613, 515)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 15
@@ -329,7 +329,7 @@ Partial Class ResampleForm
         'TextBox_BootupTime
         '
         Me.TextBox_BootupTime.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_BootupTime.Location = New System.Drawing.Point(99, 538)
+        Me.TextBox_BootupTime.Location = New System.Drawing.Point(99, 517)
         Me.TextBox_BootupTime.Name = "TextBox_BootupTime"
         Me.TextBox_BootupTime.Size = New System.Drawing.Size(274, 20)
         Me.TextBox_BootupTime.TabIndex = 9
@@ -351,7 +351,7 @@ Partial Class ResampleForm
         Me.ListView_Samples.HideSelection = False
         Me.ListView_Samples.Location = New System.Drawing.Point(12, 58)
         Me.ListView_Samples.Name = "ListView_Samples"
-        Me.ListView_Samples.Size = New System.Drawing.Size(942, 443)
+        Me.ListView_Samples.Size = New System.Drawing.Size(942, 422)
         Me.ListView_Samples.TabIndex = 2
         Me.ListView_Samples.UseCompatibleStateImageBehavior = False
         Me.ListView_Samples.View = System.Windows.Forms.View.Details
@@ -412,7 +412,7 @@ Partial Class ResampleForm
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Button_Cancel
-        Me.ClientSize = New System.Drawing.Size(966, 655)
+        Me.ClientSize = New System.Drawing.Size(966, 634)
         Me.Controls.Add(Me.TextBox_BootupTime)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)

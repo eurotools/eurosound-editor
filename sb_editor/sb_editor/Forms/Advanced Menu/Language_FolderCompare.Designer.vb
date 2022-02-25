@@ -43,11 +43,13 @@ Partial Class Language_FolderCompare
         '
         'GroupBox_PrimaryPath
         '
+        Me.GroupBox_PrimaryPath.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox_PrimaryPath.Controls.Add(Me.Button_SetPrimaryFolder)
         Me.GroupBox_PrimaryPath.Controls.Add(Me.TextBox_PrimaryPath)
         Me.GroupBox_PrimaryPath.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox_PrimaryPath.Name = "GroupBox_PrimaryPath"
-        Me.GroupBox_PrimaryPath.Size = New System.Drawing.Size(706, 51)
+        Me.GroupBox_PrimaryPath.Size = New System.Drawing.Size(714, 51)
         Me.GroupBox_PrimaryPath.TabIndex = 0
         Me.GroupBox_PrimaryPath.TabStop = False
         Me.GroupBox_PrimaryPath.Text = "Primary Path"
@@ -55,7 +57,7 @@ Partial Class Language_FolderCompare
         'Button_SetPrimaryFolder
         '
         Me.Button_SetPrimaryFolder.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_SetPrimaryFolder.Location = New System.Drawing.Point(625, 16)
+        Me.Button_SetPrimaryFolder.Location = New System.Drawing.Point(633, 16)
         Me.Button_SetPrimaryFolder.Name = "Button_SetPrimaryFolder"
         Me.Button_SetPrimaryFolder.Size = New System.Drawing.Size(75, 23)
         Me.Button_SetPrimaryFolder.TabIndex = 1
@@ -71,16 +73,18 @@ Partial Class Language_FolderCompare
         Me.TextBox_PrimaryPath.Location = New System.Drawing.Point(6, 19)
         Me.TextBox_PrimaryPath.Name = "TextBox_PrimaryPath"
         Me.TextBox_PrimaryPath.ReadOnly = True
-        Me.TextBox_PrimaryPath.Size = New System.Drawing.Size(613, 20)
+        Me.TextBox_PrimaryPath.Size = New System.Drawing.Size(621, 20)
         Me.TextBox_PrimaryPath.TabIndex = 0
         '
         'GroupBox_SecondaryPath
         '
+        Me.GroupBox_SecondaryPath.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox_SecondaryPath.Controls.Add(Me.Button_SetSecondaryFolder)
         Me.GroupBox_SecondaryPath.Controls.Add(Me.TextBox_SecondaryPath)
         Me.GroupBox_SecondaryPath.Location = New System.Drawing.Point(12, 69)
         Me.GroupBox_SecondaryPath.Name = "GroupBox_SecondaryPath"
-        Me.GroupBox_SecondaryPath.Size = New System.Drawing.Size(706, 51)
+        Me.GroupBox_SecondaryPath.Size = New System.Drawing.Size(714, 51)
         Me.GroupBox_SecondaryPath.TabIndex = 1
         Me.GroupBox_SecondaryPath.TabStop = False
         Me.GroupBox_SecondaryPath.Text = "Secondary Path"
@@ -88,7 +92,7 @@ Partial Class Language_FolderCompare
         'Button_SetSecondaryFolder
         '
         Me.Button_SetSecondaryFolder.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_SetSecondaryFolder.Location = New System.Drawing.Point(625, 16)
+        Me.Button_SetSecondaryFolder.Location = New System.Drawing.Point(633, 16)
         Me.Button_SetSecondaryFolder.Name = "Button_SetSecondaryFolder"
         Me.Button_SetSecondaryFolder.Size = New System.Drawing.Size(75, 23)
         Me.Button_SetSecondaryFolder.TabIndex = 3
@@ -104,7 +108,7 @@ Partial Class Language_FolderCompare
         Me.TextBox_SecondaryPath.Location = New System.Drawing.Point(6, 19)
         Me.TextBox_SecondaryPath.Name = "TextBox_SecondaryPath"
         Me.TextBox_SecondaryPath.ReadOnly = True
-        Me.TextBox_SecondaryPath.Size = New System.Drawing.Size(613, 20)
+        Me.TextBox_SecondaryPath.Size = New System.Drawing.Size(621, 20)
         Me.TextBox_SecondaryPath.TabIndex = 2
         '
         'Button_DoCompare
@@ -123,7 +127,7 @@ Partial Class Language_FolderCompare
         Me.GroupBox_SecondaryMissing.Controls.Add(Me.TextBox_MissingFilesSecondary)
         Me.GroupBox_SecondaryMissing.Location = New System.Drawing.Point(12, 165)
         Me.GroupBox_SecondaryMissing.Name = "GroupBox_SecondaryMissing"
-        Me.GroupBox_SecondaryMissing.Size = New System.Drawing.Size(350, 378)
+        Me.GroupBox_SecondaryMissing.Size = New System.Drawing.Size(354, 386)
         Me.GroupBox_SecondaryMissing.TabIndex = 3
         Me.GroupBox_SecondaryMissing.TabStop = False
         Me.GroupBox_SecondaryMissing.Text = "Missing Files in Secondary Path"
@@ -137,7 +141,7 @@ Partial Class Language_FolderCompare
         Me.TextBox_MissingFilesSecondary.Name = "TextBox_MissingFilesSecondary"
         Me.TextBox_MissingFilesSecondary.ReadOnly = True
         Me.TextBox_MissingFilesSecondary.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox_MissingFilesSecondary.Size = New System.Drawing.Size(344, 359)
+        Me.TextBox_MissingFilesSecondary.Size = New System.Drawing.Size(348, 367)
         Me.TextBox_MissingFilesSecondary.TabIndex = 1
         '
         'Groupbox_AdditionSecondary
@@ -145,9 +149,9 @@ Partial Class Language_FolderCompare
         Me.Groupbox_AdditionSecondary.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Groupbox_AdditionSecondary.Controls.Add(Me.TextBox_AdditionFilesSecondary)
-        Me.Groupbox_AdditionSecondary.Location = New System.Drawing.Point(368, 165)
+        Me.Groupbox_AdditionSecondary.Location = New System.Drawing.Point(372, 165)
         Me.Groupbox_AdditionSecondary.Name = "Groupbox_AdditionSecondary"
-        Me.Groupbox_AdditionSecondary.Size = New System.Drawing.Size(350, 378)
+        Me.Groupbox_AdditionSecondary.Size = New System.Drawing.Size(354, 386)
         Me.Groupbox_AdditionSecondary.TabIndex = 4
         Me.Groupbox_AdditionSecondary.TabStop = False
         Me.Groupbox_AdditionSecondary.Text = "Addition Files in Secondary Path"
@@ -161,7 +165,7 @@ Partial Class Language_FolderCompare
         Me.TextBox_AdditionFilesSecondary.Name = "TextBox_AdditionFilesSecondary"
         Me.TextBox_AdditionFilesSecondary.ReadOnly = True
         Me.TextBox_AdditionFilesSecondary.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox_AdditionFilesSecondary.Size = New System.Drawing.Size(344, 359)
+        Me.TextBox_AdditionFilesSecondary.Size = New System.Drawing.Size(348, 367)
         Me.TextBox_AdditionFilesSecondary.TabIndex = 0
         '
         'FolderBrowserDialog
@@ -172,7 +176,7 @@ Partial Class Language_FolderCompare
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(730, 555)
+        Me.ClientSize = New System.Drawing.Size(738, 563)
         Me.Controls.Add(Me.Groupbox_AdditionSecondary)
         Me.Controls.Add(Me.GroupBox_SecondaryMissing)
         Me.Controls.Add(Me.Button_DoCompare)

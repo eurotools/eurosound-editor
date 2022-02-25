@@ -42,13 +42,14 @@ Partial Class SfxControl
         Me.RadioButton_MultiSample = New System.Windows.Forms.RadioButton()
         Me.CheckBox_RandomPick = New System.Windows.Forms.CheckBox()
         Me.RadioButton_Single = New System.Windows.Forms.RadioButton()
-        Me.Label_Divider3 = New System.Windows.Forms.Label()
         Me.Numeric_MaxDelay = New System.Windows.Forms.NumericUpDown()
         Me.Label_MaxDelay = New System.Windows.Forms.Label()
         Me.Numeric_MinDelay = New System.Windows.Forms.NumericUpDown()
         Me.Label_MinDelay = New System.Windows.Forms.Label()
         Me.Label_InterSample = New System.Windows.Forms.Label()
         Me.CheckBox_SamplePoolLoop = New System.Windows.Forms.CheckBox()
+        Me.ShapeContainer1 = New Microsoft.VisualBasic.PowerPacks.ShapeContainer()
+        Me.LineShape_Divider3 = New Microsoft.VisualBasic.PowerPacks.LineShape()
         Me.GroupBox_SfxParams = New System.Windows.Forms.GroupBox()
         Me.GroupBox_GlobalSettings = New System.Windows.Forms.GroupBox()
         Me.Checkbox_Doppler = New System.Windows.Forms.CheckBox()
@@ -77,11 +78,12 @@ Partial Class SfxControl
         Me.GroupBox_TrackingType = New System.Windows.Forms.GroupBox()
         Me.RadioButton_TrackingType_3DRandom = New System.Windows.Forms.RadioButton()
         Me.RadioButton_TrackingType_3D = New System.Windows.Forms.RadioButton()
-        Me.Label_Divider2 = New System.Windows.Forms.Label()
         Me.RadioButton_TrackingType_Amb = New System.Windows.Forms.RadioButton()
-        Me.Label_Divider1 = New System.Windows.Forms.Label()
         Me.RadioButton_Tracking_2DPL2 = New System.Windows.Forms.RadioButton()
         Me.RadioButton_Tracking_2D = New System.Windows.Forms.RadioButton()
+        Me.ShapeContainer2 = New Microsoft.VisualBasic.PowerPacks.ShapeContainer()
+        Me.LineShape_Divider1 = New Microsoft.VisualBasic.PowerPacks.LineShape()
+        Me.LineShape_Divider2 = New Microsoft.VisualBasic.PowerPacks.LineShape()
         Me.Numeric_MasterVolume = New System.Windows.Forms.NumericUpDown()
         Me.Label_MasterVolume = New System.Windows.Forms.Label()
         Me.Textbox_Reverb = New System.Windows.Forms.TextBox()
@@ -125,13 +127,13 @@ Partial Class SfxControl
         Me.GroupBox_SamplePoolControl.Controls.Add(Me.RadioButton_MultiSample)
         Me.GroupBox_SamplePoolControl.Controls.Add(Me.CheckBox_RandomPick)
         Me.GroupBox_SamplePoolControl.Controls.Add(Me.RadioButton_Single)
-        Me.GroupBox_SamplePoolControl.Controls.Add(Me.Label_Divider3)
         Me.GroupBox_SamplePoolControl.Controls.Add(Me.Numeric_MaxDelay)
         Me.GroupBox_SamplePoolControl.Controls.Add(Me.Label_MaxDelay)
         Me.GroupBox_SamplePoolControl.Controls.Add(Me.Numeric_MinDelay)
         Me.GroupBox_SamplePoolControl.Controls.Add(Me.Label_MinDelay)
         Me.GroupBox_SamplePoolControl.Controls.Add(Me.Label_InterSample)
         Me.GroupBox_SamplePoolControl.Controls.Add(Me.CheckBox_SamplePoolLoop)
+        Me.GroupBox_SamplePoolControl.Controls.Add(Me.ShapeContainer1)
         Me.GroupBox_SamplePoolControl.Dock = System.Windows.Forms.DockStyle.Right
         Me.GroupBox_SamplePoolControl.Location = New System.Drawing.Point(510, 0)
         Me.GroupBox_SamplePoolControl.Name = "GroupBox_SamplePoolControl"
@@ -332,16 +334,6 @@ Partial Class SfxControl
         Me.RadioButton_Single.Text = "Sigle"
         Me.RadioButton_Single.UseVisualStyleBackColor = True
         '
-        'Label_Divider3
-        '
-        Me.Label_Divider3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label_Divider3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Label_Divider3.Location = New System.Drawing.Point(6, 87)
-        Me.Label_Divider3.Name = "Label_Divider3"
-        Me.Label_Divider3.Size = New System.Drawing.Size(369, 1)
-        Me.Label_Divider3.TabIndex = 6
-        '
         'Numeric_MaxDelay
         '
         Me.Numeric_MaxDelay.Location = New System.Drawing.Point(213, 58)
@@ -396,6 +388,26 @@ Partial Class SfxControl
         Me.CheckBox_SamplePoolLoop.TabIndex = 0
         Me.CheckBox_SamplePoolLoop.Text = "Loop"
         Me.CheckBox_SamplePoolLoop.UseVisualStyleBackColor = True
+        '
+        'ShapeContainer1
+        '
+        Me.ShapeContainer1.Location = New System.Drawing.Point(3, 16)
+        Me.ShapeContainer1.Margin = New System.Windows.Forms.Padding(0)
+        Me.ShapeContainer1.Name = "ShapeContainer1"
+        Me.ShapeContainer1.Shapes.AddRange(New Microsoft.VisualBasic.PowerPacks.Shape() {Me.LineShape_Divider3})
+        Me.ShapeContainer1.Size = New System.Drawing.Size(375, 255)
+        Me.ShapeContainer1.TabIndex = 15
+        Me.ShapeContainer1.TabStop = False
+        '
+        'LineShape_Divider3
+        '
+        Me.LineShape_Divider3.AccessibleRole = System.Windows.Forms.AccessibleRole.[Default]
+        Me.LineShape_Divider3.Name = "LineShape_Divider3"
+        Me.LineShape_Divider3.SelectionColor = System.Drawing.SystemColors.Control
+        Me.LineShape_Divider3.X1 = 2
+        Me.LineShape_Divider3.X2 = 371
+        Me.LineShape_Divider3.Y1 = 67
+        Me.LineShape_Divider3.Y2 = 67
         '
         'GroupBox_SfxParams
         '
@@ -694,11 +706,10 @@ Partial Class SfxControl
         '
         Me.GroupBox_TrackingType.Controls.Add(Me.RadioButton_TrackingType_3DRandom)
         Me.GroupBox_TrackingType.Controls.Add(Me.RadioButton_TrackingType_3D)
-        Me.GroupBox_TrackingType.Controls.Add(Me.Label_Divider2)
         Me.GroupBox_TrackingType.Controls.Add(Me.RadioButton_TrackingType_Amb)
-        Me.GroupBox_TrackingType.Controls.Add(Me.Label_Divider1)
         Me.GroupBox_TrackingType.Controls.Add(Me.RadioButton_Tracking_2DPL2)
         Me.GroupBox_TrackingType.Controls.Add(Me.RadioButton_Tracking_2D)
+        Me.GroupBox_TrackingType.Controls.Add(Me.ShapeContainer2)
         Me.GroupBox_TrackingType.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox_TrackingType.Location = New System.Drawing.Point(15, 45)
         Me.GroupBox_TrackingType.Name = "GroupBox_TrackingType"
@@ -733,14 +744,6 @@ Partial Class SfxControl
         " Uses: Most sounds. Sound acts as point source and is tracked.")
         Me.RadioButton_TrackingType_3D.UseVisualStyleBackColor = True
         '
-        'Label_Divider2
-        '
-        Me.Label_Divider2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Label_Divider2.Location = New System.Drawing.Point(264, 14)
-        Me.Label_Divider2.Name = "Label_Divider2"
-        Me.Label_Divider2.Size = New System.Drawing.Size(1, 20)
-        Me.Label_Divider2.TabIndex = 4
-        '
         'RadioButton_TrackingType_Amb
         '
         Me.RadioButton_TrackingType_Amb.AutoSize = True
@@ -753,14 +756,6 @@ Partial Class SfxControl
         Me.ToolTip_Buttons.SetToolTip(Me.RadioButton_TrackingType_Amb, "Volume UPDATES with Distance + Surround Pan FIXED Equal in All Speakers + Reverb " &
         "is ON + HTRF is OFF + Uses: Environment Sounds which surround player. eg Rain")
         Me.RadioButton_TrackingType_Amb.UseVisualStyleBackColor = True
-        '
-        'Label_Divider1
-        '
-        Me.Label_Divider1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Label_Divider1.Location = New System.Drawing.Point(152, 14)
-        Me.Label_Divider1.Name = "Label_Divider1"
-        Me.Label_Divider1.Size = New System.Drawing.Size(1, 20)
-        Me.Label_Divider1.TabIndex = 2
         '
         'RadioButton_Tracking_2DPL2
         '
@@ -788,6 +783,36 @@ Partial Class SfxControl
         Me.ToolTip_Buttons.SetToolTip(Me.RadioButton_Tracking_2D, "Volume FIXED (Set in SFX) + Stereo Pan FIXED (Set in SFX) + No Reverb on XBOX + H" &
         "RTF is OFF + Uses: Musical Effects, Menu sounds, Narrator Speech")
         Me.RadioButton_Tracking_2D.UseVisualStyleBackColor = True
+        '
+        'ShapeContainer2
+        '
+        Me.ShapeContainer2.Location = New System.Drawing.Point(3, 16)
+        Me.ShapeContainer2.Margin = New System.Windows.Forms.Padding(0)
+        Me.ShapeContainer2.Name = "ShapeContainer2"
+        Me.ShapeContainer2.Shapes.AddRange(New Microsoft.VisualBasic.PowerPacks.Shape() {Me.LineShape_Divider1, Me.LineShape_Divider2})
+        Me.ShapeContainer2.Size = New System.Drawing.Size(460, 21)
+        Me.ShapeContainer2.TabIndex = 7
+        Me.ShapeContainer2.TabStop = False
+        '
+        'LineShape_Divider1
+        '
+        Me.LineShape_Divider1.AccessibleRole = System.Windows.Forms.AccessibleRole.[Default]
+        Me.LineShape_Divider1.Name = "LineShape_Divider1"
+        Me.LineShape_Divider1.SelectionColor = System.Drawing.SystemColors.Control
+        Me.LineShape_Divider1.X1 = 146
+        Me.LineShape_Divider1.X2 = 146
+        Me.LineShape_Divider1.Y1 = -9
+        Me.LineShape_Divider1.Y2 = 16
+        '
+        'LineShape_Divider2
+        '
+        Me.LineShape_Divider2.AccessibleRole = System.Windows.Forms.AccessibleRole.[Default]
+        Me.LineShape_Divider2.Name = "LineShape_Divider2"
+        Me.LineShape_Divider2.SelectionColor = System.Drawing.SystemColors.Control
+        Me.LineShape_Divider2.X1 = 260
+        Me.LineShape_Divider2.X2 = 260
+        Me.LineShape_Divider2.Y1 = -9
+        Me.LineShape_Divider2.Y2 = 16
         '
         'Numeric_MasterVolume
         '
@@ -926,7 +951,6 @@ Partial Class SfxControl
     Protected Friend WithEvents RadioButton_MultiSample As RadioButton
     Protected Friend WithEvents CheckBox_RandomPick As CheckBox
     Protected Friend WithEvents RadioButton_Single As RadioButton
-    Private WithEvents Label_Divider3 As Label
     Protected Friend WithEvents Numeric_MaxDelay As NumericUpDown
     Private WithEvents Label_MaxDelay As Label
     Protected Friend WithEvents Numeric_MinDelay As NumericUpDown
@@ -975,9 +999,7 @@ Partial Class SfxControl
     Private WithEvents GroupBox_TrackingType As GroupBox
     Protected Friend WithEvents RadioButton_TrackingType_3DRandom As RadioButton
     Protected Friend WithEvents RadioButton_TrackingType_3D As RadioButton
-    Private WithEvents Label_Divider2 As Label
     Protected Friend WithEvents RadioButton_TrackingType_Amb As RadioButton
-    Private WithEvents Label_Divider1 As Label
     Protected Friend WithEvents RadioButton_Tracking_2DPL2 As RadioButton
     Protected Friend WithEvents RadioButton_Tracking_2D As RadioButton
     Protected Friend WithEvents Numeric_MasterVolume As NumericUpDown
@@ -991,4 +1013,9 @@ Partial Class SfxControl
     Private WithEvents Label_SfxName As Label
     Friend WithEvents Label_SubSfxEnabled As Label
     Friend WithEvents ToolTip_Buttons As ToolTip
+    Friend WithEvents ShapeContainer1 As PowerPacks.ShapeContainer
+    Friend WithEvents LineShape_Divider3 As PowerPacks.LineShape
+    Friend WithEvents ShapeContainer2 As PowerPacks.ShapeContainer
+    Friend WithEvents LineShape_Divider2 As PowerPacks.LineShape
+    Friend WithEvents LineShape_Divider1 As PowerPacks.LineShape
 End Class
