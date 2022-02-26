@@ -137,9 +137,9 @@ Partial Public Class FileParsers
                                             Case "RANDOMVOLUMEOFFSET"
                                                 samplesList(SampleIndex).RandomVolumeOffset = CSByte(lineData(1))
                                             Case "PAN"
-                                                samplesList(SampleIndex).RandomVolumeOffset = CSByte(lineData(1))
+                                                samplesList(SampleIndex).Pan = CSByte(lineData(1))
                                             Case "RANDOMPAN"
-                                                samplesList(SampleIndex).RandomVolumeOffset = CSByte(lineData(1))
+                                                samplesList(SampleIndex).RandomPan = CSByte(lineData(1))
                                         End Select
 
                                         'Continue Reading

@@ -173,6 +173,16 @@ Partial Public Class Frm_SfxEditor
         selectedFileData.SamplePool.Polyphonic = SfxParamsAndSamplePool.CheckBox_Polyphonic.Checked
     End Sub
 
+    Private Sub SfxParamsAndSamplePool_SfxControl_StealOnLouderChecked(sender As Object, e As EventArgs) Handles SfxParamsAndSamplePool.SfxControl_StealOnLouderChecked
+        If SfxParamsAndSamplePool.CheckBox_StealOnLouder.Checked Then
+            If Numeric_RandomVolume.Value <> 0 Then
+                'Inform user
+                MsgBox("Steal On Louder & Random Volume NOT allowed.", vbOKOnly + vbExclamation, "EuroSound")
+                SfxParamsAndSamplePool.CheckBox_StealOnLouder.Checked = False
+            End If
+        End If
+    End Sub
+
     '*===============================================================================================
     '* SAMPLE POOL EVENTS
     '*===============================================================================================
@@ -397,10 +407,18 @@ Partial Public Class Frm_SfxEditor
     Private Sub Numeric_RandomVolume_ValueChanged(sender As Object, e As EventArgs) Handles Numeric_RandomVolume.ValueChanged
         'Ensure that we have selected an item
         If ListBox_SamplePool.SelectedItems.Count > 0 Then
-            'Update property
-            For Each sampleObject As Sample In ListBox_SamplePool.SelectedItems
-                sampleObject.RandomVolumeOffset = Numeric_RandomVolume.Value
-            Next
+            If SfxParamsAndSamplePool.CheckBox_StealOnLouder.Checked Then
+                'Inform user
+                If Numeric_RandomVolume.Value <> 0 Then
+                    MsgBox("Steal On Louder & Random Volume NOT allowed.", vbOKOnly + vbExclamation, "EuroSound")
+                    Numeric_RandomVolume.Value = 0
+                End If
+            Else
+                'Update property
+                For Each sampleObject As Sample In ListBox_SamplePool.SelectedItems
+                    sampleObject.RandomVolumeOffset = Numeric_RandomVolume.Value
+                Next
+            End If
         End If
     End Sub
 

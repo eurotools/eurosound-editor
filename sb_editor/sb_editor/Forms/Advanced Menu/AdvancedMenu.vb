@@ -51,7 +51,36 @@
     End Sub
 
     Private Sub Button_ValidateInterSample_Click(sender As Object, e As EventArgs) Handles Button_ValidateInterSample.Click
+        'Get all SFXs that has sub SFXs
+        Dim errorsToShow As New List(Of String)
 
+        Dim baseDir As String = fso.BuildPath(WorkingDirectory, "SFXs")
+        If fso.FolderExists(baseDir) Then
+            Dim fileNameWithExtension As String = Dir(baseDir & "\*.txt", FileAttribute.Archive)
+            Do While fileNameWithExtension > ""
+                Dim sfxFilePath As String = fso.BuildPath(WorkingDirectory & "\SFXs\", fileNameWithExtension)
+                Dim sfxFileData As SfxFile = readers.ReadSFXFile(sfxFilePath)
+                'Check for negative multi samples and loops
+                If sfxFileData.SamplePool.Action1 = 1 AndAlso sfxFileData.SamplePool.EnableSubSFX Then
+                    If sfxFileData.SamplePool.MinDelay < 0 Or sfxFileData.SamplePool.MaxDelay < 0 Then
+                        errorsToShow.Add(GetOnlyFileName(fileNameWithExtension) & "   -ve Multi")
+                    End If
+                ElseIf sfxFileData.SamplePool.isLooped AndAlso sfxFileData.SamplePool.Action1 = 0 Then
+                    If sfxFileData.SamplePool.MinDelay < 0 Or sfxFileData.SamplePool.MaxDelay < 0 Then
+                        errorsToShow.Add(GetOnlyFileName(fileNameWithExtension) & "   -ve Loop")
+                    End If
+                End If
+                fileNameWithExtension = Dir()
+            Loop
+            'Check what we need to show to the user
+            If errorsToShow.Count > 0 Then
+                'Show info to the user
+                Dim debugInfo As New Frm_DebugData(errorsToShow.ToArray)
+                debugInfo.ShowDialog()
+            Else
+                MsgBox("All OK", vbOKOnly + vbInformation, "EuroSound")
+            End If
+        End If
     End Sub
 
     Private Sub Button_LanguageFolder_Click(sender As Object, e As EventArgs) Handles Button_LanguageFolder.Click
@@ -60,7 +89,34 @@
     End Sub
 
     Private Sub Button_StealOnLouder_Click(sender As Object, e As EventArgs) Handles Button_StealOnLouder.Click
-
+        'Get all SFXs that has sub SFXs
+        Dim errorsToShow As New List(Of String)
+        Dim baseDir As String = fso.BuildPath(WorkingDirectory, "SFXs")
+        If fso.FolderExists(baseDir) Then
+            Dim fileNameWithExtension As String = Dir(baseDir & "\*.txt", FileAttribute.Archive)
+            Do While fileNameWithExtension > ""
+                Dim sfxFilePath As String = fso.BuildPath(WorkingDirectory & "\SFXs\", fileNameWithExtension)
+                Dim sfxFileData As SfxFile = readers.ReadSFXFile(sfxFilePath)
+                'Seems that if the flag Steal On Age is on and the random volume is different than zero is interpreted as an error
+                If sfxFileData.Parameters.StealOnAge Then
+                    For sampleIndex As Integer = 0 To sfxFileData.Samples.Count - 1
+                        Dim currentSample As Sample = sfxFileData.Samples(sampleIndex)
+                        If currentSample.RandomVolumeOffset <> 0 Then
+                            errorsToShow.Add(GetOnlyFileName(fileNameWithExtension) & " -->> " & currentSample.FilePath)
+                        End If
+                    Next
+                End If
+                fileNameWithExtension = Dir()
+            Loop
+            'Check what we need to show to the user
+            If errorsToShow.Count > 0 Then
+                'Show info to the user
+                Dim debugInfo As New Frm_DebugData(errorsToShow.ToArray)
+                debugInfo.ShowDialog()
+            Else
+                MsgBox("All OK", vbOKOnly + vbInformation, "EuroSound")
+            End If
+        End If
     End Sub
 
     Private Sub Button_ValidateSfxLinks_Click(sender As Object, e As EventArgs) Handles Button_ValidateSfxLinks.Click

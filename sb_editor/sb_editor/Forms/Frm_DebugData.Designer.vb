@@ -30,7 +30,7 @@ Partial Class Frm_DebugData
         'Button_Ok
         '
         Me.Button_Ok.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_Ok.Location = New System.Drawing.Point(311, 345)
+        Me.Button_Ok.Location = New System.Drawing.Point(322, 359)
         Me.Button_Ok.Name = "Button_Ok"
         Me.Button_Ok.Size = New System.Drawing.Size(75, 23)
         Me.Button_Ok.TabIndex = 1
@@ -46,15 +46,16 @@ Partial Class Frm_DebugData
         Me.TextBox_DebugData.Multiline = True
         Me.TextBox_DebugData.Name = "TextBox_DebugData"
         Me.TextBox_DebugData.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.TextBox_DebugData.Size = New System.Drawing.Size(374, 327)
+        Me.TextBox_DebugData.Size = New System.Drawing.Size(385, 341)
         Me.TextBox_DebugData.TabIndex = 2
         Me.TextBox_DebugData.TabStop = False
+        Me.TextBox_DebugData.WordWrap = False
         '
         'Frm_DebugData
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(398, 380)
+        Me.ClientSize = New System.Drawing.Size(409, 394)
         Me.Controls.Add(Me.TextBox_DebugData)
         Me.Controls.Add(Me.Button_Ok)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog

@@ -26,6 +26,7 @@
     Public Event SfxControl_PolyphonicChecked As EventHandler
     Public Event SfxControl_MinDelayChanged As EventHandler
     Public Event SfxControl_MaxDelayChanged As EventHandler
+    Public Event SfxControl_StealOnLouderChecked As EventHandler
 
     '*===============================================================================================
     '* FROM EVENTS
@@ -141,5 +142,9 @@
 
     Private Sub Numeric_MaxDelay_ValueChanged(sender As Object, e As EventArgs) Handles Numeric_MaxDelay.ValueChanged
         RaiseEvent SfxControl_MaxDelayChanged(Me, e)
+    End Sub
+
+    Private Sub CheckBox_StealOnLouder_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_StealOnLouder.CheckedChanged
+        RaiseEvent SfxControl_StealOnLouderChecked(Me, e)
     End Sub
 End Class
