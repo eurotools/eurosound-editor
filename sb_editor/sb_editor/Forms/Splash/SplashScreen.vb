@@ -37,7 +37,10 @@ Partial Public NotInheritable Class SplashScreen
             mainform.UserControl_SFXs.LoadHashCodes()
             mainform.UserControl_SFXs.LoadRefineList()
             'Update Project file
-            writers.CreateProjectFile(projectFilePath, mainform.TreeView_SoundBanks, mainform.ListBox_DataBases, mainform.UserControl_SFXs.ListBox_SFXs)
+            Dim databasesToWrite As String() = mainform.ListBox_DataBases.Items.Cast(Of String).ToArray
+            Dim sfxsToWriter As String() = mainform.UserControl_SFXs.ListBox_SFXs.Items.Cast(Of String).ToArray
+            Dim soundbanksList As String() = GetListOfSoundbanks(mainform.TreeView_SoundBanks)
+            writers.CreateProjectFile(projectFilePath, soundbanksList, databasesToWrite, sfxsToWriter)
             'Load Languages
             AddProjectLanguagesToCombo()
             'Update GUI
@@ -62,17 +65,23 @@ Partial Public NotInheritable Class SplashScreen
                     mainform.CheckBox_OutAllLanguages.Checked = Convert.ToBoolean(CByte(tempVar))
                 End If
                 'Combobox output language
-                Dim languageIndex As Integer = iniFunctions.Read("LanguageCombo", "MainForm")
-                If languageIndex < mainform.ComboBox_OutputLanguage.Items.Count Then
-                    mainform.ComboBox_OutputLanguage.SelectedIndex = languageIndex
-                ElseIf mainform.ComboBox_OutputLanguage.Items.Count > 0 Then
-                    mainform.ComboBox_OutputLanguage.SelectedIndex = 0
+                tempVar = iniFunctions.Read("LanguageCombo", "MainForm")
+                If Not tempVar = "" Then
+                    Dim languageIndex As Integer = tempVar
+                    If languageIndex < mainform.ComboBox_OutputLanguage.Items.Count Then
+                        mainform.ComboBox_OutputLanguage.SelectedIndex = languageIndex
+                    ElseIf mainform.ComboBox_OutputLanguage.Items.Count > 0 Then
+                        mainform.ComboBox_OutputLanguage.SelectedIndex = 0
+                    End If
                 End If
                 'Combobox output format
                 mainform.ComboBox_Format.SelectedIndex = 0
-                Dim outFormatIndex As Integer = iniFunctions.Read("FormatCombo_ListIndex", "Form1_Misc")
-                If outFormatIndex < mainform.ComboBox_Format.Items.Count Then
-                    mainform.ComboBox_Format.SelectedIndex = outFormatIndex
+                tempVar = iniFunctions.Read("FormatCombo_ListIndex", "Form1_Misc")
+                If Not tempVar = "" Then
+                    Dim outFormatIndex As Integer = tempVar
+                    If outFormatIndex < mainform.ComboBox_Format.Items.Count Then
+                        mainform.ComboBox_Format.SelectedIndex = outFormatIndex
+                    End If
                 End If
             End If
         Else

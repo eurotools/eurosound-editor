@@ -73,7 +73,7 @@ Public Class UserControl_SFXs
                 ListBox_SFXs.EndUpdate()
             End If
         Else
-                LoadHashCodes()
+            LoadHashCodes()
         End If
     End Sub
 
@@ -162,7 +162,7 @@ Public Class UserControl_SFXs
                     End If
                 Next
                 'Get list of items
-                Dim databaseDependencies As List(Of String) = mainForm.ListBox_DataBaseSFX.Items.Cast(Of String).ToList
+                Dim databaseDependencies As String() = mainForm.ListBox_DataBaseSFX.Items.Cast(Of String).ToArray
                 'Update text file
                 Dim databaseTxt As String = fso.BuildPath(WorkingDirectory, "DataBases\" & mainForm.ListBox_DataBases.SelectedItem & ".txt")
                 writers.UpdateDataBaseText(databaseTxt, databaseDependencies, textFileReaders)
@@ -249,7 +249,6 @@ Public Class UserControl_SFXs
         Else
             My.Computer.Audio.PlaySystemSound(Media.SystemSounds.Asterisk)
         End If
-
     End Sub
 
     Private Sub ContextMenuSfx_Delete_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_Delete.Click
@@ -276,7 +275,7 @@ Public Class UserControl_SFXs
             For i As Integer = 0 To databaseFiles.Length - 1
                 'Update database files
                 Dim databaseFile As DataBaseFile = textFileReaders.ReadDataBaseFile(databaseFiles(i))
-                Dim resultList As List(Of String) = databaseFile.Dependencies.Except(itemsToDelete).ToList
+                Dim resultList As String() = databaseFile.Dependencies.Except(itemsToDelete).ToArray
                 If resultList.Count < databaseFile.Dependencies.Length Then
                     writers.UpdateDataBaseText(databaseFiles(i), resultList, textFileReaders, False)
                 End If
@@ -302,7 +301,10 @@ Public Class UserControl_SFXs
             Label_TotalSfx.Text = "Total: " & ListBox_SFXs.Items.Count
 
             'Update Project file
-            writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), mainForm.TreeView_SoundBanks, mainForm.ListBox_DataBases, mainForm.UserControl_SFXs.ListBox_SFXs)
+            Dim databasesToWrite As String() = mainForm.ListBox_DataBases.Items.Cast(Of String).ToArray
+            Dim sfxsToWriter As String() = mainForm.UserControl_SFXs.ListBox_SFXs.Items.Cast(Of String).ToArray
+            Dim soundbanksList As String() = GetListOfSoundbanks(mainForm.TreeView_SoundBanks)
+            writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), soundbanksList, databasesToWrite, sfxsToWriter)
         End If
     End Sub
 
@@ -323,7 +325,10 @@ Public Class UserControl_SFXs
                 mainForm.ListBox_DataBases.SelectedItems.Clear()
                 mainForm.ListBox_DataBaseSFX.Items.Clear()
                 'Update project file
-                writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), mainForm.TreeView_SoundBanks, mainForm.ListBox_DataBases, ListBox_SFXs)
+                Dim databasesToWrite As String() = mainForm.ListBox_DataBases.Items.Cast(Of String).ToArray
+                Dim sfxsToWriter As String() = mainForm.UserControl_SFXs.ListBox_SFXs.Items.Cast(Of String).ToArray
+                Dim soundbanksList As String() = GetListOfSoundbanks(mainForm.TreeView_SoundBanks)
+                writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), soundbanksList, databasesToWrite, sfxsToWriter)
                 'Update databases
                 Dim databaseFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "Databases"), "*.txt", SearchOption.TopDirectoryOnly)
                 For index As Integer = 0 To databaseFiles.Length - 1
@@ -409,7 +414,7 @@ Public Class UserControl_SFXs
                     End While
                     'Update text
                     Dim databaseTxt As String = fso.BuildPath(WorkingDirectory, "DataBases\" & mainForm.ListBox_DataBases.SelectedItem & ".txt")
-                    Dim databaseDependencies As List(Of String) = mainForm.ListBox_DataBaseSFX.Items.Cast(Of String).ToList
+                    Dim databaseDependencies As String() = mainForm.ListBox_DataBaseSFX.Items.Cast(Of String).ToArray
                     writers.UpdateDataBaseText(databaseTxt, databaseDependencies, textFileReaders)
                 End If
             End If

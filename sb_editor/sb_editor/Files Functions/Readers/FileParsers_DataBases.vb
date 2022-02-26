@@ -15,7 +15,7 @@
             currentLine = LineInput(1)
 
             'Header info
-            If InStr(currentLine, "## ") = 1 Then
+            If InStr(1, currentLine, "## ") = 1 Then
                 'Split content
                 Dim lineData As String() = Split(currentLine, "...")
 

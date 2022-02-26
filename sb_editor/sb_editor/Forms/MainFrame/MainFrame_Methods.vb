@@ -40,7 +40,7 @@
             Next
             'Update text file
             Dim databaseTxt As String = fso.BuildPath(WorkingDirectory, "DataBases\" & ListBox_DataBases.SelectedItem & ".txt")
-            Dim databaseDependencies As List(Of String) = ListBox_DataBaseSFX.Items.Cast(Of String).ToList
+            Dim databaseDependencies As String() = ListBox_DataBaseSFX.Items.Cast(Of String).ToArray
             writers.UpdateDataBaseText(databaseTxt, databaseDependencies, textFileReaders)
 
             'Update label counter

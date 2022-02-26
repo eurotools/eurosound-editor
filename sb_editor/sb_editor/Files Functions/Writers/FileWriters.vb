@@ -15,4 +15,16 @@
         End If
         Return headerData
     End Function
+
+    Private Sub WriteListOfItems(filesToWrite As String(), sectionName As String, fileNumber As Integer)
+        PrintLine(1, sectionName)
+        'Iterate over list items
+        If filesToWrite IsNot Nothing And filesToWrite.Length > 0 Then
+            For index As Integer = 0 To filesToWrite.Length - 1
+                PrintLine(fileNumber, filesToWrite(index))
+            Next
+        End If
+        'End dependencies block
+        PrintLine(1, "#END")
+    End Sub
 End Class

@@ -78,6 +78,14 @@ Module GenericFunctions
         Return filesListToDelete
     End Function
 
+    Friend Function GetListOfSoundbanks(soundbanksTreeView As TreeView) As String()
+        Dim soundBanksArray As String() = New String(soundbanksTreeView.Nodes.Count) {}
+        For nodeIndex As Integer = 0 To soundbanksTreeView.Nodes.Count - 1
+            soundBanksArray(nodeIndex) = soundbanksTreeView.Nodes(nodeIndex).Name
+        Next
+        Return soundBanksArray
+    End Function
+
     Friend Sub RestartEuroSound()
         'Restart application
         Process.Start(Application.ExecutablePath)

@@ -403,7 +403,10 @@ Partial Public Class MainFrame
                 'Update counter
                 Label_DataBasesCount.Text = "Total: " & ListBox_DataBases.Items.Count
                 'Update Project file
-                writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), TreeView_SoundBanks, ListBox_DataBases, UserControl_SFXs.ListBox_SFXs)
+                Dim databasesToWrite As String() = ListBox_DataBases.Items.Cast(Of String).ToArray
+                Dim sfxsToWriter As String() = UserControl_SFXs.ListBox_SFXs.Items.Cast(Of String).ToArray
+                Dim soundbanksList As String() = GetListOfSoundbanks(TreeView_SoundBanks)
+                writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), soundbanksList, databasesToWrite, sfxsToWriter)
             End If
         End If
     End Sub
@@ -497,7 +500,7 @@ Partial Public Class MainFrame
                 'Update text file
                 If itemsData.Count > 0 Then
                     Dim databaseTxt As String = fso.BuildPath(WorkingDirectory, "DataBases\" & ListBox_DataBases.SelectedItem & ".txt")
-                    Dim databaseDependencies As List(Of String) = ListBox_DataBaseSFX.Items.Cast(Of String).ToList
+                    Dim databaseDependencies As String() = ListBox_DataBaseSFX.Items.Cast(Of String).ToArray
                     writers.UpdateDataBaseText(databaseTxt, databaseDependencies, textFileReaders)
                 End If
             End If
@@ -586,7 +589,7 @@ Partial Public Class MainFrame
                 End If
             Next
             'Get list of items
-            Dim databaseDependencies As List(Of String) = ListBox_DataBaseSFX.Items.Cast(Of String).ToList
+            Dim databaseDependencies As String() = ListBox_DataBaseSFX.Items.Cast(Of String).ToArray
             'Update text file
             Dim databaseTxt As String = fso.BuildPath(WorkingDirectory, "DataBases\" & ListBox_DataBases.SelectedItem & ".txt")
             writers.UpdateDataBaseText(databaseTxt, databaseDependencies, textFileReaders)

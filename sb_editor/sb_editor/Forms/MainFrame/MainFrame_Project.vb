@@ -39,9 +39,9 @@ Partial Public Class MainFrame
             'Master folder
             CreateFolderIfNotExists(fso.BuildPath(selectedProjectPath, "Master\Speech\English"))
             'Create Project files
-            writers.CreateEmptyProjectFile(fso.BuildPath(selectedProjectPath, "Project.txt"))
+            writers.CreateProjectFile(fso.BuildPath(selectedProjectPath, "Project.txt"), Nothing, Nothing, Nothing)
             'Create System Files
-            writers.CreateEmptyMiscFile(fso.BuildPath(selectedProjectPath, "System\Misc.txt"))
+            writers.UpdateMiscFile(fso.BuildPath(selectedProjectPath, "System\Misc.txt"), True)
             writers.CreateEmptyPropertiesFile(fso.BuildPath(selectedProjectPath, "System\Properties.txt"))
             writers.CreateEmptySfxDefaults(fso.BuildPath(selectedProjectPath, "System\SFX Defaults.txt"))
             'Ask for UserName

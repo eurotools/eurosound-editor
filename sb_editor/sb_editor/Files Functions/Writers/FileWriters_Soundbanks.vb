@@ -28,11 +28,7 @@
             PrintLine(1, "## Last Modified ... " & headerData.LastModify)
             PrintLine(1, "## Last Modified By ... " & headerData.LastModifyBy)
             PrintLine(1, "")
-            PrintLine(1, "#DEPENDENCIES")
-            For Each dataBase As String In fileData.Dependencies
-                PrintLine(1, dataBase)
-            Next
-            PrintLine(1, "#END")
+            WriteListOfItems(fileData.Dependencies, "#DEPENDENCIES", 1)
             PrintLine(1, "")
             PrintLine(1, "#HASHCODE")
             PrintLine(1, "HashCodeNumber " & fileData.HashCode)
