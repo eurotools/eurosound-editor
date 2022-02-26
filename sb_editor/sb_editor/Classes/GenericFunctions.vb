@@ -79,10 +79,14 @@ Module GenericFunctions
     End Function
 
     Friend Function GetListOfSoundbanks(soundbanksTreeView As TreeView) As String()
-        Dim soundBanksArray As String() = New String(soundbanksTreeView.Nodes.Count) {}
-        For nodeIndex As Integer = 0 To soundbanksTreeView.Nodes.Count - 1
-            soundBanksArray(nodeIndex) = soundbanksTreeView.Nodes(nodeIndex).Name
-        Next
+        Dim itemsCount As Integer = soundbanksTreeView.Nodes.Count - 1
+        Dim soundBanksArray As String() = Nothing
+        If itemsCount > 0 Then
+            soundBanksArray = New String(itemsCount) {}
+            For nodeIndex As Integer = 0 To itemsCount
+                soundBanksArray(nodeIndex) = soundbanksTreeView.Nodes(nodeIndex).Text
+            Next
+        End If
         Return soundBanksArray
     End Function
 

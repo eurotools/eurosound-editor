@@ -201,8 +201,9 @@ Public Class UserControl_SFXs
             'Ensure that the file exists
             If fso.FileExists(SelectedSfxPath) Then
                 'Open editor
-                Dim sfxEditor As New Frm_SfxEditor(selectedSFX)
-                sfxEditor.ShowDialog()
+                Using sfxEditor As New Frm_SfxEditor(selectedSFX)
+                    sfxEditor.ShowDialog()
+                End Using
             End If
         Else
             My.Computer.Audio.PlaySystemSound(Media.SystemSounds.Asterisk)
@@ -210,20 +211,31 @@ Public Class UserControl_SFXs
     End Sub
 
     Private Sub ContextMenuSfx_AddNewSfx_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_AddNewSfx.Click
-        If ListBox_SFXs.Items.Count > 0 AndAlso SFXHashCodeNumber = 0 Then
-            MsgBox("Please Re-Alloc Hashcodes under Advanced Menu", vbOKOnly + vbExclamation, "EuroSound")
-        Else
-            'Ensure that the default file exists
-            If fso.FileExists(SysFileSfxDefaults) Then
-
-            Else
-                'Inform user about this
-                MsgBox("Must Setup Default SFX file first!", vbOKOnly + vbCritical, "Setup SFX Defaults.")
-                'Open SFX Default Form
-                Using defaultSettingsForm As New SfxDefault
-                    defaultSettingsForm.ShowDialog()
-                End Using
+        'Ensure that the default file exists
+        If fso.FileExists(SysFileSfxDefaults) AndAlso File.ReadAllLines(SysFileSfxDefaults).Length > 7 Then
+            Dim sfxFileName As String = NewFile("SFX_Label0", fso.BuildPath(WorkingDirectory, "SFXs"))
+            If sfxFileName > "" Then
+                'Create and save file
+                Dim fileData As SfxFile = textFileReaders.ReadSFXFile(SysFileSfxDefaults)
+                'Get a new hashcode
+                writers.WriteSfxFile(fileData, fso.BuildPath(WorkingDirectory & "\SFXs", sfxFileName & ".txt"))
+                'Update file
+                SFXHashCodeNumber += 1
+                writers.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
+                'Add item to listview
+                ListBox_SFXs.Items.Add(sfxFileName)
+                'Check if we need to realloc
+                If ListBox_SFXs.Items.Count > 0 AndAlso SFXHashCodeNumber = 0 Then
+                    MsgBox("Please Re-Alloc Hashcodes under Advanced Menu", vbOKOnly + vbExclamation, "EuroSound")
+                End If
             End If
+        Else
+            'Inform user about this
+            MsgBox("Must Setup Default SFX file first!", vbOKOnly + vbCritical, "Setup SFX Defaults.")
+            'Open SFX Default Form
+            Using defaultSettingsForm As New SfxDefault
+                defaultSettingsForm.ShowDialog()
+            End Using
         End If
     End Sub
 

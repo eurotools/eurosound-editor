@@ -81,7 +81,6 @@ Partial Class Frm_SfxEditor
         Me.MenuItem_SamplePool_Play = New System.Windows.Forms.MenuItem()
         Me.MenuItem_SamplePool_Stop = New System.Windows.Forms.MenuItem()
         Me.CheckBox_EnableSubSFX = New System.Windows.Forms.CheckBox()
-        Me.SfxParamsAndSamplePool = New sb_editor.SfxControl()
         Me.Panel_Options = New System.Windows.Forms.Panel()
         Me.Groupbox_RemoveFormat = New System.Windows.Forms.GroupBox()
         Me.Button_RemoveSpecificVersion = New System.Windows.Forms.Button()
@@ -98,6 +97,7 @@ Partial Class Frm_SfxEditor
         Me.Button_Cancel = New System.Windows.Forms.Button()
         Me.openFileDiag = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip_Buttons = New System.Windows.Forms.ToolTip(Me.components)
+        Me.SfxParamsAndSamplePool = New sb_editor.SfxControl()
         Me.TabControl_Platforms.SuspendLayout()
         Me.Panel_SfxParameters.SuspendLayout()
         Me.GroupBox_SamplePool.SuspendLayout()
@@ -552,7 +552,7 @@ Partial Class Frm_SfxEditor
         'Button_PlaySample
         '
         Me.Button_PlaySample.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_PlaySample.Location = New System.Drawing.Point(368, 331)
+        Me.Button_PlaySample.Location = New System.Drawing.Point(375, 331)
         Me.Button_PlaySample.Name = "Button_PlaySample"
         Me.Button_PlaySample.Size = New System.Drawing.Size(55, 23)
         Me.Button_PlaySample.TabIndex = 7
@@ -672,14 +672,6 @@ Partial Class Frm_SfxEditor
         Me.CheckBox_EnableSubSFX.Text = "Enable Sub SFXs"
         Me.CheckBox_EnableSubSFX.UseVisualStyleBackColor = True
         '
-        'SfxParamsAndSamplePool
-        '
-        Me.SfxParamsAndSamplePool.Location = New System.Drawing.Point(3, 4)
-        Me.SfxParamsAndSamplePool.Name = "SfxParamsAndSamplePool"
-        Me.SfxParamsAndSamplePool.ShowSampleProperties = False
-        Me.SfxParamsAndSamplePool.Size = New System.Drawing.Size(891, 277)
-        Me.SfxParamsAndSamplePool.TabIndex = 14
-        '
         'Panel_Options
         '
         Me.Panel_Options.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
@@ -696,9 +688,9 @@ Partial Class Frm_SfxEditor
         'Groupbox_RemoveFormat
         '
         Me.Groupbox_RemoveFormat.Controls.Add(Me.Button_RemoveSpecificVersion)
-        Me.Groupbox_RemoveFormat.Location = New System.Drawing.Point(620, 4)
+        Me.Groupbox_RemoveFormat.Location = New System.Drawing.Point(606, 4)
         Me.Groupbox_RemoveFormat.Name = "Groupbox_RemoveFormat"
-        Me.Groupbox_RemoveFormat.Size = New System.Drawing.Size(263, 48)
+        Me.Groupbox_RemoveFormat.Size = New System.Drawing.Size(281, 48)
         Me.Groupbox_RemoveFormat.TabIndex = 2
         Me.Groupbox_RemoveFormat.TabStop = False
         Me.Groupbox_RemoveFormat.Text = "Delete Specific Version"
@@ -717,7 +709,7 @@ Partial Class Frm_SfxEditor
         '
         Me.Groupbox_Clipboard.Controls.Add(Me.Button_ClipboardPaste)
         Me.Groupbox_Clipboard.Controls.Add(Me.Button_Clipboard_Copy)
-        Me.Groupbox_Clipboard.Location = New System.Drawing.Point(358, 4)
+        Me.Groupbox_Clipboard.Location = New System.Drawing.Point(344, 4)
         Me.Groupbox_Clipboard.Name = "Groupbox_Clipboard"
         Me.Groupbox_Clipboard.Size = New System.Drawing.Size(256, 48)
         Me.Groupbox_Clipboard.TabIndex = 1
@@ -751,7 +743,7 @@ Partial Class Frm_SfxEditor
         Me.GroupBox_CreateSpecificVersion.Controls.Add(Me.Button_SpecVersion_PlayStation2)
         Me.GroupBox_CreateSpecificVersion.Location = New System.Drawing.Point(8, 4)
         Me.GroupBox_CreateSpecificVersion.Name = "GroupBox_CreateSpecificVersion"
-        Me.GroupBox_CreateSpecificVersion.Size = New System.Drawing.Size(344, 48)
+        Me.GroupBox_CreateSpecificVersion.Size = New System.Drawing.Size(330, 48)
         Me.GroupBox_CreateSpecificVersion.TabIndex = 0
         Me.GroupBox_CreateSpecificVersion.TabStop = False
         Me.GroupBox_CreateSpecificVersion.Text = "Create Format Specific Version For:"
@@ -827,6 +819,14 @@ Partial Class Frm_SfxEditor
         '
         Me.openFileDiag.Filter = "Wave File (*.wav)|*.Wav"
         Me.openFileDiag.Multiselect = True
+        '
+        'SfxParamsAndSamplePool
+        '
+        Me.SfxParamsAndSamplePool.Location = New System.Drawing.Point(3, 4)
+        Me.SfxParamsAndSamplePool.Name = "SfxParamsAndSamplePool"
+        Me.SfxParamsAndSamplePool.ShowSampleProperties = False
+        Me.SfxParamsAndSamplePool.Size = New System.Drawing.Size(891, 277)
+        Me.SfxParamsAndSamplePool.TabIndex = 14
         '
         'Frm_SfxEditor
         '

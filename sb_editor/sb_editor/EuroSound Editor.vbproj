@@ -150,16 +150,16 @@
     <Compile Include="Forms\Advanced Menu\Language_FolderCompare.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Frm_DebugData.Designer.vb">
+    <Compile Include="Forms\Others\Frm_DebugData.Designer.vb">
       <DependentUpon>Frm_DebugData.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Frm_DebugData.vb">
+    <Compile Include="Forms\Others\Frm_DebugData.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Frm_TimerForm.Designer.vb">
+    <Compile Include="Forms\Others\Frm_TimerForm.Designer.vb">
       <DependentUpon>Frm_TimerForm.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Frm_TimerForm.vb">
+    <Compile Include="Forms\Others\Frm_TimerForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Others\MusicMarkersEditor.Designer.vb">
@@ -361,10 +361,10 @@
     <EmbeddedResource Include="Forms\Advanced Menu\Language_FolderCompare.resx">
       <DependentUpon>Language_FolderCompare.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Frm_DebugData.resx">
+    <EmbeddedResource Include="Forms\Others\Frm_DebugData.resx">
       <DependentUpon>Frm_DebugData.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Frm_TimerForm.resx">
+    <EmbeddedResource Include="Forms\Others\Frm_TimerForm.resx">
       <DependentUpon>Frm_TimerForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Others\MusicMarkersEditor.resx">

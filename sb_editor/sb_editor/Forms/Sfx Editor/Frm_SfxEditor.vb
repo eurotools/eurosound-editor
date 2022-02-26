@@ -33,7 +33,9 @@ Partial Public Class Frm_SfxEditor
         ComboBox1.SelectedIndex = 0
 
         'Get stream sounds list
-        StreamSamplesList = reader.GetStreamSoundsList(SysFileSamples)
+        If fso.FileExists(SysFileSamples) Then
+            StreamSamplesList = reader.GetStreamSoundsList(SysFileSamples)
+        End If
 
         'Check if the misc folder exists
         Dim miscFolder As String = fso.BuildPath(WorkingDirectory, "SFXs\Misc")

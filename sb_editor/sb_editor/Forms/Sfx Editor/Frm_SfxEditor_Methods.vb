@@ -148,15 +148,18 @@ Partial Public Class Frm_SfxEditor
             If fso.FileExists(waveFullPath) Then
                 Using reader As New WaveFileReader(waveFullPath)
                     Label_SampleInfo_FreqValue.Text = reader.WaveFormat.SampleRate
-                    Label_SampleInfo_SizeValue.Text = BytesStringFormat(FileLen(waveFullPath))
+                    Label_SampleInfo_SizeValue.Text = BytesStringFormat(reader.Length)
                     Label_SampleInfo_LengthValue.Text = Math.Round(reader.TotalTime.TotalSeconds, 1)
                     'Check if is looped
+                    Label_SampleInfo_LoopValue.Text = "False"
                     If waveReadFunctions.ReadSampleChunk(reader)(0) = 1 Then
                         Label_SampleInfo_LoopValue.Text = "True"
-                    Else
-                        Label_SampleInfo_LoopValue.Text = "False"
                     End If
-                    Label_SampleInfo_StreamedValue.Text = Array.IndexOf(StreamSamplesList, selectedSample.FilePath) <> -1
+                    'Check if is streamed
+                    Label_SampleInfo_StreamedValue.Text = "??"
+                    If StreamSamplesList IsNot Nothing Then
+                        Label_SampleInfo_StreamedValue.Text = Array.IndexOf(StreamSamplesList, selectedSample.FilePath) <> -1
+                    End If
                 End Using
             End If
         End If
@@ -286,6 +289,8 @@ Partial Public Class Frm_SfxEditor
             Else
                 MsgBox("Reached the limit of 100 samples per sound.", vbOKOnly + vbCritical, "EuroSound")
             End If
+        Else
+            SystemSounds.Exclamation.Play()
         End If
     End Sub
 
@@ -303,6 +308,8 @@ Partial Public Class Frm_SfxEditor
             Next
             'Clear selection
             ListBox_SamplePool.SelectedItems.Clear()
+        Else
+            SystemSounds.Exclamation.Play()
         End If
     End Sub
 
@@ -313,14 +320,18 @@ Partial Public Class Frm_SfxEditor
             If WaveOut.DeviceCount > 0 Then
                 'Get index from the listbox object and ensure that the index is not out of range
                 Dim selectedItemName As Integer = ListBox_SamplePool.SelectedIndex
-                Dim sfxFileData As SfxFile = sfxFilesData(currentPlatform)
-                If selectedItemName < sfxFileData.Samples.Count Then
-                    'Get relative path
-                    Dim waveRelativePath = sfxFileData.Samples(selectedItemName).FilePath
-                    Dim waveFilePath As String = fso.BuildPath(ProjMasterFolder, "Master\" & waveRelativePath)
-                    'Play audio
-                    If fso.FileExists(waveFilePath) Then
-                        My.Computer.Audio.Play(waveFilePath)
+                If selectedItemName = -1 Then
+                    SystemSounds.Exclamation.Play()
+                Else
+                    Dim sfxFileData As SfxFile = sfxFilesData(currentPlatform)
+                    If selectedItemName < sfxFileData.Samples.Count Then
+                        'Get relative path
+                        Dim waveRelativePath = sfxFileData.Samples(selectedItemName).FilePath
+                        Dim waveFilePath As String = fso.BuildPath(ProjMasterFolder, "Master\" & waveRelativePath)
+                        'Play audio
+                        If fso.FileExists(waveFilePath) Then
+                            My.Computer.Audio.Play(waveFilePath)
+                        End If
                     End If
                 End If
             Else
@@ -336,18 +347,22 @@ Partial Public Class Frm_SfxEditor
     Private Sub EditSelectedSample(currentPlatform As String)
         'Ensure that is not a subsfx
         If CheckBox_EnableSubSFX.Checked = False Then
-            If StrComp(ProjAudioEditor, "") = 0 Then
-                MsgBox("No editor setup." & vbNewLine & "Use Properties form to setup.", vbOKOnly + vbExclamation, "EuroSound")
+            If ListBox_SamplePool.SelectedIndex = -1 Then
+                SystemSounds.Exclamation.Play()
             Else
-                'Get index from the listbox object and Ensure that the index is not out of range
-                Dim selectedItemName As Integer = ListBox_SamplePool.SelectedIndex
-                Dim sfxFileData As SfxFile = sfxFilesData(currentPlatform)
-                If selectedItemName < sfxFileData.Samples.Count Then
-                    'Get absolute path
-                    Dim waveRelativePath As String = sfxFileData.Samples(selectedItemName).FilePath
-                    Dim waveFullPath As String = fso.BuildPath(ProjMasterFolder & "\Master", waveRelativePath)
-                    'Open Audio Editor tool
-                    EditWaveFile(waveFullPath)
+                If StrComp(ProjAudioEditor, "") = 0 Then
+                    MsgBox("No editor setup." & vbNewLine & "Use Properties form to setup.", vbOKOnly + vbExclamation, "EuroSound")
+                Else
+                    'Get index from the listbox object and Ensure that the index is not out of range
+                    Dim selectedItemName As Integer = ListBox_SamplePool.SelectedIndex
+                    Dim sfxFileData As SfxFile = sfxFilesData(currentPlatform)
+                    If selectedItemName < sfxFileData.Samples.Count Then
+                        'Get absolute path
+                        Dim waveRelativePath As String = sfxFileData.Samples(selectedItemName).FilePath
+                        Dim waveFullPath As String = fso.BuildPath(ProjMasterFolder & "\Master", waveRelativePath)
+                        'Open Audio Editor tool
+                        EditWaveFile(waveFullPath)
+                    End If
                 End If
             End If
         Else
@@ -363,14 +378,18 @@ Partial Public Class Frm_SfxEditor
         Else
             'Get index from the listbox object
             Dim selectedItemName As Integer = ListBox_SamplePool.SelectedIndex
-            Dim sfxFileData As SfxFile = sfxFilesData(currentPlatform)
-            If selectedItemName < sfxFileData.Samples.Count Then
-                'Get wave folder path
-                Dim waveRelativePath = sfxFileData.Samples(selectedItemName).FilePath
-                Dim folderPath = fso.BuildPath(ProjMasterFolder & "\Master", fso.GetParentFolderName(waveRelativePath))
-                If fso.FolderExists(folderPath) Then
-                    'Open folder
-                    Process.Start("Explorer.exe", folderPath)
+            If selectedItemName = -1 Then
+                SystemSounds.Exclamation.Play()
+            Else
+                Dim sfxFileData As SfxFile = sfxFilesData(currentPlatform)
+                If selectedItemName < sfxFileData.Samples.Count Then
+                    'Get wave folder path
+                    Dim waveRelativePath = sfxFileData.Samples(selectedItemName).FilePath
+                    Dim folderPath = fso.BuildPath(ProjMasterFolder & "\Master", fso.GetParentFolderName(waveRelativePath))
+                    If fso.FolderExists(folderPath) Then
+                        'Open folder
+                        Process.Start("Explorer.exe", folderPath)
+                    End If
                 End If
             End If
         End If
