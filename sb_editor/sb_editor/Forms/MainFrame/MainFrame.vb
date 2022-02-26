@@ -16,8 +16,11 @@ Partial Public Class MainFrame
     '*===============================================================================================
     Private Sub MainFrame_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
         If fso.FolderExists(WorkingDirectory) Then
-            'Load Project
-            LoadProject(fso.BuildPath(WorkingDirectory, "Project.txt"))
+            If fso.FileExists(fso.BuildPath(WorkingDirectory, "Project.txt")) Then
+                'Update GUI
+                RecentFilesMenu.AddFile(WorkingDirectory)
+                RecentFilesMenu.SaveToIniFile()
+            End If
         End If
     End Sub
 
@@ -56,6 +59,7 @@ Partial Public Class MainFrame
         Dim projectFolder As DialogResult = FolderBrowserDialog.ShowDialog
         If projectFolder = DialogResult.OK Then
             CreateNewProject(FolderBrowserDialog.SelectedPath)
+            RestartEuroSound()
         End If
     End Sub
 
@@ -597,22 +601,13 @@ Partial Public Class MainFrame
     '* MISC BUTTONS
     '*===============================================================================================
     Private Sub Button_ProjectProperties_Click(sender As Object, e As EventArgs) Handles Button_ProjectProperties.Click
-        If fso.FileExists(SysFileProperties) Then
-            'Show form
-            Dim projectProps As New Project_Properties
-            projectProps.ShowDialog()
-            'Update program ini file
-            Dim baseIniFile As New IniFile(EuroSoundIniFilePath)
-            baseIniFile.Write("UserName", EuroSoundUser, "Form1_Misc")
-            baseIniFile.Write("Edit_Wavs_With", ProjAudioEditor, "Form7_Misc")
-            baseIniFile.Write("TextEditor", ProjTextEditor, "PropertiesForm")
-        Else
-            MsgBox("File not found", vbOKOnly + vbCritical, "EuroSound")
-        End If
+        'Show form
+        Dim projectProps As New Project_Properties
+        projectProps.ShowDialog()
     End Sub
 
     Private Sub Button_ReSampling_Click(sender As Object, e As EventArgs) Handles Button_ReSampling.Click
-        If fso.FolderExists(fso.BuildPath(WorkingDirectory, "Master")) Then
+        If fso.FolderExists(fso.BuildPath(ProjMasterFolder, "Master")) Then
             If fso.FileExists(SysFileSamples) Then
                 'Set cursor as hourglass
                 Cursor.Current = Cursors.WaitCursor
@@ -637,7 +632,7 @@ Partial Public Class MainFrame
 
                 '============================================================Check New samples======================================================
                 'Get a list of current stored samples
-                Dim sampleFiles As New List(Of String)(samplesDataTable.Rows.Count)
+                Dim sampleFiles As New HashSet(Of String)
                 Dim rowsEnum As IEnumerator = samplesDataTable.Rows.GetEnumerator
                 While rowsEnum.MoveNext
                     sampleFiles.Add(rowsEnum.Current("SampleFilename"))
@@ -686,6 +681,7 @@ Partial Public Class MainFrame
                             For Each row As DataRow In finalSamplesDataTable.Rows
                                 If StrComp(row("SampleFilename"), listEnum.Current) = 0 Then
                                     row("ReSampleRate") = newSamplesForm.ComboBox_AvailableRates.SelectedItem
+                                    row("ReSample") = "True"
                                     Exit For
                                 End If
                             Next
@@ -700,15 +696,15 @@ Partial Public Class MainFrame
                 End If
 
                 '============================================================Show form======================================================
-                If finalSamplesDataTable.Rows.Count > 0 Then
-                    Dim resampleForm As New ResampleForm(finalSamplesDataTable)
-                    resampleForm.ShowDialog()
-                End If
+                Dim resampleForm As New ResampleForm(finalSamplesDataTable)
+                resampleForm.ShowDialog()
             Else
                 MsgBox("File not found", vbOKOnly + vbCritical, "EuroSound")
             End If
         Else
-            MsgBox("Master folder could not be located.", vbOKOnly + vbCritical, "EuroSound")
+            MsgBox("Master folder could not be located. Please set the folder location under Properties menu.", vbOKOnly + vbCritical, "EuroSound")
+            Dim projectPropsform As New Project_Properties
+            projectPropsform.ShowDialog()
         End If
     End Sub
 

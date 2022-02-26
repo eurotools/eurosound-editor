@@ -1,5 +1,4 @@
-﻿Imports System.IO
-Imports IniFileFunctions
+﻿Imports IniFileFunctions
 
 Public Class SfxDefault
     '*===============================================================================================

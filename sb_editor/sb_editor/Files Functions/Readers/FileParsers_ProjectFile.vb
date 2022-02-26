@@ -86,12 +86,6 @@ Partial Public Class FileParsers
         Loop
         FileClose(1)
 
-        'Sync project file if counts are different
-        Dim soundBanksPath = Path.Combine(WorkingDirectory, "SoundBanks")
-        If Directory.GetFiles(soundBanksPath, "*.txt").Length <> SoundBankList.Count Then
-
-        End If
-
         'Add data to object
         ProjFile.DataBaseList = DataBaseList
         ProjFile.SoundBankList = SoundBankList

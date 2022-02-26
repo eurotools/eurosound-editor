@@ -27,7 +27,8 @@ Partial Public NotInheritable Class SplashScreen
         'Load ini file data
         LoadIniData()
         'Inform user if the working directory exists
-        If fso.FolderExists(WorkingDirectory) Then
+        Dim projectFilePath As String = fso.BuildPath(WorkingDirectory, "Project.txt")
+        If fso.FileExists(projectFilePath) Then
             LoadProjectData()
             CheckProjectFiles()
             'Load Project
@@ -36,14 +37,47 @@ Partial Public NotInheritable Class SplashScreen
             mainform.UserControl_SFXs.LoadHashCodes()
             mainform.UserControl_SFXs.LoadRefineList()
             'Update Project file
-            writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), mainform.TreeView_SoundBanks, mainform.ListBox_DataBases, mainform.UserControl_SFXs.ListBox_SFXs)
+            writers.CreateProjectFile(projectFilePath, mainform.TreeView_SoundBanks, mainform.ListBox_DataBases, mainform.UserControl_SFXs.ListBox_SFXs)
             'Load Languages
             AddProjectLanguagesToCombo()
             'Update GUI
             mainform.Text = "EuroSound: """ & WorkingDirectory & """"
+
+            'Read ini file
+            If SysFileProjectIniPath IsNot "" Then
+                Dim iniFunctions As New IniFile(SysFileProjectIniPath)
+                mainform.RadioButton_AllBanksSelectedFormat.Checked = StrComp(iniFunctions.Read("AllBanksOption_Value", "Form1_Misc"), "True") = 0
+                mainform.RadioButton_Output_SelectedSoundBank.Checked = StrComp(iniFunctions.Read("SelectedlBankOption_Value", "Form1_Misc"), "True") = 0
+                mainform.RadioButton_Output_AllBanksAll.Checked = StrComp(iniFunctions.Read("AllFormatsOption_Value", "Form1_Misc"), "True") = 0
+                Dim tempVar As String = iniFunctions.Read("Check1", "MainForm")
+                If Not tempVar = "" Then
+                    mainform.CheckBox_FastReSample.Checked = Convert.ToBoolean(CByte(tempVar))
+                End If
+                tempVar = iniFunctions.Read("Check2", "MainForm")
+                If Not tempVar = "" Then
+                    mainform.UserControl_SFXs.CheckBox_SortByDate.Checked = Convert.ToBoolean(CByte(tempVar))
+                End If
+                tempVar = iniFunctions.Read("OutputAllLanguages", "MainForm")
+                If Not tempVar = "" Then
+                    mainform.CheckBox_OutAllLanguages.Checked = Convert.ToBoolean(CByte(tempVar))
+                End If
+                'Combobox output language
+                Dim languageIndex As Integer = iniFunctions.Read("LanguageCombo", "MainForm")
+                If languageIndex < mainform.ComboBox_OutputLanguage.Items.Count Then
+                    mainform.ComboBox_OutputLanguage.SelectedIndex = languageIndex
+                ElseIf mainform.ComboBox_OutputLanguage.Items.Count > 0 Then
+                    mainform.ComboBox_OutputLanguage.SelectedIndex = 0
+                End If
+                'Combobox output format
+                mainform.ComboBox_Format.SelectedIndex = 0
+                Dim outFormatIndex As Integer = iniFunctions.Read("FormatCombo_ListIndex", "Form1_Misc")
+                If outFormatIndex < mainform.ComboBox_Format.Items.Count Then
+                    mainform.ComboBox_Format.SelectedIndex = outFormatIndex
+                End If
+            End If
         Else
             My.Computer.Audio.PlaySystemSound(Media.SystemSounds.Exclamation)
-            MsgBox("Project Not Found", vbOKOnly + vbCritical, "EuroSound Load Project Error")
+            MsgBox("Project Not Found " & WorkingDirectory, vbOKOnly + vbCritical, "EuroSound Load Project Error")
             Close()
         End If
 
@@ -55,29 +89,7 @@ Partial Public NotInheritable Class SplashScreen
         'Get recent files
         mainform.RecentFilesMenu = New MruStripMenuInline(mainform.MenuItemFile_RecentProjects, mainform.MenuItemFile_RecentFiles, New MostRecentFilesMenu.ClickedHandler(AddressOf mainform.MenuItemFile_Recent_Click), EuroSoundIniFilePath, 5)
         mainform.RecentFilesMenu.LoadFromIniFile()
-        'Read ini file
-        If SysFileProjectIniPath IsNot "" Then
-            Dim iniFunctions As New IniFile(SysFileProjectIniPath)
-            mainform.RadioButton_AllBanksSelectedFormat.Checked = StrComp(iniFunctions.Read("AllBanksOption_Value", "Form1_Misc"), "True") = 0
-            mainform.RadioButton_Output_SelectedSoundBank.Checked = StrComp(iniFunctions.Read("SelectedlBankOption_Value", "Form1_Misc"), "True") = 0
-            mainform.RadioButton_Output_AllBanksAll.Checked = StrComp(iniFunctions.Read("AllFormatsOption_Value", "Form1_Misc"), "True") = 0
-            mainform.CheckBox_FastReSample.Checked = Convert.ToBoolean(CByte(iniFunctions.Read("Check1", "MainForm")))
-            mainform.UserControl_SFXs.CheckBox_SortByDate.Checked = Convert.ToBoolean(CByte(iniFunctions.Read("Check2", "MainForm")))
-            mainform.CheckBox_OutAllLanguages.Checked = Convert.ToBoolean(CByte(iniFunctions.Read("OutputAllLanguages", "MainForm")))
-            'Combobox output language
-            Dim languageIndex As Integer = iniFunctions.Read("LanguageCombo", "MainForm")
-            If languageIndex < mainform.ComboBox_OutputLanguage.Items.Count Then
-                mainform.ComboBox_OutputLanguage.SelectedIndex = languageIndex
-            ElseIf mainform.ComboBox_OutputLanguage.Items.Count > 0 Then
-                mainform.ComboBox_OutputLanguage.SelectedIndex = 0
-            End If
-            'Combobox output format
-            mainform.ComboBox_Format.SelectedIndex = 0
-            Dim outFormatIndex As Integer = iniFunctions.Read("FormatCombo_ListIndex", "Form1_Misc")
-            If outFormatIndex < mainform.ComboBox_Format.Items.Count Then
-                mainform.ComboBox_Format.SelectedIndex = outFormatIndex
-            End If
-        End If
+
         'Start timer
         TimerSplash.Start()
     End Sub

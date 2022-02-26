@@ -14,68 +14,74 @@ Partial Public Class Project_Properties
     '* FORM EVENTS
     '*===============================================================================================
     Private Sub Project_Properties_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'Read data if is an existing project
         If fso.FileExists(SysFileProperties) Then
-            propsFileData = textFileReaders.ReadPropertiesFile(SysFileProperties)
-            'Put available formats and select the first one
-            If propsFileData.AvailableFormats.Length > 0 Then
-                'Print available formats
-                CopyArrayToListView(ListView_Formats, propsFileData.AvailableFormats)
-
-                'Select first item
-                ListView_Formats.Items(0).Selected = True
-                ListView_Formats.Items(0).Focused = True
-            End If
-            'Select the first item by default - Formats
-            If ComboBox_Platform.Items.Count > 0 Then
-                ComboBox_Platform.SelectedIndex = 0
-            End If
-            'Print available formats in the combo
-            If propsFileData.AvailableReSampleRates.Count > 0 Then
-                'Add available rates format to the combobox and select the first one
+            'Read data if is an existing project
+            If fso.FileExists(SysFileProperties) Then
+                propsFileData = textFileReaders.ReadPropertiesFile(SysFileProperties)
+                'Put available formats and select the first one
                 If propsFileData.AvailableFormats.Length > 0 Then
-                    ComboBox_RatesFormat.Items.AddRange(GetColumn(propsFileData.AvailableFormats, 0))
-                    ComboBox_RatesFormat.SelectedIndex = 0
+                    'Print available formats
+                    CopyArrayToListView(ListView_Formats, propsFileData.AvailableFormats)
+
+                    'Select first item
+                    ListView_Formats.Items(0).Selected = True
+                    ListView_Formats.Items(0).Focused = True
                 End If
-                Dim sampleRatesArray As String() = propsFileData.AvailableReSampleRates.ToArray
-                'Add available rates to the listbox
-                ListBox_SampleRates.Items.AddRange(sampleRatesArray)
-                'Add available rates to the combobox
-                ComboBox_DefaultSampleRate.Items.AddRange(sampleRatesArray)
-                ComboBox_DefaultSampleRate.SelectedIndex = propsFileData.MiscProps.DefaultRate
+                'Select the first item by default - Formats
+                If ComboBox_Platform.Items.Count > 0 Then
+                    ComboBox_Platform.SelectedIndex = 0
+                End If
+                'Print available formats in the combo
+                If propsFileData.AvailableReSampleRates.Count > 0 Then
+                    'Add available rates format to the combobox and select the first one
+                    If propsFileData.AvailableFormats.Length > 0 Then
+                        ComboBox_RatesFormat.Items.AddRange(GetColumn(propsFileData.AvailableFormats, 0))
+                        ComboBox_RatesFormat.SelectedIndex = 0
+                    End If
+                    Dim sampleRatesArray As String() = propsFileData.AvailableReSampleRates.ToArray
+                    'Add available rates to the listbox
+                    ListBox_SampleRates.Items.AddRange(sampleRatesArray)
+                    'Add available rates to the combobox
+                    ComboBox_DefaultSampleRate.Items.AddRange(sampleRatesArray)
+                    ComboBox_DefaultSampleRate.SelectedIndex = propsFileData.MiscProps.DefaultRate
+                End If
+
+                'Misc properties
+                Textbox_Master_Path.Text = propsFileData.MiscProps.SampleFileFolder
+                Textbox_SonixFolder.Text = propsFileData.MiscProps.HashCodeFileFolder
+                Textbox_EngineXFolder.Text = propsFileData.MiscProps.EngineXFolder
+                Textbox_EuroLandServer.Text = propsFileData.MiscProps.EuroLandHashCodeServerPath
+                TextBox_UserName.Text = EuroSoundUser
+                TextBox_EditWavs.Text = ProjAudioEditor
+                TextBox_TextEditor.Text = ProjTextEditor
+
+                'Try to read the ini file
+                If fso.FileExists(SysFileProjectIniPath) Then
+                    Dim iniFunctions As New IniFile(SysFileProjectIniPath)
+
+                    'Soundbanks Max Size
+                    Dim playStationValue As String = iniFunctions.Read("PlayStationSize", "PropertiesForm")
+                    If IsNumeric(playStationValue) Then
+                        Numeric_PlayStationMaxSize.Value = CInt(playStationValue)
+                    End If
+                    Dim pcSize As String = iniFunctions.Read("PCSize", "PropertiesForm")
+                    If IsNumeric(pcSize) Then
+                        Numeric_PcMaxSize.Value = CInt(pcSize)
+                    End If
+                    Dim gameCubeSize As String = iniFunctions.Read("GameCubeSize", "PropertiesForm")
+                    If IsNumeric(gameCubeSize) Then
+                        Numeric_GameCubeMaxSize.Value = CInt(gameCubeSize)
+                    End If
+                    Dim xboxSize As String = iniFunctions.Read("XBoxSize", "PropertiesForm")
+                    If IsNumeric(xboxSize) Then
+                        Numeric_XboxMaxSize.Value = xboxSize
+                    End If
+                End If
             End If
-
-            'Misc properties
-            Textbox_Master_Path.Text = propsFileData.MiscProps.SampleFileFolder
-            Textbox_SonixFolder.Text = propsFileData.MiscProps.HashCodeFileFolder
-            Textbox_EngineXFolder.Text = propsFileData.MiscProps.EngineXFolder
-            Textbox_EuroLandServer.Text = propsFileData.MiscProps.EuroLandHashCodeServerPath
-            TextBox_UserName.Text = EuroSoundUser
-            TextBox_EditWavs.Text = ProjAudioEditor
-            TextBox_TextEditor.Text = ProjTextEditor
-
-            'Try to read the ini file
-            If fso.FileExists(SysFileProjectIniPath) Then
-                Dim iniFunctions As New IniFile(SysFileProjectIniPath)
-
-                'Soundbanks Max Size
-                Dim playStationValue As String = iniFunctions.Read("PlayStationSize", "PropertiesForm")
-                If IsNumeric(playStationValue) Then
-                    Numeric_PlayStationMaxSize.Value = CInt(playStationValue)
-                End If
-                Dim pcSize As String = iniFunctions.Read("PCSize", "PropertiesForm")
-                If IsNumeric(pcSize) Then
-                    Numeric_PcMaxSize.Value = CInt(pcSize)
-                End If
-                Dim gameCubeSize As String = iniFunctions.Read("GameCubeSize", "PropertiesForm")
-                If IsNumeric(gameCubeSize) Then
-                    Numeric_GameCubeMaxSize.Value = CInt(gameCubeSize)
-                End If
-                Dim xboxSize As String = iniFunctions.Read("XBoxSize", "PropertiesForm")
-                If IsNumeric(xboxSize) Then
-                    Numeric_XboxMaxSize.Value = xboxSize
-                End If
-            End If
+        Else
+            MsgBox("File not found", vbOKOnly + vbCritical, "EuroSound")
+            promptSave = False
+            Close()
         End If
     End Sub
 
@@ -112,6 +118,11 @@ Partial Public Class Project_Properties
         'Save file
         SavePropertiesFile()
         SaveIniFile()
+        'Update program ini file
+        Dim baseIniFile As New IniFile(EuroSoundIniFilePath)
+        baseIniFile.Write("UserName", EuroSoundUser, "Form1_Misc")
+        baseIniFile.Write("Edit_Wavs_With", ProjAudioEditor, "Form7_Misc")
+        baseIniFile.Write("TextEditor", ProjTextEditor, "PropertiesForm")
         'Close form
         Close()
     End Sub

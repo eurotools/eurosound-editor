@@ -56,25 +56,31 @@ Public Class UserControl_SFXs
 
     Private Sub Button_ShowAll_Click(sender As Object, e As EventArgs) Handles Button_ShowAll.Click
         LoadHashCodes()
-        ComboBox_SFX_Section.SelectedIndex = 0
+        If ComboBox_SFX_Section.Items.Count > 0 Then
+            ComboBox_SFX_Section.SelectedIndex = 0
+        End If
     End Sub
 
     Private Sub CheckBox_SortByDate_CheckStateChanged(sender As Object, e As EventArgs) Handles CheckBox_SortByDate.CheckStateChanged
         If CheckBox_SortByDate.Checked Then
-            Dim di As New DirectoryInfo(fso.BuildPath(WorkingDirectory, "SFXs"))
-            Dim fiArray As String() = di.GetFiles().OrderByDescending(Function(p) p.LastWriteTime).Select(Function(f) f.Name).ToArray()
-            'Add items to listbox
-            ListBox_SFXs.BeginUpdate()
-            ListBox_SFXs.Items.AddRange(fiArray)
-            ListBox_SFXs.EndUpdate()
+            Dim sfxFolderPath As String = fso.BuildPath(WorkingDirectory, "SFXs")
+            If fso.FolderExists(sfxFolderPath) Then
+                Dim di As New DirectoryInfo(sfxFolderPath)
+                Dim fiArray As String() = di.GetFiles().OrderByDescending(Function(p) p.LastWriteTime).Select(Function(f) GetOnlyFileName(f.Name)).ToArray()
+                'Add items to listbox
+                ListBox_SFXs.BeginUpdate()
+                ListBox_SFXs.Items.AddRange(fiArray)
+                ListBox_SFXs.EndUpdate()
+            End If
         Else
-            LoadHashCodes()
+                LoadHashCodes()
         End If
     End Sub
 
     Private Sub Button_UnUsedHashCodes_Click(sender As Object, e As EventArgs) Handles Button_UnUsedHashCodes.Click
         'Check SFXs that are not used in the databases
         Dim usedSfxs As New HashSet(Of String)
+        Dim allSfxs As New HashSet(Of String)
         'Get all used SFX
         Dim databasesFilePath As String = fso.BuildPath(WorkingDirectory, "DataBases")
         If fso.FolderExists(databasesFilePath) Then
@@ -85,6 +91,21 @@ Public Class UserControl_SFXs
                 Dim databaseFileData As DataBaseFile = textFileReaders.ReadDataBaseFile(availableDatabases(databaseIndex))
                 usedSfxs.UnionWith(databaseFileData.Dependencies)
             Next
+            'Get all SFXs from the folder
+            Dim sfxDirectory As String = fso.BuildPath(WorkingDirectory, "SFXs")
+            If fso.FolderExists(sfxDirectory) Then
+                Dim availableSfxs As String() = Directory.GetFiles(sfxDirectory, "*.txt", SearchOption.TopDirectoryOnly)
+                For index As Integer = 0 To availableSfxs.Length - 1
+                    allSfxs.Add(GetOnlyFileName(availableSfxs(index)))
+                Next
+            End If
+            'Add results
+            ListBox_SFXs.BeginUpdate()
+            ListBox_SFXs.Items.Clear()
+            ListBox_SFXs.Items.AddRange(allSfxs.Except(usedSfxs).ToArray)
+            ListBox_SFXs.EndUpdate()
+            'Update counter
+            Label_TotalSfx.Text = "Total: " & ListBox_SFXs.Items.Count
         End If
     End Sub
 

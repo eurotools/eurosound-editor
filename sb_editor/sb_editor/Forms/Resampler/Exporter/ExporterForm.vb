@@ -1,6 +1,4 @@
-﻿Imports System.IO
-
-Partial Public Class ExporterForm
+﻿Partial Public Class ExporterForm
     Inherits Frm_TimerForm
     '*===============================================================================================
     '* GLOBAL VARIABLES 

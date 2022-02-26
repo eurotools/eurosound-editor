@@ -2,7 +2,6 @@
 Imports System.Text.RegularExpressions
 Imports ESUtils.BytesFunctions
 Imports IniFileFunctions
-Imports Scripting
 
 Module GenericFunctions
     '*===============================================================================================

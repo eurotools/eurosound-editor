@@ -1,6 +1,4 @@
-﻿Imports System.IO
-
-Partial Public NotInheritable Class SplashScreen
+﻿Partial Public NotInheritable Class SplashScreen
     Private Sub LoadDataBases(databasesFolder As String)
         'Add items to listbox
         mainform.ListBox_DataBases.BeginUpdate()
