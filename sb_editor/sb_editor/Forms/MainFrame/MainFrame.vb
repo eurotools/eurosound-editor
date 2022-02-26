@@ -612,96 +612,103 @@ Partial Public Class MainFrame
     End Sub
 
     Private Sub Button_ReSampling_Click(sender As Object, e As EventArgs) Handles Button_ReSampling.Click
-        If fso.FileExists(SysFileSamples) Then
-            'Parte text file to a datatable
-            Dim missingSamples As New List(Of String)
-            Dim newSamples As New List(Of String)
-            Dim samplesDataTable As DataTable = textFileReaders.SamplesFileToDatatable(SysFileSamples)
+        If fso.FolderExists(fso.BuildPath(WorkingDirectory, "Master")) Then
+            If fso.FileExists(SysFileSamples) Then
+                'Set cursor as hourglass
+                Cursor.Current = Cursors.WaitCursor
 
-            '============================================================Check missing samples======================================================
-            'Check that all samples exists
-            For index As Integer = samplesDataTable.Rows.Count - 1 To 0 Step -1
-                Dim dr As DataRow = samplesDataTable.Rows(index)
-                Dim sampleFullPath As String = fso.BuildPath(ProjMasterFolder & "\Master", dr("SampleFilename"))
-                'Add item to missing samples list and remove item form data table
-                If Not fso.FileExists(sampleFullPath) Then
-                    missingSamples.Add(dr("SampleFilename"))
-                    dr.Delete()
-                End If
-            Next
-            samplesDataTable.AcceptChanges()
+                'Parte text file to a datatable
+                Dim missingSamples As New List(Of String)
+                Dim newSamples As New List(Of String)
+                Dim samplesDataTable As DataTable = textFileReaders.SamplesFileToDatatable(SysFileSamples)
 
-            '============================================================Check New samples======================================================
-            'Get a list of current stored samples
-            Dim sampleFiles As New List(Of String)(samplesDataTable.Rows.Count)
-            Dim rowsEnum As IEnumerator = samplesDataTable.Rows.GetEnumerator
-            While rowsEnum.MoveNext
-                sampleFiles.Add(rowsEnum.Current("SampleFilename"))
-            End While
-
-            'Check for new samples
-            If fso.FolderExists(fso.BuildPath(ProjMasterFolder, "Master")) Then
-                Dim filesList As String() = Directory.GetFiles(fso.BuildPath(ProjMasterFolder, "Master"), "*.wav", SearchOption.AllDirectories)
-                Dim substrStart = Len(ProjMasterFolder & "\Master\")
-                For index As Integer = 0 To filesList.Count - 1
-                    Dim relPath As String = Mid(filesList(index), substrStart)
-                    If Not sampleFiles.Contains(relPath) Then
-                        newSamples.Add(relPath)
-                        samplesDataTable.Rows.Add(relPath, "Default", FileLen(filesList(index)), FileDateTime(filesList(index)).ToString(dateFormat), "False", "False", "", "", "", "")
+                '============================================================Check missing samples======================================================
+                'Check that all samples exists
+                For index As Integer = samplesDataTable.Rows.Count - 1 To 0 Step -1
+                    Dim dr As DataRow = samplesDataTable.Rows(index)
+                    Dim sampleFullPath As String = fso.BuildPath(ProjMasterFolder & "\Master", dr("SampleFilename"))
+                    'Add item to missing samples list and remove item form data table
+                    If Not fso.FileExists(sampleFullPath) Then
+                        missingSamples.Add(dr("SampleFilename"))
+                        dr.Delete()
                     End If
                 Next
                 samplesDataTable.AcceptChanges()
-            End If
 
-            'Sort Table
-            Dim finalSamplesDataTable As DataTable = samplesDataTable
+                '============================================================Check New samples======================================================
+                'Get a list of current stored samples
+                Dim sampleFiles As New List(Of String)(samplesDataTable.Rows.Count)
+                Dim rowsEnum As IEnumerator = samplesDataTable.Rows.GetEnumerator
+                While rowsEnum.MoveNext
+                    sampleFiles.Add(rowsEnum.Current("SampleFilename"))
+                End While
 
-            '============================================================Save Changes======================================================
-            'Show missing samples form and update text file
-            If missingSamples.Count > 0 Then
-                'Sort list A->Z
-                missingSamples.Sort()
-                'Update Text file
-                writers.SaveSamplesFile(SysFileSamples, finalSamplesDataTable)
-                'Inform user about the missing samples
-                Dim missingSamplesForm As New MissingSamples(missingSamples.ToArray)
-                missingSamplesForm.ShowDialog()
-            End If
-
-            'Show new samples form and update text file
-            If newSamples.Count > 0 Then
-                'Sort list A->Z
-                newSamples.Sort()
-                'Inform user about the missing samples
-                Dim newSamplesForm As New NewSamples(newSamples.ToArray)
-                newSamplesForm.ShowDialog()
-                'Update Resample Rate for the new samples
-                If newSamplesForm.DialogResult = DialogResult.OK Then
-                    Dim listEnum As List(Of String).Enumerator = newSamples.GetEnumerator
-                    While listEnum.MoveNext
-                        For Each row As DataRow In finalSamplesDataTable.Rows
-                            If StrComp(row("SampleFilename"), listEnum.Current) = 0 Then
-                                row("ReSampleRate") = newSamplesForm.ComboBox_AvailableRates.SelectedItem
-                                Exit For
-                            End If
-                        Next
-                    End While
+                'Check for new samples
+                If fso.FolderExists(fso.BuildPath(ProjMasterFolder, "Master")) Then
+                    Dim filesList As String() = Directory.GetFiles(fso.BuildPath(ProjMasterFolder, "Master"), "*.wav", SearchOption.AllDirectories)
+                    Dim substrStart = Len(ProjMasterFolder & "\Master\")
+                    For index As Integer = 0 To filesList.Count - 1
+                        Dim relPath As String = Mid(filesList(index), substrStart)
+                        If Not sampleFiles.Contains(relPath) Then
+                            newSamples.Add(relPath)
+                            samplesDataTable.Rows.Add(relPath, "Default", FileLen(filesList(index)), FileDateTime(filesList(index)).ToString(dateFormat), "False", "False", "", "", "", "")
+                        End If
+                    Next
+                    samplesDataTable.AcceptChanges()
                 End If
-                'Sort table
-                Dim dv As DataView = samplesDataTable.DefaultView
-                dv.Sort = "SampleFilename asc"
-                finalSamplesDataTable = dv.ToTable
-                'Update Text file
-                writers.SaveSamplesFile(SysFileSamples, finalSamplesDataTable)
-            End If
 
-            '============================================================Show form======================================================
-            If finalSamplesDataTable.Rows.Count > 0 Then
-                Dim resampleForm As New ResampleForm(finalSamplesDataTable)
-                resampleForm.ShowDialog()
+                'Sort Table
+                Dim finalSamplesDataTable As DataTable = samplesDataTable
+
+                '============================================================Save Changes======================================================
+                'Show missing samples form and update text file
+                If missingSamples.Count > 0 Then
+                    'Sort list A->Z
+                    missingSamples.Sort()
+                    'Update Text file
+                    writers.SaveSamplesFile(SysFileSamples, finalSamplesDataTable)
+                    'Inform user about the missing samples
+                    Dim missingSamplesForm As New MissingSamples(missingSamples.ToArray)
+                    missingSamplesForm.ShowDialog()
+                End If
+
+                'Show new samples form and update text file
+                If newSamples.Count > 0 Then
+                    'Sort list A->Z
+                    newSamples.Sort()
+                    'Inform user about the missing samples
+                    Dim newSamplesForm As New NewSamples(newSamples.ToArray)
+                    newSamplesForm.ShowDialog()
+                    'Update Resample Rate for the new samples
+                    If newSamplesForm.DialogResult = DialogResult.OK Then
+                        Dim listEnum As List(Of String).Enumerator = newSamples.GetEnumerator
+                        While listEnum.MoveNext
+                            For Each row As DataRow In finalSamplesDataTable.Rows
+                                If StrComp(row("SampleFilename"), listEnum.Current) = 0 Then
+                                    row("ReSampleRate") = newSamplesForm.ComboBox_AvailableRates.SelectedItem
+                                    Exit For
+                                End If
+                            Next
+                        End While
+                    End If
+                    'Sort table
+                    Dim dv As DataView = samplesDataTable.DefaultView
+                    dv.Sort = "SampleFilename asc"
+                    finalSamplesDataTable = dv.ToTable
+                    'Update Text file
+                    writers.SaveSamplesFile(SysFileSamples, finalSamplesDataTable)
+                End If
+
+                '============================================================Show form======================================================
+                If finalSamplesDataTable.Rows.Count > 0 Then
+                    Dim resampleForm As New ResampleForm(finalSamplesDataTable)
+                    resampleForm.ShowDialog()
+                End If
+            Else
+                MsgBox("File not found", vbOKOnly + vbCritical, "EuroSound")
             End If
         Else
-            MsgBox("File not found", vbOKOnly + vbCritical, "EuroSound")
+            MsgBox("Master folder could not be located.", vbOKOnly + vbCritical, "EuroSound")
         End If
     End Sub
 

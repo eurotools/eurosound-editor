@@ -7,6 +7,7 @@ Public Class SFX_Properties
     '*===============================================================================================
     Private ReadOnly sfxName As String
     Private ReadOnly sfxFullPath As String
+    Private ReadOnly fileReaders As New FileParsers
 
     Public Sub New(sfxFileName As String, sfxFilePath As String)
         ' Esta llamada es exigida por el diseñador.
@@ -25,15 +26,13 @@ Public Class SFX_Properties
         Textbox_SFX_Name.Text = sfxName
 
         'Get DataBase files
-        Dim databaseFiles As Files = fso.GetFolder(fso.BuildPath(WorkingDirectory, "Databases")).Files
-
-        'Search for DataBase dependencies
-        For Each dataBaseObj As Scripting.File In databaseFiles
-            FileOpen(1, dataBaseObj.Path, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
+        Dim databaseFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "Databases"), "*.txt", SearchOption.TopDirectoryOnly)
+        For fileIndex As Integer = 0 To databaseFiles.Length - 1
+            FileOpen(1, databaseFiles(fileIndex), OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
             Do Until EOF(1)
                 Dim currentLine As String = LineInput(1)
                 If StrComp(currentLine, sfxName) = 0 Then
-                    ListBox_DataBase_Dependencies.Items.Add(GetOnlyFileName(dataBaseObj.Name))
+                    ListBox_DataBase_Dependencies.Items.Add(GetOnlyFileName(databaseFiles(fileIndex)))
                     'Quit loop
                     Exit Do
                 End If
@@ -41,61 +40,27 @@ Public Class SFX_Properties
             FileClose(1)
         Next
 
-        'Search for Samples
+        'Read SFX File
+        Dim SfxFileData As SfxFile = fileReaders.ReadSFXFile(sfxFullPath)
+        'Show header info
+        Label_Value_FirstCreated.Text = SfxFileData.HeaderInfo.FirstCreated.Trim
+        Label_CreatedBy_Value.Text = SfxFileData.HeaderInfo.CreatedBy.Trim
+        Label_Value_LastModified.Text = SfxFileData.HeaderInfo.LastModify.Trim
+        Label_ModifiedBy_Value.Text = SfxFileData.HeaderInfo.LastModifyBy.Trim
+        'Add sample name
         Dim SamplesList As New List(Of String)
-        FileOpen(1, sfxFullPath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
-        Do Until EOF(1)
-            Dim currentLine As String = LineInput(1)
-
-            'Header info
-            If InStr(currentLine, "## ") = 1 Then
-                'Split content
-                Dim lineData As String() = Split(currentLine, "...")
-
-                'Add data to controls
-                If InStr(currentLine, "## First Created ...") = 1 Then
-                    Label_Value_FirstCreated.Text = lineData(1).Trim
-                End If
-                If InStr(currentLine, "## Created By ...") = 1 Then
-                    Label_CreatedBy_Value.Text = lineData(1).Trim
-                End If
-                If InStr(currentLine, "## Last Modified ...") = 1 Then
-                    Label_Value_LastModified.Text = lineData(1).Trim
-                End If
-                If InStr(currentLine, "## Last Modified By ...") = 1 Then
-                    Label_ModifiedBy_Value.Text = lineData(1).Trim
-                End If
-            End If
-
-            'Sample pool section
-            If InStr(currentLine, "#SFXSamplePoolFiles") Then
-                'Read line
-                currentLine = LineInput(1)
-                Do
-                    'Add item to list
-                    SamplesList.Add(fso.BuildPath(WorkingDirectory, currentLine.Trim()))
-
-                    'Continue Reading
-                    currentLine = LineInput(1)
-                Loop While StrComp(currentLine, "#END") <> 0 AndAlso Not EOF(1)
-            End If
-        Loop
-        FileClose(1)
-
-        'Add item to listbox
+        For index As Integer = 0 To SfxFileData.Samples.Count - 1
+            SamplesList.Add(UCase(fso.BuildPath(WorkingDirectory & "\Master", SfxFileData.Samples(index).FilePath.Trim)))
+        Next
         ListBox_Samples.Items.AddRange(SamplesList.ToArray)
 
-        'Update database file dependencies counter
-        Textbox_DataBase_Deps.Text = ListBox_DataBase_Dependencies.Items.Count
-
         'Update counters
+        Textbox_DataBase_Deps.Text = ListBox_DataBase_Dependencies.Items.Count
         Label_DatabaseCount_Value.Text = CountFolderFiles(fso.BuildPath(WorkingDirectory, "Databases"), "*.txt")
         Label_SfxCount_Value.Text = CountFolderFiles(fso.BuildPath(WorkingDirectory, "SFXs"), "*.txt")
 
-        'Get master path
+        'Get master path and count samples
         Dim MasterFilePath = fso.BuildPath(ProjMasterFolder, "Master")
-
-        'Count samples
         If fso.FolderExists(MasterFilePath) Then
             Label_SampleCount_Value.Text = Directory.GetFiles(MasterFilePath, "*.wav", SearchOption.AllDirectories).Length
             'Get sample folder size

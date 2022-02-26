@@ -25,6 +25,9 @@ Public Class Soundbank_Properties
     '* FORM EVENTS
     '*===============================================================================================
     Private Sub Soundbank_Properties_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        'Set cursor as hourglass
+        Cursor.Current = Cursors.WaitCursor
+
         'Put soundbank name
         GroupBox_SoundbankData.Text = SoundbankName
 
@@ -82,6 +85,9 @@ Public Class Soundbank_Properties
         Label_SizeFile_PlayStation2.Text = BytesStringFormat(GetSamplesSize(samplesInSoundbank, WorkingDirectory & "\PlayStation2_VAG\", ".vag") + sfxSize + samplesSize)
         Label_SizeFile_GameCube.Text = BytesStringFormat(GetSamplesSize(samplesInSoundbank, WorkingDirectory & "\GameCube_dsp_adpcm\", ".dsp") + sfxSize + samplesSize)
         Label_SizeFile_Xbox.Text = BytesStringFormat(GetSamplesSize(samplesInSoundbank, WorkingDirectory & "\XBox_adpcm\", ".wav") + sfxSize + samplesSize)
+
+        'Set cursor as default arrow
+        Cursor.Current = Cursors.Default
     End Sub
 
     Private Function GetSamplesSize(soundbankSamples As String(), platformFolder As String, fileExtension As String) As Long
@@ -119,30 +125,32 @@ Public Class Soundbank_Properties
     '*===============================================================================================
     Private Function GetSamples() As String()
         'Get Samples
-        Dim Samples As New List(Of String)
+        Dim Samples As New HashSet(Of String)
         For Each item As String In ListBox_SFXs.Items
             'Open file
-            Dim currentLine As String
-            FileOpen(1, fso.BuildPath(WorkingDirectory, "SFXs\" & item & ".txt"), OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
-            Do Until EOF(1)
-                'Read text file
-                currentLine = LineInput(1)
-                'Read samples section
-                If StrComp(currentLine, "#SFXSamplePoolFiles") = 0 Then
-                    'Read line
-                    currentLine = LineInput(1)
-                    Do
-                        'Add path to list
-                        Samples.Add(currentLine)
-                        'Continue Reading
+            Dim filePath As String = fso.BuildPath(WorkingDirectory, "SFXs\" & item & ".txt")
+            If fso.FileExists(filePath) Then
+                FileOpen(1, filePath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
+                Do Until EOF(1)
+                    'Read text file
+                    Dim currentLine As String = LineInput(1)
+                    'Read samples section
+                    If StrComp(currentLine, "#SFXSamplePoolFiles") = 0 Then
+                        'Read line
                         currentLine = LineInput(1)
-                    Loop While StrComp(currentLine, "#END") <> 0 AndAlso Not EOF(1)
-                    Exit Do
-                End If
-            Loop
-            FileClose(1)
+                        Do
+                            'Add path to list
+                            Samples.Add(currentLine)
+                            'Continue Reading
+                            currentLine = LineInput(1)
+                        Loop While StrComp(currentLine, "#END") <> 0 AndAlso Not EOF(1)
+                        Exit Do
+                    End If
+                Loop
+                FileClose(1)
+            End If
         Next
-        Return Samples.Distinct().ToArray
+        Return Samples.ToArray
     End Function
 
     Private Function GetSamplesFullPath(samplesArray As String()) As String()
@@ -157,7 +165,7 @@ Public Class Soundbank_Properties
     End Function
 
     Private Function GetSfxList(SoundbankObj As SoundbankFile) As String()
-        Dim sfxList As New List(Of String)
+        Dim sfxList As New HashSet(Of String)
         'Get used SFXs
         For Each item As String In SoundbankObj.Dependencies
             'Read SFX Dependencies
@@ -168,11 +176,11 @@ Public Class Soundbank_Properties
                 sfxList.Add(SFXs(index))
             Next
         Next
-        Return sfxList.Distinct().ToArray
+        Return sfxList.ToArray
     End Function
 
     Private Function SamplesToIncludeInSoundbank(samplesList As String(), streamSamples As String()) As String()
-        Dim samplesToInclude As New List(Of String)
+        Dim samplesToInclude As New HashSet(Of String)
 
         For index As Integer = 0 To samplesList.Length - 1
             Dim sampleFullPath As String = samplesList(index)
@@ -182,8 +190,6 @@ Public Class Soundbank_Properties
             samplesToInclude.Add(sampleFullPath)
         Next
 
-        Dim finalList = samplesToInclude.Except(streamSamples)
-
-        Return finalList.Distinct().ToArray
+        Return samplesToInclude.Except(streamSamples).ToArray
     End Function
 End Class

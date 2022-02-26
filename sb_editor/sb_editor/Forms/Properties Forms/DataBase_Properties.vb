@@ -85,16 +85,14 @@ Public Class DataBase_Properties
 
     Private Sub GetSampleList()
         'Get list of user Wav files
-        Dim samplesList As New List(Of String)
+        Dim samplesList As New HashSet(Of String)
         For Each sfxName As String In ListBox_TotalSfx.Items
             Dim sfxFullFilePath As String = fso.BuildPath(WorkingDirectory, "SFXs\" & sfxName & ".txt")
             Dim sfxFileData As SfxFile = fileReaders.ReadSFXFile(sfxFullFilePath)
             For Each sampleData As Sample In sfxFileData.Samples
                 'Add sample to list if not exists
                 Dim sampleFullPath As String = UCase(fso.BuildPath(ProjMasterFolder, "Master\" & sampleData.FilePath))
-                If Not samplesList.Contains(sampleFullPath) Then
-                    samplesList.Add(sampleFullPath)
-                End If
+                samplesList.Add(sampleFullPath)
             Next
         Next
 

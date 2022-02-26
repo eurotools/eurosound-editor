@@ -460,7 +460,7 @@ Partial Class SfxControl
         Me.GroupBox_GlobalSettings.Controls.Add(Me.TrackBar_OuterRadius)
         Me.GroupBox_GlobalSettings.Controls.Add(Me.TrackBar_InnerRadius)
         Me.GroupBox_GlobalSettings.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox_GlobalSettings.Location = New System.Drawing.Point(8, 40)
+        Me.GroupBox_GlobalSettings.Location = New System.Drawing.Point(6, 40)
         Me.GroupBox_GlobalSettings.Name = "GroupBox_GlobalSettings"
         Me.GroupBox_GlobalSettings.Size = New System.Drawing.Size(490, 227)
         Me.GroupBox_GlobalSettings.TabIndex = 2
@@ -883,16 +883,16 @@ Partial Class SfxControl
         'Textbox_SfxName
         '
         Me.Textbox_SfxName.BackColor = System.Drawing.SystemColors.Window
-        Me.Textbox_SfxName.Location = New System.Drawing.Point(80, 16)
+        Me.Textbox_SfxName.Location = New System.Drawing.Point(73, 17)
         Me.Textbox_SfxName.Name = "Textbox_SfxName"
         Me.Textbox_SfxName.ReadOnly = True
-        Me.Textbox_SfxName.Size = New System.Drawing.Size(343, 20)
+        Me.Textbox_SfxName.Size = New System.Drawing.Size(382, 20)
         Me.Textbox_SfxName.TabIndex = 1
         '
         'Label_SfxName
         '
         Me.Label_SfxName.AutoSize = True
-        Me.Label_SfxName.Location = New System.Drawing.Point(13, 19)
+        Me.Label_SfxName.Location = New System.Drawing.Point(6, 20)
         Me.Label_SfxName.Name = "Label_SfxName"
         Me.Label_SfxName.Size = New System.Drawing.Size(61, 13)
         Me.Label_SfxName.TabIndex = 0

@@ -73,7 +73,19 @@ Public Class UserControl_SFXs
     End Sub
 
     Private Sub Button_UnUsedHashCodes_Click(sender As Object, e As EventArgs) Handles Button_UnUsedHashCodes.Click
-
+        'Check SFXs that are not used in the databases
+        Dim usedSfxs As New HashSet(Of String)
+        'Get all used SFX
+        Dim databasesFilePath As String = fso.BuildPath(WorkingDirectory, "DataBases")
+        If fso.FolderExists(databasesFilePath) Then
+            'Get all available files
+            Dim availableDatabases As String() = Directory.GetFiles(databasesFilePath, "*.txt", SearchOption.TopDirectoryOnly)
+            'Inspect files
+            For databaseIndex As Integer = 0 To availableDatabases.Length - 1
+                Dim databaseFileData As DataBaseFile = textFileReaders.ReadDataBaseFile(availableDatabases(databaseIndex))
+                usedSfxs.UnionWith(databaseFileData.Dependencies)
+            Next
+        End If
     End Sub
 
     '*===============================================================================================

@@ -41,12 +41,16 @@
 
     Private Sub Button_ReAllocateHashcodes_Click(sender As Object, e As EventArgs) Handles Button_ReAllocateHashcodes.Click
         If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System")) Then
+            'Set cursor as hourglass
+            Cursor.Current = Cursors.WaitCursor
             'Check SFX Hashcode
             SFXHashCodeNumber = GetMaxHashCode(fso.BuildPath(WorkingDirectory, "SFXs"))
             SoundBankHashCodeNumber = GetMaxHashCode(fso.BuildPath(WorkingDirectory, "SoundBanks"))
             MFXHashCodeNumber = GetMaxHashCode(fso.BuildPath(WorkingDirectory, "ES_Music\Music\ESData"))
             'Update file
             writers.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
+            'Set cursor as default arrow
+            Cursor.Current = Cursors.Default
         End If
     End Sub
 
@@ -56,6 +60,9 @@
 
         Dim baseDir As String = fso.BuildPath(WorkingDirectory, "SFXs")
         If fso.FolderExists(baseDir) Then
+            'Set cursor as hourglass
+            Cursor.Current = Cursors.WaitCursor
+
             Dim fileNameWithExtension As String = Dir(baseDir & "\*.txt", FileAttribute.Archive)
             Do While fileNameWithExtension > ""
                 Dim sfxFilePath As String = fso.BuildPath(WorkingDirectory & "\SFXs\", fileNameWithExtension)
@@ -72,6 +79,8 @@
                 End If
                 fileNameWithExtension = Dir()
             Loop
+            'Set cursor as default arrow
+            Cursor.Current = Cursors.Default
             'Check what we need to show to the user
             If errorsToShow.Count > 0 Then
                 'Show info to the user
@@ -93,6 +102,8 @@
         Dim errorsToShow As New List(Of String)
         Dim baseDir As String = fso.BuildPath(WorkingDirectory, "SFXs")
         If fso.FolderExists(baseDir) Then
+            'Set cursor as hourglass
+            Cursor.Current = Cursors.WaitCursor
             Dim fileNameWithExtension As String = Dir(baseDir & "\*.txt", FileAttribute.Archive)
             Do While fileNameWithExtension > ""
                 Dim sfxFilePath As String = fso.BuildPath(WorkingDirectory & "\SFXs\", fileNameWithExtension)
@@ -108,6 +119,8 @@
                 End If
                 fileNameWithExtension = Dir()
             Loop
+            'Set cursor as default arrow
+            Cursor.Current = Cursors.Default
             'Check what we need to show to the user
             If errorsToShow.Count > 0 Then
                 'Show info to the user
@@ -125,6 +138,8 @@
 
         Dim baseDir As String = fso.BuildPath(WorkingDirectory, "SFXs")
         If fso.FolderExists(baseDir) Then
+            'Set cursor as hourglass
+            Cursor.Current = Cursors.WaitCursor
             Dim fileNameWithExtension As String = Dir(baseDir & "\*.txt", FileAttribute.Archive)
             Do While fileNameWithExtension > ""
                 Dim sfxFilePath As String = fso.BuildPath(WorkingDirectory & "\SFXs\", fileNameWithExtension)
@@ -142,6 +157,8 @@
                 End If
                 fileNameWithExtension = Dir()
             Loop
+            'Set cursor as default arrow
+            Cursor.Current = Cursors.Default
             'Check what we need to show to the user
             If missingLinks.Count > 0 Then
                 missingLinks.Add("------------------------------------------")
@@ -157,7 +174,8 @@
     Private Sub Button_ValidateSfx_Click(sender As Object, e As EventArgs) Handles Button_ValidateSfx.Click
         Dim sfxPlatformsList As New List(Of String)
         Dim baseDir As String = fso.BuildPath(WorkingDirectory, "SFXs")
-
+        'Set cursor as hourglass
+        Cursor.Current = Cursors.WaitCursor
         'Get GameCube SFXs
         Dim gameCubeDir As String = fso.BuildPath(baseDir, "GameCube")
         If fso.FolderExists(gameCubeDir) Then
@@ -178,7 +196,8 @@
         If fso.FolderExists(Xbox) Then
             GetPlatformSFXs(Xbox, sfxPlatformsList, "X Box")
         End If
-
+        'Set cursor as default arrow
+        Cursor.Current = Cursors.Default
         'Show info to user
         sfxPlatformsList.Sort()
         Dim debugInfo As New Frm_DebugData(sfxPlatformsList.ToArray)

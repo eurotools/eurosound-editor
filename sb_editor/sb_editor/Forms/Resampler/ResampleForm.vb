@@ -51,6 +51,9 @@ Partial Public Class ResampleForm
         'Show elapsed time
         stopwatch.Stop()
         TextBox_BootupTime.Text = "Bootup Time =  " & stopwatch.ElapsedTicks
+
+        'Set cursor as default arrow
+        Cursor.Current = Cursors.Default
     End Sub
 
     Private Sub ResampleForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
