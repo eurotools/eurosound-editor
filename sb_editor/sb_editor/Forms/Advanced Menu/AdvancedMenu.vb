@@ -54,25 +54,26 @@ Partial Public Class AdvancedMenu
                 Dim sfxFilesToCheck As String() = Directory.GetFiles(sfxFilePath, "*.txt", SearchOption.TopDirectoryOnly)
                 For fileIndex As Integer = 0 To sfxFilesToCheck.Length - 1
                     Dim currentFilePath As String = sfxFilesToCheck(fileIndex)
+                    Dim sfxFileName As String = GetOnlyFileName(currentFilePath)
                     '---------------------------Common
                     WriteSfxFile(currentFilePath)
                     '---------------------------GameCube
-                    Dim gameCubeFilePath As String = fso.BuildPath(sfxFilePath, "GameCube\" & GetOnlyFileName(currentFilePath) & ".txt")
+                    Dim gameCubeFilePath As String = fso.BuildPath(sfxFilePath, "GameCube\" & sfxFileName & ".txt")
                     If fso.FileExists(gameCubeFilePath) Then
                         WriteSfxFile(gameCubeFilePath)
                     End If
                     '---------------------------PC
-                    Dim PCFilePath As String = fso.BuildPath(sfxFilePath, "PC\" & GetOnlyFileName(currentFilePath) & ".txt")
+                    Dim PCFilePath As String = fso.BuildPath(sfxFilePath, "PC\" & sfxFileName & ".txt")
                     If fso.FileExists(PCFilePath) Then
                         WriteSfxFile(PCFilePath)
                     End If
                     '---------------------------PlayStation2
-                    Dim PlayStation2FilePath As String = fso.BuildPath(sfxFilePath, "PlayStation2\" & GetOnlyFileName(currentFilePath) & ".txt")
+                    Dim PlayStation2FilePath As String = fso.BuildPath(sfxFilePath, "PlayStation2\" & sfxFileName & ".txt")
                     If fso.FileExists(PlayStation2FilePath) Then
                         WriteSfxFile(PlayStation2FilePath)
                     End If
                     '---------------------------X Box
-                    Dim xboxFilePath As String = fso.BuildPath(sfxFilePath, "X Box\" & GetOnlyFileName(currentFilePath) & ".txt")
+                    Dim xboxFilePath As String = fso.BuildPath(sfxFilePath, "X Box\" & sfxFileName & ".txt")
                     If fso.FileExists(xboxFilePath) Then
                         WriteSfxFile(xboxFilePath)
                     End If
@@ -126,16 +127,6 @@ Partial Public Class AdvancedMenu
             'Set cursor as default arrow
             Cursor.Current = Cursors.Default
         End If
-    End Sub
-
-    Private Sub WriteSfxFile(sfxFilepath As String)
-        'Read files
-        Dim fileLines As String() = File.ReadAllLines(sfxFilepath)
-        'Update HashCode
-        Dim hashcodeLineINdex As Integer = Array.IndexOf(fileLines, "#HASHCODE") + 1
-        fileLines(hashcodeLineINdex) = "HashCodeNumber " & SFXHashCodeNumber
-        'Write file again
-        File.WriteAllLines(sfxFilepath, fileLines)
     End Sub
 
     Private Sub Button_ValidateInterSample_Click(sender As Object, e As EventArgs) Handles Button_ValidateInterSample.Click

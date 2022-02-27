@@ -29,4 +29,14 @@ Partial Public Class AdvancedMenu
             fileNameWithExtension = Dir()
         Loop
     End Sub
+
+    Private Sub WriteSfxFile(sfxFilepath As String)
+        'Read files
+        Dim fileLines As String() = File.ReadAllLines(sfxFilepath)
+        'Update HashCode
+        Dim hashcodeLineINdex As Integer = Array.IndexOf(fileLines, "#HASHCODE") + 1
+        fileLines(hashcodeLineINdex) = "HashCodeNumber " & SFXHashCodeNumber
+        'Write file again
+        File.WriteAllLines(sfxFilepath, fileLines)
+    End Sub
 End Class
