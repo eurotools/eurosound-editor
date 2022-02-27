@@ -96,6 +96,14 @@ Module GenericFunctions
         Application.Exit()
     End Sub
 
+    Friend Sub AddFormatsToCombo(comboControl As ComboBox)
+        If ProjectSettingsFile.AvailableFormats IsNot Nothing AndAlso ProjectSettingsFile.AvailableFormats.GetLength(0) > 0 Then
+            For formatIndex As Integer = 0 To ProjectSettingsFile.AvailableFormats.GetLength(0) - 1
+                comboControl.Items.Add(ProjectSettingsFile.AvailableFormats(formatIndex, 0))
+            Next
+        End If
+    End Sub
+
     '*===============================================================================================
     '* FILES FUNCTIONS
     '*===============================================================================================

@@ -37,7 +37,7 @@ Public Class DataBase_Properties
         Label_TotalSfx_Count.Text = "Total: " & ListBox_TotalSfx.Items.Count
 
         'Get sample folder
-        Dim MasterFilePath = fso.BuildPath(ProjMasterFolder, "Master")
+        Dim MasterFilePath = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")
         If fso.FolderExists(MasterFilePath) Then
             Label_SampleCount_Value.Text = Directory.GetFiles(MasterFilePath, "*.wav", SearchOption.AllDirectories).Length
             Dim fold As Folder = fso.GetFolder(MasterFilePath)
@@ -91,7 +91,7 @@ Public Class DataBase_Properties
             Dim sfxFileData As SfxFile = fileReaders.ReadSFXFile(sfxFullFilePath)
             For Each sampleData As Sample In sfxFileData.Samples
                 'Add sample to list if not exists
-                Dim sampleFullPath As String = UCase(fso.BuildPath(ProjMasterFolder, "Master\" & sampleData.FilePath))
+                Dim sampleFullPath As String = UCase(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\" & sampleData.FilePath))
                 samplesList.Add(sampleFullPath)
             Next
         Next

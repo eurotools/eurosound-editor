@@ -1,4 +1,6 @@
-﻿Partial Public Class AdvancedMenu
+﻿Imports System.IO
+
+Partial Public Class AdvancedMenu
     Private ReadOnly writers As New FileWriters
     Private ReadOnly readers As New FileParsers
 
@@ -43,15 +45,97 @@
         If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System")) Then
             'Set cursor as hourglass
             Cursor.Current = Cursors.WaitCursor
-            'Check SFX Hashcode
-            SFXHashCodeNumber = GetMaxHashCode(fso.BuildPath(WorkingDirectory, "SFXs"))
-            SoundBankHashCodeNumber = GetMaxHashCode(fso.BuildPath(WorkingDirectory, "SoundBanks"))
-            MFXHashCodeNumber = GetMaxHashCode(fso.BuildPath(WorkingDirectory, "ES_Music\Music\ESData"))
+            '-----------------------------------------Reallocate SFX Files-----------------------------------------
+            Dim sfxFilePath As String = fso.BuildPath(WorkingDirectory, "SFXs")
+            If fso.FolderExists(sfxFilePath) Then
+                'Reset variable
+                SFXHashCodeNumber = 1
+                'Get and modify files
+                Dim sfxFilesToCheck As String() = Directory.GetFiles(sfxFilePath, "*.txt", SearchOption.TopDirectoryOnly)
+                For fileIndex As Integer = 0 To sfxFilesToCheck.Length - 1
+                    Dim currentFilePath As String = sfxFilesToCheck(fileIndex)
+                    '---------------------------Common
+                    WriteSfxFile(currentFilePath)
+                    '---------------------------GameCube
+                    Dim gameCubeFilePath As String = fso.BuildPath(sfxFilePath, "GameCube\" & GetOnlyFileName(currentFilePath) & ".txt")
+                    If fso.FileExists(gameCubeFilePath) Then
+                        WriteSfxFile(gameCubeFilePath)
+                    End If
+                    '---------------------------PC
+                    Dim PCFilePath As String = fso.BuildPath(sfxFilePath, "PC\" & GetOnlyFileName(currentFilePath) & ".txt")
+                    If fso.FileExists(PCFilePath) Then
+                        WriteSfxFile(PCFilePath)
+                    End If
+                    '---------------------------PlayStation2
+                    Dim PlayStation2FilePath As String = fso.BuildPath(sfxFilePath, "PlayStation2\" & GetOnlyFileName(currentFilePath) & ".txt")
+                    If fso.FileExists(PlayStation2FilePath) Then
+                        WriteSfxFile(PlayStation2FilePath)
+                    End If
+                    '---------------------------X Box
+                    Dim xboxFilePath As String = fso.BuildPath(sfxFilePath, "X Box\" & GetOnlyFileName(currentFilePath) & ".txt")
+                    If fso.FileExists(xboxFilePath) Then
+                        WriteSfxFile(xboxFilePath)
+                    End If
+
+                    'Update variable
+                    SFXHashCodeNumber += 1
+                Next
+            End If
+
+            '-----------------------------------------Reallocate Soundbank Files-----------------------------------------
+            Dim soundbankFilePath As String = fso.BuildPath(WorkingDirectory, "SoundBanks")
+            If fso.FolderExists(soundbankFilePath) Then
+                'Reset variable
+                SoundBankHashCodeNumber = 1
+                'Get and modify files
+                Dim soundbankFilesToCheck As String() = Directory.GetFiles(soundbankFilePath, "*.txt", SearchOption.TopDirectoryOnly)
+                For fileIndex As Integer = 0 To soundbankFilesToCheck.Length - 1
+                    Dim currentFilePath As String = soundbankFilesToCheck(fileIndex)
+                    'Read files
+                    Dim fileLines As String() = File.ReadAllLines(currentFilePath)
+                    'Update HashCode
+                    Dim hashcodeLineIndex As Integer = Array.IndexOf(fileLines, "#HASHCODE") + 1
+                    fileLines(hashcodeLineIndex) = "HashCodeNumber " & SoundBankHashCodeNumber
+                    SoundBankHashCodeNumber += 1
+                    'Write file again
+                    File.WriteAllLines(currentFilePath, fileLines)
+                Next
+            End If
+
+            '-----------------------------------------Reallocate MFX Files-----------------------------------------
+            Dim musicsFilePath As String = fso.BuildPath(WorkingDirectory, "Music\ESData")
+            If fso.FolderExists(musicsFilePath) Then
+                'Reset variable
+                MFXHashCodeNumber = 1
+                'Get and modify files
+                Dim musicFilesToCheck As String() = Directory.GetFiles(musicsFilePath, "*.txt", SearchOption.TopDirectoryOnly)
+                For fileIndex As Integer = 0 To musicFilesToCheck.Length - 1
+                    Dim currentFilePath As String = musicFilesToCheck(fileIndex)
+                    'Read files
+                    Dim fileLines As String() = File.ReadAllLines(currentFilePath)
+                    'Update HashCode
+                    Dim hashcodeLineIndex As Integer = Array.IndexOf(fileLines, "#HASHCODE") + 1
+                    fileLines(hashcodeLineIndex) = "HashCodeNumber " & MFXHashCodeNumber
+                    MFXHashCodeNumber += 1
+                    'Write file again
+                    File.WriteAllLines(currentFilePath, fileLines)
+                Next
+            End If
             'Update file
             writers.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
             'Set cursor as default arrow
             Cursor.Current = Cursors.Default
         End If
+    End Sub
+
+    Private Sub WriteSfxFile(sfxFilepath As String)
+        'Read files
+        Dim fileLines As String() = File.ReadAllLines(sfxFilepath)
+        'Update HashCode
+        Dim hashcodeLineINdex As Integer = Array.IndexOf(fileLines, "#HASHCODE") + 1
+        fileLines(hashcodeLineINdex) = "HashCodeNumber " & SFXHashCodeNumber
+        'Write file again
+        File.WriteAllLines(sfxFilepath, fileLines)
     End Sub
 
     Private Sub Button_ValidateInterSample_Click(sender As Object, e As EventArgs) Handles Button_ValidateInterSample.Click

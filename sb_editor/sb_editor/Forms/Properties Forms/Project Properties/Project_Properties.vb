@@ -5,8 +5,8 @@ Partial Public Class Project_Properties
     '* GLOBAL VARIABLES
     '*===============================================================================================
     Private ReadOnly textFileReaders As New FileParsers()
+    Private ReadOnly textFileWriters As New FileWriters
     Private ReadOnly ratesNames As String() = New String() {"Low", "Medium", "High", "Maximum"}
-    Private propsFileData As PropertiesFile
     Private promptSave As Boolean = True
     Private ratesNamesIndex As Byte = 0
 
@@ -17,12 +17,11 @@ Partial Public Class Project_Properties
         If fso.FileExists(SysFileProperties) Then
             'Read data if is an existing project
             If fso.FileExists(SysFileProperties) Then
-                propsFileData = textFileReaders.ReadPropertiesFile(SysFileProperties)
+                ProjectSettingsFile = textFileReaders.ReadPropertiesFile(SysFileProperties)
                 'Put available formats and select the first one
-                If propsFileData.AvailableFormats.Length > 0 Then
+                If ProjectSettingsFile.AvailableFormats.Length > 0 Then
                     'Print available formats
-                    CopyArrayToListView(ListView_Formats, propsFileData.AvailableFormats)
-
+                    CopyArrayToListView(ListView_Formats, ProjectSettingsFile.AvailableFormats)
                     'Select first item
                     ListView_Formats.Items(0).Selected = True
                     ListView_Formats.Items(0).Focused = True
@@ -32,25 +31,25 @@ Partial Public Class Project_Properties
                     ComboBox_Platform.SelectedIndex = 0
                 End If
                 'Print available formats in the combo
-                If propsFileData.AvailableReSampleRates.Count > 0 Then
+                If ProjectSettingsFile.AvailableReSampleRates.Count > 0 Then
                     'Add available rates format to the combobox and select the first one
-                    If propsFileData.AvailableFormats.Length > 0 Then
-                        ComboBox_RatesFormat.Items.AddRange(GetColumn(propsFileData.AvailableFormats, 0))
+                    If ProjectSettingsFile.AvailableFormats.Length > 0 Then
+                        ComboBox_RatesFormat.Items.AddRange(GetColumn(ProjectSettingsFile.AvailableFormats, 0))
                         ComboBox_RatesFormat.SelectedIndex = 0
                     End If
-                    Dim sampleRatesArray As String() = propsFileData.AvailableReSampleRates.ToArray
+                    Dim sampleRatesArray As String() = ProjectSettingsFile.AvailableReSampleRates.ToArray
                     'Add available rates to the listbox
                     ListBox_SampleRates.Items.AddRange(sampleRatesArray)
                     'Add available rates to the combobox
                     ComboBox_DefaultSampleRate.Items.AddRange(sampleRatesArray)
-                    ComboBox_DefaultSampleRate.SelectedIndex = propsFileData.MiscProps.DefaultRate
+                    ComboBox_DefaultSampleRate.SelectedIndex = ProjectSettingsFile.MiscProps.DefaultRate
                 End If
 
                 'Misc properties
-                Textbox_Master_Path.Text = propsFileData.MiscProps.SampleFileFolder
-                Textbox_SonixFolder.Text = propsFileData.MiscProps.HashCodeFileFolder
-                Textbox_EngineXFolder.Text = propsFileData.MiscProps.EngineXFolder
-                Textbox_EuroLandServer.Text = propsFileData.MiscProps.EuroLandHashCodeServerPath
+                Textbox_Master_Path.Text = ProjectSettingsFile.MiscProps.SampleFileFolder
+                Textbox_SonixFolder.Text = ProjectSettingsFile.MiscProps.HashCodeFileFolder
+                Textbox_EngineXFolder.Text = ProjectSettingsFile.MiscProps.EngineXFolder
+                Textbox_EuroLandServer.Text = ProjectSettingsFile.MiscProps.EuroLandHashCodeServerPath
                 TextBox_UserName.Text = EuroSoundUser
                 TextBox_EditWavs.Text = ProjAudioEditor
                 TextBox_TextEditor.Text = ProjTextEditor
@@ -58,7 +57,6 @@ Partial Public Class Project_Properties
                 'Try to read the ini file
                 If fso.FileExists(SysFileProjectIniPath) Then
                     Dim iniFunctions As New IniFile(SysFileProjectIniPath)
-
                     'Soundbanks Max Size
                     Dim playStationValue As String = iniFunctions.Read("PlayStationSize", "PropertiesForm")
                     If IsNumeric(playStationValue) Then
@@ -115,14 +113,21 @@ Partial Public Class Project_Properties
     Private Sub Button_OK_Click(sender As Object, e As EventArgs) Handles Button_OK.Click
         'Disable save file message
         promptSave = False
+        'Update variables
+        ProjectSettingsFile.MiscProps.SampleFileFolder = Textbox_Master_Path.Text
+        ProjectSettingsFile.MiscProps.HashCodeFileFolder = Textbox_SonixFolder.Text
+        ProjectSettingsFile.MiscProps.EngineXFolder = Textbox_EngineXFolder.Text
+        ProjectSettingsFile.MiscProps.EuroLandHashCodeServerPath = Textbox_EuroLandServer.Text
         'Save file
-        SavePropertiesFile()
+        textFileWriters.SavePropertiesFile(ProjectSettingsFile, SysFileProperties)
         SaveIniFile()
         'Update program ini file
         Dim baseIniFile As New IniFile(EuroSoundIniFilePath)
         baseIniFile.Write("UserName", EuroSoundUser, "Form1_Misc")
         baseIniFile.Write("Edit_Wavs_With", ProjAudioEditor, "Form7_Misc")
         baseIniFile.Write("TextEditor", ProjTextEditor, "PropertiesForm")
+        baseIniFile.Write("Edit_Wavs_With", OpenFileDialog.FileName, "Form7_Misc")
+        baseIniFile.Write("TextEditor", OpenFileDialog.FileName, "PropertiesForm")
         'Close form
         Close()
     End Sub
@@ -138,14 +143,11 @@ Partial Public Class Project_Properties
     Private Sub Button_Master_Path_Click(sender As Object, e As EventArgs) Handles Button_Master_Path.Click
         'Update desc
         FolderBrowserDialog.Description = "Set Folder for Sample Files."
-        'Show dialog
-        Dim diagRes = FolderBrowserDialog.ShowDialog
         'Set results
-        If diagRes = DialogResult.OK Then
+        If FolderBrowserDialog.ShowDialog = DialogResult.OK Then
             'Ensure that the master folder exists
             If fso.FolderExists(fso.BuildPath(FolderBrowserDialog.SelectedPath, "Master")) Then
                 Textbox_Master_Path.Text = FolderBrowserDialog.SelectedPath
-                ProjMasterFolder = FolderBrowserDialog.SelectedPath
             Else
                 My.Computer.Audio.PlaySystemSound(Media.SystemSounds.Exclamation)
                 MsgBox("Master folder not found, please choose another path.", vbOKOnly + vbCritical, "EuroSound")
@@ -156,36 +158,27 @@ Partial Public Class Project_Properties
     Private Sub Button_SonixFolder_Click(sender As Object, e As EventArgs) Handles Button_SonixFolder.Click
         'Update desc
         FolderBrowserDialog.Description = "Set Folder for Hashcodes Files."
-        'Show dialog
-        Dim diagRes = FolderBrowserDialog.ShowDialog
         'Set results
-        If diagRes = DialogResult.OK Then
+        If FolderBrowserDialog.ShowDialog = DialogResult.OK Then
             Textbox_SonixFolder.Text = FolderBrowserDialog.SelectedPath
-            ProjOutHashCodesFolder = FolderBrowserDialog.SelectedPath
         End If
     End Sub
 
     Private Sub Button_EngineXFolder_Click(sender As Object, e As EventArgs) Handles Button_EngineXFolder.Click
         'Update desc
         FolderBrowserDialog.Description = "Set Folder for Hashcodes Files."
-        'Show dialog
-        Dim diagRes = FolderBrowserDialog.ShowDialog
         'Set results
-        If diagRes = DialogResult.OK Then
+        If FolderBrowserDialog.ShowDialog = DialogResult.OK Then
             Textbox_EngineXFolder.Text = FolderBrowserDialog.SelectedPath
-            ProjOutEngineXFolder = FolderBrowserDialog.SelectedPath
         End If
     End Sub
 
     Private Sub Button_EuroLandServer_Click(sender As Object, e As EventArgs) Handles Button_EuroLandServer.Click
         'Update desc
         FolderBrowserDialog.Description = "Set Folder to the EuroLand HashCodes folder."
-        'Show dialog
-        Dim diagRes = FolderBrowserDialog.ShowDialog
         'Set results
-        If diagRes = DialogResult.OK Then
+        If FolderBrowserDialog.ShowDialog = DialogResult.OK Then
             Textbox_EuroLandServer.Text = FolderBrowserDialog.SelectedPath
-            ProjOutEuroLandServer = FolderBrowserDialog.SelectedPath
         End If
     End Sub
 
@@ -194,10 +187,8 @@ Partial Public Class Project_Properties
         If ListView_Formats.SelectedItems.Count > 0 Then
             'Update desc
             FolderBrowserDialog.Description = "Set Folder for the Output Files."
-            'Show dialog
-            Dim diagRes = FolderBrowserDialog.ShowDialog
             'Set results
-            If diagRes = DialogResult.OK Then
+            If FolderBrowserDialog.ShowDialog = DialogResult.OK Then
                 ListView_Formats.SelectedItems(0).SubItems(1).Text = FolderBrowserDialog.SelectedPath
             End If
         End If
@@ -211,9 +202,9 @@ Partial Public Class Project_Properties
         If ComboBox_Platform.SelectedItem IsNot Nothing Then
             Dim selectedPlatform = ComboBox_Platform.SelectedItem
             'Check if the platform has been added to the dictionary
-            If Not propsFileData.sampleRateFormats.ContainsKey(selectedPlatform) Then
+            If Not ProjectSettingsFile.sampleRateFormats.ContainsKey(selectedPlatform) Then
                 'Add platform to dictionary
-                propsFileData.sampleRateFormats.Add(selectedPlatform, New Dictionary(Of String, UInteger))
+                ProjectSettingsFile.sampleRateFormats.Add(selectedPlatform, New Dictionary(Of String, UInteger))
                 'Add item to list
                 Dim formatitem As New ListViewItem(New String() {selectedPlatform, "Set Output Folder.", "On"})
                 ListView_Formats.Items.Add(formatitem)
@@ -241,13 +232,13 @@ Partial Public Class Project_Properties
         Dim resampleName = InputBox("Enter New Re-sample Rate Name", "New Re-sample Name", defaultName)
         If resampleName IsNot "" Then
             'Ensure that does not exists
-            If Not propsFileData.AvailableReSampleRates.Contains(resampleName) Then
+            If Not ProjectSettingsFile.AvailableReSampleRates.Contains(resampleName) Then
                 'Add item to list
                 ListBox_SampleRates.Items.Add(resampleName)
                 'Add item to combobox
                 ComboBox_DefaultSampleRate.Items.Add(resampleName)
                 'Update platform rates
-                For Each platform In propsFileData.sampleRateFormats
+                For Each platform In ProjectSettingsFile.sampleRateFormats
                     Dim formatRatesList As Dictionary(Of String, UInteger) = platform.Value
                     For index As Integer = 0 To ListBox_SampleRates.Items.Count - 1
                         If Not formatRatesList.ContainsKey(ListBox_SampleRates.Items(index)) Then
@@ -269,7 +260,7 @@ Partial Public Class Project_Properties
 
     Private Sub ComboBox_RatesFormat_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox_RatesFormat.SelectedIndexChanged
         'Ensure that the combobox has a valid item selected
-        If ComboBox_RatesFormat.SelectedItem IsNot Nothing AndAlso propsFileData.sampleRateFormats.Count > 0 Then
+        If ComboBox_RatesFormat.SelectedItem IsNot Nothing AndAlso ProjectSettingsFile.sampleRateFormats.Count > 0 Then
             PrintFormatRates(ComboBox_RatesFormat.SelectedItem)
         End If
     End Sub
@@ -278,7 +269,7 @@ Partial Public Class Project_Properties
         Dim selectedLabel As String = ListView_SampleRateValues.SelectedItems(0).Text
 
         'Ensure that we have selected an item
-        If ListView_SampleRateValues.SelectedItems.Count > 0 AndAlso propsFileData.sampleRateFormats(ComboBox_RatesFormat.SelectedItem).ContainsKey(selectedLabel) Then
+        If ListView_SampleRateValues.SelectedItems.Count > 0 AndAlso ProjectSettingsFile.sampleRateFormats(ComboBox_RatesFormat.SelectedItem).ContainsKey(selectedLabel) Then
             'Ask user for a value
             Dim currentSampleRate = ListView_SampleRateValues.SelectedItems(0).SubItems(1).Text
             Dim InputValue As String = InputBox("Enter New Re-sample Rate", "New Sample Rate", currentSampleRate)
@@ -287,7 +278,7 @@ Partial Public Class Project_Properties
                 'Update subitem
                 ListView_SampleRateValues.SelectedItems(0).SubItems(1).Text = InputValue
                 'Update dictionary
-                propsFileData.sampleRateFormats(ComboBox_RatesFormat.SelectedItem)(selectedLabel) = CInt(InputValue)
+                ProjectSettingsFile.sampleRateFormats(ComboBox_RatesFormat.SelectedItem)(selectedLabel) = CInt(InputValue)
             Else
                 'Inform user
                 MsgBox("Invalid sample rate value", vbOKOnly + vbExclamation, "Error")
@@ -299,16 +290,10 @@ Partial Public Class Project_Properties
     '* MISC SECTION
     '*===============================================================================================
     Private Sub TextBox_EditWavs_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles TextBox_EditWavs.MouseDoubleClick
-        'Show dialog
-        Dim diagResult As DialogResult = OpenFileDialog.ShowDialog
         'Put selected path to the textbox
-        If (diagResult = DialogResult.OK) Then
+        If OpenFileDialog.ShowDialog = DialogResult.OK Then
             'Update textbox and variables
             TextBox_EditWavs.Text = OpenFileDialog.FileName
-            ProjAudioEditor = OpenFileDialog.FileName
-            'Update ini file
-            Dim iniFunctions As New IniFile(EuroSoundIniFilePath)
-            iniFunctions.Write("Edit_Wavs_With", OpenFileDialog.FileName, "Form7_Misc")
         End If
     End Sub
 
@@ -319,16 +304,10 @@ Partial Public Class Project_Properties
     End Sub
 
     Private Sub TextBox_TextEditor_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles TextBox_TextEditor.MouseDoubleClick
-        'Show dialog
-        Dim diagResult As DialogResult = OpenFileDialog.ShowDialog
         'Put selected path to the textbox
-        If diagResult = DialogResult.OK Then
+        If OpenFileDialog.ShowDialog = DialogResult.OK Then
             'Update textbox and variables
             TextBox_TextEditor.Text = OpenFileDialog.FileName
-            ProjTextEditor = OpenFileDialog.FileName
-            'Update ini file
-            Dim iniFunctions As New IniFile(EuroSoundIniFilePath)
-            iniFunctions.Write("TextEditor", OpenFileDialog.FileName, "PropertiesForm")
         End If
     End Sub
 End Class

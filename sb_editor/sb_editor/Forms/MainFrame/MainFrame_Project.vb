@@ -42,8 +42,15 @@ Partial Public Class MainFrame
             writers.CreateProjectFile(fso.BuildPath(selectedProjectPath, "Project.txt"), Nothing, Nothing, Nothing)
             'Create System Files
             writers.UpdateMiscFile(fso.BuildPath(selectedProjectPath, "System\Misc.txt"), True)
-            writers.CreateEmptyPropertiesFile(fso.BuildPath(selectedProjectPath, "System\Properties.txt"))
             writers.CreateEmptySfxDefaults(fso.BuildPath(selectedProjectPath, "System\SFX Defaults.txt"))
+            'Project file
+            Dim newProjectFile As New PropertiesFile With {
+                .AvailableReSampleRates = New List(Of String)({"Default"}),
+                .AvailableFormats = New String(,) {}
+            }
+            newProjectFile.MiscProps.DefaultRate = 0
+            newProjectFile.MiscProps.SampleFileFolder = Application.StartupPath
+            writers.SavePropertiesFile(newProjectFile, fso.BuildPath(selectedProjectPath, "System\Properties.txt"))
             'Ask for UserName
             If StrComp(EuroSoundUser, "") = 0 Then
                 Dim projectPropsForm As New Project_Properties

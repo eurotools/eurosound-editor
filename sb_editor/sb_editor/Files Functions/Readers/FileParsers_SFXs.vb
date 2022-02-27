@@ -17,7 +17,7 @@ Partial Public Class FileParsers
         FileOpen(1, textFilePath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
         Do Until EOF(1)
             'Read a new line
-            currentLine = LineInput(1)
+            currentLine = Trim(LineInput(1))
             If currentLine <> "" Then
                 'Header info
                 If InStr(currentLine, "## ") = 1 Then
@@ -28,23 +28,23 @@ Partial Public Class FileParsers
                         sfxObj.HeaderInfo.FileHeader = currentLine
                     End If
                     If InStr(currentLine, "## First Created ...") = 1 Then
-                        sfxObj.HeaderInfo.FirstCreated = lineData(1).Trim
+                        sfxObj.HeaderInfo.FirstCreated = Trim(lineData(1))
                     End If
                     If InStr(currentLine, "## Created By ...") = 1 Then
-                        sfxObj.HeaderInfo.CreatedBy = lineData(1).Trim
+                        sfxObj.HeaderInfo.CreatedBy = Trim(lineData(1))
                     End If
                     If InStr(currentLine, "## Last Modified ...") = 1 Then
-                        sfxObj.HeaderInfo.LastModify = lineData(1).Trim
+                        sfxObj.HeaderInfo.LastModify = Trim(lineData(1))
                     End If
                     If InStr(currentLine, "## Last Modified By ...") = 1 Then
-                        sfxObj.HeaderInfo.LastModifyBy = lineData(1).Trim
+                        sfxObj.HeaderInfo.LastModifyBy = Trim(lineData(1))
                     End If
                 End If
 
                 'Check for Parameters block
                 If StrComp(currentLine, "#SFXParameters") = 0 Then
                     'Read line
-                    currentLine = LineInput(1)
+                    currentLine = Trim(LineInput(1))
                     If StrComp(currentLine, "#END") <> 0 Then
                         Do
                             Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
@@ -89,7 +89,7 @@ Partial Public Class FileParsers
                                     sfxObj.Parameters.Doppler = lineData(1).Equals("1")
                             End Select
                             'Continue Reading
-                            currentLine = LineInput(1)
+                            currentLine = Trim(LineInput(1))
                         Loop While StrComp(currentLine, "#END") <> 0
                     End If
                 End If
@@ -97,7 +97,7 @@ Partial Public Class FileParsers
                 'Check for Sample Pool Files block
                 If StrComp(currentLine, "#SFXSamplePoolFiles") = 0 Then
                     'Read line
-                    currentLine = LineInput(1)
+                    currentLine = Trim(LineInput(1))
                     If StrComp(currentLine, "#END") <> 0 Then
                         Do
                             Dim waveRelativePath As String = currentLine
@@ -109,7 +109,7 @@ Partial Public Class FileParsers
                             'Add object to list
                             samplesList.Add(sampleObj)
                             'Continue Reading
-                            currentLine = LineInput(1)
+                            currentLine = Trim(LineInput(1))
                         Loop While StrComp(currentLine, "#END") <> 0 AndAlso Not EOF(1)
                     End If
                 End If
@@ -117,7 +117,7 @@ Partial Public Class FileParsers
                 'Check for Sample Pool Modes block
                 If StrComp(currentLine, "#SFXSamplePoolModes") = 0 Then
                     'Read line
-                    currentLine = LineInput(1)
+                    currentLine = Trim(LineInput(1))
                     If StrComp(currentLine, "#END") <> 0 Then
                         If samplesList.Count > 0 Then
                             Do
@@ -143,7 +143,7 @@ Partial Public Class FileParsers
                                         End Select
 
                                         'Continue Reading
-                                        currentLine = LineInput(1)
+                                        currentLine = Trim(LineInput(1))
                                     Next
                                 Next
                             Loop While StrComp(currentLine, "#END") <> 0
@@ -154,7 +154,7 @@ Partial Public Class FileParsers
                 'Check for Sample Pool Control block
                 If StrComp(currentLine, "#SFXSamplePoolControl") = 0 Then
                     'Read line
-                    currentLine = LineInput(1)
+                    currentLine = Trim(LineInput(1))
                     If StrComp(currentLine, "#END") <> 0 Then
                         Do
                             Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
@@ -177,7 +177,7 @@ Partial Public Class FileParsers
                                     sfxObj.SamplePool.EnableSubSFX = lineData(1).Equals("1")
                             End Select
                             'Continue Reading
-                            currentLine = LineInput(1)
+                            currentLine = Trim(LineInput(1))
                         Loop While StrComp(currentLine, "#END") <> 0
                     End If
                 End If
@@ -185,13 +185,13 @@ Partial Public Class FileParsers
                 'Check for hashcodes block
                 If StrComp(currentLine, "#HASHCODE") = 0 Then
                     'Read a new line
-                    currentLine = LineInput(1)
+                    currentLine = Trim(LineInput(1))
                     If StrComp(currentLine, "#END") <> 0 Then
                         Do
                             'Split line and get number
                             sfxObj.HashCode = Split(currentLine, " ")(1)
                             'Continue Reading
-                            currentLine = LineInput(1)
+                            currentLine = Trim(LineInput(1))
                         Loop While StrComp(currentLine, "#END") <> 0
                     End If
                 End If

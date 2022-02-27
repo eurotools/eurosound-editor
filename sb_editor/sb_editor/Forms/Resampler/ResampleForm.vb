@@ -5,7 +5,7 @@ Partial Public Class ResampleForm
     '*===============================================================================================
     '* GLOBAL VARIABLES
     '*===============================================================================================
-    Private ReadOnly sampleRateFormats As New Dictionary(Of Integer, String())
+    'Private ReadOnly sampleRateFormats As New Dictionary(Of Integer, String())
     Private promptSave As Boolean = True
     Private ReadOnly writers As New FileWriters
     Private ReadOnly dataTableInfo As DataTable
@@ -28,11 +28,11 @@ Partial Public Class ResampleForm
         stopwatch.Start()
 
         'Get Master folder file path and select the first preview option
-        TextBox_ProjectPath.Text = fso.BuildPath(ProjMasterFolder, "Master")
+        TextBox_ProjectPath.Text = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")
         ComboBox_PreviewOptions.SelectedIndex = 0
 
         'Get available sample rates
-        GetAvailableSampleRates(SysFileProperties)
+        ComboBox_AvailableRates.Items.AddRange(ProjectSettingsFile.AvailableReSampleRates.ToArray)
         ComboBox_AvailableRates.SelectedIndex = 0
 
         'Get samples listview
@@ -47,6 +47,9 @@ Partial Public Class ResampleForm
         Else
             TextBox_MoveSamplesTo.Text = moveSamplesFolder
         End If
+
+        'Add formats to combobox
+        AddFormatsToCombo(ComboBox_PreviewOptions)
 
         'Show elapsed time
         stopwatch.Stop()
@@ -247,7 +250,7 @@ Partial Public Class ResampleForm
         Else
             If fso.FolderExists(TextBox_MoveSamplesTo.Text) Then
                 'Build master path
-                Dim masterFolder As String = fso.BuildPath(ProjMasterFolder, "Master")
+                Dim masterFolder As String = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")
                 'Ensure that we are not moving outside master folder
                 If InStr(TextBox_MoveSamplesTo.Text, masterFolder) > 0 Then
                     'Ask user what he wants to do

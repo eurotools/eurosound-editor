@@ -150,7 +150,7 @@ Partial Class ResampleForm
         '
         Me.ComboBox_PreviewOptions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_PreviewOptions.FormattingEnabled = True
-        Me.ComboBox_PreviewOptions.Items.AddRange(New Object() {"Original (Not Re-Sampled)", "PlayStation2", "GameCube", "PC", "X Box"})
+        Me.ComboBox_PreviewOptions.Items.AddRange(New Object() {"Original (Not Re-Sampled)"})
         Me.ComboBox_PreviewOptions.Location = New System.Drawing.Point(6, 18)
         Me.ComboBox_PreviewOptions.Name = "ComboBox_PreviewOptions"
         Me.ComboBox_PreviewOptions.Size = New System.Drawing.Size(211, 21)

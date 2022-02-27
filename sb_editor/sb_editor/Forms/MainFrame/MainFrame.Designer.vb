@@ -185,7 +185,6 @@ Partial Class MainFrame
         Me.ComboBox_Format.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox_Format.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_Format.FormattingEnabled = True
-        Me.ComboBox_Format.Items.AddRange(New Object() {"PlayStation2", "GameCube", "PC", "X Box"})
         Me.ComboBox_Format.Location = New System.Drawing.Point(72, 160)
         Me.ComboBox_Format.Name = "ComboBox_Format"
         Me.ComboBox_Format.Size = New System.Drawing.Size(182, 21)

@@ -17,11 +17,11 @@
         FileOpen(1, samplesFilePath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
         Do Until EOF(1)
             'Read text file
-            currentLine = LineInput(1)
+            currentLine = Trim(LineInput(1))
             'Read Available Sample Rates
             If StrComp(currentLine, "#AvailableSamples") = 0 Then
                 'Read line
-                currentLine = LineInput(1)
+                currentLine = Trim(LineInput(1))
                 Dim SamplesCount As Integer = currentLine
                 'Read samples table
                 If SamplesCount > 0 Then
@@ -29,7 +29,7 @@
                         Dim itemsCount As Integer = 0
                         Do
                             'Continue Reading
-                            currentLine = LineInput(1)
+                            currentLine = Trim(LineInput(1))
                             'Read content
                             If StrComp(currentLine, "#END") <> 0 Then
                                 'Add item to listview

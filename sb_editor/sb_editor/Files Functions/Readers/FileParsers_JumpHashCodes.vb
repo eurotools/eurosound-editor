@@ -11,16 +11,16 @@
         FileOpen(1, textFilePath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
         Do Until EOF(1)
             'Read text file
-            currentLine = LineInput(1)
+            currentLine = Trim(LineInput(1))
             If StrComp(currentLine, "#JUMPMARKERS", CompareMethod.Text) = 0 Then
                 'Read line
-                currentLine = LineInput(1)
+                currentLine = Trim(LineInput(1))
                 If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
                     Do
                         'Add item to listbox
                         jumpHashCodesList.Add(currentLine)
                         'Continue Reading
-                        currentLine = LineInput(1)
+                        currentLine = Trim(LineInput(1))
                     Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
                 End If
             End If

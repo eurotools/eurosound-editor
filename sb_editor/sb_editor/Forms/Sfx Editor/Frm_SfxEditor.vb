@@ -30,7 +30,12 @@ Partial Public Class Frm_SfxEditor
         Text = sfxFileName
         Label_SFX_Name.Text = ">Name: " & sfxFileName
         SfxParamsAndSamplePool.Textbox_SfxName.Text = sfxFileName
-        ComboBox1.SelectedIndex = 0
+
+        'Add formats to combobox
+        AddFormatsToCombo(ComboBox_AvailableFormats)
+        If ComboBox_AvailableFormats.Items.Count > 0 Then
+            ComboBox_AvailableFormats.SelectedIndex = 0
+        End If
 
         'Get stream sounds list
         If fso.FileExists(SysFileSamples) Then

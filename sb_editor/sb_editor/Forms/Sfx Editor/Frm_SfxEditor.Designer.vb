@@ -35,7 +35,7 @@ Partial Class Frm_SfxEditor
         Me.Textbox_HashCodeNumber = New System.Windows.Forms.TextBox()
         Me.Label_HashCodeNumber = New System.Windows.Forms.Label()
         Me.GroupBox_SamplePool = New System.Windows.Forms.GroupBox()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.ComboBox_AvailableFormats = New System.Windows.Forms.ComboBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.GroupBox_SampleProps = New System.Windows.Forms.GroupBox()
         Me.Label_RandomPan = New System.Windows.Forms.Label()
@@ -81,6 +81,7 @@ Partial Class Frm_SfxEditor
         Me.MenuItem_SamplePool_Play = New System.Windows.Forms.MenuItem()
         Me.MenuItem_SamplePool_Stop = New System.Windows.Forms.MenuItem()
         Me.CheckBox_EnableSubSFX = New System.Windows.Forms.CheckBox()
+        Me.SfxParamsAndSamplePool = New sb_editor.SfxControl()
         Me.Panel_Options = New System.Windows.Forms.Panel()
         Me.Groupbox_RemoveFormat = New System.Windows.Forms.GroupBox()
         Me.Button_RemoveSpecificVersion = New System.Windows.Forms.Button()
@@ -97,7 +98,6 @@ Partial Class Frm_SfxEditor
         Me.Button_Cancel = New System.Windows.Forms.Button()
         Me.openFileDiag = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip_Buttons = New System.Windows.Forms.ToolTip(Me.components)
-        Me.SfxParamsAndSamplePool = New sb_editor.SfxControl()
         Me.TabControl_Platforms.SuspendLayout()
         Me.Panel_SfxParameters.SuspendLayout()
         Me.GroupBox_SamplePool.SuspendLayout()
@@ -223,7 +223,7 @@ Partial Class Frm_SfxEditor
         '
         'GroupBox_SamplePool
         '
-        Me.GroupBox_SamplePool.Controls.Add(Me.ComboBox1)
+        Me.GroupBox_SamplePool.Controls.Add(Me.ComboBox_AvailableFormats)
         Me.GroupBox_SamplePool.Controls.Add(Me.Label1)
         Me.GroupBox_SamplePool.Controls.Add(Me.GroupBox_SampleProps)
         Me.GroupBox_SamplePool.Controls.Add(Me.Groupbox_SampleInfo)
@@ -246,14 +246,13 @@ Partial Class Frm_SfxEditor
         Me.GroupBox_SamplePool.TabStop = False
         Me.GroupBox_SamplePool.Text = "Sample Pool"
         '
-        'ComboBox1
+        'ComboBox_AvailableFormats
         '
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"Playstation2", "GameCube", "PC", "X Box"})
-        Me.ComboBox1.Location = New System.Drawing.Point(622, 19)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(138, 21)
-        Me.ComboBox1.TabIndex = 15
+        Me.ComboBox_AvailableFormats.FormattingEnabled = True
+        Me.ComboBox_AvailableFormats.Location = New System.Drawing.Point(622, 19)
+        Me.ComboBox_AvailableFormats.Name = "ComboBox_AvailableFormats"
+        Me.ComboBox_AvailableFormats.Size = New System.Drawing.Size(138, 21)
+        Me.ComboBox_AvailableFormats.TabIndex = 15
         '
         'Label1
         '
@@ -309,9 +308,9 @@ Partial Class Frm_SfxEditor
         Me.Label_RandomVolume.AutoSize = True
         Me.Label_RandomVolume.Location = New System.Drawing.Point(9, 99)
         Me.Label_RandomVolume.Name = "Label_RandomVolume"
-        Me.Label_RandomVolume.Size = New System.Drawing.Size(139, 13)
+        Me.Label_RandomVolume.Size = New System.Drawing.Size(142, 13)
         Me.Label_RandomVolume.TabIndex = 6
-        Me.Label_RandomVolume.Text = "Random Volume Offset (-/+)"
+        Me.Label_RandomVolume.Text = "Random Volume Offset: (-/+)"
         '
         'Numeric_RandomPan
         '
@@ -356,9 +355,9 @@ Partial Class Frm_SfxEditor
         Me.Label_BaseVolume.AutoSize = True
         Me.Label_BaseVolume.Location = New System.Drawing.Point(9, 73)
         Me.Label_BaseVolume.Name = "Label_BaseVolume"
-        Me.Label_BaseVolume.Size = New System.Drawing.Size(105, 13)
+        Me.Label_BaseVolume.Size = New System.Drawing.Size(108, 13)
         Me.Label_BaseVolume.TabIndex = 4
-        Me.Label_BaseVolume.Text = "Base Volume (0-100)"
+        Me.Label_BaseVolume.Text = "Base Volume: (0-100)"
         '
         'Numeric_RandomPitch
         '
@@ -378,9 +377,9 @@ Partial Class Frm_SfxEditor
         Me.Label_RandomPitch.AutoSize = True
         Me.Label_RandomPitch.Location = New System.Drawing.Point(9, 47)
         Me.Label_RandomPitch.Name = "Label_RandomPitch"
-        Me.Label_RandomPitch.Size = New System.Drawing.Size(128, 13)
+        Me.Label_RandomPitch.Size = New System.Drawing.Size(131, 13)
         Me.Label_RandomPitch.TabIndex = 2
-        Me.Label_RandomPitch.Text = "Random Pitch Offset (-/+)"
+        Me.Label_RandomPitch.Text = "Random Pitch Offset: (-/+)"
         '
         'Numeric_PitchOffset
         '
@@ -399,9 +398,9 @@ Partial Class Frm_SfxEditor
         Me.Label_PitchOffset.AutoSize = True
         Me.Label_PitchOffset.Location = New System.Drawing.Point(9, 21)
         Me.Label_PitchOffset.Name = "Label_PitchOffset"
-        Me.Label_PitchOffset.Size = New System.Drawing.Size(118, 13)
+        Me.Label_PitchOffset.Size = New System.Drawing.Size(121, 13)
         Me.Label_PitchOffset.TabIndex = 0
-        Me.Label_PitchOffset.Text = "Pitch Offset (semitones)"
+        Me.Label_PitchOffset.Text = "Pitch Offset: (semitones)"
         '
         'Groupbox_SampleInfo
         '
@@ -672,6 +671,14 @@ Partial Class Frm_SfxEditor
         Me.CheckBox_EnableSubSFX.Text = "Enable Sub SFXs"
         Me.CheckBox_EnableSubSFX.UseVisualStyleBackColor = True
         '
+        'SfxParamsAndSamplePool
+        '
+        Me.SfxParamsAndSamplePool.Location = New System.Drawing.Point(3, 4)
+        Me.SfxParamsAndSamplePool.Name = "SfxParamsAndSamplePool"
+        Me.SfxParamsAndSamplePool.ShowSampleProperties = False
+        Me.SfxParamsAndSamplePool.Size = New System.Drawing.Size(891, 277)
+        Me.SfxParamsAndSamplePool.TabIndex = 14
+        '
         'Panel_Options
         '
         Me.Panel_Options.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
@@ -820,14 +827,6 @@ Partial Class Frm_SfxEditor
         Me.openFileDiag.Filter = "Wave File (*.wav)|*.Wav"
         Me.openFileDiag.Multiselect = True
         '
-        'SfxParamsAndSamplePool
-        '
-        Me.SfxParamsAndSamplePool.Location = New System.Drawing.Point(3, 4)
-        Me.SfxParamsAndSamplePool.Name = "SfxParamsAndSamplePool"
-        Me.SfxParamsAndSamplePool.ShowSampleProperties = False
-        Me.SfxParamsAndSamplePool.Size = New System.Drawing.Size(891, 277)
-        Me.SfxParamsAndSamplePool.TabIndex = 14
-        '
         'Frm_SfxEditor
         '
         Me.AcceptButton = Me.Button_OK
@@ -877,7 +876,7 @@ Partial Class Frm_SfxEditor
     Friend WithEvents SfxParamsAndSamplePool As SfxControl
     Friend WithEvents Panel_SfxParameters As Panel
     Private WithEvents GroupBox_SamplePool As GroupBox
-    Friend WithEvents ComboBox1 As ComboBox
+    Friend WithEvents ComboBox_AvailableFormats As ComboBox
     Friend WithEvents Label1 As Label
     Private WithEvents GroupBox_SampleProps As GroupBox
     Private WithEvents Label_RandomPan As Label

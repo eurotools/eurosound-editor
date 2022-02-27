@@ -13,7 +13,7 @@
             FileOpen(1, propsFilePath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
             Do Until EOF(1)
                 'Read text file
-                currentLine = LineInput(1)
+                currentLine = Trim(LineInput(1))
 
                 'Header info
                 If InStr(currentLine, "## ") = 1 Then
@@ -25,24 +25,23 @@
                         propsFile.HeaderInfo.FileHeader = currentLine
                     End If
                     If InStr(currentLine, "## First Created ...") = 1 Then
-                        propsFile.HeaderInfo.FirstCreated = lineData(1).Trim
+                        propsFile.HeaderInfo.FirstCreated = Trim(lineData(1))
                     End If
                     If InStr(currentLine, "## Created By ...") = 1 Then
-                        propsFile.HeaderInfo.CreatedBy = lineData(1).Trim
+                        propsFile.HeaderInfo.CreatedBy = Trim(lineData(1))
                     End If
                     If InStr(currentLine, "## Last Modified ...") = 1 Then
-                        propsFile.HeaderInfo.LastModify = lineData(1).Trim
+                        propsFile.HeaderInfo.LastModify = Trim(lineData(1))
                     End If
                     If InStr(currentLine, "## Last Modified By ...") = 1 Then
-                        propsFile.HeaderInfo.LastModifyBy = lineData(1).Trim
+                        propsFile.HeaderInfo.LastModifyBy = Trim(lineData(1))
                     End If
                 End If
 
                 'Available formats section
                 If StrComp(currentLine, "#AvailableFormats", CompareMethod.Text) = 0 Then
                     'Read line
-                    currentLine = LineInput(1)
-                    Dim AvailableFormatsCount As Integer = currentLine
+                    Dim AvailableFormatsCount As Integer = Trim(LineInput(1))
                     propsFile.AvailableFormats = New String(AvailableFormatsCount - 1, 2) {}
 
                     'Ensure that there are formats stored
@@ -52,7 +51,7 @@
                             Dim itemsCount As Integer = 0
                             Do
                                 'Read line
-                                currentLine = LineInput(1)
+                                currentLine = Trim(LineInput(1))
 
                                 'Read content
                                 If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
@@ -72,13 +71,13 @@
                 'Read Available Sample Rates
                 If StrComp(currentLine, "#AvailableReSampleRates", CompareMethod.Text) = 0 Then
                     'Read line
-                    currentLine = LineInput(1)
+                    currentLine = Trim(LineInput(1))
                     If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
                         Do
                             'Add item to listview
                             AvailableReSampleRates.Add(currentLine)
                             'Continue Reading
-                            currentLine = LineInput(1)
+                            currentLine = Trim(LineInput(1))
                         Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
 
                         'Add items to array
@@ -96,13 +95,13 @@
 
                     'Read line
                     Dim sampleRateIndex As Integer = 0
-                    currentLine = LineInput(1)
+                    currentLine = Trim(LineInput(1))
                     If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
                         Do
                             'Add item to ArrayList
                             values.Add(AvailableReSampleRates(sampleRateIndex), currentLine)
                             'Continue Reading
-                            currentLine = LineInput(1)
+                            currentLine = Trim(LineInput(1))
                             'Update index
                             sampleRateIndex += 1
                         Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
@@ -118,7 +117,7 @@
                 'Misc properties block
                 If StrComp(currentLine, "#MiscProperites", CompareMethod.Text) = 0 Then
                     'Read line
-                    currentLine = LineInput(1)
+                    currentLine = Trim(LineInput(1))
                     If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
                         Do
                             'Split line
@@ -138,7 +137,7 @@
                             End Select
 
                             'Continue Reading
-                            currentLine = LineInput(1)
+                            currentLine = Trim(LineInput(1))
                         Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0 AndAlso Not EOF(1)
                     End If
                 End If

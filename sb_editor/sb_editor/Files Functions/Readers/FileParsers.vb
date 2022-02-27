@@ -4,7 +4,7 @@
     '*===============================================================================================
     Private Function GetStringValue(keyword As String, currentLine As String) As String
         Dim keyWordLength = keyword.Length
-        Dim LineData As String = currentLine.Substring(keyWordLength).Trim
+        Dim LineData As String = Trim(currentLine.Substring(keyWordLength))
         Return LineData
     End Function
 
@@ -33,16 +33,16 @@
                     headerInfo.FileHeader = currentLine
                 End If
                 If InStr(currentLine, "## First Created ...") = 1 Then
-                    headerInfo.FirstCreated = GetStringValue("## First Created ...", currentLine).Trim
+                    headerInfo.FirstCreated = GetStringValue("## First Created ...", currentLine)
                 End If
                 If InStr(currentLine, "## Created By ...") = 1 Then
-                    headerInfo.CreatedBy = GetStringValue("## Created By ...", currentLine).Trim
+                    headerInfo.CreatedBy = GetStringValue("## Created By ...", currentLine)
                 End If
                 If InStr(currentLine, "## Last Modified ...") = 1 Then
-                    headerInfo.LastModify = GetStringValue("## Last Modified ...", currentLine).Trim
+                    headerInfo.LastModify = GetStringValue("## Last Modified ...", currentLine)
                 End If
                 If InStr(currentLine, "## Last Modified By ...") = 1 Then
-                    headerInfo.LastModifyBy = GetStringValue("## Last Modified By ...", currentLine).Trim
+                    headerInfo.LastModifyBy = GetStringValue("## Last Modified By ...", currentLine)
                 End If
             End If
 

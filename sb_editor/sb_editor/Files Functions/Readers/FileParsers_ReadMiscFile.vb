@@ -4,11 +4,11 @@
             FileOpen(1, miscFilePath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
             Do Until EOF(1)
                 'Read text file
-                Dim currentLine As String = LineInput(1)
+                Dim currentLine As String = Trim(LineInput(1))
                 'Streams Block
                 If StrComp(currentLine, "#STREAMS", CompareMethod.Text) = 0 Then
                     'Read line
-                    currentLine = LineInput(1)
+                    currentLine = Trim(LineInput(1))
                     If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
                         Do
                             Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
@@ -16,7 +16,7 @@
                                 ReSampleStreams = CUInt(lineData(1))
                             End If
                             'Continue Reading
-                            currentLine = LineInput(1)
+                            currentLine = Trim(LineInput(1))
                         Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0 AndAlso Not EOF(1)
                     End If
                 End If
@@ -24,7 +24,7 @@
                 'HashCodes Block
                 If StrComp(currentLine, "#HASHCODES", CompareMethod.Text) = 0 Then
                     'Read line
-                    currentLine = LineInput(1)
+                    currentLine = Trim(LineInput(1))
                     If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
                         Do
                             Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
@@ -37,7 +37,7 @@
                                     MFXHashCodeNumber = CInt(lineData(1))
                             End Select
                             'Continue Reading
-                            currentLine = LineInput(1)
+                            currentLine = Trim(LineInput(1))
                         Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0 AndAlso Not EOF(1)
                     End If
                 End If

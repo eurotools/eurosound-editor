@@ -82,7 +82,7 @@ Partial Public Class ExporterForm
 
             'Merge all files
             Dim hastableBuilder As New SfxDefines
-            hastableBuilder.CreateSfxData(fso.BuildPath(ProjOutHashCodesFolder, "SFX_Data.h"), tempSfxDataFolder, maxHashCode)
+            hastableBuilder.CreateSfxData(fso.BuildPath(propsFile.MiscProps.HashCodeFileFolder, "SFX_Data.h"), tempSfxDataFolder, maxHashCode)
         End If
     End Sub
 End Class

@@ -41,13 +41,14 @@ Partial Public NotInheritable Class SplashScreen
             Dim sfxsToWriter As String() = mainform.UserControl_SFXs.ListBox_SFXs.Items.Cast(Of String).ToArray
             Dim soundbanksList As String() = GetListOfSoundbanks(mainform.TreeView_SoundBanks)
             writers.CreateProjectFile(projectFilePath, soundbanksList, databasesToWrite, sfxsToWriter)
-            'Load Languages
+            'Load Languages and Formats
             AddProjectLanguagesToCombo()
+            AddFormatsToCombo(mainform.ComboBox_Format)
             'Update GUI
             mainform.Text = "EuroSound: """ & WorkingDirectory & """"
 
             'Read ini file
-            If SysFileProjectIniPath IsNot "" Then
+            If SysFileProjectIniPath > "" Then
                 Dim iniFunctions As New IniFile(SysFileProjectIniPath)
                 mainform.RadioButton_AllBanksSelectedFormat.Checked = StrComp(iniFunctions.Read("AllBanksOption_Value", "Form1_Misc"), "True") = 0
                 mainform.RadioButton_Output_SelectedSoundBank.Checked = StrComp(iniFunctions.Read("SelectedlBankOption_Value", "Form1_Misc"), "True") = 0
@@ -68,19 +69,20 @@ Partial Public NotInheritable Class SplashScreen
                 tempVar = iniFunctions.Read("LanguageCombo", "MainForm")
                 If Not tempVar = "" Then
                     Dim languageIndex As Integer = tempVar
-                    If languageIndex < mainform.ComboBox_OutputLanguage.Items.Count Then
+                    If languageIndex <> -1 AndAlso languageIndex < mainform.ComboBox_OutputLanguage.Items.Count Then
                         mainform.ComboBox_OutputLanguage.SelectedIndex = languageIndex
                     ElseIf mainform.ComboBox_OutputLanguage.Items.Count > 0 Then
                         mainform.ComboBox_OutputLanguage.SelectedIndex = 0
                     End If
                 End If
                 'Combobox output format
-                mainform.ComboBox_Format.SelectedIndex = 0
                 tempVar = iniFunctions.Read("FormatCombo_ListIndex", "Form1_Misc")
                 If Not tempVar = "" Then
                     Dim outFormatIndex As Integer = tempVar
-                    If outFormatIndex < mainform.ComboBox_Format.Items.Count Then
+                    If outFormatIndex <> -1 AndAlso outFormatIndex < mainform.ComboBox_Format.Items.Count Then
                         mainform.ComboBox_Format.SelectedIndex = outFormatIndex
+                    ElseIf mainform.ComboBox_Format.Items.Count > 0 Then
+                        mainform.ComboBox_Format.SelectedIndex = 0
                     End If
                 End If
             End If
@@ -105,8 +107,8 @@ Partial Public NotInheritable Class SplashScreen
 
     Private Sub AddProjectLanguagesToCombo()
         'Get project languages
-        If Dir(fso.BuildPath(ProjMasterFolder, "Master\Speech"), FileAttribute.Directory) IsNot "" Then
-            Dim languages As String() = Directory.GetDirectories(fso.BuildPath(ProjMasterFolder, "Master\Speech"))
+        If Dir(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\Speech"), FileAttribute.Directory) IsNot "" Then
+            Dim languages As String() = Directory.GetDirectories(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\Speech"))
             'Add folders to combobox
             mainform.ComboBox_OutputLanguage.BeginUpdate()
             For index As Integer = 0 To languages.Length - 1

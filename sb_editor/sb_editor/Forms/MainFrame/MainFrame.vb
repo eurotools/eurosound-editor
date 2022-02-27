@@ -30,16 +30,18 @@ Partial Public Class MainFrame
             writers.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
 
             'Save data in the Ini File
-            Dim iniFunctions As New IniFile(SysFileProjectIniPath)
-            iniFunctions.Write("Last_Project_Opened", WorkingDirectory, "Form1_Misc")
-            iniFunctions.Write("FormatCombo_ListIndex", ComboBox_Format.SelectedIndex, "Form1_Misc")
-            iniFunctions.Write("AllBanksOption_Value", RadioButton_AllBanksSelectedFormat.Checked, "Form1_Misc")
-            iniFunctions.Write("SelectedlBankOption_Value", RadioButton_Output_SelectedSoundBank.Checked, "Form1_Misc")
-            iniFunctions.Write("AllFormatsOption_Value", RadioButton_Output_AllBanksAll.Checked, "Form1_Misc")
-            iniFunctions.Write("Check1", Convert.ToByte(CheckBox_FastReSample.Checked), "MainForm")
-            iniFunctions.Write("LanguageCombo", ComboBox_OutputLanguage.SelectedIndex, "MainForm")
-            iniFunctions.Write("Check2", Convert.ToByte(UserControl_SFXs.CheckBox_SortByDate.Checked), "MainForm")
-            iniFunctions.Write("OutputAllLanguages", Convert.ToByte(CheckBox_OutAllLanguages.Checked), "MainForm")
+            If SysFileProjectIniPath > "" Then
+                Dim iniFunctions As New IniFile(SysFileProjectIniPath)
+                iniFunctions.Write("Last_Project_Opened", WorkingDirectory, "Form1_Misc")
+                iniFunctions.Write("FormatCombo_ListIndex", ComboBox_Format.SelectedIndex, "Form1_Misc")
+                iniFunctions.Write("AllBanksOption_Value", RadioButton_AllBanksSelectedFormat.Checked, "Form1_Misc")
+                iniFunctions.Write("SelectedlBankOption_Value", RadioButton_Output_SelectedSoundBank.Checked, "Form1_Misc")
+                iniFunctions.Write("AllFormatsOption_Value", RadioButton_Output_AllBanksAll.Checked, "Form1_Misc")
+                iniFunctions.Write("Check1", Convert.ToByte(CheckBox_FastReSample.Checked), "MainForm")
+                iniFunctions.Write("LanguageCombo", ComboBox_OutputLanguage.SelectedIndex, "MainForm")
+                iniFunctions.Write("Check2", Convert.ToByte(UserControl_SFXs.CheckBox_SortByDate.Checked), "MainForm")
+                iniFunctions.Write("OutputAllLanguages", Convert.ToByte(CheckBox_OutAllLanguages.Checked), "MainForm")
+            End If
         End If
     End Sub
 
@@ -610,7 +612,7 @@ Partial Public Class MainFrame
     End Sub
 
     Private Sub Button_ReSampling_Click(sender As Object, e As EventArgs) Handles Button_ReSampling.Click
-        If fso.FolderExists(fso.BuildPath(ProjMasterFolder, "Master")) Then
+        If fso.FolderExists(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")) Then
             If fso.FileExists(SysFileSamples) Then
                 'Set cursor as hourglass
                 Cursor.Current = Cursors.WaitCursor
@@ -624,7 +626,7 @@ Partial Public Class MainFrame
                 'Check that all samples exists
                 For index As Integer = samplesDataTable.Rows.Count - 1 To 0 Step -1
                     Dim dr As DataRow = samplesDataTable.Rows(index)
-                    Dim sampleFullPath As String = fso.BuildPath(ProjMasterFolder & "\Master", dr("SampleFilename"))
+                    Dim sampleFullPath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder & "\Master", dr("SampleFilename"))
                     'Add item to missing samples list and remove item form data table
                     If Not fso.FileExists(sampleFullPath) Then
                         missingSamples.Add(dr("SampleFilename"))
@@ -642,9 +644,9 @@ Partial Public Class MainFrame
                 End While
 
                 'Check for new samples
-                If fso.FolderExists(fso.BuildPath(ProjMasterFolder, "Master")) Then
-                    Dim filesList As String() = Directory.GetFiles(fso.BuildPath(ProjMasterFolder, "Master"), "*.wav", SearchOption.AllDirectories)
-                    Dim substrStart = Len(ProjMasterFolder & "\Master\")
+                If fso.FolderExists(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")) Then
+                    Dim filesList As String() = Directory.GetFiles(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master"), "*.wav", SearchOption.AllDirectories)
+                    Dim substrStart = Len(ProjectSettingsFile.MiscProps.SampleFileFolder & "\Master\")
                     For index As Integer = 0 To filesList.Count - 1
                         Dim relPath As String = Mid(filesList(index), substrStart)
                         If Not sampleFiles.Contains(relPath) Then

@@ -7,17 +7,14 @@ Friend Module GlobalVariables
     Friend ReadOnly SfxLanguages As String() = New String() {"English", "American", "Japanese", "Danish", "Dutch", "Finnish", "French", "German", "Italian", "Norwegian", "Portuguese", "Spanish", "Swedish"}
 
     'Globals
+    Friend ProjectSettingsFile As New PropertiesFile
     Friend DefaultLanguage As String = SfxLanguages(0)
     Friend WorkingDirectory As String = ""
     Friend EuroSoundIniFilePath As String = Application.StartupPath & "\EuroSound.ini"
     Friend EuroSoundUser As String = ""
 
     'Project Settings
-    Friend ProjMasterFolder As String = ""
     Friend ProjAudioEditor As String = ""
-    Friend ProjOutHashCodesFolder As String = ""
-    Friend ProjOutEngineXFolder As String = ""
-    Friend ProjOutEuroLandServer As String = ""
     Friend ProjTextEditor As String = ""
 
     'SystemFiles

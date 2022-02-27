@@ -60,7 +60,7 @@ Public Class SFX_Properties
         Label_SfxCount_Value.Text = CountFolderFiles(fso.BuildPath(WorkingDirectory, "SFXs"), "*.txt")
 
         'Get master path and count samples
-        Dim MasterFilePath = fso.BuildPath(ProjMasterFolder, "Master")
+        Dim MasterFilePath = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")
         If fso.FolderExists(MasterFilePath) Then
             Label_SampleCount_Value.Text = Directory.GetFiles(MasterFilePath, "*.wav", SearchOption.AllDirectories).Length
             'Get sample folder size

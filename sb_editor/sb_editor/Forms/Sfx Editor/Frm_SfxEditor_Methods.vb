@@ -241,7 +241,7 @@ Partial Public Class Frm_SfxEditor
                             .RandomPan = sampleDefaultValues(5)
                         }
                         'Calculate Relative Path
-                        Dim MasterFolderPath As String = ProjMasterFolder & "\Master\"
+                        Dim MasterFolderPath As String = ProjectSettingsFile.MiscProps.SampleFileFolder & "\Master\"
                         If InStr(waveFullPath, MasterFolderPath) = 1 Then
                             Dim relativePath As String = waveFullPath.Substring(MasterFolderPath.Length)
                             sampleObj.FilePath = relativePath
@@ -327,7 +327,7 @@ Partial Public Class Frm_SfxEditor
                     If selectedItemName < sfxFileData.Samples.Count Then
                         'Get relative path
                         Dim waveRelativePath = sfxFileData.Samples(selectedItemName).FilePath
-                        Dim waveFilePath As String = fso.BuildPath(ProjMasterFolder, "Master\" & waveRelativePath)
+                        Dim waveFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\" & waveRelativePath)
                         'Play audio
                         If fso.FileExists(waveFilePath) Then
                             My.Computer.Audio.Play(waveFilePath)
@@ -359,7 +359,7 @@ Partial Public Class Frm_SfxEditor
                     If selectedItemName < sfxFileData.Samples.Count Then
                         'Get absolute path
                         Dim waveRelativePath As String = sfxFileData.Samples(selectedItemName).FilePath
-                        Dim waveFullPath As String = fso.BuildPath(ProjMasterFolder & "\Master", waveRelativePath)
+                        Dim waveFullPath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder & "\Master", waveRelativePath)
                         'Open Audio Editor tool
                         EditWaveFile(waveFullPath)
                     End If
@@ -385,7 +385,7 @@ Partial Public Class Frm_SfxEditor
                 If selectedItemName < sfxFileData.Samples.Count Then
                     'Get wave folder path
                     Dim waveRelativePath = sfxFileData.Samples(selectedItemName).FilePath
-                    Dim folderPath = fso.BuildPath(ProjMasterFolder & "\Master", fso.GetParentFolderName(waveRelativePath))
+                    Dim folderPath = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder & "\Master", fso.GetParentFolderName(waveRelativePath))
                     If fso.FolderExists(folderPath) Then
                         'Open folder
                         Process.Start("Explorer.exe", folderPath)

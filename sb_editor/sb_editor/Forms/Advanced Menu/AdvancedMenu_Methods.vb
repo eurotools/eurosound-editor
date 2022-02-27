@@ -2,7 +2,7 @@
 
 Partial Public Class AdvancedMenu
     Private Function GetMaxHashCode(folderPath As String) As Integer
-        Dim hashcodeNumber As Integer = 0
+        Dim hashcodeNumber As Integer = 1
         If fso.FolderExists(folderPath) Then
             Dim filesToCheck As String() = Directory.GetFiles(folderPath, "*.txt", SearchOption.TopDirectoryOnly)
             For index As Integer = 0 To filesToCheck.Length - 1

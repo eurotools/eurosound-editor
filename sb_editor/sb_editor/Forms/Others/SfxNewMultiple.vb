@@ -24,8 +24,14 @@ Public Class SfxNewMultiple
         'Load config
         If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System")) Then
             Dim iniFunctions As New IniFile(SysFileProjectIniPath)
-            CheckBox_ForceUpperCase.Checked = CBool(iniFunctions.Read("Check1_Value", "Form11_Misc"))
-            CheckBox_RandomSequence.Checked = CBool(iniFunctions.Read("Check2_Value", "Form11_Misc"))
+            Dim tempvar As String = iniFunctions.Read("Check1_Value", "Form11_Misc")
+            If IsNumeric(tempvar) Then
+                CheckBox_ForceUpperCase.Checked = CBool(tempvar)
+            End If
+            tempvar = iniFunctions.Read("Check2_Value", "Form11_Misc")
+            If IsNumeric(tempvar) Then
+                CheckBox_RandomSequence.Checked = CBool(tempvar)
+            End If
             TextBox_SfxPrefix.Text = iniFunctions.Read("Text1_Text", "Form11_Misc")
         End If
     End Sub
@@ -98,7 +104,7 @@ Public Class SfxNewMultiple
                     For Each waveFilePath As String In newSfx.Value
                         'Create new sample
                         Dim sampleObj As New Sample With {
-                        .FilePath = waveFilePath.Substring(Len(ProjMasterFolder & "\Master\")),
+                        .FilePath = waveFilePath.Substring(Len(ProjectSettingsFile.MiscProps.SampleFileFolder & "\Master\")),
                         .PitchOffset = sampleDefaultValues(0),
                         .RandomPitchOffset = sampleDefaultValues(1),
                         .BaseVolume = sampleDefaultValues(2),

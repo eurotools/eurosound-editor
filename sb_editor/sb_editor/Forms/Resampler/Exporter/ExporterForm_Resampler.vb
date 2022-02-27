@@ -39,7 +39,7 @@ Partial Public Class ExporterForm
                         Dim waveRelDirectoryPath As String = fso.GetParentFolderName(waveRelFilePath)
 
                         'Get Wave full path
-                        Dim waveMasterPath = fso.BuildPath(ProjMasterFolder, "Master" & waveRelFilePath)
+                        Dim waveMasterPath = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master" & waveRelFilePath)
                         Dim WaveName As String = GetOnlyFileName(waveMasterPath)
 
                         'Resample for each platform
@@ -288,7 +288,7 @@ Partial Public Class ExporterForm
                     Dim adpcmFile = fso.BuildPath(streamsFolder, "STR_" & index & ".ssd")
                     FileCopy(streamFilePath, adpcmFile)
                     'Marker File
-                    Dim MasterWaveFilePath = fso.BuildPath(ProjMasterFolder, "Master" & waveName)
+                    Dim MasterWaveFilePath = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master" & waveName)
                     Dim MasterMarkerFilePath = fso.BuildPath(fso.GetParentFolderName(MasterWaveFilePath), GetOnlyFileName(MasterWaveFilePath) & ".mrk")
                     'Ensure that the marker file exists
                     If Not fso.FileExists(MasterMarkerFilePath) Then

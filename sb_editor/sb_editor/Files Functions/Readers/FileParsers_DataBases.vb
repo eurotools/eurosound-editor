@@ -12,7 +12,7 @@
         FileOpen(1, textFilePath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
         Do Until EOF(1)
             'Read text file
-            currentLine = LineInput(1)
+            currentLine = Trim(LineInput(1))
 
             'Header info
             If InStr(1, currentLine, "## ") = 1 Then
@@ -24,28 +24,28 @@
                     DatabaseObj.HeaderInfo.FileHeader = currentLine
                 End If
                 If InStr(currentLine, "## First Created ...") = 1 Then
-                    DatabaseObj.HeaderInfo.FirstCreated = lineData(1).Trim
+                    DatabaseObj.HeaderInfo.FirstCreated = Trim(lineData(1))
                 End If
                 If InStr(currentLine, "## Created By ...") = 1 Then
-                    DatabaseObj.HeaderInfo.CreatedBy = lineData(1).Trim
+                    DatabaseObj.HeaderInfo.CreatedBy = Trim(lineData(1))
                 End If
                 If InStr(currentLine, "## Last Modified ...") = 1 Then
-                    DatabaseObj.HeaderInfo.LastModify = lineData(1).Trim
+                    DatabaseObj.HeaderInfo.LastModify = Trim(lineData(1))
                 End If
                 If InStr(currentLine, "## Last Modified By ...") = 1 Then
-                    DatabaseObj.HeaderInfo.LastModifyBy = lineData(1).Trim
+                    DatabaseObj.HeaderInfo.LastModifyBy = Trim(lineData(1))
                 End If
             End If
 
             If StrComp(currentLine, "#DEPENDENCIES", CompareMethod.Text) = 0 Then
                 'Read line
-                currentLine = LineInput(1)
+                currentLine = Trim(LineInput(1))
                 If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
                     Do
                         'Add item to listbox
                         dependencies.Add(currentLine)
                         'Continue Reading
-                        currentLine = LineInput(1)
+                        currentLine = Trim(LineInput(1))
                     Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
                 End If
             End If

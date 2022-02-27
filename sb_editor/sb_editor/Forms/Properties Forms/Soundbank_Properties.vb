@@ -65,7 +65,7 @@ Public Class Soundbank_Properties
         End If
 
         'Ensure that the Master folder exists
-        Dim MasterFilePath = fso.BuildPath(ProjMasterFolder, "Master")
+        Dim MasterFilePath = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")
         If fso.FolderExists(MasterFilePath) Then
             'Count folder files
             Label_SampleCount_Value.Text = Directory.GetFiles(MasterFilePath, "*.wav", SearchOption.AllDirectories).Length
@@ -157,7 +157,7 @@ Public Class Soundbank_Properties
         Dim samplesList As New List(Of String)
         For index As Integer = 0 To samplesArray.Length - 1
             'Get full path
-            Dim waveFilePath As String = UCase(fso.BuildPath(ProjMasterFolder, "Master\" & samplesArray(index)))
+            Dim waveFilePath As String = UCase(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\" & samplesArray(index)))
             'Add path to list
             samplesList.Add(waveFilePath)
         Next

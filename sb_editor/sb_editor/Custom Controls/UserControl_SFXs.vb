@@ -217,17 +217,18 @@ Public Class UserControl_SFXs
             If sfxFileName > "" Then
                 'Create and save file
                 Dim fileData As SfxFile = textFileReaders.ReadSFXFile(SysFileSfxDefaults)
+                fileData.HashCode = SFXHashCodeNumber
                 'Get a new hashcode
                 writers.WriteSfxFile(fileData, fso.BuildPath(WorkingDirectory & "\SFXs", sfxFileName & ".txt"))
-                'Update file
-                SFXHashCodeNumber += 1
-                writers.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
                 'Add item to listview
                 ListBox_SFXs.Items.Add(sfxFileName)
                 'Check if we need to realloc
-                If ListBox_SFXs.Items.Count > 0 AndAlso SFXHashCodeNumber = 0 Then
+                If SFXHashCodeNumber = 0 Then
                     MsgBox("Please Re-Alloc Hashcodes under Advanced Menu", vbOKOnly + vbExclamation, "EuroSound")
                 End If
+                'Update Global Variable
+                SFXHashCodeNumber += 1
+                writers.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
             End If
         Else
             'Inform user about this
@@ -377,7 +378,6 @@ Public Class UserControl_SFXs
 
         While pending.Count > 0
             rootFolderPath = pending.Dequeue()
-
             Try
                 tmp = Directory.GetFiles(rootFolderPath, fileSearchPattern)
             Catch __unusedUnauthorizedAccessException1__ As UnauthorizedAccessException
@@ -395,10 +395,25 @@ Public Class UserControl_SFXs
         End While
     End Function
 
-
     Private Sub ContextMenuSfx_NewMultiple_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_NewMultiple.Click
-        Dim newMultiple As New SfxNewMultiple
-        newMultiple.ShowDialog()
+        'Ensure that the default file exists
+        If fso.FileExists(SysFileSfxDefaults) AndAlso File.ReadAllLines(SysFileSfxDefaults).Length > 7 Then
+            'Check if we need to realloc
+            If SFXHashCodeNumber = 0 Then
+                MsgBox("Please Re-Alloc Hashcodes under Advanced Menu", vbOKOnly + vbExclamation, "EuroSound")
+            Else
+                'Start form
+                Dim newMultiple As New SfxNewMultiple
+                newMultiple.ShowDialog()
+            End If
+        Else
+            'Inform user about this
+            MsgBox("Must Setup Default SFX file first!", vbOKOnly + vbCritical, "Setup SFX Defaults.")
+            'Open SFX Default Form
+            Using defaultSettingsForm As New SfxDefault
+                defaultSettingsForm.ShowDialog()
+            End Using
+        End If
     End Sub
 
     Private Sub ContextMenuSfx_MultiEditor_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_MultiEditor.Click

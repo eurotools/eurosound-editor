@@ -27,11 +27,7 @@ Partial Public NotInheritable Class SplashScreen
         'Update project variables
         Dim propsFilePath As String = fso.BuildPath(WorkingDirectory, "System\Properties.txt")
         If fso.FileExists(propsFilePath) Then
-            Dim propsFileData As PropertiesFile = textFileReaders.ReadPropertiesFile(propsFilePath)
-            ProjMasterFolder = propsFileData.MiscProps.SampleFileFolder
-            ProjOutHashCodesFolder = propsFileData.MiscProps.HashCodeFileFolder
-            ProjOutEngineXFolder = propsFileData.MiscProps.EngineXFolder
-            ProjOutEuroLandServer = propsFileData.MiscProps.EuroLandHashCodeServerPath
+            ProjectSettingsFile = textFileReaders.ReadPropertiesFile(propsFilePath)
         End If
         'Update System Files variables
         SysFileSamples = fso.BuildPath(WorkingDirectory, "System\Samples.txt")

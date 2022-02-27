@@ -51,56 +51,12 @@
         Return fileContents
     End Function
 
-    Private Sub GetAvailableSampleRates(propsFilePath As String)
-        'Open file and read it
-        Dim currentLine As String
-        FileOpen(1, propsFilePath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
-        Do Until EOF(1)
-            'Read text file
-            currentLine = LineInput(1)
-            'Read Available Sample Rates
-            If StrComp(currentLine, "#AvailableReSampleRates") = 0 Then
-                'Read line
-                currentLine = LineInput(1)
-                Do
-                    'Add item to listview
-                    ComboBox_AvailableRates.Items.Add(currentLine)
-                    'Continue Reading
-                    currentLine = LineInput(1)
-                Loop While StrComp(currentLine, "#END") <> 0
-            End If
-
-            'ReSample Rates for Format
-            If InStr(currentLine, "#ReSampleRates") Then
-                'Get index
-                Dim index As Integer = Microsoft.VisualBasic.Right(currentLine, 1)
-                'Collection to store values
-                Dim values As New ArrayList
-                'Read line
-                currentLine = LineInput(1)
-                Do
-                    'Add item to ArrayList
-                    values.Add(currentLine)
-                    'Continue Reading
-                    currentLine = LineInput(1)
-                Loop While StrComp(currentLine, "#END") <> 0
-                'Add data to dictionary
-                If Not sampleRateFormats.ContainsKey(index) Then
-                    sampleRateFormats.Add(index, values.ToArray(GetType(String)))
-                End If
-            End If
-        Loop
-
-        'Read misc properties block
-        FileClose(1)
-    End Sub
-
     Private Sub PlaySelectedSample()
         'Ensure that we selected an item from the list
         If ListView_Samples.SelectedItems.Count > 0 Then
             'Get wave file path
             Dim waveRelativePath = ListView_Samples.SelectedItems(0).Text
-            Dim waveFilePath As String = fso.BuildPath(ProjMasterFolder, "Master" & waveRelativePath)
+            Dim waveFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master" & waveRelativePath)
 
             'Ensure that the Wave Path exists
             If fso.FileExists(waveFilePath) Then
@@ -119,8 +75,8 @@
                             fso.CreateFolder(outputFolder)
                         End If
                         'Get sample rate
-                        Dim formatRates As String() = sampleRateFormats(ComboBox_PreviewOptions.SelectedIndex - 1)
-                        Dim sampleRate As Integer = formatRates(ComboBox_AvailableRates.SelectedIndex)
+                        Dim formatRates As Dictionary(Of String, UInteger) = ProjectSettingsFile.sampleRateFormats(ComboBox_PreviewOptions.SelectedItem)
+                        Dim sampleRate As Integer = formatRates(ComboBox_AvailableRates.SelectedItem)
                         'Execute command
                         Shell("SystemFiles\Sox.exe" & " """ & waveFilePath & """ -r " & sampleRate & " """ & outputFilePath & """", AppWinStyle.Hide, True)
                         'Play audio
@@ -135,7 +91,7 @@
         'Ensure that the selection is not null
         If ListView_Samples.SelectedItems.Count > 0 Then
             'Get wave file path
-            Dim waveFilePath As String = fso.BuildPath(ProjMasterFolder, "Master\" & ListView_Samples.SelectedItems(0).Text)
+            Dim waveFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\" & ListView_Samples.SelectedItems(0).Text)
             'Open tool if files exists
             EditWaveFile(waveFilePath)
         End If
