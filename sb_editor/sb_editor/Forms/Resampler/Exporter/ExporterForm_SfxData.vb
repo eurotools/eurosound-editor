@@ -10,14 +10,12 @@ Partial Public Class ExporterForm
             'Update progress bar
             Invoke(Sub() ProgressBar1.Maximum = samplesDt.Rows.Count + 1)
             Invoke(Sub() ProgressBar1.Value = 0)
-
             'Get output folder
             Dim tempSfxDataFolder As String = fso.BuildPath(WorkingDirectory, "TempSfxData")
             If Not fso.FolderExists(tempSfxDataFolder) Then
                 fso.CreateFolder(tempSfxDataFolder)
             End If
             Dim StreamSamplesList As String() = textFileReaders.GetStreamSoundsList(SysFileSamples)
-
             'Start resample
             Dim sfxFilesDirectory As String = fso.BuildPath(WorkingDirectory, "SFXs")
             Dim sfxFiles As String() = Directory.GetFiles(sfxFilesDirectory, "*.txt", SearchOption.TopDirectoryOnly)
@@ -31,7 +29,6 @@ Partial Public Class ExporterForm
                     'Update title bar
                     Dim currentSampleName As String = GetOnlyFileName(sfxFiles(index))
                     Invoke(Sub() Text = "Creating SFX_Data.h " & currentSampleName)
-
                     'Read file data
                     If fso.FileExists(sfxFiles(index)) Then
                         Dim sfxFile As SfxFile = textFileReaders.ReadSFXFile(sfxFiles(index))
@@ -71,7 +68,6 @@ Partial Public Class ExporterForm
                             maxHashCode = Math.Max(maxHashCode, sfxFile.HashCode)
                         End If
                     End If
-
                     'Update progress bar
                     BackgroundWorker.ReportProgress(index + 1)
                 End If
@@ -82,7 +78,7 @@ Partial Public Class ExporterForm
 
             'Merge all files
             Dim hastableBuilder As New SfxDefines
-            hastableBuilder.CreateSfxData(fso.BuildPath(propsFile.MiscProps.HashCodeFileFolder, "SFX_Data.h"), tempSfxDataFolder, maxHashCode)
+            hastableBuilder.CreateSfxData(fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Data.h"), tempSfxDataFolder, maxHashCode)
         End If
     End Sub
 End Class

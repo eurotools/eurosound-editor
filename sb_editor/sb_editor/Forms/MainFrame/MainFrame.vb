@@ -743,19 +743,14 @@ Partial Public Class MainFrame
         Dim hastableBuilder As New SfxDefines
         Dim test As Boolean = True
 
-        'Read properties file
-        Dim propsFile = textFileReaders.ReadPropertiesFile(SysFileProperties)
-
         'Get output platforms
-        Dim outPlaforms As String()
+        Dim outPlaforms As String() = New String() {ComboBox_Format.SelectedItem}
         If RadioButton_Output_AllBanksAll.Checked Then
-            outPlaforms = New String() {"PlayStation2", "GameCube", "PC", "X Box"}
-        Else
-            outPlaforms = New String() {ComboBox_Format.SelectedItem}
+            outPlaforms = ProjectSettingsFile.sampleRateFormats.Keys.ToArray
         End If
 
         'Resample
-        Dim taskForm As New ExporterForm(propsFile, outPlaforms, CheckBox_FastReSample.Checked)
+        Dim taskForm As New ExporterForm(outPlaforms, CheckBox_FastReSample.Checked)
         taskForm.ShowDialog()
 
         If Not test Then

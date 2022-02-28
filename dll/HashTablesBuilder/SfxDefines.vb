@@ -4,7 +4,7 @@ Public Class SfxDefines
     '*===============================================================================================
     '* SFX_Defines.h
     '*===============================================================================================
-    Public Sub CreateSfxDefines(sfxDict As SortedDictionary(Of String, UInteger), soundbanksDict As SortedDictionary(Of String, UInteger), Languages As String(), filePath As String)
+    Public Sub CreateSfxDefines(sfxDict As SortedDictionary(Of String, UInteger), soundbanksDict As SortedDictionary(Of String, UInteger), Languages As String(), prefixHashCodes As Boolean, filePath As String)
         Const EX_SFX_PREFIX As UInteger = &H1A000000
         Const EX_SONG_PREFIX As UInteger = &H1B000000
         Const EX_SOUNDBANK_PREFIX As UInteger = &H1C000000
@@ -34,7 +34,12 @@ Public Class SfxDefines
         PrintLine(1, vbNullString)
         Dim maxSfxHashcodeDefined = 0
         For Each sfxItem In sfxDict
-            PrintLine(1, WriteHashCode(sfxItem.Key, NumberToHex(sfxItem.Value + EX_SFX_PREFIX)))
+            If prefixHashCodes Then
+                PrintLine(1, WriteHashCode("HT_Sound_" & sfxItem.Key, NumberToHex(sfxItem.Value + EX_SFX_PREFIX)))
+            Else
+                PrintLine(1, WriteHashCode(sfxItem.Key, NumberToHex(sfxItem.Value + EX_SFX_PREFIX)))
+            End If
+
             maxSfxHashcodeDefined = Math.Max(maxSfxHashcodeDefined, sfxItem.Value)
         Next
         PrintLine(1, WriteHashCode("SFX_MaximumDefined", NumberToHex(sfxDict.Count)))
@@ -44,7 +49,11 @@ Public Class SfxDefines
         'SOUNDBANK HASHCODES
         PrintLine(1, "// SoundBank HashCodes")
         For Each soundbankItem In soundbanksDict
-            PrintLine(1, WriteHashCode(soundbankItem.Key, NumberToHex(soundbankItem.Value)))
+            If prefixHashCodes Then
+                PrintLine(1, WriteHashCode("HT_Sound_" & soundbankItem.Key, NumberToHex(soundbankItem.Value)))
+            Else
+                PrintLine(1, WriteHashCode(soundbankItem.Key, NumberToHex(soundbankItem.Value)))
+            End If
         Next
         PrintLine(1, WriteHashCode("SB_MaximumDefined", NumberToHex(soundbanksDict.Count)))
 

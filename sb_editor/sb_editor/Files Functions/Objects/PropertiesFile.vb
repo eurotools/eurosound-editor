@@ -12,4 +12,5 @@ Public Class MiscProperties
     Public HashCodeFileFolder As String
     Public EngineXFolder As String
     Public EuroLandHashCodeServerPath As String
+    Public PrefixHtSound As Boolean
 End Class

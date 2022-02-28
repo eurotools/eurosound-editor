@@ -24,16 +24,13 @@ Partial Public Class ExporterForm
             For index As Integer = 0 To filesCount
                 Dim adpcmFile As String = fso.BuildPath(streamsFolder, "STR_" & index & ".ssd")
                 Dim markerFile As String = fso.BuildPath(streamsFolder, "STR_" & index & ".smf")
-
                 'Ensure that the adpcm file exists
                 If fso.FileExists(adpcmFile) AndAlso fso.FileExists(markerFile) Then
                     'Offset to write in look-up table
                     StartOffsets.Enqueue(binaryWriter.BaseStream.Position)
-
                     'Read files binary data
                     Dim markersFileData As Byte() = File.ReadAllBytes(markerFile)
                     Dim adpcmData As Byte() = File.ReadAllBytes(adpcmFile)
-
                     'Marker size
                     binaryWriter.Write(markersFileData.Length)
                     'Save position for the audio offset
@@ -44,29 +41,23 @@ Partial Public Class ExporterForm
                     binaryWriter.Write(adpcmData.Length)
                     'Marker Data
                     binaryWriter.Write(markersFileData)
-
                     'Alignment
                     Dim block As Byte() = New Byte(&H800 - 5) {}
                     binaryWriter.Write(block)
                     BinAlign(binaryWriter, &H800)
-
                     'Write adpcm data
                     Dim audioStartOffset As UInteger = binaryWriter.BaseStream.Position
                     binaryWriter.Write(adpcmData)
-
                     'Alignment
                     If index < filesCount Then
                         binaryWriter.Write(block)
                         BinAlign(binaryWriter, &H800)
                     End If
-
                     'Save current pos
                     Dim lastPosition As UInteger = binaryWriter.BaseStream.Position
-
                     'Go Back to write audio start pos
                     binaryWriter.Seek(prevPosition, SeekOrigin.Begin)
                     binaryWriter.Write(audioStartOffset)
-
                     'Return to current pos
                     binaryWriter.Seek(lastPosition, SeekOrigin.Begin)
                 End If

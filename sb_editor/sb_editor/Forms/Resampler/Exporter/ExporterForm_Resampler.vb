@@ -15,7 +15,7 @@ Partial Public Class ExporterForm
     '*===============================================================================================
     '* MAIN METHOD
     '*===============================================================================================
-    Private Sub ResampleWaves(sampleRates As Dictionary(Of String, Dictionary(Of String, UInteger)), soundsTable As DataTable, e As DoWorkEventArgs)
+    Private Sub ResampleWaves(soundsTable As DataTable, e As DoWorkEventArgs)
         'Get Wave files to include
         Dim samplesCount As Integer = soundsTable.Rows.Count - 1
 
@@ -37,11 +37,9 @@ Partial Public Class ExporterForm
                         'Get waveName
                         Dim waveRelFilePath As String = soundsTable.Rows(index).Item(0)
                         Dim waveRelDirectoryPath As String = fso.GetParentFolderName(waveRelFilePath)
-
                         'Get Wave full path
                         Dim waveMasterPath = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master" & waveRelFilePath)
                         Dim WaveName As String = GetOnlyFileName(waveMasterPath)
-
                         'Resample for each platform
                         For Each outPlatform As String In outPlatforms
                             'Check for cancellation
@@ -54,14 +52,11 @@ Partial Public Class ExporterForm
                                 If Not fso.FolderExists(outputFolder) Then
                                     MkDir(outputFolder)
                                 End If
-
                                 'Get sample rate
-                                Dim waveRate As Integer = sampleRates(outPlatform)(soundsTable.Rows(index).Item(1))
-
+                                Dim waveRate As Integer = ProjectSettingsFile.sampleRateFormats(outPlatform)(soundsTable.Rows(index).Item(1))
                                 'Get final output path and resample with SoX
                                 Dim outputFilePath As String = fso.BuildPath(outputFolder, waveRelFilePath)
                                 RunProcess("SystemFiles\Sox.exe", """" & waveMasterPath & """ -r " & waveRate & " """ & outputFilePath & """")
-
                                 'Specific platform formats
                                 If StrComp(outPlatform, "PC") = 0 Then
                                     'IMA ADPCM
@@ -350,7 +345,7 @@ Partial Public Class ExporterForm
                 If AllFilesExist Then
                     'Stream paths and filenames
                     Dim outputFolder = Path.Combine(WorkingDirectory, "TempOutputFolder", outPlatform, "English", "Streams")
-                    Dim fullDirPath = Path.Combine(propsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder(outPlatform), GetEngineXLangFolder(DefaultLanguage))
+                    Dim fullDirPath = Path.Combine(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder(outPlatform), GetEngineXLangFolder(DefaultLanguage))
                     'Create Stream File
                     BuildTemporalFile(streamsCount, streamsFolder, outputFolder)
                     Dim fileName As String = "HC" & Hex(GetSfxFileName(0, &HFFFF)).PadLeft(6, "0"c)

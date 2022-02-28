@@ -1,4 +1,5 @@
 ﻿Imports System.Globalization
+Imports System.IO
 Imports System.Text.RegularExpressions
 Imports ESUtils.BytesFunctions
 Imports IniFileFunctions
@@ -102,6 +103,23 @@ Module GenericFunctions
         End While
         Return FileNamePattern & fileNumber
     End Function
+
+    Friend Sub AddProjectLanguagesToCombo(comboboxToModify As ComboBox)
+        'Get project languages
+        If Dir(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\Speech"), FileAttribute.Directory) IsNot "" Then
+            Dim languages As String() = Directory.GetDirectories(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\Speech"))
+            'Add folders to combobox
+            comboboxToModify.BeginUpdate()
+            comboboxToModify.Items.Clear()
+            For index As Integer = 0 To languages.Length - 1
+                Dim folderName As String = Trim(StrConv(New DirectoryInfo(languages(index)).Name, vbProperCase))
+                If Array.IndexOf(SfxLanguages, folderName) <> -1 Then
+                    comboboxToModify.Items.Add(folderName)
+                End If
+            Next
+            comboboxToModify.EndUpdate()
+        End If
+    End Sub
 
     '*===============================================================================================
     '* FILES FUNCTIONS

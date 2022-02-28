@@ -58,6 +58,11 @@ Partial Class Project_Properties
         Me.Col_SampleRate = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ComboBox_RatesFormat = New System.Windows.Forms.ComboBox()
         Me.GroupBox_Misc = New System.Windows.Forms.GroupBox()
+        Me.Label_XboxMaxSizeK = New System.Windows.Forms.Label()
+        Me.Label_GameCubeMaxSizeK = New System.Windows.Forms.Label()
+        Me.Label_PcMaxSizeK = New System.Windows.Forms.Label()
+        Me.Label_PlayStationMaxSizeK = New System.Windows.Forms.Label()
+        Me.CheckBox_PrefixHashCodes = New System.Windows.Forms.CheckBox()
         Me.Numeric_XboxMaxSize = New System.Windows.Forms.NumericUpDown()
         Me.Numeric_GameCubeMaxSize = New System.Windows.Forms.NumericUpDown()
         Me.Numeric_PcMaxSize = New System.Windows.Forms.NumericUpDown()
@@ -442,6 +447,11 @@ Partial Class Project_Properties
         '
         'GroupBox_Misc
         '
+        Me.GroupBox_Misc.Controls.Add(Me.Label_XboxMaxSizeK)
+        Me.GroupBox_Misc.Controls.Add(Me.Label_GameCubeMaxSizeK)
+        Me.GroupBox_Misc.Controls.Add(Me.Label_PcMaxSizeK)
+        Me.GroupBox_Misc.Controls.Add(Me.Label_PlayStationMaxSizeK)
+        Me.GroupBox_Misc.Controls.Add(Me.CheckBox_PrefixHashCodes)
         Me.GroupBox_Misc.Controls.Add(Me.Numeric_XboxMaxSize)
         Me.GroupBox_Misc.Controls.Add(Me.Numeric_GameCubeMaxSize)
         Me.GroupBox_Misc.Controls.Add(Me.Numeric_PcMaxSize)
@@ -460,26 +470,72 @@ Partial Class Project_Properties
         Me.GroupBox_Misc.Controls.Add(Me.Label_DefaultSampleRate)
         Me.GroupBox_Misc.Location = New System.Drawing.Point(12, 644)
         Me.GroupBox_Misc.Name = "GroupBox_Misc"
-        Me.GroupBox_Misc.Size = New System.Drawing.Size(559, 164)
+        Me.GroupBox_Misc.Size = New System.Drawing.Size(559, 184)
         Me.GroupBox_Misc.TabIndex = 9
         Me.GroupBox_Misc.TabStop = False
         Me.GroupBox_Misc.Text = "Misc"
         '
+        'Label_XboxMaxSizeK
+        '
+        Me.Label_XboxMaxSizeK.AutoSize = True
+        Me.Label_XboxMaxSizeK.Location = New System.Drawing.Point(539, 122)
+        Me.Label_XboxMaxSizeK.Name = "Label_XboxMaxSizeK"
+        Me.Label_XboxMaxSizeK.Size = New System.Drawing.Size(14, 13)
+        Me.Label_XboxMaxSizeK.TabIndex = 19
+        Me.Label_XboxMaxSizeK.Text = "K"
+        '
+        'Label_GameCubeMaxSizeK
+        '
+        Me.Label_GameCubeMaxSizeK.AutoSize = True
+        Me.Label_GameCubeMaxSizeK.Location = New System.Drawing.Point(274, 162)
+        Me.Label_GameCubeMaxSizeK.Name = "Label_GameCubeMaxSizeK"
+        Me.Label_GameCubeMaxSizeK.Size = New System.Drawing.Size(14, 13)
+        Me.Label_GameCubeMaxSizeK.TabIndex = 16
+        Me.Label_GameCubeMaxSizeK.Text = "K"
+        '
+        'Label_PcMaxSizeK
+        '
+        Me.Label_PcMaxSizeK.AutoSize = True
+        Me.Label_PcMaxSizeK.Location = New System.Drawing.Point(274, 141)
+        Me.Label_PcMaxSizeK.Name = "Label_PcMaxSizeK"
+        Me.Label_PcMaxSizeK.Size = New System.Drawing.Size(14, 13)
+        Me.Label_PcMaxSizeK.TabIndex = 13
+        Me.Label_PcMaxSizeK.Text = "K"
+        '
+        'Label_PlayStationMaxSizeK
+        '
+        Me.Label_PlayStationMaxSizeK.AutoSize = True
+        Me.Label_PlayStationMaxSizeK.Location = New System.Drawing.Point(274, 122)
+        Me.Label_PlayStationMaxSizeK.Name = "Label_PlayStationMaxSizeK"
+        Me.Label_PlayStationMaxSizeK.Size = New System.Drawing.Size(14, 13)
+        Me.Label_PlayStationMaxSizeK.TabIndex = 10
+        Me.Label_PlayStationMaxSizeK.Text = "K"
+        '
+        'CheckBox_PrefixHashCodes
+        '
+        Me.CheckBox_PrefixHashCodes.AutoSize = True
+        Me.CheckBox_PrefixHashCodes.Location = New System.Drawing.Point(302, 145)
+        Me.CheckBox_PrefixHashCodes.Name = "CheckBox_PrefixHashCodes"
+        Me.CheckBox_PrefixHashCodes.Size = New System.Drawing.Size(204, 17)
+        Me.CheckBox_PrefixHashCodes.TabIndex = 20
+        Me.CheckBox_PrefixHashCodes.Text = "Prefix All HashCodes wih HT_Sound_"
+        Me.CheckBox_PrefixHashCodes.UseVisualStyleBackColor = True
+        '
         'Numeric_XboxMaxSize
         '
-        Me.Numeric_XboxMaxSize.Location = New System.Drawing.Point(453, 139)
+        Me.Numeric_XboxMaxSize.Location = New System.Drawing.Point(437, 119)
         Me.Numeric_XboxMaxSize.Maximum = New Decimal(New Integer() {999999999, 0, 0, 0})
         Me.Numeric_XboxMaxSize.Name = "Numeric_XboxMaxSize"
         Me.Numeric_XboxMaxSize.Size = New System.Drawing.Size(100, 20)
-        Me.Numeric_XboxMaxSize.TabIndex = 19
+        Me.Numeric_XboxMaxSize.TabIndex = 18
         '
         'Numeric_GameCubeMaxSize
         '
-        Me.Numeric_GameCubeMaxSize.Location = New System.Drawing.Point(453, 119)
+        Me.Numeric_GameCubeMaxSize.Location = New System.Drawing.Point(172, 159)
         Me.Numeric_GameCubeMaxSize.Maximum = New Decimal(New Integer() {999999999, 0, 0, 0})
         Me.Numeric_GameCubeMaxSize.Name = "Numeric_GameCubeMaxSize"
         Me.Numeric_GameCubeMaxSize.Size = New System.Drawing.Size(100, 20)
-        Me.Numeric_GameCubeMaxSize.TabIndex = 18
+        Me.Numeric_GameCubeMaxSize.TabIndex = 15
         '
         'Numeric_PcMaxSize
         '
@@ -487,7 +543,7 @@ Partial Class Project_Properties
         Me.Numeric_PcMaxSize.Maximum = New Decimal(New Integer() {999999999, 0, 0, 0})
         Me.Numeric_PcMaxSize.Name = "Numeric_PcMaxSize"
         Me.Numeric_PcMaxSize.Size = New System.Drawing.Size(100, 20)
-        Me.Numeric_PcMaxSize.TabIndex = 17
+        Me.Numeric_PcMaxSize.TabIndex = 12
         '
         'Numeric_PlayStationMaxSize
         '
@@ -495,24 +551,24 @@ Partial Class Project_Properties
         Me.Numeric_PlayStationMaxSize.Maximum = New Decimal(New Integer() {1868, 0, 0, 0})
         Me.Numeric_PlayStationMaxSize.Name = "Numeric_PlayStationMaxSize"
         Me.Numeric_PlayStationMaxSize.Size = New System.Drawing.Size(100, 20)
-        Me.Numeric_PlayStationMaxSize.TabIndex = 16
+        Me.Numeric_PlayStationMaxSize.TabIndex = 9
         '
         'Label_XboxMaxSize
         '
         Me.Label_XboxMaxSize.AutoSize = True
-        Me.Label_XboxMaxSize.Location = New System.Drawing.Point(290, 141)
+        Me.Label_XboxMaxSize.Location = New System.Drawing.Point(302, 122)
         Me.Label_XboxMaxSize.Name = "Label_XboxMaxSize"
         Me.Label_XboxMaxSize.Size = New System.Drawing.Size(129, 13)
-        Me.Label_XboxMaxSize.TabIndex = 15
+        Me.Label_XboxMaxSize.TabIndex = 17
         Me.Label_XboxMaxSize.Text = "SoundBank Max on XBox"
         '
         'Label_GameCubeMaxSize
         '
         Me.Label_GameCubeMaxSize.AutoSize = True
-        Me.Label_GameCubeMaxSize.Location = New System.Drawing.Point(290, 122)
+        Me.Label_GameCubeMaxSize.Location = New System.Drawing.Point(9, 162)
         Me.Label_GameCubeMaxSize.Name = "Label_GameCubeMaxSize"
         Me.Label_GameCubeMaxSize.Size = New System.Drawing.Size(157, 13)
-        Me.Label_GameCubeMaxSize.TabIndex = 12
+        Me.Label_GameCubeMaxSize.TabIndex = 14
         Me.Label_GameCubeMaxSize.Text = "SoundBank Max on GameCube"
         '
         'Label_PlayStationMaxSize
@@ -521,7 +577,7 @@ Partial Class Project_Properties
         Me.Label_PlayStationMaxSize.Location = New System.Drawing.Point(6, 122)
         Me.Label_PlayStationMaxSize.Name = "Label_PlayStationMaxSize"
         Me.Label_PlayStationMaxSize.Size = New System.Drawing.Size(160, 13)
-        Me.Label_PlayStationMaxSize.TabIndex = 11
+        Me.Label_PlayStationMaxSize.TabIndex = 8
         Me.Label_PlayStationMaxSize.Text = "SoundBank Max on PlayStation:"
         '
         'Label_PcMaxSize
@@ -530,7 +586,7 @@ Partial Class Project_Properties
         Me.Label_PcMaxSize.Location = New System.Drawing.Point(45, 141)
         Me.Label_PcMaxSize.Name = "Label_PcMaxSize"
         Me.Label_PcMaxSize.Size = New System.Drawing.Size(121, 13)
-        Me.Label_PcMaxSize.TabIndex = 8
+        Me.Label_PcMaxSize.TabIndex = 11
         Me.Label_PcMaxSize.Text = "SoundBank Max on PC:"
         '
         'TextBox_TextEditor
@@ -613,7 +669,7 @@ Partial Class Project_Properties
         '
         'Button_OK
         '
-        Me.Button_OK.Location = New System.Drawing.Point(577, 785)
+        Me.Button_OK.Location = New System.Drawing.Point(577, 805)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(78, 23)
         Me.Button_OK.TabIndex = 10
@@ -623,7 +679,7 @@ Partial Class Project_Properties
         'Button_Cancel
         '
         Me.Button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Button_Cancel.Location = New System.Drawing.Point(577, 756)
+        Me.Button_Cancel.Location = New System.Drawing.Point(577, 776)
         Me.Button_Cancel.Name = "Button_Cancel"
         Me.Button_Cancel.Size = New System.Drawing.Size(78, 23)
         Me.Button_Cancel.TabIndex = 11
@@ -640,7 +696,7 @@ Partial Class Project_Properties
         Me.ShapeContainer2.Margin = New System.Windows.Forms.Padding(0)
         Me.ShapeContainer2.Name = "ShapeContainer2"
         Me.ShapeContainer2.Shapes.AddRange(New Microsoft.VisualBasic.PowerPacks.Shape() {Me.LineShape4, Me.LineShape3})
-        Me.ShapeContainer2.Size = New System.Drawing.Size(667, 818)
+        Me.ShapeContainer2.Size = New System.Drawing.Size(667, 837)
         Me.ShapeContainer2.TabIndex = 12
         Me.ShapeContainer2.TabStop = False
         '
@@ -671,7 +727,7 @@ Partial Class Project_Properties
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.CancelButton = Me.Button_Cancel
-        Me.ClientSize = New System.Drawing.Size(667, 818)
+        Me.ClientSize = New System.Drawing.Size(667, 837)
         Me.Controls.Add(Me.Button_Cancel)
         Me.Controls.Add(Me.Button_OK)
         Me.Controls.Add(Me.GroupBox_Misc)
@@ -770,4 +826,9 @@ Partial Class Project_Properties
     Friend WithEvents ShapeContainer2 As PowerPacks.ShapeContainer
     Friend WithEvents LineShape4 As PowerPacks.LineShape
     Friend WithEvents LineShape3 As PowerPacks.LineShape
+    Friend WithEvents CheckBox_PrefixHashCodes As CheckBox
+    Friend WithEvents Label_XboxMaxSizeK As Label
+    Friend WithEvents Label_GameCubeMaxSizeK As Label
+    Friend WithEvents Label_PcMaxSizeK As Label
+    Friend WithEvents Label_PlayStationMaxSizeK As Label
 End Class

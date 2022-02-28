@@ -42,7 +42,7 @@ Partial Public NotInheritable Class SplashScreen
             Dim soundbanksList As String() = GetListOfSoundbanks(mainform.TreeView_SoundBanks)
             writers.CreateProjectFile(projectFilePath, soundbanksList, databasesToWrite, sfxsToWriter)
             'Load Languages and Formats
-            AddProjectLanguagesToCombo()
+            AddProjectLanguagesToCombo(mainform.ComboBox_OutputLanguage)
             mainform.ComboBox_Format.Items.AddRange(ProjectSettingsFile.sampleRateFormats.Keys.ToArray)
             'Update GUI
             mainform.Text = "EuroSound: """ & WorkingDirectory & """"
@@ -103,22 +103,6 @@ Partial Public NotInheritable Class SplashScreen
 
         'Start timer
         TimerSplash.Start()
-    End Sub
-
-    Private Sub AddProjectLanguagesToCombo()
-        'Get project languages
-        If Dir(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\Speech"), FileAttribute.Directory) IsNot "" Then
-            Dim languages As String() = Directory.GetDirectories(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\Speech"))
-            'Add folders to combobox
-            mainform.ComboBox_OutputLanguage.BeginUpdate()
-            For index As Integer = 0 To languages.Length - 1
-                Dim folderName As String = Trim(StrConv(New DirectoryInfo(languages(index)).Name, vbProperCase))
-                If Array.IndexOf(SfxLanguages, folderName) <> -1 Then
-                    mainform.ComboBox_OutputLanguage.Items.Add(folderName)
-                End If
-            Next
-            mainform.ComboBox_OutputLanguage.EndUpdate()
-        End If
     End Sub
 
     Private Sub TimerSplash_Tick(sender As Object, e As EventArgs) Handles TimerSplash.Tick

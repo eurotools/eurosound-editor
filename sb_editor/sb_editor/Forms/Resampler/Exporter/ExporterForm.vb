@@ -6,19 +6,17 @@
     Private ReadOnly outPlatforms As String()
     Private ReadOnly quickResample As Boolean
     Private ReadOnly mainFrame As Form
-    Private ReadOnly propsFile As PropertiesFile
 
     '*===============================================================================================
     '* FORM EVENTS
     '*===============================================================================================
-    Sub New(propsFileData As PropertiesFile, destPlatforms As String(), fastResample As Boolean)
+    Sub New(destPlatforms As String(), fastResample As Boolean)
         'Esta llamada es exigida por el diseñador.
         InitializeComponent()
 
         'Agregue cualquier inicialización después de la llamada a InitializeComponent().
         outPlatforms = destPlatforms
         quickResample = fastResample
-        propsFile = propsFileData
 
         'Get mainframe
         mainFrame = CType(Application.OpenForms("MainFrame"), MainFrame)
@@ -45,7 +43,7 @@
         Dim soundsTable As DataTable = textFileReaders.SamplesFileToDatatable(SysFileSamples)
 
         'Start waves resampling
-        ResampleWaves(propsFile.sampleRateFormats, soundsTable, e)
+        ResampleWaves(soundsTable, e)
 
         'Check if we need to rebuild the stream file
         If ReSampleStreams = 1 Then

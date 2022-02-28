@@ -74,6 +74,11 @@ Partial Public Class Project_Properties
                     If IsNumeric(xboxSize) Then
                         Numeric_XboxMaxSize.Value = xboxSize
                     End If
+                    Dim prefixHashCodes As String = iniFunctions.Read("Prefix_HT_Sound", "PropertiesForm")
+                    If IsNumeric(prefixHashCodes) Then
+                        CheckBox_PrefixHashCodes.Checked = CBool(prefixHashCodes)
+                        ProjectSettingsFile.MiscProps.PrefixHtSound = CheckBox_PrefixHashCodes.Checked
+                    End If
                 End If
             End If
         Else
@@ -119,6 +124,7 @@ Partial Public Class Project_Properties
         ProjectSettingsFile.MiscProps.HashCodeFileFolder = Textbox_SonixFolder.Text
         ProjectSettingsFile.MiscProps.EngineXFolder = Textbox_EngineXFolder.Text
         ProjectSettingsFile.MiscProps.EuroLandHashCodeServerPath = Textbox_EuroLandServer.Text
+        ProjectSettingsFile.MiscProps.PrefixHtSound = CheckBox_PrefixHashCodes.Checked
         'Save file
         textFileWriters.SavePropertiesFile(ProjectSettingsFile, SysFileProperties)
         SaveIniFile()
@@ -133,10 +139,12 @@ Partial Public Class Project_Properties
         MainFrame.ComboBox_Format.BeginUpdate()
         MainFrame.ComboBox_Format.Items.Clear()
         MainFrame.ComboBox_Format.Items.AddRange(ProjectSettingsFile.sampleRateFormats.Keys.ToArray)
-        If MainFrame.ComboBox_Format.Items.Count > 0 Then
+        If MainFrame.ComboBox_Format.Items.Count > 0 AndAlso MainFrame.ComboBox_Format.SelectedIndex = -1 Then
             MainFrame.ComboBox_Format.SelectedIndex = 0
         End If
         MainFrame.ComboBox_Format.EndUpdate()
+        'Load Languages and Formats
+        AddProjectLanguagesToCombo(MainFrame.ComboBox_OutputLanguage)
         'Close form
         Close()
     End Sub
