@@ -53,6 +53,7 @@ Partial Public Class Frm_SfxEditor
             SfxParamsAndSamplePool.CheckBox_IgnoreAge.Checked = sfxData.Parameters.IgnoreAge
             SfxParamsAndSamplePool.Checkbox_MusicType.Checked = sfxData.Parameters.MusicType
             SfxParamsAndSamplePool.Checkbox_Doppler.Checked = sfxData.Parameters.Doppler
+            Textbox_HashCodeNumber.Text = sfxData.HashCode
         End If
     End Sub
 

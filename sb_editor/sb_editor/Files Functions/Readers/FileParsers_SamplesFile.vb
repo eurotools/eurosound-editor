@@ -13,46 +13,47 @@
         samplesData.Columns.Add("ReSmp4duplicated")
 
         'Open file and read it
-        Dim currentLine As String
-        FileOpen(1, samplesFilePath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
-        Do Until EOF(1)
-            'Read text file
-            currentLine = Trim(LineInput(1))
-            'Read Available Sample Rates
-            If StrComp(currentLine, "#AvailableSamples") = 0 Then
-                'Read line
+        If fso.FileExists(samplesFilePath) Then
+            Dim currentLine As String
+            FileOpen(1, samplesFilePath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
+            Do Until EOF(1)
+                'Read text file
                 currentLine = Trim(LineInput(1))
-                Dim SamplesCount As Integer = currentLine
-                'Read samples table
-                If SamplesCount > 0 Then
-                    For i As Integer = 0 To 9
-                        Dim itemsCount As Integer = 0
-                        Do
-                            'Continue Reading
-                            currentLine = Trim(LineInput(1))
-                            'Read content
-                            If StrComp(currentLine, "#END") <> 0 Then
-                                'Add item to listview
-                                If i = 0 Then
-                                    samplesData.Rows.Add(currentLine)
+                'Read Available Sample Rates
+                If StrComp(currentLine, "#AvailableSamples") = 0 Then
+                    'Read line
+                    currentLine = Trim(LineInput(1))
+                    Dim SamplesCount As Integer = currentLine
+                    'Read samples table
+                    If SamplesCount > 0 Then
+                        For i As Integer = 0 To 9
+                            Dim itemsCount As Integer = 0
+                            Do
+                                'Continue Reading
+                                currentLine = Trim(LineInput(1))
+                                'Read content
+                                If StrComp(currentLine, "#END") <> 0 Then
+                                    'Add item to listview
+                                    If i = 0 Then
+                                        samplesData.Rows.Add(currentLine)
+                                    Else
+                                        samplesData.Rows(itemsCount)(i) = currentLine
+                                    End If
+                                    'Update counter
+                                    itemsCount += 1
                                 Else
-                                    samplesData.Rows(itemsCount)(i) = currentLine
+                                    'Exit loop
+                                    Exit Do
                                 End If
-                                'Update counter
-                                itemsCount += 1
-                            Else
-                                'Exit loop
-                                Exit Do
-                            End If
-                        Loop While itemsCount < SamplesCount
-                    Next
+                            Loop While itemsCount < SamplesCount
+                        Next
+                    End If
                 End If
-            End If
-        Loop
+            Loop
 
-        'Read misc properties block
-        FileClose(1)
-
+            'Read misc properties block
+            FileClose(1)
+        End If
         Return samplesData
     End Function
 

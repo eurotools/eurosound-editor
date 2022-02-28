@@ -130,24 +130,10 @@ Public Class Soundbank_Properties
             'Open file
             Dim filePath As String = fso.BuildPath(WorkingDirectory, "SFXs\" & item & ".txt")
             If fso.FileExists(filePath) Then
-                FileOpen(1, filePath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
-                Do Until EOF(1)
-                    'Read text file
-                    Dim currentLine As String = LineInput(1)
-                    'Read samples section
-                    If StrComp(currentLine, "#SFXSamplePoolFiles") = 0 Then
-                        'Read line
-                        currentLine = LineInput(1)
-                        Do
-                            'Add path to list
-                            Samples.Add(currentLine)
-                            'Continue Reading
-                            currentLine = LineInput(1)
-                        Loop While StrComp(currentLine, "#END") <> 0 AndAlso Not EOF(1)
-                        Exit Do
-                    End If
-                Loop
-                FileClose(1)
+                Dim sfxFileData As SfxFile = textFileReaders.ReadSFXFile(filePath)
+                For sampleIndex As Integer = 0 To sfxFileData.Samples.Count - 1
+                    Samples.Add(sfxFileData.Samples(sampleIndex).FilePath)
+                Next
             End If
         Next
         Return Samples.ToArray

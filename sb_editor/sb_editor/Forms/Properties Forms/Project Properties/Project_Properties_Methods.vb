@@ -4,7 +4,6 @@ Partial Public Class Project_Properties
     Private Sub CopyArrayToListView(lvw As ListView, data As String(,))
         Dim max_row As Integer = data.GetUpperBound(0)
         Dim max_col As Integer = data.GetUpperBound(1)
-
         For row As Integer = 0 To max_row
             Dim new_item As ListViewItem = lvw.Items.Add(data(row, 0))
             For col As Integer = 1 To max_col
@@ -16,11 +15,9 @@ Partial Public Class Project_Properties
     Public Function GetColumn(matrix As String(,), columnNumber As Integer) As String()
         Dim matrixLength As Integer = matrix.GetLength(0) - 1
         Dim columnArray As String() = New String(matrixLength) {}
-
         For i As Integer = 0 To matrixLength
             columnArray(i) = matrix(i, columnNumber)
         Next
-
         Return columnArray
     End Function
 
@@ -41,6 +38,20 @@ Partial Public Class Project_Properties
             End If
         End If
     End Sub
+
+    Private Function ParseListViewToMatrix() As String(,)
+        'Parse ListView to a matrix
+        Dim countItems As Integer = ListView_Formats.Items.Count - 1
+        Dim columnsCount As Integer = ListView_Formats.Columns.Count - 1
+        Dim availableFormats(countItems, columnsCount) As String
+        For itemIndex As Integer = 0 To countItems
+            Dim currentItem As ListViewItem = ListView_Formats.Items(itemIndex)
+            For subItemIndex As Integer = 0 To columnsCount
+                availableFormats(itemIndex, subItemIndex) = currentItem.SubItems(subItemIndex).Text
+            Next
+        Next
+        Return availableFormats
+    End Function
 
     Private Sub SaveIniFile()
         Dim iniFunctions As New IniFile(SysFileProjectIniPath)

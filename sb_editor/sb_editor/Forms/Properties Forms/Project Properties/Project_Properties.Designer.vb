@@ -286,7 +286,7 @@ Partial Class Project_Properties
         Me.ComboBox_Platform.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_Platform.FormattingEnabled = True
         Me.ComboBox_Platform.Items.AddRange(New Object() {"PlayStation2", "X Box", "Game Cube", "PC"})
-        Me.ComboBox_Platform.Location = New System.Drawing.Point(69, 142)
+        Me.ComboBox_Platform.Location = New System.Drawing.Point(69, 140)
         Me.ComboBox_Platform.Name = "ComboBox_Platform"
         Me.ComboBox_Platform.Size = New System.Drawing.Size(140, 21)
         Me.ComboBox_Platform.TabIndex = 2
@@ -398,9 +398,9 @@ Partial Class Project_Properties
         '
         Me.GroupBox_ResamplePerFormat.Controls.Add(Me.ListView_SampleRateValues)
         Me.GroupBox_ResamplePerFormat.Controls.Add(Me.ComboBox_RatesFormat)
-        Me.GroupBox_ResamplePerFormat.Location = New System.Drawing.Point(266, 375)
+        Me.GroupBox_ResamplePerFormat.Location = New System.Drawing.Point(277, 375)
         Me.GroupBox_ResamplePerFormat.Name = "GroupBox_ResamplePerFormat"
-        Me.GroupBox_ResamplePerFormat.Size = New System.Drawing.Size(389, 263)
+        Me.GroupBox_ResamplePerFormat.Size = New System.Drawing.Size(378, 263)
         Me.GroupBox_ResamplePerFormat.TabIndex = 8
         Me.GroupBox_ResamplePerFormat.TabStop = False
         Me.GroupBox_ResamplePerFormat.Text = "Re-Sample Rate Values per Format"
@@ -416,7 +416,7 @@ Partial Class Project_Properties
         Me.ListView_SampleRateValues.HideSelection = False
         Me.ListView_SampleRateValues.Location = New System.Drawing.Point(6, 46)
         Me.ListView_SampleRateValues.Name = "ListView_SampleRateValues"
-        Me.ListView_SampleRateValues.Size = New System.Drawing.Size(377, 211)
+        Me.ListView_SampleRateValues.Size = New System.Drawing.Size(366, 211)
         Me.ListView_SampleRateValues.TabIndex = 1
         Me.ListView_SampleRateValues.UseCompatibleStateImageBehavior = False
         Me.ListView_SampleRateValues.View = System.Windows.Forms.View.Details
@@ -429,7 +429,7 @@ Partial Class Project_Properties
         'Col_SampleRate
         '
         Me.Col_SampleRate.Text = "Re-Sample Rate"
-        Me.Col_SampleRate.Width = 190
+        Me.Col_SampleRate.Width = 170
         '
         'ComboBox_RatesFormat
         '
@@ -467,7 +467,7 @@ Partial Class Project_Properties
         '
         'Numeric_XboxMaxSize
         '
-        Me.Numeric_XboxMaxSize.Location = New System.Drawing.Point(441, 139)
+        Me.Numeric_XboxMaxSize.Location = New System.Drawing.Point(453, 139)
         Me.Numeric_XboxMaxSize.Maximum = New Decimal(New Integer() {999999999, 0, 0, 0})
         Me.Numeric_XboxMaxSize.Name = "Numeric_XboxMaxSize"
         Me.Numeric_XboxMaxSize.Size = New System.Drawing.Size(100, 20)
@@ -475,7 +475,7 @@ Partial Class Project_Properties
         '
         'Numeric_GameCubeMaxSize
         '
-        Me.Numeric_GameCubeMaxSize.Location = New System.Drawing.Point(441, 119)
+        Me.Numeric_GameCubeMaxSize.Location = New System.Drawing.Point(453, 119)
         Me.Numeric_GameCubeMaxSize.Maximum = New Decimal(New Integer() {999999999, 0, 0, 0})
         Me.Numeric_GameCubeMaxSize.Name = "Numeric_GameCubeMaxSize"
         Me.Numeric_GameCubeMaxSize.Size = New System.Drawing.Size(100, 20)
@@ -500,7 +500,7 @@ Partial Class Project_Properties
         'Label_XboxMaxSize
         '
         Me.Label_XboxMaxSize.AutoSize = True
-        Me.Label_XboxMaxSize.Location = New System.Drawing.Point(278, 141)
+        Me.Label_XboxMaxSize.Location = New System.Drawing.Point(290, 141)
         Me.Label_XboxMaxSize.Name = "Label_XboxMaxSize"
         Me.Label_XboxMaxSize.Size = New System.Drawing.Size(129, 13)
         Me.Label_XboxMaxSize.TabIndex = 15
@@ -509,7 +509,7 @@ Partial Class Project_Properties
         'Label_GameCubeMaxSize
         '
         Me.Label_GameCubeMaxSize.AutoSize = True
-        Me.Label_GameCubeMaxSize.Location = New System.Drawing.Point(278, 122)
+        Me.Label_GameCubeMaxSize.Location = New System.Drawing.Point(290, 122)
         Me.Label_GameCubeMaxSize.Name = "Label_GameCubeMaxSize"
         Me.Label_GameCubeMaxSize.Size = New System.Drawing.Size(157, 13)
         Me.Label_GameCubeMaxSize.TabIndex = 12
@@ -541,7 +541,7 @@ Partial Class Project_Properties
         Me.TextBox_TextEditor.Location = New System.Drawing.Point(93, 93)
         Me.TextBox_TextEditor.Name = "TextBox_TextEditor"
         Me.TextBox_TextEditor.ReadOnly = True
-        Me.TextBox_TextEditor.Size = New System.Drawing.Size(448, 20)
+        Me.TextBox_TextEditor.Size = New System.Drawing.Size(460, 20)
         Me.TextBox_TextEditor.TabIndex = 7
         '
         'Label_TextEditor
@@ -561,7 +561,7 @@ Partial Class Project_Properties
         Me.TextBox_UserName.Location = New System.Drawing.Point(93, 67)
         Me.TextBox_UserName.Name = "TextBox_UserName"
         Me.TextBox_UserName.ReadOnly = True
-        Me.TextBox_UserName.Size = New System.Drawing.Size(448, 20)
+        Me.TextBox_UserName.Size = New System.Drawing.Size(460, 20)
         Me.TextBox_UserName.TabIndex = 5
         '
         'Label_UserName
@@ -581,7 +581,7 @@ Partial Class Project_Properties
         Me.TextBox_EditWavs.Location = New System.Drawing.Point(93, 41)
         Me.TextBox_EditWavs.Name = "TextBox_EditWavs"
         Me.TextBox_EditWavs.ReadOnly = True
-        Me.TextBox_EditWavs.Size = New System.Drawing.Size(448, 20)
+        Me.TextBox_EditWavs.Size = New System.Drawing.Size(460, 20)
         Me.TextBox_EditWavs.TabIndex = 3
         '
         'Label_EditWavs
@@ -599,7 +599,7 @@ Partial Class Project_Properties
         Me.ComboBox_DefaultSampleRate.FormattingEnabled = True
         Me.ComboBox_DefaultSampleRate.Location = New System.Drawing.Point(120, 14)
         Me.ComboBox_DefaultSampleRate.Name = "ComboBox_DefaultSampleRate"
-        Me.ComboBox_DefaultSampleRate.Size = New System.Drawing.Size(131, 21)
+        Me.ComboBox_DefaultSampleRate.Size = New System.Drawing.Size(178, 21)
         Me.ComboBox_DefaultSampleRate.TabIndex = 1
         '
         'Label_DefaultSampleRate
@@ -659,8 +659,8 @@ Partial Class Project_Properties
         Me.LineShape3.AccessibleRole = System.Windows.Forms.AccessibleRole.[Default]
         Me.LineShape3.Name = "LineShape3"
         Me.LineShape3.SelectionColor = System.Drawing.SystemColors.Control
-        Me.LineShape3.X1 = 242
-        Me.LineShape3.X2 = 242
+        Me.LineShape3.X1 = 246
+        Me.LineShape3.X2 = 246
         Me.LineShape3.Y1 = 372
         Me.LineShape3.Y2 = 636
         '

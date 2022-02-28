@@ -43,7 +43,7 @@ Partial Public NotInheritable Class SplashScreen
             writers.CreateProjectFile(projectFilePath, soundbanksList, databasesToWrite, sfxsToWriter)
             'Load Languages and Formats
             AddProjectLanguagesToCombo()
-            AddFormatsToCombo(mainform.ComboBox_Format)
+            mainform.ComboBox_Format.Items.AddRange(ProjectSettingsFile.sampleRateFormats.Keys.ToArray)
             'Update GUI
             mainform.Text = "EuroSound: """ & WorkingDirectory & """"
 

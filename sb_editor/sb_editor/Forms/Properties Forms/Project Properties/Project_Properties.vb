@@ -114,6 +114,7 @@ Partial Public Class Project_Properties
         'Disable save file message
         promptSave = False
         'Update variables
+        ProjectSettingsFile.AvailableFormats = ParseListViewToMatrix()
         ProjectSettingsFile.MiscProps.SampleFileFolder = Textbox_Master_Path.Text
         ProjectSettingsFile.MiscProps.HashCodeFileFolder = Textbox_SonixFolder.Text
         ProjectSettingsFile.MiscProps.EngineXFolder = Textbox_EngineXFolder.Text
@@ -123,11 +124,19 @@ Partial Public Class Project_Properties
         SaveIniFile()
         'Update program ini file
         Dim baseIniFile As New IniFile(EuroSoundIniFilePath)
-        baseIniFile.Write("UserName", EuroSoundUser, "Form1_Misc")
         baseIniFile.Write("Edit_Wavs_With", ProjAudioEditor, "Form7_Misc")
         baseIniFile.Write("TextEditor", ProjTextEditor, "PropertiesForm")
         baseIniFile.Write("Edit_Wavs_With", OpenFileDialog.FileName, "Form7_Misc")
         baseIniFile.Write("TextEditor", OpenFileDialog.FileName, "PropertiesForm")
+        'Add items to combobox
+        Dim MainFrame As MainFrame = CType(Application.OpenForms("MainFrame"), MainFrame)
+        MainFrame.ComboBox_Format.BeginUpdate()
+        MainFrame.ComboBox_Format.Items.Clear()
+        MainFrame.ComboBox_Format.Items.AddRange(ProjectSettingsFile.sampleRateFormats.Keys.ToArray)
+        If MainFrame.ComboBox_Format.Items.Count > 0 Then
+            MainFrame.ComboBox_Format.SelectedIndex = 0
+        End If
+        MainFrame.ComboBox_Format.EndUpdate()
         'Close form
         Close()
     End Sub
@@ -205,6 +214,7 @@ Partial Public Class Project_Properties
             If Not ProjectSettingsFile.sampleRateFormats.ContainsKey(selectedPlatform) Then
                 'Add platform to dictionary
                 ProjectSettingsFile.sampleRateFormats.Add(selectedPlatform, New Dictionary(Of String, UInteger))
+                ProjectSettingsFile.sampleRateFormats(selectedPlatform).Add("Default", 22050)
                 'Add item to list
                 Dim formatitem As New ListViewItem(New String() {selectedPlatform, "Set Output Folder.", "On"})
                 ListView_Formats.Items.Add(formatitem)

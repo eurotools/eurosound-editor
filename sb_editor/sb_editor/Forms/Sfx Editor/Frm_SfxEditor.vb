@@ -32,9 +32,25 @@ Partial Public Class Frm_SfxEditor
         SfxParamsAndSamplePool.Textbox_SfxName.Text = sfxFileName
 
         'Add formats to combobox
-        AddFormatsToCombo(ComboBox_AvailableFormats)
+        ComboBox_AvailableFormats.BeginUpdate()
+        ComboBox_AvailableFormats.Items.AddRange(ProjectSettingsFile.sampleRateFormats.Keys.ToArray)
         If ComboBox_AvailableFormats.Items.Count > 0 Then
             ComboBox_AvailableFormats.SelectedIndex = 0
+        End If
+        ComboBox_AvailableFormats.EndUpdate()
+
+        'Disable buttons from formats that are not included
+        If ComboBox_AvailableFormats.Items.Contains("PlayStation2") Then
+            Button_SpecVersion_PlayStation2.Enabled = True
+        End If
+        If ComboBox_AvailableFormats.Items.Contains("GameCube") Then
+            Button_SpecVersion_GameCube.Enabled = True
+        End If
+        If ComboBox_AvailableFormats.Items.Contains("PC") Then
+            Button_SpecVersion_PC.Enabled = True
+        End If
+        If ComboBox_AvailableFormats.Items.Contains("X Box") Then
+            Button_SpecVersion_Xbox.Enabled = True
         End If
 
         'Get stream sounds list
@@ -57,7 +73,7 @@ Partial Public Class Frm_SfxEditor
         End If
 
         'Add Specific Formats Tab Pages
-        Dim availablePlatforms As String() = New String() {"PlayStation2", "GameCube", "X Box", "PC"}
+        Dim availablePlatforms As String() = ProjectSettingsFile.sampleRateFormats.Keys.ToArray
         For index As Integer = 0 To availablePlatforms.Length - 1
             'Create folder if not exists
             Dim folderPath As String = fso.BuildPath(WorkingDirectory, "SFXs\" & availablePlatforms(index))

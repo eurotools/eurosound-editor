@@ -40,7 +40,6 @@ Module GenericFunctions
         'Modify EuroSound Ini
         Dim programIni As New IniFile(EuroSoundIniFilePath)
         programIni.Write("UserName", EuroSoundUser, "Form1_Misc")
-
         Return EuroSoundUser
     End Function
 
@@ -94,14 +93,6 @@ Module GenericFunctions
         'Restart application
         Process.Start(Application.ExecutablePath)
         Application.Exit()
-    End Sub
-
-    Friend Sub AddFormatsToCombo(comboControl As ComboBox)
-        If ProjectSettingsFile.AvailableFormats IsNot Nothing AndAlso ProjectSettingsFile.AvailableFormats.GetLength(0) > 0 Then
-            For formatIndex As Integer = 0 To ProjectSettingsFile.AvailableFormats.GetLength(0) - 1
-                comboControl.Items.Add(ProjectSettingsFile.AvailableFormats(formatIndex, 0))
-            Next
-        End If
     End Sub
 
     '*===============================================================================================

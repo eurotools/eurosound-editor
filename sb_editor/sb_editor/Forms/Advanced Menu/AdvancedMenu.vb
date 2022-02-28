@@ -77,7 +77,6 @@ Partial Public Class AdvancedMenu
                     If fso.FileExists(xboxFilePath) Then
                         WriteSfxFile(xboxFilePath)
                     End If
-
                     'Update variable
                     SFXHashCodeNumber += 1
                 Next

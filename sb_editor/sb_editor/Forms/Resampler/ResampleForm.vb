@@ -49,7 +49,7 @@ Partial Public Class ResampleForm
         End If
 
         'Add formats to combobox
-        AddFormatsToCombo(ComboBox_PreviewOptions)
+        ComboBox_PreviewOptions.Items.AddRange(ProjectSettingsFile.sampleRateFormats.Keys.ToArray)
 
         'Show elapsed time
         stopwatch.Stop()

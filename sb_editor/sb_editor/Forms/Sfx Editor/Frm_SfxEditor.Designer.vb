@@ -81,7 +81,6 @@ Partial Class Frm_SfxEditor
         Me.MenuItem_SamplePool_Play = New System.Windows.Forms.MenuItem()
         Me.MenuItem_SamplePool_Stop = New System.Windows.Forms.MenuItem()
         Me.CheckBox_EnableSubSFX = New System.Windows.Forms.CheckBox()
-        Me.SfxParamsAndSamplePool = New sb_editor.SfxControl()
         Me.Panel_Options = New System.Windows.Forms.Panel()
         Me.Groupbox_RemoveFormat = New System.Windows.Forms.GroupBox()
         Me.Button_RemoveSpecificVersion = New System.Windows.Forms.Button()
@@ -98,6 +97,7 @@ Partial Class Frm_SfxEditor
         Me.Button_Cancel = New System.Windows.Forms.Button()
         Me.openFileDiag = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip_Buttons = New System.Windows.Forms.ToolTip(Me.components)
+        Me.SfxParamsAndSamplePool = New sb_editor.SfxControl()
         Me.TabControl_Platforms.SuspendLayout()
         Me.Panel_SfxParameters.SuspendLayout()
         Me.GroupBox_SamplePool.SuspendLayout()
@@ -671,14 +671,6 @@ Partial Class Frm_SfxEditor
         Me.CheckBox_EnableSubSFX.Text = "Enable Sub SFXs"
         Me.CheckBox_EnableSubSFX.UseVisualStyleBackColor = True
         '
-        'SfxParamsAndSamplePool
-        '
-        Me.SfxParamsAndSamplePool.Location = New System.Drawing.Point(3, 4)
-        Me.SfxParamsAndSamplePool.Name = "SfxParamsAndSamplePool"
-        Me.SfxParamsAndSamplePool.ShowSampleProperties = False
-        Me.SfxParamsAndSamplePool.Size = New System.Drawing.Size(891, 277)
-        Me.SfxParamsAndSamplePool.TabIndex = 14
-        '
         'Panel_Options
         '
         Me.Panel_Options.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
@@ -757,6 +749,7 @@ Partial Class Frm_SfxEditor
         '
         'Button_SpecVersion_PC
         '
+        Me.Button_SpecVersion_PC.Enabled = False
         Me.Button_SpecVersion_PC.Location = New System.Drawing.Point(248, 16)
         Me.Button_SpecVersion_PC.Name = "Button_SpecVersion_PC"
         Me.Button_SpecVersion_PC.Size = New System.Drawing.Size(75, 23)
@@ -766,6 +759,7 @@ Partial Class Frm_SfxEditor
         '
         'Button_SpecVersion_Xbox
         '
+        Me.Button_SpecVersion_Xbox.Enabled = False
         Me.Button_SpecVersion_Xbox.Location = New System.Drawing.Point(168, 16)
         Me.Button_SpecVersion_Xbox.Name = "Button_SpecVersion_Xbox"
         Me.Button_SpecVersion_Xbox.Size = New System.Drawing.Size(75, 23)
@@ -775,6 +769,7 @@ Partial Class Frm_SfxEditor
         '
         'Button_SpecVersion_GameCube
         '
+        Me.Button_SpecVersion_GameCube.Enabled = False
         Me.Button_SpecVersion_GameCube.Location = New System.Drawing.Point(88, 16)
         Me.Button_SpecVersion_GameCube.Name = "Button_SpecVersion_GameCube"
         Me.Button_SpecVersion_GameCube.Size = New System.Drawing.Size(75, 23)
@@ -784,6 +779,7 @@ Partial Class Frm_SfxEditor
         '
         'Button_SpecVersion_PlayStation2
         '
+        Me.Button_SpecVersion_PlayStation2.Enabled = False
         Me.Button_SpecVersion_PlayStation2.Location = New System.Drawing.Point(8, 16)
         Me.Button_SpecVersion_PlayStation2.Name = "Button_SpecVersion_PlayStation2"
         Me.Button_SpecVersion_PlayStation2.Size = New System.Drawing.Size(75, 23)
@@ -826,6 +822,14 @@ Partial Class Frm_SfxEditor
         '
         Me.openFileDiag.Filter = "Wave File (*.wav)|*.Wav"
         Me.openFileDiag.Multiselect = True
+        '
+        'SfxParamsAndSamplePool
+        '
+        Me.SfxParamsAndSamplePool.Location = New System.Drawing.Point(3, 4)
+        Me.SfxParamsAndSamplePool.Name = "SfxParamsAndSamplePool"
+        Me.SfxParamsAndSamplePool.ShowSampleProperties = False
+        Me.SfxParamsAndSamplePool.Size = New System.Drawing.Size(891, 277)
+        Me.SfxParamsAndSamplePool.TabIndex = 14
         '
         'Frm_SfxEditor
         '
