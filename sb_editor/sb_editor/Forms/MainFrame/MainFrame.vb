@@ -171,7 +171,8 @@ Partial Public Class MainFrame
     '* CONTEXT MENU TREEVIEW
     '*===============================================================================================
     Private Sub ContextMenu_TreeView_New_Click(sender As Object, e As EventArgs) Handles ContextMenu_TreeView_New.Click
-        Dim soundbankName As String = NewFile("SB_Label0", fso.BuildPath(WorkingDirectory, "Soundbanks\"))
+        Dim folderToCheck As String = fso.BuildPath(WorkingDirectory, "Soundbanks")
+        Dim soundbankName As String = NewFile(GetFileName(folderToCheck, "SB_Label"), folderToCheck)
         If soundbankName IsNot "" Then
             CreateNewSoundbank(soundbankName)
         End If
@@ -334,13 +335,15 @@ Partial Public Class MainFrame
     End Sub
 
     Private Sub ContextMenuDataBases_New_Click(sender As Object, e As EventArgs) Handles ContextMenuDataBases_New.Click
-        Dim databaseName As String = NewFile("DB_Label0", fso.BuildPath(WorkingDirectory, "Databases\"))
+        Dim folderToCheck As String = fso.BuildPath(WorkingDirectory, "Databases")
+        Dim databaseName As String = NewFile(GetFileName(folderToCheck, "DB_Label"), folderToCheck)
         If databaseName IsNot "" Then
             'Create txt
-            Dim databaseTxt As String = fso.BuildPath(WorkingDirectory, "DataBases\" & databaseName & ".txt")
+            Dim databaseTxt As String = fso.BuildPath(folderToCheck, databaseName & ".txt")
             writers.UpdateDataBaseText(databaseTxt, Nothing, textFileReaders)
             'Add item to list
             Dim itemIndex As Integer = ListBox_DataBases.Items.Add(databaseName)
+            ListBox_DataBases.SelectedIndices.Clear()
             ListBox_DataBases.SelectedIndex = itemIndex
             'Update label
             Label_DataBasesCount.Text = "Total: " & ListBox_DataBases.Items.Count

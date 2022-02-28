@@ -285,7 +285,7 @@ Partial Class Project_Properties
         Me.ComboBox_Platform.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.ComboBox_Platform.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_Platform.FormattingEnabled = True
-        Me.ComboBox_Platform.Items.AddRange(New Object() {"PlayStation2", "X Box", "Game Cube", "PC"})
+        Me.ComboBox_Platform.Items.AddRange(New Object() {"PlayStation2", "X Box", "GameCube", "PC"})
         Me.ComboBox_Platform.Location = New System.Drawing.Point(69, 140)
         Me.ComboBox_Platform.Name = "ComboBox_Platform"
         Me.ComboBox_Platform.Size = New System.Drawing.Size(140, 21)

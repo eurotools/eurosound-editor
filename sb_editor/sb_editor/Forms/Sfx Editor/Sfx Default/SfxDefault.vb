@@ -16,7 +16,7 @@ Public Class SfxDefault
             'Read SFX File
             Dim objSFX As SfxFile = textFileReaders.ReadSFXFile(SysFileSfxDefaults)
             'Set properties
-            SfxParamsAndSamplePool1.Textbox_SfxName.Text = GetOnlyFileName(SysFileSfxDefaults)
+            SfxParamsAndSamplePool1.Textbox_SfxName.Text = "SFX Default Setting"
 
             PutDataToControls(objSFX)
         End If
@@ -30,7 +30,6 @@ Public Class SfxDefault
             Dim IniRandomVol As String = iniFunctions.Read("DTextNIndex_3", "SFXForm")
             Dim IniPan As String = iniFunctions.Read("DTextNIndex_4", "SFXForm")
             Dim IniRandomPan As String = iniFunctions.Read("DTextNIndex_5", "SFXForm")
-
             'Pitch Offset
             If IsNumeric(IniPitchOffset) Then
                 SfxParamsAndSamplePool1.Numeric_PitchOffset.Value = Convert.ToDouble(IniPitchOffset, numericProvider)

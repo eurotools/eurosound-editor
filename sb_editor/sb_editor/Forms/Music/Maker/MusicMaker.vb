@@ -14,7 +14,6 @@ Partial Public Class MusicMaker
     '* FORM EVENTS
     '*===============================================================================================
     Private Sub MusicMaker_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ComboBox_OutputFormat.SelectedIndex = 0
         If fso.FolderExists(WorkingDirectory) Then
             'Ensure that the data and work directory exists
             Dim musicFolder = fso.BuildPath(WorkingDirectory, "Music")
@@ -30,6 +29,14 @@ Partial Public Class MusicMaker
                 fso.CreateFolder(EsWorkFolder)
             End If
         End If
+
+        'Add formats to combobox
+        ComboBox_OutputFormat.BeginUpdate()
+        ComboBox_OutputFormat.Items.AddRange(ProjectSettingsFile.sampleRateFormats.Keys.ToArray)
+        ComboBox_OutputFormat.Items.Add("All")
+        ComboBox_OutputFormat.SelectedIndex = ComboBox_OutputFormat.Items.Count - 1
+        ComboBox_OutputFormat.EndUpdate()
+
         'Print available mfx files
         GetMusicFilesData()
     End Sub
@@ -69,13 +76,11 @@ Partial Public Class MusicMaker
         'Get files and platforms to output
         Dim outputTable As DataTable = ListViewToDataTable()
         Dim outputFormats As List(Of String) = GetOutputPlatforms()
-
         'Get hashcodes dictionary
         Dim hashCodesDict As New SortedDictionary(Of String, UInteger)
         For Each listItem As ListViewItem In ListView_MusicFiles.Items
             hashCodesDict.Add(listItem.Text, listItem.SubItems(3).Text)
         Next
-
         'Open Exporter Form
         If outputTable.Rows.Count > 0 AndAlso outputFormats.Count > 0 Then
             Dim exporterTool As New MusicsExporter(outputTable, outputFormats.ToArray, CheckBox_MarkerFileOnly.Checked, Me, hashCodesDict)

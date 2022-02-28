@@ -39,20 +39,6 @@ Partial Public Class Frm_SfxEditor
         End If
         ComboBox_AvailableFormats.EndUpdate()
 
-        'Disable buttons from formats that are not included
-        If ComboBox_AvailableFormats.Items.Contains("PlayStation2") Then
-            Button_SpecVersion_PlayStation2.Enabled = True
-        End If
-        If ComboBox_AvailableFormats.Items.Contains("GameCube") Then
-            Button_SpecVersion_GameCube.Enabled = True
-        End If
-        If ComboBox_AvailableFormats.Items.Contains("PC") Then
-            Button_SpecVersion_PC.Enabled = True
-        End If
-        If ComboBox_AvailableFormats.Items.Contains("X Box") Then
-            Button_SpecVersion_Xbox.Enabled = True
-        End If
-
         'Get stream sounds list
         If fso.FileExists(SysFileSamples) Then
             StreamSamplesList = reader.GetStreamSoundsList(SysFileSamples)
@@ -87,15 +73,27 @@ Partial Public Class Frm_SfxEditor
                 fso.CopyFile(baseFilePath, platformTextFile, True)
                 sfxFilesData.Add(CreateTab(availablePlatforms(index)).Text, reader.ReadSFXFile(platformTextFile))
                 'Disable Button
-                Select Case index
-                    Case 0
+                Select Case availablePlatforms(index)
+                    Case "PlayStation2"
                         Button_SpecVersion_PlayStation2.Enabled = False
-                    Case 1
+                    Case "GameCube"
                         Button_SpecVersion_GameCube.Enabled = False
-                    Case 2
+                    Case "X Box"
                         Button_SpecVersion_Xbox.Enabled = False
-                    Case 3
+                    Case "PC"
                         Button_SpecVersion_PC.Enabled = False
+                End Select
+            Else
+                'Disable Button
+                Select Case availablePlatforms(index)
+                    Case "PlayStation2"
+                        Button_SpecVersion_PlayStation2.Enabled = True
+                    Case "GameCube"
+                        Button_SpecVersion_GameCube.Enabled = True
+                    Case "X Box"
+                        Button_SpecVersion_Xbox.Enabled = True
+                    Case "PC"
+                        Button_SpecVersion_PC.Enabled = True
                 End Select
             End If
         Next

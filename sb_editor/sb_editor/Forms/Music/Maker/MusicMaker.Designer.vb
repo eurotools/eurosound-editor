@@ -219,7 +219,6 @@ Partial Class MusicMaker
         '
         Me.ComboBox_OutputFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_OutputFormat.FormattingEnabled = True
-        Me.ComboBox_OutputFormat.Items.AddRange(New Object() {"PlayStation2", "GameCube", "PC", "X Box", "All"})
         Me.ComboBox_OutputFormat.Location = New System.Drawing.Point(6, 19)
         Me.ComboBox_OutputFormat.Name = "ComboBox_OutputFormat"
         Me.ComboBox_OutputFormat.Size = New System.Drawing.Size(188, 21)

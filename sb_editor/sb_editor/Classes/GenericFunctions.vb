@@ -95,6 +95,14 @@ Module GenericFunctions
         Application.Exit()
     End Sub
 
+    Friend Function GetFileName(foldeToCheckIn As String, FileNamePattern As String) As String
+        Dim fileNumber As Integer = 0
+        While fso.FileExists(fso.BuildPath(foldeToCheckIn, FileNamePattern & fileNumber & ".txt"))
+            fileNumber += 1
+        End While
+        Return FileNamePattern & fileNumber
+    End Function
+
     '*===============================================================================================
     '* FILES FUNCTIONS
     '*===============================================================================================

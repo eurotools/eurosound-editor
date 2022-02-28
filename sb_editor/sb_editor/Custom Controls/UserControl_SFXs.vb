@@ -213,15 +213,18 @@ Public Class UserControl_SFXs
     Private Sub ContextMenuSfx_AddNewSfx_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_AddNewSfx.Click
         'Ensure that the default file exists
         If fso.FileExists(SysFileSfxDefaults) AndAlso File.ReadAllLines(SysFileSfxDefaults).Length > 7 Then
-            Dim sfxFileName As String = NewFile("SFX_Label0", fso.BuildPath(WorkingDirectory, "SFXs"))
+            Dim folderToCheck As String = fso.BuildPath(WorkingDirectory, "SFXs")
+            Dim sfxFileName As String = NewFile(GetFileName(folderToCheck, "SFX_Label"), folderToCheck)
             If sfxFileName > "" Then
                 'Create and save file
                 Dim fileData As SfxFile = textFileReaders.ReadSFXFile(SysFileSfxDefaults)
                 fileData.HashCode = SFXHashCodeNumber
                 'Get a new hashcode
-                writers.WriteSfxFile(fileData, fso.BuildPath(WorkingDirectory & "\SFXs", sfxFileName & ".txt"))
-                'Add item to listview
-                ListBox_SFXs.Items.Add(sfxFileName)
+                writers.WriteSfxFile(fileData, fso.BuildPath(folderToCheck, sfxFileName & ".txt"))
+                'Add item to list
+                Dim itemIndex As Integer = ListBox_SFXs.Items.Add(sfxFileName)
+                ListBox_SFXs.SelectedIndices.Clear()
+                ListBox_SFXs.SelectedIndex = itemIndex
                 'Check if we need to realloc
                 If SFXHashCodeNumber = 0 Then
                     MsgBox("Please Re-Alloc Hashcodes under Advanced Menu", vbOKOnly + vbExclamation, "EuroSound")
