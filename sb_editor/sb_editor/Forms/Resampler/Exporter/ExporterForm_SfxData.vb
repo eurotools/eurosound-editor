@@ -5,6 +5,7 @@ Imports NAudio.Wave
 
 Partial Public Class ExporterForm
     Private Sub CreateSfxDataFolder(samplesDt As DataTable, e As DoWorkEventArgs)
+        Dim waveFunctions As New WaveFunctions
         'Ensure that we have files to resample
         If samplesDt.Rows.Count > 0 Then
             'Update progress bar
@@ -40,7 +41,7 @@ Partial Public Class ExporterForm
                             If fso.FileExists(waveFilePath) Then
                                 Using waveReader As New WaveFileReader(waveFilePath)
                                     waveDuration = (waveReader.Length / waveReader.WaveFormat.AverageBytesPerSecond) + 0.0
-                                    waveLooping = waveFunctions.ReadSampleChunk(waveReader)
+                                    waveLooping = WaveFunctions.ReadSampleChunk(waveReader)
                                 End Using
                             Else
                                 sfxFile.Parameters.TrackingType = 4

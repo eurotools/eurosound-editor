@@ -5,25 +5,26 @@ Partial Public Class ExporterForm
     '*===============================================================================================
     '* BINARY FILE FUNCTIONS
     '*===============================================================================================
-    Public Sub BuildTemporalFile(filesCount As Integer, streamsFolder As String, outputFolder As String)
-        'Create variables
-        Dim StartOffsets As New Queue(Of UInteger)
-
+    Public Sub BuildTemporalFile(filesCount As Integer, outputPlatform As String, outputLanguage As String)
         'Get paths
-        Dim tempStreamDataBin As String = fso.BuildPath(outputFolder, "STREAMS.bin")
-        Dim tempStreamDataLut As String = fso.BuildPath(outputFolder, "STREAMS.lut")
-
-        'Create directory if not exists
-        If Not fso.FolderExists(outputFolder) Then
-            MkDir(outputFolder)
-        End If
-
+        Dim outputFilePath As String = fso.BuildPath(WorkingDirectory & "\TempOutputFolder\" & outputPlatform & "\" & outputLanguage, "Streams")
+        CreateFolderIfRequired(outputFilePath)
+        'Reset progress bar
+        Invoke(Sub() ProgressBar1.Value = 0)
         'Create a new binary writer for the binary file
-        Using binaryWriter As New BinaryWriter(File.Open(tempStreamDataBin, FileMode.Create, FileAccess.ReadWrite), Encoding.ASCII)
-            'Convert audio to the destination platform rate
-            For index As Integer = 0 To filesCount
-                Dim adpcmFile As String = fso.BuildPath(streamsFolder, "STR_" & index & ".ssd")
-                Dim markerFile As String = fso.BuildPath(streamsFolder, "STR_" & index & ".smf")
+        Dim StartOffsets As New Queue(Of UInteger)
+        Using binaryWriter As New BinaryWriter(File.Open(fso.BuildPath(outputFilePath, "STREAMS.bin"), FileMode.Create, FileAccess.ReadWrite), Encoding.ASCII)
+            'For each file in the platform _STREAMS folder
+            For fileIndex As Integer = 0 To filesCount
+                'Calculate and report progress
+                Dim totalProgress As Double = Decimal.Divide(fileIndex, filesCount) * 100.0
+                BackgroundWorker.ReportProgress(totalProgress)
+                'Get files path
+                Dim filePath As String = fso.BuildPath(WorkingDirectory & "\" & outputPlatform & "_Streams\" & outputLanguage, "STR_" & fileIndex)
+                Dim adpcmFile As String = filePath & ".ssd"
+                Dim markerFile As String = filePath & ".smf"
+                'Update title bar
+                Invoke(Sub() Text = "Binding " & outputLanguage & " Audio Stream Data " & adpcmFile & " For " & outputPlatform)
                 'Ensure that the adpcm file exists
                 If fso.FileExists(adpcmFile) AndAlso fso.FileExists(markerFile) Then
                     'Offset to write in look-up table
@@ -49,7 +50,7 @@ Partial Public Class ExporterForm
                     Dim audioStartOffset As UInteger = binaryWriter.BaseStream.Position
                     binaryWriter.Write(adpcmData)
                     'Alignment
-                    If index < filesCount Then
+                    If fileIndex < filesCount Then
                         binaryWriter.Write(block)
                         BinAlign(binaryWriter, &H800)
                     End If
@@ -69,7 +70,7 @@ Partial Public Class ExporterForm
         'Ensure that we have items stored in the queue
         If StartOffsets.Count > 0 Then
             'Create a new binary writer for the lut file
-            Using binaryWriter As New BinaryWriter(File.Open(tempStreamDataLut, FileMode.Create, FileAccess.ReadWrite), Encoding.ASCII)
+            Using binaryWriter As New BinaryWriter(File.Open(fso.BuildPath(outputFilePath, "STREAMS.lut"), FileMode.Create, FileAccess.ReadWrite), Encoding.ASCII)
                 'Wirte all start offsets
                 Do
                     binaryWriter.Write(StartOffsets.Dequeue)

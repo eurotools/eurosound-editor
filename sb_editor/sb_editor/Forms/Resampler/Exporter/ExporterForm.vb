@@ -4,19 +4,23 @@
     '* GLOBAL VARIABLES 
     '*===============================================================================================
     Private ReadOnly outPlatforms As String()
+    Private ReadOnly outLanguages As String()
     Private ReadOnly quickResample As Boolean
     Private ReadOnly mainFrame As Form
+    Private ReadOnly textFileReaders As New FileParsers
+    Private ReadOnly textFileWritters As New FileWriters
 
     '*===============================================================================================
     '* FORM EVENTS
     '*===============================================================================================
-    Sub New(destPlatforms As String(), fastResample As Boolean)
+    Sub New(destPlatforms As String(), outputLanguages As String(), fastResample As Boolean)
         'Esta llamada es exigida por el diseñador.
         InitializeComponent()
 
         'Agregue cualquier inicialización después de la llamada a InitializeComponent().
         outPlatforms = destPlatforms
         quickResample = fastResample
+        outLanguages = outputLanguages
 
         'Get mainframe
         mainFrame = CType(Application.OpenForms("MainFrame"), MainFrame)
@@ -39,24 +43,24 @@
         'Update form title
         Invoke(Sub() Text = "Waiting")
 
-        'Get sound table from the Samples.txt
+        'Get sound table from the Samples.txt and start resample
         Dim soundsTable As DataTable = textFileReaders.SamplesFileToDatatable(SysFileSamples)
+        ResampleWaves(soundsTable, outPlatforms)
 
-        'Start waves resampling
-        ResampleWaves(soundsTable, e)
-
-        'Check if we need to rebuild the stream file
+        'Check if we need to resample and rebuild the stream file
         If ReSampleStreams = 1 Then
-            'Get stream samples list
             Dim streamSamplesList As String() = textFileReaders.GetStreamSoundsList(SysFileSamples)
-
-            'Generate Stream Files
-            GenerateStreamFolder(outPlatforms, streamSamplesList, e)
-            GenerateStreamFile(outPlatforms, streamSamplesList, e)
+            GenerateStreamFolder(streamSamplesList, outPlatforms, outLanguages)
         End If
 
         'Create SFX Data
         CreateSfxDataFolder(soundsTable, e)
+    End Sub
+
+    Private Sub CreateFolderIfRequired(destinationFilePath As String)
+        If Not fso.FolderExists(destinationFilePath) Then
+            MkDir(destinationFilePath)
+        End If
     End Sub
 
     Private Sub BackgroundWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker.ProgressChanged

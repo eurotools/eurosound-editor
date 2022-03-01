@@ -749,8 +749,22 @@ Partial Public Class MainFrame
             outPlaforms = ProjectSettingsFile.sampleRateFormats.Keys.ToArray
         End If
 
+        'Get output languages
+        Dim outputLanguage As String() = New String() {SfxLanguages(0)}
+        If ComboBox_OutputLanguage.Items.Count > 0 Then
+            'Get selected language
+            outputLanguage = New String() {ComboBox_OutputLanguage.SelectedItem}
+            'Get all languages
+            If CheckBox_OutAllLanguages.Checked Then
+                outputLanguage = New String() {ComboBox_OutputLanguage.Items.Count - 1}
+                For langIndex As Integer = 0 To outputLanguage.Length - 1
+                    outputLanguage(langIndex) = ComboBox_OutputLanguage.Items(langIndex)
+                Next
+            End If
+        End If
+
         'Resample
-        Dim taskForm As New ExporterForm(outPlaforms, CheckBox_FastReSample.Checked)
+        Dim taskForm As New ExporterForm(outPlaforms, outputLanguage, CheckBox_FastReSample.Checked)
         taskForm.ShowDialog()
 
         If Not test Then

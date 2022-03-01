@@ -13,7 +13,7 @@ namespace EngineXMarkersTool
         //*===============================================================================================
         //* STREAM MARKER BINARY FILE
         //*===============================================================================================
-        internal void CreateMarkerBinFile(string imaFilePath, string markerFilePath, string outputDir, string outputPlatform, uint baseVolume)
+        internal void CreateMarkerBinFile(string imaFilePath, string markerFilePath, string outputFilePath, string outputPlatform, uint baseVolume)
         {
             //List to store the text file markers
             List<EXStartMarker> startMarkersList = new List<EXStartMarker>();
@@ -140,7 +140,6 @@ namespace EngineXMarkersTool
             }
 
             //Write Sound Marker File
-            string outputFilePath = Path.Combine(outputDir, Path.GetFileNameWithoutExtension(imaFilePath) + ".smf");
             FileWriters.WriteBinaryMarkerFile(outputFilePath, startMarkersList, markersList, baseVolume);
         }
     }
