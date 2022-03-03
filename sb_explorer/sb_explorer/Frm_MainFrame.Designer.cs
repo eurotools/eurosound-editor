@@ -1551,7 +1551,7 @@ namespace sb_explorer
             // openFileDialog_Soundbanks
             // 
             this.openFileDialog_Soundbanks.DefaultExt = "sfx";
-            this.openFileDialog_Soundbanks.Filter = "SFX Files|HC0000??.sfx";
+            this.openFileDialog_Soundbanks.Filter = "SFX Files|HC0?00??.sfx";
             this.openFileDialog_Soundbanks.Title = "Open Soundbank file";
             // 
             // HexViewfontDialog
@@ -1564,14 +1564,14 @@ namespace sb_explorer
             // openFileDialog_MusicFile
             // 
             this.openFileDialog_MusicFile.DefaultExt = "sfx";
-            this.openFileDialog_MusicFile.Filter = "SFX Files|HCE000??.sfx";
-            this.openFileDialog_MusicFile.Title = "Open Soundbank file";
+            this.openFileDialog_MusicFile.Filter = "SFX Files|HCE??0??.sfx";
+            this.openFileDialog_MusicFile.Title = "Open Music file";
             // 
             // openFileDialog_StreamFile
             // 
             this.openFileDialog_StreamFile.DefaultExt = "sfx";
-            this.openFileDialog_StreamFile.Filter = "SFX Files|HC00FFFF.sfx";
-            this.openFileDialog_StreamFile.Title = "Open Soundbank file";
+            this.openFileDialog_StreamFile.Filter = "SFX Files|HC0?FFFF.sfx";
+            this.openFileDialog_StreamFile.Title = "Open Stream file";
             // 
             // Frm_MainFrame
             // 

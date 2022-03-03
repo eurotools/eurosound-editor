@@ -496,11 +496,15 @@ Partial Public Class MainFrame
     End Sub
 
     Private Sub ListBox_DataBaseSFX_DragDrop(sender As Object, e As DragEventArgs) Handles ListBox_DataBaseSFX.DragDrop
-        If e.Effect = DragDropEffects.Copy AndAlso ListBox_DataBases.SelectedItems.Count > 0 Then
+        If e.Effect = DragDropEffects.Copy AndAlso ListBox_DataBases.SelectedItems.Count = 1 Then
             If e.Data.GetDataPresent(GetType(ListBox.SelectedObjectCollection)) Then
                 Dim itemsData As ListBox.SelectedObjectCollection = e.Data.GetData(GetType(ListBox.SelectedObjectCollection))
-                For Each data As String In itemsData
-                    ListBox_DataBaseSFX.Items.Add(data)
+                For Each sfxItem As String In itemsData
+                    'Ensure that the item does not exist in this database
+                    If Not ListBox_DataBaseSFX.Items.Contains(sfxItem) Then
+                        'Add item to the listbox
+                        ListBox_DataBaseSFX.Items.Add(sfxItem)
+                    End If
                 Next
                 'Update text file
                 If itemsData.Count > 0 Then

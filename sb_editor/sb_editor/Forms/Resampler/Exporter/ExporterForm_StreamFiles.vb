@@ -13,6 +13,8 @@ Partial Public Class ExporterForm
         Using binaryWriter As New BinaryWriter(File.Open(fso.BuildPath(outputFilePath, "STREAMS.bin"), FileMode.Create, FileAccess.ReadWrite), Encoding.ASCII)
             'For each file in the platform _STREAMS folder
             Dim filesCount As Integer = filesToEncode.Count - 1
+            'Debug File
+            FileOpen(1, fso.BuildPath(WorkingDirectory & "\Debug_Report", "StreamList_" & outputLanguage & "_" & outputPlatform & ".txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
             For fileIndex As Integer = 0 To filesCount
                 'Calculate and report progress
                 Dim totalProgress As Double = Decimal.Divide(fileIndex, filesCount) * 100.0
@@ -26,7 +28,8 @@ Partial Public Class ExporterForm
                 'Ensure that the adpcm file exists
                 If fso.FileExists(adpcmFile) AndAlso fso.FileExists(markerFile) Then
                     'Offset to write in look-up table
-                    StartOffsets.Enqueue(binaryWriter.BaseStream.Position)
+                    Dim headerStart As Long = binaryWriter.BaseStream.Position
+                    StartOffsets.Enqueue(headerStart)
                     'Read files binary data
                     Dim markersFileData As Byte() = File.ReadAllBytes(markerFile)
                     Dim adpcmData As Byte() = File.ReadAllBytes(adpcmFile)
@@ -59,8 +62,19 @@ Partial Public Class ExporterForm
                     binaryWriter.Write(audioStartOffset)
                     'Return to current pos
                     binaryWriter.Seek(lastPosition, SeekOrigin.Begin)
+
+                    'Print Debug Data 
+                    PrintLine(1, "------------------Stream " & fileIndex & "------------------")
+                    PrintLine(1, "HeaderStart = " & headerStart)
+                    PrintLine(1, "DataStart = " & audioStartOffset)
+                    PrintLine(1, "")
+                    PrintLine(1, "MarkerSize = " & markersFileData.Length)
+                    PrintLine(1, "SampleDataStart = " & audioStartOffset)
+                    PrintLine(1, "SampleSize = " & adpcmData.Length)
+                    PrintLine(1, "")
                 End If
             Next
+            FileClose(1)
             'Close file
             binaryWriter.Close()
         End Using

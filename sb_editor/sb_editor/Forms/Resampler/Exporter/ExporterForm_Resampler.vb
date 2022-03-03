@@ -27,10 +27,12 @@ Partial Public Class ExporterForm
                         Dim outputFilePath As String = fso.BuildPath(WorkingDirectory & "\" & currentPlatform, sampleRelativePath)
                         'Update title
                         Invoke(Sub() Text = "ReSampling: " & sampleRelativePath & "  " & currentPlatform)
-                        'Get wave frequency for the destination format
+                        'Resample the wav for the destination platform
                         Dim sampleRateLabel As String = soundsTable.Rows(rowIndex).ItemArray(1)
                         Dim sampleRate As Integer = ProjectSettingsFile.sampleRateFormats(currentPlatform)(sampleRateLabel)
-                        'Resample the wav for the destination platform
+                        If StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
+                            sampleRate = 22050
+                        End If
                         CreateFolderIfRequired(fso.GetParentFolderName(outputFilePath))
                         RunProcess("SystemFiles\Sox.exe", """" & sourceFilePath & """ -r " & sampleRate & " """ & outputFilePath & """")
                         'IMA ADPCM For PC and Nintendo GameCube Formats
