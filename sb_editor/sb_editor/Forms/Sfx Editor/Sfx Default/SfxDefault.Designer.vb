@@ -73,7 +73,7 @@ Partial Class SfxDefault
         Me.MinimizeBox = False
         Me.Name = "SfxDefault"
         Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "SFX Default Setting"
         Me.ResumeLayout(False)
 

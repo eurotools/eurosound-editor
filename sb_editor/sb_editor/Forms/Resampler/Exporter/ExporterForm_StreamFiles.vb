@@ -5,16 +5,14 @@ Partial Public Class ExporterForm
     '*===============================================================================================
     '* BINARY FILE FUNCTIONS
     '*===============================================================================================
-    Public Sub BuildTemporalFile(filesCount As Integer, outputPlatform As String, outputLanguage As String)
-        'Get paths
-        Dim outputFilePath As String = fso.BuildPath(WorkingDirectory & "\TempOutputFolder\" & outputPlatform & "\" & outputLanguage, "Streams")
-        CreateFolderIfRequired(outputFilePath)
+    Public Sub BuildTemporalFile(filesToEncode As List(Of String), outputPlatform As String, outputLanguage As String, outputFilePath As String)
         'Reset progress bar
         Invoke(Sub() ProgressBar1.Value = 0)
         'Create a new binary writer for the binary file
         Dim StartOffsets As New Queue(Of UInteger)
         Using binaryWriter As New BinaryWriter(File.Open(fso.BuildPath(outputFilePath, "STREAMS.bin"), FileMode.Create, FileAccess.ReadWrite), Encoding.ASCII)
             'For each file in the platform _STREAMS folder
+            Dim filesCount As Integer = filesToEncode.Count - 1
             For fileIndex As Integer = 0 To filesCount
                 'Calculate and report progress
                 Dim totalProgress As Double = Decimal.Divide(fileIndex, filesCount) * 100.0
@@ -50,7 +48,7 @@ Partial Public Class ExporterForm
                     Dim audioStartOffset As UInteger = binaryWriter.BaseStream.Position
                     binaryWriter.Write(adpcmData)
                     'Alignment
-                    If fileIndex < filesCount Then
+                    If fileIndex < filesToEncode.Count - 1 Then
                         binaryWriter.Write(block)
                         BinAlign(binaryWriter, &H800)
                     End If

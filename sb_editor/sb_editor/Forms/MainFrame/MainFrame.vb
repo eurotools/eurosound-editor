@@ -756,7 +756,7 @@ Partial Public Class MainFrame
             outputLanguage = New String() {ComboBox_OutputLanguage.SelectedItem}
             'Get all languages
             If CheckBox_OutAllLanguages.Checked Then
-                outputLanguage = New String() {ComboBox_OutputLanguage.Items.Count - 1}
+                outputLanguage = New String(ComboBox_OutputLanguage.Items.Count - 1) {}
                 For langIndex As Integer = 0 To outputLanguage.Length - 1
                     outputLanguage(langIndex) = ComboBox_OutputLanguage.Items(langIndex)
                 Next

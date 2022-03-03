@@ -126,7 +126,7 @@ Partial Class About
         Me.MinimizeBox = False
         Me.Name = "About"
         Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "EuroSound Help"
         Me.GroupBox_About.ResumeLayout(False)
         Me.GroupBox_About.PerformLayout()

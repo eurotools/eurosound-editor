@@ -155,7 +155,7 @@ Partial Class AdvancedMenu
         Me.MinimizeBox = False
         Me.Name = "AdvancedMenu"
         Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Advanced"
         Me.GroupBox1.ResumeLayout(False)
         Me.ResumeLayout(False)

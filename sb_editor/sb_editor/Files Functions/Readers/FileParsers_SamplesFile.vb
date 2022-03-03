@@ -50,7 +50,6 @@
                     End If
                 End If
             Loop
-
             'Read misc properties block
             FileClose(1)
         End If
@@ -61,24 +60,21 @@
         'Create a datatable with the samples info
         Dim dataTable As DataTable = SamplesFileToDatatable(samplesFilePath)
 
-        'Select 
-        Dim results As DataRow() = dataTable.Select("StreamMe = True")
-        Dim totalStreamedSamples = results.Length - 1
-
-        'Create final list
-        Dim filesToInclude = New String(totalStreamedSamples) {}
-
-        'Iterate over all select results, we don't need to sort :)
-        For index As Integer = 0 To totalStreamedSamples
-            'Sample Relative path
-            filesToInclude(index) = results(index).ItemArray(0)
+        'Get the streams that has the flag StreamMe in True
+        Dim streamsList As New List(Of String)
+        For rowIndex As Integer = 0 To dataTable.Rows.Count - 1
+            If StrComp(dataTable.Rows(rowIndex).Item(5), "True") = 0 Then
+                Dim sampleRelativePath As String = dataTable.Rows(rowIndex).Item(0)
+                'In the multilanguage, we only need to get the english folder, the other languages should have the same folder structure
+                If InStr(1, sampleRelativePath, "Speech\", CompareMethod.Binary) Then
+                    If InStr(1, sampleRelativePath, "Speech\English", CompareMethod.Binary) = 0 Then
+                        Continue For
+                    End If
+                End If
+                streamsList.Add(sampleRelativePath)
+            End If
         Next
-
-        'Clear table
-        dataTable.Clear()
-
         'Return data
-        Return filesToInclude
+        Return streamsList.ToArray
     End Function
-
 End Class

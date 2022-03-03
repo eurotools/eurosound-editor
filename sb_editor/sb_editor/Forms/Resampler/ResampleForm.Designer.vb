@@ -223,7 +223,7 @@ Partial Class ResampleForm
         Me.Button_UnStreamSel.Name = "Button_UnStreamSel"
         Me.Button_UnStreamSel.Size = New System.Drawing.Size(93, 23)
         Me.Button_UnStreamSel.TabIndex = 11
-        Me.Button_UnStreamSel.Text = "UnStream Sel."
+        Me.Button_UnStreamSel.Text = "Sample Sel."
         Me.Button_UnStreamSel.UseVisualStyleBackColor = True
         '
         'Button_EditSample

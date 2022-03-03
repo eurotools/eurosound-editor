@@ -29,7 +29,6 @@
     Private Sub ExporterForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'Hide mainform
         mainFrame.Hide()
-
         'Start process
         If Not BackgroundWorker.IsBusy Then
             BackgroundWorker.RunWorkerAsync()
@@ -43,18 +42,18 @@
         'Update form title
         Invoke(Sub() Text = "Waiting")
 
-        'Get sound table from the Samples.txt and start resample
+        'Get data
         Dim soundsTable As DataTable = textFileReaders.SamplesFileToDatatable(SysFileSamples)
-        ResampleWaves(soundsTable, outPlatforms)
+        Dim streamSamplesList As String() = textFileReaders.GetStreamSoundsList(SysFileSamples)
 
-        'Check if we need to resample and rebuild the stream file
-        If ReSampleStreams = 1 Then
-            Dim streamSamplesList As String() = textFileReaders.GetStreamSoundsList(SysFileSamples)
+        'Resample, Resample Streams and Soundbanks
+        ResampleWaves(soundsTable, outPlatforms)
+        If ReSampleStreams = 1 Or ReSampleStreams = 0 Then
             GenerateStreamFolder(streamSamplesList, outPlatforms, outLanguages)
         End If
 
         'Create SFX Data
-        CreateSfxDataFolder(soundsTable, e)
+        CreateSfxDataFolder(soundsTable)
     End Sub
 
     Private Sub CreateFolderIfRequired(destinationFilePath As String)
@@ -72,21 +71,5 @@
         mainFrame.Show()
         'Close task form
         Close()
-    End Sub
-
-    Private Sub ExporterForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        If e.CloseReason = CloseReason.UserClosing Then
-            'Check if the background worker is running
-            If BackgroundWorker.IsBusy Then
-                'Cancel form closing
-                e.Cancel = True
-                'Ask user what he wants to do
-                Dim diagRes As MsgBoxResult = MsgBox("Are you sure you want to cancel this process?", vbQuestion + vbYesNo, "Question")
-                If diagRes = MsgBoxResult.Yes Then
-                    'Cancell task
-                    BackgroundWorker.CancelAsync()
-                End If
-            End If
-        End If
     End Sub
 End Class

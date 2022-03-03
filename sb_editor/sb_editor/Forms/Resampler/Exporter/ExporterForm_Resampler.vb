@@ -8,7 +8,6 @@ Partial Public Class ExporterForm
     '*===============================================================================================
     Private Sub ResampleWaves(soundsTable As DataTable, outputPlatforms As String())
         Dim waveFunctions As New WaveFunctions
-
         'Get Wave files to include
         Dim samplesCount As Integer = soundsTable.Rows.Count - 1
         If samplesCount > 0 Then
@@ -20,27 +19,20 @@ Partial Public Class ExporterForm
                     'Get paths 
                     Dim sampleRelativePath As String = soundsTable.Rows(rowIndex).ItemArray(0)
                     Dim sourceFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder & "\Master", sampleRelativePath)
-
                     'Calculate and report progress
-                    Dim totalProgress As Double = Decimal.Divide(rowIndex, samplesCount) * 100.0
-                    BackgroundWorker.ReportProgress(totalProgress)
-
+                    BackgroundWorker.ReportProgress(Decimal.Divide(rowIndex, samplesCount) * 100.0)
                     'Resample for each platform 
                     For platformIndex As Integer = 0 To outputPlatforms.Length - 1
                         Dim currentPlatform As String = outputPlatforms(platformIndex)
                         Dim outputFilePath As String = fso.BuildPath(WorkingDirectory & "\" & currentPlatform, sampleRelativePath)
-
                         'Update title
                         Invoke(Sub() Text = "ReSampling: " & sampleRelativePath & "  " & currentPlatform)
-
                         'Get wave frequency for the destination format
                         Dim sampleRateLabel As String = soundsTable.Rows(rowIndex).ItemArray(1)
                         Dim sampleRate As Integer = ProjectSettingsFile.sampleRateFormats(currentPlatform)(sampleRateLabel)
-
                         'Resample the wav for the destination platform
                         CreateFolderIfRequired(fso.GetParentFolderName(outputFilePath))
                         RunProcess("SystemFiles\Sox.exe", """" & sourceFilePath & """ -r " & sampleRate & " """ & outputFilePath & """")
-
                         'IMA ADPCM For PC and Nintendo GameCube Formats
                         If StrComp(currentPlatform, "PC") = 0 Or StrComp(currentPlatform, "GameCube") = 0 Then
                             If StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
@@ -53,7 +45,6 @@ Partial Public Class ExporterForm
                                 RunProcess("SystemFiles\Sox.exe", "-t raw -w -s -r " & sampleRate & " -c 1 """ & smdFilePath & """ -t ima """ & Path.ChangeExtension(ImaOutputFilePath, ".ssp") & """")
                             End If
                         End If
-
                         'DSP for Nintendo GameCube
                         If StrComp(currentPlatform, "GameCube") Then
                             Dim dspOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\GameCube_dsp_adpcm", sampleRelativePath), ".dsp")
@@ -74,7 +65,6 @@ Partial Public Class ExporterForm
                             'Execute Dsp Adpcm Tool
                             RunProcess("SystemFiles\DspCodec.exe", dspToolArgs)
                         End If
-
                         'Sony VAG for PlayStation 2
                         If StrComp(currentPlatform, "PlayStation2") Then
                             Dim vagOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\PlayStation2_VAG", sampleRelativePath), ".vag")
@@ -96,7 +86,6 @@ Partial Public Class ExporterForm
                             'Execute Vag Tool
                             RunProcess("SystemFiles\VagCodec.exe", vagToolArgs)
                         End If
-
                         'Xbox ADPCM for Xbox
                         If StrComp(currentPlatform, "X Box") = 0 Then
                             Dim xboxOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\XBox_adpcm", sampleRelativePath), ".adpcm")
@@ -111,5 +100,4 @@ Partial Public Class ExporterForm
             Next
         End If
     End Sub
-
 End Class
