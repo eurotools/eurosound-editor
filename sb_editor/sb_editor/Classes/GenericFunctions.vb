@@ -261,6 +261,8 @@ Module GenericFunctions
                 FolderName = "_bin_GC"
             Case "X Box"
                 FolderName = "_bin_XB"
+            Case "Xbox"
+                FolderName = "_bin_XB"
         End Select
 
         GetEngineXFolder = FolderName

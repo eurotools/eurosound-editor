@@ -3,24 +3,19 @@
     '*===============================================================================================
     '* GLOBAL VARIABLES 
     '*===============================================================================================
-    Private ReadOnly outPlatforms As String()
-    Private ReadOnly outLanguages As String()
-    Private ReadOnly quickResample As Boolean
-    Private ReadOnly mainFrame As Form
+    Private ReadOnly quickOutput As Boolean
+    Private ReadOnly mainFrame As MainFrame
     Private ReadOnly textFileReaders As New FileParsers
     Private ReadOnly textFileWritters As New FileWriters
 
     '*===============================================================================================
     '* FORM EVENTS
     '*===============================================================================================
-    Sub New(destPlatforms As String(), outputLanguages As String(), fastResample As Boolean)
+    Sub New(quickOptionClicked As Boolean)
         'Esta llamada es exigida por el diseñador.
         InitializeComponent()
 
-        'Agregue cualquier inicialización después de la llamada a InitializeComponent().
-        outPlatforms = destPlatforms
-        quickResample = fastResample
-        outLanguages = outputLanguages
+        quickOutput = quickOptionClicked
 
         'Get mainframe
         mainFrame = CType(Application.OpenForms("MainFrame"), MainFrame)
@@ -39,21 +34,65 @@
     '* BACKGROUND WORKER EVENTS
     '*===============================================================================================
     Private Sub BackgroundWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker.DoWork
-        'Update form title
+        '----------------------------------------------Get all required data----------------------------------------------
         Invoke(Sub() Text = "Waiting")
+
+        'Get output platforms
+        Dim outPlaforms As String() = New String() {mainFrame.ComboBox_Format.Invoke(Function() mainFrame.ComboBox_Format.SelectedItem)}
+        If mainFrame.RadioButton_Output_AllBanksAll.Checked Then
+            outPlaforms = ProjectSettingsFile.sampleRateFormats.Keys.ToArray
+        End If
+
+        'Get output languages
+        Dim outputLanguage As String() = New String() {SfxLanguages(0)}
+        If mainFrame.ComboBox_OutputLanguage.Items.Count > 0 Then
+            'Get selected language
+            outputLanguage = New String() {mainFrame.ComboBox_OutputLanguage.Invoke(Function() mainFrame.ComboBox_OutputLanguage.SelectedItem)}
+            'Get all languages
+            If mainFrame.CheckBox_OutAllLanguages.Checked Then
+                outputLanguage = New String(mainFrame.ComboBox_OutputLanguage.Items.Count - 1) {}
+                For langIndex As Integer = 0 To outputLanguage.Length - 1
+                    outputLanguage(langIndex) = mainFrame.ComboBox_OutputLanguage.Items(langIndex)
+                Next
+            End If
+        End If
+
+        'Get output soundbanks
+        Dim outSoundBanks As String() = New String() {}
+        If mainFrame.RadioButton_Output_SelectedSoundBank.Checked Then
+            If mainFrame.TreeView_SoundBanks.Invoke(Function() mainFrame.TreeView_SoundBanks.SelectedNode) IsNot Nothing Then
+                outSoundBanks = New String() {mainFrame.TreeView_SoundBanks.Invoke(Function() mainFrame.TreeView_SoundBanks.SelectedNode.Text)}
+            End If
+        Else
+            outSoundBanks = New String(mainFrame.TreeView_SoundBanks.Nodes.Count) {}
+            For nodeIndex As Integer = 0 To mainFrame.TreeView_SoundBanks.Nodes.Count - 1
+                outSoundBanks(nodeIndex) = mainFrame.TreeView_SoundBanks.Nodes(nodeIndex).Text
+            Next
+        End If
 
         'Get data
         Dim soundsTable As DataTable = textFileReaders.SamplesFileToDatatable(SysFileSamples)
         Dim streamSamplesList As String() = textFileReaders.GetStreamSoundsList(SysFileSamples)
 
-        'Resample, Resample Streams and Soundbanks
-        ResampleWaves(soundsTable, outPlatforms)
-        If ReSampleStreams = 1 Or ReSampleStreams = 0 Then
-            GenerateStreamFolder(streamSamplesList, outPlatforms, outLanguages)
+        '----------------------------------------------Resample samples and streams----------------------------------------------
+        If Not quickOutput Then
+            ResampleWaves(soundsTable, outPlaforms)
+            If ReSampleStreams = 1 Or ReSampleStreams = 0 Then
+                GenerateStreamFolder(streamSamplesList, outputLanguage, outPlaforms)
+            End If
         End If
 
-        'Create SFX Data
-        CreateSfxDataFolder(soundsTable)
+        '----------------------------------------------Output user selected Soundbanks----------------------------------------------
+        If outSoundBanks.Length > 0 Then
+            OutputSoundbanks(outSoundBanks, streamSamplesList, outputLanguage, outPlaforms)
+        End If
+
+        '----------------------------------------------Create SFX Data----------------------------------------------
+        If Not quickOutput Then
+            CreateSfxDataFolder(soundsTable)
+        End If
+
+        '----------------------------------------------Create Hashtables----------------------------------------------
     End Sub
 
     Private Sub CreateFolderIfRequired(destinationFilePath As String)

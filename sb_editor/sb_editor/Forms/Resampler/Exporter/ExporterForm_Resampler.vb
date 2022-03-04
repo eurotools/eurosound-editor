@@ -6,7 +6,7 @@ Partial Public Class ExporterForm
     '*===============================================================================================
     '* MAIN METHOD
     '*===============================================================================================
-    Private Sub ResampleWaves(soundsTable As DataTable, outputPlatforms As String())
+    Private Sub ResampleWaves(soundsTable As DataTable, outPlatforms As String())
         Dim waveFunctions As New WaveFunctions
         'Get Wave files to include
         Dim samplesCount As Integer = soundsTable.Rows.Count - 1
@@ -22,8 +22,8 @@ Partial Public Class ExporterForm
                     'Calculate and report progress
                     BackgroundWorker.ReportProgress(Decimal.Divide(rowIndex, samplesCount) * 100.0)
                     'Resample for each platform 
-                    For platformIndex As Integer = 0 To outputPlatforms.Length - 1
-                        Dim currentPlatform As String = outputPlatforms(platformIndex)
+                    For platformIndex As Integer = 0 To outPlatforms.Length - 1
+                        Dim currentPlatform As String = outPlatforms(platformIndex)
                         Dim outputFilePath As String = fso.BuildPath(WorkingDirectory & "\" & currentPlatform, sampleRelativePath)
                         'Update title
                         Invoke(Sub() Text = "ReSampling: " & sampleRelativePath & "  " & currentPlatform)
@@ -55,7 +55,7 @@ Partial Public Class ExporterForm
                             Dim dspToolArgs As String = "Encode """ & outputFilePath & """ """ & dspOutputFilePath & """"
                             'Get loop info
                             Using waveReader As New WaveFileReader(sourceFilePath)
-                                Dim loopInfo As Integer() = WaveFunctions.ReadSampleChunk(waveReader)
+                                Dim loopInfo As Integer() = waveFunctions.ReadSampleChunk(waveReader)
                                 If loopInfo(0) = 1 And StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
                                     'Loop offset pos in the resampled wave
                                     Using parsedWaveReader As New WaveFileReader(outputFilePath)
@@ -75,7 +75,7 @@ Partial Public Class ExporterForm
                             Dim vagToolArgs As String = """" & outputFilePath & """ """ & vagOutputFilePath & """"
                             'Get loop info
                             Using waveReader As New WaveFileReader(sourceFilePath)
-                                Dim loopInfo As Integer() = WaveFunctions.ReadSampleChunk(waveReader)
+                                Dim loopInfo As Integer() = waveFunctions.ReadSampleChunk(waveReader)
                                 If loopInfo(0) = 1 And StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
                                     'Loop offset pos in the resampled wave
                                     Using parsedWaveReader As New WaveFileReader(outputFilePath)
@@ -89,7 +89,7 @@ Partial Public Class ExporterForm
                             RunProcess("SystemFiles\VagCodec.exe", vagToolArgs)
                         End If
                         'Xbox ADPCM for Xbox
-                        If StrComp(currentPlatform, "X Box") = 0 Then
+                        If StrComp(currentPlatform, "X Box") = 0 Or StrComp(currentPlatform, "Xbox") = 0 Then
                             Dim xboxOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\XBox_adpcm", sampleRelativePath), ".adpcm")
                             CreateFolderIfRequired(fso.GetParentFolderName(xboxOutputFilePath))
                             'Execute Dsp Adpcm Tool

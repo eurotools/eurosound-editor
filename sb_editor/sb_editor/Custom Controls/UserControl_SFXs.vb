@@ -69,6 +69,7 @@ Public Class UserControl_SFXs
                 Dim fiArray As String() = di.GetFiles().OrderByDescending(Function(p) p.LastWriteTime).Select(Function(f) GetOnlyFileName(f.Name)).ToArray()
                 'Add items to listbox
                 ListBox_SFXs.BeginUpdate()
+                ListBox_SFXs.Items.Clear()
                 ListBox_SFXs.Items.AddRange(fiArray)
                 ListBox_SFXs.EndUpdate()
             End If

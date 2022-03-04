@@ -80,6 +80,8 @@ Partial Public Class Frm_SfxEditor
                         Button_SpecVersion_GameCube.Enabled = False
                     Case "X Box"
                         Button_SpecVersion_Xbox.Enabled = False
+                    Case "Xbox"
+                        Button_SpecVersion_Xbox.Enabled = False
                     Case "PC"
                         Button_SpecVersion_PC.Enabled = False
                 End Select
@@ -91,6 +93,8 @@ Partial Public Class Frm_SfxEditor
                     Case "GameCube"
                         Button_SpecVersion_GameCube.Enabled = True
                     Case "X Box"
+                        Button_SpecVersion_Xbox.Enabled = True
+                    Case "Xbox"
                         Button_SpecVersion_Xbox.Enabled = True
                     Case "PC"
                         Button_SpecVersion_PC.Enabled = True
@@ -525,6 +529,8 @@ Partial Public Class Frm_SfxEditor
             Case "PC"
                 Button_SpecVersion_PC.Enabled = True
             Case "X Box"
+                Button_SpecVersion_Xbox.Enabled = True
+            Case "Xbox"
                 Button_SpecVersion_Xbox.Enabled = True
             Case "GameCube"
                 Button_SpecVersion_GameCube.Enabled = True

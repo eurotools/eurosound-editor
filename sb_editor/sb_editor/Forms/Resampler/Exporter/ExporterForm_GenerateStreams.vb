@@ -3,7 +3,7 @@ Imports EngineXMarkersTool
 Imports NAudio.Wave
 
 Partial Public Class ExporterForm
-    Private Sub GenerateStreamFolder(streamSamplesList As String(), outputPlatforms As String(), outputLanguages As String())
+    Private Sub GenerateStreamFolder(streamSamplesList As String(), outLanguages As String(), outPlatforms As String())
         Dim markersFunctions As New ExMarkersTool
         Dim markerFileFunctions As New MarkerFiles
         Dim waveFunctions As New WaveFunctions
@@ -18,19 +18,18 @@ Partial Public Class ExporterForm
             'Reset progress bar
             Invoke(Sub() ProgressBar1.Value = 0)
             'For each Language
-            For languageIndex As Integer = 0 To outputLanguages.Length - 1
-                Dim currentLanguage As String = outputLanguages(languageIndex)
+            For languageIndex As Integer = 0 To outLanguages.Length - 1
+                Dim currentLanguage As String = outLanguages(languageIndex)
                 'For each Platform
-                For platformIndex As Integer = 0 To outputPlatforms.Length - 1
+                For platformIndex As Integer = 0 To outPlatforms.Length - 1
                     Dim filesToBind As New List(Of String)
-                    Dim currentPlatform As String = outputPlatforms(platformIndex)
+                    Dim currentPlatform As String = outPlatforms(platformIndex)
                     'Create Debug file
                     FileOpen(1, fso.BuildPath(debugFolder, "StreamsConverted_" & currentLanguage & "_" & currentPlatform & ".txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
                     'For each Sample
                     For sampleIndex As Integer = 0 To streamSamplesCount
                         'Calculate and report progress
-                        Dim totalProgress As Double = Decimal.Divide(sampleIndex, streamSamplesCount) * 100.0
-                        BackgroundWorker.ReportProgress(totalProgress)
+                        BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, streamSamplesCount) * 100.0)
                         'Get sample file path
                         Dim sampleFilePath As String = streamSamplesList(sampleIndex)
                         'If starts with speech but doesn't match the current language, skip
@@ -48,7 +47,7 @@ Partial Public Class ExporterForm
                         If StrComp(currentPlatform, "PlayStation2") = 0 Then
                             sampleFullPath = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\PlayStation2_VAG", sampleFilePath), ".vag")
                         End If
-                        If StrComp(currentPlatform, "X Box") = 0 Then
+                        If StrComp(currentPlatform, "X Box") = 0 Or StrComp(currentPlatform, "Xbox") = 0 Then
                             sampleFullPath = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\XBox_adpcm", sampleFilePath), ".adpcm")
                         End If
                         'Ensure that the file exists

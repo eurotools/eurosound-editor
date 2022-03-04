@@ -58,8 +58,7 @@
                     'Calculate and report progress
                     Dim totalItems = listboxItemsCount * 6
                     Dim progFromPrevIterations = listboxItemsCount * wordIndexCount
-                    Dim totalProgress As Double = Decimal.Divide(sfxItemIndex + progFromPrevIterations, totalItems) * 100.0
-                    BackgroundWorker.ReportProgress(totalProgress)
+                    BackgroundWorker.ReportProgress(Decimal.Divide(sfxItemIndex + progFromPrevIterations, totalItems) * 100.0)
                     'Iterate listbox items to find matches
                     For sfxItemIndexSub As Integer = 0 To listboxItemsCount
                         'Skip the line that we are checking in the previus loop

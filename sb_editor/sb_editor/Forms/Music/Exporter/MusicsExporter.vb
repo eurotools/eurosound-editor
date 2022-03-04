@@ -110,7 +110,7 @@ Partial Public Class MusicsExporter
                                 'Music Stream (.ssd)
                                 MergeChannels(ps2VagL, ps2VagR, 128, soundSampleData)
                             End If
-                            If StrComp(currentPlatform, "X Box") = 0 Then
+                            If StrComp(currentPlatform, "X Box") = 0 Or StrComp(currentPlatform, "Xbox") = 0 Then
                                 Dim XboxOutLeft As String = fso.BuildPath(waveOutputFolder, musicItem.ItemArray(0)) & "_XbL.wav"
                                 Dim XboxOutRight As String = fso.BuildPath(waveOutputFolder, musicItem.ItemArray(0)) & "_XbR.wav"
                                 'Split Channels

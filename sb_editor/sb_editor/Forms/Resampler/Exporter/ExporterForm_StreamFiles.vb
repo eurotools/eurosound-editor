@@ -17,8 +17,7 @@ Partial Public Class ExporterForm
             FileOpen(1, fso.BuildPath(WorkingDirectory & "\Debug_Report", "StreamList_" & outputLanguage & "_" & outputPlatform & ".txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
             For fileIndex As Integer = 0 To filesCount
                 'Calculate and report progress
-                Dim totalProgress As Double = Decimal.Divide(fileIndex, filesCount) * 100.0
-                BackgroundWorker.ReportProgress(totalProgress)
+                BackgroundWorker.ReportProgress(Decimal.Divide(fileIndex, filesCount) * 100.0)
                 'Get files path
                 Dim filePath As String = fso.BuildPath(WorkingDirectory & "\" & outputPlatform & "_Streams\" & outputLanguage, "STR_" & fileIndex)
                 Dim adpcmFile As String = filePath & ".ssd"

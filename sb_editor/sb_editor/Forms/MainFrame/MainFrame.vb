@@ -744,47 +744,14 @@ Partial Public Class MainFrame
     '* OUTPUT BUTTONS
     '*===============================================================================================
     Private Sub Button_FullOutput_Click(sender As Object, e As EventArgs) Handles Button_FullOutput.Click
-        Dim hastableBuilder As New SfxDefines
-        Dim test As Boolean = True
-
-        'Get output platforms
-        Dim outPlaforms As String() = New String() {ComboBox_Format.SelectedItem}
-        If RadioButton_Output_AllBanksAll.Checked Then
-            outPlaforms = ProjectSettingsFile.sampleRateFormats.Keys.ToArray
-        End If
-
-        'Get output languages
-        Dim outputLanguage As String() = New String() {SfxLanguages(0)}
-        If ComboBox_OutputLanguage.Items.Count > 0 Then
-            'Get selected language
-            outputLanguage = New String() {ComboBox_OutputLanguage.SelectedItem}
-            'Get all languages
-            If CheckBox_OutAllLanguages.Checked Then
-                outputLanguage = New String(ComboBox_OutputLanguage.Items.Count - 1) {}
-                For langIndex As Integer = 0 To outputLanguage.Length - 1
-                    outputLanguage(langIndex) = ComboBox_OutputLanguage.Items(langIndex)
-                Next
-            End If
-        End If
-
-        'Resample
-        Dim taskForm As New ExporterForm(outPlaforms, outputLanguage, CheckBox_FastReSample.Checked)
+        'Open Resample Form
+        Dim taskForm As New ExporterForm(False)
         taskForm.ShowDialog()
-
-        If Not test Then
-            'Get soundbanks
-            Dim AvailableSoundbank As New SortedDictionary(Of String, UInteger)()
-            For Each item As TreeNode In TreeView_SoundBanks.Nodes
-                AvailableSoundbank.Add(item.Text, item.Name)
-            Next
-
-            'Build hashtable
-            'hastableBuilder.CreateSfxDefines(AvailableSfx, AvailableSoundbank, "C:\Users\Jordi Martinez\Documents\SFX_Defines.h")
-            'debugHashTables.CreateSfxDebug(AvailableSfx, "C:\Users\Jordi Martinez\Documents\SFX_Debug.h")
-        End If
     End Sub
 
     Private Sub Button_QuickOutput_Click(sender As Object, e As EventArgs) Handles Button_QuickOutput.Click
-
+        'Open Resample Form
+        Dim taskForm As New ExporterForm(True)
+        taskForm.ShowDialog()
     End Sub
 End Class
