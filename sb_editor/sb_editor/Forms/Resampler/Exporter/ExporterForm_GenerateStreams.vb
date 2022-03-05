@@ -66,7 +66,7 @@ Partial Public Class ExporterForm
                             PrintLine(1, "OutputFileName = " & destinationFilePath)
                             'Create marker file
                             Dim masterWaveFilePath As String = fso.BuildPath(WorkingDirectory & "\Master", sampleFilePath)
-                            Dim masterMarkerFilePath As String = Path.ChangeExtension(masterWaveFilePath, ".mkr")
+                            Dim masterMarkerFilePath As String = Path.ChangeExtension(masterWaveFilePath, ".mrk")
                             If Not fso.FileExists(masterMarkerFilePath) Then
                                 Using waveReader As New WaveFileReader(masterWaveFilePath)
                                     Dim sampleChunkData As Integer() = waveFunctions.ReadSampleChunk(waveReader)

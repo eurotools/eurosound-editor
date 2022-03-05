@@ -15,18 +15,18 @@
     End Sub
 
     Friend Sub CreateStreamMarkerFile(filepath As String, sampleChunkData As Integer(), fileTotalSamples As Integer)
-        FileOpen(1, filepath, OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
-        PrintLine(1, "Markers")
-        PrintLine(1, "{")
-        AddMarkerBlock(1, "Stream Start Marker", 0, 10, 2, -1)
+        FileOpen(2, filepath, OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
+        PrintLine(2, "Markers")
+        PrintLine(2, "{")
+        AddMarkerBlock(2, "Stream Start Marker", 0, 10, 2, -1)
         If sampleChunkData(0) = 0 Then 'No loop
-            AddMarkerBlock(1, "Stream End Marker", fileTotalSamples, 9, 2, -1)
+            AddMarkerBlock(2, "Stream End Marker", fileTotalSamples, 9, 2, -1)
         Else
-            AddMarkerBlock(1, "Stream Start Loop", sampleChunkData(1), 6, 2, -1)
-            AddMarkerBlock(1, "Stream End Loop", sampleChunkData(2), 10, 2, -1)
+            AddMarkerBlock(2, "Stream Start Loop", sampleChunkData(1), 6, 2, -1)
+            AddMarkerBlock(2, "Stream End Loop", sampleChunkData(2), 10, 2, -1)
         End If
-        PrintLine(1, "}")
-        FileClose(1)
+        PrintLine(2, "}")
+        FileClose(2)
     End Sub
 
     Friend Sub CreateMusicMarkerFile(filePath As String, markerData As SortedDictionary(Of UInteger, MarkerObject))
@@ -41,5 +41,4 @@
         PrintLine(1, "}")
         FileClose(1)
     End Sub
-
 End Class

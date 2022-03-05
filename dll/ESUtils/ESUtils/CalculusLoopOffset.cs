@@ -83,6 +83,14 @@ namespace ESUtils
         {
             return value < 0 ? -Math.Floor(0.5 - value) : Math.Floor(0.5 + value);
         }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public static int RuleOfThreeLoopOffset(int masterFreq, int ConvertedFreq, int masterLoopOffset)
+        {
+            decimal compressFactor = decimal.Divide(masterFreq, ConvertedFreq);
+            decimal loopOffset = decimal.Divide(masterLoopOffset, compressFactor);
+            return (int)loopOffset;
+        }
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------
