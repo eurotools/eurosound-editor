@@ -89,6 +89,9 @@
   <ItemGroup>
     <Compile Include="Classes\MarkerFiles.vb" />
     <Compile Include="Classes\MarkerObject.vb" />
+    <Compile Include="Classes\SoundbankExporter\EXAudio.vb" />
+    <Compile Include="Classes\SoundbankExporter\EXSample.vb" />
+    <Compile Include="Classes\SoundbankExporter\EXSound.vb" />
     <Compile Include="Custom Controls\Refine Search\Combobox With ItemData\ComboItemData.vb" />
     <Compile Include="Custom Controls\Refine Search\Frm_RefineSearch.Designer.vb">
       <DependentUpon>Frm_RefineSearch.vb</DependentUpon>

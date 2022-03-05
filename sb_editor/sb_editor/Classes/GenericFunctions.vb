@@ -20,7 +20,8 @@ Module GenericFunctions
         processToExecute.StartInfo.FileName = toolFileName
         processToExecute.StartInfo.Arguments = toolArguments
         processToExecute.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        processToExecute.StartInfo.UseShellExecute = True
+        processToExecute.StartInfo.CreateNoWindow = True
+        processToExecute.StartInfo.UseShellExecute = False
         processToExecute.Start()
         processToExecute.WaitForExit()
     End Sub
