@@ -5,6 +5,7 @@
     '*===============================================================================================
     Private ReadOnly writers As New FileWriters
     Private ReadOnly mainframe As UserControl_SFXs
+    Private canCloseForm As Boolean = False
 
     '*===============================================================================================
     '* FORM EVENTS
@@ -20,6 +21,12 @@
         'Start process
         If Not BackgroundWorker.IsBusy Then
             BackgroundWorker.RunWorkerAsync()
+        End If
+    End Sub
+
+    Private Sub Frm_RefineSearch_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If Not canCloseForm Then
+            e.Cancel = True
         End If
     End Sub
 
@@ -164,6 +171,7 @@
     End Sub
 
     Private Sub BackgroundWorker_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker.RunWorkerCompleted
+        canCloseForm = True
         Close()
     End Sub
 End Class

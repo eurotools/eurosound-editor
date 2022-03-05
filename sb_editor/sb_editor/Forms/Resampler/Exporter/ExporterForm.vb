@@ -7,6 +7,7 @@
     Private ReadOnly mainFrame As MainFrame
     Private ReadOnly textFileReaders As New FileParsers
     Private ReadOnly textFileWritters As New FileWriters
+    Private canCloseForm As Boolean = False
 
     '*===============================================================================================
     '* FORM EVENTS
@@ -109,6 +110,13 @@
         'Show mainform
         mainFrame.Show()
         'Close task form
+        canCloseForm = True
         Close()
+    End Sub
+
+    Private Sub ExporterForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If Not canCloseForm Then
+            e.Cancel = True
+        End If
     End Sub
 End Class

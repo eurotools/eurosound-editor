@@ -24,6 +24,7 @@ Partial Class Frm_RefineSearch
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Frm_RefineSearch))
         Me.BackgroundWorker = New System.ComponentModel.BackgroundWorker()
+        Me.Groupbox_TaskTime.SuspendLayout()
         Me.SuspendLayout()
         '
         'BackgroundWorker
@@ -35,14 +36,12 @@ Partial Class Frm_RefineSearch
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(839, 92)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.Cursor = System.Windows.Forms.Cursors.Default
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
         Me.Name = "Frm_RefineSearch"
         Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Updating the SFX Refine List."
+        Me.Groupbox_TaskTime.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
