@@ -5,7 +5,7 @@ Partial Public Class ExporterForm
     '*===============================================================================================
     '* PRIVATE METHODS TO GET SOUNDBANK LISTS DATA
     '*===============================================================================================
-    Private Sub GetSfxList(soundbankData As SoundbankFile, outPlatform As String, outLanguage As String, SfxDictionary As SortedDictionary(Of String, EXSound), samplesToInclude As HashSet(Of String), streamsList As String())
+    Private Sub GetSfxList(soundbankData As SoundbankFile, outPlatform As String, SfxDictionary As SortedDictionary(Of String, EXSound), samplesToInclude As HashSet(Of String), streamsList As String())
         'Iterate over all databases
         For databaseIndex As Integer = 0 To soundbankData.Dependencies.Length - 1
             Dim databaseFilePath As String = fso.BuildPath(WorkingDirectory & "\DataBases\", soundbankData.Dependencies(databaseIndex) & ".txt")
@@ -27,7 +27,7 @@ Partial Public Class ExporterForm
                             Dim soundToAdd As New EXSound With {
                                 .HashCode = sfxFileData.HashCode,
                                 .Ducker = sfxFileData.Parameters.Ducker,
-                                .DuckerLength = sfxFileData.Parameters.DuckerLenght,
+                                .DuckerLength = sfxFileData.Parameters.DuckerLength,
                                 .Flags = GetSfxFlags(sfxFileData),
                                 .InnerRadius = sfxFileData.Parameters.InnerRadius,
                                 .MasterVolume = sfxFileData.Parameters.MasterVolume,
@@ -81,12 +81,19 @@ Partial Public Class ExporterForm
         Next
     End Sub
 
-    Private Sub GetSamplesDictionary(samplesToInclude As HashSet(Of String), SamplesDictionary As Dictionary(Of String, EXAudio), outPlatform As String)
+    Private Sub GetSamplesDictionary(samplesToInclude As HashSet(Of String), SamplesDictionary As Dictionary(Of String, EXAudio), outPlatform As String, outputLanguage As String)
         Dim SamplesSortedArray As String() = samplesToInclude.ToArray
         Array.Sort(SamplesSortedArray)
 
         For sampleIndex As Integer = 0 To SamplesSortedArray.Length - 1
             Dim sampleRelPath As String = SamplesSortedArray(sampleIndex)
+            'If starts with speech but doesn't match the current language, get the sample with the right language
+            If InStr(1, sampleRelPath, "Speech\", CompareMethod.Binary) Then
+                If StrComp(outputLanguage, "English", CompareMethod.Binary) <> 0 Then
+                    Dim multiSamplePath As String = Mid(sampleRelPath, Len("Speech\English\") + 1)
+                    sampleRelPath = fso.BuildPath("Speech\" & outputLanguage, multiSamplePath)
+                End If
+            End If
             SamplesDictionary.Add(RelativePathToAbs(sampleRelPath), GetEXaudio(sampleRelPath, outPlatform))
         Next
 

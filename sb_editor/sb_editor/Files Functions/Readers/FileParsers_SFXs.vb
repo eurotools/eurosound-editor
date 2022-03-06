@@ -74,7 +74,9 @@ Partial Public Class FileParsers
                                 Case "DUCKER"
                                     sfxObj.Parameters.Ducker = CInt(lineData(1))
                                 Case "DUCKERLENGHT"
-                                    sfxObj.Parameters.DuckerLenght = CInt(lineData(1))
+                                    sfxObj.Parameters.DuckerLength = CInt(lineData(1))
+                                Case "DUCKERLENGTH"
+                                    sfxObj.Parameters.DuckerLength = CInt(lineData(1))
                                 Case "MASTERVOLUME"
                                     sfxObj.Parameters.MasterVolume = CInt(lineData(1))
                                 Case "OUTDOORS"

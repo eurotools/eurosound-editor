@@ -109,6 +109,8 @@ Module GenericFunctions
         'Get project languages
         If Dir(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\Speech"), FileAttribute.Directory) IsNot "" Then
             Dim languages As String() = Directory.GetDirectories(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\Speech"))
+            'Previous Selected Index
+            Dim comboPrevSelection As String = comboboxToModify.SelectedItem
             'Add folders to combobox
             comboboxToModify.BeginUpdate()
             comboboxToModify.Items.Clear()
@@ -118,6 +120,12 @@ Module GenericFunctions
                     comboboxToModify.Items.Add(folderName)
                 End If
             Next
+            'Keep the previous selection
+            If comboPrevSelection IsNot Nothing Then
+                If comboboxToModify.Items.Contains(comboPrevSelection) Then
+                    comboboxToModify.SelectedItem = comboPrevSelection
+                End If
+            End If
             comboboxToModify.EndUpdate()
         End If
     End Sub

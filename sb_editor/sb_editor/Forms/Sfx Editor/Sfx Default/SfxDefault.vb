@@ -121,7 +121,7 @@ Public Class SfxDefault
         SfxParamsAndSamplePool1.Numeric_Alertness.Value = objSFX.Parameters.Alertness
         SfxParamsAndSamplePool1.CheckBox_IgnoreAge.Checked = objSFX.Parameters.IgnoreAge
         SfxParamsAndSamplePool1.Numeric_Ducker.Value = objSFX.Parameters.Ducker
-        SfxParamsAndSamplePool1.Numeric_DuckerLength.Value = objSFX.Parameters.DuckerLenght
+        SfxParamsAndSamplePool1.Numeric_DuckerLength.Value = objSFX.Parameters.DuckerLength
         SfxParamsAndSamplePool1.Numeric_MasterVolume.Value = objSFX.Parameters.MasterVolume
         SfxParamsAndSamplePool1.CheckBox_UnderWater.Checked = objSFX.Parameters.Outdoors
         SfxParamsAndSamplePool1.Checkbox_PauseInNis.Checked = objSFX.Parameters.PauseInNis

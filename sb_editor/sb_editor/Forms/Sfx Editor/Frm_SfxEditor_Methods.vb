@@ -47,7 +47,7 @@ Partial Public Class Frm_SfxEditor
             SfxParamsAndSamplePool.Numeric_Alertness.Value = sfxData.Parameters.Alertness
             SfxParamsAndSamplePool.CheckBox_StealOnLouder.Checked = sfxData.Parameters.StealOnAge
             SfxParamsAndSamplePool.Numeric_Ducker.Value = sfxData.Parameters.Ducker
-            SfxParamsAndSamplePool.Numeric_DuckerLength.Value = sfxData.Parameters.DuckerLenght
+            SfxParamsAndSamplePool.Numeric_DuckerLength.Value = sfxData.Parameters.DuckerLength
             SfxParamsAndSamplePool.CheckBox_UnderWater.Checked = sfxData.Parameters.Outdoors
             SfxParamsAndSamplePool.Checkbox_PauseInNis.Checked = sfxData.Parameters.PauseInNis
             SfxParamsAndSamplePool.CheckBox_IgnoreAge.Checked = sfxData.Parameters.IgnoreAge
@@ -87,7 +87,7 @@ Partial Public Class Frm_SfxEditor
             sfxFile.Value.Parameters.Alertness = SfxParamsAndSamplePool.Numeric_Alertness.Value
             sfxFile.Value.Parameters.StealOnAge = SfxParamsAndSamplePool.CheckBox_StealOnLouder.Checked
             sfxFile.Value.Parameters.Ducker = SfxParamsAndSamplePool.Numeric_Ducker.Value
-            sfxFile.Value.Parameters.DuckerLenght = SfxParamsAndSamplePool.Numeric_DuckerLength.Value
+            sfxFile.Value.Parameters.DuckerLength = SfxParamsAndSamplePool.Numeric_DuckerLength.Value
             sfxFile.Value.Parameters.Outdoors = SfxParamsAndSamplePool.CheckBox_UnderWater.Checked
             sfxFile.Value.Parameters.PauseInNis = SfxParamsAndSamplePool.Checkbox_PauseInNis.Checked
             sfxFile.Value.Parameters.IgnoreAge = SfxParamsAndSamplePool.CheckBox_IgnoreAge.Checked

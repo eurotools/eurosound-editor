@@ -25,7 +25,7 @@
         PrintLine(1, "Alertness  " & sfxFileObj.Parameters.Alertness)
         PrintLine(1, "IgnoreAge  " & If(sfxFileObj.Parameters.IgnoreAge, 1, 0))
         PrintLine(1, "Ducker  " & sfxFileObj.Parameters.Ducker)
-        PrintLine(1, "DuckerLenght  " & sfxFileObj.Parameters.DuckerLenght)
+        PrintLine(1, "DuckerLength  " & sfxFileObj.Parameters.DuckerLength)
         PrintLine(1, "MasterVolume  " & sfxFileObj.Parameters.MasterVolume)
         PrintLine(1, "Outdoors  " & If(sfxFileObj.Parameters.Outdoors, 1, 0))
         PrintLine(1, "PauseInNis  " & If(sfxFileObj.Parameters.PauseInNis, 1, 0))

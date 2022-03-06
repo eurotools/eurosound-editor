@@ -72,6 +72,7 @@ Partial Class SfxMultiEditor
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListView_SfxFiles.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.Col_Name, Me.Col_Reverb, Me.Col_Tracking, Me.Col_InnerRadius, Me.Col_OuterRadius, Me.Col_Max, Me.Col_Steal, Me.Col_Priority, Me.Col_Alertness, Me.Col_Ducker, Me.Col_DuckerLength, Me.Col_MasterVolume, Me.Col_UnderWater, Me.Col_StealLouder})
+        Me.ListView_SfxFiles.FullRowSelect = True
         Me.ListView_SfxFiles.GridLines = True
         Me.ListView_SfxFiles.HideSelection = False
         Me.ListView_SfxFiles.Location = New System.Drawing.Point(12, 12)

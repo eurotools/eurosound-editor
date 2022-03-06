@@ -34,9 +34,9 @@ Partial Public Class ExporterForm
                         'Get SFX and samples list
                         Dim samplesToInclude As New HashSet(Of String)
                         Dim SfxDictionary As New SortedDictionary(Of String, EXSound)
-                        GetSfxList(soundBankInfo, currentPlatform, currentLanguage, SfxDictionary, samplesToInclude, streamsList)
+                        GetSfxList(soundBankInfo, currentPlatform, SfxDictionary, samplesToInclude, streamsList)
                         Dim SamplesDictionary As New Dictionary(Of String, EXAudio)
-                        GetSamplesDictionary(samplesToInclude, SamplesDictionary, currentPlatform)
+                        GetSamplesDictionary(samplesToInclude, SamplesDictionary, currentPlatform, currentLanguage)
 
                         'Get file paths
                         Dim sfxFilePath As String = fso.BuildPath(outputFolder, soundBankInfo.HashCode & ".sfx")

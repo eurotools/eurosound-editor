@@ -421,7 +421,12 @@ Public Class UserControl_SFXs
     End Sub
 
     Private Sub ContextMenuSfx_MultiEditor_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_MultiEditor.Click
-        Dim multiEditor As New SfxMultiEditor
+        Dim listOfSFXs As New List(Of String)
+        For itemIndex As Integer = 0 To ListBox_SFXs.SelectedItems.Count - 1
+            listOfSFXs.Add(fso.BuildPath(WorkingDirectory & "\SFXs", ListBox_SFXs.SelectedItems(itemIndex) & ".txt"))
+        Next
+
+        Dim multiEditor As New SfxMultiEditor(listOfSFXs.ToArray)
         multiEditor.ShowDialog()
     End Sub
 

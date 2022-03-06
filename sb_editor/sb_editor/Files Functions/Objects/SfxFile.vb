@@ -21,7 +21,7 @@ Public Class SfxParameters
     Public Alertness As Integer
     Public IgnoreAge As Boolean
     Public Ducker As Integer
-    Public DuckerLenght As Integer
+    Public DuckerLength As Integer
     Public MasterVolume As Integer
     Public Outdoors As Boolean
     Public PauseInNis As Boolean

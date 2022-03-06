@@ -94,7 +94,7 @@ Public Class SfxNewMultiple
                     sfxFileData.Parameters.Alertness = sfxDefaults.Parameters.Alertness
                     sfxFileData.Parameters.IgnoreAge = sfxDefaults.Parameters.IgnoreAge
                     sfxFileData.Parameters.Ducker = sfxDefaults.Parameters.Ducker
-                    sfxFileData.Parameters.DuckerLenght = sfxDefaults.Parameters.DuckerLenght
+                    sfxFileData.Parameters.DuckerLength = sfxDefaults.Parameters.DuckerLength
                     sfxFileData.Parameters.MasterVolume = sfxDefaults.Parameters.MasterVolume
                     sfxFileData.Parameters.Outdoors = sfxDefaults.Parameters.Outdoors
                     sfxFileData.Parameters.PauseInNis = sfxDefaults.Parameters.PauseInNis
