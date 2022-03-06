@@ -1,24 +1,21 @@
 ﻿Imports System.ComponentModel
 Imports System.IO
-Imports HashTablesBuilder
 Imports NAudio.Wave
 
 Partial Public Class ExporterForm
-    Private Sub CreateSfxDataFolder(samplesDt As DataTable )
+    Private Function CreateSfxDataFolder(samplesDt As DataTable) As Integer
         Dim waveFunctions As New WaveFunctions
+        Dim maxHashCode As Integer = 0
         'Ensure that we have files to resample
         If samplesDt.Rows.Count > 0 Then
             'Reset progress bar
             Invoke(Sub() ProgressBar1.Value = 0)
             'Get output folder
             Dim tempSfxDataFolder As String = fso.BuildPath(WorkingDirectory, "TempSfxData")
-            If Not fso.FolderExists(tempSfxDataFolder) Then
-                fso.CreateFolder(tempSfxDataFolder)
-            End If
+            CreateFolderIfRequired(tempSfxDataFolder)
             Dim StreamSamplesList As String() = textFileReaders.GetStreamSoundsList(SysFileSamples)
             'Start resample
             Dim sfxFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly)
-            Dim maxHashCode As Integer = 0
             Dim samplesCount As Integer = sfxFiles.Length - 1
             For index As Integer = 0 To samplesCount
                 'Update title bar
@@ -69,10 +66,7 @@ Partial Public Class ExporterForm
 
             'Liberate Memmory
             Erase sfxFiles
-
-            'Merge all files
-            Dim hastableBuilder As New SfxDefines
-            hastableBuilder.CreateSfxData(fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Data.h"), tempSfxDataFolder, maxHashCode)
         End If
-    End Sub
+        Return maxHashCode
+    End Function
 End Class

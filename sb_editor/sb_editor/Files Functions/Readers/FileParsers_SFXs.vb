@@ -73,7 +73,7 @@ Partial Public Class FileParsers
                                     sfxObj.Parameters.IgnoreAge = lineData(1).Equals("1")
                                 Case "DUCKER"
                                     sfxObj.Parameters.Ducker = CInt(lineData(1))
-                                Case "DUCKERLENGTH"
+                                Case "DUCKERLENGHT"
                                     sfxObj.Parameters.DuckerLenght = CInt(lineData(1))
                                 Case "MASTERVOLUME"
                                     sfxObj.Parameters.MasterVolume = CInt(lineData(1))
@@ -167,7 +167,7 @@ Partial Public Class FileParsers
                                     sfxObj.SamplePool.Shuffled = lineData(1).Equals("1")
                                 Case "LOOP"
                                     sfxObj.SamplePool.isLooped = lineData(1).Equals("1")
-                                Case "POLYPHOINIC"
+                                Case "POLYPHONIC"
                                     sfxObj.SamplePool.Polyphonic = lineData(1).Equals("1")
                                 Case "MINDELAY"
                                     sfxObj.SamplePool.MinDelay = CInt(lineData(1))

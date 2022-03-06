@@ -48,7 +48,7 @@ Partial Public Class ExporterForm
                             End If
                         End If
                         'DSP for Nintendo GameCube
-                        If StrComp(currentPlatform, "GameCube") Then
+                        If StrComp(currentPlatform, "GameCube") = 0 Then
                             Dim dspOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\GameCube_dsp_adpcm", sampleRelativePath), ".dsp")
                             CreateFolderIfRequired(fso.GetParentFolderName(dspOutputFilePath))
                             'Default arguments
@@ -68,7 +68,7 @@ Partial Public Class ExporterForm
                             RunProcess("SystemFiles\DspCodec.exe", dspToolArgs)
                         End If
                         'Sony VAG for PlayStation 2
-                        If StrComp(currentPlatform, "PlayStation2") Then
+                        If StrComp(currentPlatform, "PlayStation2") = 0 Then
                             Dim vagOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\PlayStation2_VAG", sampleRelativePath), ".vag")
                             CreateFolderIfRequired(fso.GetParentFolderName(vagOutputFilePath))
                             'Default arguments

@@ -1,4 +1,7 @@
-﻿Partial Public Class ExporterForm
+﻿Imports System.IO
+Imports HashTablesBuilder
+
+Partial Public Class ExporterForm
     Inherits Frm_TimerForm
     '*===============================================================================================
     '* GLOBAL VARIABLES 
@@ -71,6 +74,29 @@
             Next
         End If
 
+        'Get SFXs
+        Dim hashCodesDictionary As New SortedDictionary(Of String, UInteger)
+        Dim sfxFiles As String() = Directory.GetFiles(WorkingDirectory & "\SFXs", "*.txt", SearchOption.TopDirectoryOnly)
+        For fileIndex As Integer = 0 To sfxFiles.Length - 1
+            Dim currentFilePath As String = sfxFiles(fileIndex)
+            Dim sfxFileData As SfxFile = textFileReaders.ReadSFXFile(currentFilePath)
+            Dim sfxLabel As String = GetOnlyFileName(currentFilePath)
+            If Not hashCodesDictionary.ContainsKey(sfxLabel) Then
+                hashCodesDictionary.Add(sfxLabel, sfxFileData.HashCode)
+            End If
+        Next
+        'Get all Soundbanks
+        Dim soundBanksDictionary As New SortedDictionary(Of String, UInteger)
+        Dim soundbankFiles As String() = Directory.GetFiles(WorkingDirectory & "\SoundBanks", "*.txt", SearchOption.TopDirectoryOnly)
+        For fileIndex As Integer = 0 To soundbankFiles.Length - 1
+            Dim currentFilePath As String = soundbankFiles(fileIndex)
+            Dim soundBankFileData As SoundbankFile = textFileReaders.ReadSoundBankFile(currentFilePath)
+            Dim soundBankLabel As String = GetOnlyFileName(currentFilePath)
+            If Not soundBanksDictionary.ContainsKey(soundBankLabel) Then
+                soundBanksDictionary.Add(soundBankLabel, soundBankFileData.HashCode)
+            End If
+        Next
+
         'Get data
         Dim soundsTable As DataTable = textFileReaders.SamplesFileToDatatable(SysFileSamples)
         Dim streamSamplesList As String() = textFileReaders.GetStreamSoundsList(SysFileSamples)
@@ -78,22 +104,30 @@
         '----------------------------------------------Resample samples and streams----------------------------------------------
         If Not quickOutput Then
             ResampleWaves(soundsTable, outPlaforms)
-            If ReSampleStreams = 1 Or ReSampleStreams = 0 Then
+            If ReSampleStreams = 1 Then
                 GenerateStreamFolder(streamSamplesList, outputLanguage, outPlaforms)
+                ReSampleStreams = 0
+                textFileWritters.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
             End If
+            'Save Samples File
+            textFileWritters.SaveSamplesFile(SysFileSamples, soundsTable)
         End If
 
         '----------------------------------------------Output user selected Soundbanks----------------------------------------------
         If outSoundBanks.Length > 0 Then
-            OutputSoundbanks(outSoundBanks, streamSamplesList, outputLanguage, outPlaforms)
+            OutputSoundbanks(hashCodesDictionary, outSoundBanks, streamSamplesList, outputLanguage, outPlaforms)
         End If
 
-        '----------------------------------------------Create SFX Data----------------------------------------------
         If Not quickOutput Then
-            CreateSfxDataFolder(soundsTable)
-        End If
+            Dim hashTablesBuilder As New SfxDefines
+            '----------------------------------------------Create SFX Data----------------------------------------------
+            Dim maxHashCode = CreateSfxDataFolder(soundsTable)
 
-        '----------------------------------------------Create Hashtables----------------------------------------------
+            '----------------------------------------------Create Hashtables----------------------------------------------
+            hashTablesBuilder.CreateSfxDebug(hashCodesDictionary, fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Debug.h"))
+            hashTablesBuilder.CreateSfxDefines(hashCodesDictionary, soundBanksDictionary, SfxLanguages, ProjectSettingsFile.MiscProps.PrefixHtSound, fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Defines.h"))
+            hashTablesBuilder.CreateSfxData(fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Data.h"), fso.BuildPath(WorkingDirectory, "TempSfxData"), maxHashCode)
+        End If
     End Sub
 
     Private Sub CreateFolderIfRequired(destinationFilePath As String)

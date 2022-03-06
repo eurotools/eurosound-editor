@@ -130,10 +130,10 @@ Partial Public Class Project_Properties
         SaveIniFile()
         'Update program ini file
         Dim baseIniFile As New IniFile(EuroSoundIniFilePath)
+        ProjAudioEditor = TextBox_EditWavs.Text
+        ProjTextEditor = TextBox_TextEditor.Text
         baseIniFile.Write("Edit_Wavs_With", ProjAudioEditor, "Form7_Misc")
         baseIniFile.Write("TextEditor", ProjTextEditor, "PropertiesForm")
-        baseIniFile.Write("Edit_Wavs_With", OpenFileDialog.FileName, "Form7_Misc")
-        baseIniFile.Write("TextEditor", OpenFileDialog.FileName, "PropertiesForm")
         'Add items to combobox
         Dim MainFrame As MainFrame = CType(Application.OpenForms("MainFrame"), MainFrame)
         MainFrame.ComboBox_Format.BeginUpdate()
@@ -223,6 +223,13 @@ Partial Public Class Project_Properties
                 'Add platform to dictionary
                 ProjectSettingsFile.sampleRateFormats.Add(selectedPlatform, New Dictionary(Of String, UInteger))
                 ProjectSettingsFile.sampleRateFormats(selectedPlatform).Add("Default", 22050)
+                If ProjectSettingsFile.sampleRateFormats.Count > 0 Then
+                    For Each ReSampleRate As String In ProjectSettingsFile.sampleRateFormats(ComboBox_RatesFormat.Items(0)).Keys
+                        If Not ProjectSettingsFile.sampleRateFormats(selectedPlatform).ContainsKey(ReSampleRate) Then
+                            ProjectSettingsFile.sampleRateFormats(selectedPlatform).Add(ReSampleRate, 22050)
+                        End If
+                    Next
+                End If
                 'Add item to list
                 Dim formatitem As New ListViewItem(New String() {selectedPlatform, "Set Output Folder.", "On"})
                 ListView_Formats.Items.Add(formatitem)
