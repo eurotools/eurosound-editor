@@ -37,57 +37,59 @@ Partial Public Class ExporterForm
                         GetSfxList(soundBankInfo, currentPlatform, SfxDictionary, samplesToInclude, streamsList)
                         Dim SamplesDictionary As New Dictionary(Of String, EXAudio)
                         GetSamplesDictionary(samplesToInclude, SamplesDictionary, currentPlatform, currentLanguage)
+                        'Skip if there are samples missing
+                        If Not CancelSoundBankOutput Then
+                            'Get file paths
+                            Dim sfxFilePath As String = fso.BuildPath(outputFolder, soundBankInfo.HashCode & ".sfx")
+                            Dim sifFilePath As String = fso.BuildPath(outputFolder, soundBankInfo.HashCode & ".sif")
+                            Dim ssfFilePath As String = fso.BuildPath(outputFolder, soundBankInfo.HashCode & ".ssf")
+                            Dim sbfFilePath As String = fso.BuildPath(outputFolder, soundBankInfo.HashCode & ".sbf")
 
-                        'Get file paths
-                        Dim sfxFilePath As String = fso.BuildPath(outputFolder, soundBankInfo.HashCode & ".sfx")
-                        Dim sifFilePath As String = fso.BuildPath(outputFolder, soundBankInfo.HashCode & ".sif")
-                        Dim ssfFilePath As String = fso.BuildPath(outputFolder, soundBankInfo.HashCode & ".ssf")
-                        Dim sbfFilePath As String = fso.BuildPath(outputFolder, soundBankInfo.HashCode & ".sbf")
+                            'Get output file paths
+                            Dim sfxFileName As String = "HC" & Hex(GetSfxFileName(Array.IndexOf(SfxLanguages, currentLanguage), soundBankInfo.HashCode)).PadLeft(6, "0"c)
+                            Dim outputFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary\" & GetEngineXFolder(currentPlatform) & "\" & GetEngineXLangFolder(currentLanguage))
+                            CreateFolderIfRequired(outputFilePath)
 
-                        'Get output file paths
-                        Dim sfxFileName As String = "HC" & Hex(GetSfxFileName(Array.IndexOf(SfxLanguages, currentLanguage), soundBankInfo.HashCode)).PadLeft(6, "0"c)
-                        Dim outputFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary\" & GetEngineXFolder(currentPlatform) & "\" & GetEngineXLangFolder(currentLanguage))
-                        CreateFolderIfRequired(outputFilePath)
+                            'Debug file
+                            Dim debugFile As String = fso.BuildPath(WorkingDirectory, "Debug_Report")
+                            CreateFolderIfRequired(debugFile)
+                            FileOpen(1, fso.BuildPath(debugFile, "StreamDebugSoundBank_" & currentSoundBank & "_" & currentPlatform & "_" & currentLanguage & ".txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
+                            PrintLine(1, "SoundBank Output Debug Data")
+                            PrintLine(1, Format(Now, "dd/mm/yyy"))
+                            PrintLine(1, Format(Now, "hh:mm:ss"))
+                            PrintLine(1, "")
+                            PrintLine(1, "SoundBankName = " & currentSoundBank)
+                            PrintLine(1, "SoundBankSaveName = " & soundBankInfo.HashCode)
+                            PrintLine(1, "SoundBankFileName = " & sfxFilePath)
+                            PrintLine(1, "Stream PoolFiles(n).FileRef")
 
-                        'Debug file
-                        Dim debugFile As String = fso.BuildPath(WorkingDirectory, "Debug_Report")
-                        CreateFolderIfRequired(debugFile)
-                        FileOpen(1, fso.BuildPath(debugFile, "StreamDebugSoundBank_" & currentSoundBank & "_" & currentPlatform & "_" & currentLanguage & ".txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
-                        PrintLine(1, "SoundBank Output Debug Data")
-                        PrintLine(1, Format(Now, "dd/mm/yyy"))
-                        PrintLine(1, Format(Now, "hh:mm:ss"))
-                        PrintLine(1, "")
-                        PrintLine(1, "SoundBankName = " & currentSoundBank)
-                        PrintLine(1, "SoundBankSaveName = " & soundBankInfo.HashCode)
-                        PrintLine(1, "SoundBankFileName = " & sfxFilePath)
-                        PrintLine(1, "Stream PoolFiles(n).FileRef")
-
-                        'Create output files
-                        If StrComp(currentPlatform, "GameCube") = 0 Then
-                            Using sbfWriter As New BinaryWriter(File.Open(sbfFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
-                                Using ssfWriter As New BinaryWriter(File.Open(ssfFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
-                                    Using sifWriter As New BinaryWriter(File.Open(sifFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
-                                        Using sfxWriter As New BinaryWriter(File.Open(sfxFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
-                                            WriteSbfFile(sbfWriter, SamplesDictionary)
-                                            WriteSsfFile(ssfWriter, SamplesDictionary)
-                                            WriteSifFile(sifWriter, SamplesDictionary, True)
-                                            WriteSfxFile(sfxWriter, hashCodesList, SfxDictionary, SamplesDictionary, streamsList, True)
+                            'Create output files
+                            If StrComp(currentPlatform, "GameCube") = 0 Then
+                                Using sbfWriter As New BinaryWriter(File.Open(sbfFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
+                                    Using ssfWriter As New BinaryWriter(File.Open(ssfFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
+                                        Using sifWriter As New BinaryWriter(File.Open(sifFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
+                                            Using sfxWriter As New BinaryWriter(File.Open(sfxFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
+                                                WriteSbfFile(sbfWriter, SamplesDictionary)
+                                                WriteSsfFile(ssfWriter, SamplesDictionary)
+                                                WriteSifFile(sifWriter, SamplesDictionary, True)
+                                                WriteSfxFile(sfxWriter, hashCodesList, SfxDictionary, SamplesDictionary, streamsList, True)
+                                            End Using
                                         End Using
                                     End Using
                                 End Using
-                            End Using
-                            ESUtils.MusXBuild_Soundbank.BuildSoundbankFile(sfxFilePath, sifFilePath, sbfFilePath, ssfFilePath, fso.BuildPath(outputFilePath, sfxFileName & ".SFX"), soundBankInfo.HashCode, True)
-                        Else
-                            Using sbfWriter As New BinaryWriter(File.Open(sbfFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
-                                Using sifWriter As New BinaryWriter(File.Open(sifFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
-                                    Using sfxWriter As New BinaryWriter(File.Open(sfxFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
-                                        WriteSbfFile(sbfWriter, SamplesDictionary)
-                                        WriteSifFile(sifWriter, SamplesDictionary, False)
-                                        WriteSfxFile(sfxWriter, hashCodesList, SfxDictionary, SamplesDictionary, streamsList, False)
+                                ESUtils.MusXBuild_Soundbank.BuildSoundbankFile(sfxFilePath, sifFilePath, sbfFilePath, ssfFilePath, fso.BuildPath(outputFilePath, sfxFileName & ".SFX"), soundBankInfo.HashCode, True)
+                            Else
+                                Using sbfWriter As New BinaryWriter(File.Open(sbfFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
+                                    Using sifWriter As New BinaryWriter(File.Open(sifFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
+                                        Using sfxWriter As New BinaryWriter(File.Open(sfxFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
+                                            WriteSbfFile(sbfWriter, SamplesDictionary)
+                                            WriteSifFile(sifWriter, SamplesDictionary, False)
+                                            WriteSfxFile(sfxWriter, hashCodesList, SfxDictionary, SamplesDictionary, streamsList, False)
+                                        End Using
                                     End Using
                                 End Using
-                            End Using
-                            ESUtils.MusXBuild_Soundbank.BuildSoundbankFile(sfxFilePath, sifFilePath, sbfFilePath, Nothing, fso.BuildPath(outputFilePath, sfxFileName & ".SFX"), soundBankInfo.HashCode, False)
+                                ESUtils.MusXBuild_Soundbank.BuildSoundbankFile(sfxFilePath, sifFilePath, sbfFilePath, Nothing, fso.BuildPath(outputFilePath, sfxFileName & ".SFX"), soundBankInfo.HashCode, False)
+                            End If
                         End If
                     Next
                 Next
