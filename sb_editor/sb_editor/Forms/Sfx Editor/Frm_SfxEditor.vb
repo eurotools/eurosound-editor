@@ -1,4 +1,5 @@
 ﻿Imports System.Media
+Imports System.Text
 
 Partial Public Class Frm_SfxEditor
     '*===============================================================================================
@@ -468,8 +469,42 @@ Partial Public Class Frm_SfxEditor
     End Sub
 
     Private Sub Button_TestSfx_Click(sender As Object, e As EventArgs) Handles Button_TestSfx.Click
-        Dim swyterScriptcmd As String = "SystemFiles\testSounds.cmd"
-        Shell(swyterScriptcmd)
+        Dim watch As New Stopwatch
+        watch.Start()
+        TextBox_ScriptDebug.Clear()
+        'Start Process
+        Dim procStartInfo As New ProcessStartInfo("SystemFiles\testSounds.cmd") With {
+            .RedirectStandardOutput = True,
+            .RedirectStandardError = True,
+            .UseShellExecute = False,
+            .CreateNoWindow = True
+        }
+        Dim p As New Process With {
+            .EnableRaisingEvents = True,
+            .StartInfo = procStartInfo
+        }
+        p.StartInfo.CreateNoWindow = True
+        p.StartInfo.UseShellExecute = False
+        AddHandler p.OutputDataReceived, AddressOf OutputHandler
+        AddHandler p.ErrorDataReceived, AddressOf OutputHandler
+        p.Start()
+        p.BeginOutputReadLine()
+        'Stop watcher
+        watch.Stop()
+        TextBox_ScriptTime.Text = "Script Time " & watch.ElapsedMilliseconds
+    End Sub
+
+    Private Sub OutputHandler(sendingProcess As Object, outLine As DataReceivedEventArgs)
+        ' Collect the sort command output.
+        If Not String.IsNullOrEmpty(outLine.Data) Then
+            ' Add the text to the collected output.
+            TextBox_ScriptDebug.Invoke(Sub() TextBox_ScriptDebug.Text += Trim(outLine.Data & vbCrLf))
+        End If
+    End Sub
+
+    Private Sub TextBox_EuroSoundTime_Click(sender As Object, e As EventArgs) Handles TextBox_ScriptDebug.Click
+        Dim debugForm As New Frm_DebugData(TextBox_ScriptDebug.Text.Split(vbCrLf))
+        debugForm.ShowDialog()
     End Sub
 
     '*===============================================================================================

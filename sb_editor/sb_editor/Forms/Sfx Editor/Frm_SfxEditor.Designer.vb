@@ -28,9 +28,8 @@ Partial Class Frm_SfxEditor
         Me.TabPage_Common = New System.Windows.Forms.TabPage()
         Me.Panel_SfxParameters = New System.Windows.Forms.Panel()
         Me.Button_ReverbTester = New System.Windows.Forms.Button()
-        Me.TextBox_DllTime = New System.Windows.Forms.TextBox()
-        Me.TextBox_EuroSoundTime = New System.Windows.Forms.TextBox()
-        Me.Button_StopSfx = New System.Windows.Forms.Button()
+        Me.TextBox_ScriptTime = New System.Windows.Forms.TextBox()
+        Me.TextBox_ScriptDebug = New System.Windows.Forms.TextBox()
         Me.Button_TestSfx = New System.Windows.Forms.Button()
         Me.Textbox_HashCodeNumber = New System.Windows.Forms.TextBox()
         Me.Label_HashCodeNumber = New System.Windows.Forms.Label()
@@ -81,6 +80,7 @@ Partial Class Frm_SfxEditor
         Me.MenuItem_SamplePool_Play = New System.Windows.Forms.MenuItem()
         Me.MenuItem_SamplePool_Stop = New System.Windows.Forms.MenuItem()
         Me.CheckBox_EnableSubSFX = New System.Windows.Forms.CheckBox()
+        Me.SfxParamsAndSamplePool = New sb_editor.SfxControl()
         Me.Panel_Options = New System.Windows.Forms.Panel()
         Me.Groupbox_RemoveFormat = New System.Windows.Forms.GroupBox()
         Me.Button_RemoveSpecificVersion = New System.Windows.Forms.Button()
@@ -97,7 +97,6 @@ Partial Class Frm_SfxEditor
         Me.Button_Cancel = New System.Windows.Forms.Button()
         Me.openFileDiag = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip_Buttons = New System.Windows.Forms.ToolTip(Me.components)
-        Me.SfxParamsAndSamplePool = New sb_editor.SfxControl()
         Me.TabControl_Platforms.SuspendLayout()
         Me.Panel_SfxParameters.SuspendLayout()
         Me.GroupBox_SamplePool.SuspendLayout()
@@ -144,9 +143,8 @@ Partial Class Frm_SfxEditor
         Me.Panel_SfxParameters.AutoScroll = True
         Me.Panel_SfxParameters.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel_SfxParameters.Controls.Add(Me.Button_ReverbTester)
-        Me.Panel_SfxParameters.Controls.Add(Me.TextBox_DllTime)
-        Me.Panel_SfxParameters.Controls.Add(Me.TextBox_EuroSoundTime)
-        Me.Panel_SfxParameters.Controls.Add(Me.Button_StopSfx)
+        Me.Panel_SfxParameters.Controls.Add(Me.TextBox_ScriptTime)
+        Me.Panel_SfxParameters.Controls.Add(Me.TextBox_ScriptDebug)
         Me.Panel_SfxParameters.Controls.Add(Me.Button_TestSfx)
         Me.Panel_SfxParameters.Controls.Add(Me.Textbox_HashCodeNumber)
         Me.Panel_SfxParameters.Controls.Add(Me.Label_HashCodeNumber)
@@ -159,39 +157,30 @@ Partial Class Frm_SfxEditor
         '
         'Button_ReverbTester
         '
-        Me.Button_ReverbTester.Location = New System.Drawing.Point(787, 429)
+        Me.Button_ReverbTester.Location = New System.Drawing.Point(787, 400)
         Me.Button_ReverbTester.Name = "Button_ReverbTester"
         Me.Button_ReverbTester.Size = New System.Drawing.Size(100, 23)
         Me.Button_ReverbTester.TabIndex = 24
         Me.Button_ReverbTester.Text = "Reverb Tester"
         Me.Button_ReverbTester.UseVisualStyleBackColor = True
         '
-        'TextBox_DllTime
+        'TextBox_ScriptTime
         '
-        Me.TextBox_DllTime.BackColor = System.Drawing.SystemColors.Window
-        Me.TextBox_DllTime.Location = New System.Drawing.Point(787, 345)
-        Me.TextBox_DllTime.Name = "TextBox_DllTime"
-        Me.TextBox_DllTime.ReadOnly = True
-        Me.TextBox_DllTime.Size = New System.Drawing.Size(100, 20)
-        Me.TextBox_DllTime.TabIndex = 23
+        Me.TextBox_ScriptTime.BackColor = System.Drawing.SystemColors.Window
+        Me.TextBox_ScriptTime.Location = New System.Drawing.Point(787, 345)
+        Me.TextBox_ScriptTime.Name = "TextBox_ScriptTime"
+        Me.TextBox_ScriptTime.ReadOnly = True
+        Me.TextBox_ScriptTime.Size = New System.Drawing.Size(100, 20)
+        Me.TextBox_ScriptTime.TabIndex = 23
         '
-        'TextBox_EuroSoundTime
+        'TextBox_ScriptDebug
         '
-        Me.TextBox_EuroSoundTime.BackColor = System.Drawing.SystemColors.Window
-        Me.TextBox_EuroSoundTime.Location = New System.Drawing.Point(787, 319)
-        Me.TextBox_EuroSoundTime.Name = "TextBox_EuroSoundTime"
-        Me.TextBox_EuroSoundTime.ReadOnly = True
-        Me.TextBox_EuroSoundTime.Size = New System.Drawing.Size(100, 20)
-        Me.TextBox_EuroSoundTime.TabIndex = 22
-        '
-        'Button_StopSfx
-        '
-        Me.Button_StopSfx.Location = New System.Drawing.Point(787, 400)
-        Me.Button_StopSfx.Name = "Button_StopSfx"
-        Me.Button_StopSfx.Size = New System.Drawing.Size(100, 23)
-        Me.Button_StopSfx.TabIndex = 21
-        Me.Button_StopSfx.Text = "Stop SFX"
-        Me.Button_StopSfx.UseVisualStyleBackColor = True
+        Me.TextBox_ScriptDebug.BackColor = System.Drawing.SystemColors.Window
+        Me.TextBox_ScriptDebug.Location = New System.Drawing.Point(787, 319)
+        Me.TextBox_ScriptDebug.Name = "TextBox_ScriptDebug"
+        Me.TextBox_ScriptDebug.ReadOnly = True
+        Me.TextBox_ScriptDebug.Size = New System.Drawing.Size(100, 20)
+        Me.TextBox_ScriptDebug.TabIndex = 22
         '
         'Button_TestSfx
         '
@@ -205,7 +194,7 @@ Partial Class Frm_SfxEditor
         'Textbox_HashCodeNumber
         '
         Me.Textbox_HashCodeNumber.BackColor = System.Drawing.SystemColors.Window
-        Me.Textbox_HashCodeNumber.Location = New System.Drawing.Point(787, 471)
+        Me.Textbox_HashCodeNumber.Location = New System.Drawing.Point(787, 442)
         Me.Textbox_HashCodeNumber.Name = "Textbox_HashCodeNumber"
         Me.Textbox_HashCodeNumber.ReadOnly = True
         Me.Textbox_HashCodeNumber.Size = New System.Drawing.Size(96, 20)
@@ -215,7 +204,7 @@ Partial Class Frm_SfxEditor
         'Label_HashCodeNumber
         '
         Me.Label_HashCodeNumber.AutoSize = True
-        Me.Label_HashCodeNumber.Location = New System.Drawing.Point(787, 455)
+        Me.Label_HashCodeNumber.Location = New System.Drawing.Point(787, 426)
         Me.Label_HashCodeNumber.Name = "Label_HashCodeNumber"
         Me.Label_HashCodeNumber.Size = New System.Drawing.Size(97, 13)
         Me.Label_HashCodeNumber.TabIndex = 18
@@ -278,9 +267,9 @@ Partial Class Frm_SfxEditor
         Me.GroupBox_SampleProps.Controls.Add(Me.Label_RandomPitch)
         Me.GroupBox_SampleProps.Controls.Add(Me.Numeric_PitchOffset)
         Me.GroupBox_SampleProps.Controls.Add(Me.Label_PitchOffset)
-        Me.GroupBox_SampleProps.Location = New System.Drawing.Point(533, 141)
+        Me.GroupBox_SampleProps.Location = New System.Drawing.Point(530, 141)
         Me.GroupBox_SampleProps.Name = "GroupBox_SampleProps"
-        Me.GroupBox_SampleProps.Size = New System.Drawing.Size(239, 178)
+        Me.GroupBox_SampleProps.Size = New System.Drawing.Size(242, 178)
         Me.GroupBox_SampleProps.TabIndex = 13
         Me.GroupBox_SampleProps.TabStop = False
         Me.GroupBox_SampleProps.Text = "Sample Properties"
@@ -316,38 +305,38 @@ Partial Class Frm_SfxEditor
         '
         Me.Numeric_RandomPan.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Numeric_RandomPan.Location = New System.Drawing.Point(150, 149)
+        Me.Numeric_RandomPan.Location = New System.Drawing.Point(151, 149)
         Me.Numeric_RandomPan.Name = "Numeric_RandomPan"
-        Me.Numeric_RandomPan.Size = New System.Drawing.Size(83, 20)
+        Me.Numeric_RandomPan.Size = New System.Drawing.Size(85, 20)
         Me.Numeric_RandomPan.TabIndex = 11
         '
         'Numeric_Pan
         '
         Me.Numeric_Pan.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Numeric_Pan.Location = New System.Drawing.Point(150, 123)
+        Me.Numeric_Pan.Location = New System.Drawing.Point(151, 123)
         Me.Numeric_Pan.Minimum = New Decimal(New Integer() {100, 0, 0, -2147483648})
         Me.Numeric_Pan.Name = "Numeric_Pan"
-        Me.Numeric_Pan.Size = New System.Drawing.Size(83, 20)
+        Me.Numeric_Pan.Size = New System.Drawing.Size(85, 20)
         Me.Numeric_Pan.TabIndex = 9
         '
         'Numeric_RandomVolume
         '
         Me.Numeric_RandomVolume.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Numeric_RandomVolume.Location = New System.Drawing.Point(150, 97)
+        Me.Numeric_RandomVolume.Location = New System.Drawing.Point(151, 97)
         Me.Numeric_RandomVolume.Minimum = New Decimal(New Integer() {9, 0, 0, -2147418112})
         Me.Numeric_RandomVolume.Name = "Numeric_RandomVolume"
-        Me.Numeric_RandomVolume.Size = New System.Drawing.Size(83, 20)
+        Me.Numeric_RandomVolume.Size = New System.Drawing.Size(85, 20)
         Me.Numeric_RandomVolume.TabIndex = 7
         '
         'Numeric_BaseVolume
         '
         Me.Numeric_BaseVolume.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Numeric_BaseVolume.Location = New System.Drawing.Point(150, 71)
+        Me.Numeric_BaseVolume.Location = New System.Drawing.Point(151, 71)
         Me.Numeric_BaseVolume.Name = "Numeric_BaseVolume"
-        Me.Numeric_BaseVolume.Size = New System.Drawing.Size(83, 20)
+        Me.Numeric_BaseVolume.Size = New System.Drawing.Size(85, 20)
         Me.Numeric_BaseVolume.TabIndex = 5
         '
         'Label_BaseVolume
@@ -365,11 +354,11 @@ Partial Class Frm_SfxEditor
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Numeric_RandomPitch.DecimalPlaces = 1
         Me.Numeric_RandomPitch.Increment = New Decimal(New Integer() {5, 0, 0, 65536})
-        Me.Numeric_RandomPitch.Location = New System.Drawing.Point(150, 45)
+        Me.Numeric_RandomPitch.Location = New System.Drawing.Point(151, 45)
         Me.Numeric_RandomPitch.Maximum = New Decimal(New Integer() {24, 0, 0, 0})
         Me.Numeric_RandomPitch.Minimum = New Decimal(New Integer() {9, 0, 0, -2147418112})
         Me.Numeric_RandomPitch.Name = "Numeric_RandomPitch"
-        Me.Numeric_RandomPitch.Size = New System.Drawing.Size(83, 20)
+        Me.Numeric_RandomPitch.Size = New System.Drawing.Size(85, 20)
         Me.Numeric_RandomPitch.TabIndex = 3
         '
         'Label_RandomPitch
@@ -386,11 +375,11 @@ Partial Class Frm_SfxEditor
         Me.Numeric_PitchOffset.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Numeric_PitchOffset.DecimalPlaces = 1
-        Me.Numeric_PitchOffset.Location = New System.Drawing.Point(150, 19)
+        Me.Numeric_PitchOffset.Location = New System.Drawing.Point(151, 19)
         Me.Numeric_PitchOffset.Maximum = New Decimal(New Integer() {24, 0, 0, 0})
         Me.Numeric_PitchOffset.Minimum = New Decimal(New Integer() {24, 0, 0, -2147483648})
         Me.Numeric_PitchOffset.Name = "Numeric_PitchOffset"
-        Me.Numeric_PitchOffset.Size = New System.Drawing.Size(83, 20)
+        Me.Numeric_PitchOffset.Size = New System.Drawing.Size(85, 20)
         Me.Numeric_PitchOffset.TabIndex = 1
         '
         'Label_PitchOffset
@@ -671,6 +660,14 @@ Partial Class Frm_SfxEditor
         Me.CheckBox_EnableSubSFX.Text = "Enable Sub SFXs"
         Me.CheckBox_EnableSubSFX.UseVisualStyleBackColor = True
         '
+        'SfxParamsAndSamplePool
+        '
+        Me.SfxParamsAndSamplePool.Location = New System.Drawing.Point(3, 4)
+        Me.SfxParamsAndSamplePool.Name = "SfxParamsAndSamplePool"
+        Me.SfxParamsAndSamplePool.ShowSampleProperties = False
+        Me.SfxParamsAndSamplePool.Size = New System.Drawing.Size(891, 277)
+        Me.SfxParamsAndSamplePool.TabIndex = 14
+        '
         'Panel_Options
         '
         Me.Panel_Options.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
@@ -823,14 +820,6 @@ Partial Class Frm_SfxEditor
         Me.openFileDiag.Filter = "Wave File (*.wav)|*.Wav"
         Me.openFileDiag.Multiselect = True
         '
-        'SfxParamsAndSamplePool
-        '
-        Me.SfxParamsAndSamplePool.Location = New System.Drawing.Point(3, 4)
-        Me.SfxParamsAndSamplePool.Name = "SfxParamsAndSamplePool"
-        Me.SfxParamsAndSamplePool.ShowSampleProperties = False
-        Me.SfxParamsAndSamplePool.Size = New System.Drawing.Size(891, 277)
-        Me.SfxParamsAndSamplePool.TabIndex = 14
-        '
         'Frm_SfxEditor
         '
         Me.AcceptButton = Me.Button_OK
@@ -918,9 +907,8 @@ Partial Class Frm_SfxEditor
     Private WithEvents Button_AddSample As Button
     Protected Friend WithEvents ListBox_SamplePool As ListBox
     Protected Friend WithEvents CheckBox_EnableSubSFX As CheckBox
-    Friend WithEvents TextBox_DllTime As TextBox
-    Friend WithEvents TextBox_EuroSoundTime As TextBox
-    Friend WithEvents Button_StopSfx As Button
+    Friend WithEvents TextBox_ScriptTime As TextBox
+    Friend WithEvents TextBox_ScriptDebug As TextBox
     Friend WithEvents Button_TestSfx As Button
     Protected Friend WithEvents Textbox_HashCodeNumber As TextBox
     Private WithEvents Label_HashCodeNumber As Label

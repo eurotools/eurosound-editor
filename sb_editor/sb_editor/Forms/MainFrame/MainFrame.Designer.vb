@@ -333,7 +333,7 @@ Partial Class MainFrame
         Me.Button_SfxDefault.Name = "Button_SfxDefault"
         Me.Button_SfxDefault.Size = New System.Drawing.Size(157, 23)
         Me.Button_SfxDefault.TabIndex = 3
-        Me.Button_SfxDefault.Text = "SFX Default"
+        Me.Button_SfxDefault.Text = "Default SFX settings"
         Me.Button_SfxDefault.UseVisualStyleBackColor = True
         '
         'Button_MusicMaker

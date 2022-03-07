@@ -90,9 +90,11 @@ Partial Public Class MusicMaker
 
     Private Sub Button_ForceSelected_Click(sender As Object, e As EventArgs) Handles Button_ForceSelected.Click
         If ListView_MusicFiles.SelectedItems.Count > 0 Then
-            Dim selectedItem As ListViewItem = ListView_MusicFiles.SelectedItems(0)
-            selectedItem.SubItems(4).Text = "Output"
-            selectedItem.SubItems(5).Text = "Output"
+            For itemIndex As Integer = 0 To ListView_MusicFiles.SelectedItems.Count
+                Dim selectedItem As ListViewItem = ListView_MusicFiles.SelectedItems(itemIndex)
+                selectedItem.SubItems(4).Text = "Output"
+                selectedItem.SubItems(5).Text = "Output"
+            Next
         End If
     End Sub
 
