@@ -87,8 +87,8 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\MarkerFiles.vb" />
-    <Compile Include="Classes\MarkerObject.vb" />
+    <Compile Include="Classes\Markers\MarkerFiles.vb" />
+    <Compile Include="Classes\Markers\MarkerObject.vb" />
     <Compile Include="Classes\SoundbankExporter\EXAudio.vb" />
     <Compile Include="Classes\SoundbankExporter\EXSample.vb" />
     <Compile Include="Classes\SoundbankExporter\EXSound.vb" />

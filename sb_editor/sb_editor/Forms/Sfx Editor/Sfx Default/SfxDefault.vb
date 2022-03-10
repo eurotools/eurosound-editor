@@ -1,4 +1,6 @@
 ﻿Imports IniFileFunctions
+Imports sb_editor.ParsersObjects
+Imports sb_editor.ReaderClasses
 
 Public Class SfxDefault
     '*===============================================================================================

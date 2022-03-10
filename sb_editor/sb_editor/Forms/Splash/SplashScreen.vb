@@ -1,6 +1,8 @@
 ﻿Imports System.IO
 Imports IniFileFunctions
 Imports RecentFilesMenu
+Imports sb_editor.ReaderClasses
+Imports sb_editor.WritersClasses
 
 Partial Public NotInheritable Class SplashScreen
     '*===============================================================================================

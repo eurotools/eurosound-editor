@@ -1,4 +1,6 @@
 ﻿Imports System.IO
+Imports sb_editor.ParsersObjects
+Imports sb_editor.ReaderClasses
 Imports Scripting
 
 Public Class DataBase_Properties

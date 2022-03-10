@@ -1,4 +1,6 @@
-﻿Public Class Frm_RefineSearch
+﻿Imports sb_editor.WritersClasses
+
+Public Class Frm_RefineSearch
     Inherits Frm_TimerForm
     '*===============================================================================================
     '* GLOBAL VARS

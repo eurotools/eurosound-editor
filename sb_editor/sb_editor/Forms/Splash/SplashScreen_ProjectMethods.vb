@@ -1,4 +1,6 @@
-﻿Partial Public NotInheritable Class SplashScreen
+﻿Imports sb_editor.ParsersObjects
+
+Partial Public NotInheritable Class SplashScreen
     Private Sub LoadDataBases(databasesFolder As String)
         'Add items to listbox
         mainform.ListBox_DataBases.BeginUpdate()

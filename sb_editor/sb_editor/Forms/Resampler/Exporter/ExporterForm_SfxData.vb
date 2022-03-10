@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.IO
 Imports NAudio.Wave
+Imports sb_editor.ParsersObjects
 
 Partial Public Class ExporterForm
     Private Function CreateSfxDataFolder(samplesDt As DataTable) As Integer

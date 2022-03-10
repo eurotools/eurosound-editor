@@ -1,4 +1,6 @@
-﻿Partial Public Class MainFrame
+﻿Imports sb_editor.ParsersObjects
+
+Partial Public Class MainFrame
     Private Sub DeleteDatabaseFromSoundbank(soundbankNode As TreeNode, fileName As String)
         'Remove node
         For Each sb_database As TreeNode In soundbankNode.Nodes

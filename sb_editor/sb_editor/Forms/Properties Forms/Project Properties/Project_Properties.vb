@@ -1,4 +1,6 @@
 ﻿Imports IniFileFunctions
+Imports sb_editor.ReaderClasses
+Imports sb_editor.WritersClasses
 
 Partial Public Class Project_Properties
     '*===============================================================================================

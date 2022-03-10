@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports sb_editor.MarkerFunctions
 
 Public Class MusicMarkersEditor
     '*===============================================================================================

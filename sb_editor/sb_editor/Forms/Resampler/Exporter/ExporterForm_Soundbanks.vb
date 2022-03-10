@@ -1,4 +1,6 @@
 ﻿Imports System.IO
+Imports sb_editor.ExporterObjects
+Imports sb_editor.ParsersObjects
 
 Partial Public Class ExporterForm
     Public Sub OutputSoundbanks(hashCodesList As SortedDictionary(Of String, UInteger), soundbanksList As String(), streamsList As String(), outLanguages As String(), outPlatforms As String())
@@ -34,8 +36,9 @@ Partial Public Class ExporterForm
                         'Get SFX and samples list
                         Dim samplesToInclude As New HashSet(Of String)
                         Dim SfxDictionary As New SortedDictionary(Of String, EXSound)
-                        GetSfxList(soundBankInfo, currentPlatform, SfxDictionary, samplesToInclude, streamsList)
                         Dim SamplesDictionary As New Dictionary(Of String, EXAudio)
+                        Dim SfxList As String() = GetSFXsList(soundBankInfo)
+                        GetSFXsDictionary(SfxList, currentPlatform, SfxDictionary, samplesToInclude, streamsList)
                         GetSamplesDictionary(samplesToInclude, SamplesDictionary, currentPlatform, currentLanguage)
                         'Skip if there are samples missing
                         If Not CancelSoundBankOutput Then

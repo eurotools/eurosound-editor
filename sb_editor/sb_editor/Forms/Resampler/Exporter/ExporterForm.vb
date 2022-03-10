@@ -1,4 +1,8 @@
 ﻿Imports System.IO
+Imports sb_editor.HashTablesBuilder
+Imports sb_editor.ParsersObjects
+Imports sb_editor.ReaderClasses
+Imports sb_editor.WritersClasses
 
 Partial Public Class ExporterForm
     Inherits Frm_TimerForm
@@ -131,11 +135,7 @@ Partial Public Class ExporterForm
         End If
     End Sub
 
-    Private Sub CreateFolderIfRequired(destinationFilePath As String)
-        If Not fso.FolderExists(destinationFilePath) Then
-            MkDir(destinationFilePath)
-        End If
-    End Sub
+
 
     Private Sub BackgroundWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker.ProgressChanged
         ProgressBar1.Value = e.ProgressPercentage

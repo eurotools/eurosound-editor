@@ -1,4 +1,5 @@
 ﻿Imports IniFileFunctions
+Imports sb_editor.ParsersObjects
 
 Partial Public NotInheritable Class SplashScreen
     '*===============================================================================================

@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports sb_editor.ParsersObjects
 
 Partial Public Class MusicMaker
     Private Sub GetMusicFilesData()

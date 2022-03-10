@@ -1,4 +1,8 @@
-﻿Public Class SfxMultiEditor
+﻿Imports sb_editor.ParsersObjects
+Imports sb_editor.ReaderClasses
+Imports sb_editor.WritersClasses
+
+Public Class SfxMultiEditor
     '*===============================================================================================
     '* GLOBAL VARIABLES 
     '*===============================================================================================

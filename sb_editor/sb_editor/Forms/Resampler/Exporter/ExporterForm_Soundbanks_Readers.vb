@@ -1,12 +1,82 @@
 ﻿Imports System.IO
 Imports NAudio.Wave
+Imports sb_editor.ExporterObjects
+Imports sb_editor.ParsersObjects
 
 Partial Public Class ExporterForm
     '*===============================================================================================
     '* PRIVATE METHODS TO GET SOUNDBANK LISTS DATA
     '*===============================================================================================
     Dim CancelSoundBankOutput As Boolean = False
-    Private Sub GetSfxList(soundbankData As SoundbankFile, outPlatform As String, SfxDictionary As SortedDictionary(Of String, EXSound), samplesToInclude As HashSet(Of String), streamsList As String())
+    Private Sub GetSFXsDictionary(sfxList As String(), outPlatform As String, SfxDictionary As SortedDictionary(Of String, EXSound), samplesToInclude As HashSet(Of String), streamsList As String())
+        'Read all stored SFXs in the DataBases
+        For sfxIndex As Integer = 0 To sfxList.Length - 1
+            Dim sfxFileName As String = sfxList(sfxIndex)
+            Dim sfxFilePath As String = fso.BuildPath(WorkingDirectory & "\SFXs", sfxFileName)
+            If fso.FileExists(sfxFilePath) Then
+                'Check for specific formats
+                Dim sfxPlatformPath As String = fso.BuildPath(WorkingDirectory & "\SFXs\" & outPlatform, sfxFileName)
+                If fso.FileExists(sfxPlatformPath) Then
+                    sfxFilePath = sfxPlatformPath
+                End If
+                'Read SFX
+                Dim sfxFileData As SfxFile = textFileReaders.ReadSFXFile(sfxFilePath)
+                Dim soundToAdd As New EXSound With {
+                    .HashCode = sfxFileData.HashCode,
+                    .Ducker = sfxFileData.Parameters.Ducker,
+                    .DuckerLength = sfxFileData.Parameters.DuckerLength,
+                    .Flags = GetSfxFlags(sfxFileData),
+                    .InnerRadius = sfxFileData.Parameters.InnerRadius,
+                    .MasterVolume = sfxFileData.Parameters.MasterVolume,
+                    .MaxDelay = sfxFileData.SamplePool.MaxDelay,
+                    .MaxVoices = sfxFileData.Parameters.MaxVoices,
+                    .MinDelay = sfxFileData.SamplePool.MinDelay,
+                    .OuterRadius = sfxFileData.Parameters.OuterRadius,
+                    .Priority = sfxFileData.Parameters.Priority,
+                    .ReverbSend = sfxFileData.Parameters.ReverbSend,
+                    .TrackingType = sfxFileData.Parameters.TrackingType,
+                    .HasSubSfx = sfxFileData.SamplePool.EnableSubSFX
+                }
+                For sampleIndex As Integer = 0 To sfxFileData.Samples.Count - 1
+                    Dim currentSample As Sample = sfxFileData.Samples(sampleIndex)
+                    Dim sampleToAdd As New EXSample With {
+                        .FilePath = RelativePathToAbs(currentSample.FilePath),
+                        .PitchOffset = currentSample.PitchOffset * 1024,
+                        .RandomPitchOffset = currentSample.RandomPitchOffset * 1024,
+                        .BaseVolume = currentSample.BaseVolume,
+                        .RandomVolumeOffset = currentSample.RandomVolumeOffset,
+                        .Pan = currentSample.Pan,
+                        .RandomPan = currentSample.RandomPan
+                    }
+                    If Not sfxFileData.SamplePool.EnableSubSFX Then
+                        'Check if this sample is streamed or not
+                        Dim arraySearchResult As Integer = Array.IndexOf(streamsList, sampleToAdd.FilePath)
+                        If arraySearchResult = -1 Then
+                            samplesToInclude.Add(currentSample.FilePath)
+                        End If
+                    End If
+                    'Add new sample to the dictionary
+                    soundToAdd.Samples.Add(sampleToAdd)
+                Next
+                'Calculate Ducker Length
+                Dim duckerLength As Short = 0
+                If soundToAdd.Ducker > 0 Then
+                    duckerLength = GetTotalCents(soundToAdd, outPlatform)
+                    If soundToAdd.DuckerLength < 0 Then
+                        duckerLength -= Math.Abs(soundToAdd.DuckerLength)
+                    Else
+                        duckerLength += Math.Abs(soundToAdd.DuckerLength)
+                    End If
+                End If
+                soundToAdd.DuckerLength = duckerLength
+                'Add object to dictionary
+                SfxDictionary.Add(sfxFileName, soundToAdd)
+            End If
+        Next
+    End Sub
+
+    Private Function GetSFXsList(soundbankData As SoundbankFile) As String()
+        Dim SfxList As New HashSet(Of String)
         'Iterate over all databases
         For databaseIndex As Integer = 0 To soundbankData.Dependencies.Length - 1
             Dim databaseFilePath As String = fso.BuildPath(WorkingDirectory & "\DataBases\", soundbankData.Dependencies(databaseIndex) & ".txt")
@@ -14,78 +84,16 @@ Partial Public Class ExporterForm
                 Dim databaseFile As DataBaseFile = textFileReaders.ReadDataBaseFile(databaseFilePath)
                 'Read all stored SFXs in this DataBase
                 For sfxIndex As Integer = 0 To databaseFile.Dependencies.Length - 1
-                    Dim sfxFileName As String = databaseFile.Dependencies(sfxIndex) & ".txt"
-                    Dim sfxFilePath As String = fso.BuildPath(WorkingDirectory & "\SFXs", sfxFileName)
-                    If fso.FileExists(sfxFilePath) Then
-                        If Not SfxDictionary.ContainsKey(sfxFileName) Then
-                            'Check for specific formats
-                            Dim sfxPlatformPath As String = fso.BuildPath(WorkingDirectory & "\SFXs\" & outPlatform, sfxFileName)
-                            If fso.FileExists(sfxPlatformPath) Then
-                                sfxFilePath = sfxPlatformPath
-                            End If
-                            'Read SFX
-                            Dim sfxFileData As SfxFile = textFileReaders.ReadSFXFile(sfxFilePath)
-                            Dim soundToAdd As New EXSound With {
-                                .HashCode = sfxFileData.HashCode,
-                                .Ducker = sfxFileData.Parameters.Ducker,
-                                .DuckerLength = sfxFileData.Parameters.DuckerLength,
-                                .Flags = GetSfxFlags(sfxFileData),
-                                .InnerRadius = sfxFileData.Parameters.InnerRadius,
-                                .MasterVolume = sfxFileData.Parameters.MasterVolume,
-                                .MaxDelay = sfxFileData.SamplePool.MaxDelay,
-                                .MaxVoices = sfxFileData.Parameters.MaxVoices,
-                                .MinDelay = sfxFileData.SamplePool.MinDelay,
-                                .OuterRadius = sfxFileData.Parameters.OuterRadius,
-                                .Priority = sfxFileData.Parameters.Priority,
-                                .ReverbSend = sfxFileData.Parameters.ReverbSend,
-                                .TrackingType = sfxFileData.Parameters.TrackingType,
-                                .HasSubSfx = sfxFileData.SamplePool.EnableSubSFX
-                            }
-                            For sampleIndex As Integer = 0 To sfxFileData.Samples.Count - 1
-                                Dim currentSample As Sample = sfxFileData.Samples(sampleIndex)
-                                Dim sampleToAdd As New EXSample With {
-                                    .FilePath = RelativePathToAbs(currentSample.FilePath),
-                                    .PitchOffset = currentSample.PitchOffset * 1024,
-                                    .RandomPitchOffset = currentSample.RandomPitchOffset * 1024,
-                                    .BaseVolume = currentSample.BaseVolume,
-                                    .RandomVolumeOffset = currentSample.RandomVolumeOffset,
-                                    .Pan = currentSample.Pan,
-                                    .RandomPan = currentSample.RandomPan
-                                }
-                                If Not sfxFileData.SamplePool.EnableSubSFX Then
-                                    'Check if this sample is streamed or not
-                                    Dim arraySearchResult As Integer = Array.IndexOf(streamsList, sampleToAdd.FilePath)
-                                    If arraySearchResult = -1 Then
-                                        samplesToInclude.Add(currentSample.FilePath)
-                                    End If
-                                End If
-                                'Add new sample to the dictionary
-                                soundToAdd.Samples.Add(sampleToAdd)
-                            Next
-                            'Calculate Ducker Length
-                            Dim duckerLength As Short = 0
-                            If soundToAdd.Ducker > 0 Then
-                                duckerLength = GetTotalCents(soundToAdd, outPlatform)
-                                If soundToAdd.DuckerLength < 0 Then
-                                    duckerLength -= Math.Abs(soundToAdd.DuckerLength)
-                                Else
-                                    duckerLength += Math.Abs(soundToAdd.DuckerLength)
-                                End If
-                            End If
-                            soundToAdd.DuckerLength = duckerLength
-                            'Add object to dictionary
-                            SfxDictionary.Add(sfxFileName, soundToAdd)
-                        End If
-                    End If
+                    SfxList.Add(databaseFile.Dependencies(sfxIndex) & ".txt")
                 Next
             End If
         Next
-    End Sub
+        Return SfxList.ToArray
+    End Function
 
     Private Sub GetSamplesDictionary(samplesToInclude As HashSet(Of String), SamplesDictionary As Dictionary(Of String, EXAudio), outPlatform As String, outputLanguage As String)
         Dim SamplesSortedArray As String() = samplesToInclude.ToArray
         Array.Sort(SamplesSortedArray)
-
         For sampleIndex As Integer = 0 To SamplesSortedArray.Length - 1
             Dim sampleRelPath As String = SamplesSortedArray(sampleIndex)
             'If starts with speech but doesn't match the current language, get the sample with the right language

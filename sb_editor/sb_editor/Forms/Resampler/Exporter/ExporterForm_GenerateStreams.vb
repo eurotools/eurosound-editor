@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports EngineXMarkersTool
 Imports NAudio.Wave
+Imports sb_editor.MarkerFunctions
 
 Partial Public Class ExporterForm
     Private Sub GenerateStreamFolder(streamSamplesList As String(), outLanguages As String(), outPlatforms As String())

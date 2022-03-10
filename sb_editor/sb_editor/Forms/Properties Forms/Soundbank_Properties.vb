@@ -1,5 +1,7 @@
 ﻿Imports System.IO
 Imports NAudio.Wave
+Imports sb_editor.ParsersObjects
+Imports sb_editor.ReaderClasses
 Imports Scripting
 
 Public Class Soundbank_Properties

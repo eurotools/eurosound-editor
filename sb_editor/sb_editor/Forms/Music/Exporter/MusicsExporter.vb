@@ -1,6 +1,8 @@
 ﻿Imports System.IO
 Imports EngineXMarkersTool
 Imports ESUtils.MusXBuild_MusicFile
+Imports sb_editor.HashTablesBuilder
+Imports sb_editor.ReaderClasses
 
 Partial Public Class MusicsExporter
     '*===============================================================================================

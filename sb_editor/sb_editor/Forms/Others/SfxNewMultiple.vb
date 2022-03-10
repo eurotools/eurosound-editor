@@ -1,5 +1,8 @@
 ﻿Imports System.Text.RegularExpressions
 Imports IniFileFunctions
+Imports sb_editor.ParsersObjects
+Imports sb_editor.ReaderClasses
+Imports sb_editor.WritersClasses
 
 Public Class SfxNewMultiple
     '*===============================================================================================
@@ -104,14 +107,14 @@ Public Class SfxNewMultiple
                     For Each waveFilePath As String In newSfx.Value
                         'Create new sample
                         Dim sampleObj As New Sample With {
-                        .FilePath = waveFilePath.Substring(Len(ProjectSettingsFile.MiscProps.SampleFileFolder & "\Master\")),
-                        .PitchOffset = sampleDefaultValues(0),
-                        .RandomPitchOffset = sampleDefaultValues(1),
-                        .BaseVolume = sampleDefaultValues(2),
-                        .RandomVolumeOffset = sampleDefaultValues(3),
-                        .Pan = sampleDefaultValues(4),
-                        .RandomPan = sampleDefaultValues(5)
-                    }
+                            .FilePath = waveFilePath.Substring(Len(ProjectSettingsFile.MiscProps.SampleFileFolder & "\Master\")),
+                            .PitchOffset = sampleDefaultValues(0),
+                            .RandomPitchOffset = sampleDefaultValues(1),
+                            .BaseVolume = sampleDefaultValues(2),
+                            .RandomVolumeOffset = sampleDefaultValues(3),
+                            .Pan = sampleDefaultValues(4),
+                            .RandomPan = sampleDefaultValues(5)
+                        }
                         'Add object to list
                         sfxFileData.Samples.Add(sampleObj)
                     Next

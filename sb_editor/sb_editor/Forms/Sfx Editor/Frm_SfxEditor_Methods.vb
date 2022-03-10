@@ -1,5 +1,6 @@
 ﻿Imports System.Media
 Imports NAudio.Wave
+Imports sb_editor.ParsersObjects
 
 Partial Public Class Frm_SfxEditor
     '*===============================================================================================

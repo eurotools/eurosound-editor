@@ -4,7 +4,7 @@ Imports System.Text.RegularExpressions
 Imports ESUtils.BytesFunctions
 Imports IniFileFunctions
 
-Module GenericFunctions
+Friend Module GenericFunctions
     '*===============================================================================================
     '* FORMAT INFO
     '*===============================================================================================
@@ -48,6 +48,12 @@ Module GenericFunctions
     '*===============================================================================================
     '* OTHER FUNCTIONS
     '*===============================================================================================
+    Friend Sub CreateFolderIfRequired(destinationFilePath As String)
+        If Not fso.FolderExists(destinationFilePath) Then
+            MkDir(destinationFilePath)
+        End If
+    End Sub
+
     Friend Sub EditWaveFile(waveFilePath As String)
         'Open tool if files exists
         If fso.FileExists(waveFilePath) AndAlso fso.FileExists(ProjAudioEditor) Then

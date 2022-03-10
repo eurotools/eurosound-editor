@@ -1,4 +1,5 @@
-﻿Imports Scripting
+﻿Imports sb_editor.ParsersObjects
+Imports Scripting
 
 Friend Module GlobalVariables
     Friend ReadOnly fso As New FileSystemObject

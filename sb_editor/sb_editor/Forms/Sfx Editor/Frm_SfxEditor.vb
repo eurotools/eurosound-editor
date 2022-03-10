@@ -1,4 +1,7 @@
 ﻿Imports System.Media
+Imports sb_editor.ParsersObjects
+Imports sb_editor.ReaderClasses
+Imports sb_editor.WritersClasses
 
 Partial Public Class Frm_SfxEditor
     '*===============================================================================================
@@ -46,9 +49,7 @@ Partial Public Class Frm_SfxEditor
 
         'Check if the misc folder exists
         Dim miscFolder As String = fso.BuildPath(WorkingDirectory, "SFXs\Misc")
-        If Not fso.FolderExists(miscFolder) Then
-            MkDir(miscFolder)
-        End If
+        CreateFolderIfRequired(miscFolder)
 
         'Add Common Tab Page
         Dim baseFilePath = fso.BuildPath(WorkingDirectory, "SFXs\" & sfxFileName & ".txt")
@@ -63,9 +64,7 @@ Partial Public Class Frm_SfxEditor
         For index As Integer = 0 To availablePlatforms.Length - 1
             'Create folder if not exists
             Dim folderPath As String = fso.BuildPath(WorkingDirectory, "SFXs\" & availablePlatforms(index))
-            If Not fso.FolderExists(folderPath) Then
-                MkDir(folderPath)
-            End If
+            CreateFolderIfRequired(folderPath)
             'Check if the request file exists
             baseFilePath = fso.BuildPath(folderPath, sfxFileName & ".txt")
             If fso.FileExists(baseFilePath) Then
@@ -468,13 +467,18 @@ Partial Public Class Frm_SfxEditor
     End Sub
 
     Private Sub Button_TestSfx_Click(sender As Object, e As EventArgs) Handles Button_TestSfx.Click
-        Dim filePath As String = sfxFilesData(TabControl_Platforms.SelectedTab.Text).filePath
-        CreateTestSFX(filePath)
-
+        'Start watcher
         Dim watch As New Stopwatch
         watch.Start()
-        TextBox_ScriptDebug.Clear()
+        'Create Test SoundBank
+        Dim filePath As String = sfxFilesData(TabControl_Platforms.SelectedTab.Text).filePath
+        CreateTestSFX(filePath)
+        'Stop watcher
+        watch.Stop()
+        TextBox_ScriptTime.Text = "ES Time " & watch.ElapsedMilliseconds
+
         'Start Process
+        TextBox_ScriptDebug.Clear()
         Dim procStartInfo As New ProcessStartInfo("SystemFiles\testSounds.cmd") With {
             .RedirectStandardOutput = True,
             .RedirectStandardError = True,
@@ -491,9 +495,6 @@ Partial Public Class Frm_SfxEditor
         AddHandler p.ErrorDataReceived, AddressOf OutputHandler
         p.Start()
         p.BeginOutputReadLine()
-        'Stop watcher
-        watch.Stop()
-        TextBox_ScriptTime.Text = "Script Time " & watch.ElapsedMilliseconds
     End Sub
 
     Private Sub OutputHandler(sendingProcess As Object, outLine As DataReceivedEventArgs)

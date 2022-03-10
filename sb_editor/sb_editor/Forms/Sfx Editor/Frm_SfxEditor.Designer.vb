@@ -167,20 +167,20 @@ Partial Class Frm_SfxEditor
         'TextBox_ScriptTime
         '
         Me.TextBox_ScriptTime.BackColor = System.Drawing.SystemColors.Window
-        Me.TextBox_ScriptTime.Location = New System.Drawing.Point(787, 345)
+        Me.TextBox_ScriptTime.Location = New System.Drawing.Point(787, 319)
         Me.TextBox_ScriptTime.Name = "TextBox_ScriptTime"
         Me.TextBox_ScriptTime.ReadOnly = True
         Me.TextBox_ScriptTime.Size = New System.Drawing.Size(100, 20)
-        Me.TextBox_ScriptTime.TabIndex = 23
+        Me.TextBox_ScriptTime.TabIndex = 22
         '
         'TextBox_ScriptDebug
         '
         Me.TextBox_ScriptDebug.BackColor = System.Drawing.SystemColors.Window
-        Me.TextBox_ScriptDebug.Location = New System.Drawing.Point(787, 319)
+        Me.TextBox_ScriptDebug.Location = New System.Drawing.Point(787, 345)
         Me.TextBox_ScriptDebug.Name = "TextBox_ScriptDebug"
         Me.TextBox_ScriptDebug.ReadOnly = True
         Me.TextBox_ScriptDebug.Size = New System.Drawing.Size(100, 20)
-        Me.TextBox_ScriptDebug.TabIndex = 22
+        Me.TextBox_ScriptDebug.TabIndex = 23
         '
         'Button_TestSfx
         '
