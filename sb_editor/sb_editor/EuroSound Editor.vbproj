@@ -293,12 +293,18 @@
     <Compile Include="Custom Controls\SfxControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Forms\Sfx Editor\Frm_SfxEditor_TestSoundbank.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\Splash\SplashScreen_Methods.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Splash\SplashScreen_ProjectMethods.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="HashTables Builder\FormatFunctions.vb" />
+    <Compile Include="HashTables Builder\MfxDefines.vb" />
+    <Compile Include="HashTables Builder\SfxDefines.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -481,10 +487,6 @@
     <ProjectReference Include="..\..\dll\EngineXMarkersTool\ExMarkersTool.csproj">
       <Project>{976e04c9-6b03-43f4-8cd5-3d1e8da18095}</Project>
       <Name>ExMarkersTool</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\dll\HashTablesBuilder\HashTablesBuilder.vbproj">
-      <Project>{7b4c1a2b-58b7-495b-a237-513559ade26b}</Project>
-      <Name>HashTablesBuilder</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\dll\IniFile\IniFileFunctions.vbproj">
       <Project>{37ceff5c-0be8-44da-ada0-7e176f09e5c7}</Project>

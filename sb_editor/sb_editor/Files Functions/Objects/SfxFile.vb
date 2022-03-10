@@ -6,6 +6,7 @@ Public Class SfxFile
     Public Samples As New BindingList(Of Sample)
     Public SamplePool As New SamplePoolControl
     Public HashCode As UInteger
+    Public filePath As String
 End Class
 
 Public Class SfxParameters

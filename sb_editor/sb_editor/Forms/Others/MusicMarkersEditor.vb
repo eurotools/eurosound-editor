@@ -40,7 +40,7 @@ Public Class MusicMarkersEditor
     '*===============================================================================================
     Private Sub Button_AddStartMarker_Click(sender As Object, e As EventArgs) Handles Button_AddStartMarker.Click
         If markersDictionary.ContainsKey(Numeric_MarkerPosition.Value) Then
-            MsgBox("Two markers can not contains the same position.", vbOKOnly + vbCritical, "EuroSound")
+            MsgBox("Two markers cannot contain the same position.", vbOKOnly + vbCritical, "EuroSound")
         Else
             Dim markerName As String = waveFileName & "_START"
             Dim markerIndex As Integer = 1
@@ -65,7 +65,7 @@ Public Class MusicMarkersEditor
 
     Private Sub Button_AddLoopMarker_Click(sender As Object, e As EventArgs) Handles Button_AddLoopMarker.Click
         If markersDictionary.ContainsKey(Numeric_MarkerPosition.Value) Then
-            MsgBox("Two markers can not contains the same position.", vbOKOnly + vbCritical, "EuroSound")
+            MsgBox("Two markers cannot contain the same position.", vbOKOnly + vbCritical, "EuroSound")
         Else
             Dim markerName As String = waveFileName & "_LOOP"
             loopMarker = markerName
@@ -90,7 +90,7 @@ Public Class MusicMarkersEditor
             MsgBox("The GOTO marker could not be added because a LOOP marker has not been found.", vbOKOnly + vbCritical, "EuroSound")
         Else
             If markersDictionary.ContainsKey(Numeric_MarkerPosition.Value) Then
-                MsgBox("Two markers can not contains the same position.", vbOKOnly + vbCritical, "EuroSound")
+                MsgBox("Two markers cannot contain the same position.", vbOKOnly + vbCritical, "EuroSound")
             Else
                 Dim markerName As String = "GOTO_" & waveFileName & "_LOOP"
                 If MarkerExistsInDictionary(markerName) Then
@@ -113,7 +113,7 @@ Public Class MusicMarkersEditor
 
     Private Sub Button_AddEndMarker_Click(sender As Object, e As EventArgs) Handles Button_AddEndMarker.Click
         If markersDictionary.ContainsKey(Numeric_MarkerPosition.Value) Then
-            MsgBox("Two markers can not contains the same position.", vbOKOnly + vbCritical, "EuroSound")
+            MsgBox("Two markers cannot contain the same position.", vbOKOnly + vbCritical, "EuroSound")
         Else
             If MarkerExistsInDictionary("*") Then
                 MsgBox("This music already contains a END marker.", vbOKOnly + vbCritical, "EuroSound")

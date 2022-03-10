@@ -47,7 +47,7 @@ Partial Public Class ExporterForm
                                     sampleRate = 22050
                                 End If
                                 CreateFolderIfRequired(fso.GetParentFolderName(outputFilePath))
-                                RunProcess("SystemFiles\Sox.exe", """" & sourceFilePath & """ -r " & sampleRate & " """ & outputFilePath & """")
+                                RunProcess("SystemFiles\Sox.exe", """" & sourceFilePath & """ -r " & sampleRate & " """ & outputFilePath & """  resample -qs 0.97")
                                 'IMA ADPCM For PC and Nintendo GameCube Formats
                                 If StrComp(currentPlatform, "PC") = 0 Or StrComp(currentPlatform, "GameCube") = 0 Then
                                     If StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
@@ -55,9 +55,10 @@ Partial Public Class ExporterForm
                                         CreateFolderIfRequired(fso.GetParentFolderName(ImaOutputFilePath))
                                         'Resampled wav
                                         Dim smdFilePath As String = Path.ChangeExtension(ImaOutputFilePath, ".smd")
-                                        RunProcess("SystemFiles\Sox.exe", """" & sourceFilePath & """ -t raw -r " & sampleRate & " -c 1 -s """ & smdFilePath & """")
+                                        RunProcess("SystemFiles\Sox.exe", """" & outputFilePath & """ -t raw """ & smdFilePath & """")
                                         'Wave to ima
-                                        RunProcess("SystemFiles\Sox.exe", "-t raw -w -s -r " & sampleRate & " -c 1 """ & smdFilePath & """ -t ima """ & Path.ChangeExtension(ImaOutputFilePath, ".ssp") & """")
+                                        Dim imaData As Byte() = ESUtils.ImaCodec.Encode(ConvertByteArrayToShortArray(File.ReadAllBytes(smdFilePath)))
+                                        File.WriteAllBytes(Path.ChangeExtension(ImaOutputFilePath, ".ssp"), imaData)
                                     End If
                                 End If
                                 'DSP for Nintendo GameCube
@@ -79,9 +80,7 @@ Partial Public Class ExporterForm
                                     End Using
                                     'Execute Dsp Adpcm Tool
                                     RunProcess("SystemFiles\DspCodec.exe", dspToolArgs)
-                                End If
-                                'Sony VAG for PlayStation 2
-                                If StrComp(currentPlatform, "PlayStation2") = 0 Then
+                                ElseIf StrComp(currentPlatform, "PlayStation2") = 0 Then 'Sony VAG for PlayStation 2
                                     Dim vagOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\PlayStation2_VAG", sampleRelativePath), ".vag")
                                     CreateFolderIfRequired(fso.GetParentFolderName(vagOutputFilePath))
                                     'Default arguments
@@ -100,9 +99,7 @@ Partial Public Class ExporterForm
                                     End Using
                                     'Execute Vag Tool
                                     RunProcess("SystemFiles\VagCodec.exe", vagToolArgs)
-                                End If
-                                'Xbox ADPCM for Xbox
-                                If StrComp(currentPlatform, "X Box") = 0 Or StrComp(currentPlatform, "Xbox") = 0 Then
+                                ElseIf StrComp(currentPlatform, "X Box") = 0 Or StrComp(currentPlatform, "Xbox") = 0 Then 'Xbox ADPCM for Xbox
                                     Dim xboxOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\XBox_adpcm", sampleRelativePath), ".adpcm")
                                     CreateFolderIfRequired(fso.GetParentFolderName(xboxOutputFilePath))
                                     'Execute Dsp Adpcm Tool
@@ -117,4 +114,13 @@ Partial Public Class ExporterForm
             Next
         End If
     End Sub
+
+    Private Function ConvertByteArrayToShortArray(PCMData As Byte()) As Short()
+        Dim samplesShort As Short() = New Short(PCMData.Length / 2 - 1) {}
+        Dim sourceWaveBuffer As New WaveBuffer(PCMData)
+        For i As Integer = 0 To samplesShort.Length - 1
+            samplesShort(i) = sourceWaveBuffer.ShortBuffer(i)
+        Next
+        Return samplesShort
+    End Function
 End Class

@@ -202,6 +202,7 @@ Partial Public Class FileParsers
         FileClose(1)
         'Add samples to the final object
         sfxObj.Samples = samplesList
+        sfxObj.filePath = textFilePath
         Return sfxObj
     End Function
 End Class

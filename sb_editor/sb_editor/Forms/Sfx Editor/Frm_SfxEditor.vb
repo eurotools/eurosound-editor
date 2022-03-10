@@ -1,5 +1,4 @@
 ﻿Imports System.Media
-Imports System.Text
 
 Partial Public Class Frm_SfxEditor
     '*===============================================================================================
@@ -469,6 +468,9 @@ Partial Public Class Frm_SfxEditor
     End Sub
 
     Private Sub Button_TestSfx_Click(sender As Object, e As EventArgs) Handles Button_TestSfx.Click
+        Dim filePath As String = sfxFilesData(TabControl_Platforms.SelectedTab.Text).filePath
+        CreateTestSFX(filePath)
+
         Dim watch As New Stopwatch
         watch.Start()
         TextBox_ScriptDebug.Clear()

@@ -77,7 +77,7 @@ Partial Class SfxMultiEditor
         Me.ListView_SfxFiles.HideSelection = False
         Me.ListView_SfxFiles.Location = New System.Drawing.Point(12, 12)
         Me.ListView_SfxFiles.Name = "ListView_SfxFiles"
-        Me.ListView_SfxFiles.Size = New System.Drawing.Size(1248, 464)
+        Me.ListView_SfxFiles.Size = New System.Drawing.Size(1257, 492)
         Me.ListView_SfxFiles.TabIndex = 0
         Me.ListView_SfxFiles.UseCompatibleStateImageBehavior = False
         Me.ListView_SfxFiles.View = System.Windows.Forms.View.Details
@@ -155,7 +155,7 @@ Partial Class SfxMultiEditor
         'Numeric_Reverb
         '
         Me.Numeric_Reverb.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Numeric_Reverb.Location = New System.Drawing.Point(206, 483)
+        Me.Numeric_Reverb.Location = New System.Drawing.Point(206, 511)
         Me.Numeric_Reverb.Name = "Numeric_Reverb"
         Me.Numeric_Reverb.Size = New System.Drawing.Size(77, 20)
         Me.Numeric_Reverb.TabIndex = 1
@@ -166,7 +166,7 @@ Partial Class SfxMultiEditor
         Me.ComboBox_TrackingType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_TrackingType.FormattingEnabled = True
         Me.ComboBox_TrackingType.Items.AddRange(New Object() {"2d", "Amb", "3d", "3d No:HRTF", "2d PL2"})
-        Me.ComboBox_TrackingType.Location = New System.Drawing.Point(289, 482)
+        Me.ComboBox_TrackingType.Location = New System.Drawing.Point(289, 510)
         Me.ComboBox_TrackingType.Name = "ComboBox_TrackingType"
         Me.ComboBox_TrackingType.Size = New System.Drawing.Size(84, 21)
         Me.ComboBox_TrackingType.TabIndex = 2
@@ -174,7 +174,7 @@ Partial Class SfxMultiEditor
         'Numeric_InnerRadius
         '
         Me.Numeric_InnerRadius.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Numeric_InnerRadius.Location = New System.Drawing.Point(379, 483)
+        Me.Numeric_InnerRadius.Location = New System.Drawing.Point(379, 511)
         Me.Numeric_InnerRadius.Maximum = New Decimal(New Integer() {500, 0, 0, 0})
         Me.Numeric_InnerRadius.Name = "Numeric_InnerRadius"
         Me.Numeric_InnerRadius.Size = New System.Drawing.Size(74, 20)
@@ -183,7 +183,7 @@ Partial Class SfxMultiEditor
         'Numeric_OuterRadius
         '
         Me.Numeric_OuterRadius.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Numeric_OuterRadius.Location = New System.Drawing.Point(459, 483)
+        Me.Numeric_OuterRadius.Location = New System.Drawing.Point(459, 511)
         Me.Numeric_OuterRadius.Maximum = New Decimal(New Integer() {500, 0, 0, 0})
         Me.Numeric_OuterRadius.Name = "Numeric_OuterRadius"
         Me.Numeric_OuterRadius.Size = New System.Drawing.Size(77, 20)
@@ -192,7 +192,7 @@ Partial Class SfxMultiEditor
         'Numeric_MaxVoices
         '
         Me.Numeric_MaxVoices.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Numeric_MaxVoices.Location = New System.Drawing.Point(542, 483)
+        Me.Numeric_MaxVoices.Location = New System.Drawing.Point(542, 511)
         Me.Numeric_MaxVoices.Name = "Numeric_MaxVoices"
         Me.Numeric_MaxVoices.Size = New System.Drawing.Size(72, 20)
         Me.Numeric_MaxVoices.TabIndex = 5
@@ -203,7 +203,7 @@ Partial Class SfxMultiEditor
         Me.ComboBox_Steal.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_Steal.FormattingEnabled = True
         Me.ComboBox_Steal.Items.AddRange(New Object() {"True", "False"})
-        Me.ComboBox_Steal.Location = New System.Drawing.Point(620, 482)
+        Me.ComboBox_Steal.Location = New System.Drawing.Point(620, 510)
         Me.ComboBox_Steal.Name = "ComboBox_Steal"
         Me.ComboBox_Steal.Size = New System.Drawing.Size(74, 21)
         Me.ComboBox_Steal.TabIndex = 6
@@ -211,7 +211,7 @@ Partial Class SfxMultiEditor
         'Numeric_Priority
         '
         Me.Numeric_Priority.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Numeric_Priority.Location = New System.Drawing.Point(700, 483)
+        Me.Numeric_Priority.Location = New System.Drawing.Point(700, 511)
         Me.Numeric_Priority.Name = "Numeric_Priority"
         Me.Numeric_Priority.Size = New System.Drawing.Size(73, 20)
         Me.Numeric_Priority.TabIndex = 7
@@ -219,7 +219,7 @@ Partial Class SfxMultiEditor
         'Numeric_Alertness
         '
         Me.Numeric_Alertness.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Numeric_Alertness.Location = New System.Drawing.Point(779, 483)
+        Me.Numeric_Alertness.Location = New System.Drawing.Point(779, 511)
         Me.Numeric_Alertness.Name = "Numeric_Alertness"
         Me.Numeric_Alertness.Size = New System.Drawing.Size(73, 20)
         Me.Numeric_Alertness.TabIndex = 8
@@ -227,7 +227,7 @@ Partial Class SfxMultiEditor
         'Numeric_Ducker
         '
         Me.Numeric_Ducker.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Numeric_Ducker.Location = New System.Drawing.Point(858, 483)
+        Me.Numeric_Ducker.Location = New System.Drawing.Point(858, 511)
         Me.Numeric_Ducker.Name = "Numeric_Ducker"
         Me.Numeric_Ducker.Size = New System.Drawing.Size(75, 20)
         Me.Numeric_Ducker.TabIndex = 9
@@ -235,7 +235,7 @@ Partial Class SfxMultiEditor
         'Numeric_DuckerLength
         '
         Me.Numeric_DuckerLength.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Numeric_DuckerLength.Location = New System.Drawing.Point(939, 483)
+        Me.Numeric_DuckerLength.Location = New System.Drawing.Point(939, 511)
         Me.Numeric_DuckerLength.Maximum = New Decimal(New Integer() {32767, 0, 0, 0})
         Me.Numeric_DuckerLength.Minimum = New Decimal(New Integer() {32768, 0, 0, -2147483648})
         Me.Numeric_DuckerLength.Name = "Numeric_DuckerLength"
@@ -245,7 +245,7 @@ Partial Class SfxMultiEditor
         'Numeric_MasterVolume
         '
         Me.Numeric_MasterVolume.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Numeric_MasterVolume.Location = New System.Drawing.Point(1020, 483)
+        Me.Numeric_MasterVolume.Location = New System.Drawing.Point(1020, 511)
         Me.Numeric_MasterVolume.Name = "Numeric_MasterVolume"
         Me.Numeric_MasterVolume.Size = New System.Drawing.Size(75, 20)
         Me.Numeric_MasterVolume.TabIndex = 11
@@ -256,7 +256,7 @@ Partial Class SfxMultiEditor
         Me.ComboBox_UnderWater.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_UnderWater.FormattingEnabled = True
         Me.ComboBox_UnderWater.Items.AddRange(New Object() {"False", "True"})
-        Me.ComboBox_UnderWater.Location = New System.Drawing.Point(1101, 482)
+        Me.ComboBox_UnderWater.Location = New System.Drawing.Point(1101, 510)
         Me.ComboBox_UnderWater.Name = "ComboBox_UnderWater"
         Me.ComboBox_UnderWater.Size = New System.Drawing.Size(74, 21)
         Me.ComboBox_UnderWater.TabIndex = 12
@@ -267,7 +267,7 @@ Partial Class SfxMultiEditor
         Me.ComboBox_StealLouder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_StealLouder.FormattingEnabled = True
         Me.ComboBox_StealLouder.Items.AddRange(New Object() {"False", "True"})
-        Me.ComboBox_StealLouder.Location = New System.Drawing.Point(1181, 482)
+        Me.ComboBox_StealLouder.Location = New System.Drawing.Point(1181, 510)
         Me.ComboBox_StealLouder.Name = "ComboBox_StealLouder"
         Me.ComboBox_StealLouder.Size = New System.Drawing.Size(74, 21)
         Me.ComboBox_StealLouder.TabIndex = 13
@@ -277,9 +277,9 @@ Partial Class SfxMultiEditor
         Me.GroupBox_LockedToAllFormats.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox_LockedToAllFormats.Controls.Add(Me.CheckBox_ApplyToAllFormats)
-        Me.GroupBox_LockedToAllFormats.Location = New System.Drawing.Point(206, 509)
+        Me.GroupBox_LockedToAllFormats.Location = New System.Drawing.Point(206, 537)
         Me.GroupBox_LockedToAllFormats.Name = "GroupBox_LockedToAllFormats"
-        Me.GroupBox_LockedToAllFormats.Size = New System.Drawing.Size(973, 45)
+        Me.GroupBox_LockedToAllFormats.Size = New System.Drawing.Size(982, 45)
         Me.GroupBox_LockedToAllFormats.TabIndex = 14
         Me.GroupBox_LockedToAllFormats.TabStop = False
         Me.GroupBox_LockedToAllFormats.Text = "Locked To All Formats"
@@ -300,7 +300,7 @@ Partial Class SfxMultiEditor
         'Button_Ok
         '
         Me.Button_Ok.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_Ok.Location = New System.Drawing.Point(1185, 524)
+        Me.Button_Ok.Location = New System.Drawing.Point(1194, 552)
         Me.Button_Ok.Name = "Button_Ok"
         Me.Button_Ok.Size = New System.Drawing.Size(75, 23)
         Me.Button_Ok.TabIndex = 15
@@ -311,7 +311,7 @@ Partial Class SfxMultiEditor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1272, 558)
+        Me.ClientSize = New System.Drawing.Size(1281, 586)
         Me.Controls.Add(Me.Button_Ok)
         Me.Controls.Add(Me.GroupBox_LockedToAllFormats)
         Me.Controls.Add(Me.ComboBox_StealLouder)
@@ -328,7 +328,6 @@ Partial Class SfxMultiEditor
         Me.Controls.Add(Me.ComboBox_TrackingType)
         Me.Controls.Add(Me.Numeric_Reverb)
         Me.Controls.Add(Me.ListView_SfxFiles)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False

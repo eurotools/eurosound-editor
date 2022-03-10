@@ -85,11 +85,22 @@ namespace ESUtils
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static int RuleOfThreeLoopOffset(int masterFreq, int ConvertedFreq, int masterLoopOffset)
+        public static decimal RuleOfThreeLoopOffset(int masterFreq, int ConvertedFreq, int masterLoopOffset)
         {
             decimal compressFactor = decimal.Divide(masterFreq, ConvertedFreq);
             decimal loopOffset = decimal.Divide(masterLoopOffset, compressFactor);
-            return (int)loopOffset;
+            return loopOffset;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public static uint GetXboxAlignedNumber(uint inputValue)
+        {
+            uint alignedNumber = 0;
+            if (inputValue > 31)
+            {
+                alignedNumber = (((inputValue - 32) / 64) + 1) * 36;
+            }
+            return alignedNumber;
         }
     }
 
