@@ -128,6 +128,7 @@ Partial Public Class MusicMaker
             'Update Global var
             MFXHashCodeNumber += 1
         Next
+        writers.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
         ListView_MusicFiles.EndUpdate()
     End Sub
 

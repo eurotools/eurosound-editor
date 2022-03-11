@@ -211,15 +211,12 @@ Namespace ReaderClasses
             Return sfxObj
         End Function
 
-        Public Function ReadSFXFileExport(textFilePath As String, outPlatform As String, SfxDictionary As SortedDictionary(Of String, EXSound), samplesToInclude As HashSet(Of String), streamsList As String(), Optional testMode As Boolean = False) As EXSound
+        Public Function ReadSFXFileExport(textFilePath As String, outPlatform As String, samplesToInclude As HashSet(Of String), streamsList As String(), Optional testMode As Boolean = False) As EXSound
             Dim waveReadFunctions As New WaveFunctions
 
             'Create a new object to store the data
             Dim sfxObj As New EXSound
-            'Create list of samples
             Dim samplesList As New List(Of EXSample)
-
-            'Boolean
             Dim flagsArray As Boolean() = New Boolean(12) {}
 
             'Open file and read it
@@ -365,6 +362,7 @@ Namespace ReaderClasses
                                         sfxObj.MaxDelay = CInt(lineData(1))
                                     Case "ENABLESUBSFX"
                                         flagsArray(10) = lineData(1).Equals("1")
+                                        sfxObj.HasSubSfx = flagsArray(10)
                                 End Select
                                 'Continue Reading
                                 currentLine = Trim(LineInput(1))

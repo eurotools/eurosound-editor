@@ -27,6 +27,7 @@ Partial Public Class MainFrame
         writers.UpdateSoundbankFile(soundbankObj, fso.BuildPath(WorkingDirectory, "Soundbanks\" & soundbankName & ".txt"), textFileReaders)
         'Update global var
         SoundBankHashCodeNumber += 1
+        writers.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
         'Sort control
         TreeView_SoundBanks.Sort()
         'Expand node
@@ -49,6 +50,7 @@ Partial Public Class MainFrame
         writers.UpdateSoundbankFile(soundbankFileData, fso.BuildPath(WorkingDirectory, "Soundbanks\" & soundbankName & ".txt"), textFileReaders)
         'Update global var
         SoundBankHashCodeNumber += 1
+        writers.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
         'Sort control
         TreeView_SoundBanks.Sort()
         'Expand node

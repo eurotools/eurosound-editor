@@ -260,6 +260,7 @@ Public Class UserControl_SFXs
                 If (hashCodePosition < fileContent.Length) Then
                     fileContent(hashCodePosition) = "HashCodeNumber " & SFXHashCodeNumber
                     SFXHashCodeNumber += 1
+                    writers.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
                     'Write new file
                     File.WriteAllLines(fso.BuildPath(WorkingDirectory, "SFXs\" & sfxCopyName & ".txt"), fileContent)
                     ListBox_SFXs.Items.Add(sfxCopyName)

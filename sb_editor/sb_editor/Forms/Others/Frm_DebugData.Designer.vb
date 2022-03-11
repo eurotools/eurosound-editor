@@ -55,6 +55,7 @@ Partial Class Frm_DebugData
         '
         'Frm_DebugData
         '
+        Me.AcceptButton = Me.Button_Ok
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(409, 394)

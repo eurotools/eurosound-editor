@@ -20,59 +20,8 @@ Namespace SoundBanksExporterFunctions
                         sfxFilePath = sfxPlatformPath
                     End If
                     'Read SFX
-                    Dim sfxFileData As SfxFile = textFileReaders.ReadSFXFile(sfxFilePath)
-                    Dim soundToAdd As New EXSound With {
-                        .HashCode = sfxFileData.HashCode,
-                        .Ducker = sfxFileData.Parameters.Ducker,
-                        .DuckerLength = sfxFileData.Parameters.DuckerLength,
-                        .Flags = GetSfxFlags(sfxFileData),
-                        .InnerRadius = sfxFileData.Parameters.InnerRadius,
-                        .MasterVolume = sfxFileData.Parameters.MasterVolume,
-                        .MaxDelay = sfxFileData.SamplePool.MaxDelay,
-                        .MaxVoices = sfxFileData.Parameters.MaxVoices,
-                        .MinDelay = sfxFileData.SamplePool.MinDelay,
-                        .OuterRadius = sfxFileData.Parameters.OuterRadius,
-                        .Priority = sfxFileData.Parameters.Priority,
-                        .ReverbSend = sfxFileData.Parameters.ReverbSend,
-                        .TrackingType = sfxFileData.Parameters.TrackingType,
-                        .HasSubSfx = sfxFileData.SamplePool.EnableSubSFX
-                    }
-                    For sampleIndex As Integer = 0 To sfxFileData.Samples.Count - 1
-                        Dim currentSample As Sample = sfxFileData.Samples(sampleIndex)
-                        Dim sampleToAdd As New EXSample With {
-                            .FilePath = RelativePathToAbs(currentSample.FilePath),
-                            .PitchOffset = currentSample.PitchOffset * 1024,
-                            .RandomPitchOffset = currentSample.RandomPitchOffset * 1024,
-                            .BaseVolume = currentSample.BaseVolume,
-                            .RandomVolumeOffset = currentSample.RandomVolumeOffset,
-                            .Pan = currentSample.Pan,
-                            .RandomPan = currentSample.RandomPan
-                        }
-                        If Not sfxFileData.SamplePool.EnableSubSFX Then
-                            'Check if this sample is streamed or not
-                            Dim arraySearchResult As Integer = Array.IndexOf(streamsList, sampleToAdd.FilePath)
-                            If arraySearchResult = -1 Then
-                                samplesToInclude.Add(currentSample.FilePath)
-                            End If
-                        End If
-                        'Add new sample to the dictionary
-                        soundToAdd.Samples.Add(sampleToAdd)
-                    Next
-                    'Calculate Ducker Length
-                    Dim duckerLength As Short = 0
-                    If soundToAdd.Ducker > 0 Then
-                        duckerLength = GetTotalCents(soundToAdd, outPlatform)
-                        If soundToAdd.DuckerLength < 0 Then
-                            duckerLength -= Math.Abs(soundToAdd.DuckerLength)
-                        Else
-                            duckerLength += Math.Abs(soundToAdd.DuckerLength)
-                        End If
-                    End If
-                    soundToAdd.DuckerLength = duckerLength
-                    'Check testmode
-                    If testMode Then
-                        soundToAdd.HashCode = 3
-                    End If
+                    Dim soundToAdd As EXSound = textFileReaders.ReadSFXFileExport(sfxFilePath, outPlatform, samplesToInclude, streamsList, testMode)
+
                     'Add object to dictionary
                     SfxDictionary.Add(sfxFileName, soundToAdd)
                 End If
@@ -223,60 +172,6 @@ Namespace SoundBanksExporterFunctions
                 End Using
             End If
             Return newAudioObj
-        End Function
-
-        Friend Function GetSfxFlags(sfxFileToCheck As SfxFile) As Short
-            'Get Flags
-            Dim selectedFlags As Short = 0
-            'maxReject
-            If sfxFileToCheck.Parameters.Action1 = 1 Then
-                selectedFlags = selectedFlags Or (1 << 0)
-            End If
-            'ignoreAge
-            If sfxFileToCheck.Parameters.IgnoreAge Then
-                selectedFlags = selectedFlags Or (1 << 2)
-            End If
-            'multiSample
-            If sfxFileToCheck.SamplePool.Action1 = 1 Then
-                selectedFlags = selectedFlags Or (1 << 3)
-            End If
-            'randomPick
-            If sfxFileToCheck.SamplePool.RandomPick Then
-                selectedFlags = selectedFlags Or (1 << 4)
-            End If
-            'shuffled
-            If sfxFileToCheck.SamplePool.Shuffled Then
-                selectedFlags = selectedFlags Or (1 << 5)
-            End If
-            'loop
-            If sfxFileToCheck.SamplePool.isLooped Then
-                selectedFlags = selectedFlags Or (1 << 6)
-            End If
-            'polyphonic
-            If sfxFileToCheck.SamplePool.Polyphonic Then
-                selectedFlags = selectedFlags Or (1 << 7)
-            End If
-            'underWater
-            If sfxFileToCheck.Parameters.Outdoors Then
-                selectedFlags = selectedFlags Or (1 << 8)
-            End If
-            'pauseInNis
-            If sfxFileToCheck.Parameters.PauseInNis Then
-                selectedFlags = selectedFlags Or (1 << 9)
-            End If
-            'hasSubSfx
-            If sfxFileToCheck.SamplePool.EnableSubSFX Then
-                selectedFlags = selectedFlags Or (1 << 10)
-            End If
-            'stealOnLouder
-            If sfxFileToCheck.Parameters.StealOnAge Then
-                selectedFlags = selectedFlags Or (1 << 11)
-            End If
-            'treatLikeMusic
-            If sfxFileToCheck.Parameters.MusicType Then
-                selectedFlags = selectedFlags Or (1 << 12)
-            End If
-            Return selectedFlags
         End Function
 
         Friend Function GetFlagsFromNumber(checkedFlags As Boolean()) As Short

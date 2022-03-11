@@ -127,11 +127,11 @@ Partial Public Class ExporterForm
                 mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Re-Sample Times" & vbCrLf)
                 mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "---------------" & vbCrLf)
                 mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "" & vbCrLf)
-                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "SoxTime " & SoxTimer.ElapsedMilliseconds & vbCrLf)
-                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "PCTime " & PCTimer.ElapsedMilliseconds & vbCrLf)
-                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "GCTime " & GCTimer.ElapsedMilliseconds & vbCrLf)
-                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "XBTime " & XboxTimer.ElapsedMilliseconds & vbCrLf)
-                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "PSTime " & PlayStationTimer.ElapsedMilliseconds & vbCrLf)
+                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "SoxTime " & SoxTimer.Elapsed.TotalMilliseconds.ToString.TrimStart("0"c) & vbCrLf)
+                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "PCTime " & PCTimer.Elapsed.TotalMilliseconds.ToString.TrimStart("0"c) & vbCrLf)
+                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "GCTime " & GCTimer.Elapsed.TotalMilliseconds.ToString.TrimStart("0"c) & vbCrLf)
+                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "XBTime " & XboxTimer.Elapsed.TotalMilliseconds.ToString.TrimStart("0"c) & vbCrLf)
+                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "PSTime " & PlayStationTimer.Elapsed.TotalMilliseconds.ToString.TrimStart("0"c) & vbCrLf)
                 mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += vbCrLf)
             End If
         End If

@@ -114,10 +114,10 @@ Partial Public Class ExporterForm
                         End If
 
                         'Show debug info
-                        mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Total   = " & timerTotalTime.ElapsedMilliseconds & vbCrLf)
-                        mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Query   = " & timerQuery.ElapsedMilliseconds & vbCrLf)
-                        mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "SFXDate = " & timerSfxData.ElapsedMilliseconds & vbCrLf)
-                        mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Samples = " & timerSamples.ElapsedMilliseconds & vbCrLf)
+                        mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Total   = " & timerTotalTime.Elapsed.TotalMilliseconds.ToString.TrimStart("0"c) & vbCrLf)
+                        mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Query   = " & timerQuery.Elapsed.TotalMilliseconds.ToString.TrimStart("0"c) & vbCrLf)
+                        mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "SFXDate = " & timerSfxData.Elapsed.TotalMilliseconds.ToString.TrimStart("0"c) & vbCrLf)
+                        mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Samples = " & timerSamples.Elapsed.TotalMilliseconds.ToString.TrimStart("0"c) & vbCrLf)
                         mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += vbCrLf)
                     Next
                 Next
