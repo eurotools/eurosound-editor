@@ -86,8 +86,10 @@ Partial Public Class MusicMaker
         Next
         'Open Exporter Form
         If outputTable.Rows.Count > 0 AndAlso outputFormats.Count > 0 Then
+            Hide()
             Dim exporterTool As New MusicsExporter(outputTable, outputFormats.ToArray, CheckBox_MarkerFileOnly.Checked, Me, hashCodesDict)
             exporterTool.ShowDialog()
+            Show()
         End If
     End Sub
 

@@ -759,15 +759,19 @@ Partial Public Class MainFrame
         'Clear textbox
         Textbox_DebugInfo.Clear()
         'Open Resample Form
+        Hide()
         Dim taskForm As New ExporterForm(False)
         taskForm.ShowDialog()
+        Show()
     End Sub
 
     Private Sub Button_QuickOutput_Click(sender As Object, e As EventArgs) Handles Button_QuickOutput.Click
         'Clear textbox
         Textbox_DebugInfo.Clear()
         'Open Resample Form
+        Hide()
         Dim taskForm As New ExporterForm(True)
         taskForm.ShowDialog()
+        Show()
     End Sub
 End Class

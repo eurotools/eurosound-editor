@@ -36,9 +36,6 @@ Partial Public Class MusicsExporter
     End Sub
 
     Private Sub MusicsExporter_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'Hide parent form
-        parentMusicForm.Hide()
-
         'Start process
         If Not BackgroundWorker.IsBusy Then
             BackgroundWorker.RunWorkerAsync()
@@ -250,8 +247,6 @@ Partial Public Class MusicsExporter
     End Sub
 
     Private Sub BackgroundWorker_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker.RunWorkerCompleted
-        'Show parent form
-        parentMusicForm.Show()
         'Close task form
         canCloseForm = True
         Close()

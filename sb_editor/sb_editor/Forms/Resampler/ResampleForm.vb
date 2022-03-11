@@ -9,8 +9,8 @@ Partial Public Class ResampleForm
     '*===============================================================================================
     'Private ReadOnly sampleRateFormats As New Dictionary(Of Integer, String())
     Private promptSave As Boolean = True
+    Private dataTableInfo As DataTable
     Private ReadOnly writers As New FileWriters
-    Private ReadOnly dataTableInfo As DataTable
     Private ReadOnly textFileReaders As New FileParsers
 
     '*===============================================================================================
@@ -55,7 +55,7 @@ Partial Public Class ResampleForm
 
         'Show elapsed time
         stopwatch.Stop()
-        TextBox_BootupTime.Text = "Bootup Time =  " & stopwatch.ElapsedTicks
+        TextBox_BootupTime.Text = "Bootup Time =  " & stopwatch.Elapsed.TotalMilliseconds
 
         'Set cursor as default arrow
         Cursor.Current = Cursors.Default
@@ -340,5 +340,44 @@ Partial Public Class ResampleForm
         For Each itemToDelete As ListViewItem In ListView_Samples.SelectedItems
             itemToDelete.Remove()
         Next
+    End Sub
+
+    '*===============================================================================================
+    '* PURGE BUTTONS
+    '*===============================================================================================
+    Private Sub Button_MakePurgeList_Click(sender As Object, e As EventArgs) Handles Button_MakePurgeList.Click
+        Dim purgeListMaker As New Frm_MakePurgeList
+        purgeListMaker.ShowDialog()
+        Show()
+    End Sub
+
+    Private Sub Button_ViewPurgedList_Click(sender As Object, e As EventArgs) Handles Button_ViewPurgedList.Click
+        Dim purgeListFilePath As String = fso.BuildPath(WorkingDirectory, "Report\Last_Purge.txt")
+        If fso.FileExists(purgeListFilePath) Then
+            If fso.FileExists(ProjTextEditor) Then
+                RunProcess(ProjTextEditor, purgeListFilePath)
+            Else
+                MsgBox("No Text Editor setup." & vbCrLf & "Use Properties form to setup one.", vbOKOnly + vbExclamation, "EuroSound")
+            End If
+        Else
+            MsgBox("No Purge file found", vbOKOnly + vbExclamation, "EuroSound")
+        End If
+    End Sub
+
+    Private Sub Button_PurgeGo_Click(sender As Object, e As EventArgs) Handles Button_PurgeGo.Click
+        Dim diagResult As MsgBoxResult = MsgBox("Are you Sure You want to Purge UnUsed Files?", vbYesNo + vbQuestion, "Confirm Purge")
+        If diagResult = MsgBoxResult.Yes Then
+            Dim purgeGoForm As New Frm_PurgeGo()
+            purgeGoForm.ShowDialog()
+            Show()
+            'Update Listview 
+            ListView_Samples.BeginUpdate()
+            ListView_Samples.Items.Clear()
+            dataTableInfo = textFileReaders.SamplesFileToDatatable(SysFileSamples)
+            DataTableToListView()
+            ListView_Samples.EndUpdate()
+            'Update Counter
+            Label_SampleCount.Text = "Sample Count: " & ListView_Samples.Items.Count
+        End If
     End Sub
 End Class

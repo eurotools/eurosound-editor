@@ -67,6 +67,9 @@ Partial Class ResampleForm
         Me.Col_ReSmp2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.Col_ReSmp3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.Col_ReSmp5 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.Button_MakePurgeList = New System.Windows.Forms.Button()
+        Me.Button_ViewPurgedList = New System.Windows.Forms.Button()
+        Me.Button_PurgeGo = New System.Windows.Forms.Button()
         Me.GroupBox_ProjectPath.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -296,6 +299,7 @@ Partial Class ResampleForm
         Me.Button1.TabIndex = 14
         Me.Button1.Text = "Fix"
         Me.Button1.UseVisualStyleBackColor = True
+        Me.Button1.Visible = False
         '
         'ContextMenu_SampleOptions
         '
@@ -325,6 +329,7 @@ Partial Class ResampleForm
         Me.Button2.TabIndex = 15
         Me.Button2.Text = "Button2"
         Me.Button2.UseVisualStyleBackColor = True
+        Me.Button2.Visible = False
         '
         'TextBox_BootupTime
         '
@@ -406,6 +411,36 @@ Partial Class ResampleForm
         Me.Col_ReSmp5.Text = "ReSmp4"
         Me.Col_ReSmp5.Width = 80
         '
+        'Button_MakePurgeList
+        '
+        Me.Button_MakePurgeList.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Button_MakePurgeList.Location = New System.Drawing.Point(12, 599)
+        Me.Button_MakePurgeList.Name = "Button_MakePurgeList"
+        Me.Button_MakePurgeList.Size = New System.Drawing.Size(95, 23)
+        Me.Button_MakePurgeList.TabIndex = 16
+        Me.Button_MakePurgeList.Text = "Make Purge List"
+        Me.Button_MakePurgeList.UseVisualStyleBackColor = True
+        '
+        'Button_ViewPurgedList
+        '
+        Me.Button_ViewPurgedList.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Button_ViewPurgedList.Location = New System.Drawing.Point(113, 599)
+        Me.Button_ViewPurgedList.Name = "Button_ViewPurgedList"
+        Me.Button_ViewPurgedList.Size = New System.Drawing.Size(95, 23)
+        Me.Button_ViewPurgedList.TabIndex = 17
+        Me.Button_ViewPurgedList.Text = "View Purged List"
+        Me.Button_ViewPurgedList.UseVisualStyleBackColor = True
+        '
+        'Button_PurgeGo
+        '
+        Me.Button_PurgeGo.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Button_PurgeGo.Location = New System.Drawing.Point(214, 599)
+        Me.Button_PurgeGo.Name = "Button_PurgeGo"
+        Me.Button_PurgeGo.Size = New System.Drawing.Size(95, 23)
+        Me.Button_PurgeGo.TabIndex = 18
+        Me.Button_PurgeGo.Text = "Purge Go"
+        Me.Button_PurgeGo.UseVisualStyleBackColor = True
+        '
         'ResampleForm
         '
         Me.AcceptButton = Me.Button_OK
@@ -413,6 +448,9 @@ Partial Class ResampleForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Button_Cancel
         Me.ClientSize = New System.Drawing.Size(966, 634)
+        Me.Controls.Add(Me.Button_PurgeGo)
+        Me.Controls.Add(Me.Button_ViewPurgedList)
+        Me.Controls.Add(Me.Button_MakePurgeList)
         Me.Controls.Add(Me.TextBox_BootupTime)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)
@@ -492,4 +530,7 @@ Partial Class ResampleForm
     Friend WithEvents Button2 As Button
     Friend WithEvents TextBox_BootupTime As TextBox
     Friend WithEvents FolderBrowser As FolderBrowserDialog
+    Friend WithEvents Button_MakePurgeList As Button
+    Friend WithEvents Button_ViewPurgedList As Button
+    Friend WithEvents Button_PurgeGo As Button
 End Class

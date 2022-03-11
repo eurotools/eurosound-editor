@@ -102,6 +102,7 @@
     </Compile>
     <Compile Include="Files Functions\Objects\MfxFile.vb" />
     <Compile Include="Files Functions\Readers\FileParsers_JumpHashCodes.vb" />
+    <Compile Include="Files Functions\Readers\FileParsers_PurgeList.vb" />
     <Compile Include="Files Functions\Readers\FileParsers_SamplesFile.vb" />
     <Compile Include="Files Functions\Readers\Music\FileParsers_MfxFile.vb" />
     <Compile Include="Files Functions\Writers\FileWriters.vb" />
@@ -184,16 +185,16 @@
     <Compile Include="Forms\Others\SfxMultiEditor.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Resampler\Exporter\ExporterForm.Designer.vb">
+    <Compile Include="Forms\Exporters\SoundBanks Exporter\ExporterForm.Designer.vb">
       <DependentUpon>ExporterForm.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Resampler\Exporter\ExporterForm.vb">
+    <Compile Include="Forms\Exporters\SoundBanks Exporter\ExporterForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Resampler\Exporter\ExporterForm_GenerateStreams.vb">
+    <Compile Include="Forms\Exporters\SoundBanks Exporter\ExporterForm_GenerateStreams.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Resampler\Exporter\ExporterForm_Resampler.vb">
+    <Compile Include="Forms\Exporters\SoundBanks Exporter\ExporterForm_Resampler.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Music\Maker\MusicMaker.Designer.vb">
@@ -205,13 +206,13 @@
     <Compile Include="Forms\Music\Maker\MusicMaker_Methods.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Music\Exporter\MusicsExporter.Designer.vb">
+    <Compile Include="Forms\Exporters\Musics Exporter\MusicsExporter.Designer.vb">
       <DependentUpon>MusicsExporter.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Music\Exporter\MusicsExporter.vb">
+    <Compile Include="Forms\Exporters\Musics Exporter\MusicsExporter.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Music\Exporter\MusicsExporter_Methods.vb">
+    <Compile Include="Forms\Exporters\Musics Exporter\MusicsExporter_Methods.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Properties Forms\DataBase_Properties.Designer.vb">
@@ -223,13 +224,25 @@
     <Compile Include="Forms\Properties Forms\Project Properties\Project_Properties_Methods.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Resampler\Exporter\ExporterForm_SfxData.vb">
+    <Compile Include="Forms\Exporters\SoundBanks Exporter\ExporterForm_SfxData.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Resampler\Exporter\ExporterForm_Soundbanks.vb">
+    <Compile Include="Forms\Exporters\SoundBanks Exporter\ExporterForm_Soundbanks.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Resampler\Exporter\ExporterForm_StreamFiles.vb">
+    <Compile Include="Forms\Exporters\SoundBanks Exporter\ExporterForm_StreamFiles.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Resampler\Frm_MakePurgeList.Designer.vb">
+      <DependentUpon>Frm_MakePurgeList.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Resampler\Frm_MakePurgeList.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Resampler\Frm_PurgeGo.Designer.vb">
+      <DependentUpon>Frm_PurgeGo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Resampler\Frm_PurgeGo.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Resampler\ResampleForm.Designer.vb">
@@ -392,17 +405,23 @@
     <EmbeddedResource Include="Forms\Others\SfxMultiEditor.resx">
       <DependentUpon>SfxMultiEditor.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Resampler\Exporter\ExporterForm.resx">
+    <EmbeddedResource Include="Forms\Exporters\SoundBanks Exporter\ExporterForm.resx">
       <DependentUpon>ExporterForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Music\Maker\MusicMaker.resx">
       <DependentUpon>MusicMaker.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Music\Exporter\MusicsExporter.resx">
+    <EmbeddedResource Include="Forms\Exporters\Musics Exporter\MusicsExporter.resx">
       <DependentUpon>MusicsExporter.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Properties Forms\DataBase_Properties.resx">
       <DependentUpon>DataBase_Properties.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Resampler\Frm_MakePurgeList.resx">
+      <DependentUpon>Frm_MakePurgeList.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Resampler\Frm_PurgeGo.resx">
+      <DependentUpon>Frm_PurgeGo.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Samples\MissingSamples.resx">
       <DependentUpon>MissingSamples.vb</DependentUpon>

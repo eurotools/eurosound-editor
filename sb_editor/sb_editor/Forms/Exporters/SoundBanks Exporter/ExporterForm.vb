@@ -22,15 +22,12 @@ Partial Public Class ExporterForm
         'Esta llamada es exigida por el diseñador.
         InitializeComponent()
 
+        ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
         quickOutput = quickOptionClicked
-
-        'Get mainframe
         mainFrame = CType(Application.OpenForms("MainFrame"), MainFrame)
     End Sub
 
     Private Sub ExporterForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'Hide mainform
-        mainFrame.Hide()
         'Start process
         If Not BackgroundWorker.IsBusy Then
             BackgroundWorker.RunWorkerAsync()
@@ -153,15 +150,11 @@ Partial Public Class ExporterForm
         End If
     End Sub
 
-
-
     Private Sub BackgroundWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker.ProgressChanged
         ProgressBar1.Value = e.ProgressPercentage
     End Sub
 
     Private Sub BackgroundWorker_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker.RunWorkerCompleted
-        'Show mainform
-        mainFrame.Show()
         'Close task form
         canCloseForm = True
         Close()
