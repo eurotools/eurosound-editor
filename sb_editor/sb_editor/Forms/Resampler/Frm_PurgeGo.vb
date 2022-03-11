@@ -82,6 +82,7 @@ Public Class Frm_PurgeGo
                     End If
                 End If
             Next
+            samplesDataTable.AcceptChanges()
             'Save changes
             writers.SaveSamplesFile(SysFileSamples, samplesDataTable)
         End If

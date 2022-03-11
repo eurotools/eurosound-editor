@@ -275,7 +275,7 @@ Partial Class ResampleForm
         Me.Button_OK.Location = New System.Drawing.Point(798, 599)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(75, 23)
-        Me.Button_OK.TabIndex = 13
+        Me.Button_OK.TabIndex = 16
         Me.Button_OK.Text = "OK"
         Me.Button_OK.UseVisualStyleBackColor = True
         '
@@ -286,7 +286,7 @@ Partial Class ResampleForm
         Me.Button_Cancel.Location = New System.Drawing.Point(879, 599)
         Me.Button_Cancel.Name = "Button_Cancel"
         Me.Button_Cancel.Size = New System.Drawing.Size(75, 23)
-        Me.Button_Cancel.TabIndex = 14
+        Me.Button_Cancel.TabIndex = 17
         Me.Button_Cancel.Text = "Cancel"
         Me.Button_Cancel.UseVisualStyleBackColor = True
         '
@@ -417,7 +417,7 @@ Partial Class ResampleForm
         Me.Button_MakePurgeList.Location = New System.Drawing.Point(12, 599)
         Me.Button_MakePurgeList.Name = "Button_MakePurgeList"
         Me.Button_MakePurgeList.Size = New System.Drawing.Size(95, 23)
-        Me.Button_MakePurgeList.TabIndex = 16
+        Me.Button_MakePurgeList.TabIndex = 13
         Me.Button_MakePurgeList.Text = "Make Purge List"
         Me.Button_MakePurgeList.UseVisualStyleBackColor = True
         '
@@ -427,7 +427,7 @@ Partial Class ResampleForm
         Me.Button_ViewPurgedList.Location = New System.Drawing.Point(113, 599)
         Me.Button_ViewPurgedList.Name = "Button_ViewPurgedList"
         Me.Button_ViewPurgedList.Size = New System.Drawing.Size(95, 23)
-        Me.Button_ViewPurgedList.TabIndex = 17
+        Me.Button_ViewPurgedList.TabIndex = 14
         Me.Button_ViewPurgedList.Text = "View Purged List"
         Me.Button_ViewPurgedList.UseVisualStyleBackColor = True
         '
@@ -437,7 +437,7 @@ Partial Class ResampleForm
         Me.Button_PurgeGo.Location = New System.Drawing.Point(214, 599)
         Me.Button_PurgeGo.Name = "Button_PurgeGo"
         Me.Button_PurgeGo.Size = New System.Drawing.Size(95, 23)
-        Me.Button_PurgeGo.TabIndex = 18
+        Me.Button_PurgeGo.TabIndex = 15
         Me.Button_PurgeGo.Text = "Purge Go"
         Me.Button_PurgeGo.UseVisualStyleBackColor = True
         '
