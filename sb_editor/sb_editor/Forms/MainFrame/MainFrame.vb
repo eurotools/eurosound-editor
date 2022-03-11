@@ -756,12 +756,16 @@ Partial Public Class MainFrame
     '* OUTPUT BUTTONS
     '*===============================================================================================
     Private Sub Button_FullOutput_Click(sender As Object, e As EventArgs) Handles Button_FullOutput.Click
+        'Clear textbox
+        Textbox_DebugInfo.Clear()
         'Open Resample Form
         Dim taskForm As New ExporterForm(False)
         taskForm.ShowDialog()
     End Sub
 
     Private Sub Button_QuickOutput_Click(sender As Object, e As EventArgs) Handles Button_QuickOutput.Click
+        'Clear textbox
+        Textbox_DebugInfo.Clear()
         'Open Resample Form
         Dim taskForm As New ExporterForm(True)
         taskForm.ShowDialog()

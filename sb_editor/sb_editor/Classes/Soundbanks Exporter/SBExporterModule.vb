@@ -120,7 +120,6 @@ Namespace SoundBanksExporterFunctions
         Friend Function GetEXaudio(relativeSampleFilePath As String, outputPlatform As String, ByRef CancelSoundBankOutput As Boolean, testMode As Boolean) As EXAudio
             Dim waveFunctions As New WaveFunctions
             Dim newAudioObj As New EXAudio
-
             If testMode Then
                 Using masterWaveReader As New WaveFileReader(fso.BuildPath(WorkingDirectory & "\Master", relativeSampleFilePath))
                     Dim loopInfo As Integer() = waveFunctions.ReadSampleChunk(masterWaveReader)
@@ -280,6 +279,17 @@ Namespace SoundBanksExporterFunctions
             Return selectedFlags
         End Function
 
+        Friend Function GetFlagsFromNumber(checkedFlags As Boolean()) As Short
+            'Get Flags
+            Dim selectedFlags As Short = 0
+            For index As Integer = 0 To checkedFlags.Length - 1
+                If checkedFlags(index) Then
+                    selectedFlags = selectedFlags Or (1 << index)
+                End If
+            Next
+            Return selectedFlags
+        End Function
+
         Friend Function RelativePathToAbs(sampleRelPath As String) As String
             'Ensure that the string starts with "\"
             Dim relativeSampleFilePath As String = sampleRelPath
@@ -290,7 +300,7 @@ Namespace SoundBanksExporterFunctions
             Return absrelativeSampleFilePath
         End Function
 
-        Friend Function GetTotalCents(sfxFileToCheck As EXSound, outputPlatform As String) As Short
+        Public Function GetTotalCents(sfxFileToCheck As EXSound, outputPlatform As String) As Short
             Dim totalCents As Short = 0
             For sampleIndex As Integer = 0 To sfxFileToCheck.Samples.Count - 1
                 Dim currentSample As EXSample = sfxFileToCheck.Samples(sampleIndex)

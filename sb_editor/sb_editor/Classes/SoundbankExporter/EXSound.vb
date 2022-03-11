@@ -1,5 +1,6 @@
 ﻿Namespace ExporterObjects
     Public Class EXSound
+        Public FilePath As String
         Public HashCode As UInteger
         Public Ducker As SByte
         Public DuckerLength As Short
