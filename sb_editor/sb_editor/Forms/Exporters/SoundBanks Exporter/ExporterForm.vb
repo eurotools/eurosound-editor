@@ -79,10 +79,15 @@ Partial Public Class ExporterForm
         Dim sfxFiles As String() = Directory.GetFiles(WorkingDirectory & "\SFXs", "*.txt", SearchOption.TopDirectoryOnly)
         For fileIndex As Integer = 0 To sfxFiles.Length - 1
             Dim currentFilePath As String = sfxFiles(fileIndex)
-            Dim sfxFileData As SfxFile = textFileReaders.ReadSFXFile(currentFilePath)
             Dim sfxLabel As String = GetOnlyFileName(currentFilePath)
             If Not hashCodesDictionary.ContainsKey(sfxLabel) Then
-                hashCodesDictionary.Add(sfxLabel, sfxFileData.HashCode)
+                'Get HashCode
+                Dim sfxFileData As String() = File.ReadAllLines(currentFilePath)
+                Dim hashcodeIndex As Integer = Array.IndexOf(sfxFileData, "#HASHCODE")
+                Dim stringData As String() = sfxFileData(hashcodeIndex + 1).Split(" "c)
+                If stringData.Length > 1 AndAlso IsNumeric(stringData(1)) Then
+                    hashCodesDictionary.Add(sfxLabel, stringData(1))
+                End If
             End If
         Next
 
@@ -91,10 +96,15 @@ Partial Public Class ExporterForm
         Dim soundbankFiles As String() = Directory.GetFiles(WorkingDirectory & "\SoundBanks", "*.txt", SearchOption.TopDirectoryOnly)
         For fileIndex As Integer = 0 To soundbankFiles.Length - 1
             Dim currentFilePath As String = soundbankFiles(fileIndex)
-            Dim soundBankFileData As SoundbankFile = textFileReaders.ReadSoundBankFile(currentFilePath)
             Dim soundBankLabel As String = GetOnlyFileName(currentFilePath)
             If Not soundBanksDictionary.ContainsKey(soundBankLabel) Then
-                soundBanksDictionary.Add(soundBankLabel, soundBankFileData.HashCode)
+                'Get HashCode
+                Dim soundBankFileData As String() = File.ReadAllLines(currentFilePath)
+                Dim hashcodeIndex As Integer = Array.IndexOf(soundBankFileData, "#HASHCODE")
+                Dim stringData As String() = soundBankFileData(hashcodeIndex + 1).Split(" "c)
+                If stringData.Length > 1 AndAlso IsNumeric(stringData(1)) Then
+                    soundBanksDictionary.Add(soundBankLabel, stringData(1))
+                End If
             End If
         Next
 
