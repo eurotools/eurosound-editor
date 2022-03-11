@@ -6,7 +6,7 @@ Partial Public Class ExporterForm
     '*===============================================================================================
     '* MAIN METHOD
     '*===============================================================================================
-    Private Sub ResampleWaves(soundsTable As DataTable, outPlatforms As String())
+    Private Sub ResampleWaves(soundsTable As DataTable, outPlatforms As String(), SoxTimer As Stopwatch, PCTimer As Stopwatch, GCTimer As Stopwatch, XBTimer As Stopwatch, PSTimer As Stopwatch)
         Dim waveFunctions As New WaveFunctions
         'Get Wave files to include
         Dim samplesCount As Integer = soundsTable.Rows.Count - 1
@@ -47,22 +47,22 @@ Partial Public Class ExporterForm
                                     sampleRate = 22050
                                 End If
                                 CreateFolderIfRequired(fso.GetParentFolderName(outputFilePath))
+                                SoxTimer.Start()
                                 RunProcess("SystemFiles\Sox.exe", """" & sourceFilePath & """ -r " & sampleRate & " """ & outputFilePath & """  resample -qs 0.97")
-                                'IMA ADPCM For PC and Nintendo GameCube Formats
-                                If StrComp(currentPlatform, "PC") = 0 Or StrComp(currentPlatform, "GameCube") = 0 Then
+                                SoxTimer.Stop()
+                                'IMA ADPCM For PC Streams
+                                If StrComp(currentPlatform, "PC") = 0 Then
                                     If StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
-                                        Dim ImaOutputFilePath As String = fso.BuildPath(WorkingDirectory & "\" & currentPlatform & "_Software_adpcm", sampleRelativePath)
-                                        CreateFolderIfRequired(fso.GetParentFolderName(ImaOutputFilePath))
-                                        'Resampled wav
-                                        Dim smdFilePath As String = Path.ChangeExtension(ImaOutputFilePath, ".smd")
-                                        RunProcess("SystemFiles\Sox.exe", """" & outputFilePath & """ -t raw """ & smdFilePath & """")
-                                        'Wave to ima
-                                        Dim imaData As Byte() = ESUtils.ImaCodec.Encode(ConvertByteArrayToShortArray(File.ReadAllBytes(smdFilePath)))
-                                        File.WriteAllBytes(Path.ChangeExtension(ImaOutputFilePath, ".ssp"), imaData)
+                                        CreateImaAdpcm(currentPlatform, sampleRelativePath, outputFilePath, PCTimer)
                                     End If
                                 End If
                                 'DSP for Nintendo GameCube
                                 If StrComp(currentPlatform, "GameCube") = 0 Then
+                                    'Create IMA ADPCM for Streams
+                                    If StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
+                                        CreateImaAdpcm(currentPlatform, sampleRelativePath, outputFilePath, GCTimer)
+                                    End If
+                                    GCTimer.Start()
                                     Dim dspOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\GameCube_dsp_adpcm", sampleRelativePath), ".dsp")
                                     CreateFolderIfRequired(fso.GetParentFolderName(dspOutputFilePath))
                                     'Default arguments
@@ -80,7 +80,9 @@ Partial Public Class ExporterForm
                                     End Using
                                     'Execute Dsp Adpcm Tool
                                     RunProcess("SystemFiles\DspCodec.exe", dspToolArgs)
+                                    GCTimer.Stop()
                                 ElseIf StrComp(currentPlatform, "PlayStation2") = 0 Then 'Sony VAG for PlayStation 2
+                                    PSTimer.Start()
                                     Dim vagOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\PlayStation2_VAG", sampleRelativePath), ".vag")
                                     CreateFolderIfRequired(fso.GetParentFolderName(vagOutputFilePath))
                                     'Default arguments
@@ -99,11 +101,14 @@ Partial Public Class ExporterForm
                                     End Using
                                     'Execute Vag Tool
                                     RunProcess("SystemFiles\VagCodec.exe", vagToolArgs)
+                                    PSTimer.Stop()
                                 ElseIf StrComp(currentPlatform, "X Box") = 0 Or StrComp(currentPlatform, "Xbox") = 0 Then 'Xbox ADPCM for Xbox
+                                    XBTimer.Start()
                                     Dim xboxOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\XBox_adpcm", sampleRelativePath), ".adpcm")
                                     CreateFolderIfRequired(fso.GetParentFolderName(xboxOutputFilePath))
                                     'Execute Dsp Adpcm Tool
                                     RunProcess("SystemFiles\XboxCodec.exe", "Encode """ & outputFilePath & """ """ & xboxOutputFilePath & """")
+                                    XBTimer.Stop()
                                 End If
                             Next
                             'Update Property
@@ -113,6 +118,19 @@ Partial Public Class ExporterForm
                 End If
             Next
         End If
+    End Sub
+
+    Private Sub CreateImaAdpcm(currentPlatform As String, sampleRelativePath As String, outputFilePath As String, platformTimer As Stopwatch)
+        platformTimer.Start()
+        Dim ImaOutputFilePath As String = fso.BuildPath(WorkingDirectory & "\" & currentPlatform & "_Software_adpcm", sampleRelativePath)
+        CreateFolderIfRequired(fso.GetParentFolderName(ImaOutputFilePath))
+        'Resampled wav
+        Dim smdFilePath As String = Path.ChangeExtension(ImaOutputFilePath, ".smd")
+        RunProcess("SystemFiles\Sox.exe", """" & outputFilePath & """ -t raw """ & smdFilePath & """")
+        'Wave to ima
+        Dim imaData As Byte() = ESUtils.ImaCodec.Encode(ConvertByteArrayToShortArray(File.ReadAllBytes(smdFilePath)))
+        File.WriteAllBytes(Path.ChangeExtension(ImaOutputFilePath, ".ssp"), imaData)
+        platformTimer.Stop()
     End Sub
 
     Private Function ConvertByteArrayToShortArray(PCMData As Byte()) As Short()

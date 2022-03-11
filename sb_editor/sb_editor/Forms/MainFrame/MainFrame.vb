@@ -747,6 +747,11 @@ Partial Public Class MainFrame
         markersEditor.ShowDialog()
     End Sub
 
+    Private Sub Textbox_DebugInfo_Click(sender As Object, e As EventArgs) Handles Textbox_DebugInfo.Click
+        Dim debugForm As New Frm_DebugData(Textbox_DebugInfo.Text.Split(vbCrLf))
+        debugForm.ShowDialog()
+    End Sub
+
     '*===============================================================================================
     '* OUTPUT BUTTONS
     '*===============================================================================================

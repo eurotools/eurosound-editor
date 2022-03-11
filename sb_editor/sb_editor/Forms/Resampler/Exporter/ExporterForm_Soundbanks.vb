@@ -26,6 +26,13 @@ Partial Public Class ExporterForm
                     Dim currentLanguage As String = outLanguages(languageIndex)
                     'For each Platform
                     For platformIndex As Integer = 0 To outPlatforms.Length - 1
+                        Dim timerTotalTime As New Stopwatch
+                        Dim timerQuery As New Stopwatch
+                        Dim timerSfxData As New Stopwatch
+                        Dim timerSamples As New Stopwatch
+                        'Debug info
+                        mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Timings For " & currentSoundBank & vbCrLf)
+
                         Dim CancelSoundBankOutput As Boolean = False
 
                         'Get current platform and update title bar
@@ -40,9 +47,17 @@ Partial Public Class ExporterForm
                         Dim samplesToInclude As New HashSet(Of String)
                         Dim SfxDictionary As New SortedDictionary(Of String, EXSound)
                         Dim SamplesDictionary As New Dictionary(Of String, EXAudio)
+                        timerTotalTime.Start()
+                        timerQuery.Start()
                         Dim SfxList As String() = GetSFXsList(soundBankInfo)
+                        timerQuery.Stop()
+                        timerSfxData.Start()
                         GetSFXsDictionary(SfxList, currentPlatform, SfxDictionary, samplesToInclude, streamsList)
+                        timerSfxData.Stop()
+                        timerSamples.Start()
                         GetSamplesDictionary(samplesToInclude, SamplesDictionary, currentPlatform, currentLanguage, CancelSoundBankOutput)
+                        timerSamples.Stop()
+                        timerTotalTime.Stop()
                         'Skip if there are samples missing
                         If Not CancelSoundBankOutput Then
                             'Get file paths
@@ -97,11 +112,16 @@ Partial Public Class ExporterForm
                                 ESUtils.MusXBuild_Soundbank.BuildSoundbankFile(sfxFilePath, sifFilePath, sbfFilePath, Nothing, fso.BuildPath(outputFilePath, sfxFileName & ".SFX"), soundBankInfo.HashCode, False)
                             End If
                         End If
+
+                        'Show debug info
+                        mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Total   = " & timerTotalTime.ElapsedMilliseconds & vbCrLf)
+                        mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Query   = " & timerQuery.ElapsedMilliseconds & vbCrLf)
+                        mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "SFXDate = " & timerSfxData.ElapsedMilliseconds & vbCrLf)
+                        mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Samples = " & timerSamples.ElapsedMilliseconds & vbCrLf)
+                        mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += vbCrLf)
                     Next
                 Next
             End If
         Next
     End Sub
-
-
 End Class

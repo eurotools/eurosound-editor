@@ -107,8 +107,14 @@ Partial Public Class ExporterForm
 
         '----------------------------------------------Resample samples and streams----------------------------------------------
         If Not quickOutput Then
+            Dim SoxTimer As New Stopwatch()
+            Dim PCTimer As New Stopwatch()
+            Dim GCTimer As New Stopwatch()
+            Dim XboxTimer As New Stopwatch()
+            Dim PlayStationTimer As New Stopwatch()
+            'Get all available formats
             Dim availableFormats As String() = ProjectSettingsFile.sampleRateFormats.Keys.ToArray
-            ResampleWaves(soundsTable, availableFormats)
+            ResampleWaves(soundsTable, availableFormats, SoxTimer, PCTimer, GCTimer, XboxTimer, PlayStationTimer)
             If ReSampleStreams = 1 Then
                 GenerateStreamFolder(streamSamplesList, outputLanguage, availableFormats)
                 ReSampleStreams = 0
@@ -116,6 +122,18 @@ Partial Public Class ExporterForm
             End If
             'Save Samples File
             textFileWritters.SaveSamplesFile(SysFileSamples, soundsTable)
+            'Show timers
+            If SoxTimer.ElapsedMilliseconds > 0 Then
+                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Re-Sample Times" & vbCrLf)
+                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "---------------" & vbCrLf)
+                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "" & vbCrLf)
+                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "SoxTime " & SoxTimer.ElapsedMilliseconds & vbCrLf)
+                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "PCTime " & PCTimer.ElapsedMilliseconds & vbCrLf)
+                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "GCTime " & GCTimer.ElapsedMilliseconds & vbCrLf)
+                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "XBTime " & XboxTimer.ElapsedMilliseconds & vbCrLf)
+                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "PSTime " & PlayStationTimer.ElapsedMilliseconds & vbCrLf)
+                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += vbCrLf)
+            End If
         End If
 
         '----------------------------------------------Output user selected Soundbanks----------------------------------------------
