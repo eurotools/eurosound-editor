@@ -47,6 +47,7 @@ Module ProgramMainModule
             If Not tempVar = "" Then
                 mainform.CheckBox_OutAllLanguages.Checked = Convert.ToBoolean(CByte(tempVar))
             End If
+
             'Combobox output language
             tempVar = iniFunctions.Read("LanguageCombo", "MainForm")
             If Not tempVar = "" Then
@@ -57,6 +58,7 @@ Module ProgramMainModule
                     mainform.ComboBox_OutputLanguage.SelectedIndex = 0
                 End If
             End If
+
             'Combobox output format
             tempVar = iniFunctions.Read("FormatCombo_ListIndex", "Form1_Misc")
             If Not tempVar = "" Then
@@ -67,7 +69,26 @@ Module ProgramMainModule
                     mainform.ComboBox_Format.SelectedIndex = 0
                 End If
             End If
-            'Prefix HashCodes
+
+            'SoundBank Max Sizes
+            Dim playStationValue As String = iniFunctions.Read("PlayStationSize", "PropertiesForm")
+            If IsNumeric(playStationValue) Then
+                SoundBankMaxPlayStation = CInt(playStationValue)
+            End If
+            Dim pcSize As String = iniFunctions.Read("PCSize", "PropertiesForm")
+            If IsNumeric(pcSize) Then
+                SoundBankMaxPC = CInt(pcSize)
+            End If
+            Dim gameCubeSize As String = iniFunctions.Read("GameCubeSize", "PropertiesForm")
+            If IsNumeric(gameCubeSize) Then
+                SoundBankMaxGameCube = CInt(gameCubeSize)
+            End If
+            Dim xboxSize As String = iniFunctions.Read("XBoxSize", "PropertiesForm")
+            If IsNumeric(xboxSize) Then
+                SoundBankMaxXbox = CInt(xboxSize)
+            End If
+
+            'Other Settings
             Dim prefixHashCodes As String = iniFunctions.Read("Prefix_HT_Sound", "PropertiesForm")
             If IsNumeric(prefixHashCodes) Then
                 ProjectSettingsFile.MiscProps.PrefixHtSound = CBool(prefixHashCodes)

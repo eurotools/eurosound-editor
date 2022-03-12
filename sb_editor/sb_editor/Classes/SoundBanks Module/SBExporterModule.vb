@@ -265,6 +265,40 @@ Namespace SoundBanksExporterFunctions
         End Function
 
         '*===============================================================================================
+        '* FUNCTIONS RELATED WITH THE MAX SIZE
+        '*===============================================================================================
+        Friend Function GetSoundBankMaxSize(currentPlatform As String, soundBankData As SoundbankFile) As Long
+            Dim maxSize As Long
+            Select Case currentPlatform
+                Case "PlayStation2"
+                    If soundBankData.MaxBankSizes.PlayStationSize > 0 Then
+                        maxSize = soundBankData.MaxBankSizes.PlayStationSize
+                    Else
+                        maxSize = SoundBankMaxPlayStation
+                    End If
+                Case "GameCube"
+                    If soundBankData.MaxBankSizes.GameCubeSize > 0 Then
+                        maxSize = soundBankData.MaxBankSizes.GameCubeSize
+                    Else
+                        maxSize = SoundBankMaxGameCube
+                    End If
+                Case "PC"
+                    If soundBankData.MaxBankSizes.PCSize > 0 Then
+                        maxSize = soundBankData.MaxBankSizes.PCSize
+                    Else
+                        maxSize = SoundBankMaxPC
+                    End If
+                Case Else
+                    If soundBankData.MaxBankSizes.XboxSize > 0 Then
+                        maxSize = soundBankData.MaxBankSizes.XboxSize
+                    Else
+                        maxSize = SoundBankMaxXbox
+                    End If
+            End Select
+            Return maxSize
+        End Function
+
+        '*===============================================================================================
         '* FUNCTIONS TO WRITE FILES
         '*===============================================================================================
         Friend Sub WriteSfxFile(binWriter As BinaryWriter, hashCodesList As SortedDictionary(Of String, UInteger), sfxDictionary As Dictionary(Of String, EXSound), samplesDictionary As Dictionary(Of String, EXAudio), streamsList As String(), isBigEndian As Boolean)
@@ -299,7 +333,12 @@ Namespace SoundBanksExporterFunctions
                     Dim fileRef As Short
                     If sfxToWrite.HasSubSfx Then
                         If hashCodesList IsNot Nothing Then
-                            fileRef = hashCodesList(GetOnlyFileName(currentSample.FilePath.TrimStart("\"c)))
+                            Dim hashCodeLabel As String = GetOnlyFileName(currentSample.FilePath.TrimStart("\"c))
+                            If hashCodesList.ContainsKey(hashCodeLabel) Then
+                                fileRef = hashCodesList(hashCodeLabel)
+                            Else
+                                MsgBox("HashCode Not found " & currentSample.FilePath, vbOKOnly + vbCritical, "EuroSound")
+                            End If
                         Else
                             fileRef = 0
                         End If
@@ -307,6 +346,10 @@ Namespace SoundBanksExporterFunctions
                         Dim streamFileIndex As Integer = Array.IndexOf(streamsList, currentSample.FilePath)
                         If streamFileIndex = -1 Then
                             fileRef = Array.IndexOf(samplesList, currentSample.FilePath)
+                            'Inform User
+                            If fileRef = -1 Then
+                                MsgBox("Stream/Sample Ref Not Found " & currentSample.FilePath, vbOKOnly + vbCritical, "EuroSound")
+                            End If
                         Else
                             fileRef = (streamFileIndex + 1) * -1
                             PrintLine(1, fileRef & "    " & currentSample.FilePath)

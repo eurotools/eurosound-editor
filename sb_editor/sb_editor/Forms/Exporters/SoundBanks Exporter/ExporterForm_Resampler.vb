@@ -50,66 +50,66 @@ Partial Public Class ExporterForm
                                 SoxTimer.Start()
                                 RunProcess("SystemFiles\Sox.exe", """" & sourceFilePath & """ -r " & sampleRate & " """ & outputFilePath & """  resample -qs 0.97")
                                 SoxTimer.Stop()
-                                'IMA ADPCM For PC Streams
-                                If StrComp(currentPlatform, "PC") = 0 Then
-                                    If StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
-                                        CreateImaAdpcm(currentPlatform, sampleRelativePath, outputFilePath, PCTimer)
-                                    End If
-                                End If
-                                'DSP for Nintendo GameCube
-                                If StrComp(currentPlatform, "GameCube") = 0 Then
-                                    'Create IMA ADPCM for Streams
-                                    If StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
-                                        CreateImaAdpcm(currentPlatform, sampleRelativePath, outputFilePath, GCTimer)
-                                    End If
-                                    GCTimer.Start()
-                                    Dim dspOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\GameCube_dsp_adpcm", sampleRelativePath), ".dsp")
-                                    CreateFolderIfRequired(fso.GetParentFolderName(dspOutputFilePath))
-                                    'Default arguments
-                                    Dim dspToolArgs As String = "Encode """ & outputFilePath & """ """ & dspOutputFilePath & """"
-                                    'Get loop info
-                                    Using waveReader As New WaveFileReader(sourceFilePath)
-                                        Dim loopInfo As Integer() = waveFunctions.ReadSampleChunk(waveReader)
-                                        If loopInfo(0) = 1 And StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
-                                            'Loop offset pos in the resampled wave
-                                            Using parsedWaveReader As New WaveFileReader(outputFilePath)
-                                                Dim parsedLoop As UInteger = (loopInfo(1) / (waveReader.Length / parsedWaveReader.Length)) * 2
-                                                dspToolArgs = "Encode """ & outputFilePath & """ """ & dspOutputFilePath & """ -L " & parsedLoop
-                                            End Using
+
+                                'ReSample for each platform
+                                Select Case currentPlatform
+                                    Case "PC" 'IMA ADPCM For PC Streams
+                                        If StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
+                                            CreateImaAdpcm(currentPlatform, sampleRelativePath, outputFilePath, PCTimer)
                                         End If
-                                    End Using
-                                    'Execute Dsp Adpcm Tool
-                                    RunProcess("SystemFiles\DspCodec.exe", dspToolArgs)
-                                    GCTimer.Stop()
-                                ElseIf StrComp(currentPlatform, "PlayStation2") = 0 Then 'Sony VAG for PlayStation 2
-                                    PSTimer.Start()
-                                    Dim vagOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\PlayStation2_VAG", sampleRelativePath), ".vag")
-                                    CreateFolderIfRequired(fso.GetParentFolderName(vagOutputFilePath))
-                                    'Default arguments
-                                    Dim vagToolArgs As String = """" & outputFilePath & """ """ & vagOutputFilePath & """"
-                                    'Get loop info
-                                    Using waveReader As New WaveFileReader(sourceFilePath)
-                                        Dim loopInfo As Integer() = waveFunctions.ReadSampleChunk(waveReader)
-                                        If loopInfo(0) = 1 And StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
-                                            'Loop offset pos in the resampled wave
-                                            Using parsedWaveReader As New WaveFileReader(outputFilePath)
-                                                Dim parsedLoop As UInteger = (loopInfo(1) / (waveReader.Length / parsedWaveReader.Length)) * 2
-                                                Dim loopOffsetVag As UInteger = ((parsedLoop / 28 + (If(((parsedLoop Mod 28) <> 0), 2, 1))) / 2) - 1
-                                                vagToolArgs = """" & outputFilePath & """ """ & vagOutputFilePath & """ -l" & loopOffsetVag
-                                            End Using
+                                    Case "GameCube" 'DSP for Nintendo GameCube
+                                        'Create IMA ADPCM for Streams
+                                        If StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
+                                            CreateImaAdpcm(currentPlatform, sampleRelativePath, outputFilePath, GCTimer)
                                         End If
-                                    End Using
-                                    'Execute Vag Tool
-                                    RunProcess("SystemFiles\VagCodec.exe", vagToolArgs)
-                                    PSTimer.Stop()
-                                ElseIf StrComp(currentPlatform, "X Box") = 0 Or StrComp(currentPlatform, "Xbox") = 0 Then 'Xbox ADPCM for Xbox
-                                    XBTimer.Start()
-                                    Dim xboxOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\XBox_adpcm", sampleRelativePath), ".adpcm")
-                                    CreateFolderIfRequired(fso.GetParentFolderName(xboxOutputFilePath))
-                                    'Execute Dsp Adpcm Tool
-                                    RunProcess("SystemFiles\XboxCodec.exe", "Encode """ & outputFilePath & """ """ & xboxOutputFilePath & """")
-                                    XBTimer.Stop()
-                                End If
+                                        GCTimer.Start()
+                                        Dim dspOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\GameCube_dsp_adpcm", sampleRelativePath), ".dsp")
+                                        CreateFolderIfRequired(fso.GetParentFolderName(dspOutputFilePath))
+                                        'Default arguments
+                                        Dim dspToolArgs As String = "Encode """ & outputFilePath & """ """ & dspOutputFilePath & """"
+                                        'Get loop info
+                                        Using waveReader As New WaveFileReader(sourceFilePath)
+                                            Dim loopInfo As Integer() = waveFunctions.ReadSampleChunk(waveReader)
+                                            If loopInfo(0) = 1 And StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
+                                                'Loop offset pos in the resampled wave
+                                                Using parsedWaveReader As New WaveFileReader(outputFilePath)
+                                                    Dim parsedLoop As UInteger = (loopInfo(1) / (waveReader.Length / parsedWaveReader.Length)) * 2
+                                                    dspToolArgs = "Encode """ & outputFilePath & """ """ & dspOutputFilePath & """ -L " & parsedLoop
+                                                End Using
+                                            End If
+                                        End Using
+                                        'Execute Dsp Adpcm Tool
+                                        RunProcess("SystemFiles\DspCodec.exe", dspToolArgs)
+                                        GCTimer.Stop()
+                                    Case "PlayStation2"  'Sony VAG for PlayStation 2
+                                        PSTimer.Start()
+                                        Dim vagOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\PlayStation2_VAG", sampleRelativePath), ".vag")
+                                        CreateFolderIfRequired(fso.GetParentFolderName(vagOutputFilePath))
+                                        'Default arguments
+                                        Dim vagToolArgs As String = """" & outputFilePath & """ """ & vagOutputFilePath & """"
+                                        'Get loop info
+                                        Using waveReader As New WaveFileReader(sourceFilePath)
+                                            Dim loopInfo As Integer() = waveFunctions.ReadSampleChunk(waveReader)
+                                            If loopInfo(0) = 1 And StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
+                                                'Loop offset pos in the resampled wave
+                                                Using parsedWaveReader As New WaveFileReader(outputFilePath)
+                                                    Dim parsedLoop As UInteger = (loopInfo(1) / (waveReader.Length / parsedWaveReader.Length)) * 2
+                                                    Dim loopOffsetVag As UInteger = ((parsedLoop / 28 + (If(((parsedLoop Mod 28) <> 0), 2, 1))) / 2) - 1
+                                                    vagToolArgs = """" & outputFilePath & """ """ & vagOutputFilePath & """ -l" & loopOffsetVag
+                                                End Using
+                                            End If
+                                        End Using
+                                        'Execute Vag Tool
+                                        RunProcess("SystemFiles\VagCodec.exe", vagToolArgs)
+                                        PSTimer.Stop()
+                                    Case Else 'Xbox ADPCM for Xbox
+                                        XBTimer.Start()
+                                        Dim xboxOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\XBox_adpcm", sampleRelativePath), ".adpcm")
+                                        CreateFolderIfRequired(fso.GetParentFolderName(xboxOutputFilePath))
+                                        'Execute Dsp Adpcm Tool
+                                        RunProcess("SystemFiles\XboxCodec.exe", "Encode """ & outputFilePath & """ """ & xboxOutputFilePath & """")
+                                        XBTimer.Stop()
+                                End Select
                             Next
                             'Update Property
                             soundsTable.Rows(rowIndex).Item(4) = "False"

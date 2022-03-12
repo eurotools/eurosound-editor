@@ -34,4 +34,10 @@ Friend Module GlobalVariables
     Friend ReadOnly dateFormat As String = "yyyy/dd/MM HH:mm:ss"
     Friend ReadOnly filesDateFormat As String = "MM-dd-yyyy HH:mm:ss"
     Friend ReadOnly namesFormat As String = "^[a-zA-Z0-9_]*$"
+
+    'Output SoundBanks file size
+    Friend SoundBankMaxPC As Integer = 0
+    Friend SoundBankMaxPlayStation As Integer = 0
+    Friend SoundBankMaxGameCube As Integer = 0
+    Friend SoundBankMaxXbox As Integer = 0
 End Module

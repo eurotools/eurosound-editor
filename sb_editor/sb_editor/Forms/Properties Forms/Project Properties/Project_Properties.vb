@@ -65,37 +65,15 @@ Partial Public Class Project_Properties
                 TextBox_EditWavs.Text = ProjAudioEditor
                 TextBox_TextEditor.Text = ProjTextEditor
 
-                'Try to read the ini file
-                If fso.FileExists(SysFileProjectIniPath) Then
-                    Dim iniFunctions As New IniFile(SysFileProjectIniPath)
-                    'Soundbanks Max Size
-                    Dim playStationValue As String = iniFunctions.Read("PlayStationSize", "PropertiesForm")
-                    If IsNumeric(playStationValue) Then
-                        Numeric_PlayStationMaxSize.Value = CInt(playStationValue)
-                    End If
-                    Dim pcSize As String = iniFunctions.Read("PCSize", "PropertiesForm")
-                    If IsNumeric(pcSize) Then
-                        Numeric_PcMaxSize.Value = CInt(pcSize)
-                    End If
-                    Dim gameCubeSize As String = iniFunctions.Read("GameCubeSize", "PropertiesForm")
-                    If IsNumeric(gameCubeSize) Then
-                        Numeric_GameCubeMaxSize.Value = CInt(gameCubeSize)
-                    End If
-                    Dim xboxSize As String = iniFunctions.Read("XBoxSize", "PropertiesForm")
-                    If IsNumeric(xboxSize) Then
-                        Numeric_XboxMaxSize.Value = xboxSize
-                    End If
-                    Dim prefixHashCodes As String = iniFunctions.Read("Prefix_HT_Sound", "PropertiesForm")
-                    If IsNumeric(prefixHashCodes) Then
-                        CheckBox_PrefixHashCodes.Checked = CBool(prefixHashCodes)
-                        ProjectSettingsFile.MiscProps.PrefixHtSound = CheckBox_PrefixHashCodes.Checked
-                    End If
-                    Dim viewOutputDos As String = iniFunctions.Read("ViewOutputDos", "PropertiesForm")
-                    If IsNumeric(viewOutputDos) Then
-                        Checkbox_ViewPrePostOutputCommands.Checked = CBool(viewOutputDos)
-                        ProjectSettingsFile.MiscProps.ViewOutputDos = Checkbox_ViewPrePostOutputCommands.Checked
-                    End If
-                End If
+                'SoundBank Sizes
+                Numeric_PlayStationMaxSize.Value = SoundBankMaxPlayStation
+                Numeric_PcMaxSize.Value = SoundBankMaxPC
+                Numeric_GameCubeMaxSize.Value = SoundBankMaxGameCube
+                Numeric_XboxMaxSize.Value = SoundBankMaxXbox
+
+                'Others
+                CheckBox_PrefixHashCodes.Checked = ProjectSettingsFile.MiscProps.PrefixHtSound
+                Checkbox_ViewPrePostOutputCommands.Checked = ProjectSettingsFile.MiscProps.ViewOutputDos
             End If
         Else
             MsgBox("File not found", vbOKOnly + vbCritical, "EuroSound")
@@ -149,6 +127,13 @@ Partial Public Class Project_Properties
         ProjectSettingsFile.MiscProps.EuroLandHashCodeServerPath = Textbox_EuroLandServer.Text
         ProjectSettingsFile.MiscProps.PrefixHtSound = CheckBox_PrefixHashCodes.Checked
         ProjectSettingsFile.MiscProps.ViewOutputDos = Checkbox_ViewPrePostOutputCommands.Checked
+
+        'SoundBank Max sizes
+        SoundBankMaxPlayStation = Numeric_PlayStationMaxSize.Value
+        SoundBankMaxPC = Numeric_PcMaxSize.Value
+        SoundBankMaxGameCube = Numeric_GameCubeMaxSize.Value
+        SoundBankMaxXbox = Numeric_XboxMaxSize.Value
+
         'Save file
         textFileWriters.SavePropertiesFile(ProjectSettingsFile, SysFileProperties)
         SaveIniFile()

@@ -154,26 +154,30 @@ Partial Public Class ExporterForm
         End If
 
         '----------------------------------------------Output user selected Soundbanks----------------------------------------------
+        Dim OutputAborted As Boolean = False
         If outSoundBanks.Length > 0 Then
-            OutputSoundbanks(hashCodesDictionary, outSoundBanks, streamSamplesList, outputLanguage, outPlaforms)
+            OutputSoundbanks(hashCodesDictionary, outSoundBanks, streamSamplesList, outputLanguage, outPlaforms, OutputAborted)
         End If
 
-        If Not quickOutput Then
-            Dim hashTablesBuilder As New SfxDefines
-            '----------------------------------------------Create SFX Data----------------------------------------------
-            Dim maxHashCode = CreateSfxDataFolder(soundsTable)
+        'Continue if the output has not been aborted
+        If Not OutputAborted Then
+            If Not quickOutput Then
+                Dim hashTablesBuilder As New SfxDefines
+                '----------------------------------------------Create SFX Data----------------------------------------------
+                Dim maxHashCode = CreateSfxDataFolder(soundsTable)
 
-            '----------------------------------------------Create Hashtables----------------------------------------------
-            hashTablesBuilder.CreateSfxDebug(Me, hashCodesDictionary, fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Debug.h"))
-            hashTablesBuilder.CreateSfxDefines(Me, hashCodesDictionary, soundBanksDictionary, SfxLanguages, ProjectSettingsFile.MiscProps.PrefixHtSound, fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Defines.h"))
-            hashTablesBuilder.CreateSfxData(Me, fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Data.h"), fso.BuildPath(WorkingDirectory, "TempSfxData"), maxHashCode)
+                '----------------------------------------------Create Hashtables----------------------------------------------
+                hashTablesBuilder.CreateSfxDebug(Me, hashCodesDictionary, fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Debug.h"))
+                hashTablesBuilder.CreateSfxDefines(Me, hashCodesDictionary, soundBanksDictionary, SfxLanguages, ProjectSettingsFile.MiscProps.PrefixHtSound, fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Defines.h"))
+                hashTablesBuilder.CreateSfxData(Me, fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Data.h"), fso.BuildPath(WorkingDirectory, "TempSfxData"), maxHashCode)
+            End If
+
+            'Create bat if required
+            Invoke(Sub() Text = "End")
+            Dim postOutBatFilepath As String = fso.BuildPath(WorkingDirectory & "\System", "PostOutput.bat")
+            CreatePrePostOutputBatIfRequired(postOutBatFilepath, "rem Add your post-output stuff here")
+            RunProcess(postOutBatFilepath, "", ProjectSettingsFile.MiscProps.ViewOutputDos)
         End If
-
-        'Create bat if required
-        Invoke(Sub() Text = "End")
-        Dim postOutBatFilepath As String = fso.BuildPath(WorkingDirectory & "\System", "PostOutput.bat")
-        CreatePrePostOutputBatIfRequired(postOutBatFilepath, "rem Add your post-output stuff here")
-        RunProcess(postOutBatFilepath, "", ProjectSettingsFile.MiscProps.ViewOutputDos)
     End Sub
 
     Private Sub BackgroundWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker.ProgressChanged
