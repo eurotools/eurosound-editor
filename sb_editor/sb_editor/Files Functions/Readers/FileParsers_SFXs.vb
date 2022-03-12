@@ -393,7 +393,7 @@ Namespace ReaderClasses
             'Add samples to the final object
             sfxObj.Samples = samplesList
             sfxObj.FilePath = textFilePath
-            sfxObj.Flags = GetFlagsFromNumber(flagsArray)
+            sfxObj.Flags = GetUserFlags(flagsArray)
 
             'Calculate Ducker Length
             Dim duckerLength As Short = 0

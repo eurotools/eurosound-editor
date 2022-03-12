@@ -8,7 +8,7 @@ Namespace SoundBanksExporterFunctions
     Friend Module SBExporterModule
         Private ReadOnly textFileReaders As New FileParsers
 
-        Friend Sub GetSFXsDictionary(sfxList As String(), outPlatform As String, SfxDictionary As SortedDictionary(Of String, EXSound), samplesToInclude As HashSet(Of String), streamsList As String(), Optional testMode As Boolean = False)
+        Friend Sub GetSFXsDictionary(sfxList As String(), outPlatform As String, SfxDictionary As Dictionary(Of String, EXSound), samplesToInclude As HashSet(Of String), streamsList As String(), Optional testMode As Boolean = False)
             'Read all stored SFXs in the DataBases
             For sfxIndex As Integer = 0 To sfxList.Length - 1
                 Dim sfxFileName As String = sfxList(sfxIndex)
@@ -28,7 +28,7 @@ Namespace SoundBanksExporterFunctions
             Next
         End Sub
 
-        Friend Function GetSFXsList(soundbankData As SoundbankFile) As String()
+        Friend Function GetSFXsArray(soundbankData As SoundbankFile, Optional removeExtension As Boolean = False) As String()
             Dim SfxList As New HashSet(Of String)
             'Iterate over all databases
             For databaseIndex As Integer = 0 To soundbankData.Dependencies.Length - 1
@@ -37,11 +37,20 @@ Namespace SoundBanksExporterFunctions
                     Dim databaseFile As DataBaseFile = textFileReaders.ReadDataBaseFile(databaseFilePath)
                     'Read all stored SFXs in this DataBase
                     For sfxIndex As Integer = 0 To databaseFile.Dependencies.Length - 1
-                        SfxList.Add(databaseFile.Dependencies(sfxIndex) & ".txt")
+                        If removeExtension Then
+                            SfxList.Add(databaseFile.Dependencies(sfxIndex))
+                        Else
+                            SfxList.Add(databaseFile.Dependencies(sfxIndex) & ".txt")
+                        End If
                     Next
                 End If
             Next
-            Return SfxList.ToArray
+
+            'Get and Sort Array
+            Dim SfxArray As String() = SfxList.ToArray
+            Array.Sort(SfxArray)
+
+            Return SfxArray
         End Function
 
         Friend Sub GetSamplesDictionary(samplesToInclude As HashSet(Of String), SamplesDictionary As Dictionary(Of String, EXAudio), outPlatform As String, outputLanguage As String, CancelSoundBankOutput As Boolean, Optional testMode As Boolean = False)
@@ -65,6 +74,45 @@ Namespace SoundBanksExporterFunctions
             Erase SamplesSortedArray
             samplesToInclude = Nothing
         End Sub
+
+        Friend Function GetSamplesList(soundBankSFXs As String()) As String()
+            'Get Samples
+            Dim Samples As New List(Of String)
+            For sfxIndex As Integer = 0 To soundBankSFXs.Length - 1
+                'Open file
+                Dim filePath As String = fso.BuildPath(WorkingDirectory, "SFXs\" & soundBankSFXs(sfxIndex) & ".txt")
+                If fso.FileExists(filePath) Then
+                    Dim sfxFileData As SfxFile = textFileReaders.ReadSFXFile(filePath)
+                    For sampleIndex As Integer = 0 To sfxFileData.Samples.Count - 1
+                        Samples.Add(UCase(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\" & sfxFileData.Samples(sampleIndex).FilePath)))
+                    Next
+                End If
+            Next
+
+            Return Samples.ToArray
+        End Function
+
+        Friend Function GetSoundBankSize(soundbankSamples As String(), platformFolder As String, fileExtension As String) As Long
+            Dim fileLength As Long = 0
+            If fso.FolderExists(platformFolder) Then
+                Dim startString As Integer = Len(WorkingDirectory & "\Master\")
+                For index As Integer = 0 To soundbankSamples.Length - 1
+                    Dim platformFilePath As String = Path.ChangeExtension(fso.BuildPath(platformFolder, Mid(soundbankSamples(index), startString)), fileExtension)
+                    If fso.FileExists(platformFilePath) Then
+                        If platformFilePath.EndsWith(".wav", StringComparison.OrdinalIgnoreCase) Then
+                            Dim waveReader As New WaveFileReader(platformFilePath)
+                            fileLength += waveReader.Length
+                        ElseIf platformFilePath.EndsWith(".aif", StringComparison.OrdinalIgnoreCase) Then
+                            Dim aiffReader As New AiffFileReader(platformFilePath)
+                            fileLength += aiffReader.Length
+                        Else
+                            fileLength += FileLen(platformFilePath)
+                        End If
+                    End If
+                Next
+            End If
+            Return fileLength
+        End Function
 
         Friend Function GetEXaudio(relativeSampleFilePath As String, outputPlatform As String, ByRef CancelSoundBankOutput As Boolean, testMode As Boolean) As EXAudio
             Dim waveFunctions As New WaveFunctions
@@ -180,7 +228,7 @@ Namespace SoundBanksExporterFunctions
             Return newAudioObj
         End Function
 
-        Friend Function GetFlagsFromNumber(checkedFlags As Boolean()) As Short
+        Friend Function GetUserFlags(checkedFlags As Boolean()) As Short
             'Get Flags
             Dim selectedFlags As Short = 0
             For index As Integer = 0 To checkedFlags.Length - 1
@@ -216,8 +264,10 @@ Namespace SoundBanksExporterFunctions
             Return totalCents
         End Function
 
-
-        Friend Sub WriteSfxFile(binWriter As BinaryWriter, hashCodesList As SortedDictionary(Of String, UInteger), sfxDictionary As SortedDictionary(Of String, EXSound), samplesDictionary As Dictionary(Of String, EXAudio), streamsList As String(), isBigEndian As Boolean)
+        '*===============================================================================================
+        '* FUNCTIONS TO WRITE FILES
+        '*===============================================================================================
+        Friend Sub WriteSfxFile(binWriter As BinaryWriter, hashCodesList As SortedDictionary(Of String, UInteger), sfxDictionary As Dictionary(Of String, EXSound), samplesDictionary As Dictionary(Of String, EXAudio), streamsList As String(), isBigEndian As Boolean)
             binWriter.Write(ESUtils.BytesFunctions.FlipUInt32(sfxDictionary.Count, isBigEndian))
             Dim sfxStartOffsets As New Queue(Of UInteger)
             Dim samplesList As String() = samplesDictionary.Keys.ToArray
