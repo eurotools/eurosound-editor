@@ -137,14 +137,7 @@ Partial Public Class Project_Properties
         baseIniFile.Write("Edit_Wavs_With", ProjAudioEditor, "Form7_Misc")
         baseIniFile.Write("TextEditor", ProjTextEditor, "PropertiesForm")
         'Add items to combobox
-        Dim MainFrame As MainFrame = CType(Application.OpenForms("MainFrame"), MainFrame)
-        MainFrame.ComboBox_Format.BeginUpdate()
-        MainFrame.ComboBox_Format.Items.Clear()
-        MainFrame.ComboBox_Format.Items.AddRange(ProjectSettingsFile.sampleRateFormats.Keys.ToArray)
-        If MainFrame.ComboBox_Format.Items.Count > 0 AndAlso MainFrame.ComboBox_Format.SelectedIndex = -1 Then
-            MainFrame.ComboBox_Format.SelectedIndex = 0
-        End If
-        MainFrame.ComboBox_Format.EndUpdate()
+        AddAvailableFormatsToCombobox()
         'Load Languages and Formats
         AddProjectLanguagesToCombo(MainFrame.ComboBox_OutputLanguage)
         'Close form
