@@ -126,7 +126,7 @@ Partial Public Class MainFrame
             For sampleIndex As Integer = 0 To samplesToAdd.Length - 1
                 Dim currentFilePath As String = samplesToAdd(sampleIndex)
                 Dim sampleFullPath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder & "\Master", currentFilePath)
-                samplesTable.Rows.Add(currentFilePath, selectedSampleRate, FileLen(sampleFullPath), FileDateTime(sampleFullPath).ToString(dateFormat), "True", "False")
+                samplesTable.Rows.Add(currentFilePath, selectedSampleRate, FileLen(sampleFullPath), FileDateTime(sampleFullPath).ToString(dateFormat), "True", "False", "", "", "", "")
             Next
             'Sort table
             samplesTable.AcceptChanges()

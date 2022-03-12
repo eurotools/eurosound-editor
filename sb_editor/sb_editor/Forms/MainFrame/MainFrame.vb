@@ -631,13 +631,11 @@ Partial Public Class MainFrame
                 'Set cursor as hourglass
                 Cursor.Current = Cursors.WaitCursor
 
-                '============================================================Check missing samples======================================================
+                'Check new and missing samples
                 CheckForMissingSamples()
-
-                '============================================================Check New samples======================================================
                 CheckForNewSamples()
 
-                '============================================================Show form======================================================
+                'Show form
                 Dim resampleForm As New ResampleForm(textFileReaders.SamplesFileToDatatable(SysFileSamples))
                 resampleForm.ShowDialog()
             Else
