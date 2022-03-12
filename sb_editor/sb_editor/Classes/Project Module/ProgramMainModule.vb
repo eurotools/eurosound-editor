@@ -67,6 +67,15 @@ Module ProgramMainModule
                     mainform.ComboBox_Format.SelectedIndex = 0
                 End If
             End If
+            'Prefix HashCodes
+            Dim prefixHashCodes As String = iniFunctions.Read("Prefix_HT_Sound", "PropertiesForm")
+            If IsNumeric(prefixHashCodes) Then
+                ProjectSettingsFile.MiscProps.PrefixHtSound = CBool(prefixHashCodes)
+            End If
+            Dim viewOutputDos As String = iniFunctions.Read("ViewOutputDos", "PropertiesForm")
+            If IsNumeric(viewOutputDos) Then
+                ProjectSettingsFile.MiscProps.ViewOutputDos = CBool(viewOutputDos)
+            End If
         End If
     End Sub
 
@@ -108,16 +117,16 @@ Module ProgramMainModule
         mainform.ListBox_DataBases.Items.AddRange(availableDataBases)
         mainform.ListBox_DataBases.EndUpdate()
         mainform.Label_DataBasesCount.Text = "Total: " & mainform.ListBox_DataBases.Items.Count
-
-        'Create temporal file
-        Dim temporalProjectFilePath As String = fso.BuildPath(WorkingDirectory & "\System", "TempFileName.txt")
-        writers.CreateProjectFile(temporalProjectFilePath, availableSoundBanks, availableDataBases, Nothing)
+        'Create project file
+        Dim temporalFile As String = fso.BuildPath(WorkingDirectory, "System\TempFileName.txt")
+        writers.CreateProjectFile(temporalFile, availableSoundBanks, availableDataBases, Nothing)
 
         'Load Hashcodes
         Dim SFXFiles As String() = mainform.UserControl_SFXs.LoadHashCodes()
         mainform.UserControl_SFXs.LoadRefineList()
 
-        writers.MergeFiles(projectFilePath, temporalProjectFilePath, SFXFiles)
+        'Update Project file
+        writers.CreateProjectFile(projectFilePath, availableSoundBanks, availableDataBases, SFXFiles)
 
         'Update EuroSound Ini
         Dim programIni As New IniFile(EuroSoundIniFilePath)
@@ -127,6 +136,14 @@ Module ProgramMainModule
         AddProjectLanguagesToCombo(mainform.ComboBox_OutputLanguage)
         AddAvailableFormatsToCombobox(mainform.ComboBox_Format)
     End Sub
+
+    Friend Function GetSoundBanksList(soundBanksTreeView As TreeView) As String()
+        Dim soundBanksList As String() = New String(soundBanksTreeView.Nodes.Count - 1) {}
+        For index As Integer = 0 To soundBanksList.Length - 1
+            soundBanksList(index) = soundBanksTreeView.Nodes(index).Text
+        Next
+        Return soundBanksList
+    End Function
 
     '*===============================================================================================
     '* LOAD SOUNDBANKS

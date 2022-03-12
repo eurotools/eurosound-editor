@@ -15,13 +15,17 @@ Friend Module GenericFunctions
     '*===============================================================================================
     '* TOOLS FUNCTIONS
     '*===============================================================================================
-    Friend Sub RunProcess(toolFileName As String, toolArguments As String)
+    Friend Sub RunProcess(toolFileName As String, toolArguments As String, Optional ShowWindow As Boolean = False)
         Dim processToExecute As New Process
         processToExecute.StartInfo.FileName = toolFileName
         processToExecute.StartInfo.Arguments = toolArguments
-        processToExecute.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        processToExecute.StartInfo.CreateNoWindow = True
-        processToExecute.StartInfo.UseShellExecute = False
+        If ShowWindow Then
+            processToExecute.StartInfo.WindowStyle = ProcessWindowStyle.Normal
+            processToExecute.StartInfo.CreateNoWindow = False
+        Else
+            processToExecute.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+            processToExecute.StartInfo.CreateNoWindow = True
+        End If
         processToExecute.Start()
         processToExecute.WaitForExit()
     End Sub

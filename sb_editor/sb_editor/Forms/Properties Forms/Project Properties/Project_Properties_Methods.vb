@@ -57,10 +57,11 @@ Partial Public Class Project_Properties
         Dim iniFunctions As New IniFile(SysFileProjectIniPath)
         iniFunctions.Write("Edit_Wavs_With", TextBox_EditWavs.Text, "Form7_Misc")
         iniFunctions.Write("TextEditor", TextBox_TextEditor.Text, "PropertiesForm")
-        iniFunctions.Write("Prefix_HT_Sound", Convert.ToByte(CheckBox_PrefixHashCodes.Checked), "PropertiesForm")
         iniFunctions.Write("PlayStationSize", Numeric_PlayStationMaxSize.Value, "PropertiesForm")
         iniFunctions.Write("PCSize", Numeric_PcMaxSize.Value, "PropertiesForm")
         iniFunctions.Write("GameCubeSize", Numeric_GameCubeMaxSize.Value, "PropertiesForm")
         iniFunctions.Write("XBoxSize", Numeric_XboxMaxSize.Value, "PropertiesForm")
+        iniFunctions.Write("Prefix_HT_Sound", Convert.ToByte(CheckBox_PrefixHashCodes.Checked), "PropertiesForm")
+        iniFunctions.Write("ViewOutputDos", Convert.ToByte(Checkbox_ViewPrePostOutputCommands.Checked), "PropertiesForm")
     End Sub
 End Class

@@ -40,6 +40,11 @@ Partial Public Class ExporterForm
         '----------------------------------------------Get all required data----------------------------------------------
         Invoke(Sub() Text = "Waiting")
 
+        'Create bat if required
+        Dim preOutbatFilePath As String = fso.BuildPath(WorkingDirectory & "\System", "PreOutput.bat")
+        CreatePrePostOutputBatIfRequired(preOutbatFilePath, "rem Add your pre-output stuff here")
+        RunProcess(preOutbatFilePath, "", ProjectSettingsFile.MiscProps.ViewOutputDos)
+
         'Get output platforms
         Dim outPlaforms As String() = New String() {mainFrame.ComboBox_Format.Invoke(Function() mainFrame.ComboBox_Format.SelectedItem)}
         If mainFrame.RadioButton_Output_AllBanksAll.Checked Then
@@ -163,6 +168,12 @@ Partial Public Class ExporterForm
             hashTablesBuilder.CreateSfxDefines(Me, hashCodesDictionary, soundBanksDictionary, SfxLanguages, ProjectSettingsFile.MiscProps.PrefixHtSound, fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Defines.h"))
             hashTablesBuilder.CreateSfxData(Me, fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Data.h"), fso.BuildPath(WorkingDirectory, "TempSfxData"), maxHashCode)
         End If
+
+        'Create bat if required
+        Invoke(Sub() Text = "End")
+        Dim postOutBatFilepath As String = fso.BuildPath(WorkingDirectory & "\System", "PostOutput.bat")
+        CreatePrePostOutputBatIfRequired(postOutBatFilepath, "rem Add your post-output stuff here")
+        RunProcess(postOutBatFilepath, "", ProjectSettingsFile.MiscProps.ViewOutputDos)
     End Sub
 
     Private Sub BackgroundWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker.ProgressChanged
@@ -178,6 +189,17 @@ Partial Public Class ExporterForm
     Private Sub ExporterForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If Not canCloseForm Then
             e.Cancel = True
+        End If
+    End Sub
+
+    '*===============================================================================================
+    '* BAT FILES FUNCTIONS
+    '*===============================================================================================
+    Private Sub CreatePrePostOutputBatIfRequired(batFilePath As String, comment As String)
+        If Not fso.FileExists(batFilePath) Then
+            FileOpen(1, batFilePath, OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
+            PrintLine(1, comment)
+            FileClose(1)
         End If
     End Sub
 End Class

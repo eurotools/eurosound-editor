@@ -38,6 +38,11 @@ Public Class UserControl_SFXs
             ListBox_SFXs.EndUpdate()
             'Update counter
             Label_TotalSfx.Text = "Total: " & hashCodesArray.Length
+
+            'Update Project file
+            Dim projectFile As String = fso.BuildPath(WorkingDirectory, "Project.txt")
+            Dim temporalProjFile As ProjectFile = textFileReaders.ReadProjectFile(fso.BuildPath(WorkingDirectory, "System\TempFileName.txt"))
+            writers.CreateProjectFile(projectFile, temporalProjFile.SoundBankList, temporalProjFile.DataBaseList, hashCodesArray)
         End If
 
         Return hashCodesArray
@@ -245,6 +250,13 @@ Public Class UserControl_SFXs
                 'Update Global Variable
                 SFXHashCodeNumber += 1
                 writers.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
+
+                'Update Project file
+                Dim temporalFile As String = fso.BuildPath(WorkingDirectory, "System\TempFileName.txt")
+                Dim projectFile As String = fso.BuildPath(WorkingDirectory, "Project.txt")
+                Dim temporalProjFile As ProjectFile = textFileReaders.ReadProjectFile(temporalFile)
+                writers.MergeFiles(temporalFile, temporalFile, textFileReaders.ReadProjectFile(projectFile), "#SFXList")
+                writers.CreateProjectFile(projectFile, temporalProjFile.SoundBankList, temporalProjFile.DataBaseList, ListBox_SFXs.Items.Cast(Of String).ToArray)
             End If
         Else
             'Inform user about this
@@ -331,9 +343,11 @@ Public Class UserControl_SFXs
             Label_TotalSfx.Text = "Total: " & ListBox_SFXs.Items.Count
 
             'Update Project file
-            Dim databasesToWrite As String() = mainForm.ListBox_DataBases.Items.Cast(Of String).ToArray
-            Dim sfxsToWriter As String() = mainForm.UserControl_SFXs.ListBox_SFXs.Items.Cast(Of String).ToArray
-            writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), Nothing, databasesToWrite, sfxsToWriter)
+            Dim temporalFile As String = fso.BuildPath(WorkingDirectory, "System\TempFileName.txt")
+            Dim projectFile As String = fso.BuildPath(WorkingDirectory, "Project.txt")
+            Dim temporalProjFile As ProjectFile = textFileReaders.ReadProjectFile(temporalFile)
+            writers.MergeFiles(temporalFile, temporalFile, textFileReaders.ReadProjectFile(projectFile), "#SFXList")
+            writers.CreateProjectFile(projectFile, temporalProjFile.SoundBankList, temporalProjFile.DataBaseList, ListBox_SFXs.Items.Cast(Of String).ToArray)
         End If
     End Sub
 

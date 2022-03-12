@@ -90,6 +90,11 @@ Partial Public Class Project_Properties
                         CheckBox_PrefixHashCodes.Checked = CBool(prefixHashCodes)
                         ProjectSettingsFile.MiscProps.PrefixHtSound = CheckBox_PrefixHashCodes.Checked
                     End If
+                    Dim viewOutputDos As String = iniFunctions.Read("ViewOutputDos", "PropertiesForm")
+                    If IsNumeric(viewOutputDos) Then
+                        Checkbox_ViewPrePostOutputCommands.Checked = CBool(viewOutputDos)
+                        ProjectSettingsFile.MiscProps.ViewOutputDos = Checkbox_ViewPrePostOutputCommands.Checked
+                    End If
                 End If
             End If
         Else
@@ -143,6 +148,7 @@ Partial Public Class Project_Properties
         ProjectSettingsFile.MiscProps.EngineXFolder = Textbox_EngineXFolder.Text
         ProjectSettingsFile.MiscProps.EuroLandHashCodeServerPath = Textbox_EuroLandServer.Text
         ProjectSettingsFile.MiscProps.PrefixHtSound = CheckBox_PrefixHashCodes.Checked
+        ProjectSettingsFile.MiscProps.ViewOutputDos = Checkbox_ViewPrePostOutputCommands.Checked
         'Save file
         textFileWriters.SavePropertiesFile(ProjectSettingsFile, SysFileProperties)
         SaveIniFile()

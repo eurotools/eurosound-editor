@@ -14,5 +14,6 @@
         Public EngineXFolder As String
         Public EuroLandHashCodeServerPath As String
         Public PrefixHtSound As Boolean
+        Public ViewOutputDos As Boolean
     End Class
 End Namespace

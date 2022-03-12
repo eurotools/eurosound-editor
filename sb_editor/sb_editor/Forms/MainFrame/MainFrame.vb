@@ -29,8 +29,6 @@ Partial Public Class MainFrame
     Private Sub MainFrame_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         'Update text file
         If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System\")) Then
-            writers.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
-
             'Save data in the Ini File
             If SysFileProjectIniPath > "" Then
                 Dim iniFunctions As New IniFile(SysFileProjectIniPath)
@@ -243,6 +241,12 @@ Partial Public Class MainFrame
 
             'Update label
             Label_SoundBanksCount.Text = "Total: " & TreeView_SoundBanks.Nodes.Count
+            'Update Project file
+            Dim temporalFile As String = fso.BuildPath(WorkingDirectory, "System\TempFileName.txt")
+            Dim projectFile As String = fso.BuildPath(WorkingDirectory, "Project.txt")
+            Dim projFileData As ProjectFile = textFileReaders.ReadProjectFile(projectFile)
+            writers.CreateProjectFile(temporalFile, GetSoundBanksList(TreeView_SoundBanks), projFileData.DataBaseList.ToArray, projFileData.SFXList.ToArray)
+            writers.MergeFiles(temporalFile, projectFile, projFileData, "#SoundBankList")
         End If
     End Sub
 
@@ -410,9 +414,11 @@ Partial Public Class MainFrame
                 'Update counter
                 Label_DataBasesCount.Text = "Total: " & ListBox_DataBases.Items.Count
                 'Update Project file
-                Dim databasesToWrite As String() = ListBox_DataBases.Items.Cast(Of String).ToArray
-                Dim sfxsToWriter As String() = UserControl_SFXs.ListBox_SFXs.Items.Cast(Of String).ToArray
-                writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), Nothing, databasesToWrite, sfxsToWriter)
+                Dim temporalFile As String = fso.BuildPath(WorkingDirectory, "System\TempFileName.txt")
+                Dim projectFile As String = fso.BuildPath(WorkingDirectory, "Project.txt")
+                Dim projFileData As ProjectFile = textFileReaders.ReadProjectFile(projectFile)
+                writers.CreateProjectFile(temporalFile, projFileData.SoundBankList.ToArray, ListBox_DataBases.Items.Cast(Of String).ToArray, projFileData.SFXList.ToArray)
+                writers.MergeFiles(temporalFile, projectFile, projFileData, "#DataBaseList")
             End If
         End If
     End Sub
@@ -642,8 +648,6 @@ Partial Public Class MainFrame
             End If
         Else
             MsgBox("Master folder could not be located. Please set the folder location under Properties menu.", vbOKOnly + vbCritical, "EuroSound")
-            Dim projectPropsform As New Project_Properties(Me)
-            projectPropsform.ShowDialog()
         End If
     End Sub
 

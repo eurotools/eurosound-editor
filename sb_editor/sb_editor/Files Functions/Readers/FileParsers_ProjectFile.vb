@@ -88,9 +88,9 @@ Namespace ReaderClasses
             FileClose(1)
 
             'Add data to object
-            ProjFile.DataBaseList = DataBaseList
-            ProjFile.SoundBankList = SoundBankList
-            ProjFile.SFXList = SFXList
+            ProjFile.DataBaseList = DataBaseList.ToArray
+            ProjFile.SoundBankList = SoundBankList.ToArray
+            ProjFile.SFXList = SFXList.ToArray
 
             Return ProjFile
         End Function

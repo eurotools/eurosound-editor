@@ -86,6 +86,7 @@ Partial Class Project_Properties
         Me.ShapeContainer2 = New Microsoft.VisualBasic.PowerPacks.ShapeContainer()
         Me.LineShape4 = New Microsoft.VisualBasic.PowerPacks.LineShape()
         Me.LineShape3 = New Microsoft.VisualBasic.PowerPacks.LineShape()
+        Me.Checkbox_ViewPrePostOutputCommands = New System.Windows.Forms.CheckBox()
         Me.GroupBox_Master_Path.SuspendLayout()
         Me.GroupBox_SonixFolder.SuspendLayout()
         Me.GroupBox_EngineXFolder.SuspendLayout()
@@ -447,6 +448,7 @@ Partial Class Project_Properties
         '
         'GroupBox_Misc
         '
+        Me.GroupBox_Misc.Controls.Add(Me.Checkbox_ViewPrePostOutputCommands)
         Me.GroupBox_Misc.Controls.Add(Me.Label_XboxMaxSizeK)
         Me.GroupBox_Misc.Controls.Add(Me.Label_GameCubeMaxSizeK)
         Me.GroupBox_Misc.Controls.Add(Me.Label_PcMaxSizeK)
@@ -720,6 +722,16 @@ Partial Class Project_Properties
         Me.LineShape3.Y1 = 372
         Me.LineShape3.Y2 = 636
         '
+        'Checkbox_ViewPrePostOutputCommands
+        '
+        Me.Checkbox_ViewPrePostOutputCommands.AutoSize = True
+        Me.Checkbox_ViewPrePostOutputCommands.Location = New System.Drawing.Point(302, 162)
+        Me.Checkbox_ViewPrePostOutputCommands.Name = "Checkbox_ViewPrePostOutputCommands"
+        Me.Checkbox_ViewPrePostOutputCommands.Size = New System.Drawing.Size(206, 17)
+        Me.Checkbox_ViewPrePostOutputCommands.TabIndex = 21
+        Me.Checkbox_ViewPrePostOutputCommands.Text = "View Pre/Post Output Dos Commands"
+        Me.Checkbox_ViewPrePostOutputCommands.UseVisualStyleBackColor = True
+        '
         'Project_Properties
         '
         Me.AcceptButton = Me.Button_OK
@@ -831,4 +843,5 @@ Partial Class Project_Properties
     Friend WithEvents Label_GameCubeMaxSizeK As Label
     Friend WithEvents Label_PcMaxSizeK As Label
     Friend WithEvents Label_PlayStationMaxSizeK As Label
+    Friend WithEvents Checkbox_ViewPrePostOutputCommands As CheckBox
 End Class
