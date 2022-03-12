@@ -14,25 +14,34 @@ Public Class UserControl_SFXs
     '*===============================================================================================
     '* FORM EVENTS
     '*===============================================================================================
-    Public Sub LoadHashCodes()
+    Public Function LoadHashCodes() As String()
+        Dim hashCodesList As New List(Of String)
+        Dim hashCodesArray As String() = Nothing
+
         'Get files from directory and add it to list
         If fso.FolderExists(fso.BuildPath(WorkingDirectory, "SFXs")) Then
             Dim fileToadd As String = Dir(fso.BuildPath(WorkingDirectory, "SFXs\*.txt"))
-            'Add item to listbox
-            ListBox_SFXs.BeginUpdate()
-            ListBox_SFXs.Items.Clear()
             Do While fileToadd > ""
                 Dim fileNameLength As Integer = Len(fileToadd)
                 Dim fileName As String = Microsoft.VisualBasic.Left(fileToadd, fileNameLength - Len(".txt"))
-                ListBox_SFXs.Items.Add(fileName)
+                hashCodesList.Add(fileName)
                 'Get new item
                 fileToadd = Dir()
             Loop
+            'Get array
+            hashCodesArray = hashCodesList.ToArray
+            Array.Sort(hashCodesArray)
+            'Add item to listbox
+            ListBox_SFXs.BeginUpdate()
+            ListBox_SFXs.Items.Clear()
+            ListBox_SFXs.Items.AddRange(hashCodesArray)
             ListBox_SFXs.EndUpdate()
             'Update counter
-            Label_TotalSfx.Text = "Total: " & ListBox_SFXs.Items.Count
+            Label_TotalSfx.Text = "Total: " & hashCodesArray.Length
         End If
-    End Sub
+
+        Return hashCodesArray
+    End Function
 
     Public Sub LoadRefineList()
         'Get arrays item
@@ -324,8 +333,7 @@ Public Class UserControl_SFXs
             'Update Project file
             Dim databasesToWrite As String() = mainForm.ListBox_DataBases.Items.Cast(Of String).ToArray
             Dim sfxsToWriter As String() = mainForm.UserControl_SFXs.ListBox_SFXs.Items.Cast(Of String).ToArray
-            Dim soundbanksList As String() = GetListOfSoundbanks(mainForm.TreeView_SoundBanks)
-            writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), soundbanksList, databasesToWrite, sfxsToWriter)
+            writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), Nothing, databasesToWrite, sfxsToWriter)
         End If
     End Sub
 
@@ -348,8 +356,7 @@ Public Class UserControl_SFXs
                 'Update project file
                 Dim databasesToWrite As String() = mainForm.ListBox_DataBases.Items.Cast(Of String).ToArray
                 Dim sfxsToWriter As String() = mainForm.UserControl_SFXs.ListBox_SFXs.Items.Cast(Of String).ToArray
-                Dim soundbanksList As String() = GetListOfSoundbanks(mainForm.TreeView_SoundBanks)
-                writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), soundbanksList, databasesToWrite, sfxsToWriter)
+                writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), Nothing, databasesToWrite, sfxsToWriter)
                 'Update databases
                 Dim databaseFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "Databases"), "*.txt", SearchOption.TopDirectoryOnly)
                 For index As Integer = 0 To databaseFiles.Length - 1

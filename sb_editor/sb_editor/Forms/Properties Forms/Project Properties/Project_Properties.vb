@@ -11,10 +11,19 @@ Partial Public Class Project_Properties
     Private ReadOnly ratesNames As String() = New String() {"Low", "Medium", "High", "Maximum"}
     Private promptSave As Boolean = True
     Private ratesNamesIndex As Byte = 0
+    Private ReadOnly mainform As MainFrame
 
     '*===============================================================================================
     '* FORM EVENTS
     '*===============================================================================================
+    Sub New(mainformObj As MainFrame)
+        ' Esta llamada es exigida por el diseñador.
+        InitializeComponent()
+
+        ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
+        mainform = mainformObj
+    End Sub
+
     Private Sub Project_Properties_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If fso.FileExists(SysFileProperties) Then
             'Read data if is an existing project
@@ -109,9 +118,16 @@ Partial Public Class Project_Properties
                 'Cancel close if user not want to quit
                 If save = MsgBoxResult.Cancel Then
                     e.Cancel = True
+                Else
+                    'Load Project Data
+                    LoadProjectData(mainform, fso.BuildPath(WorkingDirectory, "Project.txt"))
                 End If
+            Else
+                'Load Project Data
+                LoadProjectData(mainform, fso.BuildPath(WorkingDirectory, "Project.txt"))
             End If
         End If
+
     End Sub
 
     '*===============================================================================================
@@ -136,10 +152,6 @@ Partial Public Class Project_Properties
         ProjTextEditor = TextBox_TextEditor.Text
         baseIniFile.Write("Edit_Wavs_With", ProjAudioEditor, "Form7_Misc")
         baseIniFile.Write("TextEditor", ProjTextEditor, "PropertiesForm")
-        'Add items to combobox
-        AddAvailableFormatsToCombobox()
-        'Load Languages and Formats
-        AddProjectLanguagesToCombo(MainFrame.ComboBox_OutputLanguage)
         'Close form
         Close()
     End Sub

@@ -85,18 +85,6 @@ Friend Module GenericFunctions
         Return filesListToDelete
     End Function
 
-    Friend Function GetListOfSoundbanks(soundbanksTreeView As TreeView) As String()
-        Dim itemsCount As Integer = soundbanksTreeView.Nodes.Count - 1
-        Dim soundBanksArray As String() = Nothing
-        If itemsCount > 0 Then
-            soundBanksArray = New String(itemsCount) {}
-            For nodeIndex As Integer = 0 To itemsCount
-                soundBanksArray(nodeIndex) = soundbanksTreeView.Nodes(nodeIndex).Text
-            Next
-        End If
-        Return soundBanksArray
-    End Function
-
     Friend Sub RestartEuroSound()
         'Restart application
         Process.Start(Application.ExecutablePath)
@@ -110,31 +98,6 @@ Friend Module GenericFunctions
         End While
         Return FileNamePattern & fileNumber
     End Function
-
-    Friend Sub AddProjectLanguagesToCombo(comboboxToModify As ComboBox)
-        'Get project languages
-        If Dir(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\Speech"), FileAttribute.Directory) IsNot "" Then
-            Dim languages As String() = Directory.GetDirectories(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\Speech"))
-            'Previous Selected Index
-            Dim comboPrevSelection As String = comboboxToModify.SelectedItem
-            'Add folders to combobox
-            comboboxToModify.BeginUpdate()
-            comboboxToModify.Items.Clear()
-            For index As Integer = 0 To languages.Length - 1
-                Dim folderName As String = Trim(StrConv(New DirectoryInfo(languages(index)).Name, vbProperCase))
-                If Array.IndexOf(SfxLanguages, folderName) <> -1 Then
-                    comboboxToModify.Items.Add(folderName)
-                End If
-            Next
-            'Keep the previous selection
-            If comboPrevSelection IsNot Nothing Then
-                If comboboxToModify.Items.Contains(comboPrevSelection) Then
-                    comboboxToModify.SelectedItem = comboPrevSelection
-                End If
-            End If
-            comboboxToModify.EndUpdate()
-        End If
-    End Sub
 
     '*===============================================================================================
     '* FILES FUNCTIONS

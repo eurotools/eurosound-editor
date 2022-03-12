@@ -89,10 +89,11 @@
   <ItemGroup>
     <Compile Include="Classes\Markers\MarkerFiles.vb" />
     <Compile Include="Classes\Markers\MarkerObject.vb" />
-    <Compile Include="Classes\Soundbanks Exporter\Objects\EXAudio.vb" />
-    <Compile Include="Classes\Soundbanks Exporter\Objects\EXSample.vb" />
-    <Compile Include="Classes\Soundbanks Exporter\Objects\EXSound.vb" />
-    <Compile Include="Classes\Soundbanks Exporter\SBExporterModule.vb" />
+    <Compile Include="Classes\Project Module\ProgramMainModule.vb" />
+    <Compile Include="Classes\SoundBanks Module\Objects\EXAudio.vb" />
+    <Compile Include="Classes\SoundBanks Module\Objects\EXSample.vb" />
+    <Compile Include="Classes\SoundBanks Module\Objects\EXSound.vb" />
+    <Compile Include="Classes\SoundBanks Module\SBExporterModule.vb" />
     <Compile Include="Custom Controls\Refine Search\Combobox With ItemData\ComboItemData.vb" />
     <Compile Include="Custom Controls\Refine Search\Frm_RefineSearch.Designer.vb">
       <DependentUpon>Frm_RefineSearch.vb</DependentUpon>
@@ -305,12 +306,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Forms\Sfx Editor\Frm_SfxEditor_TestSoundbank.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Splash\SplashScreen_Methods.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Splash\SplashScreen_ProjectMethods.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="HashTables Builder\FormatFunctions.vb" />

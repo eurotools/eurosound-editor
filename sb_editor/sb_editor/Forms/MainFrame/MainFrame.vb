@@ -412,8 +412,7 @@ Partial Public Class MainFrame
                 'Update Project file
                 Dim databasesToWrite As String() = ListBox_DataBases.Items.Cast(Of String).ToArray
                 Dim sfxsToWriter As String() = UserControl_SFXs.ListBox_SFXs.Items.Cast(Of String).ToArray
-                Dim soundbanksList As String() = GetListOfSoundbanks(TreeView_SoundBanks)
-                writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), soundbanksList, databasesToWrite, sfxsToWriter)
+                writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), Nothing, databasesToWrite, sfxsToWriter)
             End If
         End If
     End Sub
@@ -621,7 +620,7 @@ Partial Public Class MainFrame
     '*===============================================================================================
     Private Sub Button_ProjectProperties_Click(sender As Object, e As EventArgs) Handles Button_ProjectProperties.Click
         'Show form
-        Dim projectProps As New Project_Properties
+        Dim projectProps As New Project_Properties(Me)
         projectProps.ShowDialog()
     End Sub
 
@@ -643,7 +642,7 @@ Partial Public Class MainFrame
             End If
         Else
             MsgBox("Master folder could not be located. Please set the folder location under Properties menu.", vbOKOnly + vbCritical, "EuroSound")
-            Dim projectPropsform As New Project_Properties
+            Dim projectPropsform As New Project_Properties(Me)
             projectPropsform.ShowDialog()
         End If
     End Sub

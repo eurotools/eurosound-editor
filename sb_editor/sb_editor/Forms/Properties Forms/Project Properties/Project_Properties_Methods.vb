@@ -63,15 +63,4 @@ Partial Public Class Project_Properties
         iniFunctions.Write("GameCubeSize", Numeric_GameCubeMaxSize.Value, "PropertiesForm")
         iniFunctions.Write("XBoxSize", Numeric_XboxMaxSize.Value, "PropertiesForm")
     End Sub
-
-    Private Sub AddAvailableFormatsToCombobox()
-        Dim MainFrame As MainFrame = CType(Application.OpenForms("MainFrame"), MainFrame)
-        MainFrame.ComboBox_Format.BeginUpdate()
-        MainFrame.ComboBox_Format.Items.Clear()
-        MainFrame.ComboBox_Format.Items.AddRange(ProjectSettingsFile.sampleRateFormats.Keys.ToArray)
-        If MainFrame.ComboBox_Format.Items.Count > 0 AndAlso MainFrame.ComboBox_Format.SelectedIndex = -1 Then
-            MainFrame.ComboBox_Format.SelectedIndex = 0
-        End If
-        MainFrame.ComboBox_Format.EndUpdate()
-    End Sub
 End Class

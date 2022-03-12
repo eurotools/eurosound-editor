@@ -1,5 +1,4 @@
 ﻿Imports System.IO
-Imports IniFileFunctions
 Imports RecentFilesMenu
 Imports sb_editor.ReaderClasses
 Imports sb_editor.WritersClasses
@@ -27,65 +26,36 @@ Partial Public NotInheritable Class SplashScreen
     '*===============================================================================================
     Private Sub SplashScreen_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
         'Load ini file data
-        LoadIniData()
+        LoadSystemFilesIni()
         'Inform user if the working directory exists
         Dim projectFilePath As String = fso.BuildPath(WorkingDirectory, "Project.txt")
         If fso.FileExists(projectFilePath) Then
-            LoadProjectData()
-            CheckProjectFiles()
-            'Load Project
-            LoadSoundbanks(fso.BuildPath(WorkingDirectory, "Soundbanks"))
-            LoadDataBases(fso.BuildPath(WorkingDirectory, "DataBases"))
-            mainform.UserControl_SFXs.LoadHashCodes()
-            mainform.UserControl_SFXs.LoadRefineList()
-            'Update Project file
-            Dim databasesToWrite As String() = mainform.ListBox_DataBases.Items.Cast(Of String).ToArray
-            Dim sfxsToWriter As String() = mainform.UserControl_SFXs.ListBox_SFXs.Items.Cast(Of String).ToArray
-            Dim soundbanksList As String() = GetListOfSoundbanks(mainform.TreeView_SoundBanks)
-            writers.CreateProjectFile(projectFilePath, soundbanksList, databasesToWrite, sfxsToWriter)
-            'Load Languages and Formats
-            AddProjectLanguagesToCombo(mainform.ComboBox_OutputLanguage)
-            mainform.ComboBox_Format.Items.AddRange(ProjectSettingsFile.sampleRateFormats.Keys.ToArray)
+            'Update project variables
+            Dim propsFilePath As String = fso.BuildPath(WorkingDirectory, "System\Properties.txt")
+            If fso.FileExists(propsFilePath) Then
+                ProjectSettingsFile = textFileReaders.ReadPropertiesFile(propsFilePath)
+            End If
+
+            'Update all variables 
+            UpdateGlobalVariables()
+
+            'Load Project Data
+            LoadProjectData(mainform, projectFilePath)
+
+            'Ask for UserName if required
+            If StrComp(EuroSoundUser, "") = 0 Then
+                EuroSoundUser = AskForUserName("MyName")
+            End If
+
             'Update GUI
             mainform.Text = "EuroSound: """ & WorkingDirectory & """"
+            LoadProgramLastState(mainform)
 
-            'Read ini file
-            If SysFileProjectIniPath > "" Then
-                Dim iniFunctions As New IniFile(SysFileProjectIniPath)
-                mainform.RadioButton_AllBanksSelectedFormat.Checked = StrComp(iniFunctions.Read("AllBanksOption_Value", "Form1_Misc"), "True") = 0
-                mainform.RadioButton_Output_SelectedSoundBank.Checked = StrComp(iniFunctions.Read("SelectedlBankOption_Value", "Form1_Misc"), "True") = 0
-                mainform.RadioButton_Output_AllBanksAll.Checked = StrComp(iniFunctions.Read("AllFormatsOption_Value", "Form1_Misc"), "True") = 0
-                Dim tempVar As String = iniFunctions.Read("Check1", "MainForm")
-                If Not tempVar = "" Then
-                    mainform.CheckBox_FastReSample.Checked = Convert.ToBoolean(CByte(tempVar))
-                End If
-                tempVar = iniFunctions.Read("Check2", "MainForm")
-                If Not tempVar = "" Then
-                    mainform.UserControl_SFXs.CheckBox_SortByDate.Checked = Convert.ToBoolean(CByte(tempVar))
-                End If
-                tempVar = iniFunctions.Read("OutputAllLanguages", "MainForm")
-                If Not tempVar = "" Then
-                    mainform.CheckBox_OutAllLanguages.Checked = Convert.ToBoolean(CByte(tempVar))
-                End If
-                'Combobox output language
-                tempVar = iniFunctions.Read("LanguageCombo", "MainForm")
-                If Not tempVar = "" Then
-                    Dim languageIndex As Integer = tempVar
-                    If languageIndex <> -1 AndAlso languageIndex < mainform.ComboBox_OutputLanguage.Items.Count Then
-                        mainform.ComboBox_OutputLanguage.SelectedIndex = languageIndex
-                    ElseIf mainform.ComboBox_OutputLanguage.Items.Count > 0 Then
-                        mainform.ComboBox_OutputLanguage.SelectedIndex = 0
-                    End If
-                End If
-                'Combobox output format
-                tempVar = iniFunctions.Read("FormatCombo_ListIndex", "Form1_Misc")
-                If Not tempVar = "" Then
-                    Dim outFormatIndex As Integer = tempVar
-                    If outFormatIndex <> -1 AndAlso outFormatIndex < mainform.ComboBox_Format.Items.Count Then
-                        mainform.ComboBox_Format.SelectedIndex = outFormatIndex
-                    ElseIf mainform.ComboBox_Format.Items.Count > 0 Then
-                        mainform.ComboBox_Format.SelectedIndex = 0
-                    End If
+            'Create refine search file if required
+            Dim refineSearchTextFile As String = fso.BuildPath(WorkingDirectory, "System\RefineSearch.txt")
+            If Not fso.FileExists(refineSearchTextFile) Then
+                If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System")) Then
+                    writers.CreateRefineList(refineSearchTextFile, Nothing)
                 End If
             End If
         Else

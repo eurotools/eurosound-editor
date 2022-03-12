@@ -54,7 +54,7 @@ Partial Public Class MainFrame
             writers.SavePropertiesFile(newProjectFile, fso.BuildPath(selectedProjectPath, "System\Properties.txt"))
             'Ask for UserName
             If StrComp(EuroSoundUser, "") = 0 Then
-                Dim projectPropsForm As New Project_Properties
+                Dim projectPropsForm As New Project_Properties(Me)
                 projectPropsForm.ShowDialog()
             End If
             'Update ini file
