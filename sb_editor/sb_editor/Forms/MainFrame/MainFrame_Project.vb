@@ -18,27 +18,27 @@ Partial Public Class MainFrame
         'Continue with the project creation
         If createProject = MsgBoxResult.Ok Then
             'Create folders
-            CreateFolderIfNotExists(DataBasesFolder)
-            CreateFolderIfNotExists(fso.BuildPath(selectedProjectPath, "Debug_Report\ForES2\MarkerFileData"))
-            CreateFolderIfNotExists(fso.BuildPath(selectedProjectPath, "Music\ESData"))
-            CreateFolderIfNotExists(fso.BuildPath(selectedProjectPath, "Music\ESWork"))
-            CreateFolderIfNotExists(fso.BuildPath(selectedProjectPath, "Reverbs"))
-            CreateFolderIfNotExists(SoundbanksFolder)
-            CreateFolderIfNotExists(SystemFolder)
+            CreateFolderIfRequired(DataBasesFolder)
+            CreateFolderIfRequired(fso.BuildPath(selectedProjectPath, "Debug_Report\ForES2\MarkerFileData"))
+            CreateFolderIfRequired(fso.BuildPath(selectedProjectPath, "Music\ESData"))
+            CreateFolderIfRequired(fso.BuildPath(selectedProjectPath, "Music\ESWork"))
+            CreateFolderIfRequired(fso.BuildPath(selectedProjectPath, "Reverbs"))
+            CreateFolderIfRequired(SoundbanksFolder)
+            CreateFolderIfRequired(SystemFolder)
             'SFXs Folders
-            CreateFolderIfNotExists(SfxFolder)
-            CreateFolderIfNotExists(fso.BuildPath(selectedProjectPath, "SFXs\PC"))
-            CreateFolderIfNotExists(fso.BuildPath(selectedProjectPath, "SFXs\PlayStation2"))
-            CreateFolderIfNotExists(fso.BuildPath(selectedProjectPath, "SFXs\X Box"))
-            CreateFolderIfNotExists(fso.BuildPath(selectedProjectPath, "SFXs\GameCube"))
-            CreateFolderIfNotExists(fso.BuildPath(selectedProjectPath, "SFXs\Misc"))
+            CreateFolderIfRequired(SfxFolder)
+            CreateFolderIfRequired(fso.BuildPath(selectedProjectPath, "SFXs\PC"))
+            CreateFolderIfRequired(fso.BuildPath(selectedProjectPath, "SFXs\PlayStation2"))
+            CreateFolderIfRequired(fso.BuildPath(selectedProjectPath, "SFXs\X Box"))
+            CreateFolderIfRequired(fso.BuildPath(selectedProjectPath, "SFXs\GameCube"))
+            CreateFolderIfRequired(fso.BuildPath(selectedProjectPath, "SFXs\Misc"))
             'Output folders
-            CreateFolderIfNotExists(fso.BuildPath(selectedProjectPath, "TempOutputFolder\GameCube\SoundBanks"))
-            CreateFolderIfNotExists(fso.BuildPath(selectedProjectPath, "TempOutputFolder\PC\SoundBanks"))
-            CreateFolderIfNotExists(fso.BuildPath(selectedProjectPath, "TempOutputFolder\PlayStation2\SoundBanks"))
-            CreateFolderIfNotExists(fso.BuildPath(selectedProjectPath, "TempOutputFolder\X Box\SoundBanks"))
+            CreateFolderIfRequired(fso.BuildPath(selectedProjectPath, "TempOutputFolder\GameCube\SoundBanks"))
+            CreateFolderIfRequired(fso.BuildPath(selectedProjectPath, "TempOutputFolder\PC\SoundBanks"))
+            CreateFolderIfRequired(fso.BuildPath(selectedProjectPath, "TempOutputFolder\PlayStation2\SoundBanks"))
+            CreateFolderIfRequired(fso.BuildPath(selectedProjectPath, "TempOutputFolder\X Box\SoundBanks"))
             'Master folder
-            CreateFolderIfNotExists(fso.BuildPath(selectedProjectPath, "Master\Speech\English"))
+            CreateFolderIfRequired(fso.BuildPath(selectedProjectPath, "Master\Speech\English"))
             'Create Project files
             writers.CreateProjectFile(fso.BuildPath(selectedProjectPath, "Project.txt"), Nothing, Nothing, Nothing)
             'Create System Files
@@ -60,12 +60,6 @@ Partial Public Class MainFrame
             'Update ini file
             Dim baseIniFunctions As New IniFile(EuroSoundIniFilePath)
             baseIniFunctions.Write("Last_Project_Opened", selectedProjectPath, "Form1_Misc")
-        End If
-    End Sub
-
-    Private Sub CreateFolderIfNotExists(folderPath As String)
-        If Not fso.FolderExists(folderPath) Then
-            MkDir(folderPath)
         End If
     End Sub
 End Class

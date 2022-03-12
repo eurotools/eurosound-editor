@@ -107,6 +107,12 @@ Partial Public Class ExporterForm
             End If
         Next
 
+        'Check for new and missing samples
+        If Not quickOutput Then
+            Invoke(Sub() mainFrame.CheckForMissingSamples())
+            Invoke(Sub() mainFrame.CheckForNewSamples())
+        End If
+
         'Get data
         Dim soundsTable As DataTable = textFileReaders.SamplesFileToDatatable(SysFileSamples)
         Dim streamSamplesList As String() = textFileReaders.GetStreamSoundsList(SysFileSamples)

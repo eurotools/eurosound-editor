@@ -85,6 +85,7 @@ Partial Class NewSamples
         Me.ListBox_NewSamples.Location = New System.Drawing.Point(6, 13)
         Me.ListBox_NewSamples.Name = "ListBox_NewSamples"
         Me.ListBox_NewSamples.Size = New System.Drawing.Size(472, 446)
+        Me.ListBox_NewSamples.Sorted = True
         Me.ListBox_NewSamples.TabIndex = 0
         '
         'NewSamples

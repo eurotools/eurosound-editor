@@ -8,7 +8,6 @@
     '* FORM EVENTS
     '*===============================================================================================
     Sub New(missingSamplesList As String())
-
         ' Esta llamada es exigida por el diseñador.
         InitializeComponent()
 

@@ -62,6 +62,7 @@ Partial Class MissingSamples
         Me.ListBox_MissingSamples.Location = New System.Drawing.Point(6, 13)
         Me.ListBox_MissingSamples.Name = "ListBox_MissingSamples"
         Me.ListBox_MissingSamples.Size = New System.Drawing.Size(392, 446)
+        Me.ListBox_MissingSamples.Sorted = True
         Me.ListBox_MissingSamples.TabIndex = 0
         '
         'MissingSamples
