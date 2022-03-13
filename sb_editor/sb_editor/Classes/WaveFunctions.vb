@@ -30,5 +30,14 @@ Friend Class WaveFunctions
         End If
         Return loopInfo
     End Function
+
+    Friend Function ConvertByteArrayToShortArray(PCMData As Byte()) As Short()
+        Dim samplesShort As Short() = New Short(PCMData.Length / 2 - 1) {}
+        Dim sourceWaveBuffer As New WaveBuffer(PCMData)
+        For i As Integer = 0 To samplesShort.Length - 1
+            samplesShort(i) = sourceWaveBuffer.ShortBuffer(i)
+        Next
+        Return samplesShort
+    End Function
 End Class
 

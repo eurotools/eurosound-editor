@@ -34,29 +34,30 @@ Partial Class Frm_TimerForm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Groupbox_TaskTime.Controls.Add(Me.ProgressBar1)
-        Me.Groupbox_TaskTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Groupbox_TaskTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Groupbox_TaskTime.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.Groupbox_TaskTime.Location = New System.Drawing.Point(12, 12)
+        Me.Groupbox_TaskTime.Location = New System.Drawing.Point(7, 6)
+        Me.Groupbox_TaskTime.Margin = New System.Windows.Forms.Padding(2)
         Me.Groupbox_TaskTime.Name = "Groupbox_TaskTime"
-        Me.Groupbox_TaskTime.Size = New System.Drawing.Size(815, 68)
+        Me.Groupbox_TaskTime.Size = New System.Drawing.Size(689, 60)
         Me.Groupbox_TaskTime.TabIndex = 2
         Me.Groupbox_TaskTime.TabStop = False
         Me.Groupbox_TaskTime.Text = "EuroSound Task Time Remaining:"
         '
         'ProgressBar1
         '
-        Me.ProgressBar1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.ProgressBar1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ProgressBar1.Location = New System.Drawing.Point(6, 30)
+        Me.ProgressBar1.Location = New System.Drawing.Point(5, 29)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(803, 23)
+        Me.ProgressBar1.Size = New System.Drawing.Size(679, 23)
         Me.ProgressBar1.TabIndex = 0
         '
         'Frm_TimerForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(839, 92)
+        Me.ClientSize = New System.Drawing.Size(703, 72)
         Me.Controls.Add(Me.Groupbox_TaskTime)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)

@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports IniFileFunctions
+Imports NAudio.Wave
 Imports sb_editor.ParsersObjects
 Imports sb_editor.ReaderClasses
 Imports sb_editor.WritersClasses
@@ -12,7 +13,7 @@ Module ProgramMainModule
     Private ReadOnly writers As New FileWriters
 
     '*===============================================================================================
-    '* LOAD INI FILES AND UPDATE VARIABLES
+    '* LOAD EUROSOUND INI FILE (APPLICATION.STARTUPPATH & "EuroSound.ini")
     '*===============================================================================================
     Friend Sub LoadSystemFilesIni()
         'Load Ini file
@@ -28,6 +29,9 @@ Module ProgramMainModule
         End If
     End Sub
 
+    '*===============================================================================================
+    '* LOAD EUROSOUND INI FILE ("System\EuroSound.ini")
+    '*===============================================================================================
     Friend Sub LoadProgramLastState(mainform As MainFrame)
         'Load program last state
         If SysFileProjectIniPath > "" Then
@@ -100,6 +104,9 @@ Module ProgramMainModule
         End If
     End Sub
 
+    '*===============================================================================================
+    '* UPDATE VARIABLES, PROJECT SYSTEM FILES
+    '*===============================================================================================
     Friend Sub UpdateGlobalVariables()
         'Update System Files variables
         SysFileSamples = fso.BuildPath(WorkingDirectory, "System\Samples.txt")
@@ -158,6 +165,9 @@ Module ProgramMainModule
         AddAvailableFormatsToCombobox(mainform.ComboBox_Format)
     End Sub
 
+    '*===============================================================================================
+    '* GET A LIST OF ALL SOUNDBANKS IN THE TREE VIEW
+    '*===============================================================================================
     Friend Function GetSoundBanksList(soundBanksTreeView As TreeView) As String()
         Dim soundBanksList As String() = New String(soundBanksTreeView.Nodes.Count - 1) {}
         For index As Integer = 0 To soundBanksList.Length - 1
@@ -278,5 +288,33 @@ Module ProgramMainModule
             End If
         End If
         comboboxToModify.EndUpdate()
+    End Sub
+
+    '*===============================================================================================
+    '* SOX FUNCTIONS
+    '*===============================================================================================
+    Friend Sub ReSampleWithSox(inputFile As String, outputFile As String, currentFrequency As Integer, destinationFrequency As Integer)
+        'Check if we have to resample or not
+        If destinationFrequency < currentFrequency Then
+            RunProcess("SystemFiles\Sox.exe", """" & inputFile & """ -r " & destinationFrequency & " """ & outputFile & """  resample -qs 0.97")
+        Else
+            fso.CopyFile(inputFile, outputFile)
+        End If
+    End Sub
+
+    Friend Sub ReSampleAndSplitWithSox(inputFile As String, outputLFilePath As String, outputRFilePath As String, destinationFrequency As String)
+        'Get Current Sample Rate
+        Dim currentFrequency As Integer
+        Using waveReader As New WaveFileReader(inputFile)
+            currentFrequency = waveReader.WaveFormat.SampleRate
+        End Using
+        'Split and ReSample channels
+        If destinationFrequency < currentFrequency Then
+            RunProcess("SystemFiles\Sox.exe", """" & inputFile & """ -c 1 -r 32000 """ & outputLFilePath & """ resample -qs 0.97 avg -l")
+            RunProcess("SystemFiles\Sox.exe", """" & inputFile & """ -c 1 -r 32000 """ & outputRFilePath & """ resample -qs 0.97 avg -r")
+        Else
+            RunProcess("SystemFiles\Sox.exe", """" & inputFile & """ -c 1 """ & outputLFilePath & """ avg -l")
+            RunProcess("SystemFiles\Sox.exe", """" & inputFile & """ -c 1 """ & outputRFilePath & """ avg -r")
+        End If
     End Sub
 End Module

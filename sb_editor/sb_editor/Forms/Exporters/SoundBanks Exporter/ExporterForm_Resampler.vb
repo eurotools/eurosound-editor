@@ -24,9 +24,11 @@ Partial Public Class ExporterForm
                     'Check channels
                     Dim numberOfChannels As Integer = 0
                     Dim bitsPerSample As Integer = 0
+                    Dim originalFrequency As Integer = 0
                     Using reader As New WaveFileReader(sourceFilePath)
                         numberOfChannels = reader.WaveFormat.Channels
                         bitsPerSample = reader.WaveFormat.BitsPerSample
+                        originalFrequency = reader.WaveFormat.SampleRate
                     End Using
                     If numberOfChannels <> 1 Then
                         MsgBox("Sample " & sourceFilePath & " is not 1 channel.", vbOKOnly + vbCritical, "EuroSound")
@@ -48,19 +50,19 @@ Partial Public Class ExporterForm
                                 End If
                                 CreateFolderIfRequired(fso.GetParentFolderName(outputFilePath))
                                 SoxTimer.Start()
-                                RunProcess("SystemFiles\Sox.exe", """" & sourceFilePath & """ -r " & sampleRate & " """ & outputFilePath & """  resample -qs 0.97")
+                                ReSampleWithSox(sourceFilePath, outputFilePath, originalFrequency, sampleRate)
                                 SoxTimer.Stop()
 
                                 'ReSample for each platform
                                 Select Case currentPlatform
                                     Case "PC" 'IMA ADPCM For PC Streams
                                         If StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
-                                            CreateImaAdpcm(currentPlatform, sampleRelativePath, outputFilePath, PCTimer)
+                                            CreateImaAdpcm(currentPlatform, sampleRelativePath, outputFilePath, PCTimer, waveFunctions)
                                         End If
                                     Case "GameCube" 'DSP for Nintendo GameCube
                                         'Create IMA ADPCM for Streams
                                         If StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
-                                            CreateImaAdpcm(currentPlatform, sampleRelativePath, outputFilePath, GCTimer)
+                                            CreateImaAdpcm(currentPlatform, sampleRelativePath, outputFilePath, GCTimer, waveFunctions)
                                         End If
                                         GCTimer.Start()
                                         Dim dspOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\GameCube_dsp_adpcm", sampleRelativePath), ".dsp")
@@ -120,7 +122,7 @@ Partial Public Class ExporterForm
         End If
     End Sub
 
-    Private Sub CreateImaAdpcm(currentPlatform As String, sampleRelativePath As String, outputFilePath As String, platformTimer As Stopwatch)
+    Private Sub CreateImaAdpcm(currentPlatform As String, sampleRelativePath As String, outputFilePath As String, platformTimer As Stopwatch, waveLib As WaveFunctions)
         platformTimer.Start()
         Dim ImaOutputFilePath As String = fso.BuildPath(WorkingDirectory & "\" & currentPlatform & "_Software_adpcm", sampleRelativePath)
         CreateFolderIfRequired(fso.GetParentFolderName(ImaOutputFilePath))
@@ -128,17 +130,8 @@ Partial Public Class ExporterForm
         Dim smdFilePath As String = Path.ChangeExtension(ImaOutputFilePath, ".smd")
         RunProcess("SystemFiles\Sox.exe", """" & outputFilePath & """ -t raw """ & smdFilePath & """")
         'Wave to ima
-        Dim imaData As Byte() = ESUtils.ImaCodec.Encode(ConvertByteArrayToShortArray(File.ReadAllBytes(smdFilePath)))
+        Dim imaData As Byte() = ESUtils.ImaCodec.Encode(waveLib.ConvertByteArrayToShortArray(File.ReadAllBytes(smdFilePath)))
         File.WriteAllBytes(Path.ChangeExtension(ImaOutputFilePath, ".ssp"), imaData)
         platformTimer.Stop()
     End Sub
-
-    Private Function ConvertByteArrayToShortArray(PCMData As Byte()) As Short()
-        Dim samplesShort As Short() = New Short(PCMData.Length / 2 - 1) {}
-        Dim sourceWaveBuffer As New WaveBuffer(PCMData)
-        For i As Integer = 0 To samplesShort.Length - 1
-            samplesShort(i) = sourceWaveBuffer.ShortBuffer(i)
-        Next
-        Return samplesShort
-    End Function
 End Class

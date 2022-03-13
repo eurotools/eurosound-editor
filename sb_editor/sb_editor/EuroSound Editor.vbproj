@@ -156,6 +156,18 @@
     <Compile Include="Forms\Advanced Menu\Language_FolderCompare.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\Exporters\Musics Exporter\MusicsExporter_HashTables.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Exporters\Musics Exporter\MusicsExporter_MusicStreams.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Exporters\Musics Exporter\MusicsExporter_MarkerFiles.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Exporters\Musics Exporter\MusicsExporter_MuxFiles.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\Others\Frm_DebugData.Designer.vb">
       <DependentUpon>Frm_DebugData.vb</DependentUpon>
     </Compile>
@@ -211,9 +223,6 @@
       <DependentUpon>MusicsExporter.vb</DependentUpon>
     </Compile>
     <Compile Include="Forms\Exporters\Musics Exporter\MusicsExporter.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Exporters\Musics Exporter\MusicsExporter_Methods.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Properties Forms\DataBase_Properties.Designer.vb">

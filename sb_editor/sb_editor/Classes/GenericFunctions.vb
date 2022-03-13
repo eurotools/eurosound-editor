@@ -1,5 +1,4 @@
 ﻿Imports System.Globalization
-Imports System.IO
 Imports System.Text.RegularExpressions
 Imports ESUtils.BytesFunctions
 Imports IniFileFunctions

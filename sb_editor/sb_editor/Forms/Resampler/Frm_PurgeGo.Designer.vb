@@ -34,7 +34,7 @@ Partial Class Frm_PurgeGo
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(839, 92)
+        Me.ClientSize = New System.Drawing.Size(703, 72)
         Me.Cursor = System.Windows.Forms.Cursors.Default
         Me.Name = "Frm_PurgeGo"
         Me.ShowInTaskbar = False

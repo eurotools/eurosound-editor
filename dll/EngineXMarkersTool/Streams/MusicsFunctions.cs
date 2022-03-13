@@ -147,7 +147,7 @@ namespace EngineXMarkersTool
             }
 
             //Write Sound Marker File
-            FileWriters.WriteBinaryMarkerFile(smfFilePath, startMarkersList, markersList, volume);
+            FileWriters.WriteBinaryMarkerFile(smfFilePath, startMarkersList, markersList, volume, outputPlatform.Equals("GameCube", StringComparison.OrdinalIgnoreCase));
         }
     }
 }
