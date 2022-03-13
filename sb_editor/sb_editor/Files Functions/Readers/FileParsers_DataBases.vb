@@ -43,14 +43,12 @@ Namespace ReaderClasses
                 If StrComp(currentLine, "#DEPENDENCIES", CompareMethod.Text) = 0 Then
                     'Read line
                     currentLine = Trim(LineInput(1))
-                    If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
-                        Do
-                            'Add item to listbox
-                            dependencies.Add(currentLine)
-                            'Continue Reading
-                            currentLine = Trim(LineInput(1))
-                        Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
-                    End If
+                    While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
+                        'Add item to listbox
+                        dependencies.Add(currentLine)
+                        'Continue Reading
+                        currentLine = Trim(LineInput(1))
+                    End While
                 End If
             Loop
             FileClose(1)

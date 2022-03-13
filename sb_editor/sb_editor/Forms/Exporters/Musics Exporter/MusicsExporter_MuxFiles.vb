@@ -31,8 +31,6 @@ Partial Public Class MusicsExporter
                 Else
                     BuildMusicFile(soundMarkerFile, soundSampleData, fullDirPath, musicHashCode, False)
                 End If
-                'Update progress bar
-                'BackgroundWorker.ReportProgress(counter)
             Next
         Next
     End Sub

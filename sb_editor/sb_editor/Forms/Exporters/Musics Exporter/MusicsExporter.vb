@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports sb_editor.ParsersObjects
 Imports sb_editor.ReaderClasses
 
 Partial Public Class MusicsExporter
@@ -9,13 +10,12 @@ Partial Public Class MusicsExporter
     Private ReadOnly MarkerFileOnly As Boolean
     Private ReadOnly textFileReaders As New FileParsers
     Private ReadOnly parentMusicForm As MusicMaker
-    Private ReadOnly hashCodesCollection As SortedDictionary(Of String, UInteger)
     Private canCloseForm As Boolean = False
 
     '*===============================================================================================
     '* FORM EVENTS
     '*===============================================================================================
-    Sub New(outputFileList As DataTable, onlyMarkerFile As Boolean, parentForm As MusicMaker, hashCodesDict As SortedDictionary(Of String, UInteger))
+    Sub New(outputFileList As DataTable, onlyMarkerFile As Boolean, parentForm As MusicMaker)
         ' Esta llamada es exigida por el diseñador.
         InitializeComponent()
 
@@ -23,7 +23,6 @@ Partial Public Class MusicsExporter
         outputQueue = outputFileList
         MarkerFileOnly = onlyMarkerFile
         parentMusicForm = parentForm
-        hashCodesCollection = hashCodesDict
 
         'Custom cursors
         Cursor = New Cursor(New MemoryStream(My.Resources.ChristmasTree))
@@ -55,6 +54,16 @@ Partial Public Class MusicsExporter
             outPlaforms = ProjectSettingsFile.sampleRateFormats.Keys.ToArray
         End If
 
+        'Get hashcodes dictionary
+        Dim hashCodesCollection As New SortedDictionary(Of String, UInteger)
+        Dim filesList As String = fso.BuildPath(WorkingDirectory, "Music\ESData\MFXFiles.txt")
+        Dim musicListItems As String() = textFileReaders.ReadMfxFileList(filesList)
+        For itemIndex As Integer = 0 To musicListItems.Length - 1
+            Dim musicFilePath As String = fso.BuildPath(WorkingDirectory & "\Music\ESData", musicListItems(itemIndex) & ".txt")
+            Dim musicFileData As MfxFile = textFileReaders.ReadMfxFile(musicFilePath)
+            hashCodesCollection.Add(GetOnlyFileName(musicFilePath), musicFileData.HashCode)
+        Next
+
         'Calculate execution time
         Dim watch = Stopwatch.StartNew
 
@@ -72,7 +81,10 @@ Partial Public Class MusicsExporter
 
         'Create Music HashTables (.h)
         Invoke(Sub() ProgressBar1.Value = 0)
-        BuildMusicHashTables()
+        BuildMusicHashTables(hashCodesCollection)
+
+        'Create info file
+        CreateMFXInfoFile(outPlaforms, hashCodesCollection)
 
         'Get Output time
         watch.Stop()

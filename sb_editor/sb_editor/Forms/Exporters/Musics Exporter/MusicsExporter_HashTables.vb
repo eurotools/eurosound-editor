@@ -2,7 +2,7 @@
 Imports sb_editor.HashTablesBuilder
 
 Partial Public Class MusicsExporter
-    Private Sub BuildMusicHashTables()
+    Private Sub BuildMusicHashTables(hashCodesCollection As SortedDictionary(Of String, UInteger))
         Dim hashTablesFunctions As New MfxDefines
         Dim numIteration As Integer = 0
         Dim musicDefinesFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "MFX_Defines.h")
@@ -30,7 +30,7 @@ Partial Public Class MusicsExporter
         Next
 
         'Create MFX Data
-        Dim dataDictionary As Dictionary(Of UInteger, String()) = GetMfxDataDict()
+        Dim dataDictionary As Dictionary(Of UInteger, String()) = GetMfxDataDict(hashCodesCollection)
         Dim musicDataFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "MFX_Data.h")
         hashTablesFunctions.CreateMfxData(musicDataFilePath, dataDictionary)
 
@@ -61,7 +61,7 @@ Partial Public Class MusicsExporter
     '*===============================================================================================
     '* GET DATA FOR MFX_DATA FILE
     '*===============================================================================================
-    Private Function GetMfxDataDict() As Dictionary(Of UInteger, String())
+    Private Function GetMfxDataDict(hashCodesCollection As SortedDictionary(Of String, UInteger)) As Dictionary(Of UInteger, String())
         Dim dictionaryData As New Dictionary(Of UInteger, String())
 
         'Dictionary Data

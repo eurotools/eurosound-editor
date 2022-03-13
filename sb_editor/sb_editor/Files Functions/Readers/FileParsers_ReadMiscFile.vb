@@ -10,37 +10,33 @@
                     If StrComp(currentLine, "#STREAMS", CompareMethod.Text) = 0 Then
                         'Read line
                         currentLine = Trim(LineInput(1))
-                        If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
-                            Do
-                                Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
-                                If StrComp(UCase(lineData(0)), "RESAMPLESTREAMS") = 1 Then
-                                    ReSampleStreams = CUInt(lineData(1))
-                                End If
-                                'Continue Reading
-                                currentLine = Trim(LineInput(1))
-                            Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0 AndAlso Not EOF(1)
-                        End If
+                        While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
+                            Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
+                            If StrComp(UCase(lineData(0)), "RESAMPLESTREAMS") = 1 Then
+                                ReSampleStreams = CUInt(lineData(1))
+                            End If
+                            'Continue Reading
+                            currentLine = Trim(LineInput(1))
+                        End While
                     End If
 
                     'HashCodes Block
                     If StrComp(currentLine, "#HASHCODES", CompareMethod.Text) = 0 Then
                         'Read line
                         currentLine = Trim(LineInput(1))
-                        If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
-                            Do
-                                Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
-                                Select Case UCase(lineData(0))
-                                    Case "SFXHASHCODENUMBER"
-                                        SFXHashCodeNumber = CInt(lineData(1))
-                                    Case "SOUNDBANKHASHCODENUMBER"
-                                        SoundBankHashCodeNumber = CByte(lineData(1))
-                                    Case "MFXHASHCODENUMBER"
-                                        MFXHashCodeNumber = CInt(lineData(1))
-                                End Select
-                                'Continue Reading
-                                currentLine = Trim(LineInput(1))
-                            Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0 AndAlso Not EOF(1)
-                        End If
+                        While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
+                            Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
+                            Select Case UCase(lineData(0))
+                                Case "SFXHASHCODENUMBER"
+                                    SFXHashCodeNumber = CInt(lineData(1))
+                                Case "SOUNDBANKHASHCODENUMBER"
+                                    SoundBankHashCodeNumber = CByte(lineData(1))
+                                Case "MFXHASHCODENUMBER"
+                                    MFXHashCodeNumber = CInt(lineData(1))
+                            End Select
+                            'Continue Reading
+                            currentLine = Trim(LineInput(1))
+                        End While
                     End If
                 Loop
                 FileClose(1)

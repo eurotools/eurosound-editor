@@ -45,52 +45,46 @@ Namespace ReaderClasses
                 If StrComp(currentLine, "#DEPENDENCIES", CompareMethod.Text) = 0 Then
                     'Read line
                     currentLine = Trim(LineInput(1))
-                    If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
-                        Do
-                            'Add item to listbox
-                            dependencies.Add(currentLine)
-                            'Continue Reading
-                            currentLine = Trim(LineInput(1))
-                        Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0 AndAlso Not EOF(1)
-                    End If
+                    While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
+                        'Add item to listbox
+                        dependencies.Add(currentLine)
+                        'Continue Reading
+                        currentLine = Trim(LineInput(1))
+                    End While
                 End If
 
                 'Check for hashcodes block
                 If StrComp(currentLine, "#HASHCODE", CompareMethod.Binary) = 0 Then
                     'Read a new line
                     currentLine = Trim(LineInput(1))
-                    If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
-                        Do
-                            'Split line and get number
-                            objSB.HashCode = Split(currentLine, " ")(1)
-                            objSB.HashCodeLabel = GetOnlyFileName(textFilePath)
-                            'Continue Reading
-                            currentLine = Trim(LineInput(1))
-                        Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0 AndAlso Not EOF(1)
-                    End If
+                    While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
+                        'Split line and get number
+                        objSB.HashCode = Split(currentLine, " ")(1)
+                        objSB.HashCodeLabel = GetOnlyFileName(textFilePath)
+                        'Continue Reading
+                        currentLine = Trim(LineInput(1))
+                    End While
                 End If
 
                 'Check for max bank sizes block
                 If StrComp(currentLine, "#MaxBankSizes", CompareMethod.Binary) = 0 Then
                     'Read a new line
                     currentLine = Trim(LineInput(1))
-                    If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
-                        Do
-                            Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
-                            Select Case UCase(lineData(0))
-                                Case "PLAYSTATIONSIZE"
-                                    objSB.MaxBankSizes.PlayStationSize = CInt(lineData(1))
-                                Case "PCSIZE"
-                                    objSB.MaxBankSizes.PCSize = CByte(lineData(1))
-                                Case "XBOXSIZE"
-                                    objSB.MaxBankSizes.XboxSize = CInt(lineData(1))
-                                Case "GAMECUBESIZE"
-                                    objSB.MaxBankSizes.GameCubeSize = CInt(lineData(1))
-                            End Select
-                            'Continue Reading
-                            currentLine = Trim(LineInput(1))
-                        Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0 AndAlso Not EOF(1)
-                    End If
+                    While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
+                        Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
+                        Select Case UCase(lineData(0))
+                            Case "PLAYSTATIONSIZE"
+                                objSB.MaxBankSizes.PlayStationSize = CInt(lineData(1))
+                            Case "PCSIZE"
+                                objSB.MaxBankSizes.PCSize = CByte(lineData(1))
+                            Case "XBOXSIZE"
+                                objSB.MaxBankSizes.XboxSize = CInt(lineData(1))
+                            Case "GAMECUBESIZE"
+                                objSB.MaxBankSizes.GameCubeSize = CInt(lineData(1))
+                        End Select
+                        'Continue Reading
+                        currentLine = Trim(LineInput(1))
+                    End While
                 End If
             Loop
             FileClose(1)

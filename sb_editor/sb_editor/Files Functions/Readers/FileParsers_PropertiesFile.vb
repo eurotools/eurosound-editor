@@ -75,17 +75,14 @@ Namespace ReaderClasses
                     If StrComp(currentLine, "#AvailableReSampleRates", CompareMethod.Text) = 0 Then
                         'Read line
                         currentLine = Trim(LineInput(1))
-                        If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
-                            Do
-                                'Add item to listview
-                                AvailableReSampleRates.Add(currentLine)
-                                'Continue Reading
-                                currentLine = Trim(LineInput(1))
-                            Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
-
-                            'Add items to array
-                            propsFile.AvailableReSampleRates = AvailableReSampleRates
-                        End If
+                        While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
+                            'Add item to listview
+                            AvailableReSampleRates.Add(currentLine)
+                            'Continue Reading
+                            currentLine = Trim(LineInput(1))
+                        End While
+                        'Add items to array
+                        propsFile.AvailableReSampleRates = AvailableReSampleRates
                     End If
 
                     'ReSample Rates for Format
@@ -99,16 +96,14 @@ Namespace ReaderClasses
                         'Read line
                         Dim sampleRateIndex As Integer = 0
                         currentLine = Trim(LineInput(1))
-                        If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
-                            Do
-                                'Add item to ArrayList
-                                values.Add(AvailableReSampleRates(sampleRateIndex), currentLine)
-                                'Continue Reading
-                                currentLine = Trim(LineInput(1))
-                                'Update index
-                                sampleRateIndex += 1
-                            Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
-                        End If
+                        While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
+                            'Add item to ArrayList
+                            values.Add(AvailableReSampleRates(sampleRateIndex), currentLine)
+                            'Continue Reading
+                            currentLine = Trim(LineInput(1))
+                            'Update index
+                            sampleRateIndex += 1
+                        End While
 
                         'Add data to dictionary
                         Dim formatName As String = propsFile.AvailableFormats(index, 0)
@@ -121,28 +116,26 @@ Namespace ReaderClasses
                     If StrComp(currentLine, "#MiscProperites", CompareMethod.Text) = 0 Then
                         'Read line
                         currentLine = Trim(LineInput(1))
-                        If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
-                            Do
-                                'Split line
-                                Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
+                        While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
+                            'Split line
+                            Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
 
-                                Select Case UCase(lineData(0))
-                                    Case "DEFAULTRATE"
-                                        propsFile.MiscProps.DefaultRate = CInt(lineData(1))
-                                    Case "SAMPLEFILEFOLDER"
-                                        propsFile.MiscProps.SampleFileFolder = GetStringValue("SAMPLEFILEFOLDER", currentLine)
-                                    Case "HASHCODEFILEFOLDER"
-                                        propsFile.MiscProps.HashCodeFileFolder = GetStringValue("HASHCODEFILEFOLDER", currentLine)
-                                    Case "ENGINEXFOLDER"
-                                        propsFile.MiscProps.EngineXFolder = GetStringValue("ENGINEXFOLDER", currentLine)
-                                    Case "EUROLANDHASHCODESERVERPATH"
-                                        propsFile.MiscProps.EuroLandHashCodeServerPath = GetStringValue("EUROLANDHASHCODESERVERPATH", currentLine)
-                                End Select
+                            Select Case UCase(lineData(0))
+                                Case "DEFAULTRATE"
+                                    propsFile.MiscProps.DefaultRate = CInt(lineData(1))
+                                Case "SAMPLEFILEFOLDER"
+                                    propsFile.MiscProps.SampleFileFolder = GetStringValue("SAMPLEFILEFOLDER", currentLine)
+                                Case "HASHCODEFILEFOLDER"
+                                    propsFile.MiscProps.HashCodeFileFolder = GetStringValue("HASHCODEFILEFOLDER", currentLine)
+                                Case "ENGINEXFOLDER"
+                                    propsFile.MiscProps.EngineXFolder = GetStringValue("ENGINEXFOLDER", currentLine)
+                                Case "EUROLANDHASHCODESERVERPATH"
+                                    propsFile.MiscProps.EuroLandHashCodeServerPath = GetStringValue("EUROLANDHASHCODESERVERPATH", currentLine)
+                            End Select
 
-                                'Continue Reading
-                                currentLine = Trim(LineInput(1))
-                            Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0 AndAlso Not EOF(1)
-                        End If
+                            'Continue Reading
+                            currentLine = Trim(LineInput(1))
+                        End While
                     End If
                 Loop
 

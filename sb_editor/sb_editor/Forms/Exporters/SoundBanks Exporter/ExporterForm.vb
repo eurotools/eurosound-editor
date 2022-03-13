@@ -175,6 +175,9 @@ Partial Public Class ExporterForm
                 soundhBuilder.CreateSoundhFile(fso.BuildPath(ProjectSettingsFile.MiscProps.EuroLandHashCodeServerPath, "Sound.h"), sfxDefinesFilePath, fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "MFX_Defines.h"))
             End If
 
+            'Create SoundBanks Info file
+            CreateSBInfoFile(outPlaforms, soundBanksDictionary)
+
             'Create bat if required
             Invoke(Sub() Text = "End")
             Dim postOutBatFilepath As String = fso.BuildPath(WorkingDirectory & "\System", "PostOutput.bat")

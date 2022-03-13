@@ -75,31 +75,31 @@ Module ProgramMainModule
             End If
 
             'SoundBank Max Sizes
-            Dim playStationValue As String = iniFunctions.Read("PlayStationSize", "PropertiesForm")
-            If IsNumeric(playStationValue) Then
-                SoundBankMaxPlayStation = CInt(playStationValue)
+            tempVar = iniFunctions.Read("PlayStationSize", "PropertiesForm")
+            If IsNumeric(tempVar) Then
+                SoundBankMaxPlayStation = CInt(tempVar)
             End If
-            Dim pcSize As String = iniFunctions.Read("PCSize", "PropertiesForm")
-            If IsNumeric(pcSize) Then
-                SoundBankMaxPC = CInt(pcSize)
+            tempVar = iniFunctions.Read("PCSize", "PropertiesForm")
+            If IsNumeric(tempVar) Then
+                SoundBankMaxPC = CInt(tempVar)
             End If
-            Dim gameCubeSize As String = iniFunctions.Read("GameCubeSize", "PropertiesForm")
-            If IsNumeric(gameCubeSize) Then
-                SoundBankMaxGameCube = CInt(gameCubeSize)
+            tempVar = iniFunctions.Read("GameCubeSize", "PropertiesForm")
+            If IsNumeric(tempVar) Then
+                SoundBankMaxGameCube = CInt(tempVar)
             End If
-            Dim xboxSize As String = iniFunctions.Read("XBoxSize", "PropertiesForm")
-            If IsNumeric(xboxSize) Then
-                SoundBankMaxXbox = CInt(xboxSize)
+            tempVar = iniFunctions.Read("XBoxSize", "PropertiesForm")
+            If IsNumeric(tempVar) Then
+                SoundBankMaxXbox = CInt(tempVar)
             End If
 
             'Other Settings
-            Dim prefixHashCodes As String = iniFunctions.Read("Prefix_HT_Sound", "PropertiesForm")
-            If IsNumeric(prefixHashCodes) Then
-                ProjectSettingsFile.MiscProps.PrefixHtSound = CBool(prefixHashCodes)
+            tempVar = iniFunctions.Read("Prefix_HT_Sound", "PropertiesForm")
+            If IsNumeric(tempVar) Then
+                ProjectSettingsFile.MiscProps.PrefixHtSound = CBool(tempVar)
             End If
-            Dim viewOutputDos As String = iniFunctions.Read("ViewOutputDos", "PropertiesForm")
-            If IsNumeric(viewOutputDos) Then
-                ProjectSettingsFile.MiscProps.ViewOutputDos = CBool(viewOutputDos)
+            tempVar = iniFunctions.Read("ViewOutputDos", "PropertiesForm")
+            If IsNumeric(tempVar) Then
+                ProjectSettingsFile.MiscProps.ViewOutputDos = CBool(tempVar)
             End If
         End If
     End Sub

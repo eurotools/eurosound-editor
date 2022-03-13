@@ -106,6 +106,7 @@
     <Compile Include="Files Functions\Readers\FileParsers_PurgeList.vb" />
     <Compile Include="Files Functions\Readers\FileParsers_SamplesFile.vb" />
     <Compile Include="Files Functions\Readers\Music\FileParsers_MfxFile.vb" />
+    <Compile Include="Files Functions\Readers\Music\FileParsers_MfxFileList.vb" />
     <Compile Include="Files Functions\Writers\FileWriters.vb" />
     <Compile Include="Files Functions\Writers\FileWriters_MfxFile.vb" />
     <Compile Include="Files Functions\Writers\FileWriters_SamplesFile.vb" />
@@ -159,6 +160,9 @@
     <Compile Include="Forms\Exporters\Musics Exporter\MusicsExporter_HashTables.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\Exporters\Musics Exporter\MusicsExporter_MFXInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\Exporters\Musics Exporter\MusicsExporter_MusicStreams.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -166,6 +170,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Exporters\Musics Exporter\MusicsExporter_MuxFiles.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Exporters\SoundBanks Exporter\ExporterForm_SBInfo.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Others\Frm_DebugData.Designer.vb">

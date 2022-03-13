@@ -47,42 +47,36 @@ Namespace ReaderClasses
                 If StrComp(currentLine, "#SoundBankList", CompareMethod.Text) = 0 Then
                     'Read line
                     currentLine = Trim(LineInput(1))
-                    If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
-                        Do
-                            'Add item to listbox
-                            SoundBankList.Add(currentLine)
-                            'Continue Reading
-                            currentLine = Trim(LineInput(1))
-                        Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0 AndAlso Not EOF(1)
-                    End If
+                    While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
+                        'Add item to listbox
+                        SoundBankList.Add(currentLine)
+                        'Continue Reading
+                        currentLine = Trim(LineInput(1))
+                    End While
                 End If
 
                 'Database Section
                 If StrComp(currentLine, "#DataBaseList", CompareMethod.Text) = 0 Then
                     'Read line
                     currentLine = Trim(LineInput(1))
-                    If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
-                        Do
-                            'Add item to listbox
-                            DataBaseList.Add(currentLine)
-                            'Continue Reading
-                            currentLine = Trim(LineInput(1))
-                        Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0 AndAlso Not EOF(1)
-                    End If
+                    While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
+                        'Add item to listbox
+                        DataBaseList.Add(currentLine)
+                        'Continue Reading
+                        currentLine = Trim(LineInput(1))
+                    End While
                 End If
 
                 'SFXs Section
                 If StrComp(currentLine, "#SFXList", CompareMethod.Text) = 0 Then
                     'Read line
                     currentLine = Trim(LineInput(1))
-                    If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
-                        Do
-                            'Add item to listbox
-                            SFXList.Add(currentLine)
-                            'Continue Reading
-                            currentLine = Trim(LineInput(1))
-                        Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0 AndAlso Not EOF(1)
-                    End If
+                    While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
+                        'Add item to listbox
+                        SFXList.Add(currentLine)
+                        'Continue Reading
+                        currentLine = Trim(LineInput(1))
+                    End While
                 End If
             Loop
             FileClose(1)

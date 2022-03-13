@@ -10,8 +10,8 @@ Partial Public Class MusicMaker
     '*===============================================================================================
     Private ReadOnly textFileReaders As New FileParsers
     Private ReadOnly writers As New FileWriters
-    Private ReadOnly musicStuffPath = fso.BuildPath(WorkingDirectory, "Music")
     Private ReadOnly hashTablesFunctions As New MfxDefines
+    Private currentReadedFiles As String()
 
     '*===============================================================================================
     '* FORM EVENTS
@@ -41,7 +41,8 @@ Partial Public Class MusicMaker
         ComboBox_OutputFormat.EndUpdate()
 
         'Print available mfx files
-        GetMusicFilesData()
+        currentReadedFiles = GetMfxFiles(fso.BuildPath(WorkingDirectory, "Music"))
+        GetMusicFilesData(currentReadedFiles)
     End Sub
 
     Private Sub ListView_MusicFiles_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView_MusicFiles.SelectedIndexChanged
@@ -72,20 +73,22 @@ Partial Public Class MusicMaker
     End Sub
 
     Private Sub Button_UpdateFiles_Click(sender As Object, e As EventArgs) Handles Button_UpdateFiles.Click
-        GetMusicFilesData()
+        'Get Files in folder
+        Dim filesInFolder As String() = GetMfxFiles(fso.BuildPath(WorkingDirectory, "Music"))
+        'Check if we really need to reload all
+        Dim needToReload As Boolean = Not New HashSet(Of String)(currentReadedFiles).SetEquals(filesInFolder)
+        If needToReload Then
+            currentReadedFiles = filesInFolder
+            GetMusicFilesData(filesInFolder)
+        End If
     End Sub
 
     Private Sub Button_Output_Click(sender As Object, e As EventArgs) Handles Button_Output.Click
         'Get files and platforms to output
         Dim outputTable As DataTable = ListViewToDataTable()
-        'Get hashcodes dictionary
-        Dim hashCodesDict As New SortedDictionary(Of String, UInteger)
-        For Each listItem As ListViewItem In ListView_MusicFiles.Items
-            hashCodesDict.Add(listItem.Text, listItem.SubItems(3).Text)
-        Next
         'Open Exporter Form
         If outputTable.Rows.Count > 0 Then
-            Dim exporterTool As New MusicsExporter(outputTable, CheckBox_MarkerFileOnly.Checked, Me, hashCodesDict)
+            Dim exporterTool As New MusicsExporter(outputTable, CheckBox_MarkerFileOnly.Checked, Me)
             exporterTool.ShowDialog()
             Show()
         End If

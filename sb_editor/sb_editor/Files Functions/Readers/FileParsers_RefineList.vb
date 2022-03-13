@@ -11,13 +11,11 @@
                 If StrComp(currentLine, "#RefineSearch", CompareMethod.Text) = 0 Then
                     'Read line
                     currentLine = Trim(LineInput(1))
-                    If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
-                        Do
-                            refineKeywords.Add(currentLine)
-                            'Continue Reading
-                            currentLine = Trim(LineInput(1))
-                        Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0 AndAlso Not EOF(1)
-                    End If
+                    While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
+                        refineKeywords.Add(currentLine)
+                        'Continue Reading
+                        currentLine = Trim(LineInput(1))
+                    End While
                 End If
             Loop
             FileClose(1)
