@@ -1,7 +1,7 @@
 ﻿Imports EngineXMarkersTool
 
 Partial Public Class MusicsExporter
-    Private Sub CreateMarkerFiles(waveOutputFolder As String)
+    Private Sub CreateMarkerFiles(waveOutputFolder As String, outputPlatforms As String())
         Dim markersFunctions As New ExMarkersTool
         For fileIndex As Integer = 0 To outputQueue.Rows.Count - 1
             Dim musicItem As DataRow = outputQueue.Rows(fileIndex)

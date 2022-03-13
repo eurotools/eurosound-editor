@@ -39,6 +39,7 @@ Partial Class Frm_MakePurgeList
         Me.Name = "Frm_MakePurgeList"
         Me.ShowInTaskbar = False
         Me.Text = "Frm_MakePurgeList"
+        Me.TopMost = True
         Me.Groupbox_TaskTime.ResumeLayout(False)
         Me.ResumeLayout(False)
 

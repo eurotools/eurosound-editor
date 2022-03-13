@@ -78,16 +78,14 @@ Partial Public Class MusicMaker
     Private Sub Button_Output_Click(sender As Object, e As EventArgs) Handles Button_Output.Click
         'Get files and platforms to output
         Dim outputTable As DataTable = ListViewToDataTable()
-        Dim outputFormats As List(Of String) = GetOutputPlatforms()
         'Get hashcodes dictionary
         Dim hashCodesDict As New SortedDictionary(Of String, UInteger)
         For Each listItem As ListViewItem In ListView_MusicFiles.Items
             hashCodesDict.Add(listItem.Text, listItem.SubItems(3).Text)
         Next
         'Open Exporter Form
-        If outputTable.Rows.Count > 0 AndAlso outputFormats.Count > 0 Then
-            Hide()
-            Dim exporterTool As New MusicsExporter(outputTable, outputFormats.ToArray, CheckBox_MarkerFileOnly.Checked, Me, hashCodesDict)
+        If outputTable.Rows.Count > 0 Then
+            Dim exporterTool As New MusicsExporter(outputTable, CheckBox_MarkerFileOnly.Checked, Me, hashCodesDict)
             exporterTool.ShowDialog()
             Show()
         End If

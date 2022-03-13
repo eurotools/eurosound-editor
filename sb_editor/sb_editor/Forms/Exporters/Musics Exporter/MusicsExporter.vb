@@ -7,7 +7,6 @@ Partial Public Class MusicsExporter
     '* GLOBAL VARIABLES 
     '*===============================================================================================
     Private ReadOnly outputQueue As DataTable
-    Private ReadOnly outputPlatforms As String()
     Private ReadOnly MarkerFileOnly As Boolean
     Private ReadOnly textFileReaders As New FileParsers
     Private ReadOnly parentMusicForm As MusicMaker
@@ -18,13 +17,12 @@ Partial Public Class MusicsExporter
     '*===============================================================================================
     '* FORM EVENTS
     '*===============================================================================================
-    Sub New(outputFileList As DataTable, outputFormats As String(), onlyMarkerFile As Boolean, parentForm As MusicMaker, hashCodesDict As SortedDictionary(Of String, UInteger))
+    Sub New(outputFileList As DataTable, onlyMarkerFile As Boolean, parentForm As MusicMaker, hashCodesDict As SortedDictionary(Of String, UInteger))
         ' Esta llamada es exigida por el diseñador.
         InitializeComponent()
 
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
         outputQueue = outputFileList
-        outputPlatforms = outputFormats
         MarkerFileOnly = onlyMarkerFile
         parentMusicForm = parentForm
         hashCodesCollection = hashCodesDict
@@ -34,6 +32,7 @@ Partial Public Class MusicsExporter
     End Sub
 
     Private Sub MusicsExporter_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        parentMusicForm.Hide()
         'Start process
         If Not BackgroundWorker.IsBusy Then
             BackgroundWorker.RunWorkerAsync()
@@ -51,20 +50,27 @@ Partial Public Class MusicsExporter
         Dim waveOutputFolder As String = fso.BuildPath(WorkingDirectory, "Music\ESWork")
         CreateFolderIfRequired(waveOutputFolder)
 
+        'Get output platforms
+        Dim selectedPlatform As String = parentMusicForm.ComboBox_OutputFormat.Invoke(Function() parentMusicForm.ComboBox_OutputFormat.SelectedItem)
+        Dim outPlaforms As String() = New String() {selectedPlatform}
+        If StrComp(selectedPlatform, "All") = 0 Then
+            outPlaforms = ProjectSettingsFile.sampleRateFormats.Keys.ToArray
+        End If
+
         'Calculate execution time
         Dim watch = Stopwatch.StartNew
 
         'Create Music Stream (.ssd)
         Invoke(Sub() ProgressBar1.Value = 0)
-        CreateMusicStreams(waveOutputFolder)
+        CreateMusicStreams(waveOutputFolder, outPlaforms)
 
         'Create Marker Files (.smf)
         Invoke(Sub() ProgressBar1.Value = 0)
-        CreateMarkerFiles(waveOutputFolder)
+        CreateMarkerFiles(waveOutputFolder, outPlaforms)
 
         'Create MusX Files (.SFX)
         Invoke(Sub() ProgressBar1.Value = 0)
-        CreateMusXFiles()
+        CreateMusXFiles(outPlaforms)
 
         'Create Music HashTables (.h)
         Invoke(Sub() ProgressBar1.Value = 0)

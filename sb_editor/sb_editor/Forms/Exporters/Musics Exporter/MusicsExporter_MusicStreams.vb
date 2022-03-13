@@ -4,7 +4,7 @@ Partial Public Class MusicsExporter
     '*===============================================================================================
     '* CREATE MUSIC STREAMS - MAIN METHOD
     '*===============================================================================================
-    Private Sub CreateMusicStreams(waveOutputFolder As String)
+    Private Sub CreateMusicStreams(waveOutputFolder As String, outputPlatforms As String())
         Dim waveFunctions As New WaveFunctions
         If Not MarkerFileOnly Then
             Dim temporalLeft As String = fso.BuildPath(WorkingDirectory, "System\TempWave.wav")

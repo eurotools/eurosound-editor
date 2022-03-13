@@ -41,8 +41,8 @@ Partial Class MusicsExporter
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "MusicsExporter"
         Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Musics Exporter Form"
+        Me.TopMost = True
         Me.Groupbox_TaskTime.ResumeLayout(False)
         Me.ResumeLayout(False)
 

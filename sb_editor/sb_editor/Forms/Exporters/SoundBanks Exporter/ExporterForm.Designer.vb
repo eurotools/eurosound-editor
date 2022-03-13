@@ -41,6 +41,7 @@ Partial Class ExporterForm
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "ExporterForm"
         Me.Text = "ExporterForm"
+        Me.TopMost = True
         Me.Groupbox_TaskTime.ResumeLayout(False)
         Me.ResumeLayout(False)
 

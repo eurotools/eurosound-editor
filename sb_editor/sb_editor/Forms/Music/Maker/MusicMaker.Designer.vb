@@ -313,8 +313,8 @@ Partial Class MusicMaker
     Friend WithEvents Button_RemapHashCodes As Button
     Friend WithEvents Button_Ok As Button
     Private WithEvents TextBox_UserValue As TextBox
-    Private WithEvents ComboBox_OutputFormat As ComboBox
     Protected Friend WithEvents TextBox_OutputTime As TextBox
     Private WithEvents Numeric_Volume As NumericUpDown
     Protected Friend WithEvents ListView_MusicFiles As ListView_ColumnSortingClick.ListView_ColumnSortingClick
+    Protected Friend WithEvents ComboBox_OutputFormat As ComboBox
 End Class

@@ -39,6 +39,7 @@ Partial Class Frm_PurgeGo
         Me.Name = "Frm_PurgeGo"
         Me.ShowInTaskbar = False
         Me.Text = "Frm_PurgeGo"
+        Me.TopMost = True
         Me.Groupbox_TaskTime.ResumeLayout(False)
         Me.ResumeLayout(False)
 

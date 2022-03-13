@@ -1,7 +1,7 @@
 ﻿Imports ESUtils.MusXBuild_MusicFile
 
 Partial Public Class MusicsExporter
-    Private Sub CreateMusXFiles()
+    Private Sub CreateMusXFiles(outputPlatforms As String())
         'Update listview
         For fileIndex As Integer = 0 To outputQueue.Rows.Count - 1
             Dim musicItem As DataRow = outputQueue.Rows(fileIndex)

@@ -33,12 +33,15 @@ Partial Public Class MusicsExporter
         hashTablesFunctions.CreateMfxData(musicDataFilePath, dataDictionary)
 
         'Create Valid list
-        Invoke(Sub() ProgressBar1.Maximum = hashCodesCollection.Count)
         Invoke(Sub() ProgressBar1.Value = 0)
+        numIteration = 0
         Dim musicValidListFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "MFX_ValidList.h")
         Dim jumpHashCodesDictionary As New Dictionary(Of UInteger, String)
         For Each musicItem As KeyValuePair(Of String, UInteger) In hashCodesCollection
+            'Update title bar and progress bar
             Invoke(Sub() Text = "Creating MFX Valid List: " & musicItem.Key)
+            BackgroundWorker.ReportProgress(Decimal.Divide(numIteration, hashCodesCollection.Count) * 100.0)
+            'Get all jump marker files and store it in the dictionary
             Dim jumpMarkersFilePath As String = fso.BuildPath(WorkingDirectory, "Music\ESWork\" & musicItem.Key & ".jmp")
             If fso.FileExists(jumpMarkersFilePath) Then
                 Dim jumpHashCodes As String() = textFileReaders.ReadJumpFile(jumpMarkersFilePath)
@@ -48,6 +51,7 @@ Partial Public Class MusicsExporter
                     jumpHashCodesDictionary.Add(hashCode, "JMP_" & jumpHashCodes(jumpHashCode))
                 Next
             End If
+            numIteration += 1
         Next
         hashTablesFunctions.CreateMfxValidList(musicValidListFilePath, jumpHashCodesDictionary)
     End Sub

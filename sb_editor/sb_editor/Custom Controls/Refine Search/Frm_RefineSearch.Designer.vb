@@ -41,6 +41,7 @@ Partial Class Frm_RefineSearch
         Me.Name = "Frm_RefineSearch"
         Me.ShowInTaskbar = False
         Me.Text = "Updating the SFX Refine List."
+        Me.TopMost = True
         Me.Groupbox_TaskTime.ResumeLayout(False)
         Me.ResumeLayout(False)
 
