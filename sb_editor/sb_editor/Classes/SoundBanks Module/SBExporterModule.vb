@@ -32,15 +32,17 @@ Namespace SoundBanksExporterFunctions
             Dim SfxList As New HashSet(Of String)
             'Iterate over all databases
             For databaseIndex As Integer = 0 To soundbankData.Dependencies.Length - 1
-                Dim databaseFilePath As String = fso.BuildPath(WorkingDirectory & "\DataBases\", soundbankData.Dependencies(databaseIndex) & ".txt")
+                Dim currentDataBase As String = soundbankData.Dependencies(databaseIndex)
+                Dim databaseFilePath As String = fso.BuildPath(WorkingDirectory & "\DataBases", currentDataBase & ".txt")
                 If fso.FileExists(databaseFilePath) Then
                     Dim databaseFile As DataBaseFile = textFileReaders.ReadDataBaseFile(databaseFilePath)
                     'Read all stored SFXs in this DataBase
                     For sfxIndex As Integer = 0 To databaseFile.Dependencies.Length - 1
+                        Dim currentSfx As String = databaseFile.Dependencies(sfxIndex)
                         If removeExtension Then
-                            SfxList.Add(databaseFile.Dependencies(sfxIndex))
+                            SfxList.Add(currentSfx)
                         Else
-                            SfxList.Add(databaseFile.Dependencies(sfxIndex) & ".txt")
+                            SfxList.Add(currentSfx & ".txt")
                         End If
                     Next
                 End If

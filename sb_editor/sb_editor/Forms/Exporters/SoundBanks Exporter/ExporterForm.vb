@@ -163,13 +163,16 @@ Partial Public Class ExporterForm
         If Not OutputAborted Then
             If Not quickOutput Then
                 Dim hashTablesBuilder As New SfxDefines
+                Dim soundhBuilder As New SoundhFile
                 '----------------------------------------------Create SFX Data----------------------------------------------
                 Dim maxHashCode = CreateSfxDataFolder(soundsTable)
 
                 '----------------------------------------------Create Hashtables----------------------------------------------
+                Dim sfxDefinesFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Defines.h")
                 hashTablesBuilder.CreateSfxDebug(Me, hashCodesDictionary, fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Debug.h"))
-                hashTablesBuilder.CreateSfxDefines(Me, hashCodesDictionary, soundBanksDictionary, SfxLanguages, ProjectSettingsFile.MiscProps.PrefixHtSound, fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Defines.h"))
+                hashTablesBuilder.CreateSfxDefines(Me, hashCodesDictionary, soundBanksDictionary, SfxLanguages, ProjectSettingsFile.MiscProps.PrefixHtSound, sfxDefinesFilePath)
                 hashTablesBuilder.CreateSfxData(Me, fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Data.h"), fso.BuildPath(WorkingDirectory, "TempSfxData"), maxHashCode)
+                soundhBuilder.CreateSoundhFile(fso.BuildPath(ProjectSettingsFile.MiscProps.EuroLandHashCodeServerPath, "Sound.h"), sfxDefinesFilePath, fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "MFX_Defines.h"))
             End If
 
             'Create bat if required

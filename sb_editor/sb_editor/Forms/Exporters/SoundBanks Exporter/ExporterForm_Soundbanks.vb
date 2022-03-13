@@ -15,7 +15,6 @@ Partial Public Class ExporterForm
         'For each Soundbank
         For soundBankIndex As Integer = 0 To soundbanksList.Length - 1
             If Not AbortOutput Then
-
                 'Calculate and report progress
                 BackgroundWorker.ReportProgress(Decimal.Divide(soundBankIndex, soundbanksList.Length) * 100.0)
                 Dim currentSoundBank As String = soundbanksList(soundBankIndex)
@@ -75,6 +74,9 @@ Partial Public Class ExporterForm
                                     Dim sampleBankFilePath As String = fso.BuildPath(outputFilePath, sfxFileName & ".SFX")
                                     CreateFolderIfRequired(outputFilePath)
 
+                                    'Get bank max size
+                                    Dim bankSize As Long = GetSoundBankMaxSize(currentPlatform, soundBankInfo) * 1024
+
                                     'Debug file
                                     Dim debugFile As String = fso.BuildPath(WorkingDirectory, "Debug_Report")
                                     CreateFolderIfRequired(debugFile)
@@ -102,7 +104,21 @@ Partial Public Class ExporterForm
                                                 End Using
                                             End Using
                                         End Using
-                                        ESUtils.MusXBuild_Soundbank.BuildSoundbankFile(sfxFilePath, sifFilePath, sbfFilePath, ssfFilePath, sampleBankFilePath, soundBankInfo.HashCode, True)
+                                        'Check min and max sizes
+                                        Dim fileSize As Long = FileLen(sbfFilePath)
+                                        If fileSize > bankSize Then
+                                            'Delete files
+                                            fso.DeleteFile(sbfFilePath)
+                                            fso.DeleteFile(ssfFilePath)
+                                            fso.DeleteFile(sifFilePath)
+                                            fso.DeleteFile(sfxFilePath)
+                                            'Inform user
+                                            Dim stringHeader As String = "Sample Bank Limit Exceeded With:" & vbCrLf & vbCrLf & "SoundBank: " & currentSoundBank & vbCrLf & "Format: " & currentPlatform
+                                            MsgBox(stringHeader & vbCrLf & "My Size: " & BytesStringFormat(fileSize) & vbCrLf & "My Max Size: " & BytesStringFormat(bankSize) & vbCrLf & vbCrLf & "Output Aborted and Files Deleted.", vbOKOnly + vbCritical, "Fatal Output Error!")
+                                            AbortOutput = True
+                                        Else
+                                            ESUtils.MusXBuild_Soundbank.BuildSoundbankFile(sfxFilePath, sifFilePath, sbfFilePath, ssfFilePath, sampleBankFilePath, soundBankInfo.HashCode, True)
+                                        End If
                                     Else
                                         Using sbfWriter As New BinaryWriter(File.Open(sbfFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
                                             Using sifWriter As New BinaryWriter(File.Open(sifFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
@@ -113,19 +129,19 @@ Partial Public Class ExporterForm
                                                 End Using
                                             End Using
                                         End Using
-                                        ESUtils.MusXBuild_Soundbank.BuildSoundbankFile(sfxFilePath, sifFilePath, sbfFilePath, Nothing, sampleBankFilePath, soundBankInfo.HashCode, False)
-                                    End If
-
-                                    'Check min and max sizes
-                                    If fso.FileExists(sampleBankFilePath) Then
-                                        Dim fileSize As Long = FileLen(sampleBankFilePath) / 1000
-                                        Dim bankSize As Long = GetSoundBankMaxSize(currentPlatform, soundBankInfo)
+                                        'Check min and max sizes
+                                        Dim fileSize As Long = FileLen(sbfFilePath) - 4024
                                         If fileSize > bankSize Then
+                                            'Delete files
+                                            fso.DeleteFile(sbfFilePath)
+                                            fso.DeleteFile(sifFilePath)
+                                            fso.DeleteFile(sfxFilePath)
+                                            'Inform user
                                             Dim stringHeader As String = "Sample Bank Limit Exceeded With:" & vbCrLf & vbCrLf & "SoundBank: " & currentSoundBank & vbCrLf & "Format: " & currentPlatform
-                                            MsgBox(stringHeader & vbCrLf & "My Size: " & fileSize & "K" & vbCrLf & "My Max Size: " & bankSize & "K" & vbCrLf & vbCrLf & "Output Aborted and Files Deleted.", vbOKOnly + vbCritical, "Fatal Output Error!")
-                                            fso.DeleteFile(sampleBankFilePath)
+                                            MsgBox(stringHeader & vbCrLf & "My Size: " & BytesStringFormat(fileSize) & vbCrLf & "My Max Size: " & BytesStringFormat(bankSize) & vbCrLf & vbCrLf & "Output Aborted and Files Deleted.", vbOKOnly + vbCritical, "Fatal Output Error!")
                                             AbortOutput = True
-                                            Exit For
+                                        Else
+                                            ESUtils.MusXBuild_Soundbank.BuildSoundbankFile(sfxFilePath, sifFilePath, sbfFilePath, Nothing, sampleBankFilePath, soundBankInfo.HashCode, False)
                                         End If
                                     End If
                                 End If
@@ -136,6 +152,11 @@ Partial Public Class ExporterForm
                                 mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "SFXDate = " & timerSfxData.Elapsed.TotalMilliseconds.ToString.TrimStart("0"c) & vbCrLf)
                                 mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Samples = " & timerSamples.Elapsed.TotalMilliseconds.ToString.TrimStart("0"c) & vbCrLf)
                                 mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += vbCrLf)
+
+                                'Check if we have to quit
+                                If AbortOutput Then
+                                    Exit For
+                                End If
                             Next
                         Else
                             Exit For

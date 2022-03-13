@@ -311,6 +311,7 @@
     <Compile Include="HashTables Builder\FormatFunctions.vb" />
     <Compile Include="HashTables Builder\MfxDefines.vb" />
     <Compile Include="HashTables Builder\SfxDefines.vb" />
+    <Compile Include="HashTables Builder\SoundhFile.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
