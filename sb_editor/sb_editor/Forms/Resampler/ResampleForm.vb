@@ -7,7 +7,6 @@ Partial Public Class ResampleForm
     '*===============================================================================================
     '* GLOBAL VARIABLES
     '*===============================================================================================
-    'Private ReadOnly sampleRateFormats As New Dictionary(Of Integer, String())
     Private promptSave As Boolean = True
     Private dataTableInfo As DataTable
     Private ReadOnly writers As New FileWriters

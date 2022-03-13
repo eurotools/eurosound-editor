@@ -1,5 +1,4 @@
 ﻿Imports System.IO
-Imports sb_editor.HashTablesBuilder
 Imports sb_editor.ReaderClasses
 
 Partial Public Class MusicsExporter
@@ -10,7 +9,6 @@ Partial Public Class MusicsExporter
     Private ReadOnly MarkerFileOnly As Boolean
     Private ReadOnly textFileReaders As New FileParsers
     Private ReadOnly parentMusicForm As MusicMaker
-    Private ReadOnly hashTablesFunctions As New MfxDefines
     Private ReadOnly hashCodesCollection As SortedDictionary(Of String, UInteger)
     Private canCloseForm As Boolean = False
 

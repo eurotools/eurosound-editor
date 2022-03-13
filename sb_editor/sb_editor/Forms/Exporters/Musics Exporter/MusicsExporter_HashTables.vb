@@ -1,7 +1,9 @@
 ﻿Imports NAudio.Wave
+Imports sb_editor.HashTablesBuilder
 
 Partial Public Class MusicsExporter
     Private Sub BuildMusicHashTables()
+        Dim hashTablesFunctions As New MfxDefines
         Dim numIteration As Integer = 0
         Dim musicDefinesFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "MFX_Defines.h")
         hashTablesFunctions.CreateMfxHashTable(musicDefinesFilePath, hashCodesCollection)
