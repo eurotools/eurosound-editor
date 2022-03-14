@@ -76,7 +76,7 @@ Public Class Frm_MakePurgeList
                     Dim sfxData As SfxFile = textFileReaders.ReadSFXFile(sfxFilesToInspect(fileIndex))
                     For sampleIndex As Integer = 0 To sfxData.Samples.Count - 1
                         Dim currentSample = sfxData.Samples(sampleIndex)
-                        samplesToPrint.Add(RelativePathToAbs(currentSample.FilePath))
+                        samplesToPrint.Add("\" & currentSample.FilePath.TrimStart("\"))
                     Next
                 End If
             Next

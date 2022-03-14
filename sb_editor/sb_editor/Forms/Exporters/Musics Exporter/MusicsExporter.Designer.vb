@@ -42,7 +42,6 @@ Partial Class MusicsExporter
         Me.Name = "MusicsExporter"
         Me.ShowInTaskbar = False
         Me.Text = "Musics Exporter Form"
-        Me.TopMost = True
         Me.Groupbox_TaskTime.ResumeLayout(False)
         Me.ResumeLayout(False)
 

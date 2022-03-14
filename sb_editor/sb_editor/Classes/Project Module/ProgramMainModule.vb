@@ -133,14 +133,14 @@ Module ProgramMainModule
 
         'Get All SoundBanks
         Dim soundBanksFilePath As String = fso.BuildPath(WorkingDirectory, "SoundBanks")
-        Dim availableSoundBanks As String() = GetSoundBankFiles(soundBanksFilePath)
+        Dim availableSoundBanks As String() = GetFolderFiles(soundBanksFilePath)
         LoadSoundBanks(availableSoundBanks, mainform)
         'Update counter label
         mainform.Label_SoundBanksCount.Text = "Total: " & mainform.TreeView_SoundBanks.Nodes.Count
 
         'Get All DataBases
         Dim databasesFilePath As String = fso.BuildPath(WorkingDirectory, "DataBases")
-        Dim availableDataBases As String() = GetDataBaseFiles(databasesFilePath)
+        Dim availableDataBases As String() = GetFolderFiles(databasesFilePath)
         mainform.ListBox_DataBases.BeginUpdate()
         mainform.ListBox_DataBases.Items.AddRange(availableDataBases)
         mainform.ListBox_DataBases.EndUpdate()
@@ -177,27 +177,30 @@ Module ProgramMainModule
     End Function
 
     '*===============================================================================================
-    '* LOAD SOUNDBANKS
+    '* GENERIC FUNCTIONS
     '*===============================================================================================
-    Private Function GetSoundBankFiles(soundBanksFilePath As String) As String()
-        Dim soundBanks As New List(Of String)
+    Private Function GetFolderFiles(folderToInspect As String) As String()
+        Dim folderFiles As New List(Of String)
 
         'Get file path and ensure that exists
-        If fso.FolderExists(soundBanksFilePath) Then
+        If fso.FolderExists(folderToInspect) Then
             'Load data and create a list
-            Dim soundBankFiles As String() = Directory.GetFiles(soundBanksFilePath, "*.txt", SearchOption.TopDirectoryOnly)
+            Dim soundBankFiles As String() = Directory.GetFiles(folderToInspect, "*.txt", SearchOption.TopDirectoryOnly)
             For fileIndex As Integer = 0 To soundBankFiles.Length - 1
-                soundBanks.Add(GetOnlyFileName(soundBankFiles(fileIndex)))
+                folderFiles.Add(GetOnlyFileName(soundBankFiles(fileIndex)))
             Next
         End If
 
         'Get array and sort it
-        Dim soundBanksArray As String() = soundBanks.ToArray
+        Dim soundBanksArray As String() = folderFiles.ToArray
         Array.Sort(soundBanksArray)
 
         Return soundBanksArray
     End Function
 
+    '*===============================================================================================
+    '* LOAD SOUNDBANKS
+    '*===============================================================================================
     Private Sub LoadSoundBanks(availableSoundBanks As String(), mainform As MainFrame)
         mainform.TreeView_SoundBanks.BeginUpdate()
         For fileIndex As Integer = 0 To availableSoundBanks.Length - 1
@@ -219,28 +222,6 @@ Module ProgramMainModule
         Next
         mainform.TreeView_SoundBanks.EndUpdate()
     End Sub
-
-    '*===============================================================================================
-    '* LOAD DATABASES
-    '*===============================================================================================
-    Private Function GetDataBaseFiles(dataBasesFilePath) As String()
-        Dim databases As New List(Of String)
-
-        'Get file path and ensure that exists
-        If fso.FolderExists(dataBasesFilePath) Then
-            'Load data and create a list
-            Dim databaseFiles As String() = Directory.GetFiles(dataBasesFilePath, "*.txt", SearchOption.TopDirectoryOnly)
-            For fileIndex As Integer = 0 To databaseFiles.Length - 1
-                databases.Add(GetOnlyFileName(databaseFiles(fileIndex)))
-            Next
-        End If
-
-        'Get array and sort it
-        Dim dataBasesArray As String() = databases.ToArray
-        Array.Sort(dataBasesArray)
-
-        Return dataBasesArray
-    End Function
 
     '*===============================================================================================
     '* COMBOBOXES FUNCTIONS

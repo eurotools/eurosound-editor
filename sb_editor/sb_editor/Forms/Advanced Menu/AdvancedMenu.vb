@@ -1,7 +1,6 @@
 ﻿Imports System.IO
 Imports sb_editor.ParsersObjects
 Imports sb_editor.ReaderClasses
-Imports sb_editor.SoundBanksExporterFunctions
 Imports sb_editor.WritersClasses
 
 Partial Public Class AdvancedMenu
@@ -26,77 +25,21 @@ Partial Public Class AdvancedMenu
                 'Output folder
                 Dim outputFolder As String = fso.BuildPath(WorkingDirectory, "Report")
                 CreateFolderIfRequired(outputFolder)
-
                 'Ensure that the SoundBank Exists
                 Dim soundBankFilePath As String = fso.BuildPath(WorkingDirectory & "\SoundBanks", selectedSoundBank & ".txt")
                 If fso.FileExists(soundBankFilePath) Then
-                    'Set cursor as hourglass
                     Cursor.Current = Cursors.WaitCursor
-
-                    'Get SoundBank Data
-                    Dim soundBankData As SoundbankFile = readers.ReadSoundBankFile(soundBankFilePath)
-                    Dim soundBankSFXs As String() = GetSFXsArray(soundBankData, True)
-                    Dim soundBankSamples As String() = GetSamplesList(soundBankSFXs)
-                    Dim soundBankSamplesNoDuplicates As String() = soundBankSamples.Distinct.ToArray
-
-                    Dim sfxSize As Integer = 20 * soundBankSFXs.Length
-                    Dim samplesSize As Integer = 12 * soundBankSFXs.Length
-
-                    'Create file
-                    FileOpen(2, fso.BuildPath(outputFolder, selectedSoundBank & ".txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
-                    PrintLine(2, "SoundBank Report Created: 	" & Date.Now.ToString("MM/dd/yyyy") & "	" & Date.Now.ToString("HH:mm:ss"))
-                    PrintLine(2, "")
-                    PrintLine(2, "SoundBank Name: " & selectedSoundBank)
-                    PrintLine(2, "")
-                    PrintLine(2, "First Created :		 " & soundBankData.HeaderInfo.FirstCreated)
-                    PrintLine(2, "Created By :		 " & soundBankData.HeaderInfo.CreatedBy)
-                    PrintLine(2, "Last Modified :		 " & soundBankData.HeaderInfo.LastModify)
-                    PrintLine(2, "Last Modified By :		 " & soundBankData.HeaderInfo.LastModifyBy)
-                    PrintLine(2, "")
-                    PrintLine(2, "Database Count:		" & soundBankData.Dependencies.Length)
-                    PrintLine(2, "SFX Count:		" & soundBankSFXs.Length)
-                    PrintLine(2, "Sample Count:		" & soundBankSamplesNoDuplicates.Length)
-                    PrintLine(2, "")
-                    PrintLine(2, "Total Sample Size:		" & soundBankData.Dependencies.Length)
-                    PrintLine(2, "")
-                    PrintLine(2, "PlayStation2:		" & BytesStringFormat(GetSoundBankSize(soundBankSamplesNoDuplicates, WorkingDirectory & "\PlayStation2_VAG\", ".vag") + sfxSize + samplesSize) & " - ESTIMATED")
-                    PrintLine(2, "GameCube:		" & BytesStringFormat(GetSoundBankSize(soundBankSamplesNoDuplicates, WorkingDirectory & "\GameCube_dsp_adpcm\", ".dsp") + sfxSize + samplesSize) & " - ESTIMATED")
-                    PrintLine(2, "PC:		" & BytesStringFormat(GetSoundBankSize(soundBankSamplesNoDuplicates, WorkingDirectory & "\PC\", ".wav") + sfxSize + samplesSize) & " - ESTIMATED")
-                    PrintLine(2, "X Box:		" & BytesStringFormat(GetSoundBankSize(soundBankSamplesNoDuplicates, WorkingDirectory & "\XBox_adpcm\", ".adpcm") + sfxSize + samplesSize) & " - ESTIMATED")
-                    PrintLine(2, "")
-                    PrintLine(2, "")
-                    PrintLine(2, "DataBases:  " & soundBankData.Dependencies.Length)
-                    PrintLine(2, "SFXs:  " & soundBankSFXs.Length)
-                    PrintLine(2, "Samples:  " & soundBankSamplesNoDuplicates.Length)
-                    PrintLine(2, "")
-                    PrintLine(2, "")
-                    'Print SoundBank info
-                    Dim samplePathStartPos As Integer = Len(ProjectSettingsFile.MiscProps.SampleFileFolder)
-                    For databaseIndex As Integer = 0 To soundBankData.Dependencies.Length - 1
-                        'Get Database Data
-                        Dim currentDataBase As String = soundBankData.Dependencies(databaseIndex)
-                        Dim dataBaseFilePath As String = fso.BuildPath(WorkingDirectory & "\DataBases\", currentDataBase & ".txt")
-                        If fso.FileExists(dataBaseFilePath) Then
-                            Dim dataBaseSFXs As DataBaseFile = readers.ReadDataBaseFile(dataBaseFilePath)
-                            PrintLine(2, "DataBase: 	" & currentDataBase)
-                            'Get SFXs in this DataBase
-                            For sfxIndex As Integer = 0 To dataBaseSFXs.Dependencies.Length - 1
-                                Dim currentSfx As String = dataBaseSFXs.Dependencies(sfxIndex)
-                                soundBankSamples = GetSamplesList(New String() {currentSfx})
-                                PrintLine(2, "	SFX: 	" & soundBankSFXs(sfxIndex))
-                                'Print Samples in this SFX
-                                For sampleIndex As Integer = 0 To soundBankSamples.Length - 1
-                                    PrintLine(2, "		Sample: 	" & Mid(soundBankSamples(sampleIndex), samplePathStartPos + 1))
-                                Next
-                                PrintLine(2, "	End SFX")
-                            Next
-                            PrintLine(2, "End DataBase")
-                            PrintLine(2, "")
-                        End If
-                    Next
-                    FileClose(2)
-
-                    'Set cursor as default arrow
+                    'Output Language
+                    Dim outLanguage As String = "English"
+                    If mainFrame.ComboBox_OutputLanguage.SelectedItem IsNot Nothing Then
+                        outLanguage = mainFrame.ComboBox_OutputLanguage.SelectedItem
+                    End If
+                    'Output Format
+                    Dim outFormat As String = "PC"
+                    If mainFrame.ComboBox_Format.SelectedItem IsNot Nothing Then
+                        outLanguage = mainFrame.ComboBox_Format.SelectedItem
+                    End If
+                    CreateSFXReportFile(fso.BuildPath(outputFolder, selectedSoundBank & ".txt"), selectedSoundBank, soundBankFilePath, outFormat, outLanguage)
                     Cursor.Current = Cursors.Default
                 End If
             End If
@@ -115,22 +58,34 @@ Partial Public Class AdvancedMenu
             Dim fileNameWithExtension As String = Dir(baseDir & "\*.txt", FileAttribute.Archive)
             Do While fileNameWithExtension > ""
                 Dim sfxFilePath As String = fso.BuildPath(WorkingDirectory & "\SFXs\", fileNameWithExtension)
-                Dim sfxFileData As SfxFile = readers.ReadSFXFile(sfxFilePath)
-                If availableHashcode.ContainsKey(sfxFileData.HashCode) Then
-                    If duplicatedHashcodes.Count = 0 Then
-                        'Add file to list
-                        duplicatedHashcodes.Add("SFXs Found With Duplicate HashCodes")
-                        duplicatedHashcodes.Add("")
-                        'Update hashcode and write file again
-                        sfxFileData.HashCode = SFXHashCodeNumber
-                        SFXHashCodeNumber += 1
-                        writers.WriteSfxFile(sfxFileData, sfxFilePath)
+                'Read SFX file as a string array
+                Dim fileData As String() = File.ReadAllLines(sfxFilePath)
+                Dim hashcodeIndex As Integer = Array.IndexOf(fileData, "#HASHCODE")
+                If hashcodeIndex >= 0 Then
+                    'Get HashCode
+                    Dim stringData As String() = fileData(hashcodeIndex + 1).Split(" "c)
+                    If stringData.Length > 1 AndAlso IsNumeric(stringData(1)) Then
+                        Dim hashcodeNumber As UInteger = stringData(1)
+                        'Check if we have read this hashcode before
+                        If availableHashcode.ContainsKey(hashcodeNumber) Then
+                            If duplicatedHashcodes.Count = 0 Then
+                                'Add file to list
+                                duplicatedHashcodes.Add("SFXs Found With Duplicate HashCodes")
+                                duplicatedHashcodes.Add("")
+                                'Update hashcode and write file again
+                                hashcodeNumber = SFXHashCodeNumber
+                                SFXHashCodeNumber += 1
+                                'Update hashcode and write the updated data
+                                fileData(hashcodeIndex + 1) = "HashCodeNumber " & hashcodeNumber
+                                File.WriteAllLines(sfxFilePath, fileData)
+                            End If
+                            duplicatedHashcodes.Add(GetOnlyFileName(fileNameWithExtension))
+                        Else
+                            availableHashcode.Add(hashcodeNumber, fileNameWithExtension)
+                        End If
+                        fileNameWithExtension = Dir()
                     End If
-                    duplicatedHashcodes.Add(GetOnlyFileName(fileNameWithExtension))
-                Else
-                    availableHashcode.Add(sfxFileData.HashCode, fileNameWithExtension)
                 End If
-                fileNameWithExtension = Dir()
             Loop
             availableHashcode.Clear()
             'Add message if empty

@@ -45,11 +45,11 @@ Partial Public Class ExporterForm
 
                                 'Get SFX and samples list
                                 Dim samplesToInclude As New HashSet(Of String)
-                                Dim SfxDictionary As New Dictionary(Of String, EXSound)
+                                Dim SfxDictionary As New SortedDictionary(Of String, EXSound)
                                 Dim SamplesDictionary As New Dictionary(Of String, EXAudio)
                                 timerTotalTime.Start()
                                 timerQuery.Start()
-                                Dim SfxList As String() = GetSFXsArray(soundBankInfo)
+                                Dim SfxList As String() = GetSoundBankSFXsList(soundBankInfo, currentPlatform)
                                 timerQuery.Stop()
                                 timerSfxData.Start()
                                 GetSFXsDictionary(SfxList, currentPlatform, SfxDictionary, samplesToInclude, streamsList)
