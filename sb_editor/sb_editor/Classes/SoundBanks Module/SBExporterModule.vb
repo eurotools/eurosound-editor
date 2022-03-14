@@ -254,7 +254,7 @@ Namespace SoundBanksExporterFunctions
                             End If
                         Else
                             fileRef = (streamFileIndex + 1) * -1
-                            PrintLine(1, fileRef & "    " & currentSample.FilePath)
+                            PrintLine(1, fileRef & "    \" & currentSample.FilePath)
                             StreamFileRefCheckSum += Math.Abs(fileRef)
                         End If
                     End If

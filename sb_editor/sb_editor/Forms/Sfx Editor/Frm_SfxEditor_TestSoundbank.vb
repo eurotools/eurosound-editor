@@ -20,7 +20,7 @@ Partial Public Class Frm_SfxEditor
         Dim samplesToInclude As New HashSet(Of String)
         Dim SfxDictionary As New SortedDictionary(Of String, EXSound)
         Dim SamplesDictionary As New Dictionary(Of String, EXAudio)
-        GetSFXsDictionary(New String() {"Misc\" & fso.GetFileName(sfxTextFilePath)}, "PC", SfxDictionary, samplesToInclude, New String() {}, True)
+        GetSFXsDictionary(New String() {"Misc\" & Path.GetFileNameWithoutExtension(sfxTextFilePath)}, "PC", SfxDictionary, samplesToInclude, New String() {}, True)
         GetSamplesDictionary(samplesToInclude, SamplesDictionary, "PC", "English", False, True)
 
         'Get output file paths
