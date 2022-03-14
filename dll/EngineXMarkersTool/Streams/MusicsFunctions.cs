@@ -60,7 +60,7 @@ namespace EngineXMarkersTool
                     //Get IMA Adpcm States
                     uint[][] pcImaDecodedStates = new uint[2][];
                     pcImaDecodedStates[0] = DecodeStatesIma(imaData[0], imaData[0].Length * 2);
-                    pcImaDecodedStates[1]= DecodeStatesIma(imaData[1], imaData[1].Length * 2);
+                    pcImaDecodedStates[1] = DecodeStatesIma(imaData[1], imaData[1].Length * 2);
 
                     //Update Markers states
                     EXMarkersFunctions markersFunctions = new EXMarkersFunctions();

@@ -69,7 +69,6 @@ Partial Class Soundbank_Properties
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_Value_Size)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_ModifiedBy)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_CreatedBy_Value)
-        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_SizeFile_Xbox)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_CreatedBy)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_Size)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_Value_LastModified)
@@ -80,23 +79,24 @@ Partial Class Soundbank_Properties
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_SampleCount)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_FirstCreated)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_SfxCount_Value)
-        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_SizeFile_PC)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_DatabaseCount_Value)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label1)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_Pc)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_DataBaseCount)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_Value_OutFileName)
-        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_SizeFile_GameCube)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_OutFileName)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_GameCube)
         Me.GroupBox_SoundbankData.Controls.Add(Me.ListBox_SFXs)
-        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_SizeFile_PlayStation2)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_SfxCount)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_PlayStation2)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_DataBasesCount)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_TotalSamples)
         Me.GroupBox_SoundbankData.Controls.Add(Me.ListBox_SamplesList)
         Me.GroupBox_SoundbankData.Controls.Add(Me.ListBox_Databases)
+        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_SizeFile_Xbox)
+        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_SizeFile_PC)
+        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_SizeFile_GameCube)
+        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_SizeFile_PlayStation2)
         Me.GroupBox_SoundbankData.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox_SoundbankData.Name = "GroupBox_SoundbankData"
         Me.GroupBox_SoundbankData.Size = New System.Drawing.Size(733, 632)
@@ -143,7 +143,7 @@ Partial Class Soundbank_Properties
         'Label_SizeFile_Xbox
         '
         Me.Label_SizeFile_Xbox.AutoSize = True
-        Me.Label_SizeFile_Xbox.Location = New System.Drawing.Point(164, 275)
+        Me.Label_SizeFile_Xbox.Location = New System.Drawing.Point(161, 275)
         Me.Label_SizeFile_Xbox.Name = "Label_SizeFile_Xbox"
         Me.Label_SizeFile_Xbox.Size = New System.Drawing.Size(179, 13)
         Me.Label_SizeFile_Xbox.TabIndex = 7
@@ -242,7 +242,7 @@ Partial Class Soundbank_Properties
         'Label_SizeFile_PC
         '
         Me.Label_SizeFile_PC.AutoSize = True
-        Me.Label_SizeFile_PC.Location = New System.Drawing.Point(164, 258)
+        Me.Label_SizeFile_PC.Location = New System.Drawing.Point(161, 258)
         Me.Label_SizeFile_PC.Name = "Label_SizeFile_PC"
         Me.Label_SizeFile_PC.Size = New System.Drawing.Size(179, 13)
         Me.Label_SizeFile_PC.TabIndex = 5
@@ -296,7 +296,7 @@ Partial Class Soundbank_Properties
         'Label_SizeFile_GameCube
         '
         Me.Label_SizeFile_GameCube.AutoSize = True
-        Me.Label_SizeFile_GameCube.Location = New System.Drawing.Point(164, 242)
+        Me.Label_SizeFile_GameCube.Location = New System.Drawing.Point(161, 242)
         Me.Label_SizeFile_GameCube.Name = "Label_SizeFile_GameCube"
         Me.Label_SizeFile_GameCube.Size = New System.Drawing.Size(179, 13)
         Me.Label_SizeFile_GameCube.TabIndex = 3
@@ -335,7 +335,7 @@ Partial Class Soundbank_Properties
         'Label_SizeFile_PlayStation2
         '
         Me.Label_SizeFile_PlayStation2.AutoSize = True
-        Me.Label_SizeFile_PlayStation2.Location = New System.Drawing.Point(164, 226)
+        Me.Label_SizeFile_PlayStation2.Location = New System.Drawing.Point(161, 226)
         Me.Label_SizeFile_PlayStation2.Name = "Label_SizeFile_PlayStation2"
         Me.Label_SizeFile_PlayStation2.Size = New System.Drawing.Size(179, 13)
         Me.Label_SizeFile_PlayStation2.TabIndex = 1

@@ -94,6 +94,7 @@
     <Compile Include="Classes\SoundBanks Module\Objects\EXSample.vb" />
     <Compile Include="Classes\SoundBanks Module\Objects\EXSound.vb" />
     <Compile Include="Classes\SoundBanks Module\SBExporterModule.vb" />
+    <Compile Include="Classes\SoundBanks Module\SoundBanksMainModule.vb" />
     <Compile Include="Custom Controls\Refine Search\Combobox With ItemData\ComboItemData.vb" />
     <Compile Include="Custom Controls\Refine Search\Frm_RefineSearch.Designer.vb">
       <DependentUpon>Frm_RefineSearch.vb</DependentUpon>

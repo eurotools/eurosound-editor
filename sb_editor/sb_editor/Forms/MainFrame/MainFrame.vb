@@ -275,10 +275,12 @@ Partial Public Class MainFrame
             Dim soundbankFullPath As String = fso.BuildPath(WorkingDirectory, "SoundBanks\" & soundbankNode.Text & ".txt")
             'Ensure that the soundbank txt still exists
             If fso.FileExists(soundbankFullPath) Then
-                'Get Soundbank HashCode
-                Dim soundbankHashCode As Integer = soundbankNode.Name
+                Dim outLanguage As String = "English"
+                If ComboBox_OutputLanguage.SelectedItem IsNot Nothing Then
+                    outLanguage = ComboBox_OutputLanguage.SelectedItem
+                End If
                 'Show form
-                Dim sbProperties As New Soundbank_Properties(soundbankFullPath, soundbankNode.Text, soundbankHashCode)
+                Dim sbProperties As New Soundbank_Properties(soundbankFullPath, ComboBox_Format.SelectedItem, outLanguage)
                 sbProperties.ShowDialog()
             End If
         Else

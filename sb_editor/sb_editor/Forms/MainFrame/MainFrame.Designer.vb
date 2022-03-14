@@ -586,6 +586,7 @@ Partial Class MainFrame
         Me.ListBox_DataBaseSFX.Name = "ListBox_DataBaseSFX"
         Me.ListBox_DataBaseSFX.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
         Me.ListBox_DataBaseSFX.Size = New System.Drawing.Size(175, 615)
+        Me.ListBox_DataBaseSFX.Sorted = True
         Me.ListBox_DataBaseSFX.TabIndex = 3
         '
         'ContextMenu_DataBasesSFX
