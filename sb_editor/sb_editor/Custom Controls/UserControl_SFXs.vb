@@ -329,7 +329,7 @@ Public Class UserControl_SFXs
             For i As Integer = 0 To itemsToDelete.Count - 1
                 ListBox_SFXs.Items.Remove(itemsToDelete(i))
                 'Remove text file
-                Dim filesToDelete As IEnumerable(Of String) = GetFileList(itemsToDelete(i) & ".txt", fso.BuildPath(WorkingDirectory, "SFXs"))
+                Dim filesToDelete As IEnumerable(Of String) = Directory.GetFiles(WorkingDirectory & "\SFXs", itemsToDelete(i) & ".txt", SearchOption.AllDirectories)
                 Using enumerator As IEnumerator(Of String) = filesToDelete.GetEnumerator
                     While enumerator.MoveNext
                         fso.CopyFile(enumerator.Current, fso.BuildPath(sfxsTrash, itemsToDelete(i) & ".txt"))
@@ -399,30 +399,6 @@ Public Class UserControl_SFXs
         Next
         Erase fileList
     End Sub
-
-    Public Shared Iterator Function GetFileList(fileSearchPattern As String, rootFolderPath As String) As IEnumerable(Of String)
-        Dim pending As New Queue(Of String)()
-        pending.Enqueue(rootFolderPath)
-        Dim tmp As String()
-
-        While pending.Count > 0
-            rootFolderPath = pending.Dequeue()
-            Try
-                tmp = Directory.GetFiles(rootFolderPath, fileSearchPattern)
-            Catch __unusedUnauthorizedAccessException1__ As UnauthorizedAccessException
-                Continue While
-            End Try
-
-            For i As Integer = 0 To tmp.Length - 1
-                Yield tmp(i)
-            Next
-
-            tmp = Directory.GetDirectories(rootFolderPath)
-            For i As Integer = 0 To tmp.Length - 1
-                pending.Enqueue(tmp(i))
-            Next
-        End While
-    End Function
 
     Private Sub ContextMenuSfx_NewMultiple_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_NewMultiple.Click
         'Ensure that the default file exists

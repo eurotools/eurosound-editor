@@ -46,12 +46,9 @@ Partial Public Class ExporterForm
                             waveDurationFormat = waveDuration.ToString("0.######E+00", numericProvider)
                         End If
                         'Check if is streamed or not
-                        Dim absFilePath As String = sfxFile.Samples(0).FilePath
-                        If Not absFilePath.StartsWith("\") Then
-                            absFilePath = "\" + sfxFile.Samples(0).FilePath
-                        End If
+                        Dim fileNameToCheck As String = sfxFile.Samples(0).FilePath.TrimStart("\")
                         Dim sampleIsStreamed = 0
-                        If Array.IndexOf(StreamSamplesList, absFilePath) <> -1 Then
+                        If Array.IndexOf(StreamSamplesList, UCase(fileNameToCheck)) <> -1 Then
                             sampleIsStreamed = 1
                         End If
                         'Create File

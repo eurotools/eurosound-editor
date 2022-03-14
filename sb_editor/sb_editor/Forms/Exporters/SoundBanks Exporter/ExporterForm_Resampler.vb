@@ -21,19 +21,20 @@ Partial Public Class ExporterForm
                     'Get paths 
                     Dim sampleRelativePath As String = soundsTable.Rows(rowIndex).ItemArray(0)
                     Dim sourceFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder & "\Master", sampleRelativePath)
-                    'Check channels
-                    Dim numberOfChannels As Integer = 0
-                    Dim bitsPerSample As Integer = 0
-                    Dim originalFrequency As Integer = 0
+                    'Read WAVE Master file and get all required info
+                    Dim masterWaveNumOfChannels, masterWaveBitsPerSample, masterWaveFrequency, masterWaveLength As Integer
+                    Dim masterWaveLoopInfo As Integer()
                     Using reader As New WaveFileReader(sourceFilePath)
-                        numberOfChannels = reader.WaveFormat.Channels
-                        bitsPerSample = reader.WaveFormat.BitsPerSample
-                        originalFrequency = reader.WaveFormat.SampleRate
+                        masterWaveNumOfChannels = reader.WaveFormat.Channels
+                        masterWaveBitsPerSample = reader.WaveFormat.BitsPerSample
+                        masterWaveFrequency = reader.WaveFormat.SampleRate
+                        masterWaveLength = reader.Length
+                        masterWaveLoopInfo = waveFunctions.ReadSampleChunk(reader)
                     End Using
-                    If numberOfChannels <> 1 Then
+                    If masterWaveNumOfChannels <> 1 Then
                         MsgBox("Sample " & sourceFilePath & " is not 1 channel.", vbOKOnly + vbCritical, "EuroSound")
                     Else
-                        If bitsPerSample <> 16 Then
+                        If masterWaveBitsPerSample <> 16 Then
                             MsgBox("Sample " & sourceFilePath & " is not 16 bit.", vbOKOnly + vbCritical, "EuroSound")
                         Else
                             'Resample for each platform 
@@ -50,7 +51,7 @@ Partial Public Class ExporterForm
                                 End If
                                 CreateFolderIfRequired(fso.GetParentFolderName(outputFilePath))
                                 SoxTimer.Start()
-                                ReSampleWithSox(sourceFilePath, outputFilePath, originalFrequency, sampleRate)
+                                ReSampleWithSox(sourceFilePath, outputFilePath, masterWaveFrequency, sampleRate)
                                 SoxTimer.Stop()
 
                                 'ReSample for each platform
@@ -69,17 +70,14 @@ Partial Public Class ExporterForm
                                         CreateFolderIfRequired(fso.GetParentFolderName(dspOutputFilePath))
                                         'Default arguments
                                         Dim dspToolArgs As String = "Encode """ & outputFilePath & """ """ & dspOutputFilePath & """"
-                                        'Get loop info
-                                        Using waveReader As New WaveFileReader(sourceFilePath)
-                                            Dim loopInfo As Integer() = waveFunctions.ReadSampleChunk(waveReader)
-                                            If loopInfo(0) = 1 And StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
-                                                'Loop offset pos in the resampled wave
-                                                Using parsedWaveReader As New WaveFileReader(outputFilePath)
-                                                    Dim parsedLoop As UInteger = (loopInfo(1) / (waveReader.Length / parsedWaveReader.Length)) * 2
-                                                    dspToolArgs = "Encode """ & outputFilePath & """ """ & dspOutputFilePath & """ -L " & parsedLoop
-                                                End Using
-                                            End If
-                                        End Using
+                                        'Check loop info
+                                        If masterWaveLoopInfo(0) = 1 And StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
+                                            'Loop offset pos in the resampled wave
+                                            Using parsedWaveReader As New WaveFileReader(outputFilePath)
+                                                Dim parsedLoop As UInteger = (masterWaveLoopInfo(1) / (masterWaveLength / parsedWaveReader.Length)) * 2
+                                                dspToolArgs = "Encode """ & outputFilePath & """ """ & dspOutputFilePath & """ -L " & parsedLoop
+                                            End Using
+                                        End If
                                         'Execute Dsp Adpcm Tool
                                         RunProcess("SystemFiles\DspCodec.exe", dspToolArgs)
                                         GCTimer.Stop()
@@ -89,18 +87,15 @@ Partial Public Class ExporterForm
                                         CreateFolderIfRequired(fso.GetParentFolderName(vagOutputFilePath))
                                         'Default arguments
                                         Dim vagToolArgs As String = """" & outputFilePath & """ """ & vagOutputFilePath & """"
-                                        'Get loop info
-                                        Using waveReader As New WaveFileReader(sourceFilePath)
-                                            Dim loopInfo As Integer() = waveFunctions.ReadSampleChunk(waveReader)
-                                            If loopInfo(0) = 1 And StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
-                                                'Loop offset pos in the resampled wave
-                                                Using parsedWaveReader As New WaveFileReader(outputFilePath)
-                                                    Dim parsedLoop As UInteger = (loopInfo(1) / (waveReader.Length / parsedWaveReader.Length)) * 2
-                                                    Dim loopOffsetVag As UInteger = ((parsedLoop / 28 + (If(((parsedLoop Mod 28) <> 0), 2, 1))) / 2) - 1
-                                                    vagToolArgs = """" & outputFilePath & """ """ & vagOutputFilePath & """ -l" & loopOffsetVag
-                                                End Using
-                                            End If
-                                        End Using
+                                        'Check loop info
+                                        If masterWaveLoopInfo(0) = 1 And StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
+                                            'Loop offset pos in the resampled wave
+                                            Using parsedWaveReader As New WaveFileReader(outputFilePath)
+                                                Dim parsedLoop As UInteger = (masterWaveLoopInfo(1) / (masterWaveLength / parsedWaveReader.Length)) * 2
+                                                Dim loopOffsetVag As UInteger = ((parsedLoop / 28 + (If(((parsedLoop Mod 28) <> 0), 2, 1))) / 2) - 1
+                                                vagToolArgs = """" & outputFilePath & """ """ & vagOutputFilePath & """ -l" & loopOffsetVag
+                                            End Using
+                                        End If
                                         'Execute Vag Tool
                                         RunProcess("SystemFiles\VagCodec.exe", vagToolArgs)
                                         PSTimer.Stop()

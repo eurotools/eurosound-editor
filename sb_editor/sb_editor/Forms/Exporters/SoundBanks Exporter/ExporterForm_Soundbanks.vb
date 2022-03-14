@@ -28,10 +28,8 @@ Partial Public Class ExporterForm
                             Dim currentLanguage As String = outLanguages(languageIndex)
                             'For each Platform
                             For platformIndex As Integer = 0 To outPlatforms.Length - 1
-                                Dim timerTotalTime As New Stopwatch
-                                Dim timerQuery As New Stopwatch
-                                Dim timerSfxData As New Stopwatch
-                                Dim timerSamples As New Stopwatch
+                                Dim timerTotalTime, timerQuery, timerSfxData, timerSamples As New Stopwatch
+
                                 'Debug info
                                 mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Timings For " & currentSoundBank & vbCrLf)
 

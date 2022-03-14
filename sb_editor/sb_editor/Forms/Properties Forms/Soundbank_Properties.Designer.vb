@@ -28,30 +28,30 @@ Partial Class Soundbank_Properties
         Me.Label_Value_Size = New System.Windows.Forms.Label()
         Me.Label_ModifiedBy = New System.Windows.Forms.Label()
         Me.Label_CreatedBy_Value = New System.Windows.Forms.Label()
-        Me.Label_SizeFile_Xbox = New System.Windows.Forms.Label()
+        Me.Label_Format4Value = New System.Windows.Forms.Label()
         Me.Label_CreatedBy = New System.Windows.Forms.Label()
         Me.Label_Size = New System.Windows.Forms.Label()
         Me.Label_Value_LastModified = New System.Windows.Forms.Label()
         Me.Label_SampleCount_Value = New System.Windows.Forms.Label()
         Me.Label_LastModified = New System.Windows.Forms.Label()
-        Me.Label_XBox = New System.Windows.Forms.Label()
+        Me.Label_Format4Name = New System.Windows.Forms.Label()
         Me.Label_Value_FirstCreated = New System.Windows.Forms.Label()
         Me.Label_SampleCount = New System.Windows.Forms.Label()
         Me.Label_FirstCreated = New System.Windows.Forms.Label()
         Me.Label_SfxCount_Value = New System.Windows.Forms.Label()
-        Me.Label_SizeFile_PC = New System.Windows.Forms.Label()
+        Me.Label_Format3Value = New System.Windows.Forms.Label()
         Me.Label_DatabaseCount_Value = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label_Pc = New System.Windows.Forms.Label()
+        Me.Label_Format3Name = New System.Windows.Forms.Label()
         Me.Label_DataBaseCount = New System.Windows.Forms.Label()
         Me.Label_Value_OutFileName = New System.Windows.Forms.Label()
-        Me.Label_SizeFile_GameCube = New System.Windows.Forms.Label()
+        Me.Label_Format2Value = New System.Windows.Forms.Label()
         Me.Label_OutFileName = New System.Windows.Forms.Label()
-        Me.Label_GameCube = New System.Windows.Forms.Label()
+        Me.Label_Format2Name = New System.Windows.Forms.Label()
         Me.ListBox_SFXs = New System.Windows.Forms.ListBox()
-        Me.Label_SizeFile_PlayStation2 = New System.Windows.Forms.Label()
+        Me.Label_Format1Value = New System.Windows.Forms.Label()
         Me.Label_SfxCount = New System.Windows.Forms.Label()
-        Me.Label_PlayStation2 = New System.Windows.Forms.Label()
+        Me.Label_Format1Name = New System.Windows.Forms.Label()
         Me.Label_DataBasesCount = New System.Windows.Forms.Label()
         Me.Label_TotalSamples = New System.Windows.Forms.Label()
         Me.ListBox_SamplesList = New System.Windows.Forms.ListBox()
@@ -74,29 +74,29 @@ Partial Class Soundbank_Properties
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_Value_LastModified)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_SampleCount_Value)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_LastModified)
-        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_XBox)
+        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_Format4Name)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_Value_FirstCreated)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_SampleCount)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_FirstCreated)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_SfxCount_Value)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_DatabaseCount_Value)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label1)
-        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_Pc)
+        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_Format3Name)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_DataBaseCount)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_Value_OutFileName)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_OutFileName)
-        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_GameCube)
+        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_Format2Name)
         Me.GroupBox_SoundbankData.Controls.Add(Me.ListBox_SFXs)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_SfxCount)
-        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_PlayStation2)
+        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_Format1Name)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_DataBasesCount)
         Me.GroupBox_SoundbankData.Controls.Add(Me.Label_TotalSamples)
         Me.GroupBox_SoundbankData.Controls.Add(Me.ListBox_SamplesList)
         Me.GroupBox_SoundbankData.Controls.Add(Me.ListBox_Databases)
-        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_SizeFile_Xbox)
-        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_SizeFile_PC)
-        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_SizeFile_GameCube)
-        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_SizeFile_PlayStation2)
+        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_Format4Value)
+        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_Format3Value)
+        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_Format2Value)
+        Me.GroupBox_SoundbankData.Controls.Add(Me.Label_Format1Value)
         Me.GroupBox_SoundbankData.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox_SoundbankData.Name = "GroupBox_SoundbankData"
         Me.GroupBox_SoundbankData.Size = New System.Drawing.Size(733, 632)
@@ -140,14 +140,14 @@ Partial Class Soundbank_Properties
         Me.Label_CreatedBy_Value.TabIndex = 3
         Me.Label_CreatedBy_Value.Text = "XXXX"
         '
-        'Label_SizeFile_Xbox
+        'Label_Format4Value
         '
-        Me.Label_SizeFile_Xbox.AutoSize = True
-        Me.Label_SizeFile_Xbox.Location = New System.Drawing.Point(161, 275)
-        Me.Label_SizeFile_Xbox.Name = "Label_SizeFile_Xbox"
-        Me.Label_SizeFile_Xbox.Size = New System.Drawing.Size(179, 13)
-        Me.Label_SizeFile_Xbox.TabIndex = 7
-        Me.Label_SizeFile_Xbox.Text = "0 (MB) (00,000 bytes) - ESTIMATED"
+        Me.Label_Format4Value.AutoSize = True
+        Me.Label_Format4Value.Location = New System.Drawing.Point(161, 275)
+        Me.Label_Format4Value.Name = "Label_Format4Value"
+        Me.Label_Format4Value.Size = New System.Drawing.Size(72, 13)
+        Me.Label_Format4Value.TabIndex = 7
+        Me.Label_Format4Value.Text = "format #4 info"
         '
         'Label_CreatedBy
         '
@@ -194,14 +194,14 @@ Partial Class Soundbank_Properties
         Me.Label_LastModified.TabIndex = 4
         Me.Label_LastModified.Text = "Last Modified:"
         '
-        'Label_XBox
+        'Label_Format4Name
         '
-        Me.Label_XBox.AutoSize = True
-        Me.Label_XBox.Location = New System.Drawing.Point(6, 275)
-        Me.Label_XBox.Name = "Label_XBox"
-        Me.Label_XBox.Size = New System.Drawing.Size(38, 13)
-        Me.Label_XBox.TabIndex = 6
-        Me.Label_XBox.Text = "X Box:"
+        Me.Label_Format4Name.AutoSize = True
+        Me.Label_Format4Name.Location = New System.Drawing.Point(6, 275)
+        Me.Label_Format4Name.Name = "Label_Format4Name"
+        Me.Label_Format4Name.Size = New System.Drawing.Size(81, 13)
+        Me.Label_Format4Name.TabIndex = 6
+        Me.Label_Format4Name.Text = "format name #4"
         '
         'Label_Value_FirstCreated
         '
@@ -239,14 +239,14 @@ Partial Class Soundbank_Properties
         Me.Label_SfxCount_Value.TabIndex = 3
         Me.Label_SfxCount_Value.Text = "0"
         '
-        'Label_SizeFile_PC
+        'Label_Format3Value
         '
-        Me.Label_SizeFile_PC.AutoSize = True
-        Me.Label_SizeFile_PC.Location = New System.Drawing.Point(161, 258)
-        Me.Label_SizeFile_PC.Name = "Label_SizeFile_PC"
-        Me.Label_SizeFile_PC.Size = New System.Drawing.Size(179, 13)
-        Me.Label_SizeFile_PC.TabIndex = 5
-        Me.Label_SizeFile_PC.Text = "0 (MB) (00,000 bytes) - ESTIMATED"
+        Me.Label_Format3Value.AutoSize = True
+        Me.Label_Format3Value.Location = New System.Drawing.Point(161, 258)
+        Me.Label_Format3Value.Name = "Label_Format3Value"
+        Me.Label_Format3Value.Size = New System.Drawing.Size(72, 13)
+        Me.Label_Format3Value.TabIndex = 5
+        Me.Label_Format3Value.Text = "format #3 info"
         '
         'Label_DatabaseCount_Value
         '
@@ -266,14 +266,14 @@ Partial Class Soundbank_Properties
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "SFX Count:"
         '
-        'Label_Pc
+        'Label_Format3Name
         '
-        Me.Label_Pc.AutoSize = True
-        Me.Label_Pc.Location = New System.Drawing.Point(6, 258)
-        Me.Label_Pc.Name = "Label_Pc"
-        Me.Label_Pc.Size = New System.Drawing.Size(24, 13)
-        Me.Label_Pc.TabIndex = 4
-        Me.Label_Pc.Text = "PC:"
+        Me.Label_Format3Name.AutoSize = True
+        Me.Label_Format3Name.Location = New System.Drawing.Point(6, 258)
+        Me.Label_Format3Name.Name = "Label_Format3Name"
+        Me.Label_Format3Name.Size = New System.Drawing.Size(81, 13)
+        Me.Label_Format3Name.TabIndex = 4
+        Me.Label_Format3Name.Text = "format name #3"
         '
         'Label_DataBaseCount
         '
@@ -289,18 +289,18 @@ Partial Class Soundbank_Properties
         Me.Label_Value_OutFileName.AutoSize = True
         Me.Label_Value_OutFileName.Location = New System.Drawing.Point(161, 199)
         Me.Label_Value_OutFileName.Name = "Label_Value_OutFileName"
-        Me.Label_Value_OutFileName.Size = New System.Drawing.Size(81, 13)
+        Me.Label_Value_OutFileName.Size = New System.Drawing.Size(50, 13)
         Me.Label_Value_OutFileName.TabIndex = 7
-        Me.Label_Value_OutFileName.Text = "HC000000.SFX"
+        Me.Label_Value_OutFileName.Text = "outputfile"
         '
-        'Label_SizeFile_GameCube
+        'Label_Format2Value
         '
-        Me.Label_SizeFile_GameCube.AutoSize = True
-        Me.Label_SizeFile_GameCube.Location = New System.Drawing.Point(161, 242)
-        Me.Label_SizeFile_GameCube.Name = "Label_SizeFile_GameCube"
-        Me.Label_SizeFile_GameCube.Size = New System.Drawing.Size(179, 13)
-        Me.Label_SizeFile_GameCube.TabIndex = 3
-        Me.Label_SizeFile_GameCube.Text = "0 (MB) (00,000 bytes) - ESTIMATED"
+        Me.Label_Format2Value.AutoSize = True
+        Me.Label_Format2Value.Location = New System.Drawing.Point(161, 242)
+        Me.Label_Format2Value.Name = "Label_Format2Value"
+        Me.Label_Format2Value.Size = New System.Drawing.Size(72, 13)
+        Me.Label_Format2Value.TabIndex = 3
+        Me.Label_Format2Value.Text = "format #2 info"
         '
         'Label_OutFileName
         '
@@ -311,14 +311,14 @@ Partial Class Soundbank_Properties
         Me.Label_OutFileName.TabIndex = 6
         Me.Label_OutFileName.Text = "Output Filename:"
         '
-        'Label_GameCube
+        'Label_Format2Name
         '
-        Me.Label_GameCube.AutoSize = True
-        Me.Label_GameCube.Location = New System.Drawing.Point(6, 242)
-        Me.Label_GameCube.Name = "Label_GameCube"
-        Me.Label_GameCube.Size = New System.Drawing.Size(63, 13)
-        Me.Label_GameCube.TabIndex = 2
-        Me.Label_GameCube.Text = "GameCube:"
+        Me.Label_Format2Name.AutoSize = True
+        Me.Label_Format2Name.Location = New System.Drawing.Point(6, 242)
+        Me.Label_Format2Name.Name = "Label_Format2Name"
+        Me.Label_Format2Name.Size = New System.Drawing.Size(81, 13)
+        Me.Label_Format2Name.TabIndex = 2
+        Me.Label_Format2Name.Text = "format name #2"
         '
         'ListBox_SFXs
         '
@@ -332,14 +332,14 @@ Partial Class Soundbank_Properties
         Me.ListBox_SFXs.Sorted = True
         Me.ListBox_SFXs.TabIndex = 5
         '
-        'Label_SizeFile_PlayStation2
+        'Label_Format1Value
         '
-        Me.Label_SizeFile_PlayStation2.AutoSize = True
-        Me.Label_SizeFile_PlayStation2.Location = New System.Drawing.Point(161, 226)
-        Me.Label_SizeFile_PlayStation2.Name = "Label_SizeFile_PlayStation2"
-        Me.Label_SizeFile_PlayStation2.Size = New System.Drawing.Size(179, 13)
-        Me.Label_SizeFile_PlayStation2.TabIndex = 1
-        Me.Label_SizeFile_PlayStation2.Text = "0 (MB) (00,000 bytes) - ESTIMATED"
+        Me.Label_Format1Value.AutoSize = True
+        Me.Label_Format1Value.Location = New System.Drawing.Point(161, 226)
+        Me.Label_Format1Value.Name = "Label_Format1Value"
+        Me.Label_Format1Value.Size = New System.Drawing.Size(72, 13)
+        Me.Label_Format1Value.TabIndex = 1
+        Me.Label_Format1Value.Text = "format #1 info"
         '
         'Label_SfxCount
         '
@@ -350,14 +350,14 @@ Partial Class Soundbank_Properties
         Me.Label_SfxCount.TabIndex = 4
         Me.Label_SfxCount.Text = "SFXs: 0"
         '
-        'Label_PlayStation2
+        'Label_Format1Name
         '
-        Me.Label_PlayStation2.AutoSize = True
-        Me.Label_PlayStation2.Location = New System.Drawing.Point(6, 226)
-        Me.Label_PlayStation2.Name = "Label_PlayStation2"
-        Me.Label_PlayStation2.Size = New System.Drawing.Size(69, 13)
-        Me.Label_PlayStation2.TabIndex = 0
-        Me.Label_PlayStation2.Text = "PlayStation2:"
+        Me.Label_Format1Name.AutoSize = True
+        Me.Label_Format1Name.Location = New System.Drawing.Point(6, 226)
+        Me.Label_Format1Name.Name = "Label_Format1Name"
+        Me.Label_Format1Name.Size = New System.Drawing.Size(81, 13)
+        Me.Label_Format1Name.TabIndex = 0
+        Me.Label_Format1Name.Text = "format name #1"
         '
         'Label_DataBasesCount
         '
@@ -457,12 +457,12 @@ Partial Class Soundbank_Properties
     Friend WithEvents Label_LastModified As Label
     Friend WithEvents Label_Value_FirstCreated As Label
     Friend WithEvents Label_FirstCreated As Label
-    Friend WithEvents Label_SizeFile_Xbox As Label
-    Friend WithEvents Label_XBox As Label
-    Friend WithEvents Label_SizeFile_PC As Label
-    Friend WithEvents Label_Pc As Label
-    Friend WithEvents Label_SizeFile_GameCube As Label
-    Friend WithEvents Label_GameCube As Label
-    Friend WithEvents Label_SizeFile_PlayStation2 As Label
-    Friend WithEvents Label_PlayStation2 As Label
+    Friend WithEvents Label_Format4Value As Label
+    Friend WithEvents Label_Format4Name As Label
+    Friend WithEvents Label_Format3Value As Label
+    Friend WithEvents Label_Format3Name As Label
+    Friend WithEvents Label_Format2Value As Label
+    Friend WithEvents Label_Format2Name As Label
+    Friend WithEvents Label_Format1Value As Label
+    Friend WithEvents Label_Format1Name As Label
 End Class

@@ -74,8 +74,8 @@ Partial Public Class MusicsExporter
     '* MERGE CHANNELS (CREATES THE .SSD FILE)
     '*===============================================================================================
     Private Sub MergeChannels(leftChannelFile As String, rightChannelFile As String, interleave_block_size As Integer, outputFilePath As String)
-        Dim IndexLC As Integer = 0
-        Dim IndexRC As Integer = 0
+        Dim IndexLC, IndexRC As Integer
+
         'Read data and align array size
         Dim LeftChannelData As Byte() = File.ReadAllBytes(leftChannelFile)
         Dim RightChannelData As Byte() = File.ReadAllBytes(rightChannelFile)

@@ -68,74 +68,41 @@ Public Class Soundbank_Properties
 
         'Get streamed samples 
         Dim streamSamplesList As String() = textFileReaders.GetStreamSoundsList(SysFileSamples)
-
-        'Calculate SoundBank size for each format
-        Dim pcFinalList = GetFinalList(soundBankSamplesList, streamSamplesList, "PC")
-        Dim psFinalList = GetFinalList(soundBankSamplesList, streamSamplesList, "PlayStation2")
-        Dim gcFinalList = GetFinalList(soundBankSamplesList, streamSamplesList, "GameCube")
-        Dim xbFinalList = GetFinalList(soundBankSamplesList, streamSamplesList, "X Box")
         Dim totalSampleSize As Integer = 0
         Dim samplesTable As DataTable = textFileReaders.SamplesFileToDatatable(SysFileSamples)
-
-        'PC Size
-        Dim pcSoundBankFile As String = fso.BuildPath(WorkingDirectory, "PC\SoundBanks\" & OutputLanguage & "\" & soundBankData.HashCode & ".sbf")
-        If fso.FileExists(pcSoundBankFile) Then
-            totalSampleSize += GetTotalSampleSize(pcFinalList)
-            Label_SizeFile_PC.Text = BytesStringFormat(FileLen(pcSoundBankFile))
-        Else
-            If fso.FolderExists(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")) Then
-                totalSampleSize += GetTotalSampleSize(pcFinalList)
-                Label_SizeFile_PC.Text = BytesStringFormat(GetEstimatedPlatformSize(pcFinalList, "PC", samplesTable)) & " - ESTIMATED"
+        Dim soundBankFormatSizes As New List(Of String)
+        For formatIndex As Integer = 0 To availablePlatforms.Length - 1
+            Dim currentFormat As String = availablePlatforms(formatIndex)
+            Dim soundBankSize As String
+            Dim formatSamplesList As String() = GetFinalList(soundBankSamplesList, streamSamplesList, currentFormat)
+            'Get SoundBank Size
+            Dim formatSamplesFolder As String = fso.BuildPath(WorkingDirectory, currentFormat & "\SoundBanks\" & OutputLanguage & "\" & soundBankData.HashCode & ".sbf")
+            If fso.FileExists(formatSamplesFolder) Then
+                totalSampleSize += GetTotalSampleSize(formatSamplesList)
+                soundBankSize = BytesStringFormat(FileLen(formatSamplesFolder))
             Else
-                totalSampleSize += pcFinalList.Length
-                Label_SizeFile_PC.Text = BytesStringFormat(GetEstimatedPlatformSizeNoMaster(pcFinalList, "PC")) & " - ESTIMATED"
+                If fso.FolderExists(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")) Then
+                    totalSampleSize += GetTotalSampleSize(formatSamplesList)
+                    soundBankSize = BytesStringFormat(GetEstimatedPlatformSize(formatSamplesList, currentFormat, samplesTable)) & " - ESTIMATED"
+                Else
+                    totalSampleSize += formatSamplesList.Length
+                    soundBankSize = BytesStringFormat(GetEstimatedPlatformSizeNoMaster(formatSamplesList, currentFormat)) & " - ESTIMATED"
+                End If
             End If
-        End If
+            'Add format to dictionary
+            soundBankFormatSizes.Add(currentFormat & ";" & soundBankSize)
+        Next
 
-        'PlayStation2
-        Dim playStationSoundBankFile As String = fso.BuildPath(WorkingDirectory, "PlayStation2\SoundBanks\" & OutputLanguage & "\" & soundBankData.HashCode & ".sbf")
-        If fso.FileExists(playStationSoundBankFile) Then
-            totalSampleSize += GetTotalSampleSize(psFinalList)
-            Label_SizeFile_PlayStation2.Text = BytesStringFormat(FileLen(playStationSoundBankFile))
-        Else
-            If fso.FolderExists(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")) Then
-                totalSampleSize += GetTotalSampleSize(psFinalList)
-                Label_SizeFile_PlayStation2.Text = BytesStringFormat(GetEstimatedPlatformSize(psFinalList, "PlayStation2", samplesTable)) & " - ESTIMATED"
-            Else
-                totalSampleSize += psFinalList.Length
-                Label_SizeFile_PlayStation2.Text = BytesStringFormat(GetEstimatedPlatformSizeNoMaster(psFinalList, "PlayStation2")) & " - ESTIMATED"
-            End If
-        End If
-
-        'GameCube
-        Dim gameCubeSoundbankFile As String = fso.BuildPath(WorkingDirectory, "GameCube\SoundBanks\" & OutputLanguage & "\" & soundBankData.HashCode & ".sbf")
-        If fso.FileExists(gameCubeSoundbankFile) Then
-            totalSampleSize += GetTotalSampleSize(gcFinalList)
-            Label_SizeFile_GameCube.Text = BytesStringFormat(FileLen(gameCubeSoundbankFile))
-        Else
-            If fso.FolderExists(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")) Then
-                totalSampleSize += GetTotalSampleSize(gcFinalList)
-                Label_SizeFile_GameCube.Text = BytesStringFormat(GetEstimatedPlatformSize(gcFinalList, "GameCube", samplesTable)) & " - ESTIMATED"
-            Else
-                totalSampleSize += gcFinalList.Length
-                Label_SizeFile_GameCube.Text = BytesStringFormat(GetEstimatedPlatformSizeNoMaster(gcFinalList, "GameCube")) & " - ESTIMATED"
-            End If
-        End If
-
-        'X Box
-        Dim xboxSoundbankFile As String = fso.BuildPath(WorkingDirectory, "X Box\SoundBanks\" & OutputLanguage & "\" & soundBankData.HashCode & ".sbf")
-        If fso.FileExists(xboxSoundbankFile) Then
-            totalSampleSize += GetTotalSampleSize(xbFinalList)
-            Label_SizeFile_Xbox.Text = BytesStringFormat(FileLen(xboxSoundbankFile))
-        Else
-            If fso.FolderExists(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")) Then
-                totalSampleSize += GetTotalSampleSize(xbFinalList)
-                Label_SizeFile_Xbox.Text = BytesStringFormat(GetEstimatedPlatformSize(xbFinalList, "X Box", samplesTable)) & " - ESTIMATED"
-            Else
-                totalSampleSize += xbFinalList.Length
-                Label_SizeFile_Xbox.Text = BytesStringFormat(GetEstimatedPlatformSizeNoMaster(xbFinalList, "X Box")) & " - ESTIMATED"
-            End If
-        End If
+        'Print values
+        For itemIndex As Integer = 0 To soundBankFormatSizes.Count - 1
+            Dim labelFormatName As Label = GroupBox_SoundbankData.Controls.Find("Label_Format" & (itemIndex + 1) & "Name", False)(0)
+            Dim labelFormatValue As Label = GroupBox_SoundbankData.Controls.Find("Label_Format" & (itemIndex + 1) & "Value", False)(0)
+            Dim dataToPrint As String() = Split(soundBankFormatSizes.Item(itemIndex), ";")
+            labelFormatName.Text = dataToPrint(0)
+            labelFormatName.Visible = True
+            labelFormatValue.Text = dataToPrint(1)
+            labelFormatValue.Visible = True
+        Next
 
         'Total Sample Size
         Label_Value_Size.Text = BytesStringFormat(totalSampleSize)
@@ -185,7 +152,7 @@ Public Class Soundbank_Properties
             Dim sampleIsStream As Boolean = False
             For streamIndex As Integer = 0 To StreamsArray.Length - 1
                 Dim currentStream As String = StreamsArray(streamIndex)
-                If InStr(1, currentSample, UCase(currentStream), CompareMethod.Binary) Then
+                If InStr(1, currentSample, currentStream, CompareMethod.Binary) Then
                     sampleIsStream = True
                     Exit For
                 End If

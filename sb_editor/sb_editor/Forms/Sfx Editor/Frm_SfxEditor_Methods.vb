@@ -160,7 +160,7 @@ Partial Public Class Frm_SfxEditor
                     'Check if is streamed
                     Label_SampleInfo_StreamedValue.Text = "??"
                     If StreamSamplesList IsNot Nothing Then
-                        Label_SampleInfo_StreamedValue.Text = Array.IndexOf(StreamSamplesList, selectedSample.FilePath) <> -1
+                        Label_SampleInfo_StreamedValue.Text = Array.IndexOf(StreamSamplesList, UCase(selectedSample.FilePath.TrimStart("\"))) <> -1
                     End If
                 End Using
             End If

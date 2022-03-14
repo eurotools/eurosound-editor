@@ -72,7 +72,7 @@
                             Continue For
                         End If
                     End If
-                    streamsList.Add(sampleRelativePath)
+                    streamsList.Add(UCase(sampleRelativePath.TrimStart("\")))
                 End If
             Next
             'Return data
