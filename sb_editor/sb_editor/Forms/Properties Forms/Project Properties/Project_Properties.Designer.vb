@@ -58,6 +58,7 @@ Partial Class Project_Properties
         Me.Col_SampleRate = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ComboBox_RatesFormat = New System.Windows.Forms.ComboBox()
         Me.GroupBox_Misc = New System.Windows.Forms.GroupBox()
+        Me.Checkbox_ViewPrePostOutputCommands = New System.Windows.Forms.CheckBox()
         Me.Label_XboxMaxSizeK = New System.Windows.Forms.Label()
         Me.Label_GameCubeMaxSizeK = New System.Windows.Forms.Label()
         Me.Label_PcMaxSizeK = New System.Windows.Forms.Label()
@@ -86,7 +87,6 @@ Partial Class Project_Properties
         Me.ShapeContainer2 = New Microsoft.VisualBasic.PowerPacks.ShapeContainer()
         Me.LineShape4 = New Microsoft.VisualBasic.PowerPacks.LineShape()
         Me.LineShape3 = New Microsoft.VisualBasic.PowerPacks.LineShape()
-        Me.Checkbox_ViewPrePostOutputCommands = New System.Windows.Forms.CheckBox()
         Me.GroupBox_Master_Path.SuspendLayout()
         Me.GroupBox_SonixFolder.SuspendLayout()
         Me.GroupBox_EngineXFolder.SuspendLayout()
@@ -317,6 +317,7 @@ Partial Class Project_Properties
         Me.ListView_Formats.GridLines = True
         Me.ListView_Formats.HideSelection = False
         Me.ListView_Formats.Location = New System.Drawing.Point(6, 19)
+        Me.ListView_Formats.MultiSelect = False
         Me.ListView_Formats.Name = "ListView_Formats"
         Me.ListView_Formats.Size = New System.Drawing.Size(631, 115)
         Me.ListView_Formats.TabIndex = 0
@@ -476,6 +477,16 @@ Partial Class Project_Properties
         Me.GroupBox_Misc.TabIndex = 9
         Me.GroupBox_Misc.TabStop = False
         Me.GroupBox_Misc.Text = "Misc"
+        '
+        'Checkbox_ViewPrePostOutputCommands
+        '
+        Me.Checkbox_ViewPrePostOutputCommands.AutoSize = True
+        Me.Checkbox_ViewPrePostOutputCommands.Location = New System.Drawing.Point(302, 162)
+        Me.Checkbox_ViewPrePostOutputCommands.Name = "Checkbox_ViewPrePostOutputCommands"
+        Me.Checkbox_ViewPrePostOutputCommands.Size = New System.Drawing.Size(206, 17)
+        Me.Checkbox_ViewPrePostOutputCommands.TabIndex = 21
+        Me.Checkbox_ViewPrePostOutputCommands.Text = "View Pre/Post Output Dos Commands"
+        Me.Checkbox_ViewPrePostOutputCommands.UseVisualStyleBackColor = True
         '
         'Label_XboxMaxSizeK
         '
@@ -721,16 +732,6 @@ Partial Class Project_Properties
         Me.LineShape3.X2 = 246
         Me.LineShape3.Y1 = 372
         Me.LineShape3.Y2 = 636
-        '
-        'Checkbox_ViewPrePostOutputCommands
-        '
-        Me.Checkbox_ViewPrePostOutputCommands.AutoSize = True
-        Me.Checkbox_ViewPrePostOutputCommands.Location = New System.Drawing.Point(302, 162)
-        Me.Checkbox_ViewPrePostOutputCommands.Name = "Checkbox_ViewPrePostOutputCommands"
-        Me.Checkbox_ViewPrePostOutputCommands.Size = New System.Drawing.Size(206, 17)
-        Me.Checkbox_ViewPrePostOutputCommands.TabIndex = 21
-        Me.Checkbox_ViewPrePostOutputCommands.Text = "View Pre/Post Output Dos Commands"
-        Me.Checkbox_ViewPrePostOutputCommands.UseVisualStyleBackColor = True
         '
         'Project_Properties
         '

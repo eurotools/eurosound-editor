@@ -30,7 +30,11 @@ Namespace SoundBanksExporterFunctions
                 If InStr(1, sampleRelPath, "SPEECH\ENGLISH", CompareMethod.Binary) AndAlso StrComp(outputLanguage, "ENGLISH") <> 0 Then
                     sampleRelPath = "SPEECH\" & outputLanguage & Mid(sampleRelPath, 15)
                 End If
-                SamplesDictionary.Add(sampleRelPath.TrimStart("\"), GetEXaudio(sampleRelPath, outPlatform, CancelSoundBankOutput, testMode))
+                'Add sample if we have not read it previously
+                Dim sampleName As String = sampleRelPath.TrimStart("\")
+                If Not SamplesDictionary.ContainsKey(sampleName) Then
+                    SamplesDictionary.Add(sampleName, GetEXaudio(sampleRelPath, outPlatform, CancelSoundBankOutput, testMode))
+                End If
                 If CancelSoundBankOutput Then
                     Exit For
                 End If
@@ -68,6 +72,7 @@ Namespace SoundBanksExporterFunctions
                 If fso.FileExists(masterWaveFilePath) Then
                     Using masterWaveReader As New WaveFileReader(masterWaveFilePath)
                         Dim loopInfo As Integer() = waveFunctions.ReadSampleChunk(masterWaveReader)
+                        newAudioObj.Duration = masterWaveReader.TotalTime.TotalMilliseconds
                         'Get address and flags
                         newAudioObj.Flags = loopInfo(0)
                         'Get Platform Wave Ffile
@@ -79,7 +84,6 @@ Namespace SoundBanksExporterFunctions
                                 newAudioObj.NumberOfChannels = platformWaveReader.WaveFormat.Channels
                                 newAudioObj.Bits = 4
                                 newAudioObj.FilePath = relativeSampleFilePath
-                                newAudioObj.Duration = platformWaveReader.TotalTime.TotalMilliseconds
                                 'Specific formats
                                 Select Case outputPlatform
                                     Case "PC"

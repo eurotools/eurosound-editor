@@ -4,7 +4,7 @@ Imports NAudio.Wave
 Imports sb_editor.ParsersObjects
 
 Partial Public Class ExporterForm
-    Private Function CreateSfxDataFolder(samplesDt As DataTable) As Integer
+    Private Function CreateSfxDataTempFolder(samplesDt As DataTable) As Integer
         Dim waveFunctions As New WaveFunctions
         Dim maxHashCode As Integer = 0
         'Ensure that we have files to resample
@@ -67,4 +67,32 @@ Partial Public Class ExporterForm
         End If
         Return maxHashCode
     End Function
+
+    Friend Sub CreateSFXDataBinaryFiles(outPlatforms As String(), outputLanguages As String())
+        'Single Language
+        If outputLanguages.Length = 1 AndAlso StrComp(UCase(outputLanguages(0)), "ENGLISH") = 0 Then
+            Dim sfxDataFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Data.h")
+            For platformIndex As Integer = 0 To outPlatforms.Length - 1
+                Dim currentPlatform As String = outPlatforms(platformIndex)
+                'Output File Path
+                Dim outputFolder As String = fso.BuildPath(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary\" & GetEngineXFolder(currentPlatform) & "\_Eng")
+                CreateFolderIfRequired(outputFolder)
+                'Create bin file
+                RunProcess("SystemFiles\SFXStructToBin.exe", """" & sfxDataFilePath & """ """ & fso.BuildPath(outputFolder, "SFX_Data.bin") & """")
+            Next
+        Else 'Multiples Languages
+            For languageIndex As Integer = 0 To outputLanguages.Length - 1
+                Dim currentLanguage As String = outputLanguages(languageIndex)
+                Dim sfxDataFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, currentLanguage & "_SFX_Data.txt")
+                For platformIndex As Integer = 0 To outPlatforms.Length - 1
+                    Dim currentPlatform As String = outPlatforms(platformIndex)
+                    'Output File Path
+                    Dim outputFolder As String = fso.BuildPath(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary\" & GetEngineXFolder(currentPlatform) & "\" & GetEngineXLangFolder(currentLanguage))
+                    CreateFolderIfRequired(outputFolder)
+                    'Create bin file
+                    RunProcess("SystemFiles\SFXStructToBin.exe", """" & sfxDataFilePath & """ """ & fso.BuildPath(outputFolder, "SFX_Data.bin") & """")
+                Next
+            Next
+        End If
+    End Sub
 End Class
