@@ -89,8 +89,10 @@ Partial Class ResampleForm
         '
         Me.TextBox_ProjectPath.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox_ProjectPath.BackColor = System.Drawing.SystemColors.Window
         Me.TextBox_ProjectPath.Location = New System.Drawing.Point(6, 19)
         Me.TextBox_ProjectPath.Name = "TextBox_ProjectPath"
+        Me.TextBox_ProjectPath.ReadOnly = True
         Me.TextBox_ProjectPath.Size = New System.Drawing.Size(479, 20)
         Me.TextBox_ProjectPath.TabIndex = 0
         '
@@ -334,8 +336,10 @@ Partial Class ResampleForm
         'TextBox_BootupTime
         '
         Me.TextBox_BootupTime.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.TextBox_BootupTime.BackColor = System.Drawing.SystemColors.Window
         Me.TextBox_BootupTime.Location = New System.Drawing.Point(99, 447)
         Me.TextBox_BootupTime.Name = "TextBox_BootupTime"
+        Me.TextBox_BootupTime.ReadOnly = True
         Me.TextBox_BootupTime.Size = New System.Drawing.Size(274, 20)
         Me.TextBox_BootupTime.TabIndex = 9
         '

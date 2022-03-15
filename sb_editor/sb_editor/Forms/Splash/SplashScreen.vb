@@ -36,11 +36,11 @@ Partial Public NotInheritable Class SplashScreen
                 ProjectSettingsFile = textFileReaders.ReadPropertiesFile(propsFilePath)
             End If
 
-            'Update all variables 
-            UpdateGlobalVariables()
-
             'Load Project Data
             LoadProjectData(mainform, projectFilePath)
+
+            'Update all variables 
+            UpdateGlobalVariables()
 
             'Ask for UserName if required
             If StrComp(EuroSoundUser, "") = 0 Then
