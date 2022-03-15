@@ -113,6 +113,12 @@ Public Class Soundbank_Properties
         Cursor.Current = Cursors.Default
     End Sub
 
+    Private Sub Soundbank_Properties_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
+        If ActiveForm IsNot Me Then
+            FlashWindowAPI(Handle)
+        End If
+    End Sub
+
     '*===============================================================================================
     '* FORM BUTTONS
     '*===============================================================================================

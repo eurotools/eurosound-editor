@@ -28,7 +28,6 @@ Partial Class Soundbank_Properties
         Me.Label_Value_Size = New System.Windows.Forms.Label()
         Me.Label_ModifiedBy = New System.Windows.Forms.Label()
         Me.Label_CreatedBy_Value = New System.Windows.Forms.Label()
-        Me.Label_Format4Value = New System.Windows.Forms.Label()
         Me.Label_CreatedBy = New System.Windows.Forms.Label()
         Me.Label_Size = New System.Windows.Forms.Label()
         Me.Label_Value_LastModified = New System.Windows.Forms.Label()
@@ -39,23 +38,24 @@ Partial Class Soundbank_Properties
         Me.Label_SampleCount = New System.Windows.Forms.Label()
         Me.Label_FirstCreated = New System.Windows.Forms.Label()
         Me.Label_SfxCount_Value = New System.Windows.Forms.Label()
-        Me.Label_Format3Value = New System.Windows.Forms.Label()
         Me.Label_DatabaseCount_Value = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label_Format3Name = New System.Windows.Forms.Label()
         Me.Label_DataBaseCount = New System.Windows.Forms.Label()
         Me.Label_Value_OutFileName = New System.Windows.Forms.Label()
-        Me.Label_Format2Value = New System.Windows.Forms.Label()
         Me.Label_OutFileName = New System.Windows.Forms.Label()
         Me.Label_Format2Name = New System.Windows.Forms.Label()
         Me.ListBox_SFXs = New System.Windows.Forms.ListBox()
-        Me.Label_Format1Value = New System.Windows.Forms.Label()
         Me.Label_SfxCount = New System.Windows.Forms.Label()
         Me.Label_Format1Name = New System.Windows.Forms.Label()
         Me.Label_DataBasesCount = New System.Windows.Forms.Label()
         Me.Label_TotalSamples = New System.Windows.Forms.Label()
         Me.ListBox_SamplesList = New System.Windows.Forms.ListBox()
         Me.ListBox_Databases = New System.Windows.Forms.ListBox()
+        Me.Label_Format4Value = New System.Windows.Forms.Label()
+        Me.Label_Format3Value = New System.Windows.Forms.Label()
+        Me.Label_Format2Value = New System.Windows.Forms.Label()
+        Me.Label_Format1Value = New System.Windows.Forms.Label()
         Me.Button_OK = New System.Windows.Forms.Button()
         Me.GroupBox_SoundbankData.SuspendLayout()
         Me.SuspendLayout()
@@ -139,15 +139,6 @@ Partial Class Soundbank_Properties
         Me.Label_CreatedBy_Value.Size = New System.Drawing.Size(35, 13)
         Me.Label_CreatedBy_Value.TabIndex = 3
         Me.Label_CreatedBy_Value.Text = "XXXX"
-        '
-        'Label_Format4Value
-        '
-        Me.Label_Format4Value.AutoSize = True
-        Me.Label_Format4Value.Location = New System.Drawing.Point(161, 275)
-        Me.Label_Format4Value.Name = "Label_Format4Value"
-        Me.Label_Format4Value.Size = New System.Drawing.Size(72, 13)
-        Me.Label_Format4Value.TabIndex = 7
-        Me.Label_Format4Value.Text = "format #4 info"
         '
         'Label_CreatedBy
         '
@@ -239,15 +230,6 @@ Partial Class Soundbank_Properties
         Me.Label_SfxCount_Value.TabIndex = 3
         Me.Label_SfxCount_Value.Text = "0"
         '
-        'Label_Format3Value
-        '
-        Me.Label_Format3Value.AutoSize = True
-        Me.Label_Format3Value.Location = New System.Drawing.Point(161, 258)
-        Me.Label_Format3Value.Name = "Label_Format3Value"
-        Me.Label_Format3Value.Size = New System.Drawing.Size(72, 13)
-        Me.Label_Format3Value.TabIndex = 5
-        Me.Label_Format3Value.Text = "format #3 info"
-        '
         'Label_DatabaseCount_Value
         '
         Me.Label_DatabaseCount_Value.AutoSize = True
@@ -293,15 +275,6 @@ Partial Class Soundbank_Properties
         Me.Label_Value_OutFileName.TabIndex = 7
         Me.Label_Value_OutFileName.Text = "outputfile"
         '
-        'Label_Format2Value
-        '
-        Me.Label_Format2Value.AutoSize = True
-        Me.Label_Format2Value.Location = New System.Drawing.Point(161, 242)
-        Me.Label_Format2Value.Name = "Label_Format2Value"
-        Me.Label_Format2Value.Size = New System.Drawing.Size(72, 13)
-        Me.Label_Format2Value.TabIndex = 3
-        Me.Label_Format2Value.Text = "format #2 info"
-        '
         'Label_OutFileName
         '
         Me.Label_OutFileName.AutoSize = True
@@ -331,15 +304,6 @@ Partial Class Soundbank_Properties
         Me.ListBox_SFXs.Size = New System.Drawing.Size(358, 160)
         Me.ListBox_SFXs.Sorted = True
         Me.ListBox_SFXs.TabIndex = 5
-        '
-        'Label_Format1Value
-        '
-        Me.Label_Format1Value.AutoSize = True
-        Me.Label_Format1Value.Location = New System.Drawing.Point(161, 226)
-        Me.Label_Format1Value.Name = "Label_Format1Value"
-        Me.Label_Format1Value.Size = New System.Drawing.Size(72, 13)
-        Me.Label_Format1Value.TabIndex = 1
-        Me.Label_Format1Value.Text = "format #1 info"
         '
         'Label_SfxCount
         '
@@ -399,6 +363,42 @@ Partial Class Soundbank_Properties
         Me.ListBox_Databases.Size = New System.Drawing.Size(358, 108)
         Me.ListBox_Databases.Sorted = True
         Me.ListBox_Databases.TabIndex = 0
+        '
+        'Label_Format4Value
+        '
+        Me.Label_Format4Value.AutoSize = True
+        Me.Label_Format4Value.Location = New System.Drawing.Point(161, 275)
+        Me.Label_Format4Value.Name = "Label_Format4Value"
+        Me.Label_Format4Value.Size = New System.Drawing.Size(72, 13)
+        Me.Label_Format4Value.TabIndex = 7
+        Me.Label_Format4Value.Text = "format #4 info"
+        '
+        'Label_Format3Value
+        '
+        Me.Label_Format3Value.AutoSize = True
+        Me.Label_Format3Value.Location = New System.Drawing.Point(161, 258)
+        Me.Label_Format3Value.Name = "Label_Format3Value"
+        Me.Label_Format3Value.Size = New System.Drawing.Size(72, 13)
+        Me.Label_Format3Value.TabIndex = 5
+        Me.Label_Format3Value.Text = "format #3 info"
+        '
+        'Label_Format2Value
+        '
+        Me.Label_Format2Value.AutoSize = True
+        Me.Label_Format2Value.Location = New System.Drawing.Point(161, 242)
+        Me.Label_Format2Value.Name = "Label_Format2Value"
+        Me.Label_Format2Value.Size = New System.Drawing.Size(72, 13)
+        Me.Label_Format2Value.TabIndex = 3
+        Me.Label_Format2Value.Text = "format #2 info"
+        '
+        'Label_Format1Value
+        '
+        Me.Label_Format1Value.AutoSize = True
+        Me.Label_Format1Value.Location = New System.Drawing.Point(161, 226)
+        Me.Label_Format1Value.Name = "Label_Format1Value"
+        Me.Label_Format1Value.Size = New System.Drawing.Size(72, 13)
+        Me.Label_Format1Value.TabIndex = 1
+        Me.Label_Format1Value.Text = "format #1 info"
         '
         'Button_OK
         '

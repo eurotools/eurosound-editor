@@ -87,6 +87,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Blink Title Bar\FlashWindow.vb" />
     <Compile Include="Classes\Markers\MarkerFiles.vb" />
     <Compile Include="Classes\Markers\MarkerObject.vb" />
     <Compile Include="Classes\Project Module\ProgramMainModule.vb" />
