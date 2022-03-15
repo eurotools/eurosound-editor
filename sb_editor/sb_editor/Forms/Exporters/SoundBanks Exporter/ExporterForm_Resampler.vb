@@ -71,7 +71,7 @@ Partial Public Class ExporterForm
                                         'Default arguments
                                         Dim dspToolArgs As String = "Encode """ & outputFilePath & """ """ & dspOutputFilePath & """"
                                         'Check loop info
-                                        If masterWaveLoopInfo(0) = 1 And StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
+                                        If masterWaveLoopInfo(0) = 1 AndAlso StrComp(soundsTable.Rows(rowIndex).Item(5), "False") = 0 Then
                                             'Loop offset pos in the resampled wave
                                             Using parsedWaveReader As New WaveFileReader(outputFilePath)
                                                 Dim parsedLoop As UInteger = (masterWaveLoopInfo(1) / (masterWaveLength / parsedWaveReader.Length)) * 2
@@ -88,12 +88,12 @@ Partial Public Class ExporterForm
                                         'Default arguments
                                         Dim vagToolArgs As String = """" & outputFilePath & """ """ & vagOutputFilePath & """"
                                         'Check loop info
-                                        If masterWaveLoopInfo(0) = 1 And StrComp(soundsTable.Rows(rowIndex).Item(5), "True") = 0 Then
+                                        If masterWaveLoopInfo(0) = 1 AndAlso StrComp(soundsTable.Rows(rowIndex).Item(5), "False") = 0 Then
                                             'Loop offset pos in the resampled wave
                                             Using parsedWaveReader As New WaveFileReader(outputFilePath)
-                                                Dim parsedLoop As UInteger = (masterWaveLoopInfo(1) / (masterWaveLength / parsedWaveReader.Length)) * 2
-                                                Dim loopOffsetVag As UInteger = ((parsedLoop / 28 + (If(((parsedLoop Mod 28) <> 0), 2, 1))) / 2) - 1
-                                                vagToolArgs = """" & outputFilePath & """ """ & vagOutputFilePath & """ -l" & loopOffsetVag
+                                                Dim parsedLoop As UInteger = masterWaveLoopInfo(1) / (masterWaveLength / parsedWaveReader.Length)
+                                                Dim loopOffsetVag As UInteger = ESUtils.CalculusLoopOffset.GetLoopOffsetForVag(parsedLoop) - 1
+                                                vagToolArgs = """" & outputFilePath & """ """ & vagOutputFilePath & """ " & loopOffsetVag
                                             End Using
                                         End If
                                         'Execute Vag Tool
