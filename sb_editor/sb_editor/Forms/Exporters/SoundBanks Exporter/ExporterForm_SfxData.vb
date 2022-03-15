@@ -34,17 +34,28 @@ Partial Public Class ExporterForm
                         Dim waveDuration As Single = 0.00002267574F
                         If fso.FileExists(waveFilePath) Then
                             Using waveReader As New WaveFileReader(waveFilePath)
-                                waveDuration = (waveReader.Length / waveReader.WaveFormat.AverageBytesPerSecond) + 0.0
+                                waveDuration = waveReader.Length / waveReader.WaveFormat.AverageBytesPerSecond
                                 waveLooping = waveFunctions.ReadSampleChunk(waveReader)
                             End Using
                         Else
                             sfxFile.Parameters.TrackingType = 4
                         End If
-                        'Format String
-                        Dim waveDurationFormat As String = waveDuration.ToString(".#######", numericProvider).TrimStart("0"c)
-                        If waveDuration < 0.1 Then
-                            waveDurationFormat = waveDuration.ToString("0.######E+00", numericProvider)
+
+                        'Get the number of decimal places
+                        Dim stringNum As String = waveDuration.ToString(numericProvider)
+                        Dim decimalPlaces As Integer = 0
+                        If InStr(1, stringNum, ".", CompareMethod.Binary) Then
+                            decimalPlaces = stringNum.Substring(stringNum.IndexOf(".")).Length
                         End If
+
+                        'Format String
+                        Dim waveDurationFormat As String
+                        If decimalPlaces > 8 Then
+                            waveDurationFormat = waveDuration.ToString("0.######E+00", numericProvider)
+                        Else
+                            waveDurationFormat = waveDuration.ToString(".#######", numericProvider)
+                        End If
+
                         'Check if is streamed or not
                         Dim fileNameToCheck As String = sfxFile.Samples(0).FilePath.TrimStart("\")
                         Dim sampleIsStreamed = 0
@@ -54,7 +65,7 @@ Partial Public Class ExporterForm
                         'Create File
                         FileOpen(1, fso.BuildPath(tempSfxDataFolder, currentSampleName & ".txt"), OpenMode.Output, OpenAccess.Write)
                         PrintLine(1, UCase(waveFilePath))
-                        PrintLine(1, "{ " & sfxFile.HashCode & " ,  " & sfxFile.Parameters.InnerRadius & ".0f ,  " & sfxFile.Parameters.OuterRadius & ".0f ,  " & sfxFile.Parameters.Alertness & ".0f ,  " & waveDurationFormat & "f , " & waveLooping(0) & ", " & sfxFile.Parameters.TrackingType & ", " & sampleIsStreamed & " } ,  // " & currentSampleName)
+                        PrintLine(1, "{ " & sfxFile.HashCode & " ,  " & sfxFile.Parameters.InnerRadius & ".0f ,  " & sfxFile.Parameters.OuterRadius & ".0f ,  " & sfxFile.Parameters.Alertness & ".0f ,  " & waveDurationFormat & "f , " & Math.Max(waveLooping(0), Convert.ToByte(sfxFile.SamplePool.isLooped)) & ", " & sfxFile.Parameters.TrackingType & ", " & sampleIsStreamed & " } ,  // " & currentSampleName)
                         FileClose(1)
                         'Get Max HashCode
                         maxHashCode = Math.Max(maxHashCode, sfxFile.HashCode)

@@ -16,6 +16,14 @@ Partial Public Class ExporterForm
         'Get Wave files to include
         Dim streamSamplesCount As Integer = streamSamplesList.Length - 1
         If streamSamplesCount > 0 Then
+            'Create Folder structure
+            For languageIndex As Integer = 0 To outLanguages.Length - 1
+                Dim currentLanguage As String = outLanguages(languageIndex)
+                For platformIndex As Integer = 0 To outPlatforms.Length - 1
+                    Dim currentPlatform As String = outPlatforms(platformIndex)
+                    CreateFolderIfRequired(fso.BuildPath(WorkingDirectory, currentPlatform & "_Streams" & "\" & currentLanguage))
+                Next
+            Next
             'Reset progress bar
             Invoke(Sub() ProgressBar1.Value = 0)
             'For each Language
@@ -57,7 +65,6 @@ Partial Public Class ExporterForm
                             Invoke(Sub() Text = currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
                             'Calculate destination folder
                             Dim destinationFolder As String = WorkingDirectory & "\" & currentPlatform & "_Streams\" & currentLanguage
-                            CreateFolderIfRequired(destinationFolder)
                             'Move Sample to destination folder
                             Dim destinationFilePath As String = fso.BuildPath(destinationFolder, "STR_" & sampleIndex & ".ssd")
                             fso.CopyFile(sampleFullPath, destinationFilePath)
