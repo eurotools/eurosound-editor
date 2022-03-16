@@ -89,7 +89,7 @@ Partial Public Class ExporterForm
                 Dim outputFolder As String = fso.BuildPath(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary\" & GetEngineXFolder(currentPlatform) & "\_Eng")
                 CreateFolderIfRequired(outputFolder)
                 'Create bin file
-                RunProcess("SystemFiles\SFXStructToBin.exe", """" & sfxDataFilePath & """ """ & fso.BuildPath(outputFolder, "SFX_Data.bin") & """")
+                RunProcess("SystemFiles\CreateSFXDataBin.exe", """" & sfxDataFilePath & """ """ & fso.BuildPath(outputFolder, "SFX_Data.bin") & """")
             Next
         Else 'Multiples Languages
             For languageIndex As Integer = 0 To outputLanguages.Length - 1
@@ -101,7 +101,7 @@ Partial Public Class ExporterForm
                     Dim outputFolder As String = fso.BuildPath(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary\" & GetEngineXFolder(currentPlatform) & "\" & GetEngineXLangFolder(currentLanguage))
                     CreateFolderIfRequired(outputFolder)
                     'Create bin file
-                    RunProcess("SystemFiles\SFXStructToBin.exe", """" & sfxDataFilePath & """ """ & fso.BuildPath(outputFolder, "SFX_Data.bin") & """")
+                    RunProcess("SystemFiles\CreateSFXDataBin.exe", """" & sfxDataFilePath & """ """ & fso.BuildPath(outputFolder, "SFX_Data.bin") & """")
                 Next
             Next
         End If
