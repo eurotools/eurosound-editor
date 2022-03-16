@@ -60,6 +60,7 @@ Namespace HashTablesBuilder
                 End If
             Next
             PrintLine(1, WriteHashCode("SB_MaximumDefined", NumberToHex(soundbanksDict.Count)))
+            PrintLine(1, vbNullString)
 
             'Close reader
             FileClose(1)
@@ -81,7 +82,6 @@ Namespace HashTablesBuilder
             PrintLine(1, "#endif")
             PrintLine(1, vbNullString)
             PrintLine(1, vbNullString)
-            PrintLine(1, vbNullString)
             'Write second part
             PrintLine(1, "#ifdef SFX_BUILD_DEBUG_TABLES")
             PrintLine(1, "typedef struct HashCodeAndString {long HashCode;char* String;} HashCodeAndString;")
@@ -92,6 +92,7 @@ Namespace HashTablesBuilder
             Next
             PrintLine(1, "};")
             PrintLine(1, "#endif")
+            PrintLine(1, vbNullString)
             mainForm.Invoke(Sub() mainForm.Text = "Writing SFX_Defines.h Stage Pre Close")
             FileClose(1)
         End Sub
@@ -131,6 +132,7 @@ Namespace HashTablesBuilder
                 End If
             Next
             PrintLine(1, "};")
+            PrintLine(1, vbNullString)
             FileClose(1)
 
             'Liberate memmory

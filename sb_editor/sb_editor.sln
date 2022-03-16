@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESUtils", "..\dll\ESUtils\E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SonyVagCodec", "..\codecs\C#\SonyVagCodec\SonyVagCodec\SonyVagCodec.csproj", "{5C251622-6E0D-465F-A00F-145BCECE0BA0}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CreateSFXDataBin", "CreateSFXDataBin\CreateSFXDataBin.vbproj", "{5ABA824E-641D-4A88-8CEE-232F7B56AAC7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -143,6 +145,18 @@ Global
 		{5C251622-6E0D-465F-A00F-145BCECE0BA0}.Release|x64.Build.0 = Release|Any CPU
 		{5C251622-6E0D-465F-A00F-145BCECE0BA0}.Release|x86.ActiveCfg = Release|Any CPU
 		{5C251622-6E0D-465F-A00F-145BCECE0BA0}.Release|x86.Build.0 = Release|Any CPU
+		{5ABA824E-641D-4A88-8CEE-232F7B56AAC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5ABA824E-641D-4A88-8CEE-232F7B56AAC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5ABA824E-641D-4A88-8CEE-232F7B56AAC7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5ABA824E-641D-4A88-8CEE-232F7B56AAC7}.Debug|x64.Build.0 = Debug|Any CPU
+		{5ABA824E-641D-4A88-8CEE-232F7B56AAC7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5ABA824E-641D-4A88-8CEE-232F7B56AAC7}.Debug|x86.Build.0 = Debug|Any CPU
+		{5ABA824E-641D-4A88-8CEE-232F7B56AAC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5ABA824E-641D-4A88-8CEE-232F7B56AAC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5ABA824E-641D-4A88-8CEE-232F7B56AAC7}.Release|x64.ActiveCfg = Release|Any CPU
+		{5ABA824E-641D-4A88-8CEE-232F7B56AAC7}.Release|x64.Build.0 = Release|Any CPU
+		{5ABA824E-641D-4A88-8CEE-232F7B56AAC7}.Release|x86.ActiveCfg = Release|Any CPU
+		{5ABA824E-641D-4A88-8CEE-232F7B56AAC7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
