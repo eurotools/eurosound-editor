@@ -12,16 +12,17 @@ Partial Public Class Frm_SfxEditor
         Directory.CreateDirectory(outputFolder)
 
         'Get file paths
-        Dim sfxFilePath As String = Path.Combine(outputFolder, &HFFFE & ".sfx")
-        Dim sifFilePath As String = Path.Combine(outputFolder, &HFFFE & ".sif")
-        Dim sbfFilePath As String = Path.Combine(outputFolder, &HFFFE & ".sbf")
+        Dim mainFilePath As String = Path.Combine(outputFolder, &HFFFE)
+        Dim sfxFilePath As String = mainFilePath & ".sfx"
+        Dim sifFilePath As String = mainFilePath & ".sif"
+        Dim sbfFilePath As String = mainFilePath & ".sbf"
 
         'Get SFX and samples list
         Dim samplesToInclude As New HashSet(Of String)
         Dim SfxDictionary As New SortedDictionary(Of String, EXSound)
         Dim SamplesDictionary As New Dictionary(Of String, EXAudio)
-        GetSFXsDictionary(New String() {"Misc\" & Path.GetFileNameWithoutExtension(sfxTextFilePath)}, "PC", SfxDictionary, samplesToInclude, New String() {}, True)
-        GetSamplesDictionary(samplesToInclude, SamplesDictionary, "PC", "English", False, True)
+        'GetSFXsDictionary(New String() {"Misc\" & Path.GetFileNameWithoutExtension(sfxTextFilePath)}, "PC", SfxDictionary, samplesToInclude, New String() {}, True)
+        'GetSamplesDictionary(samplesToInclude, SamplesDictionary, "PC", "English", False, True)
 
         'Get output file paths
         Dim sfxFileName As String = "HC" & Hex(GetSfxFileName(Array.IndexOf(SfxLanguages, "English"), &HFFFE)).PadLeft(6, "0"c)
@@ -47,7 +48,7 @@ Partial Public Class Frm_SfxEditor
                 Using sfxWriter As New BinaryWriter(File.Open(sfxFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
                     WriteSbfFile(sbfWriter, SamplesDictionary)
                     WriteSifFile(sifWriter, SamplesDictionary, False)
-                    WriteSfxFile(sfxWriter, Nothing, SfxDictionary, SamplesDictionary, New String() {}, False)
+                    'WriteSfxFile(sfxWriter, Nothing, SfxDictionary, SamplesDictionary, New String() {}, False)
                 End Using
             End Using
         End Using

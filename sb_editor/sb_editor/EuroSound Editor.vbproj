@@ -94,7 +94,6 @@
     <Compile Include="Classes\SoundBanks Module\Objects\EXAudio.vb" />
     <Compile Include="Classes\SoundBanks Module\Objects\EXSample.vb" />
     <Compile Include="Classes\SoundBanks Module\Objects\EXSound.vb" />
-    <Compile Include="Classes\SoundBanks Module\SBExporterModule.vb" />
     <Compile Include="Classes\SoundBanks Module\SoundBanksMainModule.vb" />
     <Compile Include="Custom Controls\Refine Search\Combobox With ItemData\ComboItemData.vb" />
     <Compile Include="Custom Controls\Refine Search\Frm_RefineSearch.Designer.vb">
@@ -112,6 +111,7 @@
     <Compile Include="Files Functions\Writers\FileWriters.vb" />
     <Compile Include="Files Functions\Writers\FileWriters_MfxFile.vb" />
     <Compile Include="Files Functions\Writers\FileWriters_SamplesFile.vb" />
+    <Compile Include="Files Functions\Writers\FileWriters_SoundBanksDebugFile.vb" />
     <Compile Include="Forms\About.Designer.vb">
       <DependentUpon>About.vb</DependentUpon>
     </Compile>

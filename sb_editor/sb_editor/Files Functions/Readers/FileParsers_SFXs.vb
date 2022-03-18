@@ -204,21 +204,18 @@ Namespace ReaderClasses
             Return sfxObj
         End Function
 
-        Public Function ReadSFXFileExport(textFilePath As String, outPlatform As String, samplesToInclude As HashSet(Of String), streamsList As String(), Optional testMode As Boolean = False) As EXSound
-            Dim waveReadFunctions As New WaveFunctions
-
+        Public Function ReadSFXFileExport(textFilePath As String, Optional testMode As Boolean = False) As EXSound
             'Create a new object to store the data
             Dim sfxObj As New EXSound
             Dim samplesList As New List(Of EXSample)
             Dim flagsArray As Boolean() = New Boolean(12) {}
-            Dim duckerLength As Short = 0
 
             'Open file and read it
             Using sr As StreamReader = File.OpenText(textFilePath)
                 While Not sr.EndOfStream
                     Dim currentLine As String = sr.ReadLine.Trim
                     'Skip empty lines
-                    If String.IsNullOrEmpty(currentLine) Or currentLine.StartsWith("//") Then
+                    If String.IsNullOrEmpty(currentLine) Or currentLine.StartsWith("//") Or currentLine.StartsWith("## ") Then
                         Continue While
                     Else
                         'Check for Parameters block
@@ -271,28 +268,10 @@ Namespace ReaderClasses
                             'Read line
                             currentLine = sr.ReadLine.Trim
                             While Not currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase)
-                                Dim waveRelativePath As String = currentLine.ToUpper.TrimStart("\")
                                 'Wave File
                                 Dim sampleObj As New EXSample With {
-                                    .FilePath = waveRelativePath
+                                    .FilePath = currentLine.ToUpper.TrimStart("\")
                                 }
-                                'Check if this sample is streamed or not
-                                If Path.HasExtension(sampleObj.FilePath) Then
-                                    Dim arraySearchResult As Integer = Array.IndexOf(streamsList, waveRelativePath)
-                                    If arraySearchResult = -1 Then
-                                        samplesToInclude.Add(currentLine.ToUpper)
-                                    End If
-                                End If
-                                'Get ducker
-                                If sfxObj.Ducker > 0 Then
-                                    Dim sampleFilePath As String = Path.Combine(WorkingDirectory, outPlatform, waveRelativePath)
-                                    If File.Exists(sampleFilePath) Then
-                                        Using reader As New WaveFileReader(sampleFilePath)
-                                            Dim cents = reader.TotalTime.TotalMilliseconds / 10
-                                            duckerLength += cents
-                                        End Using
-                                    End If
-                                End If
                                 'Add object to list
                                 samplesList.Add(sampleObj)
                                 'Continue Reading
@@ -389,16 +368,6 @@ Namespace ReaderClasses
             sfxObj.Samples = samplesList
             sfxObj.FilePath = textFilePath
             sfxObj.Flags = GetUserFlags(flagsArray)
-
-            'Check if we have to apply Ducker Length
-            If sfxObj.Ducker > 0 Then
-                If sfxObj.DuckerLength < 0 Then
-                    duckerLength -= Math.Abs(sfxObj.DuckerLength)
-                Else
-                    duckerLength += Math.Abs(sfxObj.DuckerLength)
-                End If
-                sfxObj.DuckerLength = duckerLength
-            End If
 
             Return sfxObj
         End Function

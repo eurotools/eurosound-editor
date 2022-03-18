@@ -266,7 +266,7 @@ Partial Public Class ResampleForm
                         For Each listItem As ListViewItem In ListView_Samples.SelectedItems
                             'Get file paths
                             Dim sourceFilePath As String = Path.Combine(masterFolder, listItem.Text)
-                            Dim relativeSourceFilePath As String = LCase(listItem.Text.Trim.TrimStart(Path.DirectorySeparatorChar))
+                            Dim relativeSourceFilePath As String = LCase(listItem.Text.Trim.TrimStart("\"))
                             Dim destFilePath As String = Path.Combine(TextBox_MoveSamplesTo.Text, Path.GetFileName(listItem.Text))
                             Dim relativeDestFilePath As String = Mid(destFilePath, substrStartIndex)
                             'Move file
@@ -290,7 +290,7 @@ Partial Public Class ResampleForm
                                 Dim sfxTextFileData As String() = IO.File.ReadAllLines(fileListEnum.Current)
                                 Dim startPos As Integer = Array.IndexOf(sfxTextFileData, "#SFXSamplePoolFiles") + 1
                                 Do While StrComp(sfxTextFileData(startPos), "#END") <> 0
-                                    Dim keyToSearch As String = LCase(sfxTextFileData(startPos).Trim.TrimStart(Path.DirectorySeparatorChar))
+                                    Dim keyToSearch As String = LCase(sfxTextFileData(startPos).Trim.TrimStart("\"))
                                     If filePathsDict.ContainsKey(keyToSearch) Then
                                         sfxTextFileData(startPos) = filePathsDict(keyToSearch)
                                         fileModified = True

@@ -36,7 +36,7 @@ Partial Public Class ExporterForm
                     BackgroundWorker.ReportProgress(Decimal.Divide(rowIndex, samplesCount) * 100.0)
                     'Get paths 
                     Dim sampleRelativePath As String = soundsTable.Rows(rowIndex).ItemArray(0)
-                    Dim sourceFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", sampleRelativePath)
+                    Dim sourceFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master" & sampleRelativePath)
                     'Read WAVE Master file and get all required info
                     Dim masterWaveNumOfChannels, masterWaveBitsPerSample, masterWaveFrequency, masterWaveLength As Integer
                     Dim masterWaveLoopInfo As Integer()
@@ -71,7 +71,7 @@ Partial Public Class ExporterForm
                                     Case "PC" 'IMA ADPCM For PC Streams
                                         '----------------------------------------------------------ReSample Master File
                                         SoxTimer.Start()
-                                        Dim outputFilePath As String = Path.Combine(WorkingDirectory, currentPlatform, sampleRelativePath)
+                                        Dim outputFilePath As String = Path.Combine(WorkingDirectory, currentPlatform & sampleRelativePath)
                                         ReSampleWithSox(sourceFilePath, outputFilePath, masterWaveFrequency, sampleRate)
                                         SoxTimer.Stop()
                                         '----------------------------------------------------------Create IMA file if Required
@@ -81,7 +81,7 @@ Partial Public Class ExporterForm
                                     Case "GameCube" 'DSP for Nintendo GameCube
                                         '----------------------------------------------------------ReSample Master File
                                         SoxTimer.Start()
-                                        Dim outputFilePath As String = Path.Combine(WorkingDirectory, currentPlatform, sampleRelativePath)
+                                        Dim outputFilePath As String = Path.Combine(WorkingDirectory, currentPlatform & sampleRelativePath)
                                         ReSampleWithSox(sourceFilePath, outputFilePath, masterWaveFrequency, sampleRate)
                                         SoxTimer.Stop()
                                         '----------------------------------------------------------Create IMA file if Required
@@ -90,7 +90,7 @@ Partial Public Class ExporterForm
                                         End If
                                         '----------------------------------------------------------Create DSP file
                                         GCTimer.Start()
-                                        Dim dspOutputFilePath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, "GameCube_dsp_adpcm", sampleRelativePath), ".dsp")
+                                        Dim dspOutputFilePath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, "GameCube_dsp_adpcm" & sampleRelativePath), ".dsp")
                                         'Default arguments
                                         Dim dspToolArgs As String = "Encode """ & outputFilePath & """ """ & dspOutputFilePath & """"
                                         'Check loop info
@@ -98,7 +98,7 @@ Partial Public Class ExporterForm
                                             'Loop offset pos in the resampled wave
                                             Using parsedWaveReader As New WaveFileReader(outputFilePath)
                                                 Dim parsedLoop As UInteger = (masterWaveLoopInfo(1) / (masterWaveLength / parsedWaveReader.Length)) * 2
-                                                dspToolArgs = "Encode """ & outputFilePath & """ """ & dspOutputFilePath & """ -L " & parsedLoop
+                                                dspToolArgs = dspToolArgs & " -L " & parsedLoop
                                             End Using
                                         End If
                                         'Execute Dsp Adpcm Tool
@@ -107,12 +107,12 @@ Partial Public Class ExporterForm
                                     Case "PlayStation2"  'Sony VAG for PlayStation 2
                                         '----------------------------------------------------------ReSample Master File
                                         SoxTimer.Start()
-                                        Dim outputFilePath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, currentPlatform, sampleRelativePath), ".aif")
+                                        Dim outputFilePath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, currentPlatform & sampleRelativePath), ".aif")
                                         ReSampleWithSox(sourceFilePath, outputFilePath, masterWaveFrequency, sampleRate)
                                         SoxTimer.Stop()
                                         '----------------------------------------------------------Create VAG file
                                         PSTimer.Start()
-                                        Dim vagOutputFilePath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, "PlayStation2_VAG", sampleRelativePath), ".vag")
+                                        Dim vagOutputFilePath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, "PlayStation2_VAG" & sampleRelativePath), ".vag")
                                         'Check loop info
                                         If masterWaveLoopInfo(0) = 1 AndAlso soundsTable.Rows(rowIndex).Item(5) = False Then 'Check if is NOT Streamed
                                             'Loop offset pos in the resampled wave
@@ -131,12 +131,12 @@ Partial Public Class ExporterForm
                                     Case Else 'Xbox ADPCM for Xbox
                                         '----------------------------------------------------------ReSample Master File
                                         SoxTimer.Start()
-                                        Dim outputFilePath As String = Path.Combine(WorkingDirectory, currentPlatform, sampleRelativePath)
+                                        Dim outputFilePath As String = Path.Combine(WorkingDirectory, currentPlatform & sampleRelativePath)
                                         ReSampleWithSox(sourceFilePath, outputFilePath, masterWaveFrequency, sampleRate)
                                         SoxTimer.Stop()
                                         '----------------------------------------------------------Create Xbox ADPCM
                                         XBTimer.Start()
-                                        Dim xboxOutputFilePath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, "XBox_adpcm", sampleRelativePath), ".adpcm")
+                                        Dim xboxOutputFilePath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, "XBox_adpcm" & sampleRelativePath), ".adpcm")
                                         'Execute Dsp Adpcm Tool
                                         RunProcess("SystemFiles\xbadpcmencode.exe", """" & outputFilePath & """ """ & xboxOutputFilePath & """")
                                         XBTimer.Stop()
@@ -153,7 +153,7 @@ Partial Public Class ExporterForm
 
     Private Sub CreateImaAdpcm(currentPlatform As String, sampleRelativePath As String, outputFilePath As String, platformTimer As Stopwatch, waveLib As WaveFunctions)
         platformTimer.Start()
-        Dim ImaOutputFilePath As String = Path.Combine(WorkingDirectory, currentPlatform & "_Software_adpcm", sampleRelativePath)
+        Dim ImaOutputFilePath As String = Path.Combine(WorkingDirectory, currentPlatform & "_Software_adpcm" & sampleRelativePath)
         'Resampled wav
         Dim smdFilePath As String = Path.ChangeExtension(ImaOutputFilePath, ".smd")
         RunProcess("SystemFiles\Sox.exe", """" & outputFilePath & """ -t raw """ & smdFilePath & """")

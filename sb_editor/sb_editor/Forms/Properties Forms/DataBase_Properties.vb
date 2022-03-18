@@ -82,9 +82,6 @@ Public Class DataBase_Properties
             Next
         Next
 
-
-
-
         'Update counter
         Label_SbDependencies_Value.Text = ListBox_SoundBank_Dependencies.Items.Count
         Label_TotalDependencies_Count.Text = "Total: " & ListBox_SoundBank_Dependencies.Items.Count
@@ -98,7 +95,7 @@ Public Class DataBase_Properties
             Dim sfxFileData As SfxFile = fileReaders.ReadSFXFile(sfxFullFilePath)
             For Each sampleData As Sample In sfxFileData.Samples
                 'Add sample to list if not exists
-                Dim sampleFullPath As String = UCase(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\" & sampleData.FilePath))
+                Dim sampleFullPath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\" & sampleData.FilePath).ToUpper
                 samplesList.Add(sampleFullPath)
             Next
         Next

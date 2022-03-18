@@ -77,7 +77,7 @@ Partial Public Class MainFrame
         Dim samplesDataTable As DataTable = textFileReaders.SamplesFileToDatatable(SysFileSamples)
         For index As Integer = samplesDataTable.Rows.Count - 1 To 0 Step -1
             Dim currentRow As DataRow = samplesDataTable.Rows(index)
-            Dim sampleFullPath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", currentRow("SampleFilename"))
+            Dim sampleFullPath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master" & currentRow("SampleFilename"))
             'Add item to missing samples list and remove item form data table
             If Not File.Exists(sampleFullPath) Then
                 missingSamples.Add(currentRow("SampleFilename"))
