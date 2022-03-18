@@ -7,7 +7,7 @@ Namespace ReaderClasses
         '*===============================================================================================
         Friend Function ReadRefineList(refineFilePath As String) As String()
             Dim refineKeywords As New List(Of String)
-            Using sr As StreamReader = File.OpenText(refineFilePath)
+            Using sr As New StreamReader(File.OpenRead(refineFilePath))
                 While Not sr.EndOfStream
                     Dim currentLine As String = sr.ReadLine.Trim
                     'Skip empty lines

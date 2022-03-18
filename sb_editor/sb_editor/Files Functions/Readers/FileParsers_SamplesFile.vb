@@ -16,7 +16,7 @@ Namespace ReaderClasses
             samplesData.Columns.Add("ReSmp4duplicated")
 
             'Open file and read it
-            Using sr As StreamReader = File.OpenText(samplesFilePath)
+            Using sr As New StreamReader(File.OpenRead(samplesFilePath))
                 While Not sr.EndOfStream
                     Dim currentLine As String = sr.ReadLine.Trim
                     'Skip empty lines

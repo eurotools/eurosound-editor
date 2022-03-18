@@ -1,4 +1,6 @@
-﻿Namespace ReaderClasses
+﻿Imports System.IO
+
+Namespace ReaderClasses
     Partial Public Class FileParsers
         '*===============================================================================================
         '* MFX FILE
@@ -8,26 +10,22 @@
             Dim mfxFilesList As New HashSet(Of String)
 
             'Open file and read it
-            Dim currentLine As String
-            FileOpen(1, textFilePath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
-            Do Until EOF(1)
-                'Read text file
-                currentLine = Trim(LineInput(1))
-                'Check for Hashcode block
-                If StrComp(currentLine, "#MFXFiles", CompareMethod.Text) = 0 Then
-                    'Read line
-                    currentLine = Trim(LineInput(1))
-                    If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
-                        Do
+            Using sr As New StreamReader(File.OpenRead(textFilePath))
+                While Not sr.EndOfStream
+                    Dim currentLine As String = sr.ReadLine.Trim
+                    'Check for Hashcode block
+                    If StrComp(currentLine, "#MFXFiles", CompareMethod.Text) = 0 Then
+                        'Read line
+                        currentLine = Trim(LineInput(1))
+                        While Not currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase)
                             'Split line and get number
                             mfxFilesList.Add(currentLine)
                             'Continue Reading
                             currentLine = Trim(LineInput(1))
-                        Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
+                        End While
                     End If
-                End If
-            Loop
-            FileClose(1)
+                End While
+            End Using
 
             Return mfxFilesList.ToArray
         End Function

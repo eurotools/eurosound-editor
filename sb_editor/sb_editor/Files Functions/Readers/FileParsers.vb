@@ -1,4 +1,5 @@
-﻿Imports sb_editor.ParsersObjects
+﻿Imports System.IO
+Imports sb_editor.ParsersObjects
 
 Namespace ReaderClasses
     Partial Public Class FileParsers
@@ -17,42 +18,42 @@ Namespace ReaderClasses
         Friend Function GetFileHeaderInfo(filePath As String) As FileHeader
             'Create Variables
             Dim headerInfo As New FileHeader
-            Dim lineCounter As Integer = 0
 
             'Open file and read it
-            Dim currentLine As String
-            FileOpen(1, filePath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
-            Do Until EOF(1) Or lineCounter > 4
-                'Read text file
-                currentLine = LineInput(1)
+            Using sr As New StreamReader(File.OpenRead(filePath))
+                While Not sr.EndOfStream
+                    Dim currentLine As String = sr.ReadLine.Trim
+                    'Skip empty lines
+                    If String.IsNullOrEmpty(currentLine) Or currentLine.StartsWith("//") Then
+                        Exit While
+                    Else
+                        'Header info
+                        If currentLine.Contains("## ") Then
+                            'Split content
+                            Dim lineData As String() = Split(currentLine, "...")
 
-                'Header info
-                If InStr(currentLine, "## ") > 0 Then
-                    'Split content
-                    Dim lineData As String() = Split(currentLine, "...")
-
-                    'Get header info
-                    If InStr(currentLine, "## EuroSound") = 1 Then
-                        headerInfo.FileHeader = currentLine
+                            'Get header info
+                            If currentLine.Contains("## EuroSound") Then
+                                headerInfo.FileHeader = currentLine
+                            End If
+                            If currentLine.Contains("## First Created ...") Then
+                                headerInfo.FirstCreated = GetStringValue("## First Created ...", currentLine)
+                            End If
+                            If currentLine.Contains("## Created By ...") Then
+                                headerInfo.CreatedBy = GetStringValue("## Created By ...", currentLine)
+                            End If
+                            If currentLine.Contains("## Last Modified ...") Then
+                                headerInfo.LastModify = GetStringValue("## Last Modified ...", currentLine)
+                            End If
+                            If currentLine.Contains("## Last Modified By ...") Then
+                                headerInfo.LastModifyBy = GetStringValue("## Last Modified By ...", currentLine)
+                            End If
+                        Else
+                            Exit While
+                        End If
                     End If
-                    If InStr(currentLine, "## First Created ...") = 1 Then
-                        headerInfo.FirstCreated = GetStringValue("## First Created ...", currentLine)
-                    End If
-                    If InStr(currentLine, "## Created By ...") = 1 Then
-                        headerInfo.CreatedBy = GetStringValue("## Created By ...", currentLine)
-                    End If
-                    If InStr(currentLine, "## Last Modified ...") = 1 Then
-                        headerInfo.LastModify = GetStringValue("## Last Modified ...", currentLine)
-                    End If
-                    If InStr(currentLine, "## Last Modified By ...") = 1 Then
-                        headerInfo.LastModifyBy = GetStringValue("## Last Modified By ...", currentLine)
-                    End If
-                End If
-
-                'Update counter
-                lineCounter += 1
-            Loop
-            FileClose(1)
+                End While
+            End Using
 
             'Return data
             GetFileHeaderInfo = headerInfo

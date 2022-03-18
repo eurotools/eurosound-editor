@@ -51,7 +51,7 @@ Partial Public Class ExporterForm
                                 timerQuery.Stop()
 
                                 timerSfxData.Start()
-                                Dim sfxDictionary As Dictionary(Of String, EXSound) = ReadSfxData(SfxList, False)
+                                Dim sfxDictionary As SortedDictionary(Of String, EXSound) = ReadSfxData(SfxList, False)
                                 ApplyDuckerLength(SfxDictionary, currentPlatform)
                                 timerSfxData.Stop()
 

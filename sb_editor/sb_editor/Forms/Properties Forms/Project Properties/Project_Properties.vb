@@ -240,6 +240,22 @@ Partial Public Class Project_Properties
         End If
     End Sub
 
+    Private Sub Button_Resample_On_Click(sender As Object, e As EventArgs) Handles Button_Resample_On.Click
+        For itemIdex As Integer = 0 To ListView_Formats.SelectedIndices.Count - 1
+            Dim currentIndex As Integer = ListView_Formats.SelectedIndices(itemIdex)
+            ProjectSettingsFile.AvailableFormats(currentIndex, 2) = "On"
+            ListView_Formats.Items(currentIndex).SubItems(2).Text = "On"
+        Next
+    End Sub
+
+    Private Sub Button_ResampleOff_Click(sender As Object, e As EventArgs) Handles Button_ResampleOff.Click
+        For itemIdex As Integer = 0 To ListView_Formats.SelectedIndices.Count - 1
+            Dim currentIndex As Integer = ListView_Formats.SelectedIndices(itemIdex)
+            ProjectSettingsFile.AvailableFormats(currentIndex, 2) = "Off"
+            ListView_Formats.Items(currentIndex).SubItems(2).Text = "Off"
+        Next
+    End Sub
+
     '*===============================================================================================
     '* SAMPLE RATES SECTION
     '*===============================================================================================

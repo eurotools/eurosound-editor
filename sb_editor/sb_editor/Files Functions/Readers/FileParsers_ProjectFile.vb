@@ -15,7 +15,7 @@ Namespace ReaderClasses
             Dim SFXList As New List(Of String)
 
             'Open file and read it
-            Using sr As StreamReader = File.OpenText(projectFilePath)
+            Using sr As New StreamReader(File.OpenRead(projectFilePath))
                 While Not sr.EndOfStream
                     Dim currentLine As String = sr.ReadLine.Trim
                     'Skip empty lines

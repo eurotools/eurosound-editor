@@ -6,7 +6,7 @@ Namespace ReaderClasses
         '* Misc File
         '*===============================================================================================
         Friend Sub ReadMiscFile(miscFilePath As String)
-            Using sr As StreamReader = File.OpenText(miscFilePath)
+            Using sr As New StreamReader(File.OpenRead(miscFilePath))
                 While Not sr.EndOfStream
                     Dim currentLine As String = sr.ReadLine.Trim
                     'Skip empty lines

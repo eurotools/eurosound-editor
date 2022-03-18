@@ -10,7 +10,7 @@ Namespace ReaderClasses
             Dim jumpHashCodesList As New List(Of String)
 
             'Open file and read it
-            Using sr As StreamReader = File.OpenText(textFilePath)
+            Using sr As New StreamReader(File.OpenRead(textFilePath))
                 While Not sr.EndOfStream
                     'Read text file
                     Dim currentLine As String = sr.ReadLine.Trim

@@ -2,8 +2,23 @@
 Imports System.Text
 Imports NAudio.Wave
 
-Friend Class WaveFunctions
-    Friend Function ReadSampleChunk(waveReader As WaveFileReader) As Integer()
+Module WaveFunctions
+    '*===============================================================================================
+    '* SHORT PCM ARRAY TO BYTE ARRAY
+    '*===============================================================================================
+    Friend Function ConvertByteArrayToShortArray(PCMData As Byte()) As Short()
+        Dim samplesShort As Short() = New Short(PCMData.Length / 2 - 1) {}
+        Dim sourceWaveBuffer As New WaveBuffer(PCMData)
+        For i As Integer = 0 To samplesShort.Length - 1
+            samplesShort(i) = sourceWaveBuffer.ShortBuffer(i)
+        Next
+        Return samplesShort
+    End Function
+
+    '*===============================================================================================
+    '* WAVE FILE - SMPL CHUNK
+    '*===============================================================================================
+    Friend Function ReadWaveSampleChunk(waveReader As WaveFileReader) As Integer()
         Dim loopInfo = New Integer(3) {} '0 = Loop Yes/No, 1 = Start Position, 2 = End Position 3 = MidiNote
 
         'Read Sample Chunck
@@ -34,7 +49,10 @@ Friend Class WaveFunctions
         Return loopInfo
     End Function
 
-    Friend Sub AddChunksToAif(aifFilePath As String, startPosition As Integer, endPosition As Integer, midiNote As Integer)
+    '*===============================================================================================
+    '* AIFF FILE - INST & MARK CHUNK
+    '*===============================================================================================
+    Friend Sub AddLoopPointsToAiff(aifFilePath As String, startPosition As Integer, endPosition As Integer, midiNote As Integer)
         Using binWriter As New BinaryWriter(File.Open(aifFilePath, FileMode.Append, FileAccess.Write))
             'Add Instrument chunk
             binWriter.Write(Encoding.ASCII.GetBytes("INST"))
@@ -77,13 +95,25 @@ Friend Class WaveFunctions
         End Using
     End Sub
 
-    Friend Function ConvertByteArrayToShortArray(PCMData As Byte()) As Short()
-        Dim samplesShort As Short() = New Short(PCMData.Length / 2 - 1) {}
-        Dim sourceWaveBuffer As New WaveBuffer(PCMData)
-        For i As Integer = 0 To samplesShort.Length - 1
-            samplesShort(i) = sourceWaveBuffer.ShortBuffer(i)
-        Next
-        Return samplesShort
+    '*===============================================================================================
+    '* PLAYSTATION2 VAG FILE - GET DATA CHUNK
+    '*===============================================================================================
+    Friend Function GetVagFileDataChunk(vagFilePath As String) As Byte()
+        Dim vagFileWithHeader As Byte() = File.ReadAllBytes(vagFilePath)
+        Dim vagFile As Byte() = New Byte(vagFileWithHeader.Length - 48) {}
+        Array.Copy(vagFileWithHeader, 48, vagFile, 0, vagFileWithHeader.Length - 48)
+        Return vagFile
     End Function
-End Class
+
+    '*===============================================================================================
+    '* XBOX ADPCM FILE - GET DATA CHUNK
+    '*===============================================================================================
+    Friend Function GetXboxAdpcmDataChunk(xboxFilePath) As Byte()
+        Dim adpcmFileWithHeader As Byte() = File.ReadAllBytes(xboxFilePath)
+        Dim adpcmFile As Byte() = New Byte(adpcmFileWithHeader.Length - 48) {}
+        Array.Copy(adpcmFileWithHeader, 48, adpcmFile, 0, adpcmFileWithHeader.Length - 48)
+
+        Return adpcmFile
+    End Function
+End Module
 

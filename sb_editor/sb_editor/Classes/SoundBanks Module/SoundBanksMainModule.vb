@@ -151,7 +151,7 @@ Namespace SoundBanksExporterFunctions
             Dim sampleToInclude As String() = GetFinalList(GetSoundBankSamplesList(sfxFilesToInclude, outputLanguage), streamsList, outputPlatform, False)
 
             'SFX Stuff
-            Dim sfxDictionary As Dictionary(Of String, EXSound) = ReadSfxData(sfxFilesToInclude, testMode)
+            Dim sfxDictionary As SortedDictionary(Of String, EXSound) = ReadSfxData(sfxFilesToInclude, testMode)
             ApplyDuckerLength(sfxDictionary, outputPlatform)
 
             'Samples Suff
@@ -171,8 +171,8 @@ Namespace SoundBanksExporterFunctions
             Return selectedFlags
         End Function
 
-        Friend Function ReadSfxData(sfxList As String(), testMode As Boolean) As Dictionary(Of String, EXSound)
-            Dim sfxDictionary As New Dictionary(Of String, EXSound)
+        Friend Function ReadSfxData(sfxList As String(), testMode As Boolean) As SortedDictionary(Of String, EXSound)
+            Dim sfxDictionary As New SortedDictionary(Of String, EXSound)
             For fileIndex As Integer = 0 To sfxList.Length - 1
                 Dim sfxFilePath As String = Path.Combine(WorkingDirectory, "SFXs", sfxList(fileIndex).TrimStart("\") & ".txt")
                 Dim soundObj As EXSound = textFileReaders.ReadSFXFileExport(sfxFilePath, testMode)
@@ -182,9 +182,9 @@ Namespace SoundBanksExporterFunctions
             Return sfxDictionary
         End Function
 
-        Friend Sub ApplyDuckerLength(sfxDictionary As Dictionary(Of String, EXSound), outPlatform As String)
+        Friend Sub ApplyDuckerLength(sfxDictionary As SortedDictionary(Of String, EXSound), outPlatform As String)
             For Each soundToCheck As EXSound In sfxDictionary.Values
-                Dim duckerLength As Integer = -1
+                Dim duckerLength As Integer = 0
                 'Ensure if this sound uses ducker stuff
                 If soundToCheck.Ducker > 0 Then
                     'Inspect Samples
@@ -197,21 +197,19 @@ Namespace SoundBanksExporterFunctions
                             End Using
                         End If
                     Next
+
                     'Apply value
-                    If duckerLength > 0 Then
-                        If soundToCheck.DuckerLength < 0 Then
-                            duckerLength -= Math.Abs(soundToCheck.DuckerLength)
-                        Else
-                            duckerLength += Math.Abs(soundToCheck.DuckerLength)
-                        End If
-                        soundToCheck.DuckerLength = duckerLength
+                    If soundToCheck.DuckerLength < 0 Then
+                        duckerLength -= Math.Abs(soundToCheck.DuckerLength)
+                    Else
+                        duckerLength += Math.Abs(soundToCheck.DuckerLength)
                     End If
+                    soundToCheck.DuckerLength = duckerLength
                 End If
             Next
         End Sub
 
         Friend Function ReadSampleData(samplesList As String(), outputPlatform As String) As Dictionary(Of String, EXAudio)
-            Dim waveReadFunctions As New WaveFunctions
             Dim CancelSoundBankOutput As Boolean = False
             Dim samplesDictionary As New Dictionary(Of String, EXAudio)
 
@@ -234,7 +232,7 @@ Namespace SoundBanksExporterFunctions
                         Dim loopInfo As Integer()
                         Dim masterWaveSampleRate As Integer = 0
                         Using waveReader As New WaveFileReader(masterWaveFile)
-                            loopInfo = waveReadFunctions.ReadSampleChunk(waveReader)
+                            loopInfo = ReadWaveSampleChunk(waveReader)
                             soundDataObj.Duration = waveReader.TotalTime.TotalMilliseconds
                             soundDataObj.Flags = loopInfo(0)
                             soundDataObj.Bits = 4
@@ -313,17 +311,11 @@ Namespace SoundBanksExporterFunctions
                 newAudioObj.NumberOfChannels = platformWaveReader.WaveFormat.Channels
                 newAudioObj.Bits = 4
 
-                'Get Vag File Without Header
-                Dim vagFileWithHeader As Byte() = File.ReadAllBytes(vagFilePath)
-                Dim vagFile As Byte() = New Byte(vagFileWithHeader.Length - 48) {}
-                Array.Copy(vagFileWithHeader, 48, vagFile, 0, vagFileWithHeader.Length - 48)
-
-                'Get wave block data aligned
+                'Get vag block data aligned
+                Dim vagFile As Byte() = GetVagFileDataChunk(vagFilePath)
+                newAudioObj.RealSize = vagFile.Length
                 newAudioObj.SampleData = New Byte(ESUtils.BytesFunctions.AlignNumber(vagFile.Length, 64) - 1) {}
                 Buffer.BlockCopy(vagFile, 0, newAudioObj.SampleData, 0, vagFile.Length)
-
-                'Get Real length
-                newAudioObj.RealSize = vagFile.Length
 
                 'Loop offset
                 If loopInfo(0) = 1 Then
@@ -338,12 +330,14 @@ Namespace SoundBanksExporterFunctions
                 newAudioObj.NumberOfChannels = platformWaveReader.WaveFormat.Channels
                 newAudioObj.Bits = 4
 
-                Dim dspFile As Byte() = File.ReadAllBytes(dspFilePath)
                 'Get wave block data aligned
+                Dim dspFile As Byte() = File.ReadAllBytes(dspFilePath)
+                newAudioObj.RealSize = dspFile.Length
                 newAudioObj.SampleData = New Byte(ESUtils.BytesFunctions.AlignNumber(dspFile.Length, 32) - 1) {}
                 Buffer.BlockCopy(dspFile, 0, newAudioObj.SampleData, 0, dspFile.Length)
+
+                'Get header data
                 newAudioObj.DspHeaderData = File.ReadAllBytes(Path.ChangeExtension(dspFilePath, ".dsph"))
-                newAudioObj.RealSize = dspFile.Length
 
                 'Loop offset
                 If loopInfo(0) = 1 Then
@@ -356,16 +350,9 @@ Namespace SoundBanksExporterFunctions
             Using platformWaveReader As New WaveFileReader(platformWave)
                 newAudioObj.Frequency = platformWaveReader.WaveFormat.SampleRate
                 newAudioObj.NumberOfChannels = platformWaveReader.WaveFormat.Channels
-                newAudioObj.Bits = 4
-
-                'Get Adpcm File Without Header
-                Dim adpcmFileWithHeader As Byte() = File.ReadAllBytes(xboxFilePath)
-                Dim adpcmFile As Byte() = New Byte(adpcmFileWithHeader.Length - 48) {}
-                Array.Copy(adpcmFileWithHeader, 48, adpcmFile, 0, adpcmFileWithHeader.Length - 48)
-                newAudioObj.SampleData = adpcmFile
-
-                'Get Real length
+                newAudioObj.SampleData = GetXboxAdpcmDataChunk(xboxFilePath)
                 newAudioObj.RealSize = newAudioObj.SampleData.Length
+                newAudioObj.Bits = 4
 
                 'Loop offset
                 If loopInfo(0) = 1 Then
@@ -411,7 +398,7 @@ Namespace SoundBanksExporterFunctions
         '*===============================================================================================
         '* FUNCTIONS TO WRITE FILES
         '*===============================================================================================
-        Friend Function WriteSfxFile(binWriter As BinaryWriter, hashCodesList As SortedDictionary(Of String, UInteger), sfxDictionary As Dictionary(Of String, EXSound), samplesDictionary As Dictionary(Of String, EXAudio), streamsList As String(), isBigEndian As Boolean) As List(Of KeyValuePair(Of String, Integer))
+        Friend Function WriteSfxFile(binWriter As BinaryWriter, hashCodesList As SortedDictionary(Of String, UInteger), sfxDictionary As SortedDictionary(Of String, EXSound), samplesDictionary As Dictionary(Of String, EXAudio), streamsList As String(), isBigEndian As Boolean) As List(Of KeyValuePair(Of String, Integer))
             Dim sfxStartOffsets As New Queue(Of UInteger)
             Dim streamsReport As New List(Of KeyValuePair(Of String, Integer))
 
@@ -444,8 +431,8 @@ Namespace SoundBanksExporterFunctions
                     'Find File Ref
                     Dim fileRef As Short
                     If sfxToWrite.HasSubSfx Then
-                        If hashCodesList.ContainsKey(sfxItem.Key) Then
-                            fileRef = hashCodesList(sfxItem.Key)
+                        If hashCodesList.ContainsKey(currentSample.FilePath) Then
+                            fileRef = hashCodesList(currentSample.FilePath)
                         Else
                             MsgBox("HashCode Not found " & currentSample.FilePath, vbOKOnly + vbCritical, "EuroSound")
                         End If

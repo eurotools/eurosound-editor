@@ -5,7 +5,6 @@ Imports sb_editor.ParsersObjects
 
 Partial Public Class ExporterForm
     Private Function CreateSfxDataTempFolder(samplesDt As DataTable) As Integer
-        Dim waveFunctions As New WaveFunctions
         Dim maxHashCode As Integer = 0
         'Ensure that we have files to resample
         If samplesDt.Rows.Count > 0 Then
@@ -35,7 +34,7 @@ Partial Public Class ExporterForm
                         If File.Exists(waveFilePath) Then
                             Using waveReader As New WaveFileReader(waveFilePath)
                                 waveDuration = waveReader.Length / waveReader.WaveFormat.AverageBytesPerSecond
-                                waveLooping = waveFunctions.ReadSampleChunk(waveReader)
+                                waveLooping = waveFunctions.ReadWaveSampleChunk(waveReader)
                             End Using
                         Else
                             sfxFile.Parameters.TrackingType = 4

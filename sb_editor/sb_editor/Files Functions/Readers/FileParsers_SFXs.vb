@@ -1,6 +1,5 @@
 ﻿Imports System.ComponentModel
 Imports System.IO
-Imports NAudio.Wave
 Imports sb_editor.ExporterObjects
 Imports sb_editor.ParsersObjects
 Imports sb_editor.SoundBanksExporterFunctions
@@ -11,14 +10,12 @@ Namespace ReaderClasses
         '* SFX FILES
         '*===============================================================================================
         Public Function ReadSFXFile(textFilePath As String) As SfxFile
-            Dim waveReadFunctions As New WaveFunctions
-
             'Create a new object and list to store the data
             Dim sfxObj As New SfxFile
             Dim samplesList As New BindingList(Of Sample)
 
             'Open file and read it
-            Using sr As StreamReader = File.OpenText(textFilePath)
+            Using sr As New StreamReader(File.OpenRead(textFilePath))
                 While Not sr.EndOfStream
                     Dim currentLine As String = sr.ReadLine.Trim
                     'Skip empty lines

@@ -5,7 +5,6 @@ Partial Public Class MusicsExporter
     '* CREATE MUSIC STREAMS - MAIN METHOD
     '*===============================================================================================
     Private Sub CreateMusicStreams(waveOutputFolder As String, outputPlatforms As String())
-        Dim waveFunctions As New WaveFunctions
         If Not MarkerFileOnly Then
             Dim temporalLeft As String = Path.Combine(WorkingDirectory, "System", "TempWave.wav")
             Dim temporalRight As String = Path.Combine(WorkingDirectory, "System", "TempWave2.wav")
@@ -34,7 +33,7 @@ Partial Public Class MusicsExporter
                             'Wave to IMA
                             Dim PcOutLeft As String = Path.Combine(waveOutputFolder, musicItem.ItemArray(0))
                             Dim PcOutRight As String = Path.Combine(waveOutputFolder, musicItem.ItemArray(0))
-                            CreateImaAdpcm(temporalLeft, temporalRight, PcOutLeft, PcOutRight, waveFunctions)
+                            CreateImaAdpcm(temporalLeft, temporalRight, PcOutLeft, PcOutRight)
                             'Music Stream (.ssd)
                             MergeChannels(PcOutLeft & "_L.ima", PcOutRight & "_R.ima", 1, soundSampleData)
                         Case "PlayStation2"
@@ -106,7 +105,7 @@ Partial Public Class MusicsExporter
     '*===============================================================================================
     '* IMA ADPCM FUNCTIONS
     '*===============================================================================================
-    Private Sub CreateImaAdpcm(inputLeft As String, inputRight As String, outputLeft As String, outputRight As String, waveLib As WaveFunctions)
+    Private Sub CreateImaAdpcm(inputLeft As String, inputRight As String, outputLeft As String, outputRight As String)
         'FilePaths
         Dim wavePcmLeft As String = outputLeft & "_L.pcm"
         Dim wavePcmRight As String = outputRight & "_R.pcm"
@@ -114,9 +113,9 @@ Partial Public Class MusicsExporter
         RunProcess("SystemFiles\Sox.exe", """" & inputLeft & """ -t raw """ & wavePcmLeft & """")
         RunProcess("SystemFiles\Sox.exe", """" & inputRight & """ -t raw """ & wavePcmRight & """")
         'Wave to ima
-        Dim imaLeftData As Byte() = ESUtils.ImaCodec.Encode(waveLib.ConvertByteArrayToShortArray(File.ReadAllBytes(wavePcmLeft)))
+        Dim imaLeftData As Byte() = ESUtils.ImaCodec.Encode(ConvertByteArrayToShortArray(File.ReadAllBytes(wavePcmLeft)))
         File.WriteAllBytes(outputLeft & "_L.ima", imaLeftData)
-        Dim imaRightData As Byte() = ESUtils.ImaCodec.Encode(waveLib.ConvertByteArrayToShortArray(File.ReadAllBytes(wavePcmRight)))
+        Dim imaRightData As Byte() = ESUtils.ImaCodec.Encode(ConvertByteArrayToShortArray(File.ReadAllBytes(wavePcmRight)))
         File.WriteAllBytes(outputRight & "_R.ima", imaRightData)
     End Sub
 End Class

@@ -11,7 +11,7 @@ Namespace ReaderClasses
             'List to store data
             Dim AvailableReSampleRates As New List(Of String)
 
-            Using sr As StreamReader = File.OpenText(propsFilePath)
+            Using sr As New StreamReader(File.OpenRead(propsFilePath))
                 While Not sr.EndOfStream
                     Dim currentLine As String = sr.ReadLine.Trim
                     'Skip empty lines

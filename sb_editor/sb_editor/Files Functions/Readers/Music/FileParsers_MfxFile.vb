@@ -1,4 +1,5 @@
-﻿Imports sb_editor.ParsersObjects
+﻿Imports System.IO
+Imports sb_editor.ParsersObjects
 
 Namespace ReaderClasses
     Partial Public Class FileParsers
@@ -11,62 +12,54 @@ Namespace ReaderClasses
             Dim mfxObj As New MfxFile
 
             'Open file and read it
-            Dim currentLine As String
-            FileOpen(1, textFilePath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
-            Do Until EOF(1)
-                'Read text file
-                currentLine = LineInput(1)
-                'Check for Hashcode block
-                If StrComp(currentLine, "#HASHCODE", CompareMethod.Text) = 0 Then
-                    'Read line
-                    currentLine = LineInput(1)
-                    If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
-                        Do
+            Using sr As New StreamReader(File.OpenRead(textFilePath))
+                While Not sr.EndOfStream
+                    Dim currentLine As String = sr.ReadLine.Trim
+                    'Check for Hashcode block
+                    If currentLine.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase) Then
+                        'Read line
+                        currentLine = sr.ReadLine.Trim
+                        While Not currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase)
                             'Split line and get number
                             mfxObj.HashCode = Split(currentLine, " ")(1)
                             'Continue Reading
-                            currentLine = LineInput(1)
-                        Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
+                            currentLine = sr.ReadLine.Trim
+                        End While
                     End If
-                End If
-                'Check for Music Data block
-                If StrComp(currentLine, "#MusicData") = 0 Then
-                    'Read line
-                    currentLine = LineInput(1)
-                    If StrComp(currentLine, "#END") <> 0 Then
-                        Do
+                    'Check for Music Data block
+                    If currentLine.Equals("#MusicData", StringComparison.OrdinalIgnoreCase) Then
+                        'Read line
+                        currentLine = sr.ReadLine.Trim
+                        While Not currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase)
                             Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
-                            Select Case UCase(lineData(0))
+                            Select Case lineData(0).ToUpper
                                 Case "VOLUME"
                                     mfxObj.Volume = CSByte(lineData(1))
                                 Case "USERVALUE"
                                     mfxObj.UserValue = CUInt(lineData(1))
                             End Select
                             'Continue Reading
-                            currentLine = LineInput(1)
-                        Loop While StrComp(currentLine, "#END") <> 0
+                            currentLine = sr.ReadLine.Trim
+                        End While
                     End If
-                End If
-                'Check for Time Stamps block
-                If StrComp(currentLine, "#TIMESTAMPS", CompareMethod.Text) = 0 Then
-                    'Read line
-                    currentLine = LineInput(1)
-                    If StrComp(currentLine, "#END", CompareMethod.Text) <> 0 Then
-                        Do
+                    'Check for Time Stamps block
+                    If currentLine.Equals("#TIMESTAMPS", StringComparison.OrdinalIgnoreCase) Then
+                        'Read line
+                        currentLine = sr.ReadLine.Trim
+                        While Not currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase)
                             Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
-                            Select Case UCase(lineData(0))
+                            Select Case lineData(0).ToUpper
                                 Case "MIDIFILELASTOUTPUT"
                                     mfxObj.MidiFileLastOutput = GetStringValue("MIDIFILELASTOUTPUT", currentLine)
                                 Case "WAVFILELASTOUTPUT"
                                     mfxObj.WavFileLastOutput = GetStringValue("WAVFILELASTOUTPUT", currentLine)
                             End Select
                             'Continue Reading
-                            currentLine = LineInput(1)
-                        Loop While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
+                            currentLine = sr.ReadLine.Trim
+                        End While
                     End If
-                End If
-            Loop
-            FileClose(1)
+                End While
+            End Using
 
             Return mfxObj
         End Function

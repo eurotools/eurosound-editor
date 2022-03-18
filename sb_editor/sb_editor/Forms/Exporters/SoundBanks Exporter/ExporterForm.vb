@@ -130,10 +130,9 @@ Partial Public Class ExporterForm
             Dim XboxTimer As New Stopwatch()
             Dim PlayStationTimer As New Stopwatch()
             'Get all available formats
-            Dim availableFormats As String() = ProjectSettingsFile.sampleRateFormats.Keys.ToArray
-            ResampleWaves(soundsTable, availableFormats, SoxTimer, PCTimer, GCTimer, XboxTimer, PlayStationTimer)
+            ResampleWaves(soundsTable, ProjectSettingsFile.AvailableFormats, SoxTimer, PCTimer, GCTimer, XboxTimer, PlayStationTimer)
             If ReSampleStreams = 1 Then
-                GenerateStreamFolder(streamSamplesList, outputLanguage, availableFormats)
+                GenerateStreamFolder(streamSamplesList, outputLanguage, ProjectSettingsFile.AvailableFormats)
                 ReSampleStreams = 0
                 textFileWritters.UpdateMiscFile(Path.Combine(WorkingDirectory, "System", "Misc.txt"))
             End If

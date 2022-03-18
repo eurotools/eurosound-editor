@@ -155,7 +155,7 @@ Partial Public Class Frm_SfxEditor
                     Label_SampleInfo_LengthValue.Text = Math.Round(reader.TotalTime.TotalSeconds, 1)
                     'Check if is looped
                     Label_SampleInfo_LoopValue.Text = "False"
-                    If waveReadFunctions.ReadSampleChunk(reader)(0) = 1 Then
+                    If ReadWaveSampleChunk(reader)(0) = 1 Then
                         Label_SampleInfo_LoopValue.Text = "True"
                     End If
                     'Check if is streamed

@@ -12,7 +12,6 @@ Partial Public Class Frm_SfxEditor
     Private ReadOnly writers As New FileWriters
     Private ReadOnly reader As New FileParsers
     Private ReadOnly sfxFilesData As New Dictionary(Of String, SfxFile)
-    Private ReadOnly waveReadFunctions As New WaveFunctions
     Private StreamSamplesList As String()
     Private promptSave As Boolean = True
 
