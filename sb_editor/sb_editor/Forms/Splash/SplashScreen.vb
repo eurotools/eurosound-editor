@@ -27,12 +27,13 @@ Partial Public NotInheritable Class SplashScreen
     Private Sub SplashScreen_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
         'Load ini file data
         LoadSystemFilesIni()
+
         'Inform user if the working directory exists
-        Dim projectFilePath As String = fso.BuildPath(WorkingDirectory, "Project.txt")
-        If fso.FileExists(projectFilePath) Then
+        Dim projectFilePath As String = Path.Combine(WorkingDirectory, "Project.txt")
+        If File.Exists(projectFilePath) Then
             'Update project variables
-            Dim propsFilePath As String = fso.BuildPath(WorkingDirectory, "System\Properties.txt")
-            If fso.FileExists(propsFilePath) Then
+            Dim propsFilePath As String = Path.Combine(WorkingDirectory, "System\Properties.txt")
+            If File.Exists(propsFilePath) Then
                 ProjectSettingsFile = textFileReaders.ReadPropertiesFile(propsFilePath)
             End If
 
@@ -43,7 +44,7 @@ Partial Public NotInheritable Class SplashScreen
             UpdateGlobalVariables()
 
             'Ask for UserName if required
-            If StrComp(EuroSoundUser, "") = 0 Then
+            If String.IsNullOrEmpty(EuroSoundUser) Then
                 EuroSoundUser = AskForUserName("MyName")
             End If
 
@@ -52,9 +53,9 @@ Partial Public NotInheritable Class SplashScreen
             LoadProgramLastState(mainform)
 
             'Create refine search file if required
-            Dim refineSearchTextFile As String = fso.BuildPath(WorkingDirectory, "System\RefineSearch.txt")
-            If Not fso.FileExists(refineSearchTextFile) Then
-                If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System")) Then
+            Dim refineSearchTextFile As String = Path.Combine(WorkingDirectory, "System", "RefineSearch.txt")
+            If Not File.Exists(refineSearchTextFile) Then
+                If Directory.Exists(Path.Combine(WorkingDirectory, "System")) Then
                     writers.CreateRefineList(refineSearchTextFile, Nothing)
                 End If
             End If

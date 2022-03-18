@@ -29,7 +29,7 @@ Partial Public Class ResampleForm
         stopwatch.Start()
 
         'Get Master folder file path and select the first preview option
-        TextBox_ProjectPath.Text = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")
+        TextBox_ProjectPath.Text = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")
         ComboBox_PreviewOptions.SelectedIndex = 0
 
         'Get available sample rates
@@ -249,9 +249,9 @@ Partial Public Class ResampleForm
         If StrComp(TextBox_MoveSamplesTo.Text, "Set Folder") = 0 Then
             MsgBox("Please Set Folder by Clicking TextBox.", vbOKOnly + vbCritical, "Move File Error")
         Else
-            If fso.FolderExists(TextBox_MoveSamplesTo.Text) Then
+            If Directory.Exists(TextBox_MoveSamplesTo.Text) Then
                 'Build master path
-                Dim masterFolder As String = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")
+                Dim masterFolder As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")
                 'Ensure that we are not moving outside master folder
                 If InStr(TextBox_MoveSamplesTo.Text, masterFolder) > 0 Then
                     'Ask user what he wants to do
@@ -265,15 +265,15 @@ Partial Public Class ResampleForm
                         ListView_Samples.BeginUpdate()
                         For Each listItem As ListViewItem In ListView_Samples.SelectedItems
                             'Get file paths
-                            Dim sourceFilePath As String = fso.BuildPath(masterFolder, listItem.Text)
+                            Dim sourceFilePath As String = Path.Combine(masterFolder, listItem.Text)
                             Dim relativeSourceFilePath As String = LCase(listItem.Text.Trim.TrimStart(Path.DirectorySeparatorChar))
-                            Dim destFilePath As String = fso.BuildPath(TextBox_MoveSamplesTo.Text, fso.GetFileName(listItem.Text))
+                            Dim destFilePath As String = Path.Combine(TextBox_MoveSamplesTo.Text, Path.GetFileName(listItem.Text))
                             Dim relativeDestFilePath As String = Mid(destFilePath, substrStartIndex)
                             'Move file
-                            If fso.FileExists(destFilePath) Then
-                                MsgBox("Cannot Move File: '" & sourceFilePath & "' because of duplicate Name: " & fso.GetFileName(destFilePath), vbOKOnly + vbCritical, "Move File Error")
+                            If File.Exists(destFilePath) Then
+                                MsgBox("Cannot Move File: '" & sourceFilePath & "' because of duplicate Name: " & Path.Combine(destFilePath), vbOKOnly + vbCritical, "Move File Error")
                             Else
-                                fso.MoveFile(sourceFilePath, destFilePath)
+                                File.Move(sourceFilePath, destFilePath)
                                 'Update listview control
                                 listItem.Text = "\" & relativeDestFilePath
                                 'Add item to dictionary
@@ -283,7 +283,7 @@ Partial Public Class ResampleForm
                         ListView_Samples.EndUpdate()
                         'Update Text Files
                         If filePathsDict.Count > 0 Then
-                            Dim fileList As IEnumerable(Of String) = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "SFXs"), "*.txt", SearchOption.AllDirectories)
+                            Dim fileList As IEnumerable(Of String) = Directory.GetFiles(Path.Combine(WorkingDirectory, "SFXs"), "*.txt", SearchOption.AllDirectories)
                             Dim fileListEnum As IEnumerator(Of String) = fileList.GetEnumerator
                             While fileListEnum.MoveNext
                                 Dim fileModified As Boolean = False
@@ -351,9 +351,9 @@ Partial Public Class ResampleForm
     End Sub
 
     Private Sub Button_ViewPurgedList_Click(sender As Object, e As EventArgs) Handles Button_ViewPurgedList.Click
-        Dim purgeListFilePath As String = fso.BuildPath(WorkingDirectory, "Report\Last_Purge.txt")
-        If fso.FileExists(purgeListFilePath) Then
-            If fso.FileExists(ProjTextEditor) Then
+        Dim purgeListFilePath As String = Path.Combine(WorkingDirectory, "Report", "Last_Purge.txt")
+        If File.Exists(purgeListFilePath) Then
+            If File.Exists(ProjTextEditor) Then
                 RunProcess(ProjTextEditor, purgeListFilePath)
             Else
                 MsgBox("No Text Editor setup." & vbCrLf & "Use Properties form to setup one.", vbOKOnly + vbExclamation, "EuroSound")

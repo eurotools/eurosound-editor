@@ -43,9 +43,9 @@ Public Class Frm_MakePurgeList
         Dim samplesToPrint As New HashSet(Of String)
 
         'Get all SFXs
-        Dim sfxFilesToInspect As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "SFXs"), "*.txt")
-        Dim outputFilePath As String = fso.BuildPath(WorkingDirectory, "Report")
-        CreateFolderIfRequired(outputFilePath)
+        Dim sfxFilesToInspect As String() = Directory.GetFiles(Path.Combine(WorkingDirectory, "SFXs"), "*.txt")
+        Dim outputFilePath As String = Path.Combine(WorkingDirectory, "Report")
+        Directory.CreateDirectory(outputFilePath)
 
         'Get a list of all available formats
         Dim availablePlatforms As New List(Of String)({"Common"})
@@ -58,7 +58,7 @@ Public Class Frm_MakePurgeList
             Dim currentPlatform As String = availablePlatforms(platformIndex)
             For fileIndex As Integer = 0 To samplesCount
                 'Read samples
-                Dim sfxFileName As String = GetOnlyFileName(sfxFilesToInspect(fileIndex))
+                Dim sfxFileName As String = Path.GetFileNameWithoutExtension(sfxFilesToInspect(fileIndex))
                 Invoke(Sub() Text = "Creating Sample List " & currentPlatform & " " & sfxFileName)
                 'Calculate and report progress
                 Dim previousCounts = samplesCount * platformIndex
@@ -66,12 +66,12 @@ Public Class Frm_MakePurgeList
                 'Get File Path
                 Dim sfxFilePath As String
                 If StrComp(currentPlatform, "Common", CompareMethod.Binary) = 0 Then
-                    sfxFilePath = fso.BuildPath(WorkingDirectory, "SFXs\" & sfxFileName & ".txt")
+                    sfxFilePath = Path.Combine(WorkingDirectory, "SFXs", sfxFileName & ".txt")
                 Else
-                    sfxFilePath = fso.BuildPath(WorkingDirectory, "SFXs\" & currentPlatform & "\" & sfxFileName & ".txt")
+                    sfxFilePath = Path.Combine(WorkingDirectory, "SFXs", currentPlatform, sfxFileName & ".txt")
                 End If
                 'Get samples
-                If fso.FileExists(sfxFilePath) Then
+                If File.Exists(sfxFilePath) Then
                     Dim sfxData As SfxFile = textFileReaders.ReadSFXFile(sfxFilesToInspect(fileIndex))
                     For sampleIndex As Integer = 0 To sfxData.Samples.Count - 1
                         Dim currentSample = sfxData.Samples(sampleIndex)
@@ -82,7 +82,7 @@ Public Class Frm_MakePurgeList
         Next
 
         'Print items to file
-        FileOpen(2, fso.BuildPath(outputFilePath, "Last_Purge.txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
+        FileOpen(2, Path.Combine(outputFilePath, "Last_Purge.txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
         PrintLine(2, "Purged File List Created: 	" & Date.Now.ToString("MM/dd/yyyy") & "	" & Date.Now.ToString("HH:mm:ss"))
         PrintLine(2, "")
         PrintLine(2, "#PurgedFileList")

@@ -1,4 +1,5 @@
-﻿Imports sb_editor.ParsersObjects
+﻿Imports System.IO
+Imports sb_editor.ParsersObjects
 
 Partial Public Class MainFrame
     Private Sub DeleteDatabaseFromSoundbank(soundbankNode As TreeNode, fileName As String)
@@ -24,10 +25,10 @@ Partial Public Class MainFrame
         Dim soundbankObj As New SoundbankFile With {
             .HashCode = SoundBankHashCodeNumber
         }
-        writers.UpdateSoundbankFile(soundbankObj, fso.BuildPath(WorkingDirectory, "Soundbanks\" & soundbankName & ".txt"), textFileReaders)
+        writers.UpdateSoundbankFile(soundbankObj, Path.Combine(WorkingDirectory, "Soundbanks", soundbankName & ".txt"), textFileReaders)
         'Update global var
         SoundBankHashCodeNumber += 1
-        writers.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
+        writers.UpdateMiscFile(Path.Combine(WorkingDirectory, "System", "Misc.txt"))
         'Sort control
         TreeView_SoundBanks.Sort()
         'Expand node
@@ -45,12 +46,12 @@ Partial Public Class MainFrame
         nodeToAdd.Name = SoundBankHashCodeNumber
         TreeView_SoundBanks.Nodes.Add(nodeToAdd)
         'Create text file
-        Dim soundbankFileData As SoundbankFile = textFileReaders.ReadSoundBankFile(fso.BuildPath(WorkingDirectory, "Soundbanks\" & sourceSoundbankNode.Text & ".txt"))
+        Dim soundbankFileData As SoundbankFile = textFileReaders.ReadSoundBankFile(Path.Combine(WorkingDirectory, "Soundbanks", sourceSoundbankNode.Text & ".txt"))
         soundbankFileData.HashCode = SoundBankHashCodeNumber
-        writers.UpdateSoundbankFile(soundbankFileData, fso.BuildPath(WorkingDirectory, "Soundbanks\" & soundbankName & ".txt"), textFileReaders)
+        writers.UpdateSoundbankFile(soundbankFileData, Path.Combine(WorkingDirectory, "Soundbanks", soundbankName & ".txt"), textFileReaders)
         'Update global var
         SoundBankHashCodeNumber += 1
-        writers.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
+        writers.UpdateMiscFile(Path.Combine(WorkingDirectory, "System", "Misc.txt"))
         'Sort control
         TreeView_SoundBanks.Sort()
         'Expand node
@@ -62,8 +63,8 @@ Partial Public Class MainFrame
     End Sub
 
     Private Sub AddDatabaseToSoundbank(dataBasesToAdd As List(Of String), soundBank As TreeNode)
-        Dim soundbankFilePath As String = fso.BuildPath(WorkingDirectory, "Soundbanks\" & soundBank.Text & ".txt")
-        If fso.FileExists(soundbankFilePath) Then
+        Dim soundbankFilePath As String = Path.Combine(WorkingDirectory, "Soundbanks", soundBank.Text & ".txt")
+        If File.Exists(soundbankFilePath) Then
             'Read file data 
             Dim soundbankData As SoundbankFile = textFileReaders.ReadSoundBankFile(soundbankFilePath)
             If soundbankData IsNot Nothing Then

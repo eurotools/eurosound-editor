@@ -17,13 +17,13 @@ Module ProgramMainModule
     '*===============================================================================================
     Friend Sub LoadSystemFilesIni()
         'Load Ini file
-        If fso.FileExists(EuroSoundIniFilePath) Then
+        If File.Exists(EuroSoundIniFilePath) Then
             Dim baseIniFunctions As New IniFile(EuroSoundIniFilePath)
             WorkingDirectory = baseIniFunctions.Read("Last_Project_Opened", "Form1_Misc")
-            SysFileSamples = fso.BuildPath(WorkingDirectory, "System\Samples.txt")
-            SysFileProperties = fso.BuildPath(WorkingDirectory, "System\Properties.txt")
+            SysFileSamples = Path.Combine(WorkingDirectory, "System", "Samples.txt")
+            SysFileProperties = Path.Combine(WorkingDirectory, "System", "Properties.txt")
             ProjAudioEditor = baseIniFunctions.Read("Edit_Wavs_With", "Form7_Misc")
-            SysFileSfxDefaults = fso.BuildPath(WorkingDirectory, "System\SFX Defaults.txt")
+            SysFileSfxDefaults = Path.Combine(WorkingDirectory, "System", "SFX Defaults.txt")
             EuroSoundUser = baseIniFunctions.Read("UserName", "Form1_Misc")
             ProjTextEditor = baseIniFunctions.Read("TextEditor", "PropertiesForm")
         End If
@@ -36,9 +36,9 @@ Module ProgramMainModule
         'Load program last state
         If SysFileProjectIniPath > "" Then
             Dim iniFunctions As New IniFile(SysFileProjectIniPath)
-            mainform.RadioButton_AllBanksSelectedFormat.Checked = StrComp(iniFunctions.Read("AllBanksOption_Value", "Form1_Misc"), "True") = 0
-            mainform.RadioButton_Output_SelectedSoundBank.Checked = StrComp(iniFunctions.Read("SelectedlBankOption_Value", "Form1_Misc"), "True") = 0
-            mainform.RadioButton_Output_AllBanksAll.Checked = StrComp(iniFunctions.Read("AllFormatsOption_Value", "Form1_Misc"), "True") = 0
+            mainform.RadioButton_AllBanksSelectedFormat.Checked = iniFunctions.Read("AllBanksOption_Value", "Form1_Misc").Equals("True", StringComparison.OrdinalIgnoreCase)
+            mainform.RadioButton_Output_SelectedSoundBank.Checked = iniFunctions.Read("SelectedlBankOption_Value", "Form1_Misc").Equals("True", StringComparison.OrdinalIgnoreCase)
+            mainform.RadioButton_Output_AllBanksAll.Checked = iniFunctions.Read("AllFormatsOption_Value", "Form1_Misc").Equals("True", StringComparison.OrdinalIgnoreCase)
             Dim tempVar As String = iniFunctions.Read("Check1", "MainForm")
             If Not tempVar = "" Then
                 mainform.CheckBox_FastReSample.Checked = Convert.ToBoolean(CByte(tempVar))
@@ -109,14 +109,14 @@ Module ProgramMainModule
     '*===============================================================================================
     Friend Sub UpdateGlobalVariables()
         'Update System Files variables
-        SysFileSamples = fso.BuildPath(WorkingDirectory, "System\Samples.txt")
-        SysFileProperties = fso.BuildPath(WorkingDirectory, "System\Properties.txt")
-        SysFileSfxDefaults = fso.BuildPath(WorkingDirectory, "System\SFX Defaults.txt")
-        SysFileProjectIniPath = fso.BuildPath(WorkingDirectory, "System\EuroSound.ini")
+        SysFileSamples = Path.Combine(WorkingDirectory, "System", "Samples.txt")
+        SysFileProperties = Path.Combine(WorkingDirectory, "System", "Properties.txt")
+        SysFileSfxDefaults = Path.Combine(WorkingDirectory, "System", "SFX Defaults.txt")
+        SysFileProjectIniPath = Path.Combine(WorkingDirectory, "System", "EuroSound.ini")
 
         'Load misc properties
-        Dim miscFilePath As String = fso.BuildPath(WorkingDirectory, "System\Misc.txt")
-        If fso.FileExists(miscFilePath) Then
+        Dim miscFilePath As String = Path.Combine(WorkingDirectory, "System", "Misc.txt")
+        If File.Exists(miscFilePath) Then
             textFileReaders.ReadMiscFile(miscFilePath)
         End If
     End Sub
@@ -132,21 +132,23 @@ Module ProgramMainModule
         mainform.UserControl_SFXs.ListBox_SFXs.Items.Clear()
 
         'Get All SoundBanks
-        Dim soundBanksFilePath As String = fso.BuildPath(WorkingDirectory, "SoundBanks")
+        Dim soundBanksFilePath As String = Path.Combine(WorkingDirectory, "SoundBanks")
         Dim availableSoundBanks As String() = GetFolderFiles(soundBanksFilePath)
         LoadSoundBanks(availableSoundBanks, mainform)
+
         'Update counter label
         mainform.Label_SoundBanksCount.Text = "Total: " & mainform.TreeView_SoundBanks.Nodes.Count
 
         'Get All DataBases
-        Dim databasesFilePath As String = fso.BuildPath(WorkingDirectory, "DataBases")
+        Dim databasesFilePath As String = Path.Combine(WorkingDirectory, "DataBases")
         Dim availableDataBases As String() = GetFolderFiles(databasesFilePath)
         mainform.ListBox_DataBases.BeginUpdate()
         mainform.ListBox_DataBases.Items.AddRange(availableDataBases)
         mainform.ListBox_DataBases.EndUpdate()
         mainform.Label_DataBasesCount.Text = "Total: " & mainform.ListBox_DataBases.Items.Count
+
         'Create project file
-        Dim temporalFile As String = fso.BuildPath(WorkingDirectory, "System\TempFileName.txt")
+        Dim temporalFile As String = Path.Combine(WorkingDirectory, "System", "TempFileName.txt")
         writers.CreateProjectFile(temporalFile, availableSoundBanks, availableDataBases, Nothing)
 
         'Load Hashcodes
@@ -183,11 +185,11 @@ Module ProgramMainModule
         Dim folderFiles As New List(Of String)
 
         'Get file path and ensure that exists
-        If fso.FolderExists(folderToInspect) Then
+        If Directory.Exists(folderToInspect) Then
             'Load data and create a list
             Dim soundBankFiles As String() = Directory.GetFiles(folderToInspect, "*.txt", SearchOption.TopDirectoryOnly)
             For fileIndex As Integer = 0 To soundBankFiles.Length - 1
-                folderFiles.Add(GetOnlyFileName(soundBankFiles(fileIndex)))
+                folderFiles.Add(Path.GetFileNameWithoutExtension(soundBankFiles(fileIndex)))
             Next
         End If
 
@@ -204,14 +206,14 @@ Module ProgramMainModule
     Private Sub LoadSoundBanks(availableSoundBanks As String(), mainform As MainFrame)
         mainform.TreeView_SoundBanks.BeginUpdate()
         For fileIndex As Integer = 0 To availableSoundBanks.Length - 1
-            Dim soundBankFileName As String = Trim(availableSoundBanks(fileIndex))
-            Dim soundBankFilePath As String = fso.BuildPath(WorkingDirectory & "\SoundBanks", soundBankFileName & ".txt")
+            Dim soundBankFileName As String = availableSoundBanks(fileIndex).Trim
+            Dim soundBankFilePath As String = Path.Combine(WorkingDirectory, "SoundBanks", soundBankFileName & ".txt")
             Dim soundBankFileData As SoundbankFile = textFileReaders.ReadSoundBankFile(soundBankFilePath)
 
             'Create SoundBank node
             Dim parentNode As TreeNode = mainform.TreeView_SoundBanks.Nodes.Add(CStr(soundBankFileData.HashCode), soundBankFileName, 0, 0)
             For dataBaseIndex As Integer = 0 To soundBankFileData.Dependencies.Length - 1
-                Dim dataBaseName As String = Trim(soundBankFileData.Dependencies(dataBaseIndex))
+                Dim dataBaseName As String = soundBankFileData.Dependencies(dataBaseIndex).Trim
                 parentNode.Nodes.Add(dataBaseName, dataBaseName, 2, 2)
             Next
 
@@ -228,19 +230,22 @@ Module ProgramMainModule
     '*===============================================================================================
     Friend Sub AddProjectLanguagesToCombo(comboboxToModify As ComboBox)
         'Get project languages
-        If Dir(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\Speech"), FileAttribute.Directory) IsNot "" Then
-            Dim languages As String() = Directory.GetDirectories(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\Speech"))
+        If Directory.Exists(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", "Speech")) Then
+            Dim languages As String() = Directory.GetDirectories(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", "Speech"))
+
             'Previous Selected Index
             Dim comboPrevSelection As String = comboboxToModify.SelectedItem
+
             'Add folders to combobox
             comboboxToModify.BeginUpdate()
             comboboxToModify.Items.Clear()
             For index As Integer = 0 To languages.Length - 1
-                Dim folderName As String = Trim(StrConv(New DirectoryInfo(languages(index)).Name, vbProperCase))
+                Dim folderName As String = StrConv(New DirectoryInfo(languages(index)).Name, vbProperCase).Trim
                 If Array.IndexOf(SfxLanguages, folderName) <> -1 Then
                     comboboxToModify.Items.Add(folderName)
                 End If
             Next
+
             'Keep the previous selection
             If comboPrevSelection IsNot Nothing Then
                 If comboboxToModify.Items.Contains(comboPrevSelection) Then
@@ -254,14 +259,17 @@ Module ProgramMainModule
     Friend Sub AddAvailableFormatsToCombobox(comboboxToModify As ComboBox)
         'Previous Selected Index
         Dim comboPrevSelection As String = comboboxToModify.SelectedItem
+
         'Add all formats to combobox
         comboboxToModify.BeginUpdate()
         comboboxToModify.Items.Clear()
         comboboxToModify.Items.AddRange(ProjectSettingsFile.sampleRateFormats.Keys.ToArray)
+
         'Select first item
         If comboboxToModify.Items.Count > 0 AndAlso MainFrame.ComboBox_Format.SelectedIndex = -1 Then
             comboboxToModify.SelectedIndex = 0
         End If
+
         'Keep the previous selection
         If comboPrevSelection IsNot Nothing Then
             If comboboxToModify.Items.Contains(comboPrevSelection) Then
@@ -279,7 +287,7 @@ Module ProgramMainModule
         If destinationFrequency < currentFrequency Then
             RunProcess("SystemFiles\Sox.exe", """" & inputFile & """ -r " & destinationFrequency & " """ & outputFile & """  resample -qs 0.97")
         Else
-            fso.CopyFile(inputFile, outputFile)
+            File.Copy(inputFile, outputFile, True)
         End If
     End Sub
 
@@ -289,6 +297,7 @@ Module ProgramMainModule
         Using waveReader As New WaveFileReader(inputFile)
             currentFrequency = waveReader.WaveFormat.SampleRate
         End Using
+
         'Split and ReSample channels
         If destinationFrequency < currentFrequency Then
             RunProcess("SystemFiles\Sox.exe", """" & inputFile & """ -c 1 -r 32000 """ & outputLFilePath & """ resample -qs 0.97 avg -l")

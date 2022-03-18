@@ -5,7 +5,7 @@ Imports sb_editor.SoundBanksExporterFunctions
 Partial Public Class AdvancedMenu
     Private Function GetMaxHashCode(folderPath As String) As Integer
         Dim hashcodeNumber As Integer = 1
-        If fso.FolderExists(folderPath) Then
+        If Directory.Exists(folderPath) Then
             Dim filesToCheck As String() = Directory.GetFiles(folderPath, "*.txt", SearchOption.TopDirectoryOnly)
             For index As Integer = 0 To filesToCheck.Length - 1
                 Dim fileData As String() = File.ReadAllLines(filesToCheck(index))
@@ -94,8 +94,8 @@ Partial Public Class AdvancedMenu
         For databaseIndex As Integer = 0 To soundBankData.Dependencies.Length - 1
             'Get Database Data
             Dim currentDataBase As String = soundBankData.Dependencies(databaseIndex)
-            Dim dataBaseFilePath As String = fso.BuildPath(WorkingDirectory & "\DataBases\", currentDataBase & ".txt")
-            If fso.FileExists(dataBaseFilePath) Then
+            Dim dataBaseFilePath As String = Path.Combine(WorkingDirectory, "DataBases", currentDataBase & ".txt")
+            If File.Exists(dataBaseFilePath) Then
                 Dim dataBaseSFXs As DataBaseFile = readers.ReadDataBaseFile(dataBaseFilePath)
                 PrintLine(2, "DataBase: 	" & currentDataBase)
                 'Get SFXs in this DataBase
@@ -128,7 +128,7 @@ Partial Public Class AdvancedMenu
             Dim soundBankSize As String
             Dim formatSamplesList As String() = GetFinalList(soundBankSamplesList, streamSamplesList, currentFormat)
             'Get SoundBank Size
-            Dim formatSamplesFolder As String = fso.BuildPath(WorkingDirectory, currentFormat & "\SoundBanks\" & OutputLanguage & "\" & soundBankData.HashCode & ".sbf")
+            Dim formatSamplesFolder As String = Path.Combine(WorkingDirectory, currentFormat, "SoundBanks", OutputLanguage, soundBankData.HashCode & ".sbf")
             totalSampleSize += formatSamplesList.Length
             soundBankSize = BytesStringFormat(GetEstimatedPlatformSizeNoMaster(formatSamplesList, currentFormat)) & " - ESTIMATED"
             'Add format to dictionary
@@ -142,11 +142,11 @@ Partial Public Class AdvancedMenu
         Dim Samples As New List(Of String)
         For sfxIndex As Integer = 0 To soundBankSFXs.Length - 1
             'Open file
-            Dim filePath As String = fso.BuildPath(WorkingDirectory, "SFXs\" & soundBankSFXs(sfxIndex) & ".txt")
-            If fso.FileExists(filePath) Then
+            Dim filePath As String = Path.Combine(WorkingDirectory, "SFXs", soundBankSFXs(sfxIndex) & ".txt")
+            If File.Exists(filePath) Then
                 Dim sfxFileData As SfxFile = readers.ReadSFXFile(filePath)
                 For sampleIndex As Integer = 0 To sfxFileData.Samples.Count - 1
-                    Samples.Add(UCase(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\" & sfxFileData.Samples(sampleIndex).FilePath)))
+                    Samples.Add(UCase(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\" & sfxFileData.Samples(sampleIndex).FilePath)))
                 Next
             End If
         Next

@@ -1,19 +1,20 @@
-﻿Imports NAudio.Wave
+﻿Imports System.IO
+Imports NAudio.Wave
 Imports sb_editor.HashTablesBuilder
 
 Partial Public Class MusicsExporter
     Private Sub BuildMusicHashTables(hashCodesCollection As SortedDictionary(Of String, UInteger))
         Dim hashTablesFunctions As New MfxDefines
         Dim numIteration As Integer = 0
-        Dim musicDefinesFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "MFX_Defines.h")
+        Dim musicDefinesFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "MFX_Defines.h")
         hashTablesFunctions.CreateMfxHashTable(musicDefinesFilePath, hashCodesCollection)
         For Each musicItem As KeyValuePair(Of String, UInteger) In hashCodesCollection
             'Update Title and progress bar
             Invoke(Sub() Text = "Appending Jump HashCodes: " & musicItem.Key)
             BackgroundWorker.ReportProgress(Decimal.Divide(numIteration, hashCodesCollection.Count) * 100.0)
             'Create jump files
-            Dim jumpMarkersFilePath As String = fso.BuildPath(WorkingDirectory, "Music\ESWork\" & musicItem.Key & ".jmp")
-            If fso.FileExists(jumpMarkersFilePath) Then
+            Dim jumpMarkersFilePath As String = Path.Combine(WorkingDirectory, "Music", "ESWork", musicItem.Key & ".jmp")
+            If File.Exists(jumpMarkersFilePath) Then
                 Dim jumpHashCodes As String() = textFileReaders.ReadJumpFile(jumpMarkersFilePath)
                 'Append data
                 FileOpen(1, musicDefinesFilePath, OpenMode.Append)
@@ -31,21 +32,21 @@ Partial Public Class MusicsExporter
 
         'Create MFX Data
         Dim dataDictionary As Dictionary(Of UInteger, String()) = GetMfxDataDict(hashCodesCollection)
-        Dim musicDataFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "MFX_Data.h")
+        Dim musicDataFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "MFX_Data.h")
         hashTablesFunctions.CreateMfxData(musicDataFilePath, dataDictionary)
 
         'Create Valid list
         Invoke(Sub() ProgressBar1.Value = 0)
         numIteration = 0
-        Dim musicValidListFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "MFX_ValidList.h")
+        Dim musicValidListFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "MFX_ValidList.h")
         Dim jumpHashCodesDictionary As New Dictionary(Of UInteger, String)
         For Each musicItem As KeyValuePair(Of String, UInteger) In hashCodesCollection
             'Update title bar and progress bar
             Invoke(Sub() Text = "Creating MFX Valid List: " & musicItem.Key)
             BackgroundWorker.ReportProgress(Decimal.Divide(numIteration, hashCodesCollection.Count) * 100.0)
             'Get all jump marker files and store it in the dictionary
-            Dim jumpMarkersFilePath As String = fso.BuildPath(WorkingDirectory, "Music\ESWork\" & musicItem.Key & ".jmp")
-            If fso.FileExists(jumpMarkersFilePath) Then
+            Dim jumpMarkersFilePath As String = Path.Combine(WorkingDirectory, "Music", "ESWork", musicItem.Key & ".jmp")
+            If File.Exists(jumpMarkersFilePath) Then
                 Dim jumpHashCodes As String() = textFileReaders.ReadJumpFile(jumpMarkersFilePath)
                 For jumpHashCode As Integer = 0 To jumpHashCodes.Length - 1
                     Dim mfxHashCode As Short = musicItem.Value
@@ -66,7 +67,7 @@ Partial Public Class MusicsExporter
 
         'Dictionary Data
         For Each rowData As KeyValuePair(Of String, UInteger) In hashCodesCollection
-            Dim filePath As String = fso.BuildPath(WorkingDirectory, "Music\" & rowData.Key & ".wav")
+            Dim filePath As String = Path.Combine(WorkingDirectory, "Music", rowData.Key & ".wav")
             Using waveReader As New WaveFileReader(filePath)
                 Dim duration As Single = (waveReader.Length / waveReader.WaveFormat.AverageBytesPerSecond) + 0.0
                 Dim stringDuration As String

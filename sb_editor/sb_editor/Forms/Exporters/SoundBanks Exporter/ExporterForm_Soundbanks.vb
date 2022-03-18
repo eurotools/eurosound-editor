@@ -6,8 +6,8 @@ Imports sb_editor.SoundBanksExporterFunctions
 Partial Public Class ExporterForm
     Public Sub OutputSoundbanks(hashCodesList As SortedDictionary(Of String, UInteger), soundbanksList As String(), streamsList As String(), outLanguages As String(), outPlatforms As String(), ByRef AbortOutput As Boolean)
         'Debug Folder
-        Dim debugFolder As String = fso.BuildPath(WorkingDirectory, "Debug_Report")
-        CreateFolderIfRequired(debugFolder)
+        Dim debugFolder As String = Path.Combine(WorkingDirectory, "Debug_Report")
+        Directory.CreateDirectory(debugFolder)
 
         'Reset progress bar
         Invoke(Sub() ProgressBar1.Value = 0)
@@ -18,9 +18,9 @@ Partial Public Class ExporterForm
                 'Calculate and report progress
                 BackgroundWorker.ReportProgress(Decimal.Divide(soundBankIndex, soundbanksList.Length) * 100.0)
                 Dim currentSoundBank As String = soundbanksList(soundBankIndex)
-                Dim soundbankFilePath As String = fso.BuildPath(WorkingDirectory & "\SoundBanks", currentSoundBank & ".txt")
+                Dim soundbankFilePath As String = Path.Combine(WorkingDirectory, "SoundBanks", currentSoundBank & ".txt")
                 'Read soundbank file
-                If fso.FileExists(soundbankFilePath) Then
+                If File.Exists(soundbankFilePath) Then
                     Dim soundBankInfo As SoundbankFile = textFileReaders.ReadSoundBankFile(soundbankFilePath)
                     'For each Language
                     For languageIndex As Integer = 0 To outLanguages.Length - 1
@@ -40,8 +40,8 @@ Partial Public Class ExporterForm
                                 Invoke(Sub() Text = "Outputting " & currentLanguage & " SoundBank " & currentSoundBank & " for " & currentPlatform)
 
                                 'Get output folder
-                                Dim outputFolder As String = fso.BuildPath(WorkingDirectory, "TempOutputFolder\" & currentPlatform & "\SoundBanks\" & currentLanguage)
-                                CreateFolderIfRequired(outputFolder)
+                                Dim outputFolder As String = Path.Combine(WorkingDirectory, "TempOutputFolder", currentPlatform, "SoundBanks", currentLanguage)
+                                Directory.CreateDirectory(outputFolder)
 
                                 'Get SFX and samples list
                                 Dim samplesToInclude As New HashSet(Of String)
@@ -61,24 +61,24 @@ Partial Public Class ExporterForm
                                 'Skip if there are samples missing
                                 If Not CancelSoundBankOutput Then
                                     'Get file paths
-                                    Dim sfxFilePath As String = fso.BuildPath(outputFolder, soundBankInfo.HashCode & ".sfx")
-                                    Dim sifFilePath As String = fso.BuildPath(outputFolder, soundBankInfo.HashCode & ".sif")
-                                    Dim ssfFilePath As String = fso.BuildPath(outputFolder, soundBankInfo.HashCode & ".ssf")
-                                    Dim sbfFilePath As String = fso.BuildPath(outputFolder, soundBankInfo.HashCode & ".sbf")
+                                    Dim sfxFilePath As String = Path.Combine(outputFolder, soundBankInfo.HashCode & ".sfx")
+                                    Dim sifFilePath As String = Path.Combine(outputFolder, soundBankInfo.HashCode & ".sif")
+                                    Dim ssfFilePath As String = Path.Combine(outputFolder, soundBankInfo.HashCode & ".ssf")
+                                    Dim sbfFilePath As String = Path.Combine(outputFolder, soundBankInfo.HashCode & ".sbf")
 
                                     'Get output file paths
                                     Dim sfxFileName As String = "HC" & Hex(GetSfxFileName(Array.IndexOf(SfxLanguages, currentLanguage), soundBankInfo.HashCode)).PadLeft(6, "0"c)
-                                    Dim outputFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary\" & GetEngineXFolder(currentPlatform) & "\" & GetEngineXLangFolder(currentLanguage))
-                                    Dim sampleBankFilePath As String = fso.BuildPath(outputFilePath, sfxFileName & ".SFX")
-                                    CreateFolderIfRequired(outputFilePath)
+                                    Dim outputFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder(currentPlatform), GetEngineXLangFolder(currentLanguage))
+                                    Dim sampleBankFilePath As String = Path.Combine(outputFilePath, sfxFileName & ".SFX")
+                                    Directory.CreateDirectory(outputFilePath)
 
                                     'Get bank max size
                                     Dim bankSize As Long = GetSoundBankMaxSize(currentPlatform, soundBankInfo) * 1024
 
                                     'Debug file
-                                    Dim debugFile As String = fso.BuildPath(WorkingDirectory, "Debug_Report")
-                                    CreateFolderIfRequired(debugFile)
-                                    FileOpen(1, fso.BuildPath(debugFile, "StreamDebugSoundBank_" & currentSoundBank & "_" & currentPlatform & "_" & currentLanguage & ".txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
+                                    Dim debugFile As String = Path.Combine(WorkingDirectory, "Debug_Report")
+                                    Directory.CreateDirectory(debugFile)
+                                    FileOpen(1, Path.Combine(debugFile, "StreamDebugSoundBank_" & currentSoundBank & "_" & currentPlatform & "_" & currentLanguage & ".txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
                                     PrintLine(1, "SoundBank Output Debug Data")
                                     PrintLine(1, Format(Now, "dd/mm/yyy"))
                                     PrintLine(1, Format(Now, "hh:mm:ss"))
@@ -106,10 +106,10 @@ Partial Public Class ExporterForm
                                         Dim fileSize As Long = FileLen(sbfFilePath)
                                         If fileSize > bankSize Then
                                             'Delete files
-                                            fso.DeleteFile(sbfFilePath)
-                                            fso.DeleteFile(ssfFilePath)
-                                            fso.DeleteFile(sifFilePath)
-                                            fso.DeleteFile(sfxFilePath)
+                                            File.Delete(sbfFilePath)
+                                            File.Delete(ssfFilePath)
+                                            File.Delete(sifFilePath)
+                                            File.Delete(sfxFilePath)
                                             'Inform user
                                             Dim stringHeader As String = "Sample Bank Limit Exceeded With:" & vbCrLf & vbCrLf & "SoundBank: " & currentSoundBank & vbCrLf & "Format: " & currentPlatform
                                             MsgBox(stringHeader & vbCrLf & "My Size: " & BytesStringFormat(fileSize) & vbCrLf & "My Max Size: " & BytesStringFormat(bankSize) & vbCrLf & vbCrLf & "Output Aborted and Files Deleted.", vbOKOnly + vbCritical, "Fatal Output Error!")
@@ -131,9 +131,9 @@ Partial Public Class ExporterForm
                                         Dim fileSize As Long = FileLen(sbfFilePath) - 4024
                                         If fileSize > bankSize Then
                                             'Delete files
-                                            fso.DeleteFile(sbfFilePath)
-                                            fso.DeleteFile(sifFilePath)
-                                            fso.DeleteFile(sfxFilePath)
+                                            File.Delete(sbfFilePath)
+                                            File.Delete(sifFilePath)
+                                            File.Delete(sfxFilePath)
                                             'Inform user
                                             Dim stringHeader As String = "Sample Bank Limit Exceeded With:" & vbCrLf & vbCrLf & "SoundBank: " & currentSoundBank & vbCrLf & "Format: " & currentPlatform
                                             MsgBox(stringHeader & vbCrLf & "My Size: " & BytesStringFormat(fileSize) & vbCrLf & "My Max Size: " & BytesStringFormat(bankSize) & vbCrLf & vbCrLf & "Output Aborted and Files Deleted.", vbOKOnly + vbCritical, "Fatal Output Error!")

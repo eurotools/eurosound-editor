@@ -23,11 +23,11 @@ Partial Public Class AdvancedMenu
                     selectedSoundBank = mainFrame.TreeView_SoundBanks.SelectedNode.Text
                 End If
                 'Output folder
-                Dim outputFolder As String = fso.BuildPath(WorkingDirectory, "Report")
-                CreateFolderIfRequired(outputFolder)
+                Dim outputFolder As String = Path.Combine(WorkingDirectory, "Report")
+                Directory.CreateDirectory(outputFolder)
                 'Ensure that the SoundBank Exists
-                Dim soundBankFilePath As String = fso.BuildPath(WorkingDirectory & "\SoundBanks", selectedSoundBank & ".txt")
-                If fso.FileExists(soundBankFilePath) Then
+                Dim soundBankFilePath As String = Path.Combine(WorkingDirectory, "SoundBanks", selectedSoundBank & ".txt")
+                If File.Exists(soundBankFilePath) Then
                     Cursor.Current = Cursors.WaitCursor
                     'Output Language
                     Dim outLanguage As String = "English"
@@ -39,7 +39,7 @@ Partial Public Class AdvancedMenu
                     If mainFrame.ComboBox_Format.SelectedItem IsNot Nothing Then
                         outLanguage = mainFrame.ComboBox_Format.SelectedItem
                     End If
-                    CreateSFXReportFile(fso.BuildPath(outputFolder, selectedSoundBank & ".txt"), selectedSoundBank, soundBankFilePath, outFormat, outLanguage)
+                    CreateSFXReportFile(Path.Combine(outputFolder, selectedSoundBank & ".txt"), selectedSoundBank, soundBankFilePath, outFormat, outLanguage)
                     Cursor.Current = Cursors.Default
                 End If
             End If
@@ -53,11 +53,11 @@ Partial Public Class AdvancedMenu
         Dim availableHashcode As New Dictionary(Of UInteger, String)
         Dim duplicatedHashcodes As New List(Of String)
 
-        Dim baseDir As String = fso.BuildPath(WorkingDirectory, "SFXs")
-        If fso.FolderExists(baseDir) Then
+        Dim baseDir As String = Path.Combine(WorkingDirectory, "SFXs")
+        If Directory.Exists(baseDir) Then
             Dim fileNameWithExtension As String = Dir(baseDir & "\*.txt", FileAttribute.Archive)
             Do While fileNameWithExtension > ""
-                Dim sfxFilePath As String = fso.BuildPath(WorkingDirectory & "\SFXs\", fileNameWithExtension)
+                Dim sfxFilePath As String = Path.Combine(WorkingDirectory, "SFXs", fileNameWithExtension)
                 'Read SFX file as a string array
                 Dim fileData As String() = File.ReadAllLines(sfxFilePath)
                 Dim hashcodeIndex As Integer = Array.IndexOf(fileData, "#HASHCODE")
@@ -79,7 +79,7 @@ Partial Public Class AdvancedMenu
                                 fileData(hashcodeIndex + 1) = "HashCodeNumber " & hashcodeNumber
                                 File.WriteAllLines(sfxFilePath, fileData)
                             End If
-                            duplicatedHashcodes.Add(GetOnlyFileName(fileNameWithExtension))
+                            duplicatedHashcodes.Add(Path.GetFileNameWithoutExtension(fileNameWithExtension))
                         Else
                             availableHashcode.Add(hashcodeNumber, fileNameWithExtension)
                         End If
@@ -102,39 +102,39 @@ Partial Public Class AdvancedMenu
     '* RE-ALLOCATE HASHCODES
     '*===============================================================================================
     Private Sub Button_ReAllocateHashcodes_Click(sender As Object, e As EventArgs) Handles Button_ReAllocateHashcodes.Click
-        If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System")) Then
+        If Directory.Exists(Path.Combine(WorkingDirectory, "System")) Then
             'Set cursor as hourglass
             Cursor.Current = Cursors.WaitCursor
             '-----------------------------------------Reallocate SFX Files-----------------------------------------
-            Dim sfxFilePath As String = fso.BuildPath(WorkingDirectory, "SFXs")
-            If fso.FolderExists(sfxFilePath) Then
+            Dim sfxFilePath As String = Path.Combine(WorkingDirectory, "SFXs")
+            If Directory.Exists(sfxFilePath) Then
                 'Reset variable
                 SFXHashCodeNumber = 1
                 'Get and modify files
                 Dim sfxFilesToCheck As String() = Directory.GetFiles(sfxFilePath, "*.txt", SearchOption.TopDirectoryOnly)
                 For fileIndex As Integer = 0 To sfxFilesToCheck.Length - 1
                     Dim currentFilePath As String = sfxFilesToCheck(fileIndex)
-                    Dim sfxFileName As String = GetOnlyFileName(currentFilePath)
+                    Dim sfxFileName As String = Path.GetFileNameWithoutExtension(currentFilePath)
                     '---------------------------Common
                     WriteSfxFile(currentFilePath)
                     '---------------------------GameCube
-                    Dim gameCubeFilePath As String = fso.BuildPath(sfxFilePath, "GameCube\" & sfxFileName & ".txt")
-                    If fso.FileExists(gameCubeFilePath) Then
+                    Dim gameCubeFilePath As String = Path.Combine(sfxFilePath, "GameCube", sfxFileName & ".txt")
+                    If File.Exists(gameCubeFilePath) Then
                         WriteSfxFile(gameCubeFilePath)
                     End If
                     '---------------------------PC
-                    Dim PCFilePath As String = fso.BuildPath(sfxFilePath, "PC\" & sfxFileName & ".txt")
-                    If fso.FileExists(PCFilePath) Then
+                    Dim PCFilePath As String = Path.Combine(sfxFilePath, "PC", sfxFileName & ".txt")
+                    If File.Exists(PCFilePath) Then
                         WriteSfxFile(PCFilePath)
                     End If
                     '---------------------------PlayStation2
-                    Dim PlayStation2FilePath As String = fso.BuildPath(sfxFilePath, "PlayStation2\" & sfxFileName & ".txt")
-                    If fso.FileExists(PlayStation2FilePath) Then
+                    Dim PlayStation2FilePath As String = Path.Combine(sfxFilePath, "PlayStation2", sfxFileName & ".txt")
+                    If File.Exists(PlayStation2FilePath) Then
                         WriteSfxFile(PlayStation2FilePath)
                     End If
                     '---------------------------X Box
-                    Dim xboxFilePath As String = fso.BuildPath(sfxFilePath, "X Box\" & sfxFileName & ".txt")
-                    If fso.FileExists(xboxFilePath) Then
+                    Dim xboxFilePath As String = Path.Combine(sfxFilePath, "X Box", sfxFileName & ".txt")
+                    If File.Exists(xboxFilePath) Then
                         WriteSfxFile(xboxFilePath)
                     End If
                     'Update variable
@@ -143,8 +143,8 @@ Partial Public Class AdvancedMenu
             End If
 
             '-----------------------------------------Reallocate Soundbank Files-----------------------------------------
-            Dim soundbankFilePath As String = fso.BuildPath(WorkingDirectory, "SoundBanks")
-            If fso.FolderExists(soundbankFilePath) Then
+            Dim soundbankFilePath As String = Path.Combine(WorkingDirectory, "SoundBanks")
+            If Directory.Exists(soundbankFilePath) Then
                 'Reset variable
                 SoundBankHashCodeNumber = 1
                 'Get and modify files
@@ -163,8 +163,8 @@ Partial Public Class AdvancedMenu
             End If
 
             '-----------------------------------------Reallocate MFX Files-----------------------------------------
-            Dim musicsFilePath As String = fso.BuildPath(WorkingDirectory, "Music\ESData")
-            If fso.FolderExists(musicsFilePath) Then
+            Dim musicsFilePath As String = Path.Combine(WorkingDirectory, "Music", "ESData")
+            If Directory.Exists(musicsFilePath) Then
                 'Reset variable
                 MFXHashCodeNumber = 1
                 'Get and modify files
@@ -182,7 +182,7 @@ Partial Public Class AdvancedMenu
                 Next
             End If
             'Update file
-            writers.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
+            writers.UpdateMiscFile(Path.Combine(WorkingDirectory, "System", "Misc.txt"))
             'Set cursor as default arrow
             Cursor.Current = Cursors.Default
         End If
@@ -195,27 +195,29 @@ Partial Public Class AdvancedMenu
         'Get all SFXs that has sub SFXs
         Dim errorsToShow As New List(Of String)
 
-        Dim baseDir As String = fso.BuildPath(WorkingDirectory, "SFXs")
-        If fso.FolderExists(baseDir) Then
+        Dim baseDir As String = Path.Combine(WorkingDirectory, "SFXs")
+        If Directory.Exists(baseDir) Then
             'Set cursor as hourglass
             Cursor.Current = Cursors.WaitCursor
 
-            Dim fileNameWithExtension As String = Dir(baseDir & "\*.txt", FileAttribute.Archive)
-            Do While fileNameWithExtension > ""
-                Dim sfxFilePath As String = fso.BuildPath(WorkingDirectory & "\SFXs\", fileNameWithExtension)
+            'Inspect files
+            Dim filesToInspect As String() = Directory.GetFiles(baseDir, "*.txt", SearchOption.TopDirectoryOnly)
+            For fileIndex As Integer = 0 To filesToInspect.Length - 1
+                Dim sfxFilePath As String = filesToInspect(fileIndex)
                 Dim sfxFileData As SfxFile = readers.ReadSFXFile(sfxFilePath)
+
                 'Check for negative multi samples and loops
                 If sfxFileData.SamplePool.Action1 = 1 AndAlso sfxFileData.SamplePool.EnableSubSFX Then
                     If sfxFileData.SamplePool.MinDelay < 0 Or sfxFileData.SamplePool.MaxDelay < 0 Then
-                        errorsToShow.Add(GetOnlyFileName(fileNameWithExtension) & "   -ve Multi")
+                        errorsToShow.Add(Path.GetFileNameWithoutExtension(sfxFilePath) & "   -ve Multi")
                     End If
                 ElseIf sfxFileData.SamplePool.isLooped AndAlso sfxFileData.SamplePool.Action1 = 0 Then
                     If sfxFileData.SamplePool.MinDelay < 0 Or sfxFileData.SamplePool.MaxDelay < 0 Then
-                        errorsToShow.Add(GetOnlyFileName(fileNameWithExtension) & "   -ve Loop")
+                        errorsToShow.Add(Path.GetFileNameWithoutExtension(sfxFilePath) & "   -ve Loop")
                     End If
                 End If
-                fileNameWithExtension = Dir()
-            Loop
+            Next
+
             'Set cursor as default arrow
             Cursor.Current = Cursors.Default
             'Check what we need to show to the user
@@ -243,25 +245,28 @@ Partial Public Class AdvancedMenu
     Private Sub Button_StealOnLouder_Click(sender As Object, e As EventArgs) Handles Button_StealOnLouder.Click
         'Get all SFXs that has sub SFXs
         Dim errorsToShow As New List(Of String)
-        Dim baseDir As String = fso.BuildPath(WorkingDirectory, "SFXs")
-        If fso.FolderExists(baseDir) Then
+        Dim baseDir As String = Path.Combine(WorkingDirectory, "SFXs")
+        If Directory.Exists(baseDir) Then
             'Set cursor as hourglass
             Cursor.Current = Cursors.WaitCursor
-            Dim fileNameWithExtension As String = Dir(baseDir & "\*.txt", FileAttribute.Archive)
-            Do While fileNameWithExtension > ""
-                Dim sfxFilePath As String = fso.BuildPath(WorkingDirectory & "\SFXs\", fileNameWithExtension)
+
+            'Inspect files
+            Dim filesToInspect As String() = Directory.GetFiles(baseDir, "*.txt", SearchOption.TopDirectoryOnly)
+            For fileIndex As Integer = 0 To filesToInspect.Length - 1
+                Dim sfxFilePath As String = filesToInspect(fileIndex)
                 Dim sfxFileData As SfxFile = readers.ReadSFXFile(sfxFilePath)
+
                 'Seems that if the flag Steal On Age is on and the random volume is different than zero is interpreted as an error
                 If sfxFileData.Parameters.StealOnAge Then
                     For sampleIndex As Integer = 0 To sfxFileData.Samples.Count - 1
                         Dim currentSample As Sample = sfxFileData.Samples(sampleIndex)
                         If currentSample.RandomVolumeOffset <> 0 Then
-                            errorsToShow.Add(GetOnlyFileName(fileNameWithExtension) & " -->> " & currentSample.FilePath)
+                            errorsToShow.Add(Path.GetFileNameWithoutExtension(sfxFilePath) & " -->> " & currentSample.FilePath)
                         End If
                     Next
                 End If
-                fileNameWithExtension = Dir()
-            Loop
+            Next
+
             'Set cursor as default arrow
             Cursor.Current = Cursors.Default
             'Check what we need to show to the user
@@ -282,27 +287,30 @@ Partial Public Class AdvancedMenu
         'Get all SFXs that has sub SFXs
         Dim missingLinks As New List(Of String)
 
-        Dim baseDir As String = fso.BuildPath(WorkingDirectory, "SFXs")
-        If fso.FolderExists(baseDir) Then
+        Dim baseDir As String = Path.Combine(WorkingDirectory, "SFXs")
+        If Directory.Exists(baseDir) Then
             'Set cursor as hourglass
             Cursor.Current = Cursors.WaitCursor
-            Dim fileNameWithExtension As String = Dir(baseDir & "\*.txt", FileAttribute.Archive)
-            Do While fileNameWithExtension > ""
-                Dim sfxFilePath As String = fso.BuildPath(WorkingDirectory & "\SFXs\", fileNameWithExtension)
+
+            'Inspect files
+            Dim filesToInspect As String() = Directory.GetFiles(baseDir, "*.txt", SearchOption.TopDirectoryOnly)
+            For fileIndex As Integer = 0 To filesToInspect.Length - 1
+                Dim sfxFilePath As String = filesToInspect(fileIndex)
                 Dim sfxFileData As SfxFile = readers.ReadSFXFile(sfxFilePath)
+
                 If sfxFileData.SamplePool.EnableSubSFX Then
                     'Add links to dictionary
                     For sampleIndex As Integer = 0 To sfxFileData.Samples.Count - 1
                         Dim linkHashCode As String = sfxFileData.Samples(sampleIndex).FilePath
-                        Dim subSfxFilePath As String = fso.BuildPath(WorkingDirectory & "\SFXs\", linkHashCode & ".txt")
+                        Dim subSfxFilePath As String = Path.Combine(WorkingDirectory, "SFXs", linkHashCode & ".txt")
                         'Add missing link to list
-                        If Not fso.FileExists(subSfxFilePath) Then
-                            missingLinks.Add(GetOnlyFileName(fileNameWithExtension) & " #=# " & linkHashCode)
+                        If Not File.Exists(subSfxFilePath) Then
+                            missingLinks.Add(Path.GetFileNameWithoutExtension(sfxFilePath) & " #=# " & linkHashCode)
                         End If
                     Next
                 End If
-                fileNameWithExtension = Dir()
-            Loop
+            Next
+
             'Set cursor as default arrow
             Cursor.Current = Cursors.Default
             'Check what we need to show to the user
@@ -322,27 +330,27 @@ Partial Public Class AdvancedMenu
     '*===============================================================================================
     Private Sub Button_ValidateSfx_Click(sender As Object, e As EventArgs) Handles Button_ValidateSfx.Click
         Dim sfxPlatformsList As New List(Of String)
-        Dim baseDir As String = fso.BuildPath(WorkingDirectory, "SFXs")
+        Dim baseDir As String = Path.Combine(WorkingDirectory, "SFXs")
         'Set cursor as hourglass
         Cursor.Current = Cursors.WaitCursor
         'Get GameCube SFXs
-        Dim gameCubeDir As String = fso.BuildPath(baseDir, "GameCube")
-        If fso.FolderExists(gameCubeDir) Then
+        Dim gameCubeDir As String = Path.Combine(baseDir, "GameCube")
+        If Directory.Exists(gameCubeDir) Then
             GetPlatformSFXs(gameCubeDir, sfxPlatformsList, "GameCube")
         End If
         'Get PC SFXs
-        Dim pcDir As String = fso.BuildPath(baseDir, "PC")
-        If fso.FolderExists(pcDir) Then
+        Dim pcDir As String = Path.Combine(baseDir, "PC")
+        If Directory.Exists(pcDir) Then
             GetPlatformSFXs(pcDir, sfxPlatformsList, "PC")
         End If
         'Get PC SFXs
-        Dim playStation2 As String = fso.BuildPath(baseDir, "PlayStation2")
-        If fso.FolderExists(playStation2) Then
+        Dim playStation2 As String = Path.Combine(baseDir, "PlayStation2")
+        If Directory.Exists(playStation2) Then
             GetPlatformSFXs(playStation2, sfxPlatformsList, "PlayStation2")
         End If
         'Get X Box SFXs
-        Dim Xbox As String = fso.BuildPath(baseDir, "X Box")
-        If fso.FolderExists(Xbox) Then
+        Dim Xbox As String = Path.Combine(baseDir, "X Box")
+        If Directory.Exists(Xbox) Then
             GetPlatformSFXs(Xbox, sfxPlatformsList, "X Box")
         End If
         'Set cursor as default arrow

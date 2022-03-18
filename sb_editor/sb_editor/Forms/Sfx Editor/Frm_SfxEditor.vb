@@ -1,4 +1,5 @@
-﻿Imports System.Media
+﻿Imports System.IO
+Imports System.Media
 Imports sb_editor.ParsersObjects
 Imports sb_editor.ReaderClasses
 Imports sb_editor.WritersClasses
@@ -43,19 +44,19 @@ Partial Public Class Frm_SfxEditor
         ComboBox_AvailableFormats.EndUpdate()
 
         'Get stream sounds list
-        If fso.FileExists(SysFileSamples) Then
+        If File.Exists(SysFileSamples) Then
             StreamSamplesList = reader.GetStreamSoundsList(SysFileSamples)
         End If
 
         'Check if the misc folder exists
-        Dim miscFolder As String = fso.BuildPath(WorkingDirectory, "SFXs\Misc")
-        CreateFolderIfRequired(miscFolder)
+        Dim miscFolder As String = Path.Combine(WorkingDirectory, "SFXs", "Misc")
+        Directory.CreateDirectory(miscFolder)
 
         'Add Common Tab Page
-        Dim baseFilePath = fso.BuildPath(WorkingDirectory, "SFXs\" & sfxFileName & ".txt")
-        If fso.FileExists(baseFilePath) Then
-            Dim commonTextFile As String = fso.BuildPath(WorkingDirectory, "SFXs\Misc\Common.txt")
-            fso.CopyFile(baseFilePath, commonTextFile, True)
+        Dim baseFilePath = Path.Combine(WorkingDirectory, "SFXs", sfxFileName & ".txt")
+        If File.Exists(baseFilePath) Then
+            Dim commonTextFile As String = Path.Combine(WorkingDirectory, "SFXs", "Misc", "Common.txt")
+            File.Copy(baseFilePath, commonTextFile, True)
             sfxFilesData.Add("Common", reader.ReadSFXFile(commonTextFile))
         End If
 
@@ -63,13 +64,13 @@ Partial Public Class Frm_SfxEditor
         Dim availablePlatforms As String() = ProjectSettingsFile.sampleRateFormats.Keys.ToArray
         For index As Integer = 0 To availablePlatforms.Length - 1
             'Create folder if not exists
-            Dim folderPath As String = fso.BuildPath(WorkingDirectory, "SFXs\" & availablePlatforms(index))
-            CreateFolderIfRequired(folderPath)
+            Dim folderPath As String = Path.Combine(WorkingDirectory, "SFXs", availablePlatforms(index))
+            Directory.CreateDirectory(folderPath)
             'Check if the request file exists
-            baseFilePath = fso.BuildPath(folderPath, sfxFileName & ".txt")
-            If fso.FileExists(baseFilePath) Then
-                Dim platformTextFile As String = fso.BuildPath(WorkingDirectory, "SFXs\Misc\" & availablePlatforms(index) & ".txt")
-                fso.CopyFile(baseFilePath, platformTextFile, True)
+            baseFilePath = Path.Combine(folderPath, sfxFileName & ".txt")
+            If File.Exists(baseFilePath) Then
+                Dim platformTextFile As String = Path.Combine(WorkingDirectory, "SFXs", "Misc", availablePlatforms(index) & ".txt")
+                File.Copy(baseFilePath, platformTextFile, True)
                 sfxFilesData.Add(CreateTab(availablePlatforms(index)).Text, reader.ReadSFXFile(platformTextFile))
                 'Disable Button
                 Select Case availablePlatforms(index)
@@ -107,7 +108,7 @@ Partial Public Class Frm_SfxEditor
         ShowSfxSamplePoolControl(TabControl_Platforms.SelectedTab.Text)
         ShowSfxSamplePool(TabControl_Platforms.SelectedTab.Text)
         'Enable clipboard
-        If fso.FileExists(fso.BuildPath(WorkingDirectory, "SFXs\Misc\ClipBoard.txt")) Then
+        If File.Exists(Path.Combine(WorkingDirectory, "SFXs", "Misc", "ClipBoard.txt")) Then
             Button_ClipboardPaste.Enabled = True
         End If
     End Sub
@@ -543,14 +544,14 @@ Partial Public Class Frm_SfxEditor
 
     Private Sub Button_Clipboard_Copy_Click(sender As Object, e As EventArgs) Handles Button_Clipboard_Copy.Click
         If sfxFilesData.ContainsKey(TabControl_Platforms.SelectedTab.Text) Then
-            writers.WriteSfxFile(sfxFilesData(TabControl_Platforms.SelectedTab.Text), fso.BuildPath(WorkingDirectory, "SFXs\Misc\ClipBoard.txt"))
+            writers.WriteSfxFile(sfxFilesData(TabControl_Platforms.SelectedTab.Text), Path.Combine(WorkingDirectory, "SFXs", "Misc", "ClipBoard.txt"))
             Button_ClipboardPaste.Enabled = True
         End If
     End Sub
 
     Private Sub Button_ClipboardPaste_Click(sender As Object, e As EventArgs) Handles Button_ClipboardPaste.Click
-        Dim clipboardFilePath As String = fso.BuildPath(WorkingDirectory, "SFXs\Misc\ClipBoard.txt")
-        If fso.FileExists(clipboardFilePath) Then
+        Dim clipboardFilePath As String = Path.Combine(WorkingDirectory, "SFXs", "Misc", "ClipBoard.txt")
+        If File.Exists(clipboardFilePath) Then
             Dim sfxFile As SfxFile = reader.ReadSFXFile(clipboardFilePath)
             sfxFilesData(TabControl_Platforms.SelectedTab.Text) = sfxFile
             'Inherited from common file and applied to all other formats
@@ -596,13 +597,13 @@ Partial Public Class Frm_SfxEditor
             'Update properties
             UpdateFilesParameters()
             'Write file
-            Dim tempFilePath As String = fso.BuildPath(WorkingDirectory, "SFXs\Misc\" & sfxFile.Key & ".txt")
+            Dim tempFilePath As String = Path.Combine(WorkingDirectory, "SFXs", "Misc", sfxFile.Key & ".txt")
             writers.WriteSfxFile(sfxFile.Value, tempFilePath)
             'Move file to the final folder
             If StrComp(sfxFile.Key, "Common") = 0 Then
-                fso.CopyFile(tempFilePath, fso.BuildPath(WorkingDirectory, "SFXs\" & sfxFileName & ".txt"))
+                File.Copy(tempFilePath, Path.Combine(WorkingDirectory, "SFXs", sfxFileName & ".txt"), True)
             Else
-                fso.CopyFile(tempFilePath, fso.BuildPath(WorkingDirectory, "SFXs\" & sfxFile.Key & "\" & sfxFileName & ".txt"))
+                File.Copy(tempFilePath, Path.Combine(WorkingDirectory, "SFXs", sfxFile.Key, sfxFileName & ".txt"), True)
             End If
         Next
         'Close form

@@ -1,4 +1,5 @@
-﻿Imports sb_editor.ParsersObjects
+﻿Imports System.IO
+Imports sb_editor.ParsersObjects
 Imports sb_editor.ReaderClasses
 
 Namespace WritersClasses
@@ -9,7 +10,7 @@ Namespace WritersClasses
 
             'Get creation time if file exists
             Dim created = Date.Now.ToString(filesDateFormat)
-            If fso.FileExists(filePath) Then
+            If File.Exists(filePath) Then
                 headerData = headerLib.GetFileHeaderInfo(filePath)
                 If updateHeader Then
                     headerData.LastModify = created

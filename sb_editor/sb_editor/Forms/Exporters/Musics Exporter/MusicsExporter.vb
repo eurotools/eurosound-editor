@@ -44,24 +44,24 @@ Partial Public Class MusicsExporter
         Invoke(Sub() Text = "Waiting")
 
         'Create ESWork folder if required
-        Dim waveOutputFolder As String = fso.BuildPath(WorkingDirectory, "Music\ESWork")
-        CreateFolderIfRequired(waveOutputFolder)
+        Dim waveOutputFolder As String = Path.Combine(WorkingDirectory, "Music", "ESWork")
+        Directory.CreateDirectory(waveOutputFolder)
 
         'Get output platforms
         Dim selectedPlatform As String = parentMusicForm.ComboBox_OutputFormat.Invoke(Function() parentMusicForm.ComboBox_OutputFormat.SelectedItem)
         Dim outPlaforms As String() = New String() {selectedPlatform}
-        If StrComp(selectedPlatform, "All") = 0 Then
+        If selectedPlatform.Equals("All", StringComparison.OrdinalIgnoreCase) Then
             outPlaforms = ProjectSettingsFile.sampleRateFormats.Keys.ToArray
         End If
 
         'Get hashcodes dictionary
         Dim hashCodesCollection As New SortedDictionary(Of String, UInteger)
-        Dim filesList As String = fso.BuildPath(WorkingDirectory, "Music\ESData\MFXFiles.txt")
+        Dim filesList As String = Path.Combine(WorkingDirectory, "Music", "ESData", "MFXFiles.txt")
         Dim musicListItems As String() = textFileReaders.ReadMfxFileList(filesList)
         For itemIndex As Integer = 0 To musicListItems.Length - 1
-            Dim musicFilePath As String = fso.BuildPath(WorkingDirectory & "\Music\ESData", musicListItems(itemIndex) & ".txt")
+            Dim musicFilePath As String = Path.Combine(WorkingDirectory, "Music", "ESData", musicListItems(itemIndex) & ".txt")
             Dim musicFileData As MfxFile = textFileReaders.ReadMfxFile(musicFilePath)
-            hashCodesCollection.Add(GetOnlyFileName(musicFilePath), musicFileData.HashCode)
+            hashCodesCollection.Add(Path.GetFileNameWithoutExtension(musicFilePath), musicFileData.HashCode)
         Next
 
         'Calculate execution time

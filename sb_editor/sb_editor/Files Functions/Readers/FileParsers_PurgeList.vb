@@ -1,31 +1,35 @@
-﻿Namespace ReaderClasses
+﻿Imports System.IO
+
+Namespace ReaderClasses
     Partial Public Class FileParsers
         '*===============================================================================================
-        '* DATABASE FILES
+        '* PURGE LIST
         '*===============================================================================================
         Public Function ReadPurgeList(textFilePath As String) As String()
             'Create an object
             Dim dependencies As New List(Of String)
 
             'Open file and read it
-            Dim currentLine As String
-            FileOpen(1, textFilePath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
-            Do Until EOF(1)
-                'Read text file
-                currentLine = Trim(LineInput(1))
-
-                If StrComp(currentLine, "#PurgedFileList", CompareMethod.Text) = 0 Then
-                    'Read line
-                    currentLine = Trim(LineInput(1))
-                    While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
-                        'Add item to listbox
-                        dependencies.Add(currentLine)
-                        'Continue Reading
-                        currentLine = Trim(LineInput(1))
-                    End While
-                End If
-            Loop
-            FileClose(1)
+            Using sr As StreamReader = File.OpenText(textFilePath)
+                While Not sr.EndOfStream
+                    Dim currentLine As String = sr.ReadLine.Trim
+                    'Skip empty lines
+                    If String.IsNullOrEmpty(currentLine) Or currentLine.StartsWith("//") Then
+                        Continue While
+                    Else
+                        If currentLine.Equals("#PurgedFileList", StringComparison.OrdinalIgnoreCase) Then
+                            'Read line
+                            currentLine = sr.ReadLine.Trim
+                            While Not currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase)
+                                'Add item to listbox
+                                dependencies.Add(currentLine)
+                                'Continue Reading
+                                currentLine = sr.ReadLine.Trim
+                            End While
+                        End If
+                    End If
+                End While
+            End Using
 
             Return dependencies.ToArray
         End Function

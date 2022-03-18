@@ -1,4 +1,5 @@
-﻿Imports EngineXMarkersTool
+﻿Imports System.IO
+Imports EngineXMarkersTool
 Imports sb_editor.HashTablesBuilder
 Imports sb_editor.ParsersObjects
 Imports sb_editor.ReaderClasses
@@ -17,20 +18,11 @@ Partial Public Class MusicMaker
     '* FORM EVENTS
     '*===============================================================================================
     Private Sub MusicMaker_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        If fso.FolderExists(WorkingDirectory) Then
+        If Directory.Exists(WorkingDirectory) Then
             'Ensure that the data and work directory exists
-            Dim musicFolder = fso.BuildPath(WorkingDirectory, "Music")
-            Dim esDataFolder = fso.BuildPath(WorkingDirectory, "Music\ESData")
-            Dim EsWorkFolder = fso.BuildPath(WorkingDirectory, "Music\ESWork")
-            If Not fso.FolderExists(musicFolder) Then
-                fso.CreateFolder(musicFolder)
-            End If
-            If Not fso.FolderExists(esDataFolder) Then
-                fso.CreateFolder(esDataFolder)
-            End If
-            If Not fso.FolderExists(EsWorkFolder) Then
-                fso.CreateFolder(EsWorkFolder)
-            End If
+            Directory.CreateDirectory(Path.Combine(WorkingDirectory, "Music"))
+            Directory.CreateDirectory(Path.Combine(WorkingDirectory, "Music", "ESData"))
+            Directory.CreateDirectory(Path.Combine(WorkingDirectory, "Music", "ESWork"))
         End If
 
         'Add formats to combobox
@@ -41,7 +33,7 @@ Partial Public Class MusicMaker
         ComboBox_OutputFormat.EndUpdate()
 
         'Print available mfx files
-        currentReadedFiles = GetMfxFiles(fso.BuildPath(WorkingDirectory, "Music"))
+        currentReadedFiles = GetMfxFiles(Path.Combine(WorkingDirectory, "Music"))
         GetMusicFilesData(currentReadedFiles)
     End Sub
 
@@ -59,8 +51,8 @@ Partial Public Class MusicMaker
             Dim selectedItem As ListViewItem = ListView_MusicFiles.SelectedItems(0)
             selectedItem.SubItems(1).Text = Numeric_Volume.Value
             'Read and update mfx file
-            Dim mfxFilePath As String = fso.BuildPath(WorkingDirectory, "Music\ESData\" & selectedItem.Text & ".txt")
-            If fso.FileExists(mfxFilePath) Then
+            Dim mfxFilePath As String = Path.Combine(WorkingDirectory, "Music", "ESData", selectedItem.Text & ".txt")
+            If File.Exists(mfxFilePath) Then
                 Dim mfxFileData As MfxFile = textFileReaders.ReadMfxFile(mfxFilePath)
                 If mfxFileData.Volume <> Numeric_Volume.Value Then
                     mfxFileData.Volume = Numeric_Volume.Value
@@ -74,7 +66,7 @@ Partial Public Class MusicMaker
 
     Private Sub Button_UpdateFiles_Click(sender As Object, e As EventArgs) Handles Button_UpdateFiles.Click
         'Get Files in folder
-        Dim filesInFolder As String() = GetMfxFiles(fso.BuildPath(WorkingDirectory, "Music"))
+        Dim filesInFolder As String() = GetMfxFiles(Path.Combine(WorkingDirectory, "Music"))
         'Check if we really need to reload all
         Dim needToReload As Boolean = Not New HashSet(Of String)(currentReadedFiles).SetEquals(filesInFolder)
         If needToReload Then
@@ -120,7 +112,7 @@ Partial Public Class MusicMaker
         ListView_MusicFiles.BeginUpdate()
         For Each listviewItem As ListViewItem In ListView_MusicFiles.Items
             'Read text file
-            Dim mfxFilePath As String = fso.BuildPath(WorkingDirectory, "Music\ESData\" & listviewItem.Text & ".txt")
+            Dim mfxFilePath As String = Path.Combine(WorkingDirectory, "Music", "ESData", listviewItem.Text & ".txt")
             Dim mfxFileData As MfxFile = textFileReaders.ReadMfxFile(mfxFilePath)
             mfxFileData.HashCode = MFXHashCodeNumber
             'Update Text File
@@ -131,7 +123,7 @@ Partial Public Class MusicMaker
             'Update Global var
             MFXHashCodeNumber += 1
         Next
-        writers.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
+        writers.UpdateMiscFile(Path.Combine(WorkingDirectory, "System", "Misc.txt"))
         ListView_MusicFiles.EndUpdate()
     End Sub
 
@@ -144,12 +136,12 @@ Partial Public Class MusicMaker
                 hashCodesDict.Add(listItem.Text, listItem.SubItems(3).Text)
             Next
             'Build temporal file
-            Dim testHashTableFilePath As String = fso.BuildPath(WorkingDirectory, "System\Temp_MFX_Defines.h")
+            Dim testHashTableFilePath As String = Path.Combine(WorkingDirectory, "System", "Temp_MFX_Defines.h")
             hashTablesFunctions.CreateMfxHashTable(testHashTableFilePath, hashCodesDict)
             'Merge jump hashcodes
             Dim markerFunctions As New ExMarkersTool
             Dim definesInHashTable As List(Of String) = AppendJumpHashCodes(testHashTableFilePath, hashCodesDict)
-            Dim definesInFolder As List(Of String) = markerFunctions.GetJumpMakersList(fso.BuildPath(WorkingDirectory, "Music"))
+            Dim definesInFolder As List(Of String) = markerFunctions.GetJumpMakersList(Path.Combine(WorkingDirectory, "Music"))
             'Get missing defines
             Dim missingDefines As IEnumerable(Of String) = definesInFolder.Except(definesInHashTable)
             'Merge missing defines into a single string
@@ -173,8 +165,8 @@ Partial Public Class MusicMaker
                 Dim userValue As UInteger = TextBox_UserValue.Text
                 selectedItem.SubItems(7).Text = userValue
                 'Read and update mfx file
-                Dim mfxFilePath As String = fso.BuildPath(WorkingDirectory, "Music\ESData\" & selectedItem.Text & ".txt")
-                If fso.FileExists(mfxFilePath) Then
+                Dim mfxFilePath As String = Path.Combine(WorkingDirectory, "Music", "ESData", selectedItem.Text & ".txt")
+                If File.Exists(mfxFilePath) Then
                     Dim mfxFileData As MfxFile = textFileReaders.ReadMfxFile(mfxFilePath)
                     If mfxFileData.UserValue <> userValue Then
                         mfxFileData.UserValue = userValue

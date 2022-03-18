@@ -7,7 +7,7 @@ Public Class Language_FolderCompare
     '*===============================================================================================
     Private Sub Language_FolderCompare_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'Load config
-        If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System")) Then
+        If Directory.Exists(Path.Combine(WorkingDirectory, "System")) Then
             Dim iniFunctions As New IniFile(SysFileProjectIniPath)
             TextBox_PrimaryPath.Text = iniFunctions.Read("LanguagePath1", "LanguageFolderCompare")
             TextBox_SecondaryPath.Text = iniFunctions.Read("LanguagePath2", "LanguageFolderCompare")
@@ -16,7 +16,7 @@ Public Class Language_FolderCompare
 
     Private Sub Language_FolderCompare_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         'Save data in the Ini File
-        If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System")) Then
+        If Directory.Exists(Path.Combine(WorkingDirectory, "System")) Then
             Dim iniFunctions As New IniFile(SysFileProjectIniPath)
             iniFunctions.Write("LanguagePath1", TextBox_PrimaryPath.Text, "LanguageFolderCompare")
             iniFunctions.Write("LanguagePath2", TextBox_SecondaryPath.Text, "LanguageFolderCompare")

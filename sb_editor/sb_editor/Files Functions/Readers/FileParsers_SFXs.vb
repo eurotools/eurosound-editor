@@ -13,189 +13,191 @@ Namespace ReaderClasses
         Public Function ReadSFXFile(textFilePath As String) As SfxFile
             Dim waveReadFunctions As New WaveFunctions
 
-            'Create a new object to store the data
+            'Create a new object and list to store the data
             Dim sfxObj As New SfxFile
-            'Create list of samples
             Dim samplesList As New BindingList(Of Sample)
 
             'Open file and read it
-            Dim currentLine As String
-            FileOpen(1, textFilePath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
-            Do Until EOF(1)
-                'Read a new line
-                currentLine = Trim(LineInput(1))
-                If currentLine <> "" Then
-                    'Header info
-                    If InStr(currentLine, "## ") = 1 Then
-                        'Split content
-                        Dim lineData As String() = Split(currentLine, "...")
-                        'Get header info
-                        If InStr(currentLine, "## EuroSound") = 1 Then
-                            sfxObj.HeaderInfo.FileHeader = currentLine
-                        End If
-                        If InStr(currentLine, "## First Created ...") = 1 Then
-                            sfxObj.HeaderInfo.FirstCreated = Trim(lineData(1))
-                        End If
-                        If InStr(currentLine, "## Created By ...") = 1 Then
-                            sfxObj.HeaderInfo.CreatedBy = Trim(lineData(1))
-                        End If
-                        If InStr(currentLine, "## Last Modified ...") = 1 Then
-                            sfxObj.HeaderInfo.LastModify = Trim(lineData(1))
-                        End If
-                        If InStr(currentLine, "## Last Modified By ...") = 1 Then
-                            sfxObj.HeaderInfo.LastModifyBy = Trim(lineData(1))
-                        End If
-                    End If
+            Using sr As StreamReader = File.OpenText(textFilePath)
+                While Not sr.EndOfStream
+                    Dim currentLine As String = sr.ReadLine.Trim
+                    'Skip empty lines
+                    If String.IsNullOrEmpty(currentLine) Or currentLine.StartsWith("//") Then
+                        Continue While
+                    Else
+                        'Header info
+                        If currentLine.Contains("## ") Then
+                            'Split content
+                            Dim lineData As String() = Split(currentLine, "...")
 
-                    'Check for Parameters block
-                    If StrComp(currentLine, "#SFXParameters") = 0 Then
-                        'Read line
-                        currentLine = Trim(LineInput(1))
-                        While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
-                            Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
-                            Select Case UCase(lineData(0))
-                                Case "REVERBSEND"
-                                    sfxObj.Parameters.ReverbSend = CInt(lineData(1))
-                                Case "TRACKINGTYPE"
-                                    sfxObj.Parameters.TrackingType = CByte(lineData(1))
-                                Case "INNERRADIUS"
-                                    sfxObj.Parameters.InnerRadius = CInt(lineData(1))
-                                Case "OUTERRADIUS"
-                                    sfxObj.Parameters.OuterRadius = CInt(lineData(1))
-                                Case "MAXVOICES"
-                                    sfxObj.Parameters.MaxVoices = CInt(lineData(1))
-                                Case "ACTION1"
-                                    sfxObj.Parameters.Action1 = CByte(lineData(1))
-                                Case "PRIORITY"
-                                    sfxObj.Parameters.Priority = CInt(lineData(1))
-                                Case "GROUP"
-                                    sfxObj.Parameters.Group = CInt(lineData(1))
-                                Case "ACTION2"
-                                    sfxObj.Parameters.Action2 = CByte(lineData(1))
-                                Case "ALERTNESS"
-                                    sfxObj.Parameters.Alertness = CInt(lineData(1))
-                                Case "IGNOREAGE"
-                                    sfxObj.Parameters.IgnoreAge = lineData(1).Equals("1")
-                                Case "DUCKER"
-                                    sfxObj.Parameters.Ducker = CInt(lineData(1))
-                                Case "DUCKERLENGHT"
-                                    sfxObj.Parameters.DuckerLength = CInt(lineData(1))
-                                Case "DUCKERLENGTH"
-                                    sfxObj.Parameters.DuckerLength = CInt(lineData(1))
-                                Case "MASTERVOLUME"
-                                    sfxObj.Parameters.MasterVolume = CInt(lineData(1))
-                                Case "OUTDOORS"
-                                    sfxObj.Parameters.Outdoors = lineData(1).Equals("1")
-                                Case "PAUSEINNIS"
-                                    sfxObj.Parameters.PauseInNis = lineData(1).Equals("1")
-                                Case "STEALONAGE"
-                                    sfxObj.Parameters.StealOnAge = lineData(1).Equals("1")
-                                Case "MUSICTYPE"
-                                    sfxObj.Parameters.MusicType = lineData(1).Equals("1")
-                                Case "DOPPLER"
-                                    sfxObj.Parameters.Doppler = lineData(1).Equals("1")
-                            End Select
-                            'Continue Reading
-                            currentLine = Trim(LineInput(1))
-                        End While
-                    End If
+                            'Get header info
+                            If currentLine.Contains("## EuroSound") Then
+                                sfxObj.HeaderInfo.FileHeader = currentLine
+                            End If
+                            If currentLine.Contains("## First Created ...") Then
+                                sfxObj.HeaderInfo.FirstCreated = lineData(1).Trim
+                            End If
+                            If currentLine.Contains("## Created By ...") Then
+                                sfxObj.HeaderInfo.CreatedBy = lineData(1).Trim
+                            End If
+                            If currentLine.Contains("## Last Modified ...") Then
+                                sfxObj.HeaderInfo.LastModify = lineData(1).Trim
+                            End If
+                            If currentLine.Contains("## Last Modified By ...") Then
+                                sfxObj.HeaderInfo.LastModifyBy = lineData(1).Trim
+                            End If
+                        End If
 
-                    'Check for Sample Pool Files block
-                    If StrComp(currentLine, "#SFXSamplePoolFiles") = 0 Then
-                        'Read line
-                        currentLine = Trim(LineInput(1))
-                        While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
-                            Dim waveRelativePath As String = currentLine
-                            Dim waveFullPath As String = fso.BuildPath(WorkingDirectory & "\Master", waveRelativePath)
-                            'Wave File
-                            Dim sampleObj As New Sample With {
+                        'Check for Parameters block
+                        If currentLine.Equals("#SFXParameters", StringComparison.OrdinalIgnoreCase) Then
+                            'Read line
+                            currentLine = sr.ReadLine.Trim
+                            While Not currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase)
+                                Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
+                                Select Case lineData(0).ToUpper
+                                    Case "REVERBSEND"
+                                        sfxObj.Parameters.ReverbSend = CInt(lineData(1))
+                                    Case "TRACKINGTYPE"
+                                        sfxObj.Parameters.TrackingType = CByte(lineData(1))
+                                    Case "INNERRADIUS"
+                                        sfxObj.Parameters.InnerRadius = CInt(lineData(1))
+                                    Case "OUTERRADIUS"
+                                        sfxObj.Parameters.OuterRadius = CInt(lineData(1))
+                                    Case "MAXVOICES"
+                                        sfxObj.Parameters.MaxVoices = CInt(lineData(1))
+                                    Case "ACTION1"
+                                        sfxObj.Parameters.Action1 = CByte(lineData(1))
+                                    Case "PRIORITY"
+                                        sfxObj.Parameters.Priority = CInt(lineData(1))
+                                    Case "GROUP"
+                                        sfxObj.Parameters.Group = CInt(lineData(1))
+                                    Case "ACTION2"
+                                        sfxObj.Parameters.Action2 = CByte(lineData(1))
+                                    Case "ALERTNESS"
+                                        sfxObj.Parameters.Alertness = CInt(lineData(1))
+                                    Case "IGNOREAGE"
+                                        sfxObj.Parameters.IgnoreAge = lineData(1).Equals("1")
+                                    Case "DUCKER"
+                                        sfxObj.Parameters.Ducker = CInt(lineData(1))
+                                    Case "DUCKERLENGHT"
+                                        sfxObj.Parameters.DuckerLength = CInt(lineData(1))
+                                    Case "DUCKERLENGTH"
+                                        sfxObj.Parameters.DuckerLength = CInt(lineData(1))
+                                    Case "MASTERVOLUME"
+                                        sfxObj.Parameters.MasterVolume = CInt(lineData(1))
+                                    Case "OUTDOORS"
+                                        sfxObj.Parameters.Outdoors = lineData(1).Equals("1")
+                                    Case "PAUSEINNIS"
+                                        sfxObj.Parameters.PauseInNis = lineData(1).Equals("1")
+                                    Case "STEALONAGE"
+                                        sfxObj.Parameters.StealOnAge = lineData(1).Equals("1")
+                                    Case "MUSICTYPE"
+                                        sfxObj.Parameters.MusicType = lineData(1).Equals("1")
+                                    Case "DOPPLER"
+                                        sfxObj.Parameters.Doppler = lineData(1).Equals("1")
+                                End Select
+                                'Continue Reading
+                                currentLine = sr.ReadLine.Trim
+                            End While
+                        End If
+
+                        'Check for Sample Pool Files block
+                        If currentLine.Equals("#SFXSamplePoolFiles", StringComparison.OrdinalIgnoreCase) Then
+                            'Read line
+                            currentLine = sr.ReadLine.Trim
+                            While Not currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase)
+                                Dim waveRelativePath As String = currentLine
+                                Dim waveFullPath As String = Path.Combine(WorkingDirectory, "Master", waveRelativePath)
+                                'Wave File
+                                Dim sampleObj As New Sample With {
                                     .FilePath = waveRelativePath
                                 }
-                            'Add object to list
-                            samplesList.Add(sampleObj)
-                            'Continue Reading
-                            currentLine = Trim(LineInput(1))
-                        End While
-                    End If
+                                'Add object to list
+                                samplesList.Add(sampleObj)
+                                'Continue Reading
+                                currentLine = sr.ReadLine.Trim
+                            End While
+                        End If
 
-                    'Check for Sample Pool Modes block
-                    If StrComp(currentLine, "#SFXSamplePoolModes") = 0 Then
-                        'Read line
-                        currentLine = Trim(LineInput(1))
-                        If samplesList.Count > 0 Then
-                            While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
-                                'Get properties for each sample
-                                For SampleIndex As Integer = 0 To samplesList.Count - 1
-                                    'IterationS for each sample
-                                    For iteration As Integer = 0 To 5
-                                        'Split line
-                                        Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
-                                        Select Case UCase(lineData(0))
-                                            Case "BASEVOLUME"
-                                                samplesList(SampleIndex).BaseVolume = CSByte(lineData(1))
-                                            Case "PITCHOFFSET"
-                                                samplesList(SampleIndex).PitchOffset = Convert.ToDouble(lineData(1), numericProvider)
-                                            Case "RANDOMPITCHOFFSET"
-                                                samplesList(SampleIndex).RandomPitchOffset = Convert.ToDouble(lineData(1), numericProvider)
-                                            Case "RANDOMVOLUMEOFFSET"
-                                                samplesList(SampleIndex).RandomVolumeOffset = CSByte(lineData(1))
-                                            Case "PAN"
-                                                samplesList(SampleIndex).Pan = CSByte(lineData(1))
-                                            Case "RANDOMPAN"
-                                                samplesList(SampleIndex).RandomPan = CSByte(lineData(1))
-                                        End Select
+                        'Check for Sample Pool Modes block
+                        If currentLine.Equals("#SFXSamplePoolModes", StringComparison.OrdinalIgnoreCase) Then
+                            'Read line
+                            currentLine = sr.ReadLine.Trim
+                            If samplesList.Count > 0 Then
+                                While Not currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase)
+                                    'Get properties for each sample
+                                    For SampleIndex As Integer = 0 To samplesList.Count - 1
+                                        'IterationS for each sample
+                                        For iteration As Integer = 0 To 5
+                                            'Split line
+                                            Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
+                                            Select Case lineData(0).ToUpper
+                                                Case "BASEVOLUME"
+                                                    samplesList(SampleIndex).BaseVolume = CSByte(lineData(1))
+                                                Case "PITCHOFFSET"
+                                                    samplesList(SampleIndex).PitchOffset = Convert.ToDouble(lineData(1), numericProvider)
+                                                Case "RANDOMPITCHOFFSET"
+                                                    samplesList(SampleIndex).RandomPitchOffset = Convert.ToDouble(lineData(1), numericProvider)
+                                                Case "RANDOMVOLUMEOFFSET"
+                                                    samplesList(SampleIndex).RandomVolumeOffset = CSByte(lineData(1))
+                                                Case "PAN"
+                                                    samplesList(SampleIndex).Pan = CSByte(lineData(1))
+                                                Case "RANDOMPAN"
+                                                    samplesList(SampleIndex).RandomPan = CSByte(lineData(1))
+                                            End Select
 
-                                        'Continue Reading
-                                        currentLine = Trim(LineInput(1))
+                                            'Continue Reading
+                                            currentLine = sr.ReadLine.Trim
+                                        Next
                                     Next
-                                Next
+                                End While
+                            End If
+                        End If
+
+                        'Check for Sample Pool Control block
+                        If currentLine.Equals("#SFXSamplePoolControl", StringComparison.OrdinalIgnoreCase) Then
+                            'Read line
+                            currentLine = sr.ReadLine.Trim
+                            While Not currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase)
+                                Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
+                                Select Case lineData(0).ToUpper
+                                    Case "ACTION1"
+                                        sfxObj.SamplePool.Action1 = CByte(lineData(1))
+                                    Case "RANDOMPICK"
+                                        sfxObj.SamplePool.RandomPick = lineData(1).Equals("1")
+                                    Case "SHUFFLED"
+                                        sfxObj.SamplePool.Shuffled = lineData(1).Equals("1")
+                                    Case "LOOP"
+                                        sfxObj.SamplePool.isLooped = lineData(1).Equals("1")
+                                    Case "POLYPHONIC"
+                                        sfxObj.SamplePool.Polyphonic = lineData(1).Equals("1")
+                                    Case "MINDELAY"
+                                        sfxObj.SamplePool.MinDelay = CInt(lineData(1))
+                                    Case "MAXDELAY"
+                                        sfxObj.SamplePool.MaxDelay = CInt(lineData(1))
+                                    Case "ENABLESUBSFX"
+                                        sfxObj.SamplePool.EnableSubSFX = lineData(1).Equals("1")
+                                End Select
+                                'Continue Reading
+                                currentLine = sr.ReadLine.Trim
+                            End While
+                        End If
+
+                        'Check for hashcodes block
+                        If currentLine.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase) Then
+                            'Read a new line
+                            currentLine = sr.ReadLine.Trim
+                            While Not currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase)
+                                'Split line and get number
+                                sfxObj.HashCode = Split(currentLine, " ")(1)
+                                'Continue Reading
+                                currentLine = sr.ReadLine.Trim
                             End While
                         End If
                     End If
+                End While
+            End Using
 
-                    'Check for Sample Pool Control block
-                    If StrComp(currentLine, "#SFXSamplePoolControl") = 0 Then
-                        'Read line
-                        currentLine = Trim(LineInput(1))
-                        While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
-                            Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
-                            Select Case UCase(lineData(0))
-                                Case "ACTION1"
-                                    sfxObj.SamplePool.Action1 = CByte(lineData(1))
-                                Case "RANDOMPICK"
-                                    sfxObj.SamplePool.RandomPick = lineData(1).Equals("1")
-                                Case "SHUFFLED"
-                                    sfxObj.SamplePool.Shuffled = lineData(1).Equals("1")
-                                Case "LOOP"
-                                    sfxObj.SamplePool.isLooped = lineData(1).Equals("1")
-                                Case "POLYPHONIC"
-                                    sfxObj.SamplePool.Polyphonic = lineData(1).Equals("1")
-                                Case "MINDELAY"
-                                    sfxObj.SamplePool.MinDelay = CInt(lineData(1))
-                                Case "MAXDELAY"
-                                    sfxObj.SamplePool.MaxDelay = CInt(lineData(1))
-                                Case "ENABLESUBSFX"
-                                    sfxObj.SamplePool.EnableSubSFX = lineData(1).Equals("1")
-                            End Select
-                            'Continue Reading
-                            currentLine = Trim(LineInput(1))
-                        End While
-                    End If
-
-                    'Check for hashcodes block
-                    If StrComp(currentLine, "#HASHCODE") = 0 Then
-                        'Read a new line
-                        currentLine = Trim(LineInput(1))
-                        While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
-                            'Split line and get number
-                            sfxObj.HashCode = Split(currentLine, " ")(1)
-                            'Continue Reading
-                            currentLine = Trim(LineInput(1))
-                        End While
-                    End If
-                End If
-            Loop
-            FileClose(1)
             'Add samples to the final object
             sfxObj.Samples = samplesList
             sfxObj.filePath = textFilePath
@@ -212,175 +214,176 @@ Namespace ReaderClasses
             Dim duckerLength As Short = 0
 
             'Open file and read it
-            Dim currentLine As String
-            FileOpen(1, textFilePath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
-            Do Until EOF(1)
-                'Read a new line
-                currentLine = Trim(LineInput(1))
-                If currentLine <> "" Then
-                    'Check for Parameters block
-                    If StrComp(currentLine, "#SFXParameters") = 0 Then
-                        'Read line
-                        currentLine = Trim(LineInput(1))
-                        While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
-                            Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
-                            Select Case UCase(lineData(0))
-                                Case "REVERBSEND"
-                                    sfxObj.ReverbSend = CSByte(lineData(1))
-                                Case "TRACKINGTYPE"
-                                    sfxObj.TrackingType = CSByte(lineData(1))
-                                Case "INNERRADIUS"
-                                    sfxObj.InnerRadius = CShort(lineData(1))
-                                Case "OUTERRADIUS"
-                                    sfxObj.OuterRadius = CShort(lineData(1))
-                                Case "MAXVOICES"
-                                    sfxObj.MaxVoices = CSByte(lineData(1))
-                                Case "ACTION1"
-                                    flagsArray(0) = Convert.ToBoolean(CByte(lineData(1)))
-                                Case "PRIORITY"
-                                    sfxObj.Priority = CInt(lineData(1))
-                                Case "IGNOREAGE"
-                                    flagsArray(2) = lineData(1).Equals("1")
-                                Case "DUCKER"
-                                    sfxObj.Ducker = CInt(lineData(1))
-                                Case "DUCKERLENGHT"
-                                    sfxObj.DuckerLength = CInt(lineData(1))
-                                Case "DUCKERLENGTH"
-                                    sfxObj.DuckerLength = CInt(lineData(1))
-                                Case "MASTERVOLUME"
-                                    sfxObj.MasterVolume = CInt(lineData(1))
-                                Case "OUTDOORS"
-                                    flagsArray(8) = lineData(1).Equals("1")
-                                Case "PAUSEINNIS"
-                                    flagsArray(9) = lineData(1).Equals("1")
-                                Case "STEALONAGE"
-                                    flagsArray(11) = lineData(1).Equals("1")
-                                Case "MUSICTYPE"
-                                    flagsArray(12) = lineData(1).Equals("1")
-                            End Select
-                            'Continue Reading
-                            currentLine = Trim(LineInput(1))
-                        End While
-                    End If
-
-                    'Check for Sample Pool Files block
-                    If StrComp(currentLine, "#SFXSamplePoolFiles") = 0 Then
-                        'Read line
-                        currentLine = Trim(LineInput(1))
-                        While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
-                            Dim waveRelativePath As String = UCase(currentLine.TrimStart("\"))
-                            'Wave File
-                            Dim sampleObj As New EXSample With {
-                                .FilePath = waveRelativePath
-                            }
-                            'Check if this sample is streamed or not
-                            If Path.HasExtension(sampleObj.FilePath) Then
-                                Dim arraySearchResult As Integer = Array.IndexOf(streamsList, waveRelativePath)
-                                If arraySearchResult = -1 Then
-                                    samplesToInclude.Add(UCase(currentLine))
-                                End If
-                            End If
-                            'Get ducker
-                            If sfxObj.Ducker > 0 Then
-                                Dim sampleFilePath As String = fso.BuildPath(WorkingDirectory & "\" & outPlatform, waveRelativePath)
-                                If fso.FileExists(sampleFilePath) Then
-                                    Using reader As New WaveFileReader(sampleFilePath)
-                                        Dim cents = reader.TotalTime.TotalMilliseconds / 10
-                                        duckerLength += cents
-                                    End Using
-                                End If
-                            End If
-                            'Add object to list
-                            samplesList.Add(sampleObj)
-                            'Continue Reading
-                            currentLine = Trim(LineInput(1))
-                        End While
-                    End If
-
-                    'Check for Sample Pool Modes block
-                    If StrComp(currentLine, "#SFXSamplePoolModes") = 0 Then
-                        'Read line
-                        currentLine = Trim(LineInput(1))
-                        If samplesList.Count > 0 Then
-                            While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
-                                'Get properties for each sample
-                                For SampleIndex As Integer = 0 To samplesList.Count - 1
-                                    'IterationS for each sample
-                                    For iteration As Integer = 0 To 5
-                                        'Split line
-                                        Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
-                                        Select Case UCase(lineData(0))
-                                            Case "BASEVOLUME"
-                                                samplesList(SampleIndex).BaseVolume = CSByte(lineData(1))
-                                            Case "PITCHOFFSET"
-                                                samplesList(SampleIndex).PitchOffset = Convert.ToDouble(lineData(1), numericProvider) * 1024
-                                            Case "RANDOMPITCHOFFSET"
-                                                samplesList(SampleIndex).RandomPitchOffset = Convert.ToDouble(lineData(1), numericProvider) * 1024
-                                            Case "RANDOMVOLUMEOFFSET"
-                                                samplesList(SampleIndex).RandomVolumeOffset = CSByte(lineData(1))
-                                            Case "PAN"
-                                                samplesList(SampleIndex).Pan = CSByte(lineData(1))
-                                            Case "RANDOMPAN"
-                                                samplesList(SampleIndex).RandomPan = CSByte(lineData(1))
-                                        End Select
-                                        'Continue Reading
-                                        currentLine = Trim(LineInput(1))
-                                    Next
-                                    'Add sample to sound
-                                    sfxObj.Samples.Add(samplesList(SampleIndex))
-                                Next
-                            End While
-                        End If
-                    End If
-
-                    'Check for Sample Pool Control block
-                    If StrComp(currentLine, "#SFXSamplePoolControl") = 0 Then
-                        'Read line
-                        currentLine = Trim(LineInput(1))
-                        While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
-                            Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
-                            Select Case UCase(lineData(0))
-                                Case "ACTION1"
-                                    flagsArray(3) = Convert.ToBoolean(CByte(lineData(1)))
-                                Case "RANDOMPICK"
-                                    flagsArray(4) = lineData(1).Equals("1")
-                                Case "SHUFFLED"
-                                    flagsArray(5) = lineData(1).Equals("1")
-                                Case "LOOP"
-                                    flagsArray(6) = lineData(1).Equals("1")
-                                Case "POLYPHONIC"
-                                    flagsArray(7) = lineData(1).Equals("1")
-                                Case "MINDELAY"
-                                    sfxObj.MinDelay = CInt(lineData(1))
-                                Case "MAXDELAY"
-                                    sfxObj.MaxDelay = CInt(lineData(1))
-                                Case "ENABLESUBSFX"
-                                    flagsArray(10) = lineData(1).Equals("1")
-                                    sfxObj.HasSubSfx = flagsArray(10)
-                            End Select
-                            'Continue Reading
-                            currentLine = Trim(LineInput(1))
-                        End While
-                    End If
-
-                    'Check for hashcodes block
-                    If testMode Then
-                        sfxObj.HashCode = 3
+            Using sr As StreamReader = File.OpenText(textFilePath)
+                While Not sr.EndOfStream
+                    Dim currentLine As String = sr.ReadLine.Trim
+                    'Skip empty lines
+                    If String.IsNullOrEmpty(currentLine) Or currentLine.StartsWith("//") Then
+                        Continue While
                     Else
-                        If StrComp(currentLine, "#HASHCODE") = 0 Then
-                            'Read a new line
-                            currentLine = Trim(LineInput(1))
-                            While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
-                                'Split line and get number
-                                sfxObj.HashCode = Split(currentLine, " ")(1)
+                        'Check for Parameters block
+                        If currentLine.Equals("#SFXParameters", StringComparison.OrdinalIgnoreCase) Then
+                            'Read line
+                            currentLine = sr.ReadLine.Trim
+                            While Not currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase)
+                                Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
+                                Select Case lineData(0).ToUpper
+                                    Case "REVERBSEND"
+                                        sfxObj.ReverbSend = CSByte(lineData(1))
+                                    Case "TRACKINGTYPE"
+                                        sfxObj.TrackingType = CSByte(lineData(1))
+                                    Case "INNERRADIUS"
+                                        sfxObj.InnerRadius = CShort(lineData(1))
+                                    Case "OUTERRADIUS"
+                                        sfxObj.OuterRadius = CShort(lineData(1))
+                                    Case "MAXVOICES"
+                                        sfxObj.MaxVoices = CSByte(lineData(1))
+                                    Case "ACTION1"
+                                        flagsArray(0) = Convert.ToBoolean(CByte(lineData(1)))
+                                    Case "PRIORITY"
+                                        sfxObj.Priority = CInt(lineData(1))
+                                    Case "IGNOREAGE"
+                                        flagsArray(2) = lineData(1).Equals("1")
+                                    Case "DUCKER"
+                                        sfxObj.Ducker = CInt(lineData(1))
+                                    Case "DUCKERLENGHT"
+                                        sfxObj.DuckerLength = CInt(lineData(1))
+                                    Case "DUCKERLENGTH"
+                                        sfxObj.DuckerLength = CInt(lineData(1))
+                                    Case "MASTERVOLUME"
+                                        sfxObj.MasterVolume = CInt(lineData(1))
+                                    Case "OUTDOORS"
+                                        flagsArray(8) = lineData(1).Equals("1")
+                                    Case "PAUSEINNIS"
+                                        flagsArray(9) = lineData(1).Equals("1")
+                                    Case "STEALONAGE"
+                                        flagsArray(11) = lineData(1).Equals("1")
+                                    Case "MUSICTYPE"
+                                        flagsArray(12) = lineData(1).Equals("1")
+                                End Select
                                 'Continue Reading
-                                currentLine = Trim(LineInput(1))
+                                currentLine = sr.ReadLine.Trim
                             End While
                         End If
+
+                        'Check for Sample Pool Files block
+                        If currentLine.Equals("#SFXSamplePoolFiles", StringComparison.OrdinalIgnoreCase) Then
+                            'Read line
+                            currentLine = sr.ReadLine.Trim
+                            While Not currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase)
+                                Dim waveRelativePath As String = currentLine.ToUpper.TrimStart("\")
+                                'Wave File
+                                Dim sampleObj As New EXSample With {
+                                    .FilePath = waveRelativePath
+                                }
+                                'Check if this sample is streamed or not
+                                If Path.HasExtension(sampleObj.FilePath) Then
+                                    Dim arraySearchResult As Integer = Array.IndexOf(streamsList, waveRelativePath)
+                                    If arraySearchResult = -1 Then
+                                        samplesToInclude.Add(currentLine.ToUpper)
+                                    End If
+                                End If
+                                'Get ducker
+                                If sfxObj.Ducker > 0 Then
+                                    Dim sampleFilePath As String = Path.Combine(WorkingDirectory, outPlatform, waveRelativePath)
+                                    If File.Exists(sampleFilePath) Then
+                                        Using reader As New WaveFileReader(sampleFilePath)
+                                            Dim cents = reader.TotalTime.TotalMilliseconds / 10
+                                            duckerLength += cents
+                                        End Using
+                                    End If
+                                End If
+                                'Add object to list
+                                samplesList.Add(sampleObj)
+                                'Continue Reading
+                                currentLine = sr.ReadLine.Trim
+                            End While
+                        End If
+
+                        'Check for Sample Pool Modes block
+                        If currentLine.Equals("#SFXSamplePoolModes", StringComparison.OrdinalIgnoreCase) Then
+                            'Read line
+                            currentLine = sr.ReadLine.Trim
+                            If samplesList.Count > 0 Then
+                                While Not currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase)
+                                    'Get properties for each sample
+                                    For SampleIndex As Integer = 0 To samplesList.Count - 1
+                                        'IterationS for each sample
+                                        For iteration As Integer = 0 To 5
+                                            'Split line
+                                            Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
+                                            Select Case lineData(0).ToUpper
+                                                Case "BASEVOLUME"
+                                                    samplesList(SampleIndex).BaseVolume = CSByte(lineData(1))
+                                                Case "PITCHOFFSET"
+                                                    samplesList(SampleIndex).PitchOffset = Convert.ToDouble(lineData(1), numericProvider) * 1024
+                                                Case "RANDOMPITCHOFFSET"
+                                                    samplesList(SampleIndex).RandomPitchOffset = Convert.ToDouble(lineData(1), numericProvider) * 1024
+                                                Case "RANDOMVOLUMEOFFSET"
+                                                    samplesList(SampleIndex).RandomVolumeOffset = CSByte(lineData(1))
+                                                Case "PAN"
+                                                    samplesList(SampleIndex).Pan = CSByte(lineData(1))
+                                                Case "RANDOMPAN"
+                                                    samplesList(SampleIndex).RandomPan = CSByte(lineData(1))
+                                            End Select
+                                            'Continue Reading
+                                            currentLine = sr.ReadLine.Trim
+                                        Next
+                                        'Add sample to sound
+                                        sfxObj.Samples.Add(samplesList(SampleIndex))
+                                    Next
+                                End While
+                            End If
+                        End If
+
+                        'Check for Sample Pool Control block
+                        If currentLine.Equals("#SFXSamplePoolControl", StringComparison.OrdinalIgnoreCase) Then
+                            'Read line
+                            currentLine = sr.ReadLine.Trim
+                            While Not currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase)
+                                Dim lineData = currentLine.Split(New Char() {" "c, ChrW(9)}, StringSplitOptions.RemoveEmptyEntries)
+                                Select Case lineData(0).ToUpper
+                                    Case "ACTION1"
+                                        flagsArray(3) = Convert.ToBoolean(CByte(lineData(1)))
+                                    Case "RANDOMPICK"
+                                        flagsArray(4) = lineData(1).Equals("1")
+                                    Case "SHUFFLED"
+                                        flagsArray(5) = lineData(1).Equals("1")
+                                    Case "LOOP"
+                                        flagsArray(6) = lineData(1).Equals("1")
+                                    Case "POLYPHONIC"
+                                        flagsArray(7) = lineData(1).Equals("1")
+                                    Case "MINDELAY"
+                                        sfxObj.MinDelay = CInt(lineData(1))
+                                    Case "MAXDELAY"
+                                        sfxObj.MaxDelay = CInt(lineData(1))
+                                    Case "ENABLESUBSFX"
+                                        flagsArray(10) = lineData(1).Equals("1")
+                                        sfxObj.HasSubSfx = flagsArray(10)
+                                End Select
+                                'Continue Reading
+                                currentLine = sr.ReadLine.Trim
+                            End While
+                        End If
+
+                        'Check for hashcodes block
+                        If testMode Then
+                            sfxObj.HashCode = 3
+                        Else
+                            If currentLine.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase) Then
+                                'Read a new line
+                                currentLine = sr.ReadLine.Trim
+                                While Not currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase)
+                                    'Split line and get number
+                                    sfxObj.HashCode = Split(currentLine, " ")(1)
+                                    'Continue Reading
+                                    currentLine = sr.ReadLine.Trim
+                                End While
+                            End If
+                        End If
                     End If
-                End If
-            Loop
-            FileClose(1)
+                End While
+            End Using
 
             'Add samples to the final object
             sfxObj.Samples = samplesList

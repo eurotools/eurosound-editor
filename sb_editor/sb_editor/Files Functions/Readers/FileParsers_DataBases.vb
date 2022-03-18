@@ -1,4 +1,5 @@
-﻿Imports sb_editor.ParsersObjects
+﻿Imports System.IO
+Imports sb_editor.ParsersObjects
 
 Namespace ReaderClasses
     Partial Public Class FileParsers
@@ -11,47 +12,49 @@ Namespace ReaderClasses
             Dim dependencies As New List(Of String)
 
             'Open file and read it
-            Dim currentLine As String
-            FileOpen(1, textFilePath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
-            Do Until EOF(1)
-                'Read text file
-                currentLine = Trim(LineInput(1))
+            Using sr As StreamReader = File.OpenText(textFilePath)
+                While Not sr.EndOfStream
+                    Dim currentLine As String = sr.ReadLine.Trim
+                    'Skip empty lines
+                    If String.IsNullOrEmpty(currentLine) Or currentLine.StartsWith("//") Then
+                        Continue While
+                    Else
+                        'Header info
+                        If currentLine.Contains("## ") Then
+                            'Split content
+                            Dim lineData As String() = Split(currentLine, "...")
 
-                'Header info
-                If InStr(1, currentLine, "## ") = 1 Then
-                    'Split content
-                    Dim lineData As String() = Split(currentLine, "...")
+                            'Get header info
+                            If currentLine.Contains("## EuroSound") Then
+                                DatabaseObj.HeaderInfo.FileHeader = currentLine
+                            End If
+                            If currentLine.Contains("## First Created ...") Then
+                                DatabaseObj.HeaderInfo.FirstCreated = lineData(1).Trim
+                            End If
+                            If currentLine.Contains("## Created By ...") Then
+                                DatabaseObj.HeaderInfo.CreatedBy = lineData(1).Trim
+                            End If
+                            If currentLine.Contains("## Last Modified ...") Then
+                                DatabaseObj.HeaderInfo.LastModify = lineData(1).Trim
+                            End If
+                            If currentLine.Contains("## Last Modified By ...") Then
+                                DatabaseObj.HeaderInfo.LastModifyBy = lineData(1).Trim
+                            End If
+                        End If
 
-                    'Get header info
-                    If InStr(currentLine, "## EuroSound") = 1 Then
-                        DatabaseObj.HeaderInfo.FileHeader = currentLine
+                        'Get SFXs included in this database
+                        If currentLine.Equals("#DEPENDENCIES", StringComparison.OrdinalIgnoreCase) Then
+                            currentLine = sr.ReadLine.Trim
+                            While Not currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase)
+                                'Add item to listbox
+                                dependencies.Add(currentLine)
+                                'Continue Reading
+                                currentLine = sr.ReadLine.Trim
+                            End While
+                        End If
                     End If
-                    If InStr(currentLine, "## First Created ...") = 1 Then
-                        DatabaseObj.HeaderInfo.FirstCreated = Trim(lineData(1))
-                    End If
-                    If InStr(currentLine, "## Created By ...") = 1 Then
-                        DatabaseObj.HeaderInfo.CreatedBy = Trim(lineData(1))
-                    End If
-                    If InStr(currentLine, "## Last Modified ...") = 1 Then
-                        DatabaseObj.HeaderInfo.LastModify = Trim(lineData(1))
-                    End If
-                    If InStr(currentLine, "## Last Modified By ...") = 1 Then
-                        DatabaseObj.HeaderInfo.LastModifyBy = Trim(lineData(1))
-                    End If
-                End If
-
-                If StrComp(currentLine, "#DEPENDENCIES", CompareMethod.Text) = 0 Then
-                    'Read line
-                    currentLine = Trim(LineInput(1))
-                    While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
-                        'Add item to listbox
-                        dependencies.Add(currentLine)
-                        'Continue Reading
-                        currentLine = Trim(LineInput(1))
-                    End While
-                End If
-            Loop
-            FileClose(1)
+                End While
+            End Using
 
             'Parse items to an array
             If dependencies.Count > 0 Then

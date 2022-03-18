@@ -185,7 +185,7 @@ Public Class MusicMarkersEditor
         Dim waveFileBrowser As DialogResult = OpenFileDialog_WaveFile.ShowDialog
         If waveFileBrowser = DialogResult.OK Then
             TextBox_MusicFilePath.Text = OpenFileDialog_WaveFile.FileName
-            waveFileName = GetOnlyFileName(TextBox_MusicFilePath.Text)
+            waveFileName = Path.GetFileNameWithoutExtension(TextBox_MusicFilePath.Text)
             GroupBox_MarkerTypes.Enabled = True
             GroupBox_Options.Enabled = True
             ListView_Markers.Enabled = True
@@ -194,7 +194,7 @@ Public Class MusicMarkersEditor
 
     Private Sub Button_Ok_Click(sender As Object, e As EventArgs) Handles Button_Ok.Click
         promptToSave = False
-        If fso.FileExists(TextBox_MusicFilePath.Text) Then
+        If File.Exists(TextBox_MusicFilePath.Text) Then
             markersFunctions.CreateMusicMarkerFile(Path.ChangeExtension(TextBox_MusicFilePath.Text, ".mrk"), markersDictionary)
         End If
         Close()

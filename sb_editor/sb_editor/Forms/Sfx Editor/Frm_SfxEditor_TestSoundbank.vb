@@ -8,13 +8,13 @@ Partial Public Class Frm_SfxEditor
         Dim sfxFileData As SfxFile = reader.ReadSFXFile(sfxTextFilePath)
 
         'Get output folder
-        Dim outputFolder As String = fso.BuildPath(WorkingDirectory, "TempOutputFolder\PC\SoundBanks\English")
-        CreateFolderIfRequired(outputFolder)
+        Dim outputFolder As String = Path.Combine(WorkingDirectory, "TempOutputFolder", "PC", "SoundBanks", "English")
+        Directory.CreateDirectory(outputFolder)
 
         'Get file paths
-        Dim sfxFilePath As String = fso.BuildPath(outputFolder, &HFFFE & ".sfx")
-        Dim sifFilePath As String = fso.BuildPath(outputFolder, &HFFFE & ".sif")
-        Dim sbfFilePath As String = fso.BuildPath(outputFolder, &HFFFE & ".sbf")
+        Dim sfxFilePath As String = Path.Combine(outputFolder, &HFFFE & ".sfx")
+        Dim sifFilePath As String = Path.Combine(outputFolder, &HFFFE & ".sif")
+        Dim sbfFilePath As String = Path.Combine(outputFolder, &HFFFE & ".sbf")
 
         'Get SFX and samples list
         Dim samplesToInclude As New HashSet(Of String)
@@ -25,13 +25,13 @@ Partial Public Class Frm_SfxEditor
 
         'Get output file paths
         Dim sfxFileName As String = "HC" & Hex(GetSfxFileName(Array.IndexOf(SfxLanguages, "English"), &HFFFE)).PadLeft(6, "0"c)
-        Dim outputFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary\" & GetEngineXFolder("PC") & "\" & GetEngineXLangFolder("English"))
-        CreateFolderIfRequired(outputFilePath)
+        Dim outputFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder("PC"), GetEngineXLangFolder("English"))
+        Directory.CreateDirectory(outputFilePath)
 
         'Debug file
-        Dim debugFile As String = fso.BuildPath(WorkingDirectory, "Debug_Report")
-        CreateFolderIfRequired(debugFile)
-        FileOpen(1, fso.BuildPath(debugFile, "StreamDebugSoundBank____SB_TEST_SFX____PC_English.txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
+        Dim debugFile As String = Path.Combine(WorkingDirectory, "Debug_Report")
+        Directory.CreateDirectory(debugFile)
+        FileOpen(1, Path.Combine(debugFile, "StreamDebugSoundBank____SB_TEST_SFX____PC_English.txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
         PrintLine(1, "SoundBank Output Debug Data")
         PrintLine(1, Format(Now, "dd/mm/yyy"))
         PrintLine(1, Format(Now, "hh:mm:ss"))
@@ -53,10 +53,10 @@ Partial Public Class Frm_SfxEditor
         End Using
 
         'Merge files
-        Dim fileOutputPath As String = fso.BuildPath(outputFilePath, sfxFileName & ".SFX")
+        Dim fileOutputPath As String = Path.Combine(outputFilePath, sfxFileName & ".SFX")
         ESUtils.MusXBuild_Soundbank.BuildSoundbankFile(sfxFilePath, sifFilePath, sbfFilePath, Nothing, fileOutputPath, &HFFFE, False)
 
         'Copy Soundbank to destination folder
-        File.Copy(fileOutputPath, fso.BuildPath(Application.StartupPath, "SystemFiles\testAudioMod\_Eng\" & sfxFileName & ".SFX"), True)
+        File.Copy(fileOutputPath, Path.Combine(Application.StartupPath, "SystemFiles", "testAudioMod", "_Eng", sfxFileName & ".SFX"), True)
     End Sub
 End Class

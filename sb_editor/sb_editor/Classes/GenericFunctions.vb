@@ -52,15 +52,9 @@ Friend Module GenericFunctions
     '*===============================================================================================
     '* OTHER FUNCTIONS
     '*===============================================================================================
-    Friend Sub CreateFolderIfRequired(destinationFilePath As String)
-        If Not fso.FolderExists(destinationFilePath) Then
-            MkDir(destinationFilePath)
-        End If
-    End Sub
-
     Friend Sub EditWaveFile(waveFilePath As String)
         'Open tool if files exists
-        If fso.FileExists(waveFilePath) AndAlso fso.FileExists(ProjAudioEditor) Then
+        If File.Exists(waveFilePath) AndAlso File.Exists(ProjAudioEditor) Then
             Try
                 Dim procInfo As New ProcessStartInfo With {
                     .FileName = """" & ProjAudioEditor & """",
@@ -95,9 +89,9 @@ Friend Module GenericFunctions
         Application.Exit()
     End Sub
 
-    Friend Function GetFileName(foldeToCheckIn As String, FileNamePattern As String) As String
+    Friend Function GetNextAvailableFileName(foldeToCheckIn As String, FileNamePattern As String) As String
         Dim fileNumber As Integer = 0
-        While fso.FileExists(fso.BuildPath(foldeToCheckIn, FileNamePattern & fileNumber & ".txt"))
+        While File.Exists(Path.Combine(foldeToCheckIn, FileNamePattern & fileNumber & ".txt"))
             fileNumber += 1
         End While
         Return FileNamePattern & fileNumber
@@ -106,18 +100,6 @@ Friend Module GenericFunctions
     '*===============================================================================================
     '* FILES FUNCTIONS
     '*===============================================================================================
-    Friend Function GetOnlyFileName(fullFileName As String) As String
-        Dim a As Integer = InStrRev(fullFileName, "\") + 1
-        Dim b As Integer = InStrRev(fullFileName, ".")
-        Dim fileName As String
-        If b > a Then
-            fileName = Mid(fullFileName, a, b - a)
-        Else
-            fileName = fullFileName
-        End If
-        Return fileName
-    End Function
-
     Friend Function CountFolderFiles(Folder As String, Filter As String) As Integer
         Dim CountFilesDir As Integer = 0
         Dim sFile As String = Dir(Folder & "\" & Filter)
@@ -134,13 +116,13 @@ Friend Module GenericFunctions
 
     Friend Function RenameFile(defaultResponse As String, objectType As String, objectFolder As String) As String
         While True
-            Dim inputName As String = Trim(InputBox("Enter New Name For " & objectType & " " & defaultResponse, "Rename " & objectType, defaultResponse))
+            Dim inputName As String = InputBox("Enter New Name For " & objectType & " " & defaultResponse, "Rename " & objectType, defaultResponse).Trim
             Dim match As Match = Regex.Match(inputName, namesFormat)
             If (match.Success) Then
-                Dim inputFilePath As String = fso.BuildPath(objectFolder, inputName & ".txt")
-                If StrComp(defaultResponse, inputName) = 0 Then
+                Dim inputFilePath As String = Path.Combine(objectFolder, inputName & ".txt")
+                If defaultResponse.Equals(inputName) Then
                     Return ""
-                ElseIf fso.FileExists(inputFilePath) Then
+                ElseIf File.Exists(inputFilePath) Then
                     MsgBox(objectType & " Label '" & inputName & "' already exists please use another name!", vbOKOnly + vbCritical, "Duplicate " & objectType & " Name")
                 Else
                     Return inputName
@@ -154,11 +136,11 @@ Friend Module GenericFunctions
 
     Friend Function CopyFile(defaultResponse As String, objectType As String, objectFolder As String) As String
         While True
-            Dim inputName As String = Trim(InputBox("Enter New Name For " & objectType & " " & defaultResponse, "Copy " & objectType, defaultResponse))
+            Dim inputName As String = InputBox("Enter New Name For " & objectType & " " & defaultResponse, "Copy " & objectType, defaultResponse).Trim
             Dim match As Match = Regex.Match(inputName, namesFormat)
             If (match.Success) Then
-                Dim inputFilePath As String = fso.BuildPath(objectFolder, inputName & ".txt")
-                If fso.FileExists(inputFilePath) Then
+                Dim inputFilePath As String = Path.Combine(objectFolder, inputName & ".txt")
+                If File.Exists(inputFilePath) Then
                     MsgBox(objectType & " Label '" & inputName & "' already exists please use another name!", vbOKOnly + vbCritical, "Duplicate " & objectType & " Name")
                 Else
                     Return inputName
@@ -172,11 +154,11 @@ Friend Module GenericFunctions
 
     Friend Function NewFile(objectName As String, objectFolder As String) As String
         While True
-            Dim inputName As String = Trim(InputBox("Enter Name", "Create New", objectName))
+            Dim inputName As String = InputBox("Enter Name", "Create New", objectName).Trim
             Dim match As Match = Regex.Match(inputName, namesFormat)
             If (match.Success) Then
-                Dim inputFilePath As String = fso.BuildPath(objectFolder, inputName & ".txt")
-                If fso.FileExists(inputFilePath) Then
+                Dim inputFilePath As String = Path.Combine(objectFolder, inputName & ".txt")
+                If File.Exists(inputFilePath) Then
                     MsgBox("Label '" & inputName & "' already exists please use another name!", vbOKOnly + vbCritical, "Duplicate Name")
                 Else
                     Return inputName

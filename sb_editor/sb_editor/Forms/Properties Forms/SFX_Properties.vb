@@ -28,13 +28,13 @@ Public Class SFX_Properties
         Textbox_SFX_Name.Text = sfxName
 
         'Get DataBase files
-        Dim databaseFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "Databases"), "*.txt", SearchOption.TopDirectoryOnly)
+        Dim databaseFiles As String() = Directory.GetFiles(Path.Combine(WorkingDirectory, "Databases"), "*.txt", SearchOption.TopDirectoryOnly)
         For fileIndex As Integer = 0 To databaseFiles.Length - 1
             FileOpen(1, databaseFiles(fileIndex), OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
             Do Until EOF(1)
                 Dim currentLine As String = LineInput(1)
                 If StrComp(currentLine, sfxName) = 0 Then
-                    ListBox_DataBase_Dependencies.Items.Add(GetOnlyFileName(databaseFiles(fileIndex)))
+                    ListBox_DataBase_Dependencies.Items.Add(Path.GetFileNameWithoutExtension(databaseFiles(fileIndex)))
                     'Quit loop
                     Exit Do
                 End If
@@ -52,18 +52,19 @@ Public Class SFX_Properties
         'Add sample name
         Dim SamplesList As New List(Of String)
         For index As Integer = 0 To SfxFileData.Samples.Count - 1
-            SamplesList.Add(UCase(fso.BuildPath(WorkingDirectory & "\Master", SfxFileData.Samples(index).FilePath.Trim)))
+            SamplesList.Add(UCase(Path.Combine(WorkingDirectory & "\Master", SfxFileData.Samples(index).FilePath.Trim)))
         Next
         ListBox_Samples.Items.AddRange(SamplesList.ToArray)
 
         'Update counters
         Textbox_DataBase_Deps.Text = ListBox_DataBase_Dependencies.Items.Count
-        Label_DatabaseCount_Value.Text = CountFolderFiles(fso.BuildPath(WorkingDirectory, "Databases"), "*.txt")
-        Label_SfxCount_Value.Text = CountFolderFiles(fso.BuildPath(WorkingDirectory, "SFXs"), "*.txt")
+        Label_DatabaseCount_Value.Text = CountFolderFiles(Path.Combine(WorkingDirectory, "Databases"), "*.txt")
+        Label_SfxCount_Value.Text = CountFolderFiles(Path.Combine(WorkingDirectory, "SFXs"), "*.txt")
 
         'Get master path and count samples
-        Dim MasterFilePath = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")
-        If fso.FolderExists(MasterFilePath) Then
+        Dim fso As New FileSystemObject
+        Dim MasterFilePath = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")
+        If Directory.Exists(MasterFilePath) Then
             Label_SampleCount_Value.Text = Directory.GetFiles(MasterFilePath, "*.wav", SearchOption.AllDirectories).Length
             'Get sample folder size
             Dim fold As Folder = fso.GetFolder(MasterFilePath)

@@ -1,4 +1,6 @@
-﻿Partial Public Class ResampleForm
+﻿Imports System.IO
+
+Partial Public Class ResampleForm
     Private Sub DataTableToListView()
         ListView_Samples.BeginUpdate()
         For Each row As DataRow In dataTableInfo.Rows
@@ -45,7 +47,7 @@
     Private Function GetFileText(name As String) As String
         Dim fileContents As String = String.Empty
         ' If the file has been deleted since we took the snapshot, ignore it And return the empty string.  
-        If fso.FileExists(name) Then
+        If File.Exists(name) Then
             fileContents = IO.File.ReadAllText(name)
         End If
         Return fileContents
@@ -56,29 +58,30 @@
         If ListView_Samples.SelectedItems.Count > 0 Then
             'Get wave file path
             Dim waveRelativePath = ListView_Samples.SelectedItems(0).Text
-            Dim waveFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master" & waveRelativePath)
+            Dim waveFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", waveRelativePath)
 
             'Ensure that the Wave Path exists
-            If fso.FileExists(waveFilePath) Then
+            If File.Exists(waveFilePath) Then
                 'Play original
                 If ComboBox_PreviewOptions.SelectedIndex = 0 Then
                     My.Computer.Audio.Play(waveFilePath)
                 Else
                     'Temporal file and folder path
-                    Dim outputFolder = fso.BuildPath(WorkingDirectory, "TempOutputFolder")
-                    Dim outputFilePath = fso.BuildPath(outputFolder, "preview_resampled.wav")
+                    Dim outputFolder = Path.Combine(WorkingDirectory, "TempOutputFolder")
+                    Dim outputFilePath = Path.Combine(outputFolder, "preview_resampled.wav")
 
                     'Ensure that the file exists
-                    If fso.FileExists("SystemFiles\Sox.exe") Then
+                    If File.Exists("SystemFiles\Sox.exe") Then
                         'Create output folder if not exists
-                        If Not fso.FolderExists(outputFolder) Then
-                            fso.CreateFolder(outputFolder)
-                        End If
+                        Directory.CreateDirectory(outputFolder)
+
                         'Get sample rate
                         Dim formatRates As Dictionary(Of String, UInteger) = ProjectSettingsFile.sampleRateFormats(ComboBox_PreviewOptions.SelectedItem)
                         Dim sampleRate As Integer = formatRates(ComboBox_AvailableRates.SelectedItem)
+
                         'Execute command
                         Shell("SystemFiles\Sox.exe" & " """ & waveFilePath & """ -r " & sampleRate & " """ & outputFilePath & """", AppWinStyle.Hide, True)
+
                         'Play audio
                         My.Computer.Audio.Play(outputFilePath)
                     End If
@@ -91,7 +94,7 @@
         'Ensure that the selection is not null
         If ListView_Samples.SelectedItems.Count > 0 Then
             'Get wave file path
-            Dim waveFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\" & ListView_Samples.SelectedItems(0).Text)
+            Dim waveFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", ListView_Samples.SelectedItems(0).Text)
             'Open tool if files exists
             EditWaveFile(waveFilePath)
         End If

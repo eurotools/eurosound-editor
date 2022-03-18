@@ -19,15 +19,14 @@ Public Class UserControl_SFXs
         Dim hashCodesArray As String() = Nothing
 
         'Get files from directory and add it to list
-        If fso.FolderExists(fso.BuildPath(WorkingDirectory, "SFXs")) Then
-            Dim fileToadd As String = Dir(fso.BuildPath(WorkingDirectory, "SFXs\*.txt"))
-            Do While fileToadd > ""
-                Dim fileNameLength As Integer = Len(fileToadd)
-                Dim fileName As String = Microsoft.VisualBasic.Left(fileToadd, fileNameLength - Len(".txt"))
-                hashCodesList.Add(fileName)
-                'Get new item
-                fileToadd = Dir()
-            Loop
+        Dim sfxDir As String = Path.Combine(WorkingDirectory, "SFXs")
+        If Directory.Exists(sfxDir) Then
+            Dim filesToInspect As String() = Directory.GetFiles(sfxDir, "*.txt", SearchOption.TopDirectoryOnly)
+            For fileIndex As Integer = 0 To filesToInspect.Length - 1
+                Dim currentFile As String = filesToInspect(fileIndex)
+                hashCodesList.Add(Path.GetFileNameWithoutExtension(currentFile))
+            Next
+
             'Get array
             hashCodesArray = hashCodesList.ToArray
             Array.Sort(hashCodesArray)
@@ -40,8 +39,8 @@ Public Class UserControl_SFXs
             Label_TotalSfx.Text = "Total: " & hashCodesArray.Length
 
             'Update Project file
-            Dim projectFile As String = fso.BuildPath(WorkingDirectory, "Project.txt")
-            Dim temporalProjFile As ProjectFile = textFileReaders.ReadProjectFile(fso.BuildPath(WorkingDirectory, "System\TempFileName.txt"))
+            Dim projectFile As String = Path.Combine(WorkingDirectory, "Project.txt")
+            Dim temporalProjFile As ProjectFile = textFileReaders.ReadProjectFile(Path.Combine(WorkingDirectory, "System", "TempFileName.txt"))
             writers.CreateProjectFile(projectFile, temporalProjFile.SoundBankList, temporalProjFile.DataBaseList, hashCodesArray)
         End If
 
@@ -50,8 +49,8 @@ Public Class UserControl_SFXs
 
     Public Sub LoadRefineList()
         'Get arrays item
-        Dim refineFilePath As String = fso.BuildPath(WorkingDirectory, "System\RefineSearch.txt")
-        If fso.FileExists(refineFilePath) Then
+        Dim refineFilePath As String = Path.Combine(WorkingDirectory, "System", "RefineSearch.txt")
+        If File.Exists(refineFilePath) Then
             Dim keywords As String() = textFileReaders.ReadRefineList(refineFilePath)
             ComboBox_SFX_Section.Items.AddRange(keywords)
             'Select first item
@@ -80,10 +79,10 @@ Public Class UserControl_SFXs
 
     Private Sub CheckBox_SortByDate_CheckStateChanged(sender As Object, e As EventArgs) Handles CheckBox_SortByDate.CheckStateChanged
         If CheckBox_SortByDate.Checked Then
-            Dim sfxFolderPath As String = fso.BuildPath(WorkingDirectory, "SFXs")
-            If fso.FolderExists(sfxFolderPath) Then
+            Dim sfxFolderPath As String = Path.Combine(WorkingDirectory, "SFXs")
+            If Directory.Exists(sfxFolderPath) Then
                 Dim di As New DirectoryInfo(sfxFolderPath)
-                Dim fiArray As String() = di.GetFiles().OrderByDescending(Function(p) p.LastWriteTime).Select(Function(f) GetOnlyFileName(f.Name)).ToArray()
+                Dim fiArray As String() = di.GetFiles().OrderByDescending(Function(p) p.LastWriteTime).Select(Function(f) Path.GetFileNameWithoutExtension(f.Name)).ToArray()
                 'Add items to listbox
                 ListBox_SFXs.BeginUpdate()
                 ListBox_SFXs.Items.Clear()
@@ -100,8 +99,8 @@ Public Class UserControl_SFXs
         Dim usedSfxs As New HashSet(Of String)
         Dim allSfxs As New HashSet(Of String)
         'Get all used SFX
-        Dim databasesFilePath As String = fso.BuildPath(WorkingDirectory, "DataBases")
-        If fso.FolderExists(databasesFilePath) Then
+        Dim databasesFilePath As String = Path.Combine(WorkingDirectory, "DataBases")
+        If Directory.Exists(databasesFilePath) Then
             'Get all available files
             Dim availableDatabases As String() = Directory.GetFiles(databasesFilePath, "*.txt", SearchOption.TopDirectoryOnly)
             'Inspect files
@@ -110,11 +109,11 @@ Public Class UserControl_SFXs
                 usedSfxs.UnionWith(databaseFileData.Dependencies)
             Next
             'Get all SFXs from the folder
-            Dim sfxDirectory As String = fso.BuildPath(WorkingDirectory, "SFXs")
-            If fso.FolderExists(sfxDirectory) Then
+            Dim sfxDirectory As String = Path.Combine(WorkingDirectory, "SFXs")
+            If Directory.Exists(sfxDirectory) Then
                 Dim availableSfxs As String() = Directory.GetFiles(sfxDirectory, "*.txt", SearchOption.TopDirectoryOnly)
                 For index As Integer = 0 To availableSfxs.Length - 1
-                    allSfxs.Add(GetOnlyFileName(availableSfxs(index)))
+                    allSfxs.Add(Path.GetFileNameWithoutExtension(availableSfxs(index)))
                 Next
             End If
             'Add results
@@ -182,7 +181,7 @@ Public Class UserControl_SFXs
                 'Get list of items
                 Dim databaseDependencies As String() = mainForm.ListBox_DataBaseSFX.Items.Cast(Of String).ToArray
                 'Update text file
-                Dim databaseTxt As String = fso.BuildPath(WorkingDirectory, "DataBases\" & mainForm.ListBox_DataBases.SelectedItem & ".txt")
+                Dim databaseTxt As String = Path.Combine(WorkingDirectory, "DataBases", mainForm.ListBox_DataBases.SelectedItem & ".txt")
                 writers.UpdateDataBaseText(databaseTxt, databaseDependencies, textFileReaders)
             Else
                 My.Computer.Audio.PlaySystemSound(Media.SystemSounds.Asterisk)
@@ -195,9 +194,9 @@ Public Class UserControl_SFXs
         If ListBox_SFXs.SelectedItems.Count = 1 Then
             'Get item name and full path
             Dim selectedSFX As String = ListBox_SFXs.SelectedItem
-            Dim sfxFullPath As String = fso.BuildPath(WorkingDirectory, "SFXs\" & selectedSFX & ".txt")
+            Dim sfxFullPath As String = Path.Combine(WorkingDirectory, "SFXs", selectedSFX & ".txt")
             'Ensure that the file exists 
-            If fso.FileExists(sfxFullPath) Then
+            If File.Exists(sfxFullPath) Then
                 'Show form
                 Dim sfxProps As New SFX_Properties(selectedSFX, sfxFullPath)
                 sfxProps.ShowDialog()
@@ -215,9 +214,9 @@ Public Class UserControl_SFXs
         If ListBox_SFXs.SelectedItems.Count = 1 AndAlso AllowDoubleClick Then
             'Get item and file path
             Dim selectedSFX As String = ListBox_SFXs.SelectedItem
-            Dim SelectedSfxPath = fso.BuildPath(WorkingDirectory, "SFXs\" & selectedSFX & ".txt")
+            Dim SelectedSfxPath = Path.Combine(WorkingDirectory, "SFXs", selectedSFX & ".txt")
             'Ensure that the file exists
-            If fso.FileExists(SelectedSfxPath) Then
+            If File.Exists(SelectedSfxPath) Then
                 'Open editor
                 Using sfxEditor As New Frm_SfxEditor(selectedSFX)
                     sfxEditor.ShowDialog()
@@ -230,15 +229,15 @@ Public Class UserControl_SFXs
 
     Private Sub ContextMenuSfx_AddNewSfx_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_AddNewSfx.Click
         'Ensure that the default file exists
-        If fso.FileExists(SysFileSfxDefaults) AndAlso File.ReadAllLines(SysFileSfxDefaults).Length > 7 Then
-            Dim folderToCheck As String = fso.BuildPath(WorkingDirectory, "SFXs")
-            Dim sfxFileName As String = NewFile(GetFileName(folderToCheck, "SFX_Label"), folderToCheck)
+        If File.Exists(SysFileSfxDefaults) AndAlso File.ReadAllLines(SysFileSfxDefaults).Length > 7 Then
+            Dim folderToCheck As String = Path.Combine(WorkingDirectory, "SFXs")
+            Dim sfxFileName As String = NewFile(GetNextAvailableFileName(folderToCheck, "SFX_Label"), folderToCheck)
             If sfxFileName > "" Then
                 'Create and save file
                 Dim fileData As SfxFile = textFileReaders.ReadSFXFile(SysFileSfxDefaults)
                 fileData.HashCode = SFXHashCodeNumber
                 'Get a new hashcode
-                writers.WriteSfxFile(fileData, fso.BuildPath(folderToCheck, sfxFileName & ".txt"))
+                writers.WriteSfxFile(fileData, Path.Combine(folderToCheck, sfxFileName & ".txt"))
                 'Add item to list
                 Dim itemIndex As Integer = ListBox_SFXs.Items.Add(sfxFileName)
                 ListBox_SFXs.SelectedIndices.Clear()
@@ -249,11 +248,11 @@ Public Class UserControl_SFXs
                 End If
                 'Update Global Variable
                 SFXHashCodeNumber += 1
-                writers.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
+                writers.UpdateMiscFile(Path.Combine(WorkingDirectory, "System", "Misc.txt"))
 
                 'Update Project file
-                Dim temporalFile As String = fso.BuildPath(WorkingDirectory, "System\TempFileName.txt")
-                Dim projectFile As String = fso.BuildPath(WorkingDirectory, "Project.txt")
+                Dim temporalFile As String = Path.Combine(WorkingDirectory, "System", "TempFileName.txt")
+                Dim projectFile As String = Path.Combine(WorkingDirectory, "Project.txt")
                 Dim temporalProjFile As ProjectFile = textFileReaders.ReadProjectFile(temporalFile)
                 writers.MergeFiles(temporalFile, temporalFile, textFileReaders.ReadProjectFile(projectFile), "#SFXList")
                 writers.CreateProjectFile(projectFile, temporalProjFile.SoundBankList, temporalProjFile.DataBaseList, ListBox_SFXs.Items.Cast(Of String).ToArray)
@@ -271,19 +270,19 @@ Public Class UserControl_SFXs
     Private Sub ContextMenuSfx_Copy_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_Copy.Click
         If ListBox_SFXs.SelectedItems.Count = 1 Then
             'Ask user
-            Dim sfxCopyName As String = CopyFile(ListBox_SFXs.SelectedItem, "SFX", fso.BuildPath(WorkingDirectory, "SFXs\"))
+            Dim sfxCopyName As String = CopyFile(ListBox_SFXs.SelectedItem, "SFX", Path.Combine(WorkingDirectory, "SFXs"))
             If sfxCopyName IsNot "" Then
                 'Read original file content
-                Dim originalFilePath As String = fso.BuildPath(WorkingDirectory, "SFXs\" & ListBox_SFXs.SelectedItem & ".txt")
+                Dim originalFilePath As String = Path.Combine(WorkingDirectory, "SFXs", ListBox_SFXs.SelectedItem & ".txt")
                 Dim fileContent As String() = File.ReadAllLines(originalFilePath)
                 'Update HashCode
                 Dim hashCodePosition As Integer = Array.IndexOf(fileContent, "#HASHCODE") + 1
                 If (hashCodePosition < fileContent.Length) Then
                     fileContent(hashCodePosition) = "HashCodeNumber " & SFXHashCodeNumber
                     SFXHashCodeNumber += 1
-                    writers.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
+                    writers.UpdateMiscFile(Path.Combine(WorkingDirectory, "System", "Misc.txt"))
                     'Write new file
-                    File.WriteAllLines(fso.BuildPath(WorkingDirectory, "SFXs\" & sfxCopyName & ".txt"), fileContent)
+                    File.WriteAllLines(Path.Combine(WorkingDirectory, "SFXs" & sfxCopyName & ".txt"), fileContent)
                     ListBox_SFXs.Items.Add(sfxCopyName)
                 End If
                 Erase fileContent
@@ -307,13 +306,13 @@ Public Class UserControl_SFXs
             Dim mainForm As MainFrame = CType(Application.OpenForms("MainFrame"), MainFrame)
             mainForm.ListBox_DataBases.SelectedItems.Clear()
             mainForm.ListBox_DataBaseSFX.Items.Clear()
+
             'Ensure that the Trash folder exists
-            Dim sfxsTrash As String = fso.BuildPath(WorkingDirectory, "SFXs_Trash")
-            If Not fso.FolderExists(sfxsTrash) Then
-                fso.CreateFolder(sfxsTrash)
-            End If
+            Dim sfxsTrash As String = Path.Combine(WorkingDirectory, "SFXs_Trash")
+            Directory.CreateDirectory(sfxsTrash)
+
             'Get database files
-            Dim databaseFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "DataBases"), "*.txt", SearchOption.TopDirectoryOnly)
+            Dim databaseFiles As String() = Directory.GetFiles(Path.Combine(WorkingDirectory, "DataBases"), "*.txt", SearchOption.TopDirectoryOnly)
             For i As Integer = 0 To databaseFiles.Length - 1
                 'Update database files
                 Dim databaseFile As DataBaseFile = textFileReaders.ReadDataBaseFile(databaseFiles(i))
@@ -332,8 +331,8 @@ Public Class UserControl_SFXs
                 Dim filesToDelete As IEnumerable(Of String) = Directory.GetFiles(WorkingDirectory & "\SFXs", itemsToDelete(i) & ".txt", SearchOption.AllDirectories)
                 Using enumerator As IEnumerator(Of String) = filesToDelete.GetEnumerator
                     While enumerator.MoveNext
-                        fso.CopyFile(enumerator.Current, fso.BuildPath(sfxsTrash, itemsToDelete(i) & ".txt"))
-                        fso.DeleteFile(enumerator.Current)
+                        File.Copy(enumerator.Current, Path.Combine(sfxsTrash, itemsToDelete(i) & ".txt"), True)
+                        File.Delete(enumerator.Current)
                     End While
                 End Using
             Next
@@ -343,8 +342,8 @@ Public Class UserControl_SFXs
             Label_TotalSfx.Text = "Total: " & ListBox_SFXs.Items.Count
 
             'Update Project file
-            Dim temporalFile As String = fso.BuildPath(WorkingDirectory, "System\TempFileName.txt")
-            Dim projectFile As String = fso.BuildPath(WorkingDirectory, "Project.txt")
+            Dim temporalFile As String = Path.Combine(WorkingDirectory, "System", "TempFileName.txt")
+            Dim projectFile As String = Path.Combine(WorkingDirectory, "Project.txt")
             Dim temporalProjFile As ProjectFile = textFileReaders.ReadProjectFile(temporalFile)
             writers.MergeFiles(temporalFile, temporalFile, textFileReaders.ReadProjectFile(projectFile), "#SFXList")
             writers.CreateProjectFile(projectFile, temporalProjFile.SoundBankList, temporalProjFile.DataBaseList, ListBox_SFXs.Items.Cast(Of String).ToArray)
@@ -355,13 +354,13 @@ Public Class UserControl_SFXs
         If ListBox_SFXs.SelectedItems.Count = 1 Then
             'Get current fileName
             Dim selectedName As String = ListBox_SFXs.SelectedItem
-            Dim currentFileName As String = fso.BuildPath(WorkingDirectory, "SFXs\" & selectedName & ".txt")
+            Dim currentFileName As String = Path.Combine(WorkingDirectory, "SFXs", selectedName & ".txt")
             'Ask for a new name
-            Dim diagResult As String = RenameFile(selectedName, "SFX", fso.BuildPath(WorkingDirectory, "SFXs\"))
+            Dim diagResult As String = RenameFile(selectedName, "SFX", Path.Combine(WorkingDirectory, "SFXs"))
             If diagResult IsNot "" Then
                 Dim mainForm As MainFrame = CType(Application.OpenForms("MainFrame"), MainFrame)
                 'Update UI and text file
-                fso.MoveFile(currentFileName, fso.BuildPath(WorkingDirectory, "SFXs\" & diagResult & ".txt"))
+                File.Move(currentFileName, Path.Combine(WorkingDirectory, "SFXs", diagResult & ".txt"))
                 ListBox_SFXs.Items(ListBox_SFXs.SelectedIndex) = diagResult
                 'Clear Selection
                 mainForm.TreeView_SoundBanks.SelectedNode = Nothing
@@ -370,9 +369,9 @@ Public Class UserControl_SFXs
                 'Update project file
                 Dim databasesToWrite As String() = mainForm.ListBox_DataBases.Items.Cast(Of String).ToArray
                 Dim sfxsToWriter As String() = mainForm.UserControl_SFXs.ListBox_SFXs.Items.Cast(Of String).ToArray
-                writers.CreateProjectFile(fso.BuildPath(WorkingDirectory, "Project.txt"), Nothing, databasesToWrite, sfxsToWriter)
+                writers.CreateProjectFile(Path.Combine(WorkingDirectory, "Project.txt"), Nothing, databasesToWrite, sfxsToWriter)
                 'Update databases
-                Dim databaseFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "Databases"), "*.txt", SearchOption.TopDirectoryOnly)
+                Dim databaseFiles As String() = Directory.GetFiles(Path.Combine(WorkingDirectory, "Databases"), "*.txt", SearchOption.TopDirectoryOnly)
                 For index As Integer = 0 To databaseFiles.Length - 1
                     'Read file
                     Dim fileLines As String() = File.ReadAllLines(databaseFiles(index))
@@ -390,11 +389,11 @@ Public Class UserControl_SFXs
     End Sub
 
     Private Sub RemoveSfxAllFolders(filename As String, trashFolder As String)
-        Dim fileList As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "SFXs"), filename & ".txt", SearchOption.AllDirectories)
+        Dim fileList As String() = Directory.GetFiles(Path.Combine(WorkingDirectory, "SFXs"), filename & ".txt", SearchOption.AllDirectories)
         For index As Integer = 0 To fileList.Length - 1
-            If fso.FileExists(fileList(index)) Then
-                fso.CopyFile(fileList(index), trashFolder)
-                fso.DeleteFile(fileList(index))
+            If File.Exists(fileList(index)) Then
+                File.Copy(fileList(index), trashFolder, True)
+                File.Delete(fileList(index))
             End If
         Next
         Erase fileList
@@ -402,7 +401,7 @@ Public Class UserControl_SFXs
 
     Private Sub ContextMenuSfx_NewMultiple_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_NewMultiple.Click
         'Ensure that the default file exists
-        If fso.FileExists(SysFileSfxDefaults) AndAlso File.ReadAllLines(SysFileSfxDefaults).Length > 7 Then
+        If File.Exists(SysFileSfxDefaults) AndAlso File.ReadAllLines(SysFileSfxDefaults).Length > 7 Then
             'Check if we need to realloc
             If SFXHashCodeNumber = 0 Then
                 MsgBox("Please Re-Alloc Hashcodes under Advanced Menu", vbOKOnly + vbExclamation, "EuroSound")
@@ -424,7 +423,7 @@ Public Class UserControl_SFXs
     Private Sub ContextMenuSfx_MultiEditor_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_MultiEditor.Click
         Dim listOfSFXs As New List(Of String)
         For itemIndex As Integer = 0 To ListBox_SFXs.SelectedItems.Count - 1
-            listOfSFXs.Add(fso.BuildPath(WorkingDirectory & "\SFXs", ListBox_SFXs.SelectedItems(itemIndex) & ".txt"))
+            listOfSFXs.Add(Path.Combine(WorkingDirectory, "SFXs", ListBox_SFXs.SelectedItems(itemIndex) & ".txt"))
         Next
 
         Dim multiEditor As New SfxMultiEditor(listOfSFXs.ToArray)
@@ -450,7 +449,7 @@ Public Class UserControl_SFXs
                         mainForm.ListBox_DataBaseSFX.Items.Remove(mainForm.ListBox_DataBaseSFX.SelectedItems(0))
                     End While
                     'Update text
-                    Dim databaseTxt As String = fso.BuildPath(WorkingDirectory, "DataBases\" & mainForm.ListBox_DataBases.SelectedItem & ".txt")
+                    Dim databaseTxt As String = Path.Combine(WorkingDirectory, "DataBases", mainForm.ListBox_DataBases.SelectedItem & ".txt")
                     Dim databaseDependencies As String() = mainForm.ListBox_DataBaseSFX.Items.Cast(Of String).ToArray
                     writers.UpdateDataBaseText(databaseTxt, databaseDependencies, textFileReaders)
                 End If
@@ -463,9 +462,9 @@ Public Class UserControl_SFXs
         If ListBox_SFXs.SelectedItems.Count > 0 AndAlso AllowDoubleClick Then
             'Get item and file path
             Dim selectedSFX As String = ListBox_SFXs.SelectedItem
-            Dim SelectedSfxPath = fso.BuildPath(WorkingDirectory, "SFXs\" & selectedSFX & ".txt")
+            Dim SelectedSfxPath = Path.Combine(WorkingDirectory, "SFXs", selectedSFX & ".txt")
             'Ensure that the file exists
-            If fso.FileExists(SelectedSfxPath) Then
+            If File.Exists(SelectedSfxPath) Then
                 'Open editor
                 Dim sfxEditor As New Frm_SfxEditor(selectedSFX)
                 sfxEditor.ShowDialog()

@@ -1,4 +1,5 @@
-﻿Imports sb_editor.ReaderClasses
+﻿Imports System.IO
+Imports sb_editor.ReaderClasses
 Imports sb_editor.WritersClasses
 
 Public Class Frm_PurgeGo
@@ -43,8 +44,8 @@ Public Class Frm_PurgeGo
 
         'Get output folder
         Dim masterFolderName As String = "Master_Trash_ " & Date.Now.Day & "_" & Date.Now.Month & "_" & Date.Now.Year
-        Dim destinationFolder As String = fso.BuildPath(WorkingDirectory, masterFolderName)
-        CreateFolderIfRequired(destinationFolder)
+        Dim destinationFolder As String = Path.Combine(WorkingDirectory, masterFolderName)
+        Directory.CreateDirectory(destinationFolder)
 
         'Get original sample list
         Dim samplesDataTable As DataTable = textFileReaders.SamplesFileToDatatable(SysFileSamples)
@@ -54,7 +55,7 @@ Public Class Frm_PurgeGo
         Next
 
         'Get used samples list
-        Dim usedSamples As String() = textFileReaders.ReadPurgeList(fso.BuildPath(WorkingDirectory, "Report\Last_Purge.txt"))
+        Dim usedSamples As String() = textFileReaders.ReadPurgeList(Path.Combine(WorkingDirectory, "Report", "Last_Purge.txt"))
 
         'Check if we need to remove samples
         Dim samplesToRemove As String() = samplesArray.Except(usedSamples).ToArray
@@ -62,16 +63,16 @@ Public Class Frm_PurgeGo
             For sampleIndex As Integer = 0 To samplesToRemove.Length - 1
                 Dim relativeFilePath As String = samplesToRemove(sampleIndex)
                 If relativeFilePath > "" Then
-                    Dim masterFilePath As String = fso.BuildPath(WorkingDirectory & "\Master", relativeFilePath)
-                    Dim destinationFilePath As String = fso.BuildPath(WorkingDirectory & "\" & masterFolderName, relativeFilePath)
+                    Dim masterFilePath As String = Path.Combine(WorkingDirectory, "Master", relativeFilePath)
+                    Dim destinationFilePath As String = Path.Combine(WorkingDirectory, masterFolderName, relativeFilePath)
                     'Calculate and report progress
                     Invoke(Sub() Text = "Moving Sample: " & masterFilePath & " to " & destinationFilePath)
                     BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, samplesToRemove.Length - 1) * 100.0)
                     'Move file
-                    If fso.FileExists(masterFilePath) Then
-                        CreateFolderIfRequired(fso.GetParentFolderName(destinationFilePath))
-                        fso.CopyFile(masterFilePath, destinationFilePath, True)
-                        fso.DeleteFile(masterFilePath)
+                    If File.Exists(masterFilePath) Then
+                        Directory.CreateDirectory(Path.GetDirectoryName(destinationFilePath))
+                        File.Copy(masterFilePath, destinationFilePath, True)
+                        File.Delete(masterFilePath)
                         filesCount += 1
                         For rowIndex As Integer = samplesDataTable.Rows.Count - 1 To 0 Step -1
                             Dim currentRow As DataRow = samplesDataTable.Rows(rowIndex)

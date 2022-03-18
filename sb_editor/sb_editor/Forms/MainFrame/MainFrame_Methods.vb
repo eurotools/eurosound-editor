@@ -41,7 +41,7 @@ Partial Public Class MainFrame
                 ListBox_DataBaseSFX.Items.Remove(itemsToRemove(index))
             Next
             'Update text file
-            Dim databaseTxt As String = fso.BuildPath(WorkingDirectory, "DataBases\" & ListBox_DataBases.SelectedItem & ".txt")
+            Dim databaseTxt As String = Path.Combine(WorkingDirectory, "DataBases", ListBox_DataBases.SelectedItem & ".txt")
             Dim databaseDependencies As String() = ListBox_DataBaseSFX.Items.Cast(Of String).ToArray
             writers.UpdateDataBaseText(databaseTxt, databaseDependencies, textFileReaders)
 
@@ -56,9 +56,9 @@ Partial Public Class MainFrame
         'Ensure that we have an item selected
         If ListBox_DataBases.SelectedItems.Count = 1 Then
             'Build path
-            Dim databaseFullPath = fso.BuildPath(WorkingDirectory, "Databases\" & ListBox_DataBases.SelectedItem & ".txt")
+            Dim databaseFullPath = Path.Combine(WorkingDirectory, "Databases", ListBox_DataBases.SelectedItem & ".txt")
             'Show properties form
-            If fso.FileExists(databaseFullPath) Then
+            If File.Exists(databaseFullPath) Then
                 Dim propertiesForm As New DataBase_Properties(databaseFullPath)
                 propertiesForm.ShowDialog()
             End If
@@ -77,9 +77,9 @@ Partial Public Class MainFrame
         Dim samplesDataTable As DataTable = textFileReaders.SamplesFileToDatatable(SysFileSamples)
         For index As Integer = samplesDataTable.Rows.Count - 1 To 0 Step -1
             Dim currentRow As DataRow = samplesDataTable.Rows(index)
-            Dim sampleFullPath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder & "\Master", currentRow("SampleFilename"))
+            Dim sampleFullPath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", currentRow("SampleFilename"))
             'Add item to missing samples list and remove item form data table
-            If Not fso.FileExists(sampleFullPath) Then
+            If Not File.Exists(sampleFullPath) Then
                 missingSamples.Add(currentRow("SampleFilename"))
                 currentRow.Delete()
             End If
@@ -108,7 +108,7 @@ Partial Public Class MainFrame
         Next
 
         'Get files in the directory
-        Dim filesList As String() = Directory.GetFiles(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master"), "*.wav", SearchOption.AllDirectories)
+        Dim filesList As String() = Directory.GetFiles(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master"), "*.wav", SearchOption.AllDirectories)
         Dim substrStart = Len(ProjectSettingsFile.MiscProps.SampleFileFolder & "\Master\")
         For fileIndex As Integer = 0 To filesList.Length - 1
             Dim relPath As String = Mid(filesList(fileIndex), substrStart)
@@ -125,7 +125,7 @@ Partial Public Class MainFrame
             'Add new samples
             For sampleIndex As Integer = 0 To samplesToAdd.Length - 1
                 Dim currentFilePath As String = samplesToAdd(sampleIndex)
-                Dim sampleFullPath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder & "\Master", currentFilePath)
+                Dim sampleFullPath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", currentFilePath)
                 samplesTable.Rows.Add(currentFilePath, selectedSampleRate, FileLen(sampleFullPath), FileDateTime(sampleFullPath).ToString(dateFormat), "True", "False", "", "", "", "")
             Next
             'Sort table

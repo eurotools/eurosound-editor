@@ -10,22 +10,22 @@ Partial Public Class ExporterForm
         Invoke(Sub() ProgressBar1.Value = 0)
         'Create a new binary writer for the binary file
         Dim StartOffsets As New Queue(Of UInteger)
-        Using binaryWriter As New BinaryWriter(File.Open(fso.BuildPath(outputFilePath, "STREAMS.bin"), FileMode.Create, FileAccess.ReadWrite), Encoding.ASCII)
+        Using binaryWriter As New BinaryWriter(File.Open(Path.Combine(outputFilePath, "STREAMS.bin"), FileMode.Create, FileAccess.ReadWrite), Encoding.ASCII)
             'For each file in the platform _STREAMS folder
             Dim filesCount As Integer = filesToEncode.Count - 1
             'Debug File
-            FileOpen(1, fso.BuildPath(WorkingDirectory & "\Debug_Report", "StreamList_" & outputLanguage & "_" & outputPlatform & ".txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
+            FileOpen(1, Path.Combine(WorkingDirectory, "Debug_Report", "StreamList_" & outputLanguage & "_" & outputPlatform & ".txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
             For fileIndex As Integer = 0 To filesCount
                 'Calculate and report progress
                 BackgroundWorker.ReportProgress(Decimal.Divide(fileIndex, filesCount) * 100.0)
                 'Get files path
-                Dim filePath As String = fso.BuildPath(WorkingDirectory & "\" & outputPlatform & "_Streams\" & outputLanguage, "STR_" & fileIndex)
+                Dim filePath As String = Path.Combine(WorkingDirectory, outputPlatform & "_Streams", outputLanguage, "STR_" & fileIndex)
                 Dim adpcmFile As String = filePath & ".ssd"
                 Dim markerFile As String = filePath & ".smf"
                 'Update title bar
                 Invoke(Sub() Text = "Binding " & outputLanguage & " Audio Stream Data " & adpcmFile & " For " & outputPlatform)
                 'Ensure that the adpcm file exists
-                If fso.FileExists(adpcmFile) AndAlso fso.FileExists(markerFile) Then
+                If File.Exists(adpcmFile) AndAlso File.Exists(markerFile) Then
                     'Offset to write in look-up table
                     Dim headerStart As Long = binaryWriter.BaseStream.Position
                     StartOffsets.Enqueue(headerStart)
@@ -81,7 +81,7 @@ Partial Public Class ExporterForm
         'Ensure that we have items stored in the queue
         If StartOffsets.Count > 0 Then
             'Create a new binary writer for the lut file
-            Using binaryWriter As New BinaryWriter(File.Open(fso.BuildPath(outputFilePath, "STREAMS.lut"), FileMode.Create, FileAccess.ReadWrite), Encoding.ASCII)
+            Using binaryWriter As New BinaryWriter(File.Open(Path.Combine(outputFilePath, "STREAMS.lut"), FileMode.Create, FileAccess.ReadWrite), Encoding.ASCII)
                 'Wirte all start offsets
                 Do
                     binaryWriter.Write(StartOffsets.Dequeue)

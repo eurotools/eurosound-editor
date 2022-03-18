@@ -1,4 +1,5 @@
-﻿Imports System.Text.RegularExpressions
+﻿Imports System.IO
+Imports System.Text.RegularExpressions
 Imports IniFileFunctions
 Imports sb_editor.ParsersObjects
 Imports sb_editor.ReaderClasses
@@ -25,7 +26,7 @@ Public Class SfxNewMultiple
         End If
 
         'Load config
-        If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System")) Then
+        If Directory.Exists(Path.Combine(WorkingDirectory, "System")) Then
             Dim iniFunctions As New IniFile(SysFileProjectIniPath)
             Dim tempvar As String = iniFunctions.Read("Check1_Value", "Form11_Misc")
             If IsNumeric(tempvar) Then
@@ -41,7 +42,7 @@ Public Class SfxNewMultiple
 
     Private Sub SfxNewMultiple_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         'Save data in the Ini File
-        If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System")) Then
+        If Directory.Exists(Path.Combine(WorkingDirectory, "System")) Then
             Dim iniFunctions As New IniFile(SysFileProjectIniPath)
             iniFunctions.Write("Check1_Value", Convert.ToByte(CheckBox_ForceUpperCase.Checked), "Form11_Misc")
             iniFunctions.Write("Check2_Value", Convert.ToByte(CheckBox_RandomSequence.Checked), "Form11_Misc")
@@ -74,15 +75,15 @@ Public Class SfxNewMultiple
     End Sub
 
     Private Sub Button_Ok_Click(sender As Object, e As EventArgs) Handles Button_Ok.Click
-        If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System")) Then
+        If Directory.Exists(Path.Combine(WorkingDirectory, "System")) Then
             Dim mainFrame As MainFrame = CType(Application.OpenForms("MainFrame"), MainFrame)
-            If fso.FileExists(SysFileSfxDefaults) Then
+            If File.Exists(SysFileSfxDefaults) Then
                 Dim sfxDefaults As SfxFile = textFileReaders.ReadSFXFile(SysFileSfxDefaults)
                 Dim sampleDefaultValues As Double() = GetDefaultSampleValues()
                 mainFrame.UserControl_SFXs.ListBox_SFXs.BeginUpdate()
 
                 For Each newSfx As KeyValuePair(Of String, List(Of String)) In samplesDictionary
-                    Dim sfxFilePath As String = fso.BuildPath(WorkingDirectory, "SFXs\" & newSfx.Key & ".txt")
+                    Dim sfxFilePath As String = Path.Combine(WorkingDirectory, "SFXs", newSfx.Key & ".txt")
                     Dim sfxFileData As New SfxFile
                     '#SFXParameters
                     sfxFileData.Parameters.ReverbSend = sfxDefaults.Parameters.ReverbSend
@@ -181,7 +182,7 @@ Public Class SfxNewMultiple
         samplesDictionary = New Dictionary(Of String, List(Of String))
         'Add items
         For Each filePath As String In ListBox_SampleFiles.Items
-            Dim fileName As String = GetOnlyFileName(filePath)
+            Dim fileName As String = Path.GetFileNameWithoutExtension(filePath)
             'Remove numbers at the start if required
             If CheckBox_RandomSequence.Checked Then
                 fileName = rgx.Replace(fileName, "")

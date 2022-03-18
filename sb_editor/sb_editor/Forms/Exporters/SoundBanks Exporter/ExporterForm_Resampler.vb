@@ -14,17 +14,17 @@ Partial Public Class ExporterForm
             'Create Folder structure for all platforms
             For platformIndex As Integer = 0 To outPlatforms.Length - 1
                 Dim currentPlatform As String = outPlatforms(platformIndex)
-                CopyDirectory(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master"), fso.BuildPath(WorkingDirectory, currentPlatform), True)
+                CopyDirectory(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master"), Path.Combine(WorkingDirectory, currentPlatform), True)
                 Select Case currentPlatform
                     Case "PC"
-                        CopyDirectory(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master"), fso.BuildPath(WorkingDirectory, currentPlatform & "_Software_adpcm"), True)
+                        CopyDirectory(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master"), Path.Combine(WorkingDirectory, currentPlatform & "_Software_adpcm"), True)
                     Case "GameCube"
-                        CopyDirectory(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master"), fso.BuildPath(WorkingDirectory, currentPlatform & "_Software_adpcm"), True)
-                        CopyDirectory(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master"), fso.BuildPath(WorkingDirectory, currentPlatform & "_dsp_adpcm"), True)
+                        CopyDirectory(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master"), Path.Combine(WorkingDirectory, currentPlatform & "_Software_adpcm"), True)
+                        CopyDirectory(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master"), Path.Combine(WorkingDirectory, currentPlatform & "_dsp_adpcm"), True)
                     Case "PlayStation2"
-                        CopyDirectory(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master"), fso.BuildPath(WorkingDirectory, currentPlatform & "_VAG"), True)
+                        CopyDirectory(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master"), Path.Combine(WorkingDirectory, currentPlatform & "_VAG"), True)
                     Case Else
-                        CopyDirectory(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master"), fso.BuildPath(WorkingDirectory, "XBox_adpcm"), True)
+                        CopyDirectory(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master"), Path.Combine(WorkingDirectory, "XBox_adpcm"), True)
                 End Select
             Next
             'Reset progress bar
@@ -36,7 +36,7 @@ Partial Public Class ExporterForm
                     BackgroundWorker.ReportProgress(Decimal.Divide(rowIndex, samplesCount) * 100.0)
                     'Get paths 
                     Dim sampleRelativePath As String = soundsTable.Rows(rowIndex).ItemArray(0)
-                    Dim sourceFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder & "\Master", sampleRelativePath)
+                    Dim sourceFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", sampleRelativePath)
                     'Read WAVE Master file and get all required info
                     Dim masterWaveNumOfChannels, masterWaveBitsPerSample, masterWaveFrequency, masterWaveLength As Integer
                     Dim masterWaveLoopInfo As Integer()
@@ -56,31 +56,41 @@ Partial Public Class ExporterForm
                             'Resample for each platform 
                             For platformIndex As Integer = 0 To outPlatforms.Length - 1
                                 Dim currentPlatform As String = outPlatforms(platformIndex)
-                                Dim outputFilePath As String = fso.BuildPath(WorkingDirectory & "\" & currentPlatform, sampleRelativePath)
                                 'Update title
                                 Invoke(Sub() Text = "ReSampling: " & sampleRelativePath & "  " & currentPlatform)
+
                                 'Resample the wav for the destination platform
                                 Dim sampleRateLabel As String = soundsTable.Rows(rowIndex).ItemArray(1)
                                 Dim sampleRate As Integer = ProjectSettingsFile.sampleRateFormats(currentPlatform)(sampleRateLabel)
                                 If soundsTable.Rows(rowIndex).Item(5) Then
                                     sampleRate = 22050
                                 End If
-                                SoxTimer.Start()
-                                ReSampleWithSox(sourceFilePath, outputFilePath, masterWaveFrequency, sampleRate)
-                                SoxTimer.Stop()
 
                                 'ReSample for each platform
                                 Select Case currentPlatform
                                     Case "PC" 'IMA ADPCM For PC Streams
-                                        If soundsTable.Rows(rowIndex).Item(5) Then 'Check if is Streamed
+                                        '----------------------------------------------------------ReSample Master File
+                                        SoxTimer.Start()
+                                        Dim outputFilePath As String = Path.Combine(WorkingDirectory, currentPlatform, sampleRelativePath)
+                                        ReSampleWithSox(sourceFilePath, outputFilePath, masterWaveFrequency, sampleRate)
+                                        SoxTimer.Stop()
+                                        '----------------------------------------------------------Create IMA file if Required
+                                        If soundsTable.Rows(rowIndex).Item(5) Then
                                             CreateImaAdpcm(currentPlatform, sampleRelativePath, outputFilePath, PCTimer, waveFunctions)
                                         End If
                                     Case "GameCube" 'DSP for Nintendo GameCube
-                                        If soundsTable.Rows(rowIndex).Item(5) Then 'Check if is Streamed
+                                        '----------------------------------------------------------ReSample Master File
+                                        SoxTimer.Start()
+                                        Dim outputFilePath As String = Path.Combine(WorkingDirectory, currentPlatform, sampleRelativePath)
+                                        ReSampleWithSox(sourceFilePath, outputFilePath, masterWaveFrequency, sampleRate)
+                                        SoxTimer.Stop()
+                                        '----------------------------------------------------------Create IMA file if Required
+                                        If soundsTable.Rows(rowIndex).Item(5) Then
                                             CreateImaAdpcm(currentPlatform, sampleRelativePath, outputFilePath, GCTimer, waveFunctions)
                                         End If
+                                        '----------------------------------------------------------Create DSP file
                                         GCTimer.Start()
-                                        Dim dspOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\GameCube_dsp_adpcm", sampleRelativePath), ".dsp")
+                                        Dim dspOutputFilePath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, "GameCube_dsp_adpcm", sampleRelativePath), ".dsp")
                                         'Default arguments
                                         Dim dspToolArgs As String = "Encode """ & outputFilePath & """ """ & dspOutputFilePath & """"
                                         'Check loop info
@@ -95,27 +105,40 @@ Partial Public Class ExporterForm
                                         RunProcess("SystemFiles\DspCodec.exe", dspToolArgs)
                                         GCTimer.Stop()
                                     Case "PlayStation2"  'Sony VAG for PlayStation 2
+                                        '----------------------------------------------------------ReSample Master File
+                                        SoxTimer.Start()
+                                        Dim outputFilePath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, currentPlatform, sampleRelativePath), ".aif")
+                                        ReSampleWithSox(sourceFilePath, outputFilePath, masterWaveFrequency, sampleRate)
+                                        SoxTimer.Stop()
+                                        '----------------------------------------------------------Create VAG file
                                         PSTimer.Start()
-                                        Dim vagOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\PlayStation2_VAG", sampleRelativePath), ".vag")
-                                        'Default arguments
-                                        Dim vagToolArgs As String = """" & outputFilePath & """ """ & vagOutputFilePath & """"
+                                        Dim vagOutputFilePath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, "PlayStation2_VAG", sampleRelativePath), ".vag")
                                         'Check loop info
                                         If masterWaveLoopInfo(0) = 1 AndAlso soundsTable.Rows(rowIndex).Item(5) = False Then 'Check if is NOT Streamed
                                             'Loop offset pos in the resampled wave
-                                            Using parsedWaveReader As New WaveFileReader(outputFilePath)
-                                                Dim parsedLoop As UInteger = masterWaveLoopInfo(1) / (masterWaveLength / parsedWaveReader.Length)
-                                                Dim loopOffsetVag As UInteger = ESUtils.CalculusLoopOffset.GetLoopOffsetForVag(parsedLoop) - 1
-                                                vagToolArgs = """" & outputFilePath & """ """ & vagOutputFilePath & """ " & loopOffsetVag
+                                            Dim waveLength As Long
+                                            Dim parsedLoop As UInteger
+                                            Using parsedWaveReader As New AiffFileReader(outputFilePath)
+                                                parsedLoop = masterWaveLoopInfo(1) / (masterWaveLength / parsedWaveReader.Length)
+                                                waveLength = parsedWaveReader.Length
                                             End Using
+                                            'Add new info to the Aif file
+                                            waveFunctions.AddChunksToAif(outputFilePath, parsedLoop, waveLength / 2, masterWaveLoopInfo(3))
                                         End If
                                         'Execute Vag Tool
-                                        RunProcess("SystemFiles\VagCodec.exe", vagToolArgs)
+                                        RunProcess("SystemFiles\AIFF2VAG.exe", """" & outputFilePath & """ """ & vagOutputFilePath & """")
                                         PSTimer.Stop()
                                     Case Else 'Xbox ADPCM for Xbox
+                                        '----------------------------------------------------------ReSample Master File
+                                        SoxTimer.Start()
+                                        Dim outputFilePath As String = Path.Combine(WorkingDirectory, currentPlatform, sampleRelativePath)
+                                        ReSampleWithSox(sourceFilePath, outputFilePath, masterWaveFrequency, sampleRate)
+                                        SoxTimer.Stop()
+                                        '----------------------------------------------------------Create Xbox ADPCM
                                         XBTimer.Start()
-                                        Dim xboxOutputFilePath As String = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\XBox_adpcm", sampleRelativePath), ".adpcm")
+                                        Dim xboxOutputFilePath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, "XBox_adpcm", sampleRelativePath), ".adpcm")
                                         'Execute Dsp Adpcm Tool
-                                        RunProcess("SystemFiles\XboxCodec.exe", "Encode """ & outputFilePath & """ """ & xboxOutputFilePath & """")
+                                        RunProcess("SystemFiles\xbadpcmencode.exe", """" & outputFilePath & """ """ & xboxOutputFilePath & """")
                                         XBTimer.Stop()
                                 End Select
                             Next
@@ -130,7 +153,7 @@ Partial Public Class ExporterForm
 
     Private Sub CreateImaAdpcm(currentPlatform As String, sampleRelativePath As String, outputFilePath As String, platformTimer As Stopwatch, waveLib As WaveFunctions)
         platformTimer.Start()
-        Dim ImaOutputFilePath As String = fso.BuildPath(WorkingDirectory & "\" & currentPlatform & "_Software_adpcm", sampleRelativePath)
+        Dim ImaOutputFilePath As String = Path.Combine(WorkingDirectory, currentPlatform & "_Software_adpcm", sampleRelativePath)
         'Resampled wav
         Dim smdFilePath As String = Path.ChangeExtension(ImaOutputFilePath, ".smd")
         RunProcess("SystemFiles\Sox.exe", """" & outputFilePath & """ -t raw """ & smdFilePath & """")

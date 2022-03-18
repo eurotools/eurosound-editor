@@ -1,4 +1,5 @@
-﻿Imports sb_editor.ParsersObjects
+﻿Imports System.IO
+Imports sb_editor.ParsersObjects
 Imports sb_editor.ReaderClasses
 Imports sb_editor.WritersClasses
 
@@ -26,7 +27,7 @@ Public Class SetMaxBankSize
         'Get file data
         soundbankFile = textFileReaders.ReadSoundBankFile(soundBankFilePath)
         'Get filename
-        TextBox_BankName.Text = GetOnlyFileName(soundBankFilePath)
+        TextBox_BankName.Text = Path.GetFileNameWithoutExtension(soundBankFilePath)
         'Put info in the numerics
         Numeric_PlayStationSize.Value = soundbankFile.MaxBankSizes.PlayStationSize
         Numeric_PcSize.Value = soundbankFile.MaxBankSizes.PCSize

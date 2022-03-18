@@ -1,4 +1,5 @@
-﻿Imports IniFileFunctions
+﻿Imports System.IO
+Imports IniFileFunctions
 Imports sb_editor.ReaderClasses
 Imports sb_editor.WritersClasses
 
@@ -25,9 +26,9 @@ Partial Public Class Project_Properties
     End Sub
 
     Private Sub Project_Properties_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        If fso.FileExists(SysFileProperties) Then
+        If File.Exists(SysFileProperties) Then
             'Read data if is an existing project
-            If fso.FileExists(SysFileProperties) Then
+            If File.Exists(SysFileProperties) Then
                 ProjectSettingsFile = textFileReaders.ReadPropertiesFile(SysFileProperties)
                 'Put available formats and select the first one
                 If ProjectSettingsFile.AvailableFormats.Length > 0 Then
@@ -103,11 +104,11 @@ Partial Public Class Project_Properties
                     e.Cancel = True
                 Else
                     'Load Project Data
-                    LoadProjectData(mainform, fso.BuildPath(WorkingDirectory, "Project.txt"))
+                    LoadProjectData(mainform, Path.Combine(WorkingDirectory, "Project.txt"))
                 End If
             Else
                 'Load Project Data
-                LoadProjectData(mainform, fso.BuildPath(WorkingDirectory, "Project.txt"))
+                LoadProjectData(mainform, Path.Combine(WorkingDirectory, "Project.txt"))
             End If
         End If
 
@@ -161,7 +162,7 @@ Partial Public Class Project_Properties
         'Set results
         If FolderBrowserDialog.ShowDialog = DialogResult.OK Then
             'Ensure that the master folder exists
-            If fso.FolderExists(fso.BuildPath(FolderBrowserDialog.SelectedPath, "Master")) Then
+            If Directory.Exists(Path.Combine(FolderBrowserDialog.SelectedPath, "Master")) Then
                 Textbox_Master_Path.Text = FolderBrowserDialog.SelectedPath
             Else
                 My.Computer.Audio.PlaySystemSound(Media.SystemSounds.Exclamation)

@@ -1,24 +1,32 @@
-﻿Namespace ReaderClasses
+﻿Imports System.IO
+
+Namespace ReaderClasses
     Partial Public Class FileParsers
+        '*===============================================================================================
+        '* REFINE LIST
+        '*===============================================================================================
         Friend Function ReadRefineList(refineFilePath As String) As String()
             Dim refineKeywords As New List(Of String)
-
-            FileOpen(1, refineFilePath, OpenMode.Input, OpenAccess.Read, OpenShare.LockWrite)
-            Do Until EOF(1)
-                'Read text file
-                Dim currentLine As String = Trim(LineInput(1))
-                'Streams Block
-                If StrComp(currentLine, "#RefineSearch", CompareMethod.Text) = 0 Then
-                    'Read line
-                    currentLine = Trim(LineInput(1))
-                    While StrComp(currentLine, "#END", CompareMethod.Text) <> 0
-                        refineKeywords.Add(currentLine)
-                        'Continue Reading
-                        currentLine = Trim(LineInput(1))
-                    End While
-                End If
-            Loop
-            FileClose(1)
+            Using sr As StreamReader = File.OpenText(refineFilePath)
+                While Not sr.EndOfStream
+                    Dim currentLine As String = sr.ReadLine.Trim
+                    'Skip empty lines
+                    If String.IsNullOrEmpty(currentLine) Or currentLine.StartsWith("//") Then
+                        Continue While
+                    Else
+                        'Streams Block
+                        If currentLine.Equals("#RefineSearch", StringComparison.OrdinalIgnoreCase) Then
+                            'Read line
+                            currentLine = sr.ReadLine.Trim
+                            While Not currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase)
+                                refineKeywords.Add(currentLine)
+                                'Continue Reading
+                                currentLine = sr.ReadLine.Trim
+                            End While
+                        End If
+                    End If
+                End While
+            End Using
 
             Return refineKeywords.ToArray
         End Function

@@ -1,4 +1,5 @@
-﻿Imports sb_editor.WritersClasses
+﻿Imports System.IO
+Imports sb_editor.WritersClasses
 
 Public Class Frm_RefineSearch
     Inherits Frm_TimerForm
@@ -37,7 +38,7 @@ Public Class Frm_RefineSearch
     '*===============================================================================================
     Private Sub BackgroundWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker.DoWork
         'Update list
-        Dim fileNameWithExtension As String = Dir(fso.BuildPath(WorkingDirectory, "SFXs\*.txt"))
+        Dim fileNameWithExtension As String = Dir(Path.Combine(WorkingDirectory, "SFXs\*.txt"))
         Dim sfxFilesToCheck As New List(Of String)
         'Add item to listbox
         Invoke(Sub() mainframe.ListBox_SFXs.BeginUpdate())
@@ -161,9 +162,9 @@ Public Class Frm_RefineSearch
             Invoke(Sub() mainframe.ComboBox_SFX_Section.SelectedIndex = 0)
 
             'Update file
-            If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System")) Then
+            If Directory.Exists(Path.Combine(WorkingDirectory, "System")) Then
                 Dim refineList() As String = (From item As String In mainframe.ComboBox_SFX_Section.Items Select item).ToArray
-                writers.CreateRefineList(fso.BuildPath(WorkingDirectory, "System\RefineSearch.txt"), refineList)
+                writers.CreateRefineList(Path.Combine(WorkingDirectory, "System\RefineSearch.txt"), refineList)
             End If
         End If
     End Sub

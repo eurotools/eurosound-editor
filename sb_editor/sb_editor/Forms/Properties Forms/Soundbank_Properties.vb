@@ -1,4 +1,5 @@
-﻿Imports NAudio.Wave
+﻿Imports System.IO
+Imports NAudio.Wave
 Imports sb_editor.ParsersObjects
 Imports sb_editor.ReaderClasses
 Imports sb_editor.SoundBanksExporterFunctions
@@ -36,7 +37,7 @@ Public Class Soundbank_Properties
         Dim soundBankSamplesList As String() = GetSoundBankSamplesList(soundBankSfxList, OutputLanguage)
 
         'Put soundbank name
-        GroupBox_SoundbankData.Text = GetOnlyFileName(SoundbankFilePath)
+        GroupBox_SoundbankData.Text = Path.GetFileNameWithoutExtension(SoundbankFilePath)
 
         'Calculate Output Filename
         Label_Value_OutFileName.Text = "HC" & Hex(soundBankData.HashCode).PadLeft(6, "0"c) & ".SFX"
@@ -78,12 +79,12 @@ Public Class Soundbank_Properties
             Dim soundBankSize As String
             Dim formatSamplesList As String() = GetFinalList(soundBankSamplesList, streamSamplesList, currentFormat)
             'Get SoundBank Size
-            Dim formatSamplesFolder As String = fso.BuildPath(WorkingDirectory, "TempOutputFolder\" & currentFormat & "\SoundBanks\" & OutputLanguage & "\" & soundBankData.HashCode & ".sbf")
-            If fso.FileExists(formatSamplesFolder) Then
+            Dim formatSamplesFolder As String = Path.Combine(WorkingDirectory, "TempOutputFolder", currentFormat, "SoundBanks", OutputLanguage, soundBankData.HashCode & ".sbf")
+            If File.Exists(formatSamplesFolder) Then
                 totalSampleSize += GetTotalSampleSize(formatSamplesList)
                 soundBankSize = BytesStringFormat(FileLen(formatSamplesFolder))
             Else
-                If fso.FolderExists(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")) Then
+                If Directory.Exists(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")) Then
                     totalSampleSize += GetTotalSampleSize(formatSamplesList)
                     soundBankSize = BytesStringFormat(GetEstimatedPlatformSize(formatSamplesList, currentFormat, samplesTable)) & " - ESTIMATED"
                 Else

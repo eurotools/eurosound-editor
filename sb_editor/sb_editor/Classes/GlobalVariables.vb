@@ -1,8 +1,7 @@
 ﻿Imports sb_editor.ParsersObjects
-Imports Scripting
 
 Friend Module GlobalVariables
-    Friend ReadOnly fso As New FileSystemObject
+    'Friend ReadOnly fso As New FileSystemObject
 
     'Available languages
     Friend ReadOnly SfxLanguages As String() = New String() {"English", "American", "Japanese", "Danish", "Dutch", "Finnish", "French", "German", "Italian", "Norwegian", "Portuguese", "Spanish", "Swedish"}

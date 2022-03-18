@@ -6,14 +6,14 @@ Partial Public Class MusicMaker
         Dim filesToRead As New HashSet(Of String)
 
         'Check for new files
-        If fso.FolderExists(musicFolder) Then
+        If Directory.Exists(musicFolder) Then
             Dim availableMarkerFiles As String() = Directory.GetFiles(musicFolder, "*.mrk", SearchOption.TopDirectoryOnly)
             For itemIndex As Integer = 0 To availableMarkerFiles.Length - 1
-                Dim fileName As String = GetOnlyFileName(availableMarkerFiles(itemIndex))
+                Dim fileName As String = Path.GetFileNameWithoutExtension(availableMarkerFiles(itemIndex))
                 'Check that the markers and wave file exists, if not discard this "item"
-                Dim mrkFilePath As String = fso.BuildPath(WorkingDirectory, "Music\" & fileName & ".mrk")
-                Dim waveFilePath As String = fso.BuildPath(WorkingDirectory, "Music\" & fileName & ".wav")
-                If fso.FileExists(mrkFilePath) AndAlso fso.FileExists(waveFilePath) Then
+                Dim mrkFilePath As String = Path.Combine(WorkingDirectory, "Music", fileName & ".mrk")
+                Dim waveFilePath As String = Path.Combine(WorkingDirectory, "Music", fileName & ".wav")
+                If File.Exists(mrkFilePath) AndAlso File.Exists(waveFilePath) Then
                     filesToRead.Add(fileName)
                 End If
             Next
@@ -29,7 +29,7 @@ Partial Public Class MusicMaker
     Private Sub GetMusicFilesData(filesToRead As String())
         If filesToRead.Length > 0 Then
             'Update the MFX Files File. (Used to get the hashcodes in the exporter) 
-            FileOpen(2, fso.BuildPath(WorkingDirectory, "Music\ESData\MFXFiles.txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
+            FileOpen(2, Path.Combine(WorkingDirectory, "Music", "ESData", "MFXFiles.txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
             PrintLine(2, "#MFXFiles")
             'Read files and add items to list
             Dim itemDataGrid As String() = New String() {"", "100", "New File", "0", "Output", "Output", "", "0"}
@@ -37,14 +37,14 @@ Partial Public Class MusicMaker
             ListView_MusicFiles.Items.Clear()
             For index As Integer = 0 To filesToRead.Count - 1
                 'Get music files path
-                Dim mrkFilePath As String = fso.BuildPath(WorkingDirectory, "Music\" & filesToRead(index) & ".mrk")
-                Dim waveFilePath As String = fso.BuildPath(WorkingDirectory, "Music\" & filesToRead(index) & ".wav")
+                Dim mrkFilePath As String = Path.Combine(WorkingDirectory, "Music", filesToRead(index) & ".mrk")
+                Dim waveFilePath As String = Path.Combine(WorkingDirectory, "Music", filesToRead(index) & ".wav")
                 'Add item to text file
                 PrintLine(2, filesToRead(index))
                 'Read properties file
-                Dim mfxPropsFilePath As String = fso.BuildPath(WorkingDirectory, "Music\ESData\" & filesToRead(index) & ".txt")
+                Dim mfxPropsFilePath As String = Path.Combine(WorkingDirectory, "Music", "ESData", filesToRead(index) & ".txt")
                 Dim mfxFileData As MfxFile
-                If fso.FileExists(mfxPropsFilePath) Then
+                If File.Exists(mfxPropsFilePath) Then
                     mfxFileData = textFileReaders.ReadMfxFile(mfxPropsFilePath)
                     itemDataGrid(2) = "No Errors"
                     itemDataGrid(4) = "OK"
@@ -105,14 +105,14 @@ Partial Public Class MusicMaker
     Private Function AppendJumpHashCodes(hashTableFilePath As String, hashCodesDict As SortedDictionary(Of String, UInteger)) As List(Of String)
         'Declare variables
         Dim jumpDefinesList As New List(Of String)
-        Dim jumpTextFilesPath As String = fso.BuildPath(WorkingDirectory, "Music\ESWork\")
+        Dim jumpTextFilesPath As String = Path.Combine(WorkingDirectory, "Music", "ESWork")
         Dim jumpTextFiles As String() = Directory.GetFiles(jumpTextFilesPath, "*.jmp", SearchOption.TopDirectoryOnly)
 
         'Append text
         For index As Integer = 0 To jumpTextFiles.Length - 1
-            If fso.FileExists(jumpTextFiles(index)) Then
+            If File.Exists(jumpTextFiles(index)) Then
                 Dim jumpHashCodes As String() = textFileReaders.ReadJumpFile(jumpTextFiles(index))
-                Dim mfxName As String = GetOnlyFileName(jumpTextFiles(index))
+                Dim mfxName As String = Path.GetFileNameWithoutExtension(jumpTextFiles(index))
                 FileOpen(1, hashTableFilePath, OpenMode.Append)
                 PrintLine(1, "")
                 PrintLine(1, "// Music Jump Codes For Level MFX_" & mfxName)

@@ -1,4 +1,5 @@
-﻿Imports IniFileFunctions
+﻿Imports System.IO
+Imports IniFileFunctions
 Imports sb_editor.ParsersObjects
 Imports sb_editor.ReaderClasses
 
@@ -14,7 +15,7 @@ Public Class SfxDefault
     '*===============================================================================================
     Private Sub Frm_SfxDefault_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'Read defaults file 
-        If fso.FileExists(SysFileSfxDefaults) Then
+        If File.Exists(SysFileSfxDefaults) Then
             'Read SFX File
             Dim objSFX As SfxFile = textFileReaders.ReadSFXFile(SysFileSfxDefaults)
             'Set properties
@@ -158,16 +159,16 @@ Public Class SfxDefault
             iniFunctions.Write("DTextNIndex_5", SfxParamsAndSamplePool1.Numeric_RandomPan.Value.ToString(), "SFXForm")
         End If
 
-        If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System")) Then
+        If Directory.Exists(Path.Combine(WorkingDirectory, "System")) Then
             'Get sfx deefault file path
-            Dim sfxDefaultsFilePath = fso.BuildPath(WorkingDirectory, "System\SFX Defaults.txt")
+            Dim sfxDefaultsFilePath = Path.Combine(WorkingDirectory, "System", "SFX Defaults.txt")
 
             'Replace current file   
             Dim headerData As New FileHeader
 
             'Get creation time if file exists
             Dim created = Date.Now.ToString(filesDateFormat)
-            If fso.FileExists(sfxDefaultsFilePath) Then
+            If File.Exists(sfxDefaultsFilePath) Then
                 headerData = textFileReaders.GetFileHeaderInfo(sfxDefaultsFilePath)
                 headerData.LastModify = created
                 headerData.LastModifyBy = EuroSoundUser

@@ -1,4 +1,5 @@
-﻿Imports sb_editor.ParsersObjects
+﻿Imports System.IO
+Imports sb_editor.ParsersObjects
 Imports sb_editor.ReaderClasses
 Imports sb_editor.WritersClasses
 
@@ -25,7 +26,7 @@ Public Class SfxMultiEditor
             Dim currentSfx As String = sfxFiles(fileIndex)
             Dim sfxFileData As SfxFile = textFileReaders.ReadSFXFile(currentSfx)
             Dim propertiesToShow As String() = New String(14) {}
-            propertiesToShow(0) = GetOnlyFileName(currentSfx)
+            propertiesToShow(0) = Path.GetFileNameWithoutExtension(currentSfx)
             propertiesToShow(1) = sfxFileData.Parameters.ReverbSend
             propertiesToShow(2) = ComboBox_TrackingType.Items(sfxFileData.Parameters.TrackingType)
             propertiesToShow(3) = sfxFileData.Parameters.InnerRadius
@@ -169,12 +170,12 @@ Public Class SfxMultiEditor
             'Update Text Files
             For platformIndex As Integer = 0 To listOfFormats.Count - 1
                 'Get SFX Text file path
-                Dim currentFilePath As String = fso.BuildPath(WorkingDirectory & "\SFXs", currentItem.SubItems(0).Text & ".txt")
+                Dim currentFilePath As String = Path.Combine(WorkingDirectory, "SFXs", currentItem.SubItems(0).Text & ".txt")
                 If platformIndex > 0 Then
-                    currentFilePath = fso.BuildPath(WorkingDirectory & "\SFXs\" & listOfFormats(platformIndex), currentItem.SubItems(0).Text & ".txt")
+                    currentFilePath = Path.Combine(WorkingDirectory, "SFXs", listOfFormats(platformIndex), currentItem.SubItems(0).Text & ".txt")
                 End If
                 'Read and update SFX File
-                If fso.FileExists(currentFilePath) Then
+                If File.Exists(currentFilePath) Then
                     Dim sfxFileData As SfxFile = textFileReaders.ReadSFXFile(currentFilePath)
                     sfxFileData.Parameters.ReverbSend = currentItem.SubItems(1).Text
                     sfxFileData.Parameters.TrackingType = ComboBox_TrackingType.Items.IndexOf(currentItem.SubItems(2).Text)

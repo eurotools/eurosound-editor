@@ -5,7 +5,7 @@ Partial Public Class ExporterForm
     Private Sub CreateSBInfoFile(outPlatforms As String(), soundBanksDictionary As SortedDictionary(Of String, UInteger))
         For platformIndex As Integer = 0 To outPlatforms.Length - 1
             Dim currentPlatform As String = outPlatforms(platformIndex)
-            Dim outputFilePath As String = fso.BuildPath(WorkingDirectory, "TempOutputFolder\" & currentPlatform & "\SBInfo.sbi")
+            Dim outputFilePath As String = Path.Combine(WorkingDirectory, "TempOutputFolder", currentPlatform, "SBInfo.sbi")
             'Check if is big endian or not
             Dim isBigEndian As Boolean = False
             If StrComp(currentPlatform, "GameCube") = 0 Then

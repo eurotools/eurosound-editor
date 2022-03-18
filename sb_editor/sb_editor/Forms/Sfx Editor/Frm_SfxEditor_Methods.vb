@@ -1,4 +1,5 @@
-﻿Imports System.Media
+﻿Imports System.IO
+Imports System.Media
 Imports NAudio.Wave
 Imports sb_editor.ParsersObjects
 
@@ -146,8 +147,8 @@ Partial Public Class Frm_SfxEditor
 
     Private Sub ShowSampleInfo(selectedSample As Sample)
         If selectedSample IsNot Nothing Then
-            Dim waveFullPath As String = fso.BuildPath(WorkingDirectory & "\Master", selectedSample.FilePath)
-            If fso.FileExists(waveFullPath) Then
+            Dim waveFullPath As String = Path.Combine(WorkingDirectory, "Master", selectedSample.FilePath)
+            If File.Exists(waveFullPath) Then
                 Using reader As New WaveFileReader(waveFullPath)
                     Label_SampleInfo_FreqValue.Text = reader.WaveFormat.SampleRate
                     Label_SampleInfo_SizeValue.Text = BytesStringFormat(reader.Length)
@@ -329,9 +330,9 @@ Partial Public Class Frm_SfxEditor
                     If selectedItemName < sfxFileData.Samples.Count Then
                         'Get relative path
                         Dim waveRelativePath = sfxFileData.Samples(selectedItemName).FilePath
-                        Dim waveFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\" & waveRelativePath)
+                        Dim waveFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", waveRelativePath)
                         'Play audio
-                        If fso.FileExists(waveFilePath) Then
+                        If File.Exists(waveFilePath) Then
                             My.Computer.Audio.Play(waveFilePath)
                         End If
                     End If
@@ -361,7 +362,7 @@ Partial Public Class Frm_SfxEditor
                     If selectedItemName < sfxFileData.Samples.Count Then
                         'Get absolute path
                         Dim waveRelativePath As String = sfxFileData.Samples(selectedItemName).FilePath
-                        Dim waveFullPath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder & "\Master", waveRelativePath)
+                        Dim waveFullPath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", waveRelativePath)
                         'Open Audio Editor tool
                         EditWaveFile(waveFullPath)
                     End If
@@ -387,8 +388,8 @@ Partial Public Class Frm_SfxEditor
                 If selectedItemName < sfxFileData.Samples.Count Then
                     'Get wave folder path
                     Dim waveRelativePath = sfxFileData.Samples(selectedItemName).FilePath
-                    Dim folderPath = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder & "\Master", fso.GetParentFolderName(waveRelativePath))
-                    If fso.FolderExists(folderPath) Then
+                    Dim folderPath = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", Path.GetDirectoryName(waveRelativePath))
+                    If Directory.Exists(folderPath) Then
                         'Open folder
                         Process.Start("Explorer.exe", folderPath)
                     End If
@@ -402,8 +403,8 @@ Partial Public Class Frm_SfxEditor
     '*===============================================================================================
     Private Sub CreateSpecificFormat(formatName As String)
         'Create format
-        Dim formatTextFile As String = fso.BuildPath(WorkingDirectory, "SFXs\Misc\" & formatName & ".txt")
-        fso.CopyFile(fso.BuildPath(WorkingDirectory, "SFXs\Misc\Common.txt"), formatTextFile, True)
+        Dim formatTextFile As String = Path.Combine(WorkingDirectory, "SFXs", "Misc", formatName & ".txt")
+        File.Copy(Path.Combine(WorkingDirectory, "SFXs", "Misc", "Common.txt"), formatTextFile, True)
         sfxFilesData.Add(CreateTab(formatName).Text, reader.ReadSFXFile(formatTextFile))
     End Sub
 End Class

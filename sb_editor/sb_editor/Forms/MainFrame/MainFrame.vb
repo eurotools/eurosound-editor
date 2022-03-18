@@ -17,8 +17,8 @@ Partial Public Class MainFrame
     '* FORM EVENTS
     '*===============================================================================================
     Private Sub MainFrame_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
-        If fso.FolderExists(WorkingDirectory) Then
-            If fso.FileExists(fso.BuildPath(WorkingDirectory, "Project.txt")) Then
+        If Directory.Exists(WorkingDirectory) Then
+            If File.Exists(Path.Combine(WorkingDirectory, "Project.txt")) Then
                 'Update GUI
                 RecentFilesMenu.AddFile(WorkingDirectory)
                 RecentFilesMenu.SaveToIniFile()
@@ -28,7 +28,7 @@ Partial Public Class MainFrame
 
     Private Sub MainFrame_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         'Update text file
-        If fso.FolderExists(fso.BuildPath(WorkingDirectory, "System\")) Then
+        If Directory.Exists(Path.Combine(WorkingDirectory, "System")) Then
             'Save data in the Ini File
             If SysFileProjectIniPath > "" Then
                 Dim iniFunctions As New IniFile(SysFileProjectIniPath)
@@ -52,7 +52,7 @@ Partial Public Class MainFrame
         OpenFileDialog.Filter = "Text File (*.txt)|*.txt"
         Dim selectedProjectFile As DialogResult = OpenFileDialog.ShowDialog
         If selectedProjectFile = DialogResult.OK Then
-            OpenNewProject(fso.GetParentFolderName(OpenFileDialog.FileName))
+            OpenNewProject(Path.GetDirectoryName(OpenFileDialog.FileName))
         End If
     End Sub
 
@@ -66,7 +66,7 @@ Partial Public Class MainFrame
     End Sub
 
     Friend Sub MenuItemFile_Recent_Click(number As Integer, filename As String)
-        If fso.FolderExists(filename) Then
+        If Directory.Exists(filename) Then
             OpenNewProject(filename)
         Else
             MsgBox("Project Directory Not Found" & filename, vbOKOnly + vbCritical, "EuroSound Load Project Error")
@@ -171,8 +171,8 @@ Partial Public Class MainFrame
     '* CONTEXT MENU TREEVIEW
     '*===============================================================================================
     Private Sub ContextMenu_TreeView_New_Click(sender As Object, e As EventArgs) Handles ContextMenu_TreeView_New.Click
-        Dim folderToCheck As String = fso.BuildPath(WorkingDirectory, "Soundbanks")
-        Dim soundbankName As String = NewFile(GetFileName(folderToCheck, "SB_Label"), folderToCheck)
+        Dim folderToCheck As String = Path.Combine(WorkingDirectory, "Soundbanks")
+        Dim soundbankName As String = NewFile(GetNextAvailableFileName(folderToCheck, "SB_Label"), folderToCheck)
         If soundbankName IsNot "" Then
             CreateNewSoundbank(soundbankName)
         End If
@@ -184,7 +184,7 @@ Partial Public Class MainFrame
             'Get parent if the user has selected a child node
             Dim soundbankNode As TreeNode = GetSoundbankNode(TreeView_SoundBanks.SelectedNode)
             'Ask user
-            Dim soundbankCopyName As String = CopyFile(soundbankNode.Text, "Sound Bank", fso.BuildPath(WorkingDirectory, "Soundbanks\"))
+            Dim soundbankCopyName As String = CopyFile(soundbankNode.Text, "Sound Bank", Path.Combine(WorkingDirectory, "Soundbanks"))
             If soundbankCopyName IsNot "" Then
                 CopySoundbank(soundbankCopyName, soundbankNode)
             End If
@@ -200,18 +200,16 @@ Partial Public Class MainFrame
             If TreeView_SoundBanks.SelectedNode.Level = 0 Then
                 'Get file path
                 Dim soundBankName = TreeView_SoundBanks.SelectedNode.Text
-                Dim soundbankPath As String = fso.BuildPath(WorkingDirectory, "SoundBanks\" & soundBankName & ".txt")
+                Dim soundbankPath As String = Path.Combine(WorkingDirectory, "SoundBanks", soundBankName & ".txt")
                 'Ask user
                 Dim userAnswer As MsgBoxResult = MsgBox("Are you sure you want to delete SoundBank(s)" & vbNewLine & "'" & soundBankName & "'" & vbNewLine & "TotalFiles: 1", vbYesNo + vbQuestion, "Confirm Sound Bank Deletion")
                 If userAnswer = MsgBoxResult.Yes Then
                     TreeView_SoundBanks.SelectedNode.Remove()
                     'Create Trash Folder if required
-                    Dim soundbanksTrash As String = fso.BuildPath(WorkingDirectory, "SoundBanks_Trash")
-                    If Not fso.FolderExists(soundbanksTrash) Then
-                        fso.CreateFolder(soundbanksTrash)
-                    End If
+                    Dim soundbanksTrash As String = Path.Combine(WorkingDirectory, "SoundBanks_Trash")
+                    Directory.CreateDirectory(soundbanksTrash)
                     'Move file to trash
-                    fso.MoveFile(soundbankPath, fso.BuildPath(soundbanksTrash, soundBankName & ".txt"))
+                    File.Move(soundbankPath, Path.Combine(soundbanksTrash, soundBankName & ".txt"))
                 End If
             Else 'Database
                 Dim soundbankNode As TreeNode = TreeView_SoundBanks.SelectedNode.Parent
@@ -230,7 +228,7 @@ Partial Public Class MainFrame
                         End If
                     Next
                     'Update text file
-                    Dim soundbankFilePath As String = fso.BuildPath(WorkingDirectory, "Soundbanks\" & soundbankNode.Text & ".txt")
+                    Dim soundbankFilePath As String = Path.Combine(WorkingDirectory, "Soundbanks", soundbankNode.Text & ".txt")
                     Dim soundbankData As New SoundbankFile With {
                         .HashCode = soundbankNode.Name,
                         .Dependencies = databases.ToArray
@@ -242,8 +240,8 @@ Partial Public Class MainFrame
             'Update label
             Label_SoundBanksCount.Text = "Total: " & TreeView_SoundBanks.Nodes.Count
             'Update Project file
-            Dim temporalFile As String = fso.BuildPath(WorkingDirectory, "System\TempFileName.txt")
-            Dim projectFile As String = fso.BuildPath(WorkingDirectory, "Project.txt")
+            Dim temporalFile As String = Path.Combine(WorkingDirectory, "System", "TempFileName.txt")
+            Dim projectFile As String = Path.Combine(WorkingDirectory, "Project.txt")
             Dim projFileData As ProjectFile = textFileReaders.ReadProjectFile(projectFile)
             writers.CreateProjectFile(temporalFile, GetSoundBanksList(TreeView_SoundBanks), projFileData.DataBaseList.ToArray, projFileData.SFXList.ToArray)
             writers.MergeFiles(temporalFile, projectFile, projFileData, "#SoundBankList")
@@ -255,11 +253,11 @@ Partial Public Class MainFrame
             'Get parent if the user has selected a child node
             Dim soundbankNode As TreeNode = GetSoundbankNode(TreeView_SoundBanks.SelectedNode)
             'Ask for a new name
-            Dim diagResult As String = RenameFile(soundbankNode.Text, "Sound Bank", fso.BuildPath(WorkingDirectory, "SoundBanks\"))
+            Dim diagResult As String = RenameFile(soundbankNode.Text, "Sound Bank", Path.Combine(WorkingDirectory, "SoundBanks"))
             If diagResult IsNot "" Then
                 'Move file
-                Dim currentFileName As String = fso.BuildPath(WorkingDirectory, "SoundBanks\" & soundbankNode.Text & ".txt")
-                fso.MoveFile(currentFileName, fso.BuildPath(WorkingDirectory, "SoundBanks\" & diagResult & ".txt"))
+                Dim currentFileName As String = Path.Combine(WorkingDirectory, "SoundBanks", soundbankNode.Text & ".txt")
+                File.Move(currentFileName, Path.Combine(WorkingDirectory, "SoundBanks", diagResult & ".txt"))
                 'Build new file path
                 soundbankNode.Text = diagResult
             End If
@@ -272,9 +270,9 @@ Partial Public Class MainFrame
             'Get parent if the user has selected a child node
             Dim soundbankNode As TreeNode = GetSoundbankNode(TreeView_SoundBanks.SelectedNode)
             'Get Soundbank name and file path
-            Dim soundbankFullPath As String = fso.BuildPath(WorkingDirectory, "SoundBanks\" & soundbankNode.Text & ".txt")
+            Dim soundbankFullPath As String = Path.Combine(WorkingDirectory, "SoundBanks", soundbankNode.Text & ".txt")
             'Ensure that the soundbank txt still exists
-            If fso.FileExists(soundbankFullPath) Then
+            If File.Exists(soundbankFullPath) Then
                 Dim outLanguage As String = "English"
                 If ComboBox_OutputLanguage.SelectedItem IsNot Nothing Then
                     outLanguage = ComboBox_OutputLanguage.SelectedItem
@@ -294,9 +292,9 @@ Partial Public Class MainFrame
             'Get parent if the user has selected a child node
             Dim soundbankNode As TreeNode = GetSoundbankNode(TreeView_SoundBanks.SelectedNode)
             'Get Soundbank name and file path
-            Dim soundbankFullPath As String = fso.BuildPath(WorkingDirectory, "SoundBanks\" & soundbankNode.Text & ".txt")
+            Dim soundbankFullPath As String = Path.Combine(WorkingDirectory, "SoundBanks", soundbankNode.Text & ".txt")
             'Ensure that the soundbank txt still exists
-            If fso.FileExists(soundbankFullPath) Then
+            If File.Exists(soundbankFullPath) Then
                 Dim maxSoundbankSize As New SetMaxBankSize(soundbankFullPath)
                 maxSoundbankSize.ShowDialog()
             End If
@@ -315,9 +313,9 @@ Partial Public Class MainFrame
         If ListBox_DataBases.SelectedItems.Count = 1 Then
             'Get Database filepath
             Dim selectedDataBase As String = ListBox_DataBases.SelectedItem
-            Dim DataBasePath As String = fso.BuildPath(WorkingDirectory, "DataBases\" & selectedDataBase & ".txt")
+            Dim DataBasePath As String = Path.Combine(WorkingDirectory, "DataBases", selectedDataBase & ".txt")
             'Ensure that the database still exists
-            If fso.FileExists(DataBasePath) Then
+            If File.Exists(DataBasePath) Then
                 'Clear listbox
                 ListBox_DataBaseSFX.Items.Clear()
                 'Add new items
@@ -343,11 +341,11 @@ Partial Public Class MainFrame
     End Sub
 
     Private Sub ContextMenuDataBases_New_Click(sender As Object, e As EventArgs) Handles ContextMenuDataBases_New.Click
-        Dim folderToCheck As String = fso.BuildPath(WorkingDirectory, "Databases")
-        Dim databaseName As String = NewFile(GetFileName(folderToCheck, "DB_Label"), folderToCheck)
+        Dim folderToCheck As String = Path.Combine(WorkingDirectory, "Databases")
+        Dim databaseName As String = NewFile(GetNextAvailableFileName(folderToCheck, "DB_Label"), folderToCheck)
         If databaseName IsNot "" Then
             'Create txt
-            Dim databaseTxt As String = fso.BuildPath(folderToCheck, databaseName & ".txt")
+            Dim databaseTxt As String = Path.Combine(folderToCheck, databaseName & ".txt")
             writers.UpdateDataBaseText(databaseTxt, Nothing, textFileReaders)
             'Add item to list
             Dim itemIndex As Integer = ListBox_DataBases.Items.Add(databaseName)
@@ -361,11 +359,11 @@ Partial Public Class MainFrame
     Private Sub ContextMenuDataBases_Copy_Click(sender As Object, e As EventArgs) Handles ContextMenuDataBases_Copy.Click
         If ListBox_DataBases.SelectedItems.Count = 1 Then
             'Ask user
-            Dim sfxCopyName As String = CopyFile(vbCrLf & ListBox_DataBases.SelectedItem, "Database", fso.BuildPath(WorkingDirectory, "DataBases\"))
+            Dim sfxCopyName As String = CopyFile(vbCrLf & ListBox_DataBases.SelectedItem, "Database", Path.Combine(WorkingDirectory, "DataBases"))
             If sfxCopyName IsNot "" Then
                 'Read original file content
-                Dim originalFilePath As String = fso.BuildPath(WorkingDirectory, "DataBases\" & ListBox_DataBases.SelectedItem & ".txt")
-                fso.CopyFile(originalFilePath, fso.BuildPath(WorkingDirectory, "DataBases\" & sfxCopyName & ".txt"))
+                Dim originalFilePath As String = Path.Combine(WorkingDirectory, "DataBases", ListBox_DataBases.SelectedItem & ".txt")
+                File.Copy(originalFilePath, Path.Combine(WorkingDirectory, "DataBases", sfxCopyName & ".txt"), True)
             End If
         End If
     End Sub
@@ -383,12 +381,11 @@ Partial Public Class MainFrame
             Dim answerQuestion As MsgBoxResult = MsgBox(MultipleDeletionMessage("Are you sure you want to delete Database(s)", itemsToDelete), vbInformation + vbYesNo, "Confirm Database Deletion")
             If answerQuestion = MsgBoxResult.Yes Then
                 'Create Trash Folder if required
-                Dim databaseTrash As String = fso.BuildPath(WorkingDirectory, "Databases_Trash")
-                If Not fso.FolderExists(databaseTrash) Then
-                    fso.CreateFolder(databaseTrash)
-                End If
+                Dim databaseTrash As String = Path.Combine(WorkingDirectory, "Databases_Trash")
+                Directory.CreateDirectory(databaseTrash)
+
                 'Get Soundbanks files
-                Dim soundbankFiles As String() = Directory.GetFiles(fso.BuildPath(WorkingDirectory, "Soundbanks"), "*.txt", SearchOption.TopDirectoryOnly)
+                Dim soundbankFiles As String() = Directory.GetFiles(Path.Combine(WorkingDirectory, "Soundbanks"), "*.txt", SearchOption.TopDirectoryOnly)
                 For i As Integer = 0 To soundbankFiles.Length - 1
                     'Update soundbank file
                     Dim soundbankFile As SoundbankFile = textFileReaders.ReadSoundBankFile(soundbankFiles(i))
@@ -398,26 +395,31 @@ Partial Public Class MainFrame
                         writers.UpdateSoundbankFile(soundbankFile, soundbankFiles(i), textFileReaders, False)
                     End If
                 Next
+
                 'Update UI
                 ListBox_DataBases.BeginUpdate()
                 For i As Integer = 0 To itemsToDelete.Count - 1
                     'Delete file 
-                    Dim fileFullPath As String = fso.BuildPath(WorkingDirectory, "Databases\" & itemsToDelete(i) & ".txt")
-                    fso.CopyFile(fileFullPath, fso.BuildPath(databaseTrash, itemsToDelete(i) & ".txt"))
-                    fso.DeleteFile(fileFullPath)
+                    Dim fileFullPath As String = Path.Combine(WorkingDirectory, "Databases", itemsToDelete(i) & ".txt")
+                    File.Copy(fileFullPath, Path.Combine(databaseTrash, itemsToDelete(i) & ".txt"))
+                    File.Delete(fileFullPath)
+
                     'Delete item from the list 
                     ListBox_DataBases.Items.Remove(itemsToDelete(i))
+
                     'Delete from the soundbank
                     For Each soundbank As TreeNode In TreeView_SoundBanks.Nodes
                         DeleteDatabaseFromSoundbank(soundbank, itemsToDelete(i))
                     Next
                 Next
                 ListBox_DataBases.EndUpdate()
+
                 'Update counter
                 Label_DataBasesCount.Text = "Total: " & ListBox_DataBases.Items.Count
+
                 'Update Project file
-                Dim temporalFile As String = fso.BuildPath(WorkingDirectory, "System\TempFileName.txt")
-                Dim projectFile As String = fso.BuildPath(WorkingDirectory, "Project.txt")
+                Dim temporalFile As String = Path.Combine(WorkingDirectory, "System", "TempFileName.txt")
+                Dim projectFile As String = Path.Combine(WorkingDirectory, "Project.txt")
                 Dim projFileData As ProjectFile = textFileReaders.ReadProjectFile(projectFile)
                 writers.CreateProjectFile(temporalFile, projFileData.SoundBankList.ToArray, ListBox_DataBases.Items.Cast(Of String).ToArray, projFileData.SFXList.ToArray)
                 writers.MergeFiles(temporalFile, projectFile, projFileData, "#DataBaseList")
@@ -429,20 +431,22 @@ Partial Public Class MainFrame
         If ListBox_DataBases.SelectedItems.Count = 1 Then
             'Get current fileName
             Dim selectedName As String = ListBox_DataBases.SelectedItem
-            Dim currentFileName As String = fso.BuildPath(WorkingDirectory, "Databases\" & selectedName & ".txt")
+            Dim currentFileName As String = Path.Combine(WorkingDirectory, "Databases", selectedName & ".txt")
             'Ask for a new name
-            Dim diagResult As String = RenameFile(selectedName, "Database", fso.BuildPath(WorkingDirectory, "Databases\"))
+            Dim diagResult As String = RenameFile(selectedName, "Database", Path.Combine(WorkingDirectory, "Databases"))
             If diagResult IsNot "" Then
                 'Build new file path
-                Dim newFileName = fso.BuildPath(WorkingDirectory, "Databases\" & diagResult & ".txt")
-                If Not fso.FileExists(newFileName) Then
+                Dim newFileName = Path.Combine(WorkingDirectory, "Databases", diagResult & ".txt")
+                If Not File.Exists(newFileName) Then
                     'Rename file and update list item
-                    fso.MoveFile(currentFileName, newFileName)
+                    File.Move(currentFileName, newFileName)
+
                     'Update Listbox
                     Dim itemPos As Integer = ListBox_DataBases.Items.IndexOf(selectedName)
                     If itemPos <> ListBox.NoMatches Then
                         ListBox_DataBases.Items(itemPos) = diagResult
                     End If
+
                     'Update databases in the soundbanks
                     For Each node As TreeNode In TreeView_SoundBanks.Nodes
                         'Boolean
@@ -464,7 +468,7 @@ Partial Public Class MainFrame
                         End If
                         'Update text file if required
                         If updateTextFile Then
-                            Dim soundbankFilePath As String = fso.BuildPath(WorkingDirectory, "Soundbanks\" & node.Text & ".txt")
+                            Dim soundbankFilePath As String = Path.Combine(WorkingDirectory, "Soundbanks", node.Text & ".txt")
                             Dim soundbankFile As SoundbankFile = textFileReaders.ReadSoundBankFile(soundbankFilePath)
                             soundbankFile.Dependencies = dependenciesList.ToArray
                             writers.UpdateSoundbankFile(soundbankFile, soundbankFilePath, textFileReaders)
@@ -490,9 +494,9 @@ Partial Public Class MainFrame
         If itemIndex <> ListBox.NoMatches Then
             'Get item and file path
             Dim selectedSFX As String = ListBox_DataBaseSFX.Items(itemIndex)
-            Dim SelectedSfxPath = fso.BuildPath(WorkingDirectory, "SFXs\" & selectedSFX & ".txt")
+            Dim SelectedSfxPath = Path.Combine(WorkingDirectory, "SFXs", selectedSFX & ".txt")
             'Ensure that the file exists
-            If fso.FileExists(SelectedSfxPath) Then
+            If File.Exists(SelectedSfxPath) Then
                 'Open editor
                 Dim sfxEditor As New Frm_SfxEditor(selectedSFX)
                 sfxEditor.ShowDialog()
@@ -517,7 +521,7 @@ Partial Public Class MainFrame
                 Next
                 'Update text file
                 If itemsData.Count > 0 Then
-                    Dim databaseTxt As String = fso.BuildPath(WorkingDirectory, "DataBases\" & ListBox_DataBases.SelectedItem & ".txt")
+                    Dim databaseTxt As String = Path.Combine(WorkingDirectory, "DataBases", ListBox_DataBases.SelectedItem & ".txt")
                     Dim databaseDependencies As String() = ListBox_DataBaseSFX.Items.Cast(Of String).ToArray
                     writers.UpdateDataBaseText(databaseTxt, databaseDependencies, textFileReaders)
                 End If
@@ -541,9 +545,9 @@ Partial Public Class MainFrame
         If ListBox_DataBaseSFX.SelectedItems.Count = 1 Then
             'Get item name and full path
             Dim selectedSFX As String = ListBox_DataBaseSFX.SelectedItem
-            Dim sfxFullPath As String = fso.BuildPath(WorkingDirectory, "SFXs\" & selectedSFX & ".txt")
+            Dim sfxFullPath As String = Path.Combine(WorkingDirectory, "SFXs", selectedSFX & ".txt")
             'Ensure that the file exists 
-            If fso.FileExists(sfxFullPath) Then
+            If File.Exists(sfxFullPath) Then
                 'Show form
                 Dim sfxProps As New SFX_Properties(selectedSFX, sfxFullPath)
                 sfxProps.ShowDialog()
@@ -561,9 +565,9 @@ Partial Public Class MainFrame
         If ListBox_DataBaseSFX.SelectedItems.Count = 1 Then
             'Get item and file path
             Dim selectedSFX As String = ListBox_DataBaseSFX.SelectedItem
-            Dim SelectedSfxPath = fso.BuildPath(WorkingDirectory, "SFXs\" & selectedSFX & ".txt")
+            Dim SelectedSfxPath = Path.Combine(WorkingDirectory, "SFXs", selectedSFX & ".txt")
             'Ensure that the file exists
-            If fso.FileExists(SelectedSfxPath) Then
+            If File.Exists(SelectedSfxPath) Then
                 'Open editor
                 Dim sfxEditor As New Frm_SfxEditor(selectedSFX)
                 sfxEditor.ShowDialog()
@@ -589,7 +593,7 @@ Partial Public Class MainFrame
     Private Sub DataBasesSFX_MultiEditor_Click(sender As Object, e As EventArgs) Handles DataBasesSFX_MultiEditor.Click
         Dim listOfSFXs As New List(Of String)
         For itemIndex As Integer = 0 To ListBox_DataBaseSFX.SelectedItems.Count - 1
-            listOfSFXs.Add(fso.BuildPath(WorkingDirectory & "\SFXs", ListBox_DataBaseSFX.SelectedItems(itemIndex) & ".txt"))
+            listOfSFXs.Add(Path.Combine(WorkingDirectory, "SFXs", ListBox_DataBaseSFX.SelectedItems(itemIndex) & ".txt"))
         Next
 
         Dim multiEditor As New SfxMultiEditor(listOfSFXs.ToArray)
@@ -614,7 +618,7 @@ Partial Public Class MainFrame
             'Get list of items
             Dim databaseDependencies As String() = ListBox_DataBaseSFX.Items.Cast(Of String).ToArray
             'Update text file
-            Dim databaseTxt As String = fso.BuildPath(WorkingDirectory, "DataBases\" & ListBox_DataBases.SelectedItem & ".txt")
+            Dim databaseTxt As String = Path.Combine(WorkingDirectory, "DataBases", ListBox_DataBases.SelectedItem & ".txt")
             writers.UpdateDataBaseText(databaseTxt, databaseDependencies, textFileReaders)
             'Update label
             Label_DataBaseSFX.Text = "Total: " & ListBox_DataBaseSFX.Items.Count
@@ -633,8 +637,8 @@ Partial Public Class MainFrame
     End Sub
 
     Private Sub Button_ReSampling_Click(sender As Object, e As EventArgs) Handles Button_ReSampling.Click
-        If fso.FolderExists(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")) Then
-            If fso.FileExists(SysFileSamples) Then
+        If Directory.Exists(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")) Then
+            If File.Exists(SysFileSamples) Then
                 'Set cursor as hourglass
                 Cursor.Current = Cursors.WaitCursor
 

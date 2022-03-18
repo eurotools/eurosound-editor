@@ -10,8 +10,8 @@ Partial Public Class ExporterForm
         Dim waveFunctions As New WaveFunctions
 
         'Debug Folder
-        Dim debugFolder As String = fso.BuildPath(WorkingDirectory, "Debug_Report")
-        CreateFolderIfRequired(debugFolder)
+        Dim debugFolder As String = Path.Combine(WorkingDirectory, "Debug_Report")
+        Directory.CreateDirectory(debugFolder)
 
         'Get Wave files to include
         Dim streamSamplesCount As Integer = streamSamplesList.Length - 1
@@ -21,7 +21,7 @@ Partial Public Class ExporterForm
                 Dim currentLanguage As String = outLanguages(languageIndex)
                 For platformIndex As Integer = 0 To outPlatforms.Length - 1
                     Dim currentPlatform As String = outPlatforms(platformIndex)
-                    CreateFolderIfRequired(fso.BuildPath(WorkingDirectory, currentPlatform & "_Streams" & "\" & currentLanguage))
+                    Directory.CreateDirectory(Path.Combine(WorkingDirectory, currentPlatform & "_Streams", currentLanguage))
                 Next
             Next
             'Reset progress bar
@@ -34,7 +34,7 @@ Partial Public Class ExporterForm
                     Dim filesToBind As New List(Of String)
                     Dim currentPlatform As String = outPlatforms(platformIndex)
                     'Create Debug file
-                    FileOpen(1, fso.BuildPath(debugFolder, "StreamsConverted_" & currentLanguage & "_" & currentPlatform & ".txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
+                    FileOpen(1, Path.Combine(debugFolder, "StreamsConverted_" & currentLanguage & "_" & currentPlatform & ".txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
                     'For each Sample
                     For sampleIndex As Integer = 0 To streamSamplesCount
                         'Calculate and report progress
@@ -45,37 +45,37 @@ Partial Public Class ExporterForm
                         If InStr(1, sampleFilePath, "Speech\", CompareMethod.Binary) Then
                             If StrComp(currentLanguage, "English", CompareMethod.Binary) <> 0 Then
                                 Dim multiSamplePath As String = Mid(sampleFilePath, Len("Speech\English\") + 1)
-                                sampleFilePath = fso.BuildPath("Speech\" & currentLanguage, multiSamplePath)
+                                sampleFilePath = Path.Combine("Speech", currentLanguage, multiSamplePath)
                             End If
                         End If
                         'Get platform samples folder path
                         Dim sampleFullPath As String = ""
                         If StrComp(currentPlatform, "PC") = 0 Or StrComp(currentPlatform, "GameCube") = 0 Then
-                            sampleFullPath = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\" & currentPlatform & "_Software_adpcm", sampleFilePath), ".ssp")
+                            sampleFullPath = Path.ChangeExtension(Path.Combine(WorkingDirectory, currentPlatform & "_Software_adpcm", sampleFilePath), ".ssp")
                         End If
                         If StrComp(currentPlatform, "PlayStation2") = 0 Then
-                            sampleFullPath = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\PlayStation2_VAG", sampleFilePath), ".vag")
+                            sampleFullPath = Path.ChangeExtension(Path.Combine(WorkingDirectory, "PlayStation2_VAG", sampleFilePath), ".vag")
                         End If
                         If StrComp(currentPlatform, "X Box") = 0 Or StrComp(currentPlatform, "Xbox") = 0 Then
-                            sampleFullPath = Path.ChangeExtension(fso.BuildPath(WorkingDirectory & "\XBox_adpcm", sampleFilePath), ".adpcm")
+                            sampleFullPath = Path.ChangeExtension(Path.Combine(WorkingDirectory, "XBox_adpcm", sampleFilePath), ".adpcm")
                         End If
                         'Ensure that the file exists
-                        If fso.FileExists(sampleFullPath) Then
+                        If File.Exists(sampleFullPath) Then
                             'Update title bar
                             Invoke(Sub() Text = currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
                             'Calculate destination folder
-                            Dim destinationFolder As String = WorkingDirectory & "\" & currentPlatform & "_Streams\" & currentLanguage
+                            Dim destinationFolder As String = Path.Combine(WorkingDirectory, currentPlatform & "_Streams", currentLanguage)
                             'Move Sample to destination folder
-                            Dim destinationFilePath As String = fso.BuildPath(destinationFolder, "STR_" & sampleIndex & ".ssd")
-                            fso.CopyFile(sampleFullPath, destinationFilePath)
+                            Dim destinationFilePath As String = Path.Combine(destinationFolder, "STR_" & sampleIndex & ".ssd")
+                            File.Copy(sampleFullPath, destinationFilePath, True)
                             filesToBind.Add(destinationFilePath)
                             'Write to debug file
                             PrintLine(1, "InputFile = " & sampleFullPath)
                             PrintLine(1, "OutputFileName = " & destinationFilePath)
                             'Create marker file
-                            Dim masterWaveFilePath As String = fso.BuildPath(WorkingDirectory & "\Master", sampleFilePath)
+                            Dim masterWaveFilePath As String = Path.Combine(WorkingDirectory, "Master", sampleFilePath)
                             Dim masterMarkerFilePath As String = Path.ChangeExtension(masterWaveFilePath, ".mrk")
-                            If Not fso.FileExists(masterMarkerFilePath) Then
+                            If Not File.Exists(masterMarkerFilePath) Then
                                 Using waveReader As New WaveFileReader(masterWaveFilePath)
                                     Dim sampleChunkData As Integer() = waveFunctions.ReadSampleChunk(waveReader)
                                     markerFileFunctions.CreateStreamMarkerFile(masterMarkerFilePath, sampleChunkData, waveReader.Length / 2)
@@ -89,18 +89,18 @@ Partial Public Class ExporterForm
                     'Close file
                     FileClose(1)
                     'Get paths
-                    Dim temporalOutputFile As String = fso.BuildPath(WorkingDirectory & "\TempOutputFolder\" & currentPlatform & "\" & currentLanguage, "Streams")
-                    CreateFolderIfRequired(temporalOutputFile)
+                    Dim temporalOutputFile As String = Path.Combine(WorkingDirectory, "TempOutputFolder", currentPlatform, currentLanguage, "Streams")
+                    Directory.CreateDirectory(temporalOutputFile)
                     'Build Temporal Stream File
                     BuildTemporalFile(filesToBind, currentPlatform, currentLanguage, temporalOutputFile)
                     'Get final Name
                     Dim sfxFileName As String = "HC" & Hex(GetSfxFileName(Array.IndexOf(SfxLanguages, currentLanguage), &HFFFF)).PadLeft(6, "0"c)
-                    Dim outputFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary\" & GetEngineXFolder(currentPlatform) & "\" & GetEngineXLangFolder(currentLanguage))
-                    CreateFolderIfRequired(outputFilePath)
+                    Dim outputFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder(currentPlatform), GetEngineXLangFolder(currentLanguage))
+                    Directory.CreateDirectory(outputFilePath)
                     If StrComp(currentPlatform, "GameCube") = 0 Then
-                        ESUtils.MusXBuild_StreamFile.BuildStreamFile(fso.BuildPath(temporalOutputFile, "STREAMS.bin"), fso.BuildPath(temporalOutputFile, "STREAMS.lut"), fso.BuildPath(outputFilePath, sfxFileName & ".SFX"), True)
+                        ESUtils.MusXBuild_StreamFile.BuildStreamFile(Path.Combine(temporalOutputFile, "STREAMS.bin"), Path.Combine(temporalOutputFile, "STREAMS.lut"), Path.Combine(outputFilePath, sfxFileName & ".SFX"), True)
                     Else
-                        ESUtils.MusXBuild_StreamFile.BuildStreamFile(fso.BuildPath(temporalOutputFile, "STREAMS.bin"), fso.BuildPath(temporalOutputFile, "STREAMS.lut"), fso.BuildPath(outputFilePath, sfxFileName & ".SFX"), False)
+                        ESUtils.MusXBuild_StreamFile.BuildStreamFile(Path.Combine(temporalOutputFile, "STREAMS.bin"), Path.Combine(temporalOutputFile, "STREAMS.lut"), Path.Combine(outputFilePath, sfxFileName & ".SFX"), False)
                     End If
                 Next
             Next

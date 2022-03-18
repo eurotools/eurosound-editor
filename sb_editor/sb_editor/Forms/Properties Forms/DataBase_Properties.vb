@@ -29,18 +29,19 @@ Public Class DataBase_Properties
         Label_ModifiedBy_Value.Text = dataBaseObj.HeaderInfo.LastModifyBy
 
         'Files Recount Section
-        Label_DatabaseCount_Value.Text = CountFolderFiles(fso.BuildPath(WorkingDirectory, "Databases"), "*.txt")
-        Label_SfxCount_Value.Text = CountFolderFiles(fso.BuildPath(WorkingDirectory, "SFXs"), "*.txt")
+        Label_DatabaseCount_Value.Text = CountFolderFiles(Path.Combine(WorkingDirectory, "Databases"), "*.txt")
+        Label_SfxCount_Value.Text = CountFolderFiles(Path.Combine(WorkingDirectory, "SFXs"), "*.txt")
 
         'Show SFXs info
-        Dim dataBaseName = GetOnlyFileName(dataBaseFilePath)
+        Dim dataBaseName = Path.GetFileNameWithoutExtension(dataBaseFilePath)
         TextBox_DataBaseName.Text = dataBaseName
         ListBox_TotalSfx.Items.AddRange(dataBaseObj.Dependencies)
         Label_TotalSfx_Count.Text = "Total: " & ListBox_TotalSfx.Items.Count
 
         'Get sample folder
-        Dim MasterFilePath = fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")
-        If fso.FolderExists(MasterFilePath) Then
+        Dim fso As New FileSystemObject
+        Dim MasterFilePath = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")
+        If Directory.Exists(MasterFilePath) Then
             Label_SampleCount_Value.Text = Directory.GetFiles(MasterFilePath, "*.wav", SearchOption.AllDirectories).Length
             Dim fold As Folder = fso.GetFolder(MasterFilePath)
             Label_Value_Size.Text = BytesStringFormat(fold.Size)
@@ -61,24 +62,28 @@ Public Class DataBase_Properties
     '*===============================================================================================
     Private Sub GetSoundbankDependencies(dataBaseName As String)
         'Get soundbank dependencies
-        Dim soundbanksFolderPath As String = fso.BuildPath(WorkingDirectory, "SoundBanks")
-        Dim soundbanksFiles As Files = fso.GetFolder(soundbanksFolderPath).Files
+        Dim soundbanksFolderPath As String = Path.Combine(WorkingDirectory, "SoundBanks")
+        Dim soundbanksFiles As String() = Directory.GetFiles(soundbanksFolderPath, "*.txt", SearchOption.TopDirectoryOnly)
 
         'Check for this database in the soundbanks
-        For Each soundbankFile As Scripting.File In soundbanksFiles
+        For fileIndex As Integer = 0 To soundbanksFiles.Length - 1
+            Dim currentFile As String = soundbanksFiles(fileIndex)
             'Get Soundbank data
-            Dim soundbankData As SoundbankFile = fileReaders.ReadSoundBankFile(soundbankFile.Path)
+            Dim soundbankData As SoundbankFile = fileReaders.ReadSoundBankFile(currentFile)
             Dim soundbankDataBases As String() = soundbankData.Dependencies
 
             'Check if this database is included
             For index As Integer = 0 To soundbankDataBases.Count - 1
                 Dim currentDataBase As String = soundbankDataBases(index)
                 If StrComp(currentDataBase, dataBaseName) = 0 Then
-                    ListBox_SoundBank_Dependencies.Items.Add(GetOnlyFileName(soundbankFile.Name))
+                    ListBox_SoundBank_Dependencies.Items.Add(Path.GetFileNameWithoutExtension(currentFile))
                     Exit For
                 End If
             Next
         Next
+
+
+
 
         'Update counter
         Label_SbDependencies_Value.Text = ListBox_SoundBank_Dependencies.Items.Count
@@ -89,11 +94,11 @@ Public Class DataBase_Properties
         'Get list of user Wav files
         Dim samplesList As New HashSet(Of String)
         For Each sfxName As String In ListBox_TotalSfx.Items
-            Dim sfxFullFilePath As String = fso.BuildPath(WorkingDirectory, "SFXs\" & sfxName & ".txt")
+            Dim sfxFullFilePath As String = Path.Combine(WorkingDirectory, "SFXs", sfxName & ".txt")
             Dim sfxFileData As SfxFile = fileReaders.ReadSFXFile(sfxFullFilePath)
             For Each sampleData As Sample In sfxFileData.Samples
                 'Add sample to list if not exists
-                Dim sampleFullPath As String = UCase(fso.BuildPath(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\" & sampleData.FilePath))
+                Dim sampleFullPath As String = UCase(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master\" & sampleData.FilePath))
                 samplesList.Add(sampleFullPath)
             Next
         Next

@@ -41,7 +41,7 @@ Partial Public Class ExporterForm
         Invoke(Sub() Text = "Waiting")
 
         'Create bat if required
-        Dim preOutbatFilePath As String = fso.BuildPath(WorkingDirectory & "\System", "PreOutput.bat")
+        Dim preOutbatFilePath As String = Path.Combine(WorkingDirectory, "System", "PreOutput.bat")
         CreatePrePostOutputBatIfRequired(preOutbatFilePath, "rem Add your pre-output stuff here")
         RunProcess(preOutbatFilePath, "", ProjectSettingsFile.MiscProps.ViewOutputDos)
 
@@ -83,7 +83,7 @@ Partial Public Class ExporterForm
         Dim sfxFiles As String() = Directory.GetFiles(WorkingDirectory & "\SFXs", "*.txt", SearchOption.TopDirectoryOnly)
         For fileIndex As Integer = 0 To sfxFiles.Length - 1
             Dim currentFilePath As String = sfxFiles(fileIndex)
-            Dim sfxLabel As String = GetOnlyFileName(currentFilePath)
+            Dim sfxLabel As String = Path.GetFileNameWithoutExtension(currentFilePath)
             If Not hashCodesDictionary.ContainsKey(sfxLabel) Then
                 'Get HashCode
                 Dim sfxFileData As String() = File.ReadAllLines(currentFilePath)
@@ -100,7 +100,7 @@ Partial Public Class ExporterForm
         Dim soundbankFiles As String() = Directory.GetFiles(WorkingDirectory & "\SoundBanks", "*.txt", SearchOption.TopDirectoryOnly)
         For fileIndex As Integer = 0 To soundbankFiles.Length - 1
             Dim currentFilePath As String = soundbankFiles(fileIndex)
-            Dim soundBankLabel As String = GetOnlyFileName(currentFilePath)
+            Dim soundBankLabel As String = Path.GetFileNameWithoutExtension(currentFilePath)
             If Not soundBanksDictionary.ContainsKey(soundBankLabel) Then
                 'Get HashCode
                 Dim soundBankFileData As String() = File.ReadAllLines(currentFilePath)
@@ -135,7 +135,7 @@ Partial Public Class ExporterForm
             If ReSampleStreams = 1 Then
                 GenerateStreamFolder(streamSamplesList, outputLanguage, availableFormats)
                 ReSampleStreams = 0
-                textFileWritters.UpdateMiscFile(fso.BuildPath(WorkingDirectory, "System\Misc.txt"))
+                textFileWritters.UpdateMiscFile(Path.Combine(WorkingDirectory, "System", "Misc.txt"))
             End If
             'Save Samples File
             textFileWritters.SaveSamplesFile(SysFileSamples, soundsTable)
@@ -168,14 +168,14 @@ Partial Public Class ExporterForm
                 Dim maxHashCode = CreateSfxDataTempFolder(soundsTable)
 
                 '----------------------------------------------Create Hashtables----------------------------------------------
-                Dim sfxDefinesFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Defines.h")
-                Dim sfxDataFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Data.h")
-                Dim soundhFilePath As String = fso.BuildPath(ProjectSettingsFile.MiscProps.EuroLandHashCodeServerPath, "Sound.h")
+                Dim sfxDefinesFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Defines.h")
+                Dim sfxDataFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Data.h")
+                Dim soundhFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.EuroLandHashCodeServerPath, "Sound.h")
 
-                hashTablesBuilder.CreateSfxDebug(Me, hashCodesDictionary, fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Debug.h"))
+                hashTablesBuilder.CreateSfxDebug(Me, hashCodesDictionary, Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Debug.h"))
                 hashTablesBuilder.CreateSfxDefines(Me, hashCodesDictionary, soundBanksDictionary, SfxLanguages, ProjectSettingsFile.MiscProps.PrefixHtSound, sfxDefinesFilePath)
-                hashTablesBuilder.CreateSfxData(Me, sfxDataFilePath, fso.BuildPath(WorkingDirectory, "TempSfxData"), maxHashCode)
-                soundhBuilder.CreateSoundhFile(soundhFilePath, sfxDefinesFilePath, fso.BuildPath(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "MFX_Defines.h"))
+                hashTablesBuilder.CreateSfxData(Me, sfxDataFilePath, Path.Combine(WorkingDirectory, "TempSfxData"), maxHashCode)
+                soundhBuilder.CreateSoundhFile(soundhFilePath, sfxDefinesFilePath, Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "MFX_Defines.h"))
 
                 '----------------------------------------------Create SFX DATA BIN----------------------------------------------
                 CreateSFXDataBinaryFiles(outPlaforms, outputLanguage)
@@ -186,7 +186,7 @@ Partial Public Class ExporterForm
 
             'Create bat if required
             Invoke(Sub() Text = "End")
-            Dim postOutBatFilepath As String = fso.BuildPath(WorkingDirectory & "\System", "PostOutput.bat")
+            Dim postOutBatFilepath As String = Path.Combine(WorkingDirectory, "System", "PostOutput.bat")
             CreatePrePostOutputBatIfRequired(postOutBatFilepath, "rem Add your post-output stuff here")
             RunProcess(postOutBatFilepath, "", ProjectSettingsFile.MiscProps.ViewOutputDos)
         End If
@@ -212,7 +212,7 @@ Partial Public Class ExporterForm
     '* BAT FILES FUNCTIONS
     '*===============================================================================================
     Private Sub CreatePrePostOutputBatIfRequired(batFilePath As String, comment As String)
-        If Not fso.FileExists(batFilePath) Then
+        If Not File.Exists(batFilePath) Then
             FileOpen(1, batFilePath, OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
             PrintLine(1, comment)
             FileClose(1)

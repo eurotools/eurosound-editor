@@ -1,4 +1,5 @@
-﻿Imports ESUtils.MusXBuild_MusicFile
+﻿Imports System.IO
+Imports ESUtils.MusXBuild_MusicFile
 
 Partial Public Class MusicsExporter
     Private Sub CreateMusXFiles(outputPlatforms As String())
@@ -18,14 +19,14 @@ Partial Public Class MusicsExporter
                 Dim outputFilePath As String = GetOutputFolder(musicHashCode, currentPlatform)
 
                 'Get output file paths
-                Dim soundMarkerFile As String = fso.BuildPath(outputFilePath, "MFX_" & musicHashCode & ".smf")
-                Dim soundSampleData As String = fso.BuildPath(outputFilePath, "MFX_" & musicHashCode & ".ssd")
+                Dim soundMarkerFile As String = Path.Combine(outputFilePath, "MFX_" & musicHashCode & ".smf")
+                Dim soundSampleData As String = Path.Combine(outputFilePath, "MFX_" & musicHashCode & ".ssd")
                 Dim musxFilename As String = "HCE" & Hex(musicHashCode).PadLeft(5, "0"c) & ".SFX"
-                Dim folderPath = fso.BuildPath(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary\" & GetEngineXFolder(currentPlatform) & "\music")
-                CreateFolderIfRequired(folderPath)
+                Dim folderPath = Path.Combine(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary\" & GetEngineXFolder(currentPlatform) & "\music")
+                Directory.CreateDirectory(folderPath)
 
                 'Build file
-                Dim fullDirPath = fso.BuildPath(folderPath, musxFilename)
+                Dim fullDirPath = Path.Combine(folderPath, musxFilename)
                 If StrComp(outputPlatforms(platformIndex), "GameCube") = 0 Then
                     BuildMusicFile(soundMarkerFile, soundSampleData, fullDirPath, musicHashCode, True)
                 Else
