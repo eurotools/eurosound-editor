@@ -2,7 +2,7 @@
 Imports System.IO
 Imports System.Text
 
-Module Module1
+Module MainModule
     '*===============================================================================================
     '* GLOBAL VARIABLES 
     '*===============================================================================================
@@ -15,19 +15,13 @@ Module Module1
     '* MAIN METHOD
     '*===============================================================================================
     Sub Main()
-        'Dim args() As String = Environment.GetCommandLineArgs()
-        Dim args As String() = New String() {"C:\Users\Jordi Martinez\Desktop\_ESOutput_Sphinx\Sonix\SFX_Data.h", "C:\Users\Jordi Martinez\Desktop\SFX_Data.bin"}
+        Dim args() As String = Environment.GetCommandLineArgs()
         If args.Length > 1 Then
-            'Get input and output file paths
-            Dim inputFilePath As String = args(0)
-            Dim outputFilePath As String = args(1)
-
             'Get data to print
-            Dim itemsList As List(Of Single()) = ReadTextFile(inputFilePath)
+            Dim itemsList As List(Of Single()) = ReadTextFile(args(0))
 
             'Generate Binary File
-            CreateBinaryFile(outputFilePath, itemsList)
-
+            CreateBinaryFile(args(1), itemsList)
         End If
     End Sub
 
@@ -72,11 +66,13 @@ Module Module1
                     'Check if the currentLine is valid
                     If currentLine.StartsWith("{") Then
                         Dim SplitedLine = currentLine.Split(New Char() {"{"c, ","c, "}"c}, StringSplitOptions.RemoveEmptyEntries)
+
                         'Parse text data to floats and add items to the list
                         Dim ArrayOfValues As Single() = New Single(7) {}
                         For index As Integer = 0 To ArrayOfValues.Length - 1
                             ArrayOfValues(index) = StringFloatToDouble(Trim(SplitedLine(index)))
                         Next
+
                         itemsList.Add(ArrayOfValues)
                     Else
                         'Read another line

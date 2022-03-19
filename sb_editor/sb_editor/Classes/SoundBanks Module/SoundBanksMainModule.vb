@@ -220,61 +220,64 @@ Namespace SoundBanksExporterFunctions
                     'Get file path
                     Dim masterWaveFile As String = samplesList(sampleIndex)
                     Dim relativeFilePath As String = masterWaveFile.Substring((ProjectSettingsFile.MiscProps.SampleFileFolder & "\Master\").Length).TrimStart("\")
-                    Dim platformWaveFile As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, outputPlatform, relativeFilePath)
-                    If outputPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase) Then
-                        platformWaveFile = Path.ChangeExtension(platformWaveFile, ".AIF")
-                    End If
-                    'Ensure that the two file paths exists
-                    If File.Exists(masterWaveFile) AndAlso File.Exists(platformWaveFile) Then
-                        Dim soundDataObj As New EXAudio
+                    If Not samplesDictionary.ContainsKey(relativeFilePath.ToUpper) Then
+                        'Get Format sample
+                        Dim platformWaveFile As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, outputPlatform, relativeFilePath)
+                        If outputPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase) Then
+                            platformWaveFile = Path.ChangeExtension(platformWaveFile, ".AIF")
+                        End If
+                        'Ensure that the two file paths exists
+                        If File.Exists(masterWaveFile) AndAlso File.Exists(platformWaveFile) Then
+                            Dim soundDataObj As New EXAudio
 
-                        'Read master wave data
-                        Dim loopInfo As Integer()
-                        Dim masterWaveSampleRate As Integer = 0
-                        Using waveReader As New WaveFileReader(masterWaveFile)
-                            loopInfo = ReadWaveSampleChunk(waveReader)
-                            soundDataObj.Duration = waveReader.TotalTime.TotalMilliseconds
-                            soundDataObj.Flags = loopInfo(0)
-                            soundDataObj.Bits = 4
-                            soundDataObj.NumberOfChannels = waveReader.WaveFormat.Channels
-                            masterWaveSampleRate = waveReader.WaveFormat.SampleRate
-                        End Using
+                            'Read master wave data
+                            Dim loopInfo As Integer()
+                            Dim masterWaveSampleRate As Integer = 0
+                            Using waveReader As New WaveFileReader(masterWaveFile)
+                                loopInfo = ReadWaveSampleChunk(waveReader)
+                                soundDataObj.Duration = waveReader.TotalTime.TotalMilliseconds
+                                soundDataObj.Flags = loopInfo(0)
+                                soundDataObj.Bits = 4
+                                soundDataObj.NumberOfChannels = waveReader.WaveFormat.Channels
+                                masterWaveSampleRate = waveReader.WaveFormat.SampleRate
+                            End Using
 
-                        'Read platform wave
-                        Select Case outputPlatform.ToUpper
-                            Case "PC"
-                                LoadPcmForPC(platformWaveFile, soundDataObj, loopInfo, masterWaveSampleRate)
-                            Case "PLAYSTATION2"
-                                Dim vagFilePath As String = Path.ChangeExtension(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "PlayStation2_VAG", relativeFilePath), ".VAG")
-                                If File.Exists(platformWaveFile) Then
-                                    LoadVagForPlayStation2(platformWaveFile, vagFilePath, soundDataObj, loopInfo, masterWaveSampleRate)
-                                Else
-                                    MsgBox("Output Error: Sample File Missing: UNKNOWN SFX & BANK" & vbCrLf & masterWaveFile, vbOKOnly + vbCritical, "EuroSound")
-                                    CancelSoundBankOutput = True
-                                End If
-                            Case "GAMECUBE"
-                                Dim dspFilePath As String = Path.ChangeExtension(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "GameCube_dsp_adpcm", relativeFilePath), ".DSP")
-                                If File.Exists(platformWaveFile) Then
-                                    LoadDspForGameCube(platformWaveFile, dspFilePath, soundDataObj, loopInfo, masterWaveSampleRate)
-                                Else
-                                    MsgBox("Output Error: Sample File Missing: UNKNOWN SFX & BANK" & vbCrLf & masterWaveFile, vbOKOnly + vbCritical, "EuroSound")
-                                    CancelSoundBankOutput = True
-                                End If
-                            Case Else
-                                Dim adpcmFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "XBox_adpcm", relativeFilePath)
-                                If File.Exists(platformWaveFile) Then
-                                    LoadAdpcmForXbox(platformWaveFile, adpcmFilePath, soundDataObj, loopInfo)
-                                Else
-                                    MsgBox("Output Error: Sample File Missing: UNKNOWN SFX & BANK" & vbCrLf & masterWaveFile, vbOKOnly + vbCritical, "EuroSound")
-                                    CancelSoundBankOutput = True
-                                End If
-                        End Select
+                            'Read platform wave
+                            Select Case outputPlatform.ToUpper
+                                Case "PC"
+                                    LoadPcmForPC(platformWaveFile, soundDataObj, loopInfo, masterWaveSampleRate)
+                                Case "PLAYSTATION2"
+                                    Dim vagFilePath As String = Path.ChangeExtension(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "PlayStation2_VAG", relativeFilePath), ".VAG")
+                                    If File.Exists(platformWaveFile) Then
+                                        LoadVagForPlayStation2(platformWaveFile, vagFilePath, soundDataObj, loopInfo, masterWaveSampleRate)
+                                    Else
+                                        MsgBox("Output Error: Sample File Missing: UNKNOWN SFX & BANK" & vbCrLf & masterWaveFile, vbOKOnly + vbCritical, "EuroSound")
+                                        CancelSoundBankOutput = True
+                                    End If
+                                Case "GAMECUBE"
+                                    Dim dspFilePath As String = Path.ChangeExtension(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "GameCube_dsp_adpcm", relativeFilePath), ".DSP")
+                                    If File.Exists(platformWaveFile) Then
+                                        LoadDspForGameCube(platformWaveFile, dspFilePath, soundDataObj, loopInfo, masterWaveSampleRate)
+                                    Else
+                                        MsgBox("Output Error: Sample File Missing: UNKNOWN SFX & BANK" & vbCrLf & masterWaveFile, vbOKOnly + vbCritical, "EuroSound")
+                                        CancelSoundBankOutput = True
+                                    End If
+                                Case Else
+                                    Dim adpcmFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "XBox_adpcm", relativeFilePath)
+                                    If File.Exists(platformWaveFile) Then
+                                        LoadAdpcmForXbox(platformWaveFile, adpcmFilePath, soundDataObj, loopInfo)
+                                    Else
+                                        MsgBox("Output Error: Sample File Missing: UNKNOWN SFX & BANK" & vbCrLf & masterWaveFile, vbOKOnly + vbCritical, "EuroSound")
+                                        CancelSoundBankOutput = True
+                                    End If
+                            End Select
 
-                        'Add readed data to the dictionary
-                        samplesDictionary.Add(relativeFilePath.ToUpper, soundDataObj)
-                    Else
-                        MsgBox("Output Error: Sample File Missing: UNKNOWN SFX & BANK" & vbCrLf & masterWaveFile, vbOKOnly + vbCritical, "EuroSound")
-                        CancelSoundBankOutput = True
+                            'Add readed data to the dictionary
+                            samplesDictionary.Add(relativeFilePath.ToUpper, soundDataObj)
+                        Else
+                            MsgBox("Output Error: Sample File Missing: UNKNOWN SFX & BANK" & vbCrLf & masterWaveFile, vbOKOnly + vbCritical, "EuroSound")
+                            CancelSoundBankOutput = True
+                        End If
                     End If
                 End If
             Next
@@ -313,7 +316,7 @@ Namespace SoundBanksExporterFunctions
 
                 'Get vag block data aligned
                 Dim vagFile As Byte() = GetVagFileDataChunk(vagFilePath)
-                newAudioObj.RealSize = vagFile.Length
+                newAudioObj.RealSize = vagFile.Length - 1
                 newAudioObj.SampleData = New Byte(ESUtils.BytesFunctions.AlignNumber(vagFile.Length, 64) - 1) {}
                 Buffer.BlockCopy(vagFile, 0, newAudioObj.SampleData, 0, vagFile.Length)
 
@@ -331,13 +334,13 @@ Namespace SoundBanksExporterFunctions
                 newAudioObj.Bits = 4
 
                 'Get wave block data aligned
-                Dim dspFile As Byte() = File.ReadAllBytes(dspFilePath)
-                newAudioObj.RealSize = dspFile.Length
+                Dim dspFile As Byte() = GetDspDataChunk(dspFilePath)
+                newAudioObj.RealSize = dspFile.Length - 1
                 newAudioObj.SampleData = New Byte(ESUtils.BytesFunctions.AlignNumber(dspFile.Length, 32) - 1) {}
                 Buffer.BlockCopy(dspFile, 0, newAudioObj.SampleData, 0, dspFile.Length)
 
                 'Get header data
-                newAudioObj.DspHeaderData = File.ReadAllBytes(Path.ChangeExtension(dspFilePath, ".dsph"))
+                newAudioObj.DspHeaderData = GetDspHeaderData(dspFilePath)
 
                 'Loop offset
                 If loopInfo(0) = 1 Then
@@ -351,7 +354,7 @@ Namespace SoundBanksExporterFunctions
                 newAudioObj.Frequency = platformWaveReader.WaveFormat.SampleRate
                 newAudioObj.NumberOfChannels = platformWaveReader.WaveFormat.Channels
                 newAudioObj.SampleData = GetXboxAdpcmDataChunk(xboxFilePath)
-                newAudioObj.RealSize = newAudioObj.SampleData.Length
+                newAudioObj.RealSize = newAudioObj.SampleData.Length - 1
                 newAudioObj.Bits = 4
 
                 'Loop offset

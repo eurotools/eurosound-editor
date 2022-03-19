@@ -10,6 +10,7 @@ Friend Module GlobalVariables
     Friend WorkingDirectory As String = ""
     Friend EuroSoundIniFilePath As String = Application.StartupPath & "\EuroSound.ini"
     Friend EuroSoundUser As String = ""
+    Friend SoxEffect As String = "resample -qs 0.97"
 
     'Project Settings
     Friend ProjAudioEditor As String = ""

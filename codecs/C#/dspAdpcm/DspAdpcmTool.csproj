@@ -9,7 +9,7 @@
     <ProjectGuid>{06EECA49-589D-49FE-8654-400038BB2181}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>DspAdpcmTool</RootNamespace>
-    <AssemblyName>DspCodec</AssemblyName>
+    <AssemblyName>DSPADPCM</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

@@ -57,18 +57,18 @@ Partial Class MusicMaker
         Me.GroupBox_MusicMaker.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox_MusicMaker.Controls.Add(Me.Numeric_Volume)
-        Me.GroupBox_MusicMaker.Controls.Add(Me.TextBox_UserValue)
-        Me.GroupBox_MusicMaker.Controls.Add(Me.Button_VeryfyMfx)
         Me.GroupBox_MusicMaker.Controls.Add(Me.Button_ForceOutput)
         Me.GroupBox_MusicMaker.Controls.Add(Me.Button_ForceSelected)
+        Me.GroupBox_MusicMaker.Controls.Add(Me.Numeric_Volume)
+        Me.GroupBox_MusicMaker.Controls.Add(Me.TextBox_UserValue)
         Me.GroupBox_MusicMaker.Controls.Add(Me.Button_ViewErrorFile)
+        Me.GroupBox_MusicMaker.Controls.Add(Me.Button_VeryfyMfx)
         Me.GroupBox_MusicMaker.Controls.Add(Me.Button_Output)
         Me.GroupBox_MusicMaker.Controls.Add(Me.Button_UpdateFiles)
         Me.GroupBox_MusicMaker.Controls.Add(Me.ListView_MusicFiles)
         Me.GroupBox_MusicMaker.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox_MusicMaker.Name = "GroupBox_MusicMaker"
-        Me.GroupBox_MusicMaker.Size = New System.Drawing.Size(762, 378)
+        Me.GroupBox_MusicMaker.Size = New System.Drawing.Size(762, 386)
         Me.GroupBox_MusicMaker.TabIndex = 0
         Me.GroupBox_MusicMaker.TabStop = False
         Me.GroupBox_MusicMaker.Text = "Available Music Files"
@@ -76,7 +76,7 @@ Partial Class MusicMaker
         'Numeric_Volume
         '
         Me.Numeric_Volume.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Numeric_Volume.Location = New System.Drawing.Point(142, 352)
+        Me.Numeric_Volume.Location = New System.Drawing.Point(142, 360)
         Me.Numeric_Volume.Name = "Numeric_Volume"
         Me.Numeric_Volume.Size = New System.Drawing.Size(60, 20)
         Me.Numeric_Volume.TabIndex = 3
@@ -84,7 +84,7 @@ Partial Class MusicMaker
         'TextBox_UserValue
         '
         Me.TextBox_UserValue.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_UserValue.Location = New System.Drawing.Point(642, 351)
+        Me.TextBox_UserValue.Location = New System.Drawing.Point(637, 359)
         Me.TextBox_UserValue.Name = "TextBox_UserValue"
         Me.TextBox_UserValue.Size = New System.Drawing.Size(60, 20)
         Me.TextBox_UserValue.TabIndex = 8
@@ -93,7 +93,7 @@ Partial Class MusicMaker
         'Button_VeryfyMfx
         '
         Me.Button_VeryfyMfx.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_VeryfyMfx.Location = New System.Drawing.Point(551, 349)
+        Me.Button_VeryfyMfx.Location = New System.Drawing.Point(546, 357)
         Me.Button_VeryfyMfx.Name = "Button_VeryfyMfx"
         Me.Button_VeryfyMfx.Size = New System.Drawing.Size(85, 23)
         Me.Button_VeryfyMfx.TabIndex = 7
@@ -103,27 +103,27 @@ Partial Class MusicMaker
         'Button_ForceOutput
         '
         Me.Button_ForceOutput.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_ForceOutput.Location = New System.Drawing.Point(442, 349)
+        Me.Button_ForceOutput.Location = New System.Drawing.Point(424, 356)
         Me.Button_ForceOutput.Name = "Button_ForceOutput"
-        Me.Button_ForceOutput.Size = New System.Drawing.Size(77, 23)
+        Me.Button_ForceOutput.Size = New System.Drawing.Size(101, 23)
         Me.Button_ForceOutput.TabIndex = 6
-        Me.Button_ForceOutput.Text = "Force Output"
+        Me.Button_ForceOutput.Text = "Add All For Output"
         Me.Button_ForceOutput.UseVisualStyleBackColor = True
         '
         'Button_ForceSelected
         '
         Me.Button_ForceSelected.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_ForceSelected.Location = New System.Drawing.Point(349, 349)
+        Me.Button_ForceSelected.Location = New System.Drawing.Point(309, 357)
         Me.Button_ForceSelected.Name = "Button_ForceSelected"
-        Me.Button_ForceSelected.Size = New System.Drawing.Size(87, 23)
+        Me.Button_ForceSelected.Size = New System.Drawing.Size(109, 23)
         Me.Button_ForceSelected.TabIndex = 5
-        Me.Button_ForceSelected.Text = "Force Selected"
+        Me.Button_ForceSelected.Text = "Add Sel. For Output"
         Me.Button_ForceSelected.UseVisualStyleBackColor = True
         '
         'Button_ViewErrorFile
         '
         Me.Button_ViewErrorFile.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_ViewErrorFile.Location = New System.Drawing.Point(208, 349)
+        Me.Button_ViewErrorFile.Location = New System.Drawing.Point(208, 357)
         Me.Button_ViewErrorFile.Name = "Button_ViewErrorFile"
         Me.Button_ViewErrorFile.Size = New System.Drawing.Size(82, 23)
         Me.Button_ViewErrorFile.TabIndex = 4
@@ -133,7 +133,7 @@ Partial Class MusicMaker
         'Button_Output
         '
         Me.Button_Output.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_Output.Location = New System.Drawing.Point(72, 349)
+        Me.Button_Output.Location = New System.Drawing.Point(72, 357)
         Me.Button_Output.Name = "Button_Output"
         Me.Button_Output.Size = New System.Drawing.Size(60, 23)
         Me.Button_Output.TabIndex = 2
@@ -143,7 +143,7 @@ Partial Class MusicMaker
         'Button_UpdateFiles
         '
         Me.Button_UpdateFiles.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_UpdateFiles.Location = New System.Drawing.Point(6, 349)
+        Me.Button_UpdateFiles.Location = New System.Drawing.Point(6, 357)
         Me.Button_UpdateFiles.Name = "Button_UpdateFiles"
         Me.Button_UpdateFiles.Size = New System.Drawing.Size(60, 23)
         Me.Button_UpdateFiles.TabIndex = 1
@@ -161,7 +161,7 @@ Partial Class MusicMaker
         Me.ListView_MusicFiles.HideSelection = False
         Me.ListView_MusicFiles.Location = New System.Drawing.Point(6, 19)
         Me.ListView_MusicFiles.Name = "ListView_MusicFiles"
-        Me.ListView_MusicFiles.Size = New System.Drawing.Size(750, 323)
+        Me.ListView_MusicFiles.Size = New System.Drawing.Size(750, 332)
         Me.ListView_MusicFiles.TabIndex = 0
         Me.ListView_MusicFiles.UseCompatibleStateImageBehavior = False
         Me.ListView_MusicFiles.View = System.Windows.Forms.View.Details
@@ -209,7 +209,7 @@ Partial Class MusicMaker
         '
         Me.GroupBox_OutputFormat.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.GroupBox_OutputFormat.Controls.Add(Me.ComboBox_OutputFormat)
-        Me.GroupBox_OutputFormat.Location = New System.Drawing.Point(12, 396)
+        Me.GroupBox_OutputFormat.Location = New System.Drawing.Point(12, 404)
         Me.GroupBox_OutputFormat.Name = "GroupBox_OutputFormat"
         Me.GroupBox_OutputFormat.Size = New System.Drawing.Size(205, 56)
         Me.GroupBox_OutputFormat.TabIndex = 1
@@ -229,7 +229,7 @@ Partial Class MusicMaker
         '
         Me.CheckBox_MarkerFileOnly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBox_MarkerFileOnly.AutoSize = True
-        Me.CheckBox_MarkerFileOnly.Location = New System.Drawing.Point(223, 408)
+        Me.CheckBox_MarkerFileOnly.Location = New System.Drawing.Point(223, 416)
         Me.CheckBox_MarkerFileOnly.Name = "CheckBox_MarkerFileOnly"
         Me.CheckBox_MarkerFileOnly.Size = New System.Drawing.Size(102, 17)
         Me.CheckBox_MarkerFileOnly.TabIndex = 2
@@ -240,7 +240,7 @@ Partial Class MusicMaker
         '
         Me.TextBox_OutputTime.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.TextBox_OutputTime.BackColor = System.Drawing.SystemColors.Window
-        Me.TextBox_OutputTime.Location = New System.Drawing.Point(223, 431)
+        Me.TextBox_OutputTime.Location = New System.Drawing.Point(223, 439)
         Me.TextBox_OutputTime.Name = "TextBox_OutputTime"
         Me.TextBox_OutputTime.ReadOnly = True
         Me.TextBox_OutputTime.Size = New System.Drawing.Size(217, 20)
@@ -249,7 +249,7 @@ Partial Class MusicMaker
         'Button_RemapHashCodes
         '
         Me.Button_RemapHashCodes.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_RemapHashCodes.Location = New System.Drawing.Point(331, 402)
+        Me.Button_RemapHashCodes.Location = New System.Drawing.Point(331, 410)
         Me.Button_RemapHashCodes.Name = "Button_RemapHashCodes"
         Me.Button_RemapHashCodes.Size = New System.Drawing.Size(109, 23)
         Me.Button_RemapHashCodes.TabIndex = 4
@@ -260,7 +260,7 @@ Partial Class MusicMaker
         '
         Me.Button_Ok.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_Ok.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Button_Ok.Location = New System.Drawing.Point(699, 429)
+        Me.Button_Ok.Location = New System.Drawing.Point(699, 437)
         Me.Button_Ok.Name = "Button_Ok"
         Me.Button_Ok.Size = New System.Drawing.Size(75, 23)
         Me.Button_Ok.TabIndex = 5
@@ -272,7 +272,7 @@ Partial Class MusicMaker
         Me.AcceptButton = Me.Button_Ok
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(786, 464)
+        Me.ClientSize = New System.Drawing.Size(786, 472)
         Me.Controls.Add(Me.Button_Ok)
         Me.Controls.Add(Me.Button_RemapHashCodes)
         Me.Controls.Add(Me.TextBox_OutputTime)

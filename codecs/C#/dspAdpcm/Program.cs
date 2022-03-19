@@ -46,7 +46,7 @@ namespace DspAdpcmTool
                 //Usage
                 if (args[0].ToLower().Contains("help") || args[0].Contains("?"))
                 {
-                    Console.WriteLine("Usage: <Encode> <InputFile> <OutputFile> <-L> ");
+                    Console.WriteLine("Usage: -E <InputFile> <OutputFile> <-L<start>-<end>> ");
                 }
                 else
                 {
@@ -55,15 +55,16 @@ namespace DspAdpcmTool
                     {
                         bool Looped = false;
                         uint samplesToLoopStart = 0;
-                        string modeApp = args[0].ToLower(), inputFile = args[1].ToLower(), outputFile = args[2].ToLower();
-                        if (args.Length > 3 && args[3].Equals("-L", StringComparison.OrdinalIgnoreCase))
+                        string modeApp = args[0].ToLower(), inputFile = args[1],  outputFile = args[2];
+                        if (args.Length > 3 && args[3].StartsWith("-L", StringComparison.OrdinalIgnoreCase))
                         {
                             Looped = true;
-                            samplesToLoopStart = Convert.ToUInt32(args[4]);
+                            string[] splittedData = args[3].Split(new string[] { "-" }, StringSplitOptions.RemoveEmptyEntries);
+                            samplesToLoopStart = Convert.ToUInt32(splittedData[0].TrimStart('L', 'l'));
                         }
 
                         //Read wave file
-                        if (File.Exists(inputFile) && modeApp.Equals("Encode", StringComparison.OrdinalIgnoreCase))
+                        if (File.Exists(inputFile) && modeApp.Equals("-E", StringComparison.OrdinalIgnoreCase))
                         {
                             //Read data
                             WaveFileReader waveReader = new WaveFileReader(inputFile);
@@ -97,13 +98,44 @@ namespace DspAdpcmTool
                                 uint nibbleEndAddress = getNibbleAddress(samplesToEncode);
 
                                 //Write encoded data
-                                File.WriteAllBytes(outputFile, encodedData);
+                                string textOutFile = Path.Combine(Path.GetDirectoryName(outputFile), Path.GetFileNameWithoutExtension(outputFile) + ".dsp");
+                                using (BinaryWriter binWrite = new BinaryWriter(File.Open(textOutFile, FileMode.Create, FileAccess.Write, FileShare.Read), System.Text.Encoding.ASCII))
+                                {
+                                    //Header data
+                                    binWrite.Write(FlipUInt32(samplesToEncode, true));
+                                    binWrite.Write(FlipUInt32(nibbleEndAddress, true));
+                                    binWrite.Write(FlipUInt32((uint)waveReader.WaveFormat.SampleRate, true));
+                                    binWrite.Write(FlipUShort(Convert.ToUInt16(Looped), true));
+                                    binWrite.Write((ushort)0);
+                                    binWrite.Write(FlipUInt32(nibbleLoopStartOffset, true));
+                                    binWrite.Write(FlipUInt32(nibbleEndAddress, true));
+                                    binWrite.Write(FlipUInt32(nibbleStartOffset, true));
+                                    for (int i = 0; i < dspData.coef.Length; i++)
+                                    {
+                                        binWrite.Write(FlipUShort((ushort)dspData.coef[i], true));
+                                    }
+                                    binWrite.Write(FlipUShort(dspData.gain, true));
+                                    binWrite.Write(FlipUShort(dspData.pred_scale, true));
+                                    binWrite.Write(FlipShort(dspData.yn1, true));
+                                    binWrite.Write(FlipShort(dspData.yn2, true));
+                                    binWrite.Write(FlipUShort(dspData.loop_pred_scale, true));
+                                    binWrite.Write(FlipShort(dspData.loop_yn1, true));
+                                    binWrite.Write(FlipShort(dspData.loop_yn2, true));
+                                    for (int i = 0; i < 10; i++)
+                                    {
+                                        binWrite.Write((ushort)0);
+                                    }
+                                    binWrite.Write((ushort)0);
+
+                                    //Write all data
+                                    binWrite.Write(encodedData);
+
+                                    //Close
+                                    binWrite.Close();
+                                }
 
                                 //Write text file
                                 WriteTextFile(outputFile, inputFile, Looped, (uint)waveReader.WaveFormat.SampleRate, samplesToEncode, dspData, nibbleStartOffset, nibbleLoopStartOffset, nibbleEndAddress);
-
-                                //Write binary file
-                                WriteBinaryFile(outputFile, Looped, (uint)waveReader.WaveFormat.SampleRate, samplesToEncode, dspData, nibbleStartOffset, nibbleLoopStartOffset, nibbleEndAddress);
                             }
                         }
                     }
@@ -115,7 +147,7 @@ namespace DspAdpcmTool
         private static void WriteTextFile(string outputFile, string inputFile, bool looped, uint sampleRate, uint samplesToEncode, ADPCMINFO dspData, uint nibbleStartOffset, uint nibbleLoopStartOffset, uint nibbleEndAddress)
         {
             //Text file
-            string textOutFile = Path.Combine(Path.GetDirectoryName(outputFile), Path.GetFileNameWithoutExtension(outputFile) + ".txt");
+            string textOutFile = Path.GetFileNameWithoutExtension(outputFile) + ".txt";
             using (StreamWriter writer = new StreamWriter(textOutFile))
             {
                 writer.WriteLine("");
@@ -145,40 +177,6 @@ namespace DspAdpcmTool
                 writer.WriteLine(string.Format("Loop y[n-1]    : 0x{0}", dspData.loop_yn1.ToString("X4")));
                 writer.WriteLine(string.Format("Loop y[n-2]    : 0x{0}", dspData.loop_yn2.ToString("X4")));
                 writer.Close();
-            }
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        private static void WriteBinaryFile(string outputFile, bool looped, uint sampleRate, uint samplesToEncode, ADPCMINFO dspData, uint nibbleStartOffset, uint nibbleLoopStartOffset, uint nibbleEndAddress)
-        {
-            string textOutFile = Path.Combine(Path.GetDirectoryName(outputFile), Path.GetFileNameWithoutExtension(outputFile) + ".dsph");
-            using (BinaryWriter binWrite = new BinaryWriter(File.Open(textOutFile, FileMode.Create, FileAccess.Write, FileShare.Read), System.Text.Encoding.ASCII))
-            {
-                binWrite.Write(FlipUInt32(samplesToEncode, true));
-                binWrite.Write(FlipUInt32(nibbleEndAddress, true));
-                binWrite.Write(FlipUInt32(sampleRate, true));
-                binWrite.Write(FlipUShort(Convert.ToUInt16(looped), true));
-                binWrite.Write((ushort)0);
-                binWrite.Write(FlipUInt32(nibbleLoopStartOffset, true));
-                binWrite.Write(FlipUInt32(nibbleEndAddress, true));
-                binWrite.Write(FlipUInt32(nibbleStartOffset, true));
-                for (int i = 0; i < dspData.coef.Length; i++)
-                {
-                    binWrite.Write(FlipUShort((ushort)dspData.coef[i], true));
-                }
-                binWrite.Write(FlipUShort(dspData.gain, true));
-                binWrite.Write(FlipUShort(dspData.pred_scale, true));
-                binWrite.Write(FlipShort(dspData.yn1, true));
-                binWrite.Write(FlipShort(dspData.yn2, true));
-                binWrite.Write(FlipUShort(dspData.loop_pred_scale, true));
-                binWrite.Write(FlipShort(dspData.loop_yn1, true));
-                binWrite.Write(FlipShort(dspData.loop_yn2, true));
-                for (int i = 0; i < 10; i++)
-                {
-                    binWrite.Write((ushort)0);
-                }
-                binWrite.Write((ushort)0);
-                binWrite.Close();
             }
         }
 

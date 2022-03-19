@@ -115,5 +115,26 @@ Module WaveFunctions
 
         Return adpcmFile
     End Function
+
+    '*===============================================================================================
+    '* GAMECUBE DSP FILE - GET DATA CHUNK
+    '*===============================================================================================
+    Friend Function GetDspDataChunk(dspFilePath) As Byte()
+        Dim dspFileWithHeader As Byte() = File.ReadAllBytes(dspFilePath)
+        Dim dspFile As Byte() = New Byte(dspFileWithHeader.Length - 96) {}
+        Array.Copy(dspFileWithHeader, 96, dspFile, 0, dspFileWithHeader.Length - 96)
+
+        Return dspFile
+    End Function
+
+    Friend Function GetDspHeaderData(dspFilePath) As Byte()
+        Dim dspFileWithHeader As Byte() = File.ReadAllBytes(dspFilePath)
+        Dim dspHeaderData As Byte() = New Byte(95) {}
+        If dspFileWithHeader.Length > 95 Then
+            Array.Copy(dspFileWithHeader, 0, dspHeaderData, 0, 96)
+        End If
+
+        Return dspHeaderData
+    End Function
 End Module
 

@@ -65,7 +65,7 @@ namespace ESUtils
                     uint positionAligned = AlignNumber((uint)binWriter.BaseStream.Position, 0x800);
                     uint SFXStart = FlipUInt32(positionAligned, bigEndian);
                     uint SFXLength = 0;
-                    if (!string.IsNullOrEmpty(sfxFilePath))
+                    if (File.Exists(sfxFilePath))
                     {
                         byte[] sfxFileData = File.ReadAllBytes(sfxFilePath);
                         if (sfxFileData.Length > 0)
@@ -80,7 +80,7 @@ namespace ESUtils
                     //Write SampleInfo SFX Section
                     uint SampleInfoStart = FlipUInt32(positionAligned, bigEndian);
                     uint SampleInfoLength = 0;
-                    if (!string.IsNullOrEmpty(sifFilePath))
+                    if (File.Exists(sifFilePath))
                     {
                         byte[] sifFileData = File.ReadAllBytes(sifFilePath);
                         if (sifFileData.Length > 0)
@@ -95,7 +95,7 @@ namespace ESUtils
                     //Write special section
                     uint SpecialSampleInfoStart = FlipUInt32(positionAligned, bigEndian);
                     uint SpecialSampleInfoLength = 0;
-                    if (!string.IsNullOrEmpty(ssFilePath))
+                    if (File.Exists(ssFilePath))
                     {
                         byte[] ssfFileData = File.ReadAllBytes(ssFilePath);
                         if (ssfFileData.Length > 0)
@@ -110,7 +110,7 @@ namespace ESUtils
                     //Write Sample Data SFX Section
                     uint SampleDataStart = FlipUInt32(positionAligned, bigEndian);
                     uint SampleDataLength = 0;
-                    if (!string.IsNullOrEmpty(sbFilePath))
+                    if (File.Exists(sbFilePath))
                     {
                         byte[] sbfFileData = File.ReadAllBytes(sbFilePath);
                         if (sbfFileData.Length > 0)

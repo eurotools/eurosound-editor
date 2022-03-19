@@ -282,12 +282,12 @@ Module ProgramMainModule
     '*===============================================================================================
     '* SOX FUNCTIONS
     '*===============================================================================================
-    Friend Sub ReSampleWithSox(inputFile As String, outputFile As String, currentFrequency As Integer, destinationFrequency As Integer)
+    Friend Sub ReSampleWithSox(inputFile As String, outputFile As String, currentFrequency As Integer, destinationFrequency As Integer, effect As String)
         'Check if we have to resample or not
-        If destinationFrequency < currentFrequency Then
-            RunProcess("SystemFiles\Sox.exe", """" & inputFile & """ -r " & destinationFrequency & " """ & outputFile & """  resample -qs 0.97")
+        If destinationFrequency = currentFrequency Then
+            RunProcess("SystemFiles\Sox.exe", """" & inputFile & """ -r " & destinationFrequency & " """ & outputFile & """")
         Else
-            File.Copy(inputFile, outputFile, True)
+            RunProcess("SystemFiles\Sox.exe", """" & inputFile & """ -r " & destinationFrequency & " """ & outputFile & """ " & effect)
         End If
     End Sub
 

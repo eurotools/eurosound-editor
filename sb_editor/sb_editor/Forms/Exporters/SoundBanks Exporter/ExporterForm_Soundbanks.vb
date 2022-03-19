@@ -5,12 +5,24 @@ Imports sb_editor.SoundBanksExporterFunctions
 
 Partial Public Class ExporterForm
     Public Sub OutputSoundbanks(hashCodesList As SortedDictionary(Of String, UInteger), soundbanksList As String(), streamsList As String(), outLanguages As String(), outPlatforms As String(), ByRef AbortOutput As Boolean)
-        'Debug Folder
-        Dim debugFolder As String = Path.Combine(WorkingDirectory, "Debug_Report")
-        Directory.CreateDirectory(debugFolder)
+        'Debug file
+        Dim debugFolderPath As String = Path.Combine(WorkingDirectory, "Debug_Report")
+        Directory.CreateDirectory(debugFolderPath)
 
         'Reset progress bar
         Invoke(Sub() ProgressBar1.Value = 0)
+
+        'Create Folder structure for all platforms and languages
+        For platformIndex As Integer = 0 To outPlatforms.Length - 1
+            Dim currentPlatform As String = outPlatforms(platformIndex)
+            'For each Language
+            For languageIndex As Integer = 0 To outLanguages.Length - 1
+                Dim currentLanguage As String = outLanguages(languageIndex)
+                'Get output folder
+                Dim outputFolder As String = Path.Combine(WorkingDirectory, "TempOutputFolder", currentPlatform, "SoundBanks", currentLanguage)
+                Directory.CreateDirectory(outputFolder)
+            Next
+        Next
 
         'For each Soundbank
         For soundBankIndex As Integer = 0 To soundbanksList.Length - 1
@@ -41,26 +53,29 @@ Partial Public Class ExporterForm
 
                                 'Get output folder
                                 Dim outputFolder As String = Path.Combine(WorkingDirectory, "TempOutputFolder", currentPlatform, "SoundBanks", currentLanguage)
-                                Directory.CreateDirectory(outputFolder)
 
-                                'Get SFX and samples list
+                                'Start timer
                                 timerTotalTime.Start()
 
+                                'Get SFXs List
                                 timerQuery.Start()
                                 Dim SfxList As String() = GetSoundBankSFXsList(soundBankInfo, currentPlatform)
                                 timerQuery.Stop()
 
+                                'Read SFXs Data
                                 timerSfxData.Start()
                                 Dim sfxDictionary As SortedDictionary(Of String, EXSound) = ReadSfxData(SfxList, False)
                                 ApplyDuckerLength(SfxDictionary, currentPlatform)
                                 timerSfxData.Stop()
 
+                                'Read Sample Data
                                 timerSamples.Start()
                                 Dim sampleToInclude As String() = GetFinalList(GetSoundBankSamplesList(SfxList, currentLanguage), streamsList, currentPlatform, False)
                                 Dim samplesDictionary As Dictionary(Of String, EXAudio) = ReadSampleData(sampleToInclude, currentPlatform)
                                 timerSamples.Stop()
 
                                 timerTotalTime.Stop()
+
                                 'Skip if there are samples missing
                                 If Not CancelSoundBankOutput Then
                                     Dim mainFilePath As String = Path.Combine(outputFolder, soundBankInfo.HashCode)
@@ -74,10 +89,6 @@ Partial Public Class ExporterForm
                                     Dim sfxFileName As String = "HC" & Hex(GetSfxFileName(Array.IndexOf(SfxLanguages, currentLanguage), soundBankInfo.HashCode)).PadLeft(6, "0"c)
                                     Dim outputFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder(currentPlatform), GetEngineXLangFolder(currentLanguage))
                                     Directory.CreateDirectory(outputFilePath)
-
-                                    'Debug file
-                                    Dim debugFile As String = Path.Combine(WorkingDirectory, "Debug_Report")
-                                    Directory.CreateDirectory(debugFile)
 
                                     'Create output files
                                     Dim outputIsBigEndian As Boolean = False
@@ -97,16 +108,16 @@ Partial Public Class ExporterForm
                                         End Using
                                     End Using
 
-                                    'Write Debug File
-                                    Dim soundBanksDebugFilePath As String = Path.Combine(debugFile, "StreamDebugSoundBank_" & currentSoundBank & "_" & currentPlatform & "_" & currentLanguage & ".txt")
-                                    textFileWritters.WriteSoundBankDebug(soundBanksDebugFilePath, streamFileReport, sfxFilePath, currentSoundBank, soundBankInfo.HashCode)
-
                                     'Create GameCube Special Section
                                     If outputIsBigEndian Then
                                         Using ssfWriter As New BinaryWriter(File.Open(ssfFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
                                             WriteSsfFile(ssfWriter, samplesDictionary)
                                         End Using
                                     End If
+
+                                    'Write Debug File
+                                    Dim soundBanksDebugFilePath As String = Path.Combine(debugFolderPath, "StreamDebugSoundBank_" & currentSoundBank & "_" & currentPlatform & "_" & currentLanguage & ".txt")
+                                    textFileWritters.WriteSoundBankDebug(soundBanksDebugFilePath, streamFileReport, sfxFilePath, currentSoundBank, soundBankInfo.HashCode)
 
                                     'Check min and max sizes
                                     Dim fileSize As Long = FileLen(sbfFilePath) - 4024
@@ -122,11 +133,7 @@ Partial Public Class ExporterForm
                                         AbortOutput = True
                                     Else
                                         Dim sampleBankFilePath As String = Path.Combine(outputFilePath, sfxFileName & ".SFX")
-                                        If outputIsBigEndian Then
-                                            ESUtils.MusXBuild_Soundbank.BuildSoundbankFile(sfxFilePath, sifFilePath, sbfFilePath, ssfFilePath, sampleBankFilePath, soundBankInfo.HashCode, False)
-                                        Else
-                                            ESUtils.MusXBuild_Soundbank.BuildSoundbankFile(sfxFilePath, sifFilePath, sbfFilePath, Nothing, sampleBankFilePath, soundBankInfo.HashCode, False)
-                                        End If
+                                        ESUtils.MusXBuild_Soundbank.BuildSoundbankFile(sfxFilePath, sifFilePath, sbfFilePath, ssfFilePath, sampleBankFilePath, soundBankInfo.HashCode, outputIsBigEndian)
                                     End If
                                 End If
 

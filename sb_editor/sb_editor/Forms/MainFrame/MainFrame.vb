@@ -17,6 +17,11 @@ Partial Public Class MainFrame
     '* FORM EVENTS
     '*===============================================================================================
     Private Sub MainFrame_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
+        If ActiveForm IsNot Me Then
+            FlashWindowAPI(Handle)
+        End If
+
+        'Update recent files
         If Directory.Exists(WorkingDirectory) Then
             If File.Exists(Path.Combine(WorkingDirectory, "Project.txt")) Then
                 'Update GUI
@@ -401,7 +406,7 @@ Partial Public Class MainFrame
                 For i As Integer = 0 To itemsToDelete.Count - 1
                     'Delete file 
                     Dim fileFullPath As String = Path.Combine(WorkingDirectory, "Databases", itemsToDelete(i) & ".txt")
-                    File.Copy(fileFullPath, Path.Combine(databaseTrash, itemsToDelete(i) & ".txt"))
+                    File.Copy(fileFullPath, Path.Combine(databaseTrash, itemsToDelete(i) & ".txt"), True)
                     File.Delete(fileFullPath)
 
                     'Delete item from the list 
@@ -703,5 +708,13 @@ Partial Public Class MainFrame
         Dim taskForm As New ExporterForm(True)
         taskForm.ShowDialog()
         Show()
+    End Sub
+
+    Private Sub CheckBox_FastReSample_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_FastReSample.CheckedChanged
+        If CheckBox_FastReSample.Checked Then
+            SoxEffect = "resample 0.97"
+        Else
+            SoxEffect = "resample -qs 0.97"
+        End If
     End Sub
 End Class
