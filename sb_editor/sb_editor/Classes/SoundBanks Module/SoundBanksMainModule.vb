@@ -145,21 +145,6 @@ Namespace SoundBanksExporterFunctions
         '*===============================================================================================
         '* FUNCTIONS TO EXPORT SOUNDBANKS
         '*===============================================================================================
-        Friend Sub ExportSoundBank(soundbankData As SoundbankFile, streamsList As String(), outputPlatform As String, outputLanguage As String, testMode As Boolean)
-            'Get as list of the data that we will export
-            Dim sfxFilesToInclude As String() = GetSoundBankSFXsList(soundbankData, outputPlatform)
-            Dim sampleToInclude As String() = GetFinalList(GetSoundBankSamplesList(sfxFilesToInclude, outputLanguage), streamsList, outputPlatform, False)
-
-            'SFX Stuff
-            Dim sfxDictionary As SortedDictionary(Of String, EXSound) = ReadSfxData(sfxFilesToInclude, testMode)
-            ApplyDuckerLength(sfxDictionary, outputPlatform)
-
-            'Samples Suff
-            Dim samplesDictionary As Dictionary(Of String, EXAudio) = ReadSampleData(sampleToInclude, outputPlatform)
-
-            'Get SFX Dictionary
-        End Sub
-
         Friend Function GetUserFlags(checkedFlags As Boolean()) As Short
             'Get Flags
             Dim selectedFlags As Short = 0
@@ -190,11 +175,21 @@ Namespace SoundBanksExporterFunctions
                     'Inspect Samples
                     For Each SampleToCheck As EXSample In soundToCheck.Samples
                         Dim sampleFilePath As String = Path.Combine(WorkingDirectory, outPlatform, SampleToCheck.FilePath)
-                        If File.Exists(sampleFilePath) Then
-                            Using reader As New WaveFileReader(sampleFilePath)
-                                Dim cents = reader.TotalTime.TotalMilliseconds / 10
-                                duckerLength += cents
-                            End Using
+                        If outPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase) Then
+                            sampleFilePath = Path.ChangeExtension(Path.Combine(WorkingDirectory, outPlatform, SampleToCheck.FilePath), ".Aif")
+                            If File.Exists(sampleFilePath) Then
+                                Using reader As New AiffFileReader(sampleFilePath)
+                                    Dim cents = reader.TotalTime.TotalMilliseconds / 10
+                                    duckerLength += cents
+                                End Using
+                            End If
+                        Else
+                            If File.Exists(sampleFilePath) Then
+                                Using reader As New WaveFileReader(sampleFilePath)
+                                    Dim cents = reader.TotalTime.TotalMilliseconds / 10
+                                    duckerLength += cents
+                                End Using
+                            End If
                         End If
                     Next
 
@@ -209,8 +204,7 @@ Namespace SoundBanksExporterFunctions
             Next
         End Sub
 
-        Friend Function ReadSampleData(samplesList As String(), outputPlatform As String) As Dictionary(Of String, EXAudio)
-            Dim CancelSoundBankOutput As Boolean = False
+        Friend Function ReadSampleData(samplesList As String(), outputPlatform As String, ByRef CancelSoundBankOutput As Boolean) As Dictionary(Of String, EXAudio)
             Dim samplesDictionary As New Dictionary(Of String, EXAudio)
 
             For sampleIndex As Integer = 0 To samplesList.Length - 1
@@ -316,9 +310,10 @@ Namespace SoundBanksExporterFunctions
 
                 'Get vag block data aligned
                 Dim vagFile As Byte() = GetVagFileDataChunk(vagFilePath)
-                newAudioObj.RealSize = vagFile.Length - 1
-                newAudioObj.SampleData = New Byte(ESUtils.BytesFunctions.AlignNumber(vagFile.Length, 64) - 1) {}
-                Buffer.BlockCopy(vagFile, 0, newAudioObj.SampleData, 0, vagFile.Length)
+                Dim vagFileLength As Integer = vagFile.Length - 1
+                newAudioObj.RealSize = vagFileLength
+                newAudioObj.SampleData = New Byte(ESUtils.BytesFunctions.AlignNumber(vagFileLength, 64) - 1) {}
+                Buffer.BlockCopy(vagFile, 0, newAudioObj.SampleData, 0, vagFileLength)
 
                 'Loop offset
                 If loopInfo(0) = 1 Then
@@ -335,9 +330,10 @@ Namespace SoundBanksExporterFunctions
 
                 'Get wave block data aligned
                 Dim dspFile As Byte() = GetDspDataChunk(dspFilePath)
-                newAudioObj.RealSize = dspFile.Length - 1
-                newAudioObj.SampleData = New Byte(ESUtils.BytesFunctions.AlignNumber(dspFile.Length, 32) - 1) {}
-                Buffer.BlockCopy(dspFile, 0, newAudioObj.SampleData, 0, dspFile.Length)
+                Dim dspFileLength As Integer = dspFile.Length - 1
+                newAudioObj.RealSize = dspFileLength
+                newAudioObj.SampleData = New Byte(ESUtils.BytesFunctions.AlignNumber(dspFileLength, 32) - 1) {}
+                Buffer.BlockCopy(dspFile, 0, newAudioObj.SampleData, 0, dspFileLength)
 
                 'Get header data
                 newAudioObj.DspHeaderData = GetDspHeaderData(dspFilePath)
@@ -354,10 +350,9 @@ Namespace SoundBanksExporterFunctions
                 newAudioObj.Frequency = platformWaveReader.WaveFormat.SampleRate
                 newAudioObj.NumberOfChannels = platformWaveReader.WaveFormat.Channels
                 newAudioObj.SampleData = GetXboxAdpcmDataChunk(xboxFilePath)
-                newAudioObj.RealSize = newAudioObj.SampleData.Length - 1
+                newAudioObj.RealSize = newAudioObj.SampleData.Length
                 newAudioObj.Bits = 4
 
-                'Loop offset
                 If loopInfo(0) = 1 Then
                     newAudioObj.LoopOffset = ESUtils.CalculusLoopOffset.GetXboxAlignedNumber(loopInfo(1))
                 End If

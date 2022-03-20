@@ -16,14 +16,14 @@ Partial Public Class ExporterForm
             'Debug File
             FileOpen(1, Path.Combine(WorkingDirectory, "Debug_Report", "StreamList_" & outputLanguage & "_" & outputPlatform & ".txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
             For fileIndex As Integer = 0 To filesCount
-                'Calculate and report progress
-                BackgroundWorker.ReportProgress(Decimal.Divide(fileIndex, filesCount) * 100.0)
                 'Get files path
                 Dim filePath As String = Path.Combine(WorkingDirectory, outputPlatform & "_Streams", outputLanguage, "STR_" & fileIndex)
                 Dim adpcmFile As String = filePath & ".ssd"
                 Dim markerFile As String = filePath & ".smf"
-                'Update title bar
-                Invoke(Sub() Text = "Binding " & outputLanguage & " Audio Stream Data " & adpcmFile & " For " & outputPlatform)
+
+                'Report progress and update title bar
+                BackgroundWorker.ReportProgress(Decimal.Divide(fileIndex, filesCount) * 100.0, "Binding " & outputLanguage & " Audio Stream Data " & adpcmFile & " For " & outputPlatform)
+
                 'Ensure that the adpcm file exists
                 If File.Exists(adpcmFile) AndAlso File.Exists(markerFile) Then
                     'Offset to write in look-up table

@@ -32,8 +32,6 @@ Partial Public Class ExporterForm
             'Start inspecting each line of the datatable
             For rowIndex As Integer = 0 To samplesCount
                 If soundsTable.Rows(rowIndex).Item(4) Then
-                    'Calculate and report progress
-                    BackgroundWorker.ReportProgress(Decimal.Divide(rowIndex, samplesCount) * 100.0)
                     'Get paths 
                     Dim sampleRelativePath As String = soundsTable.Rows(rowIndex).ItemArray(0)
                     Dim sourceFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master" & sampleRelativePath)
@@ -57,8 +55,9 @@ Partial Public Class ExporterForm
                             For platformIndex As Integer = 0 To outPlatforms.GetLength(0) - 1
                                 If outPlatforms(platformIndex, 2).Equals("On", StringComparison.OrdinalIgnoreCase) Then
                                     Dim currentPlatform As String = outPlatforms(platformIndex, 0)
-                                    'Update title
-                                    Invoke(Sub() Text = "ReSampling: " & sampleRelativePath & "  " & currentPlatform)
+
+                                    'Report progress and update title bar
+                                    BackgroundWorker.ReportProgress(Decimal.Divide(rowIndex, samplesCount) * 100.0, "ReSampling: " & sampleRelativePath & "  " & currentPlatform)
 
                                     'Resample the wav for the destination platform
                                     Dim sampleRateLabel As String = soundsTable.Rows(rowIndex).ItemArray(1)
@@ -98,8 +97,8 @@ Partial Public Class ExporterForm
                                             If masterWaveLoopInfo(0) = 1 AndAlso soundsTable.Rows(rowIndex).Item(5) = False Then 'Check if is NOT Streamed
                                                 'Loop offset pos in the resampled wave
                                                 Using parsedWaveReader As New WaveFileReader(outputFilePath)
-                                                    Dim parsedLoop As UInteger = masterWaveLoopInfo(1) / (masterWaveLength / parsedWaveReader.Length)
-                                                    dspToolArgs = dspToolArgs & " -L" & parsedLoop & "-" & ((parsedWaveReader.Length / 2) - 1)
+                                                    Dim loopStart As UInteger = masterWaveLoopInfo(1) / (masterWaveLength / parsedWaveReader.Length)
+                                                    dspToolArgs = dspToolArgs & " -l" & loopStart & "-" & (parsedWaveReader.SampleCount - 1)
                                                 End Using
                                             End If
                                             'Execute Dsp Adpcm Tool
@@ -122,13 +121,14 @@ Partial Public Class ExporterForm
                                             If masterWaveLoopInfo(0) = 1 AndAlso soundsTable.Rows(rowIndex).Item(5) = False Then 'Check if is NOT Streamed
                                                 'Loop offset pos in the resampled wave
                                                 Dim waveLength As Long
-                                                Dim parsedLoop As UInteger
+                                                Dim loopStart, loopEnd As Integer
                                                 Using parsedWaveReader As New AiffFileReader(outputFilePath)
-                                                    parsedLoop = masterWaveLoopInfo(1) / (masterWaveLength / parsedWaveReader.Length)
+                                                    loopStart = masterWaveLoopInfo(1) / (masterWaveLength / parsedWaveReader.Length)
+                                                    loopEnd = masterWaveLoopInfo(2) / (masterWaveLength / parsedWaveReader.Length)
                                                     waveLength = parsedWaveReader.Length
                                                 End Using
                                                 'Add new info to the Aif file
-                                                AddLoopPointsToAiff(outputFilePath, parsedLoop, waveLength / 2, masterWaveLoopInfo(3))
+                                                AddLoopPointsToAiff(outputFilePath, loopStart, loopEnd, masterWaveLoopInfo(3))
                                             End If
                                             'Execute Vag Tool
                                             RunProcess("SystemFiles\AIFF2VAG.exe", """" & outputFilePath & """")

@@ -284,8 +284,8 @@ Module ProgramMainModule
     '*===============================================================================================
     Friend Sub ReSampleWithSox(inputFile As String, outputFile As String, currentFrequency As Integer, destinationFrequency As Integer, effect As String)
         'Check if we have to resample or not
-        If destinationFrequency = currentFrequency Then
-            RunProcess("SystemFiles\Sox.exe", """" & inputFile & """ -r " & destinationFrequency & " """ & outputFile & """")
+        If destinationFrequency >= currentFrequency Then
+            RunProcess("SystemFiles\Sox.exe", """" & inputFile & """ """ & outputFile & """")
         Else
             RunProcess("SystemFiles\Sox.exe", """" & inputFile & """ -r " & destinationFrequency & " """ & outputFile & """ " & effect)
         End If
@@ -299,12 +299,12 @@ Module ProgramMainModule
         End Using
 
         'Split and ReSample channels
-        If destinationFrequency < currentFrequency Then
-            RunProcess("SystemFiles\Sox.exe", """" & inputFile & """ -c 1 -r 32000 """ & outputLFilePath & """ resample -qs 0.97 avg -l")
-            RunProcess("SystemFiles\Sox.exe", """" & inputFile & """ -c 1 -r 32000 """ & outputRFilePath & """ resample -qs 0.97 avg -r")
-        Else
+        If destinationFrequency >= currentFrequency Then
             RunProcess("SystemFiles\Sox.exe", """" & inputFile & """ -c 1 """ & outputLFilePath & """ avg -l")
             RunProcess("SystemFiles\Sox.exe", """" & inputFile & """ -c 1 """ & outputRFilePath & """ avg -r")
+        Else
+            RunProcess("SystemFiles\Sox.exe", """" & inputFile & """ -c 1 -r 32000 """ & outputLFilePath & """ resample -qs 0.97 avg -l")
+            RunProcess("SystemFiles\Sox.exe", """" & inputFile & """ -c 1 -r 32000 """ & outputRFilePath & """ resample -qs 0.97 avg -r")
         End If
     End Sub
 End Module

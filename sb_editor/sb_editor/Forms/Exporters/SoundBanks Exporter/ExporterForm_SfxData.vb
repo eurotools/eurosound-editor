@@ -24,8 +24,7 @@ Partial Public Class ExporterForm
                 Dim currentSampleName As String = Path.GetFileNameWithoutExtension(sfxFiles(index))
 
                 'Calculate progress and update title bar
-                Invoke(Sub() Text = "Creating SFX_Data.h " & currentSampleName)
-                BackgroundWorker.ReportProgress(Decimal.Divide(index, samplesCount) * 100.0)
+                BackgroundWorker.ReportProgress(Decimal.Divide(index, samplesCount) * 100.0, "Creating SFX_Data.h " & currentSampleName)
 
                 'Read file data
                 If File.Exists(sfxFiles(index)) Then

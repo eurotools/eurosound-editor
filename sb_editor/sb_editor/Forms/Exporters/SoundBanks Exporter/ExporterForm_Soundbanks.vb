@@ -28,7 +28,7 @@ Partial Public Class ExporterForm
         For soundBankIndex As Integer = 0 To soundbanksList.Length - 1
             If Not AbortOutput Then
                 'Calculate and report progress
-                BackgroundWorker.ReportProgress(Decimal.Divide(soundBankIndex, soundbanksList.Length) * 100.0)
+
                 Dim currentSoundBank As String = soundbanksList(soundBankIndex)
                 Dim soundbankFilePath As String = Path.Combine(WorkingDirectory, "SoundBanks", currentSoundBank & ".txt")
                 'Read soundbank file
@@ -40,21 +40,21 @@ Partial Public Class ExporterForm
                             Dim currentLanguage As String = outLanguages(languageIndex)
                             'For each Platform
                             For platformIndex As Integer = 0 To outPlatforms.Length - 1
-                                Dim timerTotalTime, timerQuery, timerSfxData, timerSamples As New Stopwatch
+                                Dim currentPlatform As String = outPlatforms(platformIndex)
+                                Dim CancelSoundBankOutput As Boolean = False
+
+                                'Report progress
+                                BackgroundWorker.ReportProgress(Decimal.Divide(soundBankIndex, soundbanksList.Length) * 100.0, "Outputting " & currentLanguage & " SoundBank " & currentSoundBank & " for " & currentPlatform)
 
                                 'Debug info
                                 mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Timings For " & currentSoundBank & vbCrLf)
 
-                                Dim CancelSoundBankOutput As Boolean = False
-
-                                'Get current platform and update title bar
-                                Dim currentPlatform As String = outPlatforms(platformIndex)
-                                Invoke(Sub() Text = "Outputting " & currentLanguage & " SoundBank " & currentSoundBank & " for " & currentPlatform)
 
                                 'Get output folder
                                 Dim outputFolder As String = Path.Combine(WorkingDirectory, "TempOutputFolder", currentPlatform, "SoundBanks", currentLanguage)
 
                                 'Start timer
+                                Dim timerTotalTime, timerQuery, timerSfxData, timerSamples As New Stopwatch
                                 timerTotalTime.Start()
 
                                 'Get SFXs List
@@ -65,18 +65,19 @@ Partial Public Class ExporterForm
                                 'Read SFXs Data
                                 timerSfxData.Start()
                                 Dim sfxDictionary As SortedDictionary(Of String, EXSound) = ReadSfxData(SfxList, False)
-                                ApplyDuckerLength(SfxDictionary, currentPlatform)
+                                ApplyDuckerLength(sfxDictionary, currentPlatform)
                                 timerSfxData.Stop()
 
                                 'Read Sample Data
                                 timerSamples.Start()
                                 Dim sampleToInclude As String() = GetFinalList(GetSoundBankSamplesList(SfxList, currentLanguage), streamsList, currentPlatform, False)
-                                Dim samplesDictionary As Dictionary(Of String, EXAudio) = ReadSampleData(sampleToInclude, currentPlatform)
+                                Dim samplesDictionary As Dictionary(Of String, EXAudio) = ReadSampleData(sampleToInclude, currentPlatform, CancelSoundBankOutput)
                                 timerSamples.Stop()
 
                                 timerTotalTime.Stop()
 
                                 'Skip if there are samples missing
+
                                 If Not CancelSoundBankOutput Then
                                     Dim mainFilePath As String = Path.Combine(outputFolder, soundBankInfo.HashCode)
                                     'Get file paths

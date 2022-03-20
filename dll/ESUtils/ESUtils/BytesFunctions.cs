@@ -112,7 +112,7 @@ namespace ESUtils
         //-------------------------------------------------------------------------------------------------------------------------------
         public static uint AlignNumber(uint valueToAlign, uint blockSize)
         {
-            uint PositionAligned = ((valueToAlign + (blockSize - 1)) & ~(blockSize - 1));
+            uint PositionAligned = (valueToAlign + (blockSize - 1)) & ~(blockSize - 1);
             return PositionAligned;
         }
     }

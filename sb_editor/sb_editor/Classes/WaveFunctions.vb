@@ -53,7 +53,10 @@ Module WaveFunctions
     '* AIFF FILE - INST & MARK CHUNK
     '*===============================================================================================
     Friend Sub AddLoopPointsToAiff(aifFilePath As String, startPosition As Integer, endPosition As Integer, midiNote As Integer)
-        Using binWriter As New BinaryWriter(File.Open(aifFilePath, FileMode.Append, FileAccess.Write))
+        Dim totalFileLength As Long
+
+        'Append data at the end of the file
+        Using binWriter As New BinaryWriter(File.Open(aifFilePath, FileMode.Append, FileAccess.Write, FileShare.Read))
             'Add Instrument chunk
             binWriter.Write(Encoding.ASCII.GetBytes("INST"))
             binWriter.Write(ESUtils.BytesFunctions.FlipInt32(20, True))
@@ -88,10 +91,18 @@ Module WaveFunctions
                     binWriter.Write(CByte(0))
                 End If
             Next
+
+            'Get new file length
+            totalFileLength = binWriter.BaseStream.Position - 8
+
             'Add empty
-            For index As Integer = 0 To 17
-                binWriter.Write(CByte(0))
-            Next
+            binWriter.Write(New Byte(17) {})
+        End Using
+
+        'Update FORM Chunk size value
+        Using binWriter As New BinaryWriter(File.Open(aifFilePath, FileMode.Open, FileAccess.Write, FileShare.Read))
+            binWriter.BaseStream.Seek(4, SeekOrigin.Begin)
+            binWriter.Write(ESUtils.BytesFunctions.FlipUInt32(totalFileLength, True))
         End Using
     End Sub
 
@@ -108,9 +119,9 @@ Module WaveFunctions
     '*===============================================================================================
     '* XBOX ADPCM FILE - GET DATA CHUNK
     '*===============================================================================================
-    Friend Function GetXboxAdpcmDataChunk(xboxFilePath) As Byte()
+    Friend Function GetXboxAdpcmDataChunk(xboxFilePath As String) As Byte()
         Dim adpcmFileWithHeader As Byte() = File.ReadAllBytes(xboxFilePath)
-        Dim adpcmFile As Byte() = New Byte(adpcmFileWithHeader.Length - 48) {}
+        Dim adpcmFile As Byte() = New Byte(adpcmFileWithHeader.Length - 49) {}
         Array.Copy(adpcmFileWithHeader, 48, adpcmFile, 0, adpcmFileWithHeader.Length - 48)
 
         Return adpcmFile

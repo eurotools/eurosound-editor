@@ -193,6 +193,7 @@ Partial Public Class ExporterForm
 
     Private Sub BackgroundWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker.ProgressChanged
         ProgressBar1.Value = e.ProgressPercentage
+        Text = e.UserState
     End Sub
 
     Private Sub BackgroundWorker_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker.RunWorkerCompleted

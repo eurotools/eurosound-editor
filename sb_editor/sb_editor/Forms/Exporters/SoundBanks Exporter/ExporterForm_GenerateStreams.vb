@@ -38,9 +38,6 @@ Partial Public Class ExporterForm
                         FileOpen(1, Path.Combine(debugFolder, "StreamsConverted_" & currentLanguage & "_" & currentPlatform & ".txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
                         'For each Sample
                         For sampleIndex As Integer = 0 To streamSamplesCount
-                            'Calculate and report progress
-                            BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, streamSamplesCount) * 100.0)
-
                             'If starts with speech but doesn't match the current language, skip
                             Dim sampleFilePath As String = streamSamplesList(sampleIndex)
                             If InStr(1, sampleFilePath, "Speech\", CompareMethod.Binary) Then
@@ -57,6 +54,8 @@ Partial Public Class ExporterForm
                             Select Case currentPlatform
                                 Case "PC"
                                     Dim sampleFullPath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, currentPlatform & "_Software_adpcm", sampleFilePath), ".ssp")
+                                    BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, streamSamplesCount) * 100.0, currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
+
                                     If File.Exists(sampleFullPath) Then
                                         CreateStreamsForPcAndGC(sampleFullPath, destinationFilePath, currentLanguage, currentPlatform, filesToBind)
                                         CreateMarkerFileIfRequired(sampleFilePath, destinationFilePath, currentPlatform)
@@ -65,6 +64,8 @@ Partial Public Class ExporterForm
                                     End If
                                 Case "GameCube"
                                     Dim sampleFullPath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, currentPlatform & "_Software_adpcm", sampleFilePath), ".ssp")
+                                    BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, streamSamplesCount) * 100.0, currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
+
                                     If File.Exists(sampleFullPath) Then
                                         CreateStreamsForPcAndGC(sampleFullPath, destinationFilePath, currentLanguage, currentPlatform, filesToBind)
                                         CreateMarkerFileIfRequired(sampleFilePath, destinationFilePath, currentPlatform)
@@ -73,6 +74,8 @@ Partial Public Class ExporterForm
                                     End If
                                 Case "PlayStation2"
                                     Dim sampleFullPath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, "PlayStation2_VAG", sampleFilePath), ".vag")
+                                    BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, streamSamplesCount) * 100.0, currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
+
                                     If File.Exists(sampleFullPath) Then
                                         CreateStreamsForPlayStation2(sampleFullPath, destinationFilePath, currentLanguage, currentPlatform, filesToBind)
                                         CreateMarkerFileIfRequired(sampleFilePath, destinationFilePath, currentPlatform)
@@ -81,6 +84,8 @@ Partial Public Class ExporterForm
                                     End If
                                 Case Else
                                     Dim sampleFullPath As String = Path.Combine(WorkingDirectory, "XBox_adpcm", sampleFilePath)
+                                    BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, streamSamplesCount) * 100.0, currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
+
                                     If File.Exists(sampleFullPath) Then
                                         CreateStreamsForXbox(sampleFullPath, destinationFilePath, currentLanguage, currentPlatform, filesToBind)
                                         CreateMarkerFileIfRequired(sampleFilePath, destinationFilePath, currentPlatform)
@@ -115,9 +120,6 @@ Partial Public Class ExporterForm
     End Sub
 
     Private Sub CreateStreamsForPcAndGC(sampleFullPath As String, destinationFilePath As String, currentLanguage As String, currentPlatform As String, filesToBind As List(Of String))
-        'Update title bar
-        Invoke(Sub() Text = currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
-
         File.Copy(sampleFullPath, destinationFilePath, True)
         filesToBind.Add(destinationFilePath)
 
@@ -127,9 +129,6 @@ Partial Public Class ExporterForm
     End Sub
 
     Private Sub CreateStreamsForPlayStation2(sampleFullPath As String, destinationFilePath As String, currentLanguage As String, currentPlatform As String, filesToBind As List(Of String))
-        'Update title bar
-        Invoke(Sub() Text = currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
-
         Dim vagFileData As Byte() = GetVagFileDataChunk(sampleFullPath)
         File.WriteAllBytes(destinationFilePath, vagFileData)
         filesToBind.Add(destinationFilePath)
@@ -140,9 +139,6 @@ Partial Public Class ExporterForm
     End Sub
 
     Private Sub CreateStreamsForXbox(sampleFullPath As String, destinationFilePath As String, currentLanguage As String, currentPlatform As String, filesToBind As List(Of String))
-        'Update title bar
-        Invoke(Sub() Text = currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
-
         Dim adpcmFileData As Byte() = GetXboxAdpcmDataChunk(sampleFullPath)
         File.WriteAllBytes(destinationFilePath, adpcmFileData)
         filesToBind.Add(destinationFilePath)
