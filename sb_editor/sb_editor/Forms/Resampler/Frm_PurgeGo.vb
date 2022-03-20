@@ -66,8 +66,7 @@ Public Class Frm_PurgeGo
                     Dim masterFilePath As String = Path.Combine(WorkingDirectory, "Master", relativeFilePath)
                     Dim destinationFilePath As String = Path.Combine(WorkingDirectory, masterFolderName, relativeFilePath)
                     'Calculate and report progress
-                    Invoke(Sub() Text = "Moving Sample: " & masterFilePath & " to " & destinationFilePath)
-                    BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, samplesToRemove.Length - 1) * 100.0)
+                    BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, samplesToRemove.Length - 1) * 100.0, "Moving Sample: " & masterFilePath & " to " & destinationFilePath)
                     'Move file
                     If File.Exists(masterFilePath) Then
                         Directory.CreateDirectory(Path.GetDirectoryName(destinationFilePath))
@@ -91,6 +90,7 @@ Public Class Frm_PurgeGo
 
     Private Sub BackgroundWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker.ProgressChanged
         ProgressBar1.Value = e.ProgressPercentage
+        Text = e.UserState
     End Sub
 
     Private Sub BackgroundWorker_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker.RunWorkerCompleted

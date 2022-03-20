@@ -36,7 +36,7 @@ Partial Class About
         'Button_OK
         '
         Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_OK.Location = New System.Drawing.Point(147, 290)
+        Me.Button_OK.Location = New System.Drawing.Point(135, 290)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(75, 23)
         Me.Button_OK.TabIndex = 5
@@ -54,14 +54,16 @@ Partial Class About
         Me.TextBox_Credits.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.TextBox_Credits.Size = New System.Drawing.Size(332, 144)
         Me.TextBox_Credits.TabIndex = 6
-        Me.TextBox_Credits.Text = resources.GetString("TextBox_Credits.Text")
+        Me.TextBox_Credits.Text = "Programmer:" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Jordi Martínez (Jmarti856)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Original Tool Developers:" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Eurocom Dev" &
+    "elopments 2002" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "GameCube dsp Tool:" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Copyright (c) 2017 Alex Barney" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Special " &
+    "Thanks:" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Ismael Ferreras (Swyter)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         Me.TextBox_Credits.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label_Title
         '
         Me.Label_Title.AutoSize = True
         Me.Label_Title.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label_Title.Location = New System.Drawing.Point(68, 16)
+        Me.Label_Title.Location = New System.Drawing.Point(56, 16)
         Me.Label_Title.Name = "Label_Title"
         Me.Label_Title.Size = New System.Drawing.Size(232, 20)
         Me.Label_Title.TabIndex = 7
@@ -71,7 +73,7 @@ Partial Class About
         '
         Me.Label_CurrentVersion.AutoSize = True
         Me.Label_CurrentVersion.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label_CurrentVersion.Location = New System.Drawing.Point(117, 55)
+        Me.Label_CurrentVersion.Location = New System.Drawing.Point(105, 55)
         Me.Label_CurrentVersion.Name = "Label_CurrentVersion"
         Me.Label_CurrentVersion.Size = New System.Drawing.Size(135, 20)
         Me.Label_CurrentVersion.TabIndex = 8
@@ -81,7 +83,7 @@ Partial Class About
         '
         Me.Label_LatestVersion.AutoSize = True
         Me.Label_LatestVersion.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label_LatestVersion.Location = New System.Drawing.Point(75, 75)
+        Me.Label_LatestVersion.Location = New System.Drawing.Point(63, 75)
         Me.Label_LatestVersion.Name = "Label_LatestVersion"
         Me.Label_LatestVersion.Size = New System.Drawing.Size(218, 20)
         Me.Label_LatestVersion.TabIndex = 9
@@ -89,7 +91,7 @@ Partial Class About
         '
         'Button_GetUpdate
         '
-        Me.Button_GetUpdate.Location = New System.Drawing.Point(147, 98)
+        Me.Button_GetUpdate.Location = New System.Drawing.Point(135, 98)
         Me.Button_GetUpdate.Name = "Button_GetUpdate"
         Me.Button_GetUpdate.Size = New System.Drawing.Size(75, 23)
         Me.Button_GetUpdate.TabIndex = 10

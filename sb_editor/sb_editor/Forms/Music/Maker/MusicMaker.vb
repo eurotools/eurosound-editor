@@ -1,9 +1,9 @@
 ﻿Imports System.IO
 Imports EngineXMarkersTool
-Imports sb_editor.HashTablesBuilder
 Imports sb_editor.ParsersObjects
 Imports sb_editor.ReaderClasses
 Imports sb_editor.WritersClasses
+Imports sb_editor.HashTablesBuilder
 
 Partial Public Class MusicMaker
     '*===============================================================================================
@@ -11,7 +11,6 @@ Partial Public Class MusicMaker
     '*===============================================================================================
     Private ReadOnly textFileReaders As New FileParsers
     Private ReadOnly writers As New FileWriters
-    Private ReadOnly hashTablesFunctions As New MfxDefines
     Private currentReadedFiles As String()
 
     '*===============================================================================================
@@ -137,7 +136,7 @@ Partial Public Class MusicMaker
             Next
             'Build temporal file
             Dim testHashTableFilePath As String = Path.Combine(WorkingDirectory, "System", "Temp_MFX_Defines.h")
-            hashTablesFunctions.CreateMfxHashTable(testHashTableFilePath, hashCodesDict)
+            CreateMfxHashTable(testHashTableFilePath, hashCodesDict)
             'Merge jump hashcodes
             Dim markerFunctions As New ExMarkersTool
             Dim definesInHashTable As List(Of String) = AppendJumpHashCodes(testHashTableFilePath, hashCodesDict)

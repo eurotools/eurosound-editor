@@ -57,7 +57,7 @@ Partial Public Class ExporterForm
                                     BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, streamSamplesCount) * 100.0, currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
 
                                     If File.Exists(sampleFullPath) Then
-                                        CreateStreamsForPcAndGC(sampleFullPath, destinationFilePath, currentLanguage, currentPlatform, filesToBind)
+                                        CreateStreamsForPcAndGC(sampleFullPath, destinationFilePath, filesToBind)
                                         CreateMarkerFileIfRequired(sampleFilePath, destinationFilePath, currentPlatform)
                                     Else
                                         Invoke(Sub() MsgBox("ReSampleStreams. File Not Here: " & sampleFullPath, vbOKOnly + vbCritical, "EuroSound"))
@@ -67,7 +67,7 @@ Partial Public Class ExporterForm
                                     BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, streamSamplesCount) * 100.0, currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
 
                                     If File.Exists(sampleFullPath) Then
-                                        CreateStreamsForPcAndGC(sampleFullPath, destinationFilePath, currentLanguage, currentPlatform, filesToBind)
+                                        CreateStreamsForPcAndGC(sampleFullPath, destinationFilePath, filesToBind)
                                         CreateMarkerFileIfRequired(sampleFilePath, destinationFilePath, currentPlatform)
                                     Else
                                         Invoke(Sub() MsgBox("ReSampleStreams. File Not Here: " & sampleFullPath, vbOKOnly + vbCritical, "EuroSound"))
@@ -77,7 +77,7 @@ Partial Public Class ExporterForm
                                     BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, streamSamplesCount) * 100.0, currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
 
                                     If File.Exists(sampleFullPath) Then
-                                        CreateStreamsForPlayStation2(sampleFullPath, destinationFilePath, currentLanguage, currentPlatform, filesToBind)
+                                        CreateStreamsForPlayStation2(sampleFullPath, destinationFilePath, filesToBind)
                                         CreateMarkerFileIfRequired(sampleFilePath, destinationFilePath, currentPlatform)
                                     Else
                                         Invoke(Sub() MsgBox("ReSampleStreams. File Not Here: " & sampleFullPath, vbOKOnly + vbCritical, "EuroSound"))
@@ -87,7 +87,7 @@ Partial Public Class ExporterForm
                                     BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, streamSamplesCount) * 100.0, currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
 
                                     If File.Exists(sampleFullPath) Then
-                                        CreateStreamsForXbox(sampleFullPath, destinationFilePath, currentLanguage, currentPlatform, filesToBind)
+                                        CreateStreamsForXbox(sampleFullPath, destinationFilePath, filesToBind)
                                         CreateMarkerFileIfRequired(sampleFilePath, destinationFilePath, currentPlatform)
                                     Else
                                         Invoke(Sub() MsgBox("ReSampleStreams. File Not Here: " & sampleFullPath, vbOKOnly + vbCritical, "EuroSound"))
@@ -119,7 +119,7 @@ Partial Public Class ExporterForm
         End If
     End Sub
 
-    Private Sub CreateStreamsForPcAndGC(sampleFullPath As String, destinationFilePath As String, currentLanguage As String, currentPlatform As String, filesToBind As List(Of String))
+    Private Sub CreateStreamsForPcAndGC(sampleFullPath As String, destinationFilePath As String, filesToBind As List(Of String))
         File.Copy(sampleFullPath, destinationFilePath, True)
         filesToBind.Add(destinationFilePath)
 
@@ -128,7 +128,7 @@ Partial Public Class ExporterForm
         PrintLine(1, "OutputFileName = " & destinationFilePath)
     End Sub
 
-    Private Sub CreateStreamsForPlayStation2(sampleFullPath As String, destinationFilePath As String, currentLanguage As String, currentPlatform As String, filesToBind As List(Of String))
+    Private Sub CreateStreamsForPlayStation2(sampleFullPath As String, destinationFilePath As String, filesToBind As List(Of String))
         Dim vagFileData As Byte() = GetVagFileDataChunk(sampleFullPath)
         File.WriteAllBytes(destinationFilePath, vagFileData)
         filesToBind.Add(destinationFilePath)
@@ -138,7 +138,7 @@ Partial Public Class ExporterForm
         PrintLine(1, "OutputFileName = " & destinationFilePath)
     End Sub
 
-    Private Sub CreateStreamsForXbox(sampleFullPath As String, destinationFilePath As String, currentLanguage As String, currentPlatform As String, filesToBind As List(Of String))
+    Private Sub CreateStreamsForXbox(sampleFullPath As String, destinationFilePath As String, filesToBind As List(Of String))
         Dim adpcmFileData As Byte() = GetXboxAdpcmDataChunk(sampleFullPath)
         File.WriteAllBytes(destinationFilePath, adpcmFileData)
         filesToBind.Add(destinationFilePath)

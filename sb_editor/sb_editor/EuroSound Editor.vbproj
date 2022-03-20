@@ -174,6 +174,9 @@
     <Compile Include="Forms\Exporters\Musics Exporter\MusicsExporter_MuxFiles.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\Exporters\SoundBanks Exporter\ExporterForm_HashTables.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\Exporters\SoundBanks Exporter\ExporterForm_SBInfo.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -326,10 +329,7 @@
     <Compile Include="Forms\Sfx Editor\Frm_SfxEditor_TestSoundbank.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HashTables Builder\FormatFunctions.vb" />
-    <Compile Include="HashTables Builder\MfxDefines.vb" />
-    <Compile Include="HashTables Builder\SfxDefines.vb" />
-    <Compile Include="HashTables Builder\SoundhFile.vb" />
+    <Compile Include="Classes\HashTables.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

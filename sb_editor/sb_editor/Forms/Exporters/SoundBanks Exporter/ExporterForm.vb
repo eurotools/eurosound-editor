@@ -79,38 +79,8 @@ Partial Public Class ExporterForm
         End If
 
         'Get SFXs
-        Dim hashCodesDictionary As New SortedDictionary(Of String, UInteger)
-        Dim sfxFiles As String() = Directory.GetFiles(WorkingDirectory & "\SFXs", "*.txt", SearchOption.TopDirectoryOnly)
-        For fileIndex As Integer = 0 To sfxFiles.Length - 1
-            Dim currentFilePath As String = sfxFiles(fileIndex)
-            Dim sfxLabel As String = Path.GetFileNameWithoutExtension(currentFilePath)
-            If Not hashCodesDictionary.ContainsKey(sfxLabel) Then
-                'Get HashCode
-                Dim sfxFileData As String() = File.ReadAllLines(currentFilePath)
-                Dim hashcodeIndex As Integer = Array.IndexOf(sfxFileData, "#HASHCODE")
-                Dim stringData As String() = sfxFileData(hashcodeIndex + 1).Split(" "c)
-                If stringData.Length > 1 AndAlso IsNumeric(stringData(1)) Then
-                    hashCodesDictionary.Add(sfxLabel, stringData(1))
-                End If
-            End If
-        Next
-
-        'Get all Soundbanks
-        Dim soundBanksDictionary As New SortedDictionary(Of String, UInteger)
-        Dim soundbankFiles As String() = Directory.GetFiles(WorkingDirectory & "\SoundBanks", "*.txt", SearchOption.TopDirectoryOnly)
-        For fileIndex As Integer = 0 To soundbankFiles.Length - 1
-            Dim currentFilePath As String = soundbankFiles(fileIndex)
-            Dim soundBankLabel As String = Path.GetFileNameWithoutExtension(currentFilePath)
-            If Not soundBanksDictionary.ContainsKey(soundBankLabel) Then
-                'Get HashCode
-                Dim soundBankFileData As String() = File.ReadAllLines(currentFilePath)
-                Dim hashcodeIndex As Integer = Array.IndexOf(soundBankFileData, "#HASHCODE")
-                Dim stringData As String() = soundBankFileData(hashcodeIndex + 1).Split(" "c)
-                If stringData.Length > 1 AndAlso IsNumeric(stringData(1)) Then
-                    soundBanksDictionary.Add(soundBankLabel, stringData(1))
-                End If
-            End If
-        Next
+        Dim hashCodesDictionary As SortedDictionary(Of String, UInteger) = GetHashCodesDict(Path.Combine(WorkingDirectory, "SFXs"))
+        Dim soundBanksDictionary As SortedDictionary(Of String, UInteger) = GetSoundBanksDict(Path.Combine(WorkingDirectory, "SoundBanks"))
 
         'Check for new and missing samples
         If Not quickOutput Then
@@ -161,8 +131,6 @@ Partial Public Class ExporterForm
         'Continue if the output has not been aborted
         If Not OutputAborted Then
             If Not quickOutput Then
-                Dim hashTablesBuilder As New SfxDefines
-                Dim soundhBuilder As New SoundhFile
                 '----------------------------------------------Create SFX Data----------------------------------------------
                 Dim maxHashCode = CreateSfxDataTempFolder(soundsTable)
 
@@ -171,10 +139,10 @@ Partial Public Class ExporterForm
                 Dim sfxDataFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Data.h")
                 Dim soundhFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.EuroLandHashCodeServerPath, "Sound.h")
 
-                hashTablesBuilder.CreateSfxDebug(Me, hashCodesDictionary, Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Debug.h"))
-                hashTablesBuilder.CreateSfxDefines(Me, hashCodesDictionary, soundBanksDictionary, SfxLanguages, ProjectSettingsFile.MiscProps.PrefixHtSound, sfxDefinesFilePath)
-                hashTablesBuilder.CreateSfxData(Me, sfxDataFilePath, Path.Combine(WorkingDirectory, "TempSfxData"), maxHashCode)
-                soundhBuilder.CreateSoundhFile(soundhFilePath, sfxDefinesFilePath, Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "MFX_Defines.h"))
+                CreateSfxDebug(hashCodesDictionary, Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Debug.h"))
+                CreateSfxDefines(hashCodesDictionary, soundBanksDictionary, SfxLanguages, ProjectSettingsFile.MiscProps.PrefixHtSound, sfxDefinesFilePath)
+                CreateSfxData(sfxDataFilePath, Path.Combine(WorkingDirectory, "TempSfxData"), maxHashCode)
+                CreateSoundhFile(soundhFilePath, sfxDefinesFilePath, Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "MFX_Defines.h"))
 
                 '----------------------------------------------Create SFX DATA BIN----------------------------------------------
                 CreateSFXDataBinaryFiles(outPlaforms, outputLanguage)

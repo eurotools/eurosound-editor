@@ -272,4 +272,49 @@ Friend Module GenericFunctions
             Next
         End If
     End Sub
+
+    '*===============================================================================================
+    '* HASHCODES FUNCTIONS
+    '*===============================================================================================
+    Friend Function GetHashCodesDict(sfxFilesPath As String) As SortedDictionary(Of String, UInteger)
+        Dim hashCodesDictionary As New SortedDictionary(Of String, UInteger)
+        Dim sfxFiles As String() = Directory.GetFiles(sfxFilesPath, "*.txt", SearchOption.TopDirectoryOnly)
+
+        For fileIndex As Integer = 0 To sfxFiles.Length - 1
+            Dim currentFilePath As String = sfxFiles(fileIndex)
+            Dim sfxLabel As String = Path.GetFileNameWithoutExtension(currentFilePath)
+            If Not hashCodesDictionary.ContainsKey(sfxLabel) Then
+                'Get HashCode
+                Dim sfxFileData As String() = File.ReadAllLines(currentFilePath)
+                Dim hashcodeIndex As Integer = Array.IndexOf(sfxFileData, "#HASHCODE")
+                Dim stringData As String() = sfxFileData(hashcodeIndex + 1).Split(" "c)
+                If stringData.Length > 1 AndAlso IsNumeric(stringData(1)) Then
+                    hashCodesDictionary.Add(sfxLabel, stringData(1))
+                End If
+            End If
+        Next
+
+        Return hashCodesDictionary
+    End Function
+
+    Friend Function GetSoundBanksDict(soundBanksFilePath) As SortedDictionary(Of String, UInteger)
+        Dim soundBanksDictionary As New SortedDictionary(Of String, UInteger)
+        Dim soundbankFiles As String() = Directory.GetFiles(soundBanksFilePath, "*.txt", SearchOption.TopDirectoryOnly)
+
+        For fileIndex As Integer = 0 To soundbankFiles.Length - 1
+            Dim currentFilePath As String = soundbankFiles(fileIndex)
+            Dim soundBankLabel As String = Path.GetFileNameWithoutExtension(currentFilePath)
+            If Not soundBanksDictionary.ContainsKey(soundBankLabel) Then
+                'Get HashCode
+                Dim soundBankFileData As String() = File.ReadAllLines(currentFilePath)
+                Dim hashcodeIndex As Integer = Array.IndexOf(soundBankFileData, "#HASHCODE")
+                Dim stringData As String() = soundBankFileData(hashcodeIndex + 1).Split(" "c)
+                If stringData.Length > 1 AndAlso IsNumeric(stringData(1)) Then
+                    soundBanksDictionary.Add(soundBankLabel, stringData(1))
+                End If
+            End If
+        Next
+
+        Return soundBanksDictionary
+    End Function
 End Module

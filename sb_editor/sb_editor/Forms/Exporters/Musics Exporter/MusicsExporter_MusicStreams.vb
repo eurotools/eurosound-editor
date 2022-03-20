@@ -20,8 +20,7 @@ Partial Public Class MusicsExporter
                     Dim currentPlatform As String = outputPlatforms(platformIndex)
                     Dim soundSampleData As String = Path.Combine(GetOutputFolder(musicHashCode, currentPlatform), "MFX_" & musicHashCode & ".ssd")
                     'Update title bar and progress
-                    Invoke(Sub() Text = "Making Music Stream: " & musicItem.ItemArray(0) & " for " & currentPlatform)
-                    BackgroundWorker.ReportProgress(Decimal.Divide(platformIndex + (fileIndex * outputPlatforms.Length), outputQueue.Rows.Count * outputPlatforms.Length) * 100.0)
+                    BackgroundWorker.ReportProgress(Decimal.Divide(platformIndex + (fileIndex * outputPlatforms.Length), outputQueue.Rows.Count * outputPlatforms.Length) * 100.0, "Making Music Stream: " & musicItem.ItemArray(0) & " for " & currentPlatform)
                     'Split channels - All platforms has the same sample rate at exception of Xbox
                     If ResampleAndSplit Then
                         ReSampleAndSplitWithSox(waveFilePath, temporalLeft, temporalRight, 32000)
@@ -38,10 +37,17 @@ Partial Public Class MusicsExporter
                             MergeChannels(PcOutLeft & "_L.ima", PcOutRight & "_R.ima", 1, soundSampleData)
                         Case "PlayStation2"
                             'Vag Tool
+                            RunProcess("SystemFiles\AIFF2VAG.exe", """" & temporalLeft & """")
+                            RunProcess("SystemFiles\AIFF2VAG.exe", """" & temporalRight & """")
+                            'Move Files
                             Dim ps2VagL As String = Path.Combine(waveOutputFolder, musicItem.ItemArray(0)) & "_L.vag"
                             Dim ps2VagR As String = Path.Combine(waveOutputFolder, musicItem.ItemArray(0)) & "_R.vag"
-                            RunProcess("SystemFiles\AIFF2VAG.exe", """" & temporalLeft & """ """ & ps2VagL & """")
-                            RunProcess("SystemFiles\AIFF2VAG.exe", """" & temporalRight & """ """ & ps2VagR & """")
+                            Dim encoderOutputFileL As String = Path.ChangeExtension(temporalLeft, ".vag")
+                            Dim encoderOutputFileR As String = Path.ChangeExtension(temporalRight, ".vag")
+                            File.Copy(encoderOutputFileL, ps2VagL, True)
+                            File.Delete(encoderOutputFileL)
+                            File.Copy(encoderOutputFileR, ps2VagR, True)
+                            File.Delete(encoderOutputFileR)
                             'Music Stream (.ssd)
                             MergeChannels(ps2VagL, ps2VagR, 128, soundSampleData)
                         Case Else
@@ -50,8 +56,8 @@ Partial Public Class MusicsExporter
                             'Xbox Tool
                             Dim xbxVagL As String = Path.Combine(waveOutputFolder, musicItem.ItemArray(0)) & "_L.adpcm"
                             Dim xbxVagR As String = Path.Combine(waveOutputFolder, musicItem.ItemArray(0)) & "_R.adpcm"
-                            RunProcess("SystemFiles\xbadpcmencode.exe", "Encode """ & temporalLeft & """ """ & xbxVagL & """")
-                            RunProcess("SystemFiles\xbadpcmencode.exe", "Encode """ & temporalRight & """ """ & xbxVagR & """")
+                            RunProcess("SystemFiles\xbadpcmencode.exe", """" & temporalLeft & """ """ & xbxVagL & """")
+                            RunProcess("SystemFiles\xbadpcmencode.exe", """" & temporalRight & """ """ & xbxVagR & """")
                             MergeChannels(xbxVagL, xbxVagR, 4, soundSampleData)
                     End Select
                 Next

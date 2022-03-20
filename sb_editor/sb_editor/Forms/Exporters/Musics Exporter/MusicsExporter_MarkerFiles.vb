@@ -7,10 +7,9 @@ Partial Public Class MusicsExporter
         For fileIndex As Integer = 0 To outputQueue.Rows.Count - 1
             Dim musicItem As DataRow = outputQueue.Rows(fileIndex)
             'Update Title bar
-            Invoke(Sub() Text = "Making Marker File: " & musicItem.ItemArray(0))
             For platformIndex As Integer = 0 To outputPlatforms.Length - 1
                 'Update progress bar
-                BackgroundWorker.ReportProgress(Decimal.Divide(platformIndex + (fileIndex * outputPlatforms.Length), outputQueue.Rows.Count * outputPlatforms.Length) * 100.0)
+                BackgroundWorker.ReportProgress(Decimal.Divide(platformIndex + (fileIndex * outputPlatforms.Length), outputQueue.Rows.Count * outputPlatforms.Length) * 100.0, "Making Marker File: " & musicItem.ItemArray(0))
                 'Get the current platform
                 Dim currentPlatform As String = outputPlatforms(platformIndex)
                 Dim musicHashCode As Integer = musicItem.ItemArray(2)

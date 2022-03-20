@@ -158,12 +158,22 @@ Partial Public Class Frm_SfxEditor
     '*===============================================================================================
     '* SAMPLE POOL CONTROL EVENTS
     '*===============================================================================================
-    Private Sub SfxParamsAndSamplePool_MaxDelayChanged(sender As Object, e As EventArgs) Handles SfxParamsAndSamplePool.SfxControl_MaxDelayChanged
+    Private Sub SfxParamsAndSamplePool_MaxDelayValidating(sender As Object, e As EventArgs) Handles SfxParamsAndSamplePool.SfxControl_MaxDelayValidating
+        If SfxParamsAndSamplePool.RadioButton_Single.Checked Then
+            If SfxParamsAndSamplePool.Numeric_MaxDelay.Value < 0 Then
+                SfxParamsAndSamplePool.Numeric_MaxDelay.Value = 0
+            End If
+        End If
         Dim selectedFileData As SfxFile = sfxFilesData(TabControl_Platforms.SelectedTab.Text)
         selectedFileData.SamplePool.MaxDelay = SfxParamsAndSamplePool.Numeric_MaxDelay.Value
     End Sub
 
-    Private Sub SfxParamsAndSamplePool_MinDelayChanged(sender As Object, e As EventArgs) Handles SfxParamsAndSamplePool.SfxControl_MinDelayChanged
+    Private Sub SfxParamsAndSamplePool_MinDelayValidating(sender As Object, e As EventArgs) Handles SfxParamsAndSamplePool.SfxControl_MinDelayValidating
+        If SfxParamsAndSamplePool.RadioButton_Single.Checked Then
+            If SfxParamsAndSamplePool.Numeric_MinDelay.Value < 0 Then
+                SfxParamsAndSamplePool.Numeric_MinDelay.Value = 0
+            End If
+        End If
         Dim selectedFileData As SfxFile = sfxFilesData(TabControl_Platforms.SelectedTab.Text)
         selectedFileData.SamplePool.MinDelay = SfxParamsAndSamplePool.Numeric_MinDelay.Value
     End Sub

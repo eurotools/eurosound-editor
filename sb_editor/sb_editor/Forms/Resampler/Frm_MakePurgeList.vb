@@ -59,10 +59,9 @@ Public Class Frm_MakePurgeList
             For fileIndex As Integer = 0 To samplesCount
                 'Read samples
                 Dim sfxFileName As String = Path.GetFileNameWithoutExtension(sfxFilesToInspect(fileIndex))
-                Invoke(Sub() Text = "Creating Sample List " & currentPlatform & " " & sfxFileName)
                 'Calculate and report progress
                 Dim previousCounts = samplesCount * platformIndex
-                BackgroundWorker.ReportProgress(Decimal.Divide(fileIndex + previousCounts, samplesCount * formatsToInspect.Length) * 100.0)
+                BackgroundWorker.ReportProgress(Decimal.Divide(fileIndex + previousCounts, samplesCount * formatsToInspect.Length) * 100.0, "Creating Sample List " & currentPlatform & " " & sfxFileName)
                 'Get File Path
                 Dim sfxFilePath As String
                 If StrComp(currentPlatform, "Common", CompareMethod.Binary) = 0 Then
@@ -98,6 +97,7 @@ Public Class Frm_MakePurgeList
 
     Private Sub BackgroundWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker.ProgressChanged
         ProgressBar1.Value = e.ProgressPercentage
+        Text = e.UserState
     End Sub
 
     Private Sub BackgroundWorker_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker.RunWorkerCompleted

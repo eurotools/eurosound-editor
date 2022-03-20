@@ -238,6 +238,8 @@ Namespace SoundBanksExporterFunctions
 
                             'Read platform wave
                             Select Case outputPlatform.ToUpper
+                                Case "MASTER"
+                                    LoadPcmForPC(platformWaveFile, soundDataObj, loopInfo, masterWaveSampleRate)
                                 Case "PC"
                                     LoadPcmForPC(platformWaveFile, soundDataObj, loopInfo, masterWaveSampleRate)
                                 Case "PLAYSTATION2"

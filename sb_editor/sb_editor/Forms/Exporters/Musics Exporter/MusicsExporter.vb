@@ -41,7 +41,7 @@ Partial Public Class MusicsExporter
     '*===============================================================================================
     Private Sub BackgroundWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker.DoWork
         'Update form title
-        Invoke(Sub() Text = "Waiting")
+        BackgroundWorker.ReportProgress(Nothing, "Waiting")
 
         'Create ESWork folder if required
         Dim waveOutputFolder As String = Path.Combine(WorkingDirectory, "Music", "ESWork")
@@ -92,7 +92,10 @@ Partial Public Class MusicsExporter
     End Sub
 
     Private Sub BackgroundWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker.ProgressChanged
-        ProgressBar1.Value = e.ProgressPercentage
+        If e.ProgressPercentage <> Nothing Then
+            ProgressBar1.Value = e.ProgressPercentage
+        End If
+        Text = e.UserState
     End Sub
 
     Private Sub BackgroundWorker_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker.RunWorkerCompleted

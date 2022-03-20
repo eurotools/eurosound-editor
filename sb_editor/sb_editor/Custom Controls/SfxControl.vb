@@ -24,8 +24,10 @@
     Public Event SfxControl_MultiSampleChecked As EventHandler
     Public Event SfxControl_ShuffledChecked As EventHandler
     Public Event SfxControl_PolyphonicChecked As EventHandler
+    Public Event SfxControl_MinDelayValidating As EventHandler
     Public Event SfxControl_MinDelayChanged As EventHandler
     Public Event SfxControl_MaxDelayChanged As EventHandler
+    Public Event SfxControl_MaxDelayValidating As EventHandler
     Public Event SfxControl_StealOnLouderChecked As EventHandler
 
     '*===============================================================================================
@@ -107,8 +109,6 @@
                 'CheckBox_RandomPick.Enabled = True
                 CheckBox_Shuffled.Enabled = False
                 CheckBox_Polyphonic.Enabled = False
-                Numeric_MinDelay.Minimum = 0
-                Numeric_MaxDelay.Minimum = 0
             Else
                 MsgBox("Inter Sample Delay cannot be negative", vbOKOnly + vbExclamation, "EuroSound")
                 RadioButton_MultiSample.Checked = True
@@ -123,8 +123,6 @@
             CheckBox_RandomPick.Checked = False
             CheckBox_Shuffled.Enabled = True
             CheckBox_Polyphonic.Enabled = True
-            Numeric_MinDelay.Minimum = -32000
-            Numeric_MaxDelay.Minimum = -32000
         End If
         RaiseEvent SfxControl_MultiSampleChecked(Me, e)
     End Sub
@@ -140,8 +138,16 @@
         RaiseEvent SfxControl_MinDelayChanged(Me, e)
     End Sub
 
+    Private Sub Numeric_MinDelay_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles Numeric_MinDelay.Validating
+        RaiseEvent SfxControl_MinDelayValidating(Me, e)
+    End Sub
+
     Private Sub Numeric_MaxDelay_ValueChanged(sender As Object, e As EventArgs) Handles Numeric_MaxDelay.ValueChanged
         RaiseEvent SfxControl_MaxDelayChanged(Me, e)
+    End Sub
+
+    Private Sub Numeric_MaxDelay_Validating(sender As Object, e As EventArgs) Handles Numeric_MaxDelay.Validating
+        RaiseEvent SfxControl_MaxDelayValidating(Me, e)
     End Sub
 
     Private Sub CheckBox_StealOnLouder_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_StealOnLouder.CheckedChanged
