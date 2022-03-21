@@ -87,11 +87,15 @@ Partial Public Class MusicMaker
         While listviewEnum.MoveNext
             Dim cells As String() = New String(2) {}
             Dim currentItem As ListViewItem = listviewEnum.Current
-            If StrComp(currentItem.SubItems(4).Text, "Output") = 0 Or StrComp(currentItem.SubItems(5).Text, "Output") = 0 Then
+            If currentItem.SubItems(4).Text.Equals("Output") Or currentItem.SubItems(5).Equals("Output") Then
+                'Add items to the output table
                 cells(0) = currentItem.Text
                 cells(1) = currentItem.SubItems(1).Text
                 cells(2) = currentItem.SubItems(3).Text
                 samplesData.Rows.Add(cells)
+                'Update listview items
+                currentItem.SubItems(4).Text = "OK"
+                currentItem.SubItems(5).Text = "OK"
             End If
         End While
 

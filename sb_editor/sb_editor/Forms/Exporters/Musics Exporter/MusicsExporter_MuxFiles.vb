@@ -10,6 +10,7 @@ Partial Public Class MusicsExporter
             For platformIndex As Integer = 0 To outputPlatforms.Length - 1
                 'Update progress bar
                 BackgroundWorker.ReportProgress(Decimal.Divide(platformIndex + (fileIndex * outputPlatforms.Length), outputQueue.Rows.Count * outputPlatforms.Length) * 100.0, "Binding Files: " & musicItem.ItemArray(0))
+
                 'Get the current platform
                 Dim musicHashCode As Integer = musicItem.ItemArray(2)
                 Dim currentPlatform As String = outputPlatforms(platformIndex)

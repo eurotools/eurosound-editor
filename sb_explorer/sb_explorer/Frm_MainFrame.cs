@@ -996,8 +996,8 @@ namespace sb_explorer
                     }
                     array[1] = samplePoolItem.Volume.ToString();
                     array[2] = samplePoolItem.VolumeOffset.ToString();
-                    array[3] = decimal.Divide(samplePoolItem.Pitch, 1000).ToString();
-                    array[4] = decimal.Divide(samplePoolItem.PitchOffset, 1000).ToString();
+                    array[3] = decimal.Divide(samplePoolItem.Pitch, 1024).ToString();
+                    array[4] = decimal.Divide(samplePoolItem.PitchOffset, 1024).ToString();
                     array[5] = samplePoolItem.Pan.ToString();
                     array[6] = samplePoolItem.PanOffset.ToString();
 

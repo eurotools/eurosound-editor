@@ -34,7 +34,7 @@ Partial Public Class MusicsExporter
                             Dim PcOutRight As String = Path.Combine(waveOutputFolder, musicItem.ItemArray(0))
                             CreateImaAdpcm(temporalLeft, temporalRight, PcOutLeft, PcOutRight)
                             'Music Stream (.ssd)
-                            MergeChannels(PcOutLeft & "_L.ima", PcOutRight & "_R.ima", 1, soundSampleData)
+                            MergeChannels(File.ReadAllBytes(PcOutLeft & "_L.ima"), File.ReadAllBytes(PcOutRight & "_R.ima"), 1, soundSampleData)
                         Case "PlayStation2"
                             'Vag Tool
                             RunProcess("SystemFiles\AIFF2VAG.exe", """" & temporalLeft & """")
@@ -49,7 +49,7 @@ Partial Public Class MusicsExporter
                             File.Copy(encoderOutputFileR, ps2VagR, True)
                             File.Delete(encoderOutputFileR)
                             'Music Stream (.ssd)
-                            MergeChannels(ps2VagL, ps2VagR, 128, soundSampleData)
+                            MergeChannels(GetVagFileDataChunk(ps2VagL), GetVagFileDataChunk(ps2VagR), 128, soundSampleData)
                         Case Else
                             'Split channels
                             ReSampleAndSplitWithSox(waveFilePath, temporalLeft, temporalRight, 44100)
@@ -58,7 +58,7 @@ Partial Public Class MusicsExporter
                             Dim xbxVagR As String = Path.Combine(waveOutputFolder, musicItem.ItemArray(0)) & "_R.adpcm"
                             RunProcess("SystemFiles\xbadpcmencode.exe", """" & temporalLeft & """ """ & xbxVagL & """")
                             RunProcess("SystemFiles\xbadpcmencode.exe", """" & temporalRight & """ """ & xbxVagR & """")
-                            MergeChannels(xbxVagL, xbxVagR, 4, soundSampleData)
+                            MergeChannels(GetXboxAdpcmDataChunk(xbxVagL), GetXboxAdpcmDataChunk(xbxVagR), 4, soundSampleData)
                     End Select
                 Next
             Next
@@ -78,12 +78,10 @@ Partial Public Class MusicsExporter
     '*===============================================================================================
     '* MERGE CHANNELS (CREATES THE .SSD FILE)
     '*===============================================================================================
-    Private Sub MergeChannels(leftChannelFile As String, rightChannelFile As String, interleave_block_size As Integer, outputFilePath As String)
+    Private Sub MergeChannels(LeftChannelData As Byte(), RightChannelData As Byte(), interleave_block_size As Integer, outputFilePath As String)
         Dim IndexLC, IndexRC As Integer
 
         'Read data and align array size
-        Dim LeftChannelData As Byte() = File.ReadAllBytes(leftChannelFile)
-        Dim RightChannelData As Byte() = File.ReadAllBytes(rightChannelFile)
         If interleave_block_size > 1 Then
             Array.Resize(LeftChannelData, ((LeftChannelData.Length + (interleave_block_size - 1)) And Not (interleave_block_size - 1)))
             Array.Resize(RightChannelData, ((RightChannelData.Length + (interleave_block_size - 1)) And Not (interleave_block_size - 1)))
