@@ -191,103 +191,117 @@ Public Class Frm_ReverbTester
     '* METHODS
     '*===============================================================================================
     Private Sub ShowReverbFile(selectedTab)
-        Select Case selectedTab
-            Case "PC"
-                TrackBar_RoomSize.Value = currentLoadedFile.PCReverb.RoomSize
-                TrackBar_Width.Value = currentLoadedFile.PCReverb.Width
-                TrackBar_Damp.Value = currentLoadedFile.PCReverb.Damp
-                TrackBar_LowPassFilter.Value = currentLoadedFile.PCReverb.LowPassFilter
-                TrackBar_Filter1.Value = currentLoadedFile.PCReverb.Filter1
-                TrackBar_Filter2.Value = currentLoadedFile.PCReverb.Filter2
-            Case "XBox"
-                TrackBar_RoomSize.Value = currentLoadedFile.XBReverb.RoomSize
-                TrackBar_Width.Value = currentLoadedFile.XBReverb.Width
-                TrackBar_Damp.Value = currentLoadedFile.XBReverb.Damp
-                TrackBar_LowPassFilter.Value = currentLoadedFile.XBReverb.LowPassFilter
-                TrackBar_Filter1.Value = currentLoadedFile.XBReverb.Filter1
-                TrackBar_Filter2.Value = currentLoadedFile.XBReverb.Filter2
-            Case "GameCube"
-                TrackBar_RoomSize.Value = currentLoadedFile.GCReverb.RoomSize
-                TrackBar_Width.Value = currentLoadedFile.GCReverb.Width
-                TrackBar_Damp.Value = currentLoadedFile.GCReverb.Damp
-                TrackBar_LowPassFilter.Value = currentLoadedFile.GCReverb.LowPassFilter
-                TrackBar_Filter1.Value = currentLoadedFile.GCReverb.Filter1
-                TrackBar_Filter2.Value = currentLoadedFile.GCReverb.Filter2
-        End Select
+        If currentLoadedFile IsNot Nothing Then
+            Select Case selectedTab
+                Case "PC"
+                    TrackBar_RoomSize.Value = currentLoadedFile.PCReverb.RoomSize
+                    TrackBar_Width.Value = currentLoadedFile.PCReverb.Width
+                    TrackBar_Damp.Value = currentLoadedFile.PCReverb.Damp
+                    TrackBar_LowPassFilter.Value = currentLoadedFile.PCReverb.LowPassFilter
+                    TrackBar_Filter1.Value = currentLoadedFile.PCReverb.Filter1
+                    TrackBar_Filter2.Value = currentLoadedFile.PCReverb.Filter2
+                Case "XBox"
+                    TrackBar_RoomSize.Value = currentLoadedFile.XBReverb.RoomSize
+                    TrackBar_Width.Value = currentLoadedFile.XBReverb.Width
+                    TrackBar_Damp.Value = currentLoadedFile.XBReverb.Damp
+                    TrackBar_LowPassFilter.Value = currentLoadedFile.XBReverb.LowPassFilter
+                    TrackBar_Filter1.Value = currentLoadedFile.XBReverb.Filter1
+                    TrackBar_Filter2.Value = currentLoadedFile.XBReverb.Filter2
+                Case "GameCube"
+                    TrackBar_RoomSize.Value = currentLoadedFile.GCReverb.RoomSize
+                    TrackBar_Width.Value = currentLoadedFile.GCReverb.Width
+                    TrackBar_Damp.Value = currentLoadedFile.GCReverb.Damp
+                    TrackBar_LowPassFilter.Value = currentLoadedFile.GCReverb.LowPassFilter
+                    TrackBar_Filter1.Value = currentLoadedFile.GCReverb.Filter1
+                    TrackBar_Filter2.Value = currentLoadedFile.GCReverb.Filter2
+            End Select
+        End If
     End Sub
 
     '*===============================================================================================
     '* TRACKBAR
     '*===============================================================================================
     Private Sub TrackBar_RoomSize_ValueChanged(sender As Object, e As EventArgs) Handles TrackBar_RoomSize.ValueChanged
-        fileHasBeenModified = True
-        Select Case TabControl1.SelectedTab.Text
-            Case "PC"
-                currentLoadedFile.PCReverb.RoomSize = TrackBar_RoomSize.Value
-            Case "XBox"
-                currentLoadedFile.XBReverb.RoomSize = TrackBar_RoomSize.Value
-            Case "GameCube"
-                currentLoadedFile.GCReverb.RoomSize = TrackBar_RoomSize.Value
-        End Select
+        If currentLoadedFile IsNot Nothing Then
+            fileHasBeenModified = True
+            Select Case TabControl1.SelectedTab.Text
+                Case "PC"
+                    currentLoadedFile.PCReverb.RoomSize = TrackBar_RoomSize.Value
+                Case "XBox"
+                    currentLoadedFile.XBReverb.RoomSize = TrackBar_RoomSize.Value
+                Case "GameCube"
+                    currentLoadedFile.GCReverb.RoomSize = TrackBar_RoomSize.Value
+            End Select
+        End If
     End Sub
 
     Private Sub TrackBar_Width_ValueChanged(sender As Object, e As EventArgs) Handles TrackBar_Width.ValueChanged
-        fileHasBeenModified = True
-        Select Case TabControl1.SelectedTab.Text
-            Case "PC"
-                currentLoadedFile.PCReverb.Width = TrackBar_Width.Value
-            Case "XBox"
-                currentLoadedFile.XBReverb.Width = TrackBar_Width.Value
-            Case "GameCube"
-                currentLoadedFile.GCReverb.Width = TrackBar_Width.Value
-        End Select
+        If currentLoadedFile IsNot Nothing Then
+            fileHasBeenModified = True
+            Select Case TabControl1.SelectedTab.Text
+                Case "PC"
+                    currentLoadedFile.PCReverb.Width = TrackBar_Width.Value
+                Case "XBox"
+                    currentLoadedFile.XBReverb.Width = TrackBar_Width.Value
+                Case "GameCube"
+                    currentLoadedFile.GCReverb.Width = TrackBar_Width.Value
+            End Select
+        End If
     End Sub
 
     Private Sub TrackBar_Damp_ValueChanged(sender As Object, e As EventArgs) Handles TrackBar_Damp.ValueChanged
-        fileHasBeenModified = True
-        Select Case TabControl1.SelectedTab.Text
-            Case "PC"
-                currentLoadedFile.PCReverb.Damp = TrackBar_Damp.Value
-            Case "XBox"
-                currentLoadedFile.XBReverb.Damp = TrackBar_Damp.Value
-            Case "GameCube"
-                currentLoadedFile.GCReverb.Damp = TrackBar_Damp.Value
-        End Select
+        If currentLoadedFile IsNot Nothing Then
+            fileHasBeenModified = True
+            Select Case TabControl1.SelectedTab.Text
+                Case "PC"
+                    currentLoadedFile.PCReverb.Damp = TrackBar_Damp.Value
+                Case "XBox"
+                    currentLoadedFile.XBReverb.Damp = TrackBar_Damp.Value
+                Case "GameCube"
+                    currentLoadedFile.GCReverb.Damp = TrackBar_Damp.Value
+            End Select
+        End If
     End Sub
 
     Private Sub TrackBar_LowPassFilter_ValueChanged(sender As Object, e As EventArgs) Handles TrackBar_LowPassFilter.ValueChanged
-        fileHasBeenModified = True
-        Select Case TabControl1.SelectedTab.Text
-            Case "PC"
-                currentLoadedFile.PCReverb.LowPassFilter = TrackBar_LowPassFilter.Value
-            Case "XBox"
-                currentLoadedFile.XBReverb.LowPassFilter = TrackBar_LowPassFilter.Value
-            Case "GameCube"
-                currentLoadedFile.GCReverb.LowPassFilter = TrackBar_LowPassFilter.Value
-        End Select
+        If currentLoadedFile IsNot Nothing Then
+            fileHasBeenModified = True
+            Select Case TabControl1.SelectedTab.Text
+                Case "PC"
+                    currentLoadedFile.PCReverb.LowPassFilter = TrackBar_LowPassFilter.Value
+                Case "XBox"
+                    currentLoadedFile.XBReverb.LowPassFilter = TrackBar_LowPassFilter.Value
+                Case "GameCube"
+                    currentLoadedFile.GCReverb.LowPassFilter = TrackBar_LowPassFilter.Value
+            End Select
+        End If
     End Sub
 
     Private Sub TrackBar_Filter1_ValueChanged(sender As Object, e As EventArgs) Handles TrackBar_Filter1.ValueChanged
-        fileHasBeenModified = True
-        Select Case TabControl1.SelectedTab.Text
-            Case "PC"
-                currentLoadedFile.PCReverb.Filter1 = TrackBar_Filter1.Value
-            Case "XBox"
-                currentLoadedFile.XBReverb.Filter1 = TrackBar_Filter1.Value
-            Case "GameCube"
-                currentLoadedFile.GCReverb.Filter1 = TrackBar_Filter1.Value
-        End Select
+        If currentLoadedFile IsNot Nothing Then
+            fileHasBeenModified = True
+            Select Case TabControl1.SelectedTab.Text
+                Case "PC"
+                    currentLoadedFile.PCReverb.Filter1 = TrackBar_Filter1.Value
+                Case "XBox"
+                    currentLoadedFile.XBReverb.Filter1 = TrackBar_Filter1.Value
+                Case "GameCube"
+                    currentLoadedFile.GCReverb.Filter1 = TrackBar_Filter1.Value
+            End Select
+        End If
     End Sub
 
     Private Sub TrackBar_Filter2_ValueChanged(sender As Object, e As EventArgs) Handles TrackBar_Filter2.ValueChanged
-        fileHasBeenModified = True
-        Select Case TabControl1.SelectedTab.Text
-            Case "PC"
-                currentLoadedFile.PCReverb.Filter2 = TrackBar_Filter2.Value
-            Case "XBox"
-                currentLoadedFile.XBReverb.Filter2 = TrackBar_Filter2.Value
-            Case "GameCube"
-                currentLoadedFile.GCReverb.Filter2 = TrackBar_Filter2.Value
-        End Select
+        If currentLoadedFile IsNot Nothing Then
+            fileHasBeenModified = True
+            Select Case TabControl1.SelectedTab.Text
+                Case "PC"
+                    currentLoadedFile.PCReverb.Filter2 = TrackBar_Filter2.Value
+                Case "XBox"
+                    currentLoadedFile.XBReverb.Filter2 = TrackBar_Filter2.Value
+                Case "GameCube"
+                    currentLoadedFile.GCReverb.Filter2 = TrackBar_Filter2.Value
+            End Select
+        End If
     End Sub
 End Class
