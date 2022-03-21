@@ -180,89 +180,89 @@ Public Class SfxDefault
             End If
 
             'Save other data in the text file
-            FileOpen(1, sfxDefaultsFilePath, OpenMode.Output, OpenAccess.Write, OpenShare.LockReadWrite)
-            PrintLine(1, "## EuroSound SFX Defaults File File")
-            PrintLine(1, "## First Created ... " & headerData.FirstCreated)
-            PrintLine(1, "## Created By ... " & headerData.CreatedBy)
-            PrintLine(1, "## Last Modified ... " & headerData.LastModify)
-            PrintLine(1, "## Last Modified By ... " & headerData.LastModifyBy)
-            PrintLine(1, "")
+            Using outputFile As New StreamWriter(sfxDefaultsFilePath)
+                outputFile.WriteLine("## EuroSound SFX Defaults File File")
+                outputFile.WriteLine("## First Created ... " & headerData.FirstCreated)
+                outputFile.WriteLine("## Created By ... " & headerData.CreatedBy)
+                outputFile.WriteLine("## Last Modified ... " & headerData.LastModify)
+                outputFile.WriteLine("## Last Modified By ... " & headerData.LastModifyBy)
+                outputFile.WriteLine("")
 
-            'Variables used by radiobuttons
-            Dim TrackingType As Byte = 0, action1 As Byte = 0, actionSamplePool As Byte = 0
+                'Variables used by radiobuttons
+                Dim TrackingType As Byte = 0, action1 As Byte = 0, actionSamplePool As Byte = 0
 
-            'SFX Parameters
-            PrintLine(1, "#SFXParameters")
-            PrintLine(1, String.Format("ReverbSend  {0}", SfxParamsAndSamplePool1.TrackBar_Reverb.Value))
-            If SfxParamsAndSamplePool1.RadioButton_Tracking_2D.Checked Then
-                TrackingType = 0
-            End If
-            If SfxParamsAndSamplePool1.RadioButton_TrackingType_Amb.Checked Then
-                TrackingType = 1
-            End If
-            If SfxParamsAndSamplePool1.RadioButton_TrackingType_3D.Checked Then
-                TrackingType = 2
-            End If
-            If SfxParamsAndSamplePool1.RadioButton_TrackingType_3DRandom.Checked Then
-                TrackingType = 3
-            End If
-            If SfxParamsAndSamplePool1.RadioButton_Tracking_2DPL2.Checked Then
-                TrackingType = 4
-            End If
-            PrintLine(1, String.Format("TrackingType  {0}", TrackingType))
-            PrintLine(1, String.Format("InnerRadius  {0}", SfxParamsAndSamplePool1.TrackBar_InnerRadius.Value))
-            PrintLine(1, String.Format("OuterRadius  {0}", SfxParamsAndSamplePool1.TrackBar_OuterRadius.Value))
-            PrintLine(1, String.Format("MaxVoices  {0}", SfxParamsAndSamplePool1.Numeric_MaxVoices.Value))
-            If SfxParamsAndSamplePool1.RadioButton_ActionSteal.Checked Then
-                action1 = 0
-            End If
-            If SfxParamsAndSamplePool1.RadioButton_ActionReject.Checked Then
-                action1 = 1
-            End If
-            PrintLine(1, String.Format("Action1  {0}", action1))
-            PrintLine(1, String.Format("Priority  {0}", SfxParamsAndSamplePool1.Numeric_Priority.Value))
-            PrintLine(1, String.Format("Group  {0}", 0))
-            PrintLine(1, String.Format("Action2  {0}", 0))
-            PrintLine(1, String.Format("Alertness  {0}", SfxParamsAndSamplePool1.Numeric_Alertness.Value))
-            PrintLine(1, String.Format("IgnoreAge  {0}", If(SfxParamsAndSamplePool1.CheckBox_IgnoreAge.Checked, 1, 0)))
-            PrintLine(1, String.Format("Ducker  {0}", SfxParamsAndSamplePool1.Numeric_Ducker.Value))
-            PrintLine(1, String.Format("DuckerLenght  {0}", SfxParamsAndSamplePool1.Numeric_DuckerLength.Value))
-            PrintLine(1, String.Format("MasterVolume  {0}", SfxParamsAndSamplePool1.Numeric_MasterVolume.Value))
-            PrintLine(1, String.Format("Outdoors  {0}", If(SfxParamsAndSamplePool1.CheckBox_UnderWater.Checked, 1, 0)))
-            PrintLine(1, String.Format("PauseInNis  {0}", If(SfxParamsAndSamplePool1.Checkbox_PauseInNis.Checked, 1, 0)))
-            PrintLine(1, String.Format("StealOnAge  {0}", If(SfxParamsAndSamplePool1.CheckBox_StealOnLouder.Checked, 1, 0)))
-            PrintLine(1, String.Format("MusicType  {0}", If(SfxParamsAndSamplePool1.Checkbox_MusicType.Checked, 1, 0)))
-            If SfxParamsAndSamplePool1.Checkbox_Doppler.Checked Then
-                PrintLine(1, String.Format("Doppler  {0}", If(SfxParamsAndSamplePool1.Checkbox_Doppler.Checked, 1, 0)))
-            End If
-            PrintLine(1, "#END")
-            PrintLine(1, "")
+                'SFX Parameters
+                outputFile.WriteLine("#SFXParameters")
+                outputFile.WriteLine(String.Format("ReverbSend  {0}", SfxParamsAndSamplePool1.TrackBar_Reverb.Value))
+                If SfxParamsAndSamplePool1.RadioButton_Tracking_2D.Checked Then
+                    TrackingType = 0
+                End If
+                If SfxParamsAndSamplePool1.RadioButton_TrackingType_Amb.Checked Then
+                    TrackingType = 1
+                End If
+                If SfxParamsAndSamplePool1.RadioButton_TrackingType_3D.Checked Then
+                    TrackingType = 2
+                End If
+                If SfxParamsAndSamplePool1.RadioButton_TrackingType_3DRandom.Checked Then
+                    TrackingType = 3
+                End If
+                If SfxParamsAndSamplePool1.RadioButton_Tracking_2DPL2.Checked Then
+                    TrackingType = 4
+                End If
+                outputFile.WriteLine(String.Format("TrackingType  {0}", TrackingType))
+                outputFile.WriteLine(String.Format("InnerRadius  {0}", SfxParamsAndSamplePool1.TrackBar_InnerRadius.Value))
+                outputFile.WriteLine(String.Format("OuterRadius  {0}", SfxParamsAndSamplePool1.TrackBar_OuterRadius.Value))
+                outputFile.WriteLine(String.Format("MaxVoices  {0}", SfxParamsAndSamplePool1.Numeric_MaxVoices.Value))
+                If SfxParamsAndSamplePool1.RadioButton_ActionSteal.Checked Then
+                    action1 = 0
+                End If
+                If SfxParamsAndSamplePool1.RadioButton_ActionReject.Checked Then
+                    action1 = 1
+                End If
+                outputFile.WriteLine(String.Format("Action1  {0}", action1))
+                outputFile.WriteLine(String.Format("Priority  {0}", SfxParamsAndSamplePool1.Numeric_Priority.Value))
+                outputFile.WriteLine(String.Format("Group  {0}", 0))
+                outputFile.WriteLine(String.Format("Action2  {0}", 0))
+                outputFile.WriteLine(String.Format("Alertness  {0}", SfxParamsAndSamplePool1.Numeric_Alertness.Value))
+                outputFile.WriteLine(String.Format("IgnoreAge  {0}", If(SfxParamsAndSamplePool1.CheckBox_IgnoreAge.Checked, 1, 0)))
+                outputFile.WriteLine(String.Format("Ducker  {0}", SfxParamsAndSamplePool1.Numeric_Ducker.Value))
+                outputFile.WriteLine(String.Format("DuckerLenght  {0}", SfxParamsAndSamplePool1.Numeric_DuckerLength.Value))
+                outputFile.WriteLine(String.Format("MasterVolume  {0}", SfxParamsAndSamplePool1.Numeric_MasterVolume.Value))
+                outputFile.WriteLine(String.Format("Outdoors  {0}", If(SfxParamsAndSamplePool1.CheckBox_UnderWater.Checked, 1, 0)))
+                outputFile.WriteLine(String.Format("PauseInNis  {0}", If(SfxParamsAndSamplePool1.Checkbox_PauseInNis.Checked, 1, 0)))
+                outputFile.WriteLine(String.Format("StealOnAge  {0}", If(SfxParamsAndSamplePool1.CheckBox_StealOnLouder.Checked, 1, 0)))
+                outputFile.WriteLine(String.Format("MusicType  {0}", If(SfxParamsAndSamplePool1.Checkbox_MusicType.Checked, 1, 0)))
+                If SfxParamsAndSamplePool1.Checkbox_Doppler.Checked Then
+                    outputFile.WriteLine(String.Format("Doppler  {0}", If(SfxParamsAndSamplePool1.Checkbox_Doppler.Checked, 1, 0)))
+                End If
+                outputFile.WriteLine("#END")
+                outputFile.WriteLine("")
 
-            'Write SFXSamplePoolControl
-            PrintLine(1, "#SFXSamplePoolControl")
-            If SfxParamsAndSamplePool1.RadioButton_Single.Checked Then
-                actionSamplePool = 0
-            End If
-            If SfxParamsAndSamplePool1.RadioButton_MultiSample.Checked Then
-                actionSamplePool = 1
-            End If
-            PrintLine(1, String.Format("Action1  {0}", actionSamplePool))
-            PrintLine(1, String.Format("RandomPick  {0}", If(SfxParamsAndSamplePool1.CheckBox_RandomPick.Checked, 1, 0)))
-            PrintLine(1, String.Format("Shuffled  {0}", If(SfxParamsAndSamplePool1.CheckBox_Shuffled.Checked, 1, 0)))
-            PrintLine(1, String.Format("Loop  {0}", If(SfxParamsAndSamplePool1.CheckBox_SamplePoolLoop.Checked, 1, 0)))
-            PrintLine(1, String.Format("Polyphonic  {0}", If(SfxParamsAndSamplePool1.CheckBox_Polyphonic.Checked, 1, 0)))
-            PrintLine(1, String.Format("MinDelay  {0}", SfxParamsAndSamplePool1.Numeric_MinDelay.Value))
-            PrintLine(1, String.Format("MaxDelay  {0}", SfxParamsAndSamplePool1.Numeric_MaxDelay.Value))
-            PrintLine(1, String.Format("EnableSubSFX  {0}", 0))
-            PrintLine(1, String.Format("EnableStereo  {0}", 0))
-            PrintLine(1, "#END")
-            PrintLine(1, "")
+                'Write SFXSamplePoolControl
+                outputFile.WriteLine("#SFXSamplePoolControl")
+                If SfxParamsAndSamplePool1.RadioButton_Single.Checked Then
+                    actionSamplePool = 0
+                End If
+                If SfxParamsAndSamplePool1.RadioButton_MultiSample.Checked Then
+                    actionSamplePool = 1
+                End If
+                outputFile.WriteLine(String.Format("Action1  {0}", actionSamplePool))
+                outputFile.WriteLine(String.Format("RandomPick  {0}", If(SfxParamsAndSamplePool1.CheckBox_RandomPick.Checked, 1, 0)))
+                outputFile.WriteLine(String.Format("Shuffled  {0}", If(SfxParamsAndSamplePool1.CheckBox_Shuffled.Checked, 1, 0)))
+                outputFile.WriteLine(String.Format("Loop  {0}", If(SfxParamsAndSamplePool1.CheckBox_SamplePoolLoop.Checked, 1, 0)))
+                outputFile.WriteLine(String.Format("Polyphonic  {0}", If(SfxParamsAndSamplePool1.CheckBox_Polyphonic.Checked, 1, 0)))
+                outputFile.WriteLine(String.Format("MinDelay  {0}", SfxParamsAndSamplePool1.Numeric_MinDelay.Value))
+                outputFile.WriteLine(String.Format("MaxDelay  {0}", SfxParamsAndSamplePool1.Numeric_MaxDelay.Value))
+                outputFile.WriteLine(String.Format("EnableSubSFX  {0}", 0))
+                outputFile.WriteLine(String.Format("EnableStereo  {0}", 0))
+                outputFile.WriteLine("#END")
+                outputFile.WriteLine("")
 
-            'Write HASHCODE
-            PrintLine(1, "#HASHCODE")
-            PrintLine(1, "HashCodeNumber " & 0)
-            PrintLine(1, "#END")
-            FileClose(1)
+                'Write HASHCODE
+                outputFile.WriteLine("#HASHCODE")
+                outputFile.WriteLine("HashCodeNumber " & 0)
+                outputFile.WriteLine("#END")
+            End Using
         End If
     End Sub
 End Class

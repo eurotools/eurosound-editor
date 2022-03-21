@@ -181,9 +181,9 @@ Partial Public Class ExporterForm
     '*===============================================================================================
     Private Sub CreatePrePostOutputBatIfRequired(batFilePath As String, comment As String)
         If Not File.Exists(batFilePath) Then
-            FileOpen(1, batFilePath, OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
-            PrintLine(1, comment)
-            FileClose(1)
+            Using outputFile As New StreamWriter(batFilePath)
+                outputFile.WriteLine(comment)
+            End Using
         End If
     End Sub
 End Class

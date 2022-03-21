@@ -81,18 +81,20 @@ Public Class Frm_MakePurgeList
         Next
 
         'Print items to file
-        FileOpen(2, Path.Combine(outputFilePath, "Last_Purge.txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
-        PrintLine(2, "Purged File List Created: 	" & Date.Now.ToString("MM/dd/yyyy") & "	" & Date.Now.ToString("HH:mm:ss"))
-        PrintLine(2, "")
-        PrintLine(2, "#PurgedFileList")
-        Dim arrayToPrint As String() = samplesToPrint.ToArray
-        Array.Sort(arrayToPrint)
-        For itemIndex As Integer = 0 To arrayToPrint.Length - 1
-            PrintLine(2, arrayToPrint(itemIndex))
-        Next
-        PrintLine(2, "#END")
-        FileClose(2)
-        filesCount = arrayToPrint.Length - 1
+        Using outputFile As New StreamWriter(outputFilePath)
+            outputFile.WriteLine("Purged File List Created: 	" & Date.Now.ToString("MM/dd/yyyy") & "	" & Date.Now.ToString("HH:mm:ss"))
+            outputFile.WriteLine("")
+            outputFile.WriteLine("#PurgedFileList")
+
+            Dim arrayToPrint As String() = samplesToPrint.ToArray
+            Array.Sort(arrayToPrint)
+            For itemIndex As Integer = 0 To arrayToPrint.Length - 1
+                outputFile.WriteLine(arrayToPrint(itemIndex))
+            Next
+            outputFile.WriteLine("#END")
+
+            filesCount = arrayToPrint.Length - 1
+        End Using
     End Sub
 
     Private Sub BackgroundWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker.ProgressChanged

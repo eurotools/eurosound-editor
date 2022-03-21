@@ -51,69 +51,69 @@ Partial Public Class AdvancedMenu
         Dim soundBankSizes As List(Of String) = GetSoundBankFormatSizes(soundBankData, soundBankSamplesList, outputFormat, totalSampleSize)
 
         'Create file
-        FileOpen(2, reportFilePath, OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
-        PrintLine(2, "SoundBank Report Created: 	" & Date.Now.ToString("MM/dd/yyyy") & "	" & Date.Now.ToString("HH:mm:ss"))
-        PrintLine(2, "")
-        PrintLine(2, "SoundBank Name: " & selectedSoundBank)
-        PrintLine(2, "")
-        PrintLine(2, "First Created :		 " & soundBankData.HeaderInfo.FirstCreated)
-        PrintLine(2, "Created By :		 " & soundBankData.HeaderInfo.CreatedBy)
-        PrintLine(2, "Last Modified :		 " & soundBankData.HeaderInfo.LastModify)
-        PrintLine(2, "Last Modified By :		 " & soundBankData.HeaderInfo.LastModifyBy)
-        PrintLine(2, "")
-        PrintLine(2, "Database Count:		" & soundBankData.Dependencies.Length)
-        PrintLine(2, "SFX Count:		" & soundBankSFXs.Length)
-        PrintLine(2, "Sample Count:		" & soundBankSamplesList.Length)
-        PrintLine(2, "")
-        PrintLine(2, "Total Sample Size:		" & BytesStringFormat(totalSampleSize))
-        PrintLine(2, "")
-        'Print values
-        For itemIndex As Integer = 0 To soundBankSizes.Count - 1
-            Dim currentFormat As String = soundBankSizes(itemIndex)
-            Dim dataToPrint As String() = Split(currentFormat, ";")
-            Select Case dataToPrint(0)
-                Case "PlayStation2"
-                    PrintLine(2, "PlayStation2:		" & dataToPrint(1))
-                Case "GameCube"
-                    PrintLine(2, "GameCube:		" & dataToPrint(1))
-                Case "PC"
-                    PrintLine(2, "PC:		" & dataToPrint(1))
-                Case Else
-                    PrintLine(2, "X Box:		" & dataToPrint(1))
-            End Select
-        Next
-        PrintLine(2, "")
-        PrintLine(2, "")
-        PrintLine(2, "DataBases:  " & soundBankData.Dependencies.Length)
-        PrintLine(2, "SFXs:  " & soundBankSFXs.Length)
-        PrintLine(2, "Samples:  " & soundBankSamplesList.Length)
-        PrintLine(2, "")
-        PrintLine(2, "")
-        'Print SoundBank info
-        Dim samplePathStartPos As Integer = Len(ProjectSettingsFile.MiscProps.SampleFileFolder)
-        For databaseIndex As Integer = 0 To soundBankData.Dependencies.Length - 1
-            'Get Database Data
-            Dim currentDataBase As String = soundBankData.Dependencies(databaseIndex)
-            Dim dataBaseFilePath As String = Path.Combine(WorkingDirectory, "DataBases", currentDataBase & ".txt")
-            If File.Exists(dataBaseFilePath) Then
-                Dim dataBaseSFXs As DataBaseFile = readers.ReadDataBaseFile(dataBaseFilePath)
-                PrintLine(2, "DataBase: 	" & currentDataBase)
-                'Get SFXs in this DataBase
-                For sfxIndex As Integer = 0 To dataBaseSFXs.Dependencies.Length - 1
-                    Dim currentSfx As String = dataBaseSFXs.Dependencies(sfxIndex)
-                    soundBankSamplesList = GetSamplesList(New String() {currentSfx})
-                    PrintLine(2, "	SFX: 	" & soundBankSFXs(sfxIndex))
-                    'Print Samples in this SFX
-                    For sampleIndex As Integer = 0 To soundBankSamplesList.Length - 1
-                        PrintLine(2, "		Sample: 	" & Mid(soundBankSamplesList(sampleIndex), samplePathStartPos + 1))
+        Using outputFile As New StreamWriter(reportFilePath)
+            outputFile.WriteLine("SoundBank Report Created: 	" & Date.Now.ToString("MM/dd/yyyy") & "	" & Date.Now.ToString("HH:mm:ss"))
+            outputFile.WriteLine("")
+            outputFile.WriteLine("SoundBank Name: " & selectedSoundBank)
+            outputFile.WriteLine("")
+            outputFile.WriteLine("First Created :		 " & soundBankData.HeaderInfo.FirstCreated)
+            outputFile.WriteLine("Created By :		 " & soundBankData.HeaderInfo.CreatedBy)
+            outputFile.WriteLine("Last Modified :		 " & soundBankData.HeaderInfo.LastModify)
+            outputFile.WriteLine("Last Modified By :		 " & soundBankData.HeaderInfo.LastModifyBy)
+            outputFile.WriteLine("")
+            outputFile.WriteLine("Database Count:		" & soundBankData.Dependencies.Length)
+            outputFile.WriteLine("SFX Count:		" & soundBankSFXs.Length)
+            outputFile.WriteLine("Sample Count:		" & soundBankSamplesList.Length)
+            outputFile.WriteLine("")
+            outputFile.WriteLine("Total Sample Size:		" & BytesStringFormat(totalSampleSize))
+            outputFile.WriteLine("")
+            'Print values
+            For itemIndex As Integer = 0 To soundBankSizes.Count - 1
+                Dim currentFormat As String = soundBankSizes(itemIndex)
+                Dim dataToPrint As String() = Split(currentFormat, ";")
+                Select Case dataToPrint(0)
+                    Case "PlayStation2"
+                        outputFile.WriteLine("PlayStation2:		" & dataToPrint(1))
+                    Case "GameCube"
+                        outputFile.WriteLine("GameCube:		" & dataToPrint(1))
+                    Case "PC"
+                        outputFile.WriteLine("PC:		" & dataToPrint(1))
+                    Case Else
+                        outputFile.WriteLine("X Box:		" & dataToPrint(1))
+                End Select
+            Next
+            outputFile.WriteLine("")
+            outputFile.WriteLine("")
+            outputFile.WriteLine("DataBases:  " & soundBankData.Dependencies.Length)
+            outputFile.WriteLine("SFXs:  " & soundBankSFXs.Length)
+            outputFile.WriteLine("Samples:  " & soundBankSamplesList.Length)
+            outputFile.WriteLine("")
+            outputFile.WriteLine("")
+            'Print SoundBank info
+            Dim samplePathStartPos As Integer = Len(ProjectSettingsFile.MiscProps.SampleFileFolder)
+            For databaseIndex As Integer = 0 To soundBankData.Dependencies.Length - 1
+                'Get Database Data
+                Dim currentDataBase As String = soundBankData.Dependencies(databaseIndex)
+                Dim dataBaseFilePath As String = Path.Combine(WorkingDirectory, "DataBases", currentDataBase & ".txt")
+                If File.Exists(dataBaseFilePath) Then
+                    Dim dataBaseSFXs As DataBaseFile = readers.ReadDataBaseFile(dataBaseFilePath)
+                    outputFile.WriteLine("DataBase: 	" & currentDataBase)
+                    'Get SFXs in this DataBase
+                    For sfxIndex As Integer = 0 To dataBaseSFXs.Dependencies.Length - 1
+                        Dim currentSfx As String = dataBaseSFXs.Dependencies(sfxIndex)
+                        soundBankSamplesList = GetSamplesList(New String() {currentSfx})
+                        outputFile.WriteLine("	SFX: 	" & soundBankSFXs(sfxIndex))
+                        'Print Samples in this SFX
+                        For sampleIndex As Integer = 0 To soundBankSamplesList.Length - 1
+                            outputFile.WriteLine("		Sample: 	" & Mid(soundBankSamplesList(sampleIndex), samplePathStartPos + 1))
+                        Next
+                        outputFile.WriteLine("	End SFX")
                     Next
-                    PrintLine(2, "	End SFX")
-                Next
-                PrintLine(2, "End DataBase")
-                PrintLine(2, "")
-            End If
-        Next
-        FileClose(2)
+                    outputFile.WriteLine("End DataBase")
+                    outputFile.WriteLine("")
+                End If
+            Next
+        End Using
     End Sub
 
     Private Function GetSoundBankFormatSizes(soundBankData As SoundbankFile, soundBankSamplesList As String(), OutputLanguage As String, ByRef totalSampleSize As Integer) As List(Of String)

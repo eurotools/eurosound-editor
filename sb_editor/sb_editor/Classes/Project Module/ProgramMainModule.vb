@@ -261,8 +261,9 @@ Module ProgramMainModule
     '*===============================================================================================
     Friend Sub AddProjectLanguagesToCombo(comboboxToModify As ComboBox)
         'Get project languages
-        If Directory.Exists(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", "Speech")) Then
-            Dim languages As String() = Directory.GetDirectories(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", "Speech"))
+        Dim samplesFolder As String = ProjectSettingsFile.MiscProps.SampleFileFolder
+        If samplesFolder > "" AndAlso Directory.Exists(Path.Combine(samplesFolder, "Master", "Speech")) Then
+            Dim languages As String() = Directory.GetDirectories(Path.Combine(samplesFolder, "Master", "Speech"))
 
             'Previous Selected Index
             Dim comboPrevSelection As String = comboboxToModify.SelectedItem

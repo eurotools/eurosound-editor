@@ -35,67 +35,66 @@ Partial Public Class ExporterForm
                         Dim filesToBind As New List(Of String)
                         Dim currentPlatform As String = outPlatforms(platformIndex, 0)
                         'Create Debug file
-                        FileOpen(1, Path.Combine(debugFolder, "StreamsConverted_" & currentLanguage & "_" & currentPlatform & ".txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
-                        'For each Sample
-                        For sampleIndex As Integer = 0 To streamSamplesCount
-                            'If starts with speech but doesn't match the current language, skip
-                            Dim sampleFilePath As String = streamSamplesList(sampleIndex)
-                            If InStr(1, sampleFilePath, "Speech\", CompareMethod.Binary) Then
-                                If StrComp(currentLanguage, "English", CompareMethod.Binary) <> 0 Then
-                                    Dim multiSamplePath As String = Mid(sampleFilePath, Len("Speech\English\") + 1)
-                                    sampleFilePath = Path.Combine("Speech", currentLanguage, multiSamplePath)
+                        Using outputFile As New StreamWriter(Path.Combine(debugFolder, "StreamsConverted_" & currentLanguage & "_" & currentPlatform & ".txt"))
+                            'For each Sample
+                            For sampleIndex As Integer = 0 To streamSamplesCount
+                                'If starts with speech but doesn't match the current language, skip
+                                Dim sampleFilePath As String = streamSamplesList(sampleIndex)
+                                If InStr(1, sampleFilePath, "Speech\", CompareMethod.Binary) Then
+                                    If StrComp(currentLanguage, "English", CompareMethod.Binary) <> 0 Then
+                                        Dim multiSamplePath As String = Mid(sampleFilePath, Len("Speech\English\") + 1)
+                                        sampleFilePath = Path.Combine("Speech", currentLanguage, multiSamplePath)
+                                    End If
                                 End If
-                            End If
 
-                            'Get destination folder
-                            Dim destinationFolder As String = Path.Combine(WorkingDirectory, currentPlatform & "_Streams", currentLanguage)
-                            Dim destinationFilePath As String = Path.Combine(destinationFolder, "STR_" & sampleIndex & ".ssd")
+                                'Get destination folder
+                                Dim destinationFolder As String = Path.Combine(WorkingDirectory, currentPlatform & "_Streams", currentLanguage)
+                                Dim destinationFilePath As String = Path.Combine(destinationFolder, "STR_" & sampleIndex & ".ssd")
 
-                            Select Case currentPlatform
-                                Case "PC"
-                                    Dim sampleFullPath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, currentPlatform & "_Software_adpcm", sampleFilePath), ".ssp")
-                                    BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, streamSamplesCount) * 100.0, currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
+                                Select Case currentPlatform
+                                    Case "PC"
+                                        Dim sampleFullPath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, currentPlatform & "_Software_adpcm", sampleFilePath), ".ssp")
+                                        BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, streamSamplesCount) * 100.0, currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
 
-                                    If File.Exists(sampleFullPath) Then
-                                        CreateStreamsForPcAndGC(sampleFullPath, destinationFilePath, filesToBind)
-                                        CreateMarkerFileIfRequired(sampleFilePath, destinationFilePath, currentPlatform)
-                                    Else
-                                        Invoke(Sub() MsgBox("ReSampleStreams. File Not Here: " & sampleFullPath, vbOKOnly + vbCritical, "EuroSound"))
-                                    End If
-                                Case "GameCube"
-                                    Dim sampleFullPath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, currentPlatform & "_Software_adpcm", sampleFilePath), ".ssp")
-                                    BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, streamSamplesCount) * 100.0, currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
+                                        If File.Exists(sampleFullPath) Then
+                                            CreateStreamsForPcAndGC(outputFile, sampleFullPath, destinationFilePath, filesToBind)
+                                            CreateMarkerFileIfRequired(sampleFilePath, destinationFilePath, currentPlatform)
+                                        Else
+                                            Invoke(Sub() MsgBox("ReSampleStreams. File Not Here: " & sampleFullPath, vbOKOnly + vbCritical, "EuroSound"))
+                                        End If
+                                    Case "GameCube"
+                                        Dim sampleFullPath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, currentPlatform & "_Software_adpcm", sampleFilePath), ".ssp")
+                                        BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, streamSamplesCount) * 100.0, currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
 
-                                    If File.Exists(sampleFullPath) Then
-                                        CreateStreamsForPcAndGC(sampleFullPath, destinationFilePath, filesToBind)
-                                        CreateMarkerFileIfRequired(sampleFilePath, destinationFilePath, currentPlatform)
-                                    Else
-                                        Invoke(Sub() MsgBox("ReSampleStreams. File Not Here: " & sampleFullPath, vbOKOnly + vbCritical, "EuroSound"))
-                                    End If
-                                Case "PlayStation2"
-                                    Dim sampleFullPath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, "PlayStation2_VAG", sampleFilePath), ".vag")
-                                    BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, streamSamplesCount) * 100.0, currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
+                                        If File.Exists(sampleFullPath) Then
+                                            CreateStreamsForPcAndGC(outputFile, sampleFullPath, destinationFilePath, filesToBind)
+                                            CreateMarkerFileIfRequired(sampleFilePath, destinationFilePath, currentPlatform)
+                                        Else
+                                            Invoke(Sub() MsgBox("ReSampleStreams. File Not Here: " & sampleFullPath, vbOKOnly + vbCritical, "EuroSound"))
+                                        End If
+                                    Case "PlayStation2"
+                                        Dim sampleFullPath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, "PlayStation2_VAG", sampleFilePath), ".vag")
+                                        BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, streamSamplesCount) * 100.0, currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
 
-                                    If File.Exists(sampleFullPath) Then
-                                        CreateStreamsForPlayStation2(sampleFullPath, destinationFilePath, filesToBind)
-                                        CreateMarkerFileIfRequired(sampleFilePath, destinationFilePath, currentPlatform)
-                                    Else
-                                        Invoke(Sub() MsgBox("ReSampleStreams. File Not Here: " & sampleFullPath, vbOKOnly + vbCritical, "EuroSound"))
-                                    End If
-                                Case Else
-                                    Dim sampleFullPath As String = Path.Combine(WorkingDirectory, "XBox_adpcm", sampleFilePath)
-                                    BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, streamSamplesCount) * 100.0, currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
+                                        If File.Exists(sampleFullPath) Then
+                                            CreateStreamsForPlayStation2(outputFile, sampleFullPath, destinationFilePath, filesToBind)
+                                            CreateMarkerFileIfRequired(sampleFilePath, destinationFilePath, currentPlatform)
+                                        Else
+                                            Invoke(Sub() MsgBox("ReSampleStreams. File Not Here: " & sampleFullPath, vbOKOnly + vbCritical, "EuroSound"))
+                                        End If
+                                    Case Else
+                                        Dim sampleFullPath As String = Path.Combine(WorkingDirectory, "XBox_adpcm", sampleFilePath)
+                                        BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, streamSamplesCount) * 100.0, currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
 
-                                    If File.Exists(sampleFullPath) Then
-                                        CreateStreamsForXbox(sampleFullPath, destinationFilePath, filesToBind)
-                                        CreateMarkerFileIfRequired(sampleFilePath, destinationFilePath, currentPlatform)
-                                    Else
-                                        Invoke(Sub() MsgBox("ReSampleStreams. File Not Here: " & sampleFullPath, vbOKOnly + vbCritical, "EuroSound"))
-                                    End If
-                            End Select
-                        Next
-                        'Close file
-                        FileClose(1)
+                                        If File.Exists(sampleFullPath) Then
+                                            CreateStreamsForXbox(outputFile, sampleFullPath, destinationFilePath, filesToBind)
+                                            CreateMarkerFileIfRequired(sampleFilePath, destinationFilePath, currentPlatform)
+                                        Else
+                                            Invoke(Sub() MsgBox("ReSampleStreams. File Not Here: " & sampleFullPath, vbOKOnly + vbCritical, "EuroSound"))
+                                        End If
+                                End Select
+                            Next
+                        End Using
 
                         'Build Temporal Stream File
                         Dim temporalOutputFile As String = Path.Combine(WorkingDirectory, "TempOutputFolder", currentPlatform, currentLanguage, "Streams")
@@ -119,33 +118,33 @@ Partial Public Class ExporterForm
         End If
     End Sub
 
-    Private Sub CreateStreamsForPcAndGC(sampleFullPath As String, destinationFilePath As String, filesToBind As List(Of String))
+    Private Sub CreateStreamsForPcAndGC(outputFile As StreamWriter, sampleFullPath As String, destinationFilePath As String, filesToBind As List(Of String))
         File.Copy(sampleFullPath, destinationFilePath, True)
         filesToBind.Add(destinationFilePath)
 
         'Write to debug file
-        PrintLine(1, "InputFile = " & sampleFullPath)
-        PrintLine(1, "OutputFileName = " & destinationFilePath)
+        outputFile.WriteLine("InputFile = " & sampleFullPath)
+        outputFile.WriteLine("OutputFileName = " & destinationFilePath)
     End Sub
 
-    Private Sub CreateStreamsForPlayStation2(sampleFullPath As String, destinationFilePath As String, filesToBind As List(Of String))
+    Private Sub CreateStreamsForPlayStation2(outputFile As StreamWriter, sampleFullPath As String, destinationFilePath As String, filesToBind As List(Of String))
         Dim vagFileData As Byte() = GetVagFileDataChunk(sampleFullPath)
         File.WriteAllBytes(destinationFilePath, vagFileData)
         filesToBind.Add(destinationFilePath)
 
         'Write to debug file
-        PrintLine(1, "InputFile = " & sampleFullPath)
-        PrintLine(1, "OutputFileName = " & destinationFilePath)
+        outputFile.WriteLine("InputFile = " & sampleFullPath)
+        outputFile.WriteLine("OutputFileName = " & destinationFilePath)
     End Sub
 
-    Private Sub CreateStreamsForXbox(sampleFullPath As String, destinationFilePath As String, filesToBind As List(Of String))
+    Private Sub CreateStreamsForXbox(outputFile As StreamWriter, sampleFullPath As String, destinationFilePath As String, filesToBind As List(Of String))
         Dim adpcmFileData As Byte() = GetXboxAdpcmDataChunk(sampleFullPath)
         File.WriteAllBytes(destinationFilePath, adpcmFileData)
         filesToBind.Add(destinationFilePath)
 
         'Write to debug file
-        PrintLine(1, "InputFile = " & sampleFullPath)
-        PrintLine(1, "OutputFileName = " & destinationFilePath)
+        outputFile.WriteLine("InputFile = " & sampleFullPath)
+        outputFile.WriteLine("OutputFileName = " & destinationFilePath)
     End Sub
 
     Private Sub CreateMarkerFileIfRequired(sampleFilePath As String, destFilePath As String, currentPlatform As String)

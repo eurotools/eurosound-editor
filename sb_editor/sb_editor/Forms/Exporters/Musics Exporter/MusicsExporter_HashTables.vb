@@ -15,15 +15,15 @@ Partial Public Class MusicsExporter
             If File.Exists(jumpMarkersFilePath) Then
                 Dim jumpHashCodes As String() = textFileReaders.ReadJumpFile(jumpMarkersFilePath)
                 'Append data
-                FileOpen(1, musicDefinesFilePath, OpenMode.Append)
-                PrintLine(1, "")
-                PrintLine(1, "// Music Jump Codes For Level MFX_" & musicItem.Key)
-                For jumpHashCode As Integer = 0 To jumpHashCodes.Length - 1
-                    Dim mfxHashCode As Short = musicItem.Value
-                    Dim hashCode As UInteger = ((&H1BE And &HFFF) << 20) Or ((jumpHashCode And &HFF) << 8) Or ((mfxHashCode And &HFF) << 0)
-                    PrintLine(1, "#define " & "JMP_" & jumpHashCodes(jumpHashCode) & " 0x" & Hex(hashCode))
-                Next
-                FileClose(1)
+                Using outputFile As New StreamWriter(musicDefinesFilePath)
+                    outputFile.WriteLine("")
+                    outputFile.WriteLine("// Music Jump Codes For Level MFX_" & musicItem.Key)
+                    For jumpHashCode As Integer = 0 To jumpHashCodes.Length - 1
+                        Dim mfxHashCode As Short = musicItem.Value
+                        Dim hashCode As UInteger = ((&H1BE And &HFFF) << 20) Or ((jumpHashCode And &HFF) << 8) Or ((mfxHashCode And &HFF) << 0)
+                        outputFile.WriteLine("#define " & "JMP_" & jumpHashCodes(jumpHashCode) & " 0x" & Hex(hashCode))
+                    Next
+                End Using
             End If
             numIteration += 1
         Next
@@ -84,37 +84,37 @@ Partial Public Class MusicsExporter
     '* MFX_Data.h
     '*===============================================================================================
     Private Sub CreateMfxData(filePath As String, mfxDict As Dictionary(Of UInteger, String()))
-        FileOpen(1, filePath, OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
-        PrintLine(1, "// Music Data table from EuroSound 1")
-        PrintLine(1, "// " & Date.Now.ToString("dddd, dd MMMM yyyy"))
-        PrintLine(1, "")
-        PrintLine(1, "typedef struct{")
-        PrintLine(1, "	u32      MusicHashCode;")
-        PrintLine(1, "	float    DurationInSeconds;")
-        PrintLine(1, "	bool     Looping;")
-        PrintLine(1, "} MusicDetails;")
-        PrintLine(1, "")
-        PrintLine(1, "MusicDetails MusicData[]={")
-        For Each mfxItem In mfxDict
-            Dim musicDataValues As String() = mfxItem.Value
-            Dim hashCode As String = NumberToHex(mfxItem.Key + &H1BE00000)
-            PrintLine(1, "	{" & hashCode & "," & musicDataValues(0) & "," & musicDataValues(1) & "},")
-        Next
-        PrintLine(1, "};")
-        FileClose(1)
+        Using outputFile As New StreamWriter(filePath)
+            outputFile.WriteLine("// Music Data table from EuroSound 1")
+            outputFile.WriteLine("// " & Date.Now.ToString("dddd, dd MMMM yyyy"))
+            outputFile.WriteLine("")
+            outputFile.WriteLine("typedef struct{")
+            outputFile.WriteLine("	u32      MusicHashCode;")
+            outputFile.WriteLine("	float    DurationInSeconds;")
+            outputFile.WriteLine("	bool     Looping;")
+            outputFile.WriteLine("} MusicDetails;")
+            outputFile.WriteLine("")
+            outputFile.WriteLine("MusicDetails MusicData[]={")
+            For Each mfxItem In mfxDict
+                Dim musicDataValues As String() = mfxItem.Value
+                Dim hashCode As String = NumberToHex(mfxItem.Key + &H1BE00000)
+                outputFile.WriteLine("	{" & hashCode & "," & musicDataValues(0) & "," & musicDataValues(1) & "},")
+            Next
+            outputFile.WriteLine("};")
+        End Using
     End Sub
 
     '*===============================================================================================
     '* MFX_ValidList.h
     '*===============================================================================================
     Private Sub CreateMfxValidList(filePath As String, mfxDict As Dictionary(Of UInteger, String))
-        FileOpen(1, filePath, OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
-        PrintLine(1, "s32 MFX_ValidList[]={")
-        For Each mfxItem In mfxDict
-            Dim hashCode As String = NumberToHex(mfxItem.Key + &H1BE00000)
-            PrintLine(1, hashCode & ",// " & mfxItem.Value)
-        Next
-        PrintLine(1, "-1};")
-        FileClose(1)
+        Using outputFile As New StreamWriter(filePath)
+            outputFile.WriteLine("s32 MFX_ValidList[]={")
+            For Each mfxItem In mfxDict
+                Dim hashCode As String = NumberToHex(mfxItem.Key + &H1BE00000)
+                outputFile.WriteLine(hashCode & ",// " & mfxItem.Value)
+            Next
+            outputFile.WriteLine("-1};")
+        End Using
     End Sub
 End Class

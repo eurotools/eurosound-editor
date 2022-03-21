@@ -29,50 +29,50 @@ Partial Public Class MusicMaker
     Private Sub GetMusicFilesData(filesToRead As String())
         If filesToRead.Length > 0 Then
             'Update the MFX Files File. (Used to get the hashcodes in the exporter) 
-            FileOpen(2, Path.Combine(WorkingDirectory, "Music", "ESData", "MFXFiles.txt"), OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
-            PrintLine(2, "#MFXFiles")
-            'Read files and add items to list
-            Dim itemDataGrid As String() = New String() {"", "100", "New File", "0", "Output", "Output", "", "0"}
-            ListView_MusicFiles.BeginUpdate()
-            ListView_MusicFiles.Items.Clear()
-            For index As Integer = 0 To filesToRead.Count - 1
-                'Get music files path
-                Dim mrkFilePath As String = Path.Combine(WorkingDirectory, "Music", filesToRead(index) & ".mrk")
-                Dim waveFilePath As String = Path.Combine(WorkingDirectory, "Music", filesToRead(index) & ".wav")
-                'Add item to text file
-                PrintLine(2, filesToRead(index))
-                'Read properties file
-                Dim mfxPropsFilePath As String = Path.Combine(WorkingDirectory, "Music", "ESData", filesToRead(index) & ".txt")
-                Dim mfxFileData As MfxFile
-                If File.Exists(mfxPropsFilePath) Then
-                    mfxFileData = textFileReaders.ReadMfxFile(mfxPropsFilePath)
-                    itemDataGrid(2) = "No Errors"
-                    itemDataGrid(4) = "OK"
-                    itemDataGrid(5) = "OK"
-                Else
-                    'Create new item
-                    mfxFileData = New MfxFile With {
-                        .Volume = 100,
-                        .HashCode = MFXHashCodeNumber,
-                        .MidiFileLastOutput = 99,
-                        .WavFileLastOutput = 99
-                    }
-                    MFXHashCodeNumber += 1
-                    'Write file 
-                    writers.WriteMfxFile(mfxPropsFilePath, mfxFileData)
-                End If
-                itemDataGrid(0) = filesToRead(index)
-                itemDataGrid(1) = mfxFileData.Volume
-                itemDataGrid(3) = mfxFileData.HashCode
-                itemDataGrid(6) = "HC" & Hex(mfxFileData.HashCode).PadLeft(6, "0"c) & ".SFX"
-                itemDataGrid(7) = mfxFileData.UserValue
-                ListView_MusicFiles.Items.Add(New ListViewItem(itemDataGrid))
+            Using outputFile As New StreamWriter(Path.Combine(WorkingDirectory, "Music", "ESData", "MFXFiles.txt"))
+                outputFile.WriteLine("#MFXFiles")
+                'Read files and add items to list
+                Dim itemDataGrid As String() = New String() {"", "100", "New File", "0", "Output", "Output", "", "0"}
+                ListView_MusicFiles.BeginUpdate()
+                ListView_MusicFiles.Items.Clear()
+                For index As Integer = 0 To filesToRead.Count - 1
+                    'Get music files path
+                    Dim mrkFilePath As String = Path.Combine(WorkingDirectory, "Music", filesToRead(index) & ".mrk")
+                    Dim waveFilePath As String = Path.Combine(WorkingDirectory, "Music", filesToRead(index) & ".wav")
+                    'Add item to text file
+                    outputFile.WriteLine(filesToRead(index))
+                    'Read properties file
+                    Dim mfxPropsFilePath As String = Path.Combine(WorkingDirectory, "Music", "ESData", filesToRead(index) & ".txt")
+                    Dim mfxFileData As MfxFile
+                    If File.Exists(mfxPropsFilePath) Then
+                        mfxFileData = textFileReaders.ReadMfxFile(mfxPropsFilePath)
+                        itemDataGrid(2) = "No Errors"
+                        itemDataGrid(4) = "OK"
+                        itemDataGrid(5) = "OK"
+                    Else
+                        'Create new item
+                        mfxFileData = New MfxFile With {
+                            .Volume = 100,
+                            .HashCode = MFXHashCodeNumber,
+                            .MidiFileLastOutput = 99,
+                            .WavFileLastOutput = 99
+                        }
+                        MFXHashCodeNumber += 1
+                        'Write file 
+                        writers.WriteMfxFile(mfxPropsFilePath, mfxFileData)
+                    End If
+                    itemDataGrid(0) = filesToRead(index)
+                    itemDataGrid(1) = mfxFileData.Volume
+                    itemDataGrid(3) = mfxFileData.HashCode
+                    itemDataGrid(6) = "HC" & Hex(mfxFileData.HashCode).PadLeft(6, "0"c) & ".SFX"
+                    itemDataGrid(7) = mfxFileData.UserValue
+                    ListView_MusicFiles.Items.Add(New ListViewItem(itemDataGrid))
 
-            Next
-            ListView_MusicFiles.EndUpdate()
-            'End dependencies block
-            PrintLine(2, "#END")
-            FileClose(2)
+                Next
+                ListView_MusicFiles.EndUpdate()
+                'End dependencies block
+                outputFile.WriteLine("#END")
+            End Using
         End If
     End Sub
 
@@ -117,17 +117,17 @@ Partial Public Class MusicMaker
             If File.Exists(jumpTextFiles(index)) Then
                 Dim jumpHashCodes As String() = textFileReaders.ReadJumpFile(jumpTextFiles(index))
                 Dim mfxName As String = Path.GetFileNameWithoutExtension(jumpTextFiles(index))
-                FileOpen(1, hashTableFilePath, OpenMode.Append)
-                PrintLine(1, "")
-                PrintLine(1, "// Music Jump Codes For Level MFX_" & mfxName)
-                For jumpHashCode As Short = 0 To jumpHashCodes.Length - 1
-                    Dim mfxHashCode As Short = hashCodesDict(mfxName)
-                    Dim hashCode As UInteger = ((&H1BE And &HFFF) << 20) Or ((jumpHashCode And &HFF) << 8) Or ((mfxHashCode And &HFF) << 0)
-                    Dim hashCodeLabel As String = "JMP_" & jumpHashCodes(jumpHashCode)
-                    PrintLine(1, "#define " & hashCodeLabel & " 0x" & Hex(hashCode))
-                    jumpDefinesList.Add(hashCodeLabel)
-                Next
-                FileClose(1)
+                Using outputFile As New StreamWriter(hashTableFilePath)
+                    outputFile.WriteLine("")
+                    outputFile.WriteLine("// Music Jump Codes For Level MFX_" & mfxName)
+                    For jumpHashCode As Short = 0 To jumpHashCodes.Length - 1
+                        Dim mfxHashCode As Short = hashCodesDict(mfxName)
+                        Dim hashCode As UInteger = ((&H1BE And &HFFF) << 20) Or ((jumpHashCode And &HFF) << 8) Or ((mfxHashCode And &HFF) << 0)
+                        Dim hashCodeLabel As String = "JMP_" & jumpHashCodes(jumpHashCode)
+                        outputFile.WriteLine("#define " & hashCodeLabel & " 0x" & Hex(hashCode))
+                        jumpDefinesList.Add(hashCodeLabel)
+                    Next
+                End Using
             End If
         Next
         AppendJumpHashCodes = jumpDefinesList

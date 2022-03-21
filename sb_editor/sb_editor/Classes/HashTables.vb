@@ -1,4 +1,6 @@
-﻿Namespace HashTablesBuilder
+﻿Imports System.IO
+
+Namespace HashTablesBuilder
     Friend Module HashTables
         '*===============================================================================================
         '* FORMAT FUNCTIONS
@@ -61,15 +63,15 @@
         '* MFX_Defines.h
         '*===============================================================================================
         Friend Sub CreateMfxHashTable(filePath As String, mfxDict As SortedDictionary(Of String, UInteger))
-            FileOpen(1, filePath, OpenMode.Output, OpenAccess.Write, OpenShare.LockWrite)
-            PrintLine(1, "// Music HashCodes")
-            Dim maxSfxHashcodeDefined = 0
-            For Each mfxItem In mfxDict
-                PrintLine(1, WriteHashCode("MFX_" & mfxItem.Key, NumberToHex(mfxItem.Value + &H1BE00000)))
-                maxSfxHashcodeDefined = Math.Max(maxSfxHashcodeDefined, mfxItem.Value)
-            Next
-            PrintLine(1, "#define MFX_MaximumDefined " & maxSfxHashcodeDefined)
-            FileClose(1)
+            Using outputFile As New StreamWriter(filePath)
+                outputFile.WriteLine("// Music HashCodes")
+                Dim maxSfxHashcodeDefined = 0
+                For Each mfxItem In mfxDict
+                    outputFile.WriteLine(WriteHashCode("MFX_" & mfxItem.Key, NumberToHex(mfxItem.Value + &H1BE00000)))
+                    maxSfxHashcodeDefined = Math.Max(maxSfxHashcodeDefined, mfxItem.Value)
+                Next
+                outputFile.WriteLine("#define MFX_MaximumDefined " & maxSfxHashcodeDefined)
+            End Using
         End Sub
     End Module
 End Namespace

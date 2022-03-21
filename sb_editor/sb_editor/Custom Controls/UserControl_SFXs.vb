@@ -282,7 +282,7 @@ Public Class UserControl_SFXs
                     SFXHashCodeNumber += 1
                     writers.UpdateMiscFile(Path.Combine(WorkingDirectory, "System", "Misc.txt"))
                     'Write new file
-                    File.WriteAllLines(Path.Combine(WorkingDirectory, "SFXs" & sfxCopyName & ".txt"), fileContent)
+                    File.WriteAllLines(Path.Combine(WorkingDirectory, "SFXs", sfxCopyName & ".txt"), fileContent)
                     ListBox_SFXs.Items.Add(sfxCopyName)
                 End If
                 Erase fileContent

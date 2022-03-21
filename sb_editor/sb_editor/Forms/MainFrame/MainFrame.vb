@@ -642,7 +642,8 @@ Partial Public Class MainFrame
     End Sub
 
     Private Sub Button_ReSampling_Click(sender As Object, e As EventArgs) Handles Button_ReSampling.Click
-        If Directory.Exists(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")) Then
+        Dim samplesFolder As String = ProjectSettingsFile.MiscProps.SampleFileFolder
+        If samplesFolder > "" AndAlso Directory.Exists(Path.Combine(samplesFolder, "Master")) Then
             If File.Exists(SysFileSamples) Then
                 'Set cursor as hourglass
                 Cursor.Current = Cursors.WaitCursor
