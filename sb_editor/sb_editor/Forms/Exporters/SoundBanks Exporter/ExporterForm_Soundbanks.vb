@@ -121,7 +121,7 @@ Partial Public Class ExporterForm
                                     textFileWritters.WriteSoundBankDebug(soundBanksDebugFilePath, streamFileReport, sfxFilePath, currentSoundBank, soundBankInfo.HashCode)
 
                                     'Check min and max sizes
-                                    Dim fileSize As Long = FileLen(sbfFilePath) - 4024
+                                    Dim fileSize As Long = New FileInfo(sbfFilePath).Length
                                     Dim bankSize As Long = GetSoundBankMaxSize(currentPlatform, soundBankInfo) * 1024
                                     If fileSize > bankSize Then
                                         'Delete files
