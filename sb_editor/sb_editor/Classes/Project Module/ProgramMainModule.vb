@@ -131,6 +131,9 @@ Module ProgramMainModule
         mainform.ListBox_DataBaseSFX.Items.Clear()
         mainform.UserControl_SFXs.ListBox_SFXs.Items.Clear()
 
+        'Check folders
+        CheckProjectFolders(WorkingDirectory)
+
         'Get All SoundBanks
         Dim soundBanksFilePath As String = Path.Combine(WorkingDirectory, "SoundBanks")
         Dim availableSoundBanks As String() = GetFolderFiles(soundBanksFilePath)
@@ -199,6 +202,34 @@ Module ProgramMainModule
 
         Return soundBanksArray
     End Function
+
+    '*===============================================================================================
+    '* CHECK PROJECT FOLDERS
+    '*===============================================================================================
+    Friend Sub CheckProjectFolders(projectFolderPath As String)
+        'Create folders
+        Directory.CreateDirectory(Path.Combine(projectFolderPath, "DataBases"))
+        Directory.CreateDirectory(Path.Combine(projectFolderPath, "Debug_Report", "ForES2", "MarkerFileData"))
+        Directory.CreateDirectory(Path.Combine(projectFolderPath, "Music", "ESData"))
+        Directory.CreateDirectory(Path.Combine(projectFolderPath, "Music", "ESWork"))
+        Directory.CreateDirectory(Path.Combine(projectFolderPath, "Reverbs"))
+        Directory.CreateDirectory(Path.Combine(projectFolderPath, "SoundBanks"))
+        Directory.CreateDirectory(Path.Combine(projectFolderPath, "System"))
+        'SFXs Folders
+        Directory.CreateDirectory(Path.Combine(projectFolderPath, "SFXs"))
+        Directory.CreateDirectory(Path.Combine(projectFolderPath, "SFXs", "PC"))
+        Directory.CreateDirectory(Path.Combine(projectFolderPath, "SFXs", "PlayStation2"))
+        Directory.CreateDirectory(Path.Combine(projectFolderPath, "SFXs", "X Box"))
+        Directory.CreateDirectory(Path.Combine(projectFolderPath, "SFXs", "GameCube"))
+        Directory.CreateDirectory(Path.Combine(projectFolderPath, "SFXs", "Misc"))
+        'Output folders
+        Directory.CreateDirectory(Path.Combine(projectFolderPath, "TempOutputFolder", "GameCube", "SoundBanks"))
+        Directory.CreateDirectory(Path.Combine(projectFolderPath, "TempOutputFolder", "PC", "SoundBanks"))
+        Directory.CreateDirectory(Path.Combine(projectFolderPath, "TempOutputFolder", "PlayStation2", "SoundBanks"))
+        Directory.CreateDirectory(Path.Combine(projectFolderPath, "TempOutputFolder", "X Box", "SoundBanks"))
+        'Master folder
+        Directory.CreateDirectory(Path.Combine(projectFolderPath, "Master", "Speech", "English"))
+    End Sub
 
     '*===============================================================================================
     '* LOAD SOUNDBANKS

@@ -507,6 +507,11 @@ Partial Public Class Frm_SfxEditor
         p.BeginOutputReadLine()
     End Sub
 
+    Private Sub Button_ReverbTester_Click(sender As Object, e As EventArgs) Handles Button_ReverbTester.Click
+        Dim reverbTest As New Frm_ReverbTester()
+        reverbTest.ShowDialog()
+    End Sub
+
     Private Sub OutputHandler(sendingProcess As Object, outLine As DataReceivedEventArgs)
         ' Collect the sort command output.
         If Not String.IsNullOrEmpty(outLine.Data) Then

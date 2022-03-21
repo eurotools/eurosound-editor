@@ -27,6 +27,7 @@ Friend Module GlobalVariables
     Friend SoundBankHashCodeNumber As UInteger = 0
     Friend MFXHashCodeNumber As UInteger = 0
     Friend ReSampleStreams As Byte = 0
+    Friend ReverbHashCodeNumber As Byte = 0
 
     'Date and Text Formats
     Friend ReadOnly dateFormat As String = "yyyy/dd/MM HH:mm:ss"

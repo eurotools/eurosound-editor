@@ -24,15 +24,15 @@ Namespace WritersClasses
             End If
 
             'Update file
-            FileOpen(1, databaseTxt, OpenMode.Output, OpenAccess.Write, OpenShare.LockReadWrite)
-            PrintLine(1, "## EuroSound  File")
-            PrintLine(1, "## First Created ... " & headerData.FirstCreated)
-            PrintLine(1, "## Created By ... " & headerData.CreatedBy)
-            PrintLine(1, "## Last Modified ... " & headerData.LastModify)
-            PrintLine(1, "## Last Modified By ... " & headerData.LastModifyBy)
-            PrintLine(1, "")
-            WriteListOfItems(itemsListObject, "#DEPENDENCIES", 1)
-            FileClose(1)
+            Using outputFile As New StreamWriter(databaseTxt)
+                outputFile.WriteLine("## EuroSound  File")
+                outputFile.WriteLine("## First Created ... " & headerData.FirstCreated)
+                outputFile.WriteLine("## Created By ... " & headerData.CreatedBy)
+                outputFile.WriteLine("## Last Modified ... " & headerData.LastModify)
+                outputFile.WriteLine("## Last Modified By ... " & headerData.LastModifyBy)
+                outputFile.WriteLine("")
+                WriteListOfItems(itemsListObject, "#DEPENDENCIES", outputFile)
+            End Using
         End Sub
     End Class
 End Namespace

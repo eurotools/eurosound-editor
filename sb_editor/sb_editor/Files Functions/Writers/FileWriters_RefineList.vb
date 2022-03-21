@@ -1,9 +1,11 @@
-﻿Namespace WritersClasses
+﻿Imports System.IO
+
+Namespace WritersClasses
     Partial Public Class FileWriters
         Friend Sub CreateRefineList(refineSearchFilePath As String, keywords As String())
-            FileOpen(1, refineSearchFilePath, OpenMode.Output, OpenAccess.Write, OpenShare.LockReadWrite)
-            WriteListOfItems(keywords, "#RefineSearch", 1)
-            FileClose(1)
+            Using outputFile As New StreamWriter(refineSearchFilePath)
+                WriteListOfItems(keywords, "#RefineSearch", outputFile)
+            End Using
         End Sub
     End Class
 End Namespace

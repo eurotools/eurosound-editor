@@ -16,12 +16,12 @@ Namespace ReaderClasses
                     'Check for Hashcode block
                     If StrComp(currentLine, "#MFXFiles", CompareMethod.Text) = 0 Then
                         'Read line
-                        currentLine = Trim(LineInput(1))
+                        currentLine = sr.ReadLine.Trim
                         While Not currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase)
                             'Split line and get number
                             mfxFilesList.Add(currentLine)
                             'Continue Reading
-                            currentLine = Trim(LineInput(1))
+                            currentLine = sr.ReadLine.Trim
                         End While
                     End If
                 End While

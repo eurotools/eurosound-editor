@@ -8,7 +8,7 @@ Namespace ReaderClasses
         '*===============================================================================================
         Private Function GetStringValue(keyword As String, currentLine As String) As String
             Dim keyWordLength = keyword.Length
-            Dim LineData As String = Trim(currentLine.Substring(keyWordLength))
+            Dim LineData As String = currentLine.Substring(keyWordLength).Trim
             Return LineData
         End Function
 

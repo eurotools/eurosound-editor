@@ -1,4 +1,5 @@
-﻿Imports sb_editor.ParsersObjects
+﻿Imports System.IO
+Imports sb_editor.ParsersObjects
 Imports sb_editor.ReaderClasses
 
 Namespace WritersClasses
@@ -9,22 +10,22 @@ Namespace WritersClasses
             Dim headerData As FileHeader = GetFileHeaderData(filePath, readers)
 
             'Update file
-            FileOpen(1, filePath, OpenMode.Output, OpenAccess.Write, OpenShare.LockReadWrite)
-            PrintLine(1, "## EuroSound Samples File")
-            PrintLine(1, "## First Created ... " & headerData.FirstCreated)
-            PrintLine(1, "## Created By ... " & headerData.CreatedBy)
-            PrintLine(1, "## Last Modified ... " & headerData.LastModify)
-            PrintLine(1, "## Last Modified By ... " & headerData.LastModifyBy)
-            PrintLine(1, "")
-            PrintLine(1, "#AvailableSamples")
-            PrintLine(1, " " & samplesFileTable.Rows.Count)
-            For Col As Integer = 0 To 9
-                For index As Integer = 0 To samplesFileTable.Rows.Count - 1
-                    PrintLine(1, samplesFileTable.Rows(index).ItemArray(Col))
+            Using outputFile As New StreamWriter(filePath)
+                outputFile.WriteLine("## EuroSound Samples File")
+                outputFile.WriteLine("## First Created ... " & headerData.FirstCreated)
+                outputFile.WriteLine("## Created By ... " & headerData.CreatedBy)
+                outputFile.WriteLine("## Last Modified ... " & headerData.LastModify)
+                outputFile.WriteLine("## Last Modified By ... " & headerData.LastModifyBy)
+                outputFile.WriteLine("")
+                outputFile.WriteLine("#AvailableSamples")
+                outputFile.WriteLine(" " & samplesFileTable.Rows.Count)
+                For Col As Integer = 0 To 9
+                    For index As Integer = 0 To samplesFileTable.Rows.Count - 1
+                        outputFile.WriteLine(samplesFileTable.Rows(index).ItemArray(Col))
+                    Next
                 Next
-            Next
-            PrintLine(1, "#END")
-            FileClose(1)
+                outputFile.WriteLine("#END")
+            End Using
         End Sub
     End Class
 End Namespace

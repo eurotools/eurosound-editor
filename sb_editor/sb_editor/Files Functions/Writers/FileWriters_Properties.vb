@@ -1,4 +1,5 @@
-﻿Imports sb_editor.ParsersObjects
+﻿Imports System.IO
+Imports sb_editor.ParsersObjects
 Imports sb_editor.ReaderClasses
 
 Namespace WritersClasses
@@ -9,54 +10,53 @@ Namespace WritersClasses
             Dim headerData As FileHeader = GetFileHeaderData(textFilePath, headerLib)
 
             'Update file
-            FileOpen(1, textFilePath, OpenMode.Output, OpenAccess.Write, OpenShare.LockReadWrite)
-            PrintLine(1, "## EuroSound Properties File")
-            PrintLine(1, "## First Created ... " & headerData.FirstCreated)
-            PrintLine(1, "## Created By ... " & headerData.CreatedBy)
-            PrintLine(1, "## Last Modified ... " & headerData.LastModify)
-            PrintLine(1, "## Last Modified By ... " & headerData.LastModifyBy)
-            PrintLine(1, "")
+            Using outputFile As New StreamWriter(textFilePath)
+                outputFile.WriteLine("## EuroSound Properties File")
+                outputFile.WriteLine("## First Created ... " & headerData.FirstCreated)
+                outputFile.WriteLine("## Created By ... " & headerData.CreatedBy)
+                outputFile.WriteLine("## Last Modified ... " & headerData.LastModify)
+                outputFile.WriteLine("## Last Modified By ... " & headerData.LastModifyBy)
+                outputFile.WriteLine("")
 
-            'Print Available formats
-            PrintLine(1, "#AvailableFormats")
-            PrintLine(1, " " & propsFileData.AvailableFormats.GetLength(0))
-            For colIndex As Integer = 0 To propsFileData.AvailableFormats.GetLength(1) - 1
-                For formatIndex As Integer = 0 To propsFileData.AvailableFormats.GetLength(0) - 1
-                    PrintLine(1, propsFileData.AvailableFormats(formatIndex, colIndex))
+                'Print Available formats
+                outputFile.WriteLine("#AvailableFormats")
+                outputFile.WriteLine(" " & propsFileData.AvailableFormats.GetLength(0))
+                For colIndex As Integer = 0 To propsFileData.AvailableFormats.GetLength(1) - 1
+                    For formatIndex As Integer = 0 To propsFileData.AvailableFormats.GetLength(0) - 1
+                        outputFile.WriteLine(propsFileData.AvailableFormats(formatIndex, colIndex))
+                    Next
                 Next
-            Next
-            PrintLine(1, "#END")
-            PrintLine(1, "")
+                outputFile.WriteLine("#END")
+                outputFile.WriteLine("")
 
-            'Print Available ReSample Rates
-            WriteListOfItems(propsFileData.AvailableReSampleRates.ToArray, "#AvailableReSampleRates", 1)
-            PrintLine(1, "")
+                'Print Available ReSample Rates
+                WriteListOfItems(propsFileData.AvailableReSampleRates.ToArray, "#AvailableReSampleRates", outputFile)
+                outputFile.WriteLine("")
 
-            For i As Integer = 0 To propsFileData.sampleRateFormats.Count - 1
-                'Get platform name
-                Dim platformFormat As String = propsFileData.sampleRateFormats.ElementAt(i).Key
-                'Get array
-                Dim SampleRates As Dictionary(Of String, UInteger) = propsFileData.sampleRateFormats(platformFormat)
-                'Print data
-                PrintLine(1, "// ReSample Rates for Format " & platformFormat)
-                PrintLine(1, "#ReSampleRates" & i)
-                For Each sampleRate As UInteger In SampleRates.Values
-                    PrintLine(1, CStr(sampleRate))
+                For i As Integer = 0 To propsFileData.sampleRateFormats.Count - 1
+                    'Get platform name
+                    Dim platformFormat As String = propsFileData.sampleRateFormats.ElementAt(i).Key
+                    'Get array
+                    Dim SampleRates As Dictionary(Of String, UInteger) = propsFileData.sampleRateFormats(platformFormat)
+                    'Print data
+                    outputFile.WriteLine("// ReSample Rates for Format " & platformFormat)
+                    outputFile.WriteLine("#ReSampleRates" & i)
+                    For Each sampleRate As UInteger In SampleRates.Values
+                        outputFile.WriteLine(CStr(sampleRate))
+                    Next
+                    outputFile.WriteLine("#END")
+                    outputFile.WriteLine("")
                 Next
-                PrintLine(1, "#END")
-                PrintLine(1, "")
-            Next
 
-            'Misc properties
-            PrintLine(1, "#MiscProperites")
-            PrintLine(1, "DefaultRate  " & propsFileData.MiscProps.DefaultRate)
-            PrintLine(1, "SampleFileFolder " & propsFileData.MiscProps.SampleFileFolder)
-            PrintLine(1, "HashCodeFileFolder " & propsFileData.MiscProps.HashCodeFileFolder)
-            PrintLine(1, "EngineXFolder " & propsFileData.MiscProps.EngineXFolder)
-            PrintLine(1, "EuroLandHashCodeServerPath " & propsFileData.MiscProps.EuroLandHashCodeServerPath)
-            PrintLine(1, "#END")
-            'Close file
-            FileClose(1)
+                'Misc properties
+                outputFile.WriteLine("#MiscProperites")
+                outputFile.WriteLine("DefaultRate  " & propsFileData.MiscProps.DefaultRate)
+                outputFile.WriteLine("SampleFileFolder " & propsFileData.MiscProps.SampleFileFolder)
+                outputFile.WriteLine("HashCodeFileFolder " & propsFileData.MiscProps.HashCodeFileFolder)
+                outputFile.WriteLine("EngineXFolder " & propsFileData.MiscProps.EngineXFolder)
+                outputFile.WriteLine("EuroLandHashCodeServerPath " & propsFileData.MiscProps.EuroLandHashCodeServerPath)
+                outputFile.WriteLine("#END")
+            End Using
         End Sub
     End Class
 End Namespace

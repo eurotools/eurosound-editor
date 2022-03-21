@@ -54,7 +54,8 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>EuroSoundIcon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
@@ -103,13 +104,16 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Files Functions\Objects\MfxFile.vb" />
+    <Compile Include="Files Functions\Objects\ReverbObj.vb" />
     <Compile Include="Files Functions\Readers\FileParsers_JumpHashCodes.vb" />
     <Compile Include="Files Functions\Readers\FileParsers_PurgeList.vb" />
     <Compile Include="Files Functions\Readers\FileParsers_SamplesFile.vb" />
     <Compile Include="Files Functions\Readers\Music\FileParsers_MfxFile.vb" />
     <Compile Include="Files Functions\Readers\Music\FileParsers_MfxFileList.vb" />
+    <Compile Include="Files Functions\Readers\Reverbs\FileParsers_ReverbFile.vb" />
     <Compile Include="Files Functions\Writers\FileWriters.vb" />
     <Compile Include="Files Functions\Writers\FileWriters_MfxFile.vb" />
+    <Compile Include="Files Functions\Writers\FileWriters_ReverbFile.vb" />
     <Compile Include="Files Functions\Writers\FileWriters_SamplesFile.vb" />
     <Compile Include="Files Functions\Writers\FileWriters_SoundBanksDebugFile.vb" />
     <Compile Include="Forms\About.Designer.vb">
@@ -276,6 +280,12 @@
     <Compile Include="Forms\Resampler\ResampleForm_Methods.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\Reverb Tester\Frm_ReverbTester.Designer.vb">
+      <DependentUpon>Frm_ReverbTester.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Reverb Tester\Frm_ReverbTester.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\Samples\MissingSamples.Designer.vb">
       <DependentUpon>MissingSamples.vb</DependentUpon>
     </Compile>
@@ -436,6 +446,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Resampler\Frm_PurgeGo.resx">
       <DependentUpon>Frm_PurgeGo.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Reverb Tester\Frm_ReverbTester.resx">
+      <DependentUpon>Frm_ReverbTester.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Samples\MissingSamples.resx">
       <DependentUpon>MissingSamples.vb</DependentUpon>

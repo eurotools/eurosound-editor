@@ -37,9 +37,11 @@ Namespace ReaderClasses
                                     Case "SFXHASHCODENUMBER"
                                         SFXHashCodeNumber = CInt(lineData(1))
                                     Case "SOUNDBANKHASHCODENUMBER"
-                                        SoundBankHashCodeNumber = CByte(lineData(1))
+                                        SoundBankHashCodeNumber = CInt(lineData(1))
                                     Case "MFXHASHCODENUMBER"
                                         MFXHashCodeNumber = CInt(lineData(1))
+                                    Case "REVERBHASHCODENUMBER"
+                                        ReverbHashCodeNumber = CInt(lineData(1))
                                 End Select
                                 'Continue Reading
                                 currentLine = sr.ReadLine.Trim
