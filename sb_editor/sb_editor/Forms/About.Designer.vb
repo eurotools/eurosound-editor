@@ -71,26 +71,27 @@ Partial Class About
         '
         'Label_CurrentVersion
         '
-        Me.Label_CurrentVersion.AutoSize = True
         Me.Label_CurrentVersion.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label_CurrentVersion.Location = New System.Drawing.Point(105, 55)
+        Me.Label_CurrentVersion.Location = New System.Drawing.Point(6, 55)
         Me.Label_CurrentVersion.Name = "Label_CurrentVersion"
-        Me.Label_CurrentVersion.Size = New System.Drawing.Size(135, 20)
+        Me.Label_CurrentVersion.Size = New System.Drawing.Size(332, 20)
         Me.Label_CurrentVersion.TabIndex = 8
-        Me.Label_CurrentVersion.Text = "This Version: 3.57"
+        Me.Label_CurrentVersion.Text = "This Version: Pending..."
+        Me.Label_CurrentVersion.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'Label_LatestVersion
         '
-        Me.Label_LatestVersion.AutoSize = True
         Me.Label_LatestVersion.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label_LatestVersion.Location = New System.Drawing.Point(63, 75)
+        Me.Label_LatestVersion.Location = New System.Drawing.Point(10, 75)
         Me.Label_LatestVersion.Name = "Label_LatestVersion"
-        Me.Label_LatestVersion.Size = New System.Drawing.Size(218, 20)
+        Me.Label_LatestVersion.Size = New System.Drawing.Size(328, 20)
         Me.Label_LatestVersion.TabIndex = 9
-        Me.Label_LatestVersion.Text = "Latest Version Available: 4.00"
+        Me.Label_LatestVersion.Text = "Latest Version Available:  Checking..."
+        Me.Label_LatestVersion.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'Button_GetUpdate
         '
+        Me.Button_GetUpdate.Enabled = False
         Me.Button_GetUpdate.Location = New System.Drawing.Point(135, 98)
         Me.Button_GetUpdate.Name = "Button_GetUpdate"
         Me.Button_GetUpdate.Size = New System.Drawing.Size(75, 23)
