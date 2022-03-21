@@ -183,4 +183,13 @@ Partial Public Class MusicMaker
         'Close Form
         Close()
     End Sub
+
+    Private Sub Button_ImportMusics_Click(sender As Object, e As EventArgs) Handles Button_ImportMusics.Click
+        Dim mfxFilePath As String = Path.Combine(WorkingDirectory, "Music", "ESData", "MFXFiles.txt")
+        If File.Exists(mfxFilePath) Then
+            Dim mfxFileData As String() = textFileReaders.ReadMfxFileList(mfxFilePath)
+            Dim musicImporter As New Frm_MusicsParser(mfxFileData, Path.Combine(WorkingDirectory, "Music"))
+            musicImporter.ShowDialog()
+        End If
+    End Sub
 End Class

@@ -24,12 +24,12 @@ Partial Class MusicMaker
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MusicMaker))
         Me.GroupBox_MusicMaker = New System.Windows.Forms.GroupBox()
-        Me.Numeric_Volume = New System.Windows.Forms.NumericUpDown()
-        Me.TextBox_UserValue = New System.Windows.Forms.TextBox()
-        Me.Button_VeryfyMfx = New System.Windows.Forms.Button()
         Me.Button_ForceOutput = New System.Windows.Forms.Button()
         Me.Button_ForceSelected = New System.Windows.Forms.Button()
+        Me.Numeric_Volume = New System.Windows.Forms.NumericUpDown()
+        Me.TextBox_UserValue = New System.Windows.Forms.TextBox()
         Me.Button_ViewErrorFile = New System.Windows.Forms.Button()
+        Me.Button_VeryfyMfx = New System.Windows.Forms.Button()
         Me.Button_Output = New System.Windows.Forms.Button()
         Me.Button_UpdateFiles = New System.Windows.Forms.Button()
         Me.ListView_MusicFiles = New ListView_ColumnSortingClick.ListView_ColumnSortingClick()
@@ -47,6 +47,7 @@ Partial Class MusicMaker
         Me.TextBox_OutputTime = New System.Windows.Forms.TextBox()
         Me.Button_RemapHashCodes = New System.Windows.Forms.Button()
         Me.Button_Ok = New System.Windows.Forms.Button()
+        Me.Button_ImportMusics = New System.Windows.Forms.Button()
         Me.GroupBox_MusicMaker.SuspendLayout()
         CType(Me.Numeric_Volume, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox_OutputFormat.SuspendLayout()
@@ -73,33 +74,6 @@ Partial Class MusicMaker
         Me.GroupBox_MusicMaker.TabStop = False
         Me.GroupBox_MusicMaker.Text = "Available Music Files"
         '
-        'Numeric_Volume
-        '
-        Me.Numeric_Volume.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Numeric_Volume.Location = New System.Drawing.Point(142, 360)
-        Me.Numeric_Volume.Name = "Numeric_Volume"
-        Me.Numeric_Volume.Size = New System.Drawing.Size(60, 20)
-        Me.Numeric_Volume.TabIndex = 3
-        '
-        'TextBox_UserValue
-        '
-        Me.TextBox_UserValue.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_UserValue.Location = New System.Drawing.Point(637, 359)
-        Me.TextBox_UserValue.Name = "TextBox_UserValue"
-        Me.TextBox_UserValue.Size = New System.Drawing.Size(60, 20)
-        Me.TextBox_UserValue.TabIndex = 8
-        Me.TextBox_UserValue.Text = "0"
-        '
-        'Button_VeryfyMfx
-        '
-        Me.Button_VeryfyMfx.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_VeryfyMfx.Location = New System.Drawing.Point(546, 357)
-        Me.Button_VeryfyMfx.Name = "Button_VeryfyMfx"
-        Me.Button_VeryfyMfx.Size = New System.Drawing.Size(85, 23)
-        Me.Button_VeryfyMfx.TabIndex = 7
-        Me.Button_VeryfyMfx.Text = "Verify MFX File"
-        Me.Button_VeryfyMfx.UseVisualStyleBackColor = True
-        '
         'Button_ForceOutput
         '
         Me.Button_ForceOutput.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
@@ -120,6 +94,23 @@ Partial Class MusicMaker
         Me.Button_ForceSelected.Text = "Add Sel. For Output"
         Me.Button_ForceSelected.UseVisualStyleBackColor = True
         '
+        'Numeric_Volume
+        '
+        Me.Numeric_Volume.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Numeric_Volume.Location = New System.Drawing.Point(142, 360)
+        Me.Numeric_Volume.Name = "Numeric_Volume"
+        Me.Numeric_Volume.Size = New System.Drawing.Size(60, 20)
+        Me.Numeric_Volume.TabIndex = 3
+        '
+        'TextBox_UserValue
+        '
+        Me.TextBox_UserValue.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.TextBox_UserValue.Location = New System.Drawing.Point(637, 359)
+        Me.TextBox_UserValue.Name = "TextBox_UserValue"
+        Me.TextBox_UserValue.Size = New System.Drawing.Size(60, 20)
+        Me.TextBox_UserValue.TabIndex = 8
+        Me.TextBox_UserValue.Text = "0"
+        '
         'Button_ViewErrorFile
         '
         Me.Button_ViewErrorFile.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
@@ -129,6 +120,16 @@ Partial Class MusicMaker
         Me.Button_ViewErrorFile.TabIndex = 4
         Me.Button_ViewErrorFile.Text = "View Error File"
         Me.Button_ViewErrorFile.UseVisualStyleBackColor = True
+        '
+        'Button_VeryfyMfx
+        '
+        Me.Button_VeryfyMfx.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Button_VeryfyMfx.Location = New System.Drawing.Point(546, 357)
+        Me.Button_VeryfyMfx.Name = "Button_VeryfyMfx"
+        Me.Button_VeryfyMfx.Size = New System.Drawing.Size(85, 23)
+        Me.Button_VeryfyMfx.TabIndex = 7
+        Me.Button_VeryfyMfx.Text = "Verify MFX File"
+        Me.Button_VeryfyMfx.UseVisualStyleBackColor = True
         '
         'Button_Output
         '
@@ -267,12 +268,23 @@ Partial Class MusicMaker
         Me.Button_Ok.Text = "OK"
         Me.Button_Ok.UseVisualStyleBackColor = True
         '
+        'Button_ImportMusics
+        '
+        Me.Button_ImportMusics.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Button_ImportMusics.Location = New System.Drawing.Point(446, 410)
+        Me.Button_ImportMusics.Name = "Button_ImportMusics"
+        Me.Button_ImportMusics.Size = New System.Drawing.Size(130, 23)
+        Me.Button_ImportMusics.TabIndex = 6
+        Me.Button_ImportMusics.Text = "Import Musics From DLC"
+        Me.Button_ImportMusics.UseVisualStyleBackColor = True
+        '
         'MusicMaker
         '
         Me.AcceptButton = Me.Button_Ok
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(786, 472)
+        Me.Controls.Add(Me.Button_ImportMusics)
         Me.Controls.Add(Me.Button_Ok)
         Me.Controls.Add(Me.Button_RemapHashCodes)
         Me.Controls.Add(Me.TextBox_OutputTime)
@@ -319,4 +331,5 @@ Partial Class MusicMaker
     Private WithEvents Numeric_Volume As NumericUpDown
     Protected Friend WithEvents ListView_MusicFiles As ListView_ColumnSortingClick.ListView_ColumnSortingClick
     Protected Friend WithEvents ComboBox_OutputFormat As ComboBox
+    Friend WithEvents Button_ImportMusics As Button
 End Class

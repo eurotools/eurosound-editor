@@ -189,6 +189,12 @@
     <Compile Include="Forms\Exporters\SoundBanks Exporter\ExporterForm_SBInfo.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\Music\DlcToMaster\Frm_MusicsParser.Designer.vb">
+      <DependentUpon>Frm_MusicsParser.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Music\DlcToMaster\Frm_MusicsParser.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\Others\Frm_DebugData.Designer.vb">
       <DependentUpon>Frm_DebugData.vb</DependentUpon>
     </Compile>
@@ -418,6 +424,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Advanced Menu\Language_FolderCompare.resx">
       <DependentUpon>Language_FolderCompare.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Music\DlcToMaster\Frm_MusicsParser.resx">
+      <DependentUpon>Frm_MusicsParser.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Others\Frm_DebugData.resx">
       <DependentUpon>Frm_DebugData.vb</DependentUpon>
