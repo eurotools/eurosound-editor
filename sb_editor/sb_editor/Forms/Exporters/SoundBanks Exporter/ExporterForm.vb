@@ -80,6 +80,7 @@ Partial Public Class ExporterForm
         'Get SFXs
         Dim hashCodesDictionary As SortedDictionary(Of String, UInteger) = GetHashCodesDict(Path.Combine(WorkingDirectory, "SFXs"))
         Dim soundBanksDictionary As SortedDictionary(Of String, UInteger) = GetSoundBanksDict(Path.Combine(WorkingDirectory, "SoundBanks"))
+        Dim reverbHashCodesDictionary As SortedDictionary(Of String, UInteger) = GetReverbsDict(Path.Combine(WorkingDirectory, "Reverbs"))
 
         'Check for new and missing samples
         If Not quickOutput Then
@@ -136,12 +137,14 @@ Partial Public Class ExporterForm
                 '----------------------------------------------Create Hashtables----------------------------------------------
                 Dim sfxDefinesFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Defines.h")
                 Dim sfxDataFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Data.h")
+                Dim reverbsFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Reverbs.h")
                 Dim soundhFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.EuroLandHashCodeServerPath, "Sound.h")
 
                 CreateSfxDebug(hashCodesDictionary, Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Debug.h"))
                 CreateSfxDefines(hashCodesDictionary, soundBanksDictionary, SfxLanguages, ProjectSettingsFile.MiscProps.PrefixHtSound, sfxDefinesFilePath)
                 CreateSfxData(sfxDataFilePath, Path.Combine(WorkingDirectory, "TempSfxData"), maxHashCode)
                 CreateSoundhFile(soundhFilePath, sfxDefinesFilePath, Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "MFX_Defines.h"))
+                CreateSfxReverbs(reverbsFilePath, reverbHashCodesDictionary)
 
                 '----------------------------------------------Create SFX DATA BIN----------------------------------------------
                 CreateSFXDataBinaryFiles(outPlaforms, outputLanguage)

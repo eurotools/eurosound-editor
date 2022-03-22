@@ -48,7 +48,7 @@ Partial Public Class ExporterForm
 
                         'Check if is streamed or not
                         Dim sampleIsStreamed = 0
-                        If Array.IndexOf(StreamSamplesList, UCase(waveRelPath)) <> -1 Then
+                        If Array.IndexOf(StreamSamplesList, waveRelPath.ToUpper) <> -1 Then
                             sampleIsStreamed = 1
                         End If
 
@@ -73,17 +73,18 @@ Partial Public Class ExporterForm
 
     Friend Sub CreateSFXDataBinaryFiles(outPlatforms As String(), outputLanguages As String())
         'Single Language
-        If outputLanguages.Length = 1 AndAlso StrComp(UCase(outputLanguages(0)), "ENGLISH") = 0 Then
+        If outputLanguages.Length = 1 AndAlso outputLanguages(0).Equals("ENGLISH", StringComparison.OrdinalIgnoreCase) Then
             Dim sfxDataFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Data.h")
             For platformIndex As Integer = 0 To outPlatforms.Length - 1
                 Dim currentPlatform As String = outPlatforms(platformIndex)
 
                 'Output File Path
-                Dim outputFolder As String = Path.Combine(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder(currentPlatform), "\_Eng")
+                Dim outputFolder As String = Path.Combine(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder(currentPlatform), "_Eng")
                 Directory.CreateDirectory(outputFolder)
 
                 'Create bin file
-                RunProcess("SystemFiles\CreateSFXDataBin.exe", """" & sfxDataFilePath & """ """ & Path.Combine(outputFolder, "SFX_Data.bin") & """")
+                Dim arguments As String = """" & sfxDataFilePath & """ """ & Path.Combine(outputFolder, "SFX_Data.bin") & """"
+                RunProcess("SystemFiles\CreateSFXDataBin.exe", arguments)
             Next
         Else 'Multiples Languages
             For languageIndex As Integer = 0 To outputLanguages.Length - 1

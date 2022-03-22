@@ -4,7 +4,7 @@ Imports sb_editor.ReaderClasses
 
 Namespace WritersClasses
     Partial Public Class FileWriters
-        Friend Sub UpdateDataBaseText(databaseTxt As String, itemsListObject As String(), headerLib As FileParsers, Optional updateHeader As Boolean = True)
+        Friend Sub UpdateDataBaseText(databaseTxt As String, itemsListObject As String(), headerLib As FileParsers)
             'Replace current file   
             Dim headerData As New FileHeader
 
@@ -12,10 +12,6 @@ Namespace WritersClasses
             Dim created = Date.Now.ToString(filesDateFormat)
             If File.Exists(databaseTxt) Then
                 headerData = headerLib.GetFileHeaderInfo(databaseTxt)
-                If updateHeader Then
-                    headerData.LastModify = created
-                    headerData.LastModifyBy = EuroSoundUser
-                End If
             Else
                 headerData.FirstCreated = created
                 headerData.CreatedBy = EuroSoundUser

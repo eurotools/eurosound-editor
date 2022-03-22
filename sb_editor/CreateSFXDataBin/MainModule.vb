@@ -14,8 +14,7 @@ Module MainModule
     '*===============================================================================================
     '* MAIN METHOD
     '*===============================================================================================
-    Sub Main()
-        Dim args() As String = Environment.GetCommandLineArgs()
+    Sub Main(args As String())
         If args.Length > 1 Then
             'Get data to print
             Dim itemsList As List(Of Single()) = ReadTextFile(args(0))
@@ -58,32 +57,30 @@ Module MainModule
         Dim itemsList As New List(Of Single())
 
         'Read Text File
-        Using fs As FileStream = File.OpenRead(inputFilePath)
-            Using reader As New StreamReader(fs)
-                'Read each line
-                Dim currentLine As String = Trim(reader.ReadLine())
-                While currentLine <> Nothing
-                    'Check if the currentLine is valid
-                    If currentLine.StartsWith("{") Then
-                        Dim SplitedLine = currentLine.Split(New Char() {"{"c, ","c, "}"c}, StringSplitOptions.RemoveEmptyEntries)
+        Using sr As New StreamReader(File.OpenRead(inputFilePath))
+            'Read each line
+            Dim currentLine As String = sr.ReadLine.Trim
+            While currentLine <> Nothing
+                'Check if the currentLine is valid
+                If currentLine.StartsWith("{") Then
+                    Dim SplitedLine = currentLine.Split(New Char() {"{"c, ","c, "}"c}, StringSplitOptions.RemoveEmptyEntries)
 
-                        'Parse text data to floats and add items to the list
-                        Dim ArrayOfValues As Single() = New Single(7) {}
-                        For index As Integer = 0 To ArrayOfValues.Length - 1
-                            ArrayOfValues(index) = StringFloatToDouble(Trim(SplitedLine(index)))
-                        Next
+                    'Parse text data to floats and add items to the list
+                    Dim ArrayOfValues As Single() = New Single(7) {}
+                    For index As Integer = 0 To ArrayOfValues.Length - 1
+                        ArrayOfValues(index) = StringFloatToDouble(SplitedLine(index).Trim)
+                    Next
 
-                        itemsList.Add(ArrayOfValues)
-                    Else
-                        'Read another line
-                        currentLine = Trim(reader.ReadLine())
-                        Continue While
-                    End If
-
+                    itemsList.Add(ArrayOfValues)
+                Else
                     'Read another line
-                    currentLine = Trim(reader.ReadLine())
-                End While
-            End Using
+                    currentLine = sr.ReadLine.Trim
+                    Continue While
+                End If
+
+                'Read another line
+                currentLine = sr.ReadLine.Trim
+            End While
         End Using
 
         Return itemsList

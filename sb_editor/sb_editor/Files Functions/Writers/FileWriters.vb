@@ -23,12 +23,14 @@ Namespace WritersClasses
 
         Private Sub WriteListOfItems(filesToWrite As String(), sectionName As String, fileNumber As StreamWriter)
             fileNumber.WriteLine(sectionName)
+
             'Iterate over list items
             If filesToWrite IsNot Nothing AndAlso filesToWrite.Length > 0 Then
                 For index As Integer = 0 To filesToWrite.Length - 1
                     fileNumber.WriteLine(filesToWrite(index))
                 Next
             End If
+
             'End dependencies block
             fileNumber.WriteLine("#END")
         End Sub

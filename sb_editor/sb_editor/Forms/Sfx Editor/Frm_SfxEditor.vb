@@ -65,12 +65,14 @@ Partial Public Class Frm_SfxEditor
             'Create folder if not exists
             Dim folderPath As String = Path.Combine(WorkingDirectory, "SFXs", availablePlatforms(index))
             Directory.CreateDirectory(folderPath)
+
             'Check if the request file exists
             baseFilePath = Path.Combine(folderPath, sfxFileName & ".txt")
             If File.Exists(baseFilePath) Then
                 Dim platformTextFile As String = Path.Combine(WorkingDirectory, "SFXs", "Misc", availablePlatforms(index) & ".txt")
                 File.Copy(baseFilePath, platformTextFile, True)
                 sfxFilesData.Add(CreateTab(availablePlatforms(index)).Text, reader.ReadSFXFile(platformTextFile))
+
                 'Disable Button
                 Select Case availablePlatforms(index)
                     Case "PlayStation2"
@@ -135,8 +137,10 @@ Partial Public Class Frm_SfxEditor
         If subSfxListForm IsNot Nothing Then
             subSfxListForm.Close()
         End If
+
         'Stop audio playing
         My.Computer.Audio.Stop()
+
         'Show mainframe again
         Dim MainFrame As Form = CType(Application.OpenForms("MainFrame"), MainFrame)
         MainFrame.Show()
@@ -229,6 +233,7 @@ Partial Public Class Frm_SfxEditor
             'Cancel check
             Dim r As CheckBox = sender
             r.Checked = Not r.Checked
+
             'Inform user
             MsgBox("Sample Pool File List Must be empty!", vbOKOnly + vbCritical, "Error")
         Else
@@ -253,6 +258,7 @@ Partial Public Class Frm_SfxEditor
                 Label_SampleInfo_LoopValue.Text = ".."
                 Label_SampleInfo_StreamedValue.Text = ".."
                 ShowSampleData(ListBox_SamplePool.SelectedItem)
+
                 'Change label colors
                 For Each lbl In lbls
                     lbl.BackColor = Color.Black
@@ -261,6 +267,7 @@ Partial Public Class Frm_SfxEditor
             Else
                 ShowSampleInfo(ListBox_SamplePool.SelectedItem)
                 ShowSampleData(ListBox_SamplePool.SelectedItem)
+
                 'Change label colors
                 For Each lbl In lbls
                     lbl.BackColor = SystemColors.Control
@@ -306,6 +313,7 @@ Partial Public Class Frm_SfxEditor
         Dim indexes As Integer() = ListBox_SamplePool.SelectedIndices.Cast(Of Integer)().ToArray()
         If indexes.Length > 0 AndAlso indexes(0) > 0 Then
             Dim itemsToSelect As New Collection
+
             'Move items
             Dim sfxFileData As SfxFile = sfxFilesData(TabControl_Platforms.SelectedTab.Text)
             For i As Integer = 0 To sfxFileData.Samples.Count - 1
@@ -316,6 +324,7 @@ Partial Public Class Frm_SfxEditor
                     itemsToSelect.Add(i - 1)
                 End If
             Next
+
             'Update selection
             ListBox_SamplePool.SelectedIndices.Clear()
             For index As Integer = 1 To itemsToSelect.Count
@@ -340,6 +349,7 @@ Partial Public Class Frm_SfxEditor
                     itemsToSelect.Add(i + 1)
                 End If
             Next
+
             'Update selection
             ListBox_SamplePool.SelectedIndices.Clear()
             For index As Integer = 1 To itemsToSelect.Count
@@ -424,7 +434,6 @@ Partial Public Class Frm_SfxEditor
     Private Sub Numeric_RandomPitch_ValueChanged(sender As Object, e As EventArgs) Handles Numeric_RandomPitch.ValueChanged
         'Ensure that we have selected an item
         If ListBox_SamplePool.SelectedItems.Count > 0 Then
-            'Update property
             For Each sampleObject As Sample In ListBox_SamplePool.SelectedItems
                 sampleObject.RandomPitchOffset = Numeric_RandomPitch.Value
             Next
@@ -434,7 +443,6 @@ Partial Public Class Frm_SfxEditor
     Private Sub Numeric_BaseVolume_ValueChanged(sender As Object, e As EventArgs) Handles Numeric_BaseVolume.ValueChanged
         'Ensure that we have selected an item
         If ListBox_SamplePool.SelectedItems.Count > 0 Then
-            'Update property
             For Each sampleObject As Sample In ListBox_SamplePool.SelectedItems
                 sampleObject.BaseVolume = Numeric_BaseVolume.Value
             Next
@@ -445,7 +453,6 @@ Partial Public Class Frm_SfxEditor
         'Ensure that we have selected an item
         If ListBox_SamplePool.SelectedItems.Count > 0 Then
             If SfxParamsAndSamplePool.CheckBox_StealOnLouder.Checked Then
-                'Inform user
                 If Numeric_RandomVolume.Value <> 0 Then
                     MsgBox("Steal On Louder & Random Volume NOT allowed.", vbOKOnly + vbExclamation, "EuroSound")
                     Numeric_RandomVolume.Value = 0
@@ -472,7 +479,6 @@ Partial Public Class Frm_SfxEditor
     Private Sub Numeric_RandomPan_ValueChanged(sender As Object, e As EventArgs) Handles Numeric_RandomPan.ValueChanged
         'Ensure that we have selected an item
         If ListBox_SamplePool.SelectedItems.Count > 0 Then
-            'Update property
             For Each sampleObject As Sample In ListBox_SamplePool.SelectedItems
                 sampleObject.RandomPan = Numeric_RandomPan.Value
             Next
@@ -519,7 +525,6 @@ Partial Public Class Frm_SfxEditor
 
     Private Sub OutputHandler(sendingProcess As Object, outLine As DataReceivedEventArgs)
         If Not String.IsNullOrEmpty(outLine.Data) Then
-            ' Add the text to the collected output.
             TextBox_ScriptDebug.Invoke(Sub() TextBox_ScriptDebug.Text += Trim(outLine.Data & vbCrLf))
         End If
     End Sub
@@ -605,13 +610,15 @@ Partial Public Class Frm_SfxEditor
     Private Sub Button_OK_Click(sender As Object, e As EventArgs) Handles Button_OK.Click
         'Disable save file message
         promptSave = False
+
         'Iterate over all available tabs
         For Each sfxFile As KeyValuePair(Of String, SfxFile) In sfxFilesData
-            'Update properties
             UpdateFilesParameters()
+
             'Write file
             Dim tempFilePath As String = Path.Combine(WorkingDirectory, "SFXs", "Misc", sfxFile.Key & ".txt")
             writers.WriteSfxFile(sfxFile.Value, tempFilePath)
+
             'Move file to the final folder
             If StrComp(sfxFile.Key, "Common") = 0 Then
                 File.Copy(tempFilePath, Path.Combine(WorkingDirectory, "SFXs", sfxFileName & ".txt"), True)
@@ -619,6 +626,7 @@ Partial Public Class Frm_SfxEditor
                 File.Copy(tempFilePath, Path.Combine(WorkingDirectory, "SFXs", sfxFile.Key, sfxFileName & ".txt"), True)
             End If
         Next
+
         'Close form
         Close()
     End Sub

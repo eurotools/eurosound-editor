@@ -112,6 +112,7 @@ Partial Public Class Frm_SfxEditor
             SfxParamsAndSamplePool.CheckBox_RandomPick.Checked = sfxData.SamplePool.RandomPick
             SfxParamsAndSamplePool.CheckBox_Shuffled.Checked = sfxData.SamplePool.Shuffled
             SfxParamsAndSamplePool.CheckBox_Polyphonic.Checked = sfxData.SamplePool.Polyphonic
+
             'Check Sub SFX Stuff
             If sfxData.SamplePool.EnableSubSFX Then
                 EnableSubSfxSection()
@@ -128,6 +129,7 @@ Partial Public Class Frm_SfxEditor
         Dim sfxData As SfxFile = sfxFilesData(platformName)
         If sfxData IsNot Nothing Then
             CheckBox_EnableSubSFX.Checked = sfxData.SamplePool.EnableSubSFX
+
             'Update listbox
             ListBox_SamplePool.DataSource = sfxData.Samples
             ListBox_SamplePool.DisplayMember = "FilePath"
@@ -153,11 +155,13 @@ Partial Public Class Frm_SfxEditor
                     Label_SampleInfo_FreqValue.Text = reader.WaveFormat.SampleRate
                     Label_SampleInfo_SizeValue.Text = BytesStringFormat(reader.Length)
                     Label_SampleInfo_LengthValue.Text = Math.Round(reader.TotalTime.TotalSeconds, 1)
+
                     'Check if is looped
                     Label_SampleInfo_LoopValue.Text = "False"
                     If ReadWaveSampleChunk(reader)(0) = 1 Then
                         Label_SampleInfo_LoopValue.Text = "True"
                     End If
+
                     'Check if is streamed
                     Label_SampleInfo_StreamedValue.Text = "??"
                     If StreamSamplesList IsNot Nothing Then
@@ -235,6 +239,7 @@ Partial Public Class Frm_SfxEditor
             If openFileDiag.ShowDialog = DialogResult.OK Then
                 Dim sfxFileData As SfxFile = sfxFilesData(currentPlatform)
                 Dim sampleDefaultValues As Double() = GetDefaultSampleValues()
+
                 'Get file selected path and read
                 For Each waveFullPath As String In openFileDiag.FileNames
                     Using reader As New WaveFileReader(waveFullPath)
@@ -252,6 +257,7 @@ Partial Public Class Frm_SfxEditor
                         If InStr(waveFullPath, MasterFolderPath) = 1 Then
                             Dim relativePath As String = waveFullPath.Substring(MasterFolderPath.Length)
                             sampleObj.FilePath = relativePath
+
                             'Add object to list
                             sfxFileData.Samples.Add(sampleObj)
                         Else

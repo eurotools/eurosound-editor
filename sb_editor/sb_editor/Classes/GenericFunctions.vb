@@ -297,7 +297,7 @@ Friend Module GenericFunctions
         Return hashCodesDictionary
     End Function
 
-    Friend Function GetSoundBanksDict(soundBanksFilePath) As SortedDictionary(Of String, UInteger)
+    Friend Function GetSoundBanksDict(soundBanksFilePath As String) As SortedDictionary(Of String, UInteger)
         Dim soundBanksDictionary As New SortedDictionary(Of String, UInteger)
         Dim soundbankFiles As String() = Directory.GetFiles(soundBanksFilePath, "*.txt", SearchOption.TopDirectoryOnly)
 
@@ -316,5 +316,26 @@ Friend Module GenericFunctions
         Next
 
         Return soundBanksDictionary
+    End Function
+
+    Friend Function GetReverbsDict(reverbsFilePath As String) As SortedDictionary(Of String, UInteger)
+        Dim reverbHashcodesDictionary As New SortedDictionary(Of String, UInteger)
+        Dim soundbankFiles As String() = Directory.GetFiles(reverbsFilePath, "*.txt", SearchOption.TopDirectoryOnly)
+
+        For fileIndex As Integer = 0 To soundbankFiles.Length - 1
+            Dim currentFilePath As String = soundbankFiles(fileIndex)
+            Dim soundBankLabel As String = Path.GetFileNameWithoutExtension(currentFilePath)
+            If Not reverbHashcodesDictionary.ContainsKey(soundBankLabel) Then
+                'Get HashCode
+                Dim reverbFilePath As String() = File.ReadAllLines(currentFilePath)
+                Dim hashcodeIndex As Integer = Array.IndexOf(reverbFilePath, "#MiscData")
+                Dim stringData As String() = reverbFilePath(hashcodeIndex + 1).Split(New Char() {" "c}, StringSplitOptions.RemoveEmptyEntries)
+                If stringData.Length > 1 AndAlso IsNumeric(stringData(1)) Then
+                    reverbHashcodesDictionary.Add(soundBankLabel, stringData(1))
+                End If
+            End If
+        Next
+
+        Return reverbHashcodesDictionary
     End Function
 End Module

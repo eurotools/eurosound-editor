@@ -36,7 +36,7 @@ Partial Public Class ExporterForm
             outputFile.WriteLine("#define SFX_NIS_MUSIC_TRIGGER 0")
             outputFile.WriteLine(vbNullString)
             Dim maxSfxHashcodeDefined = 0
-            For Each sfxItem In sfxDict
+            For Each sfxItem As KeyValuePair(Of String, UInteger) In sfxDict
                 If prefixHashCodes Then
                     outputFile.WriteLine(WriteHashCode("HT_Sound_" & sfxItem.Key, NumberToHex(sfxItem.Value + EX_SFX_PREFIX)))
                 Else
@@ -136,6 +136,20 @@ Partial Public Class ExporterForm
         'Liberate memmory
         Erase contentArray
         Erase filesArray
+    End Sub
+
+    '*===============================================================================================
+    '* SFX_Reverbs.h
+    '*===============================================================================================
+    Private Sub CreateSfxReverbs(filePath As String, reverbsDict As SortedDictionary(Of String, UInteger))
+        If reverbsDict.Count > 0 Then
+            Using outputFile As New StreamWriter(filePath)
+                outputFile.WriteLine("// Reverb Hashcodes")
+                For Each sfxItem As KeyValuePair(Of String, UInteger) In reverbsDict
+                    outputFile.WriteLine(WriteHashCode(sfxItem.Key, NumberToHex(sfxItem.Value)))
+                Next
+            End Using
+        End If
     End Sub
 
     '*===============================================================================================
