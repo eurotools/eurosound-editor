@@ -57,7 +57,7 @@ Partial Public Class ResampleForm
         'Ensure that we selected an item from the list
         If ListView_Samples.SelectedItems.Count > 0 Then
             'Get wave file path
-            Dim waveRelativePath = ListView_Samples.SelectedItems(0).Text
+            Dim waveRelativePath = ListView_Samples.SelectedItems(0).Text.TrimStart("\")
             Dim waveFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", waveRelativePath)
 
             'Ensure that the Wave Path exists
@@ -94,7 +94,8 @@ Partial Public Class ResampleForm
         'Ensure that the selection is not null
         If ListView_Samples.SelectedItems.Count > 0 Then
             'Get wave file path
-            Dim waveFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", ListView_Samples.SelectedItems(0).Text)
+            Dim waveRelativePath = ListView_Samples.SelectedItems(0).Text.TrimStart("\")
+            Dim waveFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", waveRelativePath)
             'Open tool if files exists
             EditWaveFile(waveFilePath)
         End If
