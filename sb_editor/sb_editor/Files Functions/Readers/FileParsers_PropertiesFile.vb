@@ -105,9 +105,11 @@ Namespace ReaderClasses
                             End While
 
                             'Add data to dictionary
-                            Dim formatName As String = propsFile.AvailableFormats(index, 0)
-                            If Not propsFile.sampleRateFormats.ContainsKey(formatName) Then
-                                propsFile.sampleRateFormats.Add(formatName, values)
+                            If propsFile.AvailableFormats.GetLength(0) > 0 Then
+                                Dim formatName As String = propsFile.AvailableFormats(index, 0)
+                                If Not propsFile.sampleRateFormats.ContainsKey(formatName) Then
+                                    propsFile.sampleRateFormats.Add(formatName, values)
+                                End If
                             End If
                         End If
 

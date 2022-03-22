@@ -77,7 +77,7 @@ Partial Class MusicMaker
         'Button_ForceOutput
         '
         Me.Button_ForceOutput.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_ForceOutput.Location = New System.Drawing.Point(424, 356)
+        Me.Button_ForceOutput.Location = New System.Drawing.Point(424, 357)
         Me.Button_ForceOutput.Name = "Button_ForceOutput"
         Me.Button_ForceOutput.Size = New System.Drawing.Size(101, 23)
         Me.Button_ForceOutput.TabIndex = 6

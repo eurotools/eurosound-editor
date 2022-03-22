@@ -223,11 +223,13 @@ Partial Public Class Project_Properties
                 ProjectSettingsFile.sampleRateFormats.Add(selectedPlatform, New Dictionary(Of String, UInteger))
                 ProjectSettingsFile.sampleRateFormats(selectedPlatform).Add("Default", 22050)
                 If ProjectSettingsFile.sampleRateFormats.Count > 0 Then
-                    For Each ReSampleRate As String In ProjectSettingsFile.sampleRateFormats(ComboBox_RatesFormat.Items(0)).Keys
-                        If Not ProjectSettingsFile.sampleRateFormats(selectedPlatform).ContainsKey(ReSampleRate) Then
-                            ProjectSettingsFile.sampleRateFormats(selectedPlatform).Add(ReSampleRate, 22050)
-                        End If
-                    Next
+                    If ComboBox_RatesFormat.Items.Count > 0 Then
+                        For Each ReSampleRate As String In ProjectSettingsFile.sampleRateFormats(ComboBox_RatesFormat.Items(0)).Keys
+                            If Not ProjectSettingsFile.sampleRateFormats(selectedPlatform).ContainsKey(ReSampleRate) Then
+                                ProjectSettingsFile.sampleRateFormats(selectedPlatform).Add(ReSampleRate, 22050)
+                            End If
+                        Next
+                    End If
                 End If
                 'Add item to list
                 Dim formatitem As New ListViewItem(New String() {selectedPlatform, "Set Output Folder.", "On"})
@@ -273,19 +275,19 @@ Partial Public Class Project_Properties
         If resampleName IsNot "" Then
             'Ensure that does not exists
             If Not ProjectSettingsFile.AvailableReSampleRates.Contains(resampleName) Then
-                'Add item to list
+                'Add item to list and to the combobox
                 ListBox_SampleRates.Items.Add(resampleName)
-                'Add item to combobox
                 ComboBox_DefaultSampleRate.Items.Add(resampleName)
+                ProjectSettingsFile.AvailableReSampleRates.Add(resampleName)
+
                 'Update platform rates
                 For Each platform In ProjectSettingsFile.sampleRateFormats
                     Dim formatRatesList As Dictionary(Of String, UInteger) = platform.Value
-                    For index As Integer = 0 To ListBox_SampleRates.Items.Count - 1
-                        If Not formatRatesList.ContainsKey(ListBox_SampleRates.Items(index)) Then
-                            formatRatesList.Add(ListBox_SampleRates.Items(index), 22050)
-                        End If
-                    Next
+                    If Not formatRatesList.ContainsKey(resampleName) Then
+                        formatRatesList.Add(resampleName, 22050)
+                    End If
                 Next
+
                 'Print rates
                 If ComboBox_RatesFormat.SelectedItem IsNot Nothing Then
                     'Get selected platform

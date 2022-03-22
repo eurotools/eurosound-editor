@@ -21,6 +21,7 @@ mono_crash.*
 [Ii]cons/
 [Oo]utput[Ff]older/
 [Oo]utput[Tt]ests/
+[Dd]emo [Pp]roject/
 
 # Build results
 [Dd]ebug/
