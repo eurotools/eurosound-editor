@@ -155,7 +155,7 @@ Partial Public Class ExporterForm
     '*===============================================================================================
     '* Sound.h
     '*===============================================================================================
-    Private Sub CreateSoundhFile(outputFilePath As String, sfxDefines As String, mfxDefines As String)
+    Private Sub CreateSoundhFile(outputFilePath As String, sfxDefines As String, mfxDefines As String, sfxReverbDefines As String)
         Using outputFile As New StreamWriter(outputFilePath)
             outputFile.WriteLine("/* HT_Sound */")
             'SFX_Defines.h
@@ -170,6 +170,13 @@ Partial Public Class ExporterForm
                 Dim mfxDefinesData As String() = File.ReadAllLines(mfxDefines)
                 For index As Integer = 0 To mfxDefinesData.Length - 1
                     outputFile.WriteLine(mfxDefinesData(index))
+                Next
+            End If
+            'SFX_Reverbs.h
+            If File.Exists(sfxReverbDefines) Then
+                Dim reverbsData As String() = File.ReadAllLines(sfxReverbDefines)
+                For index As Integer = 0 To reverbsData.Length - 1
+                    outputFile.WriteLine(reverbsData(index))
                 Next
             End If
         End Using

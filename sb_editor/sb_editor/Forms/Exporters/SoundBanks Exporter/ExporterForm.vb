@@ -143,8 +143,8 @@ Partial Public Class ExporterForm
                 CreateSfxDebug(hashCodesDictionary, Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Debug.h"))
                 CreateSfxDefines(hashCodesDictionary, soundBanksDictionary, SfxLanguages, ProjectSettingsFile.MiscProps.PrefixHtSound, sfxDefinesFilePath)
                 CreateSfxData(sfxDataFilePath, Path.Combine(WorkingDirectory, "TempSfxData"), maxHashCode)
-                CreateSoundhFile(soundhFilePath, sfxDefinesFilePath, Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "MFX_Defines.h"))
                 CreateSfxReverbs(reverbsFilePath, reverbHashCodesDictionary)
+                CreateSoundhFile(soundhFilePath, sfxDefinesFilePath, Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "MFX_Defines.h"), reverbsFilePath)
 
                 '----------------------------------------------Create SFX DATA BIN----------------------------------------------
                 CreateSFXDataBinaryFiles(outPlaforms, outputLanguage)
