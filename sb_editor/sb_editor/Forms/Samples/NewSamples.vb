@@ -11,7 +11,6 @@ Public Class NewSamples
     '* FORM EVENTS
     '*===============================================================================================
     Sub New(missingSamplesList As String())
-
         ' Esta llamada es exigida por el diseñador.
         InitializeComponent()
 
@@ -21,9 +20,11 @@ Public Class NewSamples
 
     Private Sub MissingSamples_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ListBox_NewSamples.Items.AddRange(samplesItemsToAdd)
+
         'Read properties file
         Dim propsFileData = textFileReaders.ReadPropertiesFile(SysFileProperties)
         Dim sampleRatesArray As String() = propsFileData.AvailableReSampleRates.ToArray
+
         'Add available rates to the combobox
         If sampleRatesArray.Length > 0 Then
             ComboBox_AvailableRates.Items.AddRange(sampleRatesArray)

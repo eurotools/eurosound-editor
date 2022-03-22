@@ -9,12 +9,14 @@ Partial Public Class MainFrame
         If ListBox_DataBases.SelectedItems.Count > 0 AndAlso TreeView_SoundBanks.Nodes.Count > 0 Then
             'Get Soundbank node
             Dim selectedSoundBank As TreeNode = TreeView_SoundBanks.SelectedNode
+
             'Ensure that is not null
             If selectedSoundBank IsNot Nothing Then
                 'If we have selected a child node, select his parent node
                 If selectedSoundBank.Level > 0 Then
                     selectedSoundBank = TreeView_SoundBanks.SelectedNode.Parent
                 End If
+
                 'Add databases to soundbank
                 Dim selectedDatabases As New List(Of String)
                 For Each database As String In ListBox_DataBases.SelectedItems
@@ -30,16 +32,11 @@ Partial Public Class MainFrame
     Private Sub RemoveSfxFromDatabase()
         'Remove Dependency
         If ListBox_DataBaseSFX.SelectedItems.Count > 0 AndAlso ListBox_DataBases.SelectedItems.Count = 1 Then
-            'Get selected items
-            Dim itemsToRemove As New Collection
-            For Each itemIndex As Integer In ListBox_DataBaseSFX.SelectedIndices
-                itemsToRemove.Add(ListBox_DataBaseSFX.Items(itemIndex))
+            'Remove selected items
+            For itemIndex As Integer = ListBox_DataBaseSFX.SelectedItems.Count - 1 To 0 Step -1
+                ListBox_DataBaseSFX.Items.Remove(ListBox_DataBaseSFX.SelectedItems(itemIndex))
             Next
-            'Remove items
-            For index As Integer = 1 To itemsToRemove.Count
-                'Remove item to the listbox
-                ListBox_DataBaseSFX.Items.Remove(itemsToRemove(index))
-            Next
+
             'Update text file
             Dim databaseTxt As String = Path.Combine(WorkingDirectory, "DataBases", ListBox_DataBases.SelectedItem & ".txt")
             Dim databaseDependencies As String() = ListBox_DataBaseSFX.Items.Cast(Of String).ToArray
@@ -57,6 +54,7 @@ Partial Public Class MainFrame
         If ListBox_DataBases.SelectedItems.Count = 1 Then
             'Build path
             Dim databaseFullPath = Path.Combine(WorkingDirectory, "Databases", ListBox_DataBases.SelectedItem & ".txt")
+
             'Show properties form
             If File.Exists(databaseFullPath) Then
                 Dim propertiesForm As New DataBase_Properties(databaseFullPath)
@@ -78,6 +76,7 @@ Partial Public Class MainFrame
         For index As Integer = samplesDataTable.Rows.Count - 1 To 0 Step -1
             Dim currentRow As DataRow = samplesDataTable.Rows(index)
             Dim sampleFullPath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master" & currentRow("SampleFilename"))
+
             'Add item to missing samples list and remove item form data table
             If Not File.Exists(sampleFullPath) Then
                 missingSamples.Add(currentRow("SampleFilename"))
@@ -90,6 +89,7 @@ Partial Public Class MainFrame
             'Update Text file
             samplesDataTable.AcceptChanges()
             writers.SaveSamplesFile(SysFileSamples, samplesDataTable)
+
             'Inform user about the missing samples
             Dim missingSamplesForm As New MissingSamples(missingSamples.ToArray)
             missingSamplesForm.ShowDialog()
@@ -122,17 +122,20 @@ Partial Public Class MainFrame
             Dim newSamplesForm As New NewSamples(samplesToAdd.ToArray)
             newSamplesForm.ShowDialog()
             Dim selectedSampleRate = newSamplesForm.ComboBox_AvailableRates.SelectedItem
+
             'Add new samples
             For sampleIndex As Integer = 0 To samplesToAdd.Length - 1
                 Dim currentFilePath As String = samplesToAdd(sampleIndex)
                 Dim sampleFullPath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", currentFilePath)
                 samplesTable.Rows.Add(currentFilePath, selectedSampleRate, FileLen(sampleFullPath), FileDateTime(sampleFullPath).ToString(dateFormat), "True", "False", "", "", "", "")
             Next
+
             'Sort table
             samplesTable.AcceptChanges()
             Dim view As DataView = samplesTable.DefaultView
             view.Sort = "SampleFilename asc"
             Dim sortedTable As DataTable = view.ToTable
+
             'Update file
             writers.SaveSamplesFile(SysFileSamples, sortedTable)
         End If

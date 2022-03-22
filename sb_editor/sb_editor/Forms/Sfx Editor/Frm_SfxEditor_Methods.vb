@@ -177,12 +177,14 @@ Partial Public Class Frm_SfxEditor
         SfxParamsAndSamplePool.GroupBox_GlobalSettings.Enabled = False
         GroupBox_SampleProps.Visible = False
         SfxParamsAndSamplePool.GroupBox_GlobalSettings.Visible = False
+
         'Hide labels
         Label_SampleInfo_FreqValue.Visible = False
         Label_SampleInfo_SizeValue.Visible = False
         Label_SampleInfo_LengthValue.Visible = False
         Label_SampleInfo_LoopValue.Visible = False
         Label_SampleInfo_StreamedValue.Visible = False
+
         'Show HashCodes List for Drag & Drop
         Dim hashcodesList As New HashCodesList With {
             .StartPosition = FormStartPosition.Manual
@@ -197,12 +199,14 @@ Partial Public Class Frm_SfxEditor
         SfxParamsAndSamplePool.GroupBox_GlobalSettings.Enabled = True
         GroupBox_SampleProps.Visible = True
         SfxParamsAndSamplePool.GroupBox_GlobalSettings.Visible = True
+
         'Show labels
         Label_SampleInfo_FreqValue.Visible = True
         Label_SampleInfo_SizeValue.Visible = True
         Label_SampleInfo_LengthValue.Visible = True
         Label_SampleInfo_LoopValue.Visible = True
         Label_SampleInfo_StreamedValue.Visible = True
+
         'Close form
         Dim subSfxListForm = CType(Application.OpenForms("HashCodesList"), HashCodesList)
         If subSfxListForm IsNot Nothing Then
@@ -264,14 +268,15 @@ Partial Public Class Frm_SfxEditor
         If ListBox_SamplePool.SelectedItems.Count > 0 Then
             If ListBox_SamplePool.Items.Count < 100 Then
                 Dim sfxFileData As SfxFile = sfxFilesData(currentPlatform)
+
                 'Get items to clone
                 Dim objectsToClone As New Collection
                 For Each sampleToClone As Sample In ListBox_SamplePool.SelectedItems
                     objectsToClone.Add(sampleToClone)
                 Next
+
                 'Add items
                 For index As Integer = 1 To objectsToClone.Count
-                    'Clone item
                     Dim newSample As New Sample With {
                         .FilePath = objectsToClone(index).FilePath,
                         .PitchOffset = objectsToClone(index).PitchOffset,
@@ -284,6 +289,7 @@ Partial Public Class Frm_SfxEditor
                     'Add item to list
                     sfxFileData.Samples.Add(newSample)
                 Next
+
                 'Clear selection
                 ListBox_SamplePool.SelectedItems.Clear()
                 For index As Integer = 1 To objectsToClone.Count
@@ -300,15 +306,18 @@ Partial Public Class Frm_SfxEditor
     Private Sub RemoveSelectedSample(currentPlatform As String)
         If ListBox_SamplePool.SelectedItems.Count > 0 Then
             Dim sfxFileData As SfxFile = sfxFilesData(currentPlatform)
+
             'Get items to remove
             Dim objectsToRemove As New Collection
             For Each sampleToRemove As Sample In ListBox_SamplePool.SelectedItems
                 objectsToRemove.Add(sampleToRemove)
             Next
+
             'Remove items
             For index As Integer = 1 To objectsToRemove.Count
                 sfxFileData.Samples.Remove(objectsToRemove(index))
             Next
+
             'Clear selection
             ListBox_SamplePool.SelectedItems.Clear()
         Else
@@ -331,6 +340,7 @@ Partial Public Class Frm_SfxEditor
                         'Get relative path
                         Dim waveRelativePath = sfxFileData.Samples(selectedItemName).FilePath
                         Dim waveFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", waveRelativePath)
+
                         'Play audio
                         If File.Exists(waveFilePath) Then
                             My.Computer.Audio.Play(waveFilePath)
@@ -338,7 +348,6 @@ Partial Public Class Frm_SfxEditor
                     End If
                 End If
             Else
-                'Inform user about this error
                 MsgBox("No audio devices has been found", vbOKOnly + vbExclamation, "EuroSound")
             End If
         Else
@@ -363,6 +372,7 @@ Partial Public Class Frm_SfxEditor
                         'Get absolute path
                         Dim waveRelativePath As String = sfxFileData.Samples(selectedItemName).FilePath
                         Dim waveFullPath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", waveRelativePath)
+
                         'Open Audio Editor tool
                         EditWaveFile(waveFullPath)
                     End If
@@ -390,7 +400,6 @@ Partial Public Class Frm_SfxEditor
                     Dim waveRelativePath = sfxFileData.Samples(selectedItemName).FilePath
                     Dim folderPath = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", Path.GetDirectoryName(waveRelativePath))
                     If Directory.Exists(folderPath) Then
-                        'Open folder
                         Process.Start("Explorer.exe", folderPath)
                     End If
                 End If

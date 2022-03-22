@@ -264,7 +264,7 @@ Partial Class MusicMaker
         Me.Button_Ok.Location = New System.Drawing.Point(699, 437)
         Me.Button_Ok.Name = "Button_Ok"
         Me.Button_Ok.Size = New System.Drawing.Size(75, 23)
-        Me.Button_Ok.TabIndex = 5
+        Me.Button_Ok.TabIndex = 6
         Me.Button_Ok.Text = "OK"
         Me.Button_Ok.UseVisualStyleBackColor = True
         '
@@ -274,7 +274,7 @@ Partial Class MusicMaker
         Me.Button_ImportMusics.Location = New System.Drawing.Point(446, 410)
         Me.Button_ImportMusics.Name = "Button_ImportMusics"
         Me.Button_ImportMusics.Size = New System.Drawing.Size(130, 23)
-        Me.Button_ImportMusics.TabIndex = 6
+        Me.Button_ImportMusics.TabIndex = 5
         Me.Button_ImportMusics.Text = "Import Musics From DLC"
         Me.Button_ImportMusics.UseVisualStyleBackColor = True
         '

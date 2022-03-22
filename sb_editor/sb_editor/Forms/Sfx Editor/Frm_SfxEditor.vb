@@ -103,9 +103,11 @@ Partial Public Class Frm_SfxEditor
 
         'Inherited from common file and applied to all other formats
         ShowSfxParameters(TabControl_Platforms.SelectedTab.Text)
+
         'Show common file
         ShowSfxSamplePoolControl(TabControl_Platforms.SelectedTab.Text)
         ShowSfxSamplePool(TabControl_Platforms.SelectedTab.Text)
+
         'Enable clipboard
         If File.Exists(Path.Combine(WorkingDirectory, "SFXs", "Misc", "ClipBoard.txt")) Then
             Button_ClipboardPaste.Enabled = True
@@ -147,6 +149,7 @@ Partial Public Class Frm_SfxEditor
         'Show common file
         ShowSfxSamplePoolControl(TabControl_Platforms.SelectedTab.Text)
         ShowSfxSamplePool(TabControl_Platforms.SelectedTab.Text)
+
         'Disable remove specific format if the current tab is "Common"
         If StrComp(e.TabPage.Text, "Common") = 0 Then
             Button_RemoveSpecificVersion.Enabled = False
@@ -480,9 +483,11 @@ Partial Public Class Frm_SfxEditor
         'Start watcher
         Dim watch As New Stopwatch
         watch.Start()
+
         'Create Test SoundBank
         Dim filePath As String = sfxFilesData(TabControl_Platforms.SelectedTab.Text).filePath
         CreateTestSFX(filePath)
+
         'Stop watcher
         watch.Stop()
         TextBox_ScriptTime.Text = "ES Time " & watch.ElapsedMilliseconds
@@ -513,7 +518,6 @@ Partial Public Class Frm_SfxEditor
     End Sub
 
     Private Sub OutputHandler(sendingProcess As Object, outLine As DataReceivedEventArgs)
-        ' Collect the sort command output.
         If Not String.IsNullOrEmpty(outLine.Data) Then
             ' Add the text to the collected output.
             TextBox_ScriptDebug.Invoke(Sub() TextBox_ScriptDebug.Text += Trim(outLine.Data & vbCrLf))
@@ -529,30 +533,22 @@ Partial Public Class Frm_SfxEditor
     '* BUTTON EVENTS
     '*===============================================================================================
     Private Sub Button_SpecVersion_PlayStation2_Click(sender As Object, e As EventArgs) Handles Button_SpecVersion_PlayStation2.Click
-        'Create format
         CreateSpecificFormat("PlayStation2")
-        'Disable Button
         Button_SpecVersion_PlayStation2.Enabled = False
     End Sub
 
     Private Sub Button_SpecVersion_GameCube_Click(sender As Object, e As EventArgs) Handles Button_SpecVersion_GameCube.Click
-        'Create format
         CreateSpecificFormat("GameCube")
-        'Disable Button
         Button_SpecVersion_GameCube.Enabled = False
     End Sub
 
     Private Sub Button_SpecVersion_Xbox_Click(sender As Object, e As EventArgs) Handles Button_SpecVersion_Xbox.Click
-        'Create format
         CreateSpecificFormat("X Box")
-        'Disable Button
         Button_SpecVersion_Xbox.Enabled = False
     End Sub
 
     Private Sub Button_SpecVersion_PC_Click(sender As Object, e As EventArgs) Handles Button_SpecVersion_PC.Click
-        'Create format
         CreateSpecificFormat("PC")
-        'Disable Button
         Button_SpecVersion_PC.Enabled = False
     End Sub
 
@@ -568,8 +564,10 @@ Partial Public Class Frm_SfxEditor
         If File.Exists(clipboardFilePath) Then
             Dim sfxFile As SfxFile = reader.ReadSFXFile(clipboardFilePath)
             sfxFilesData(TabControl_Platforms.SelectedTab.Text) = sfxFile
+
             'Inherited from common file and applied to all other formats
             ShowSfxParameters(TabControl_Platforms.SelectedTab.Text)
+
             'Show common file
             ShowSfxSamplePoolControl(TabControl_Platforms.SelectedTab.Text)
             ShowSfxSamplePool(TabControl_Platforms.SelectedTab.Text)
@@ -590,6 +588,7 @@ Partial Public Class Frm_SfxEditor
             Case "PlayStation2"
                 Button_SpecVersion_PlayStation2.Enabled = True
         End Select
+
         'Delete tab
         sfxFilesData.Remove(TabControl_Platforms.SelectedTab.Text)
         TabControl_Platforms.TabPages.Remove(TabControl_Platforms.SelectedTab)

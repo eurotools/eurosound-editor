@@ -392,13 +392,8 @@ Partial Public Class MainFrame
                 'Get Soundbanks files
                 Dim soundbankFiles As String() = Directory.GetFiles(Path.Combine(WorkingDirectory, "Soundbanks"), "*.txt", SearchOption.TopDirectoryOnly)
                 For i As Integer = 0 To soundbankFiles.Length - 1
-                    'Update soundbank file
-                    Dim soundbankFile As SoundbankFile = textFileReaders.ReadSoundBankFile(soundbankFiles(i))
-                    Dim resultList As List(Of String) = soundbankFile.Dependencies.Except(itemsToDelete).ToList
-                    If resultList.Count < soundbankFile.Dependencies.Length Then
-                        soundbankFile.Dependencies = resultList.ToArray
-                        writers.UpdateSoundbankFile(soundbankFile, soundbankFiles(i), textFileReaders, False)
-                    End If
+                    Dim soundBankData As String() = File.ReadAllLines(soundbankFiles(i))
+                    File.WriteAllLines(soundbankFiles(i), soundBankData.Except(itemsToDelete).ToArray)
                 Next
 
                 'Update UI
