@@ -193,6 +193,7 @@ Partial Class Soundbank_Properties
         Me.Label_Format4Name.Size = New System.Drawing.Size(81, 13)
         Me.Label_Format4Name.TabIndex = 6
         Me.Label_Format4Name.Text = "format name #4"
+        Me.Label_Format4Name.Visible = False
         '
         'Label_Value_FirstCreated
         '
@@ -256,6 +257,7 @@ Partial Class Soundbank_Properties
         Me.Label_Format3Name.Size = New System.Drawing.Size(81, 13)
         Me.Label_Format3Name.TabIndex = 4
         Me.Label_Format3Name.Text = "format name #3"
+        Me.Label_Format3Name.Visible = False
         '
         'Label_DataBaseCount
         '
@@ -292,6 +294,7 @@ Partial Class Soundbank_Properties
         Me.Label_Format2Name.Size = New System.Drawing.Size(81, 13)
         Me.Label_Format2Name.TabIndex = 2
         Me.Label_Format2Name.Text = "format name #2"
+        Me.Label_Format2Name.Visible = False
         '
         'ListBox_SFXs
         '
@@ -322,6 +325,7 @@ Partial Class Soundbank_Properties
         Me.Label_Format1Name.Size = New System.Drawing.Size(81, 13)
         Me.Label_Format1Name.TabIndex = 0
         Me.Label_Format1Name.Text = "format name #1"
+        Me.Label_Format1Name.Visible = False
         '
         'Label_DataBasesCount
         '
@@ -372,6 +376,7 @@ Partial Class Soundbank_Properties
         Me.Label_Format4Value.Size = New System.Drawing.Size(72, 13)
         Me.Label_Format4Value.TabIndex = 7
         Me.Label_Format4Value.Text = "format #4 info"
+        Me.Label_Format4Value.Visible = False
         '
         'Label_Format3Value
         '
@@ -381,6 +386,7 @@ Partial Class Soundbank_Properties
         Me.Label_Format3Value.Size = New System.Drawing.Size(72, 13)
         Me.Label_Format3Value.TabIndex = 5
         Me.Label_Format3Value.Text = "format #3 info"
+        Me.Label_Format3Value.Visible = False
         '
         'Label_Format2Value
         '
@@ -390,6 +396,7 @@ Partial Class Soundbank_Properties
         Me.Label_Format2Value.Size = New System.Drawing.Size(72, 13)
         Me.Label_Format2Value.TabIndex = 3
         Me.Label_Format2Value.Text = "format #2 info"
+        Me.Label_Format2Value.Visible = False
         '
         'Label_Format1Value
         '
@@ -399,6 +406,7 @@ Partial Class Soundbank_Properties
         Me.Label_Format1Value.Size = New System.Drawing.Size(72, 13)
         Me.Label_Format1Value.TabIndex = 1
         Me.Label_Format1Value.Text = "format #1 info"
+        Me.Label_Format1Value.Visible = False
         '
         'Button_OK
         '

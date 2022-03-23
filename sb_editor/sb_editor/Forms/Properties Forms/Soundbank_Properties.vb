@@ -71,30 +71,38 @@ Public Class Soundbank_Properties
         Dim totalSampleSize As Integer = 0
 
         'Get streamed samples 
-        Dim streamSamplesList As String() = textFileReaders.GetStreamSoundsList(SysFileSamples)
-        Dim samplesTable As DataTable = textFileReaders.SamplesFileToDatatable(SysFileSamples)
         Dim soundBankFormatSizes As New List(Of String)
-        For formatIndex As Integer = 0 To availablePlatforms.Length - 1
-            Dim currentFormat As String = availablePlatforms(formatIndex)
-            Dim soundBankSize As String
-            Dim formatSamplesList As String() = GetFinalList(soundBankSamplesList, streamSamplesList, currentFormat)
-            'Get SoundBank Size
-            Dim formatSamplesFolder As String = Path.Combine(WorkingDirectory, "TempOutputFolder", currentFormat, "SoundBanks", OutputLanguage, soundBankData.HashCode & ".sbf")
-            If File.Exists(formatSamplesFolder) Then
-                totalSampleSize += GetTotalSampleSize(formatSamplesList)
-                soundBankSize = BytesStringFormat(FileLen(formatSamplesFolder))
-            Else
-                If Directory.Exists(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")) Then
+        If File.Exists(SysFileSamples) Then
+            Dim streamSamplesList As String() = textFileReaders.GetStreamSoundsList(SysFileSamples)
+            Dim samplesTable As DataTable = textFileReaders.SamplesFileToDatatable(SysFileSamples)
+            For formatIndex As Integer = 0 To availablePlatforms.Length - 1
+                Dim currentFormat As String = availablePlatforms(formatIndex)
+                Dim soundBankSize As String
+                Dim formatSamplesList As String() = GetFinalList(soundBankSamplesList, streamSamplesList, currentFormat)
+                'Get SoundBank Size
+                Dim formatSamplesFolder As String = Path.Combine(WorkingDirectory, "TempOutputFolder", currentFormat, "SoundBanks", OutputLanguage, soundBankData.HashCode & ".sbf")
+                If File.Exists(formatSamplesFolder) Then
                     totalSampleSize += GetTotalSampleSize(formatSamplesList)
-                    soundBankSize = BytesStringFormat(GetEstimatedPlatformSize(formatSamplesList, currentFormat, samplesTable)) & " - ESTIMATED"
+                    soundBankSize = BytesStringFormat(FileLen(formatSamplesFolder))
                 Else
-                    totalSampleSize += formatSamplesList.Length
-                    soundBankSize = BytesStringFormat(GetEstimatedPlatformSizeNoMaster(formatSamplesList, currentFormat)) & " - ESTIMATED"
+                    If Directory.Exists(Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")) Then
+                        totalSampleSize += GetTotalSampleSize(formatSamplesList)
+                        soundBankSize = BytesStringFormat(GetEstimatedPlatformSize(formatSamplesList, currentFormat, samplesTable)) & " - ESTIMATED"
+                    Else
+                        totalSampleSize += formatSamplesList.Length
+                        soundBankSize = BytesStringFormat(GetEstimatedPlatformSizeNoMaster(formatSamplesList, currentFormat)) & " - ESTIMATED"
+                    End If
                 End If
-            End If
-            'Add format to dictionary
-            soundBankFormatSizes.Add(currentFormat & ";" & soundBankSize)
-        Next
+                'Add format to dictionary
+                soundBankFormatSizes.Add(currentFormat & ";" & soundBankSize)
+            Next
+        Else
+            For formatIndex As Integer = 0 To availablePlatforms.Length - 1
+                'Add format to dictionary
+                Dim currentFormat As String = availablePlatforms(formatIndex)
+                soundBankFormatSizes.Add(currentFormat & ";" & BytesStringFormat(0) & " - ESTIMATED")
+            Next
+        End If
 
         'Print values
         For itemIndex As Integer = 0 To soundBankFormatSizes.Count - 1

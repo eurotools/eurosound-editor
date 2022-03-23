@@ -9,7 +9,7 @@ Partial Public Class Project_Properties
     '*===============================================================================================
     Private ReadOnly textFileReaders As New FileParsers()
     Private ReadOnly textFileWriters As New FileWriters
-    Private ReadOnly ratesNames As String() = New String() {"Low", "Medium", "High", "Maximum"}
+    Private ReadOnly ratesNames As String() = New String() {"Minimum", "Low", "Medium", "High", "Maximum"}
     Private promptSave As Boolean = True
     Private ratesNamesIndex As Byte = 0
     Private ReadOnly mainform As MainFrame
