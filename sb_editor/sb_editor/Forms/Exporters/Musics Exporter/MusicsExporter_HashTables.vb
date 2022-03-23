@@ -15,7 +15,7 @@ Partial Public Class MusicsExporter
             If File.Exists(jumpMarkersFilePath) Then
                 Dim jumpHashCodes As String() = textFileReaders.ReadJumpFile(jumpMarkersFilePath)
                 'Append data
-                Using outputFile As New StreamWriter(musicDefinesFilePath)
+                Using outputFile As New StreamWriter(File.Open(musicDefinesFilePath, FileMode.Append, FileAccess.Write, FileShare.Read))
                     outputFile.WriteLine("")
                     outputFile.WriteLine("// Music Jump Codes For Level MFX_" & musicItem.Key)
                     For jumpHashCode As Integer = 0 To jumpHashCodes.Length - 1

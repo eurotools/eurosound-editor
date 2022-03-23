@@ -231,9 +231,11 @@ Partial Public Class Project_Properties
                         Next
                     End If
                 End If
+
                 'Add item to list
                 Dim formatitem As New ListViewItem(New String() {selectedPlatform, "Set Output Folder.", "On"})
                 ListView_Formats.Items.Add(formatitem)
+
                 'Add item to combobox
                 If Not ComboBox_RatesFormat.Items.Contains(selectedPlatform) Then
                     ComboBox_RatesFormat.Items.Add(selectedPlatform)
@@ -267,7 +269,7 @@ Partial Public Class Project_Properties
         If ratesNamesIndex < ratesNames.Length Then
             defaultName = ratesNames(ratesNamesIndex)
         Else
-            defaultName = ratesNames(3) & " " & (ratesNamesIndex - 3)
+            defaultName = ratesNames(4) & " " & (ratesNamesIndex - 4)
         End If
 
         'Ask user for a new resample rate name
