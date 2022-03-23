@@ -639,20 +639,21 @@ Partial Public Class MainFrame
     Private Sub Button_ReSampling_Click(sender As Object, e As EventArgs) Handles Button_ReSampling.Click
         Dim samplesFolder As String = ProjectSettingsFile.MiscProps.SampleFileFolder
         If samplesFolder > "" AndAlso Directory.Exists(Path.Combine(samplesFolder, "Master")) Then
-            If File.Exists(SysFileSamples) Then
-                'Set cursor as hourglass
-                Cursor.Current = Cursors.WaitCursor
-
-                'Check new and missing samples
-                CheckForMissingSamples()
-                CheckForNewSamples()
-
-                'Show form
-                Dim resampleForm As New ResampleForm(textFileReaders.SamplesFileToDatatable(SysFileSamples))
-                resampleForm.ShowDialog()
-            Else
-                MsgBox("File not found", vbOKOnly + vbCritical, "EuroSound")
+            'Create the file if not exists (for new projects)
+            If Not File.Exists(SysFileSamples) Then
+                writers.SaveSamplesFile(SysFileSamples, New DataTable)
             End If
+
+            'Set cursor as hourglass
+            Cursor.Current = Cursors.WaitCursor
+
+            'Check new and missing samples
+            CheckForMissingSamples()
+            CheckForNewSamples()
+
+            'Show form
+            Dim resampleForm As New ResampleForm(textFileReaders.SamplesFileToDatatable(SysFileSamples))
+            resampleForm.ShowDialog()
         Else
             MsgBox("Master folder could not be located. Please set the folder location under Properties menu.", vbOKOnly + vbCritical, "EuroSound")
         End If

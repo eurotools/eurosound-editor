@@ -126,7 +126,7 @@ Partial Public Class MainFrame
             'Add new samples
             For sampleIndex As Integer = 0 To samplesToAdd.Length - 1
                 Dim currentFilePath As String = samplesToAdd(sampleIndex)
-                Dim sampleFullPath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", currentFilePath)
+                Dim sampleFullPath As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master", currentFilePath.TrimStart("\"))
                 samplesTable.Rows.Add(currentFilePath, selectedSampleRate, FileLen(sampleFullPath), FileDateTime(sampleFullPath).ToString(dateFormat), "True", "False", "", "", "", "")
             Next
 
