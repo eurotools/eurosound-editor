@@ -60,7 +60,7 @@ Namespace ReaderClasses
             Return samplesData
         End Function
 
-        Friend Function GetStreamSoundsList(samplesFilePath As String) As String()
+        Friend Function GetAllStreamSamples(samplesFilePath As String) As String()
             'Create a datatable with the samples info
             Dim dataTable As DataTable = SamplesFileToDatatable(samplesFilePath)
 
@@ -70,17 +70,12 @@ Namespace ReaderClasses
                 Dim itemData As String = dataTable.Rows(rowIndex).Item(5)
                 If itemData.Equals("True", StringComparison.OrdinalIgnoreCase) Then
                     Dim sampleRelativePath As String = dataTable.Rows(rowIndex).Item(0)
-                    'In the multilanguage, we only need to get the english folder, the other languages should have the same folder structure
-                    If sampleRelativePath.Contains("Speech\") Then
-                        If Not sampleRelativePath.Contains("Speech\English") Then
-                            Continue For
-                        End If
-                    End If
                     streamsList.Add(sampleRelativePath.TrimStart("\").ToUpper)
                 End If
             Next
+
             'Return data
-            Return streamsList.ToArray
+            Return streamsList.Distinct.ToArray
         End Function
     End Class
 End Namespace

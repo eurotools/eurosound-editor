@@ -90,7 +90,6 @@ Partial Public Class ExporterForm
 
         'Get data
         Dim soundsTable As DataTable = textFileReaders.SamplesFileToDatatable(SysFileSamples)
-        Dim streamSamplesList As String() = textFileReaders.GetStreamSoundsList(SysFileSamples)
 
         '----------------------------------------------Resample samples and streams----------------------------------------------
         If Not quickOutput Then
@@ -100,7 +99,7 @@ Partial Public Class ExporterForm
             Dim XboxTimer As New Stopwatch()
             Dim PlayStationTimer As New Stopwatch()
             'Get all available formats
-            ResampleWaves(soundsTable, ProjectSettingsFile.AvailableFormats, SoxTimer, PCTimer, GCTimer, XboxTimer, PlayStationTimer)
+            Dim streamSamplesList As String() = ResampleWaves(soundsTable, ProjectSettingsFile.AvailableFormats, SoxTimer, PCTimer, GCTimer, XboxTimer, PlayStationTimer)
             If ReSampleStreams = 1 Then
                 GenerateStreamFolder(streamSamplesList, outputLanguage, ProjectSettingsFile.AvailableFormats)
                 ReSampleStreams = 0
@@ -125,7 +124,7 @@ Partial Public Class ExporterForm
         '----------------------------------------------Output user selected Soundbanks----------------------------------------------
         Dim OutputAborted As Boolean = False
         If outSoundBanks.Length > 0 Then
-            OutputSoundbanks(hashCodesDictionary, outSoundBanks, streamSamplesList, outputLanguage, outPlaforms, OutputAborted)
+            OutputSoundbanks(hashCodesDictionary, outSoundBanks, outputLanguage, outPlaforms, OutputAborted)
         End If
 
         'Continue if the output has not been aborted

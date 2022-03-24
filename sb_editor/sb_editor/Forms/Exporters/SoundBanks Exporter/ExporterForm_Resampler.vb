@@ -6,7 +6,10 @@ Partial Public Class ExporterForm
     '*===============================================================================================
     '* MAIN METHOD
     '*===============================================================================================
-    Private Sub ResampleWaves(soundsTable As DataTable, outPlatforms As String(,), SoxTimer As Stopwatch, PCTimer As Stopwatch, GCTimer As Stopwatch, XBTimer As Stopwatch, PSTimer As Stopwatch)
+    Private Function ResampleWaves(soundsTable As DataTable, outPlatforms As String(,), SoxTimer As Stopwatch, PCTimer As Stopwatch, GCTimer As Stopwatch, XBTimer As Stopwatch, PSTimer As Stopwatch) As String()
+        'Streams List
+        Dim streamsList As New List(Of String)
+
         'Get Wave files to include
         Dim samplesCount As Integer = soundsTable.Rows.Count - 1
         If samplesCount > 0 Then
@@ -64,6 +67,11 @@ Partial Public Class ExporterForm
                                     Dim sampleRate As Integer = ProjectSettingsFile.sampleRateFormats(currentPlatform)(sampleRateLabel)
                                     If soundsTable.Rows(rowIndex).Item(5) Then
                                         sampleRate = 22050
+                                    End If
+
+                                    'Check if is stream
+                                    If soundsTable.Rows(rowIndex).Item(5) Then
+                                        streamsList.Add(sampleRelativePath)
                                     End If
 
                                     'ReSample for each platform
@@ -159,7 +167,13 @@ Partial Public Class ExporterForm
                 End If
             Next
         End If
-    End Sub
+
+        'Get sorted array with no duplicates
+        Dim StreamArray As String() = streamsList.Distinct.ToArray
+        Array.Sort(StreamArray)
+
+        Return StreamArray
+    End Function
 
     Private Sub CreateImaAdpcm(currentPlatform As String, sampleRelativePath As String, outputFilePath As String, platformTimer As Stopwatch)
         platformTimer.Start()

@@ -216,6 +216,8 @@ Partial Public Class ResampleForm
             For Each item As ListViewItem In ListView_Samples.SelectedItems
                 item.SubItems(5).Text = "False"
             Next
+            'Update global varibale
+            ReSampleStreams = 1
         End If
     End Sub
 
@@ -239,8 +241,6 @@ Partial Public Class ResampleForm
         For Each item As ListViewItem In ListView_Samples.Items
             item.SubItems(4).Text = "False"
         Next
-        'Update global varibale
-        ReSampleStreams = 0
         'End list update
         ListView_Samples.EndUpdate()
     End Sub

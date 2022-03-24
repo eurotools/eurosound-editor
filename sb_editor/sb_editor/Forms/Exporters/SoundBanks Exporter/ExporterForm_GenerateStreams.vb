@@ -2,6 +2,7 @@
 Imports EngineXMarkersTool
 Imports NAudio.Wave
 Imports sb_editor.MarkerFunctions
+Imports sb_editor.SoundBanksExporterFunctions
 
 Partial Public Class ExporterForm
     Private ReadOnly markersFunctions As New ExMarkersTool
@@ -13,8 +14,7 @@ Partial Public Class ExporterForm
         Directory.CreateDirectory(debugFolder)
 
         'Get Wave files to include
-        Dim streamSamplesCount As Integer = streamSamplesList.Length - 1
-        If streamSamplesCount > 0 Then
+        If streamSamplesList.Length > 0 Then
             'Create Folder structure
             For languageIndex As Integer = 0 To outLanguages.Length - 1
                 Dim currentLanguage As String = outLanguages(languageIndex)
@@ -26,26 +26,25 @@ Partial Public Class ExporterForm
 
             'Reset progress bar
             Invoke(Sub() ProgressBar1.Value = 0)
+
             'For each Language
             For languageIndex As Integer = 0 To outLanguages.Length - 1
                 Dim currentLanguage As String = outLanguages(languageIndex)
+                Dim finalPlatformStreams As String() = GetStreamsCurrentLanguage(streamSamplesList, currentLanguage)
+
                 'For each Platform
                 For platformIndex As Integer = 0 To outPlatforms.GetLength(0) - 1
                     If outPlatforms(platformIndex, 2).Equals("On", StringComparison.OrdinalIgnoreCase) Then
-                        Dim filesToBind As New List(Of String)
                         Dim currentPlatform As String = outPlatforms(platformIndex, 0)
+                        Dim filesToBind As New List(Of String)
+
                         'Create Debug file
                         Using outputFile As New StreamWriter(Path.Combine(debugFolder, "StreamsConverted_" & currentLanguage & "_" & currentPlatform & ".txt"))
                             'For each Sample
-                            For sampleIndex As Integer = 0 To streamSamplesCount
+                            Dim streamSamplesCount As Integer = finalPlatformStreams.Length
+                            For sampleIndex As Integer = 0 To streamSamplesCount - 1
                                 'If starts with speech but doesn't match the current language, skip
-                                Dim sampleFilePath As String = streamSamplesList(sampleIndex)
-                                If InStr(1, sampleFilePath, "Speech\", CompareMethod.Binary) Then
-                                    If StrComp(currentLanguage, "English", CompareMethod.Binary) <> 0 Then
-                                        Dim multiSamplePath As String = Mid(sampleFilePath, Len("Speech\English\") + 1)
-                                        sampleFilePath = Path.Combine("Speech", currentLanguage, multiSamplePath)
-                                    End If
-                                End If
+                                Dim sampleFilePath As String = finalPlatformStreams(sampleIndex)
 
                                 'Get destination folder
                                 Dim destinationFolder As String = Path.Combine(WorkingDirectory, currentPlatform & "_Streams", currentLanguage)
@@ -55,7 +54,6 @@ Partial Public Class ExporterForm
                                     Case "PC"
                                         Dim sampleFullPath As String = Path.ChangeExtension(Path.Combine(WorkingDirectory, currentPlatform & "_Software_adpcm", sampleFilePath), ".ssp")
                                         BackgroundWorker.ReportProgress(Decimal.Divide(sampleIndex, streamSamplesCount) * 100.0, currentLanguage & " Stream " & sampleFullPath & " For " & currentPlatform)
-
                                         If File.Exists(sampleFullPath) Then
                                             CreateStreamsForPcAndGC(outputFile, sampleFullPath, destinationFilePath, filesToBind)
                                             CreateMarkerFileIfRequired(sampleFilePath, destinationFilePath, currentPlatform)
@@ -97,20 +95,22 @@ Partial Public Class ExporterForm
                         End Using
 
                         'Build Temporal Stream File
-                        Dim temporalOutputFile As String = Path.Combine(WorkingDirectory, "TempOutputFolder", currentPlatform, currentLanguage, "Streams")
-                        Directory.CreateDirectory(temporalOutputFile)
-                        BuildTemporalFile(filesToBind, currentPlatform, currentLanguage, temporalOutputFile)
+                        If filesToBind.Count > 0 Then
+                            Dim temporalOutputFile As String = Path.Combine(WorkingDirectory, "TempOutputFolder", currentPlatform, currentLanguage, "Streams")
+                            Directory.CreateDirectory(temporalOutputFile)
+                            BuildTemporalFile(filesToBind, currentPlatform, currentLanguage, temporalOutputFile)
 
-                        'Get final Name
-                        Dim sfxFileName As String = "HC" & Hex(GetSfxFileName(Array.IndexOf(SfxLanguages, currentLanguage), &HFFFF)).PadLeft(6, "0"c)
-                        Dim outputFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder(currentPlatform), GetEngineXLangFolder(currentLanguage))
-                        Directory.CreateDirectory(outputFilePath)
+                            'Get final Name
+                            Dim sfxFileName As String = "HC" & Hex(GetSfxFileName(Array.IndexOf(SfxLanguages, currentLanguage), &HFFFF)).PadLeft(6, "0"c)
+                            Dim outputFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder(currentPlatform), GetEngineXLangFolder(currentLanguage))
+                            Directory.CreateDirectory(outputFilePath)
 
-                        'Build SFX file
-                        If StrComp(currentPlatform, "GameCube") = 0 Then
-                            ESUtils.MusXBuild_StreamFile.BuildStreamFile(Path.Combine(temporalOutputFile, "STREAMS.bin"), Path.Combine(temporalOutputFile, "STREAMS.lut"), Path.Combine(outputFilePath, sfxFileName & ".SFX"), True)
-                        Else
-                            ESUtils.MusXBuild_StreamFile.BuildStreamFile(Path.Combine(temporalOutputFile, "STREAMS.bin"), Path.Combine(temporalOutputFile, "STREAMS.lut"), Path.Combine(outputFilePath, sfxFileName & ".SFX"), False)
+                            'Build SFX file
+                            If StrComp(currentPlatform, "GameCube") = 0 Then
+                                ESUtils.MusXBuild_StreamFile.BuildStreamFile(Path.Combine(temporalOutputFile, "STREAMS.bin"), Path.Combine(temporalOutputFile, "STREAMS.lut"), Path.Combine(outputFilePath, sfxFileName & ".SFX"), True)
+                            Else
+                                ESUtils.MusXBuild_StreamFile.BuildStreamFile(Path.Combine(temporalOutputFile, "STREAMS.bin"), Path.Combine(temporalOutputFile, "STREAMS.lut"), Path.Combine(outputFilePath, sfxFileName & ".SFX"), False)
+                            End If
                         End If
                     End If
                 Next

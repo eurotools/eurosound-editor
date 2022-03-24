@@ -9,13 +9,15 @@ Namespace WritersClasses
             Dim headerData As New FileHeader
 
             'Get creation time if file exists
-            Dim created = Date.Now.ToString(filesDateFormat)
+            Dim currentDate = Date.Now.ToString(filesDateFormat)
             If File.Exists(databaseTxt) Then
                 headerData = headerLib.GetFileHeaderInfo(databaseTxt)
+                headerData.LastModify = currentDate
+                headerData.LastModifyBy = EuroSoundUser
             Else
-                headerData.FirstCreated = created
+                headerData.FirstCreated = currentDate
                 headerData.CreatedBy = EuroSoundUser
-                headerData.LastModify = created
+                headerData.LastModify = currentDate
                 headerData.LastModifyBy = EuroSoundUser
             End If
 

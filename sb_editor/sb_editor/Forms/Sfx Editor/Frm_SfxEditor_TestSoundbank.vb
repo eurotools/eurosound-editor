@@ -43,7 +43,7 @@ Partial Public Class Frm_SfxEditor
                 Using sfxWriter As New BinaryWriter(File.Open(sfxFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
                     WriteSbfFile(sbfWriter, samplesDictionary)
                     WriteSifFile(sifWriter, samplesDictionary, False)
-                    streamFileReport = WriteSfxFile(sfxWriter, hashCodesDictionary, sfxDictionary, samplesDictionary, StreamSamplesList, False)
+                    streamFileReport = WriteSfxFile(sfxWriter, hashCodesDictionary, sfxDictionary, samplesDictionary, StreamSamplesList, "Englisn", False)
                 End Using
             End Using
         End Using

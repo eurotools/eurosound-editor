@@ -73,7 +73,7 @@ Public Class Soundbank_Properties
         'Get streamed samples 
         Dim soundBankFormatSizes As New List(Of String)
         If File.Exists(SysFileSamples) Then
-            Dim streamSamplesList As String() = textFileReaders.GetStreamSoundsList(SysFileSamples)
+            Dim streamSamplesList As String() = textFileReaders.GetAllStreamSamples(SysFileSamples)
             Dim samplesTable As DataTable = textFileReaders.SamplesFileToDatatable(SysFileSamples)
             For formatIndex As Integer = 0 To availablePlatforms.Length - 1
                 Dim currentFormat As String = availablePlatforms(formatIndex)

@@ -11,19 +11,16 @@ Partial Public Class ExporterForm
         'Create a new binary writer for the binary file
         Dim StartOffsets As New Queue(Of UInteger)
         Using binaryWriter As New BinaryWriter(File.Open(Path.Combine(outputFilePath, "STREAMS.bin"), FileMode.Create, FileAccess.ReadWrite), Encoding.ASCII)
-            'For each file in the platform _STREAMS folder
-            Dim filesCount As Integer = filesToEncode.Count - 1
-
             'Debug File
             Using outputFile As New StreamWriter(Path.Combine(WorkingDirectory, "Debug_Report", "StreamList_" & outputLanguage & "_" & outputPlatform & ".txt"))
-                For fileIndex As Integer = 0 To filesCount
+                Dim fileIndex As Integer = 0
+                For Each filePath As String In filesToEncode
                     'Get files path
-                    Dim filePath As String = Path.Combine(WorkingDirectory, outputPlatform & "_Streams", outputLanguage, "STR_" & fileIndex)
-                    Dim adpcmFile As String = filePath & ".ssd"
-                    Dim markerFile As String = filePath & ".smf"
+                    Dim adpcmFile As String = Path.ChangeExtension(filePath, ".ssd")
+                    Dim markerFile As String = Path.ChangeExtension(filePath, ".smf")
 
                     'Report progress and update title bar
-                    BackgroundWorker.ReportProgress(Decimal.Divide(fileIndex, filesCount) * 100.0, "Binding " & outputLanguage & " Audio Stream Data " & adpcmFile & " For " & outputPlatform)
+                    BackgroundWorker.ReportProgress(Decimal.Divide(fileIndex, filesToEncode.Count) * 100.0, "Binding " & outputLanguage & " Audio Stream Data " & adpcmFile & " For " & outputPlatform)
 
                     'Ensure that the adpcm file exists
                     If File.Exists(adpcmFile) AndAlso File.Exists(markerFile) Then
@@ -73,6 +70,9 @@ Partial Public Class ExporterForm
                         outputFile.WriteLine("SampleSize = " & adpcmData.Length)
                         outputFile.WriteLine("")
                     End If
+
+                    'Update counter 
+                    fileIndex += 1
                 Next
             End Using
 

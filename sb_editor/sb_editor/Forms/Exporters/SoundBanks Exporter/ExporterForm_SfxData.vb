@@ -14,7 +14,7 @@ Partial Public Class ExporterForm
             'Get output folder
             Dim tempSfxDataFolder As String = Path.Combine(WorkingDirectory, "TempSfxData")
             Directory.CreateDirectory(tempSfxDataFolder)
-            Dim StreamSamplesList As String() = textFileReaders.GetStreamSoundsList(SysFileSamples)
+            Dim StreamSamplesList As String() = textFileReaders.GetAllStreamSamples(SysFileSamples)
 
             'Start resample
             Dim sfxFiles As String() = Directory.GetFiles(Path.Combine(WorkingDirectory, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly)

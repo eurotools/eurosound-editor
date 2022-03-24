@@ -44,7 +44,7 @@ Partial Public Class Frm_SfxEditor
 
         'Get stream sounds list
         If File.Exists(SysFileSamples) Then
-            StreamSamplesList = reader.GetStreamSoundsList(SysFileSamples)
+            StreamSamplesList = reader.GetAllStreamSamples(SysFileSamples)
         End If
 
         'Check if the misc folder exists
