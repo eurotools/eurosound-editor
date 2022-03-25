@@ -54,7 +54,11 @@ Partial Public Class ExporterForm
         Dim outputLanguage As String() = New String() {SfxLanguages(0)}
         If mainFrame.ComboBox_OutputLanguage.Items.Count > 0 Then
             'Get selected language
-            outputLanguage = New String() {mainFrame.ComboBox_OutputLanguage.Invoke(Function() mainFrame.ComboBox_OutputLanguage.SelectedItem)}
+            Dim selectedLanguage As String = mainFrame.ComboBox_OutputLanguage.Invoke(Function() mainFrame.ComboBox_OutputLanguage.SelectedItem)
+            If Not String.IsNullOrEmpty(selectedLanguage) Then
+                outputLanguage = New String() {selectedLanguage}
+            End If
+
             'Get all languages
             If mainFrame.CheckBox_OutAllLanguages.Checked Then
                 outputLanguage = New String(mainFrame.ComboBox_OutputLanguage.Items.Count - 1) {}
@@ -99,14 +103,16 @@ Partial Public Class ExporterForm
             Dim XboxTimer As New Stopwatch()
             Dim PlayStationTimer As New Stopwatch()
             'Get all available formats
-            Dim streamSamplesList As String() = ResampleWaves(soundsTable, ProjectSettingsFile.AvailableFormats, SoxTimer, PCTimer, GCTimer, XboxTimer, PlayStationTimer)
+            ResampleWaves(soundsTable, ProjectSettingsFile.AvailableFormats, SoxTimer, PCTimer, GCTimer, XboxTimer, PlayStationTimer)
             If ReSampleStreams = 1 Then
-                GenerateStreamFolder(streamSamplesList, outputLanguage, ProjectSettingsFile.AvailableFormats)
+                GenerateStreamFolder(outputLanguage, ProjectSettingsFile.AvailableFormats, soundsTable)
                 ReSampleStreams = 0
                 textFileWritters.UpdateMiscFile(Path.Combine(WorkingDirectory, "System", "Misc.txt"))
             End If
+
             'Save Samples File
             textFileWritters.SaveSamplesFile(SysFileSamples, soundsTable)
+
             'Show timers
             If SoxTimer.ElapsedMilliseconds > 0 Then
                 mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Re-Sample Times" & vbCrLf)
@@ -124,7 +130,7 @@ Partial Public Class ExporterForm
         '----------------------------------------------Output user selected Soundbanks----------------------------------------------
         Dim OutputAborted As Boolean = False
         If outSoundBanks.Length > 0 Then
-            OutputSoundbanks(hashCodesDictionary, outSoundBanks, outputLanguage, outPlaforms, OutputAborted)
+            OutputSoundbanks(hashCodesDictionary, outSoundBanks, outputLanguage, outPlaforms, OutputAborted, soundsTable)
         End If
 
         'Continue if the output has not been aborted

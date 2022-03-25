@@ -4,7 +4,7 @@ Imports sb_editor.ParsersObjects
 Imports sb_editor.SoundBanksExporterFunctions
 
 Partial Public Class ExporterForm
-    Public Sub OutputSoundbanks(hashCodesList As SortedDictionary(Of String, UInteger), soundbanksList As String(), outLanguages As String(), outPlatforms As String(), ByRef AbortOutput As Boolean)
+    Public Sub OutputSoundbanks(hashCodesList As SortedDictionary(Of String, UInteger), soundbanksList As String(), outLanguages As String(), outPlatforms As String(), ByRef AbortOutput As Boolean, soundsTable As DataTable)
         'Debug file
         Dim debugFolderPath As String = Path.Combine(WorkingDirectory, "Debug_Report")
         Directory.CreateDirectory(debugFolderPath)
@@ -38,7 +38,7 @@ Partial Public Class ExporterForm
                     For languageIndex As Integer = 0 To outLanguages.Length - 1
                         If Not AbortOutput Then
                             Dim currentLanguage As String = outLanguages(languageIndex)
-                            Dim streamsList As String() = GetStreamsCurrentLanguage(textFileReaders.GetAllStreamSamples(SysFileSamples), currentLanguage)
+                            Dim streamsList As String() = GetStreamsCurrentLanguage(textFileReaders.GetAllStreamSamples(soundsTable), currentLanguage)
 
                             'For each Platform
                             For platformIndex As Integer = 0 To outPlatforms.Length - 1

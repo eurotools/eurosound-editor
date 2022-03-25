@@ -166,13 +166,13 @@ namespace EngineXMarkersTool
                                         markerInfo.Type = MarkerType;
                                     }
                                     break;
-                                case "Flags":
+                                case "FLAGS":
                                     if (byte.TryParse(lineData[1], out byte MarkerFlags))
                                     {
                                         markerInfo.Flags = MarkerFlags;
                                     }
                                     break;
-                                case "Extra":
+                                case "EXTRA":
                                     if (byte.TryParse(lineData[1], out byte ExtraData))
                                     {
                                         markerInfo.Extra = ExtraData;

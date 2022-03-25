@@ -100,8 +100,8 @@ Partial Public Class AdvancedMenu
         Dim availablePlatforms As String() = ProjectSettingsFile.sampleRateFormats.Keys.ToArray
 
         'Get streamed samples 
-        Dim streamSamplesList As String() = readers.GetAllStreamSamples(SysFileSamples)
         Dim samplesTable As DataTable = readers.SamplesFileToDatatable(SysFileSamples)
+        Dim streamSamplesList As String() = readers.GetAllStreamSamples(samplesTable)
         For formatIndex As Integer = 0 To availablePlatforms.Length - 1
             Dim currentFormat As String = availablePlatforms(formatIndex)
             Dim soundBankSize As String

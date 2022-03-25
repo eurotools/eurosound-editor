@@ -60,10 +60,7 @@ Namespace ReaderClasses
             Return samplesData
         End Function
 
-        Friend Function GetAllStreamSamples(samplesFilePath As String) As String()
-            'Create a datatable with the samples info
-            Dim dataTable As DataTable = SamplesFileToDatatable(samplesFilePath)
-
+        Friend Function GetAllStreamSamples(dataTable As DataTable) As String()
             'Get the streams that has the flag StreamMe in True
             Dim streamsList As New List(Of String)
             For rowIndex As Integer = 0 To dataTable.Rows.Count - 1

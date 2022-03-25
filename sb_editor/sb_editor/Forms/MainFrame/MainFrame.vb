@@ -298,7 +298,6 @@ Partial Public Class MainFrame
             Dim soundbankNode As TreeNode = GetSoundbankNode(TreeView_SoundBanks.SelectedNode)
             'Get Soundbank name and file path
             Dim soundbankFullPath As String = Path.Combine(WorkingDirectory, "SoundBanks", soundbankNode.Text & ".txt")
-            'Ensure that the soundbank txt still exists
             If File.Exists(soundbankFullPath) Then
                 Dim maxSoundbankSize As New SetMaxBankSize(soundbankFullPath)
                 maxSoundbankSize.ShowDialog()

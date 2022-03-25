@@ -17,6 +17,11 @@ Partial Public Class MainFrame
         Dim foldersString As String = DataBasesFolder & vbNewLine & SfxFolder & vbNewLine & SoundbanksFolder & vbNewLine & SystemFolder & vbNewLine & vbNewLine
         Dim createProject As MsgBoxResult = MsgBox("This will create the following folders:" & vbNewLine & foldersString & "Proceed?", vbOKCancel + vbQuestion, "Create New Project?")
         If createProject = MsgBoxResult.Ok Then
+            'Master folder
+            Directory.CreateDirectory(Path.Combine(selectedProjectPath, "Master", "Speech", "English"))
+            Directory.CreateDirectory(Path.Combine(selectedProjectPath, "Music", "ESData"))
+            Directory.CreateDirectory(Path.Combine(selectedProjectPath, "Music", "ESWork"))
+
             'Create folders
             CheckProjectFolders(selectedProjectPath)
 

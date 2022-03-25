@@ -36,7 +36,7 @@ Partial Class About
         'Button_OK
         '
         Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_OK.Location = New System.Drawing.Point(135, 290)
+        Me.Button_OK.Location = New System.Drawing.Point(140, 309)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(75, 23)
         Me.Button_OK.TabIndex = 5
@@ -48,11 +48,11 @@ Partial Class About
         Me.TextBox_Credits.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_Credits.Location = New System.Drawing.Point(6, 140)
+        Me.TextBox_Credits.Location = New System.Drawing.Point(6, 127)
         Me.TextBox_Credits.Multiline = True
         Me.TextBox_Credits.Name = "TextBox_Credits"
         Me.TextBox_Credits.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox_Credits.Size = New System.Drawing.Size(332, 144)
+        Me.TextBox_Credits.Size = New System.Drawing.Size(343, 176)
         Me.TextBox_Credits.TabIndex = 6
         Me.TextBox_Credits.Text = "Programmer:" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Jordi Martínez (Jmarti856)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Original Tool Developers:" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Eurocom Dev" &
     "elopments 2002" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "GameCube dsp Tool:" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Copyright (c) 2017 Alex Barney" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Special " &
@@ -112,7 +112,7 @@ Partial Class About
         Me.GroupBox_About.Controls.Add(Me.Label_CurrentVersion)
         Me.GroupBox_About.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox_About.Name = "GroupBox_About"
-        Me.GroupBox_About.Size = New System.Drawing.Size(344, 319)
+        Me.GroupBox_About.Size = New System.Drawing.Size(355, 338)
         Me.GroupBox_About.TabIndex = 11
         Me.GroupBox_About.TabStop = False
         '
@@ -121,7 +121,7 @@ Partial Class About
         Me.AcceptButton = Me.Button_OK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(368, 343)
+        Me.ClientSize = New System.Drawing.Size(379, 362)
         Me.Controls.Add(Me.GroupBox_About)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)

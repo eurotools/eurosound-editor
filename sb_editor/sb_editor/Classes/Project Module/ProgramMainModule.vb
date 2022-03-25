@@ -210,8 +210,7 @@ Module ProgramMainModule
         'Create folders
         Directory.CreateDirectory(Path.Combine(projectFolderPath, "DataBases"))
         Directory.CreateDirectory(Path.Combine(projectFolderPath, "Debug_Report", "ForES2", "MarkerFileData"))
-        Directory.CreateDirectory(Path.Combine(projectFolderPath, "Music", "ESData"))
-        Directory.CreateDirectory(Path.Combine(projectFolderPath, "Music", "ESWork"))
+
         Directory.CreateDirectory(Path.Combine(projectFolderPath, "Reverbs"))
         Directory.CreateDirectory(Path.Combine(projectFolderPath, "SoundBanks"))
         Directory.CreateDirectory(Path.Combine(projectFolderPath, "System"))
@@ -227,8 +226,6 @@ Module ProgramMainModule
         Directory.CreateDirectory(Path.Combine(projectFolderPath, "TempOutputFolder", "PC", "SoundBanks"))
         Directory.CreateDirectory(Path.Combine(projectFolderPath, "TempOutputFolder", "PlayStation2", "SoundBanks"))
         Directory.CreateDirectory(Path.Combine(projectFolderPath, "TempOutputFolder", "X Box", "SoundBanks"))
-        'Master folder
-        Directory.CreateDirectory(Path.Combine(projectFolderPath, "Master", "Speech", "English"))
     End Sub
 
     '*===============================================================================================
