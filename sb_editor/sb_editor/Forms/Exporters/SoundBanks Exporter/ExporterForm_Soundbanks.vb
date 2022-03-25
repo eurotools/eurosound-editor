@@ -51,7 +51,6 @@ Partial Public Class ExporterForm
                                 'Debug info
                                 mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Timings For " & currentSoundBank & vbCrLf)
 
-
                                 'Get output folder
                                 Dim outputFolder As String = Path.Combine(WorkingDirectory, "TempOutputFolder", currentPlatform, "SoundBanks", currentLanguage)
 
@@ -89,7 +88,7 @@ Partial Public Class ExporterForm
                                     Dim sbfFilePath As String = mainFilePath & ".sbf"
 
                                     'Get output file paths
-                                    Dim sfxFileName As String = "HC" & Hex(GetSfxFileName(Array.IndexOf(SfxLanguages, currentLanguage), soundBankInfo.HashCode)).PadLeft(6, "0"c)
+                                    Dim sfxFileName As String = "HC" & GetSfxFileName(Array.IndexOf(SfxLanguages, currentLanguage), soundBankInfo.HashCode).ToString("X6")
                                     Dim outputFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder(currentPlatform), GetEngineXLangFolder(currentLanguage))
                                     Directory.CreateDirectory(outputFilePath)
 

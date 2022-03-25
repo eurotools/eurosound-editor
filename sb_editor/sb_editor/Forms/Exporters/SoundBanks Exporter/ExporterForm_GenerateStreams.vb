@@ -97,7 +97,7 @@ Partial Public Class ExporterForm
                         BuildTemporalFile(filesToBind, currentPlatform, currentLanguage, temporalOutputFile)
 
                         'Get final Name
-                        Dim sfxFileName As String = "HC" & Hex(GetSfxFileName(Array.IndexOf(SfxLanguages, currentLanguage), &HFFFF)).PadLeft(6, "0"c)
+                        Dim sfxFileName As String = "HC" & GetSfxFileName(Array.IndexOf(SfxLanguages, currentLanguage), &HFFFF).ToString("X6")
                         Dim outputFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder(currentPlatform), GetEngineXLangFolder(currentLanguage))
                         Directory.CreateDirectory(outputFilePath)
 
