@@ -21,6 +21,7 @@
     'Events
     Public Event SfxControl_LoopChecked As EventHandler
     Public Event SfxControl_SingleChecked As EventHandler
+    Public Event SfxControl_RandomPickChecked As EventHandler
     Public Event SfxControl_MultiSampleChecked As EventHandler
     Public Event SfxControl_ShuffledChecked As EventHandler
     Public Event SfxControl_PolyphonicChecked As EventHandler
@@ -65,11 +66,11 @@
     '*===============================================================================================
     '* CHECKBOXES EVENTS
     '*===============================================================================================
-    Private Sub CheckBox_Shuffled_CheckStateChanged(sender As Object, e As EventArgs) Handles CheckBox_Shuffled.CheckStateChanged
+    Private Sub CheckBox_Shuffled_CheckStateChanged(sender As Object, e As EventArgs) Handles CheckBox_Shuffled.CheckedChanged
         If CheckBox_Shuffled.Checked Then
             CheckBox_Polyphonic.Checked = False
         End If
-        RaiseEvent SfxControl_SingleChecked(Me, e)
+        RaiseEvent SfxControl_ShuffledChecked(Me, e)
     End Sub
 
     Private Sub CheckBox_Polyphonic_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_Polyphonic.CheckedChanged
@@ -77,6 +78,10 @@
             CheckBox_Shuffled.Checked = False
         End If
         RaiseEvent SfxControl_PolyphonicChecked(Me, e)
+    End Sub
+
+    Private Sub CheckBox_RandomPick_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_RandomPick.CheckedChanged
+        RaiseEvent SfxControl_RandomPickChecked(Me, e)
     End Sub
 
     '*===============================================================================================

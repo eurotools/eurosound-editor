@@ -19,6 +19,13 @@ Public Class SfxNewMultiple
     '*===============================================================================================
     Private Sub SfxNewMultiple_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If ListBox_SampleFiles.Items.Count = 0 Then
+            'Open the dialog in the master folder
+            Dim masterDirectory As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")
+            If Directory.Exists(masterDirectory) Then
+                OpenFile_WaveFiles.InitialDirectory = masterDirectory
+            End If
+
+            'Show dialog
             Dim diagResult = OpenFile_WaveFiles.ShowDialog
             If diagResult = DialogResult.OK Then
                 AddFilesToListbox(OpenFile_WaveFiles.FileNames)
@@ -54,6 +61,13 @@ Public Class SfxNewMultiple
     '* BUTTON EVENTS
     '*===============================================================================================
     Private Sub Button_Add_Click(sender As Object, e As EventArgs) Handles Button_Add.Click
+        'Open the dialog in the master folder
+        Dim masterDirectory As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")
+        If Directory.Exists(masterDirectory) Then
+            OpenFile_WaveFiles.InitialDirectory = masterDirectory
+        End If
+
+        'Show dialog
         Dim diagResult = OpenFile_WaveFiles.ShowDialog
         If diagResult = DialogResult.OK Then
             AddFilesToListbox(OpenFile_WaveFiles.FileNames)

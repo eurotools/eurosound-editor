@@ -197,6 +197,13 @@ Partial Public Class Frm_SfxEditor
         End If
     End Sub
 
+    Private Sub SfxParamsAndSamplePool_SfxControl_RandomPickChecked(sender As Object, e As EventArgs) Handles SfxParamsAndSamplePool.SfxControl_RandomPickChecked
+        Dim selectedFileData As SfxFile = sfxFilesData(TabControl_Platforms.SelectedTab.Text)
+        If SfxParamsAndSamplePool.RadioButton_Single.Checked Then
+            selectedFileData.SamplePool.RandomPick = SfxParamsAndSamplePool.CheckBox_RandomPick.Checked
+        End If
+    End Sub
+
     Private Sub SfxParamsAndSamplePool_MultiSampleChecked(sender As Object, e As EventArgs) Handles SfxParamsAndSamplePool.SfxControl_MultiSampleChecked
         Dim selectedFileData As SfxFile = sfxFilesData(TabControl_Platforms.SelectedTab.Text)
         If SfxParamsAndSamplePool.RadioButton_MultiSample.Checked Then
