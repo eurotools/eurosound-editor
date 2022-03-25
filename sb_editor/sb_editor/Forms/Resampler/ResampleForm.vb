@@ -354,7 +354,7 @@ Partial Public Class ResampleForm
         Dim purgeListFilePath As String = Path.Combine(WorkingDirectory, "Report", "Last_Purge.txt")
         If File.Exists(purgeListFilePath) Then
             If File.Exists(ProjTextEditor) Then
-                RunProcess(ProjTextEditor, purgeListFilePath)
+                RunConsoleProcess(ProjTextEditor, purgeListFilePath)
             Else
                 MsgBox("No Text Editor setup." & vbCrLf & "Use Properties form to setup one.", vbOKOnly + vbExclamation, "EuroSound")
             End If

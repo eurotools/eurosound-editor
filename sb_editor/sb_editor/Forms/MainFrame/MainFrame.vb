@@ -214,7 +214,8 @@ Partial Public Class MainFrame
                     Dim soundbanksTrash As String = Path.Combine(WorkingDirectory, "SoundBanks_Trash")
                     Directory.CreateDirectory(soundbanksTrash)
                     'Move file to trash
-                    File.Move(soundbankPath, Path.Combine(soundbanksTrash, soundBankName & ".txt"))
+                    File.Copy(soundbankPath, Path.Combine(soundbanksTrash, soundBankName & ".txt"), True)
+                    File.Delete(soundbankPath)
                 End If
             Else 'Database
                 Dim soundbankNode As TreeNode = TreeView_SoundBanks.SelectedNode.Parent

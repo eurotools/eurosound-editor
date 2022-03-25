@@ -37,8 +37,8 @@ Partial Public Class MusicsExporter
                             MergeChannels(File.ReadAllBytes(PcOutLeft & "_L.ima"), File.ReadAllBytes(PcOutRight & "_R.ima"), 1, soundSampleData)
                         Case "PlayStation2"
                             'Vag Tool
-                            RunProcess("SystemFiles\AIFF2VAG.exe", """" & temporalLeft & """")
-                            RunProcess("SystemFiles\AIFF2VAG.exe", """" & temporalRight & """")
+                            RunConsoleProcess("SystemFiles\AIFF2VAG.exe", """" & temporalLeft & """")
+                            RunConsoleProcess("SystemFiles\AIFF2VAG.exe", """" & temporalRight & """")
                             'Move Files
                             Dim ps2VagL As String = Path.Combine(waveOutputFolder, musicItem.ItemArray(0)) & "_L.vag"
                             Dim ps2VagR As String = Path.Combine(waveOutputFolder, musicItem.ItemArray(0)) & "_R.vag"
@@ -56,8 +56,8 @@ Partial Public Class MusicsExporter
                             'Xbox Tool
                             Dim xbxVagL As String = Path.Combine(waveOutputFolder, musicItem.ItemArray(0)) & "_L.adpcm"
                             Dim xbxVagR As String = Path.Combine(waveOutputFolder, musicItem.ItemArray(0)) & "_R.adpcm"
-                            RunProcess("SystemFiles\xbadpcmencode.exe", """" & temporalLeft & """ """ & xbxVagL & """")
-                            RunProcess("SystemFiles\xbadpcmencode.exe", """" & temporalRight & """ """ & xbxVagR & """")
+                            RunConsoleProcess("SystemFiles\xbadpcmencode.exe", """" & temporalLeft & """ """ & xbxVagL & """")
+                            RunConsoleProcess("SystemFiles\xbadpcmencode.exe", """" & temporalRight & """ """ & xbxVagR & """")
                             MergeChannels(GetXboxAdpcmDataChunk(xbxVagL), GetXboxAdpcmDataChunk(xbxVagR), 4, soundSampleData)
                     End Select
                 Next
@@ -114,8 +114,8 @@ Partial Public Class MusicsExporter
         Dim wavePcmLeft As String = outputLeft & "_L.pcm"
         Dim wavePcmRight As String = outputRight & "_R.pcm"
         'Resampled wav
-        RunProcess("SystemFiles\Sox.exe", """" & inputLeft & """ -t raw """ & wavePcmLeft & """")
-        RunProcess("SystemFiles\Sox.exe", """" & inputRight & """ -t raw """ & wavePcmRight & """")
+        RunConsoleProcess("SystemFiles\Sox.exe", """" & inputLeft & """ -t raw """ & wavePcmLeft & """")
+        RunConsoleProcess("SystemFiles\Sox.exe", """" & inputRight & """ -t raw """ & wavePcmRight & """")
         'Wave to ima
         Dim imaLeftData As Byte() = ESUtils.ImaCodec.Encode(ConvertByteArrayToShortArray(File.ReadAllBytes(wavePcmLeft)))
         File.WriteAllBytes(outputLeft & "_L.ima", imaLeftData)

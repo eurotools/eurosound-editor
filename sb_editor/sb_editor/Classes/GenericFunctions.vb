@@ -15,7 +15,7 @@ Friend Module GenericFunctions
     '*===============================================================================================
     '* TOOLS FUNCTIONS
     '*===============================================================================================
-    Friend Sub RunProcess(toolFileName As String, toolArguments As String, Optional ShowWindow As Boolean = False)
+    Friend Sub RunConsoleProcess(toolFileName As String, toolArguments As String, Optional ShowWindow As Boolean = False)
         Dim processToExecute As New Process
         processToExecute.StartInfo.FileName = toolFileName
         processToExecute.StartInfo.Arguments = toolArguments

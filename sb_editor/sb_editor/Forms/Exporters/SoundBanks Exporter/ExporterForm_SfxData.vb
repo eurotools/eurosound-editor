@@ -84,7 +84,7 @@ Partial Public Class ExporterForm
 
                 'Create bin file
                 Dim arguments As String = """" & sfxDataFilePath & """ """ & Path.Combine(outputFolder, "SFX_Data.bin") & """"
-                RunProcess("SystemFiles\CreateSFXDataBin.exe", arguments)
+                RunConsoleProcess("SystemFiles\CreateSFXDataBin.exe", arguments)
             Next
         Else 'Multiples Languages
             For languageIndex As Integer = 0 To outputLanguages.Length - 1
@@ -98,7 +98,7 @@ Partial Public Class ExporterForm
                     Directory.CreateDirectory(outputFolder)
 
                     'Create bin file
-                    RunProcess("SystemFiles\CreateSFXDataBin.exe", """" & sfxDataFilePath & """ """ & Path.Combine(outputFolder, "SFX_Data.bin") & """")
+                    RunConsoleProcess("SystemFiles\CreateSFXDataBin.exe", """" & sfxDataFilePath & """ """ & Path.Combine(outputFolder, "SFX_Data.bin") & """")
                 Next
             Next
         End If

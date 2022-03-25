@@ -25,7 +25,7 @@ Partial Public Class ExporterForm
         mainFrame = CType(Application.OpenForms("MainFrame"), MainFrame)
     End Sub
 
-    Private Sub ExporterForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub ExporterForm_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
         'Start process
         If Not BackgroundWorker.IsBusy Then
             BackgroundWorker.RunWorkerAsync()
@@ -42,7 +42,7 @@ Partial Public Class ExporterForm
         'Create bat if required
         Dim preOutbatFilePath As String = Path.Combine(WorkingDirectory, "System", "PreOutput.bat")
         CreatePrePostOutputBatIfRequired(preOutbatFilePath, "rem Add your pre-output stuff here")
-        RunProcess(preOutbatFilePath, "", ProjectSettingsFile.MiscProps.ViewOutputDos)
+        RunConsoleProcess(preOutbatFilePath, "", ProjectSettingsFile.MiscProps.ViewOutputDos)
 
         'Get output platforms
         Dim outPlaforms As String() = New String() {mainFrame.ComboBox_Format.Invoke(Function() mainFrame.ComboBox_Format.SelectedItem)}
@@ -102,6 +102,7 @@ Partial Public Class ExporterForm
             Dim GCTimer As New Stopwatch()
             Dim XboxTimer As New Stopwatch()
             Dim PlayStationTimer As New Stopwatch()
+
             'Get all available formats
             ResampleWaves(soundsTable, ProjectSettingsFile.AvailableFormats, SoxTimer, PCTimer, GCTimer, XboxTimer, PlayStationTimer)
             If ReSampleStreams = 1 Then
@@ -109,9 +110,6 @@ Partial Public Class ExporterForm
                 ReSampleStreams = 0
                 textFileWritters.UpdateMiscFile(Path.Combine(WorkingDirectory, "System", "Misc.txt"))
             End If
-
-            'Save Samples File
-            textFileWritters.SaveSamplesFile(SysFileSamples, soundsTable)
 
             'Show timers
             If SoxTimer.ElapsedMilliseconds > 0 Then
@@ -162,7 +160,7 @@ Partial Public Class ExporterForm
             Invoke(Sub() Text = "End")
             Dim postOutBatFilepath As String = Path.Combine(WorkingDirectory, "System", "PostOutput.bat")
             CreatePrePostOutputBatIfRequired(postOutBatFilepath, "rem Add your post-output stuff here")
-            RunProcess(postOutBatFilepath, "", ProjectSettingsFile.MiscProps.ViewOutputDos)
+            RunConsoleProcess(postOutBatFilepath, "", ProjectSettingsFile.MiscProps.ViewOutputDos)
         End If
     End Sub
 

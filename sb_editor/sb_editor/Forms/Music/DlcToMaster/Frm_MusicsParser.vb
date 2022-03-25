@@ -142,7 +142,7 @@ Public Class Frm_MusicsParser
                         Dim outputFilePath As String = Path.Combine(TextBox_DestinationFolder.Text, fileName & ".wav")
                         TextBox_OutputConsole.Invoke(Sub() TextBox_OutputConsole.Text += "Input DLC file: " & inputFilePath & vbCrLf)
                         TextBox_OutputConsole.Invoke(Sub() TextBox_OutputConsole.Text += "Output Wave file: " & outputFilePath & vbCrLf)
-                        RunProcess("SystemFiles\MusicTool\Sox.exe", """" & inputFilePath & """ """ & outputFilePath & """ trim 0s " & WaveEndPosition & "s")
+                        RunConsoleProcess("SystemFiles\MusicTool\Sox.exe", """" & inputFilePath & """ """ & outputFilePath & """ trim 0s " & WaveEndPosition & "s")
                     Else
                         TextBox_OutputConsole.Invoke(Sub() TextBox_OutputConsole.Text += "Input DLC file NOT found: " & inputFilePath & vbCrLf)
                     End If
