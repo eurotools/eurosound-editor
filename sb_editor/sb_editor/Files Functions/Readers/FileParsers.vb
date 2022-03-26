@@ -21,6 +21,7 @@ Namespace ReaderClasses
 
             'Open file and read it
             Using sr As New StreamReader(File.OpenRead(filePath))
+                Dim headerLinesCount = 0
                 While Not sr.EndOfStream
                     Dim currentLine As String = sr.ReadLine.Trim
                     'Skip empty lines
@@ -49,8 +50,12 @@ Namespace ReaderClasses
                                 headerInfo.LastModifyBy = GetStringValue("## Last Modified By ...", currentLine)
                             End If
                         Else
-                            Exit While
+                            If headerLinesCount > 4 Or sr.EndOfStream Then
+                                Exit While
+                            End If
                         End If
+
+                        headerLinesCount += 1
                     End If
                 End While
             End Using

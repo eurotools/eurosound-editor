@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿Imports System.Globalization
+Imports System.IO
 Imports sb_editor.ParsersObjects
 Imports sb_editor.ReaderClasses
 Imports sb_editor.WritersClasses
@@ -85,16 +86,26 @@ Public Class UserControl_SFXs
         If CheckBox_SortByDate.Checked Then
             Dim sfxFolderPath As String = Path.Combine(WorkingDirectory, "SFXs")
             If Directory.Exists(sfxFolderPath) Then
-                Dim di As New DirectoryInfo(sfxFolderPath)
-                Dim fiArray As String() = di.GetFiles().OrderByDescending(Function(p) p.LastWriteTime).Select(Function(f) Path.GetFileNameWithoutExtension(f.Name)).ToArray()
+                ListBox_SFXs.Sorted = False
+
+                Dim filesToAdd As New List(Of KeyValuePair(Of String, String))
+                Dim filesToCheck As String() = Directory.GetFiles(sfxFolderPath, "*.txt", SearchOption.TopDirectoryOnly)
+                For fileIndex As Integer = 0 To filesToCheck.Length - 1
+                    Dim currentFilePath As String = filesToCheck(fileIndex)
+                    Dim headerFileInfo = textFileReaders.GetFileHeaderInfo(currentFilePath)
+                    filesToAdd.Add(New KeyValuePair(Of String, String)(headerFileInfo.LastModify, Path.GetFileNameWithoutExtension(currentFilePath)))
+                Next
+
+                Dim sortedList = filesToAdd.OrderBy(Function(x) x.Key).ToList
 
                 'Add items to listbox
                 ListBox_SFXs.BeginUpdate()
                 ListBox_SFXs.Items.Clear()
-                ListBox_SFXs.Items.AddRange(fiArray)
+                ListBox_SFXs.Items.AddRange(sortedList.Select(Function(x) x.Value).ToArray)
                 ListBox_SFXs.EndUpdate()
             End If
         Else
+            ListBox_SFXs.Sorted = True
             LoadHashCodes()
         End If
     End Sub
@@ -263,6 +274,7 @@ Public Class UserControl_SFXs
                 If SFXHashCodeNumber = 0 Then
                     MsgBox("Please Re-Alloc Hashcodes under Advanced Menu", vbOKOnly + vbExclamation, "EuroSound")
                 End If
+
                 'Update Global Variable
                 SFXHashCodeNumber += 1
                 writers.UpdateMiscFile(Path.Combine(WorkingDirectory, "System", "Misc.txt"))
