@@ -5,6 +5,9 @@ Imports sb_editor.MarkerFunctions
 Imports sb_editor.SoundBanksExporterFunctions
 
 Partial Public Class ExporterForm
+    '*===============================================================================================
+    '* GLOBAL VARIABLES 
+    '*===============================================================================================
     Private ReadOnly markersFunctions As New ExMarkersTool
     Private ReadOnly markerFileFunctions As New MarkerFiles
 
@@ -36,6 +39,7 @@ Partial Public Class ExporterForm
                     Dim currentPlatform As String = outPlatforms(platformIndex, 0)
                     Dim filesToBind As New List(Of String)
                     Dim destinationFolder As String = Path.Combine(WorkingDirectory, currentPlatform & "_Streams", currentLanguage)
+                    Dim isBigEndian As Boolean = False
 
                     'Create Debug file
                     Using outputFile As New StreamWriter(Path.Combine(debugFolder, "StreamsConverted_" & currentLanguage & "_" & currentPlatform & ".txt"))
@@ -68,6 +72,7 @@ Partial Public Class ExporterForm
                                     Case "PC"
                                         File.Copy(sampleFullPath, destinationFilePath, True)
                                     Case "GameCube"
+                                        isBigEndian = True
                                         File.Copy(sampleFullPath, destinationFilePath, True)
                                     Case "PlayStation2"
                                         File.WriteAllBytes(destinationFilePath, GetVagFileDataChunk(sampleFullPath))
@@ -94,19 +99,20 @@ Partial Public Class ExporterForm
                     If filesToBind.Count > 0 Then
                         Dim temporalOutputFile As String = Path.Combine(WorkingDirectory, "TempOutputFolder", currentPlatform, currentLanguage, "Streams")
                         Directory.CreateDirectory(temporalOutputFile)
-                        BuildTemporalFile(filesToBind, currentPlatform, currentLanguage, temporalOutputFile)
 
-                        'Get final Name
+                        'Create Temporal Files
+                        Dim binaryFilePath As String = Path.Combine(temporalOutputFile, "STREAMS.bin")
+                        Dim lutFilepath As String = Path.Combine(temporalOutputFile, "STREAMS.lut")
+                        Dim debugFilePath As String = Path.Combine(WorkingDirectory, "Debug_Report", "StreamList_" & currentLanguage & "_" & currentPlatform & ".txt")
+                        BuildTemporalFile(filesToBind, currentPlatform, currentLanguage, binaryFilePath, lutFilepath, debugFilePath, isBigEndian)
+
+                        'Get SFX file name and output path
                         Dim sfxFileName As String = "HC" & GetSfxFileName(Array.IndexOf(SfxLanguages, currentLanguage), &HFFFF).ToString("X6")
                         Dim outputFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder(currentPlatform), GetEngineXLangFolder(currentLanguage))
                         Directory.CreateDirectory(outputFilePath)
 
                         'Build SFX file
-                        If StrComp(currentPlatform, "GameCube") = 0 Then
-                            ESUtils.MusXBuild_StreamFile.BuildStreamFile(Path.Combine(temporalOutputFile, "STREAMS.bin"), Path.Combine(temporalOutputFile, "STREAMS.lut"), Path.Combine(outputFilePath, sfxFileName & ".SFX"), True)
-                        Else
-                            ESUtils.MusXBuild_StreamFile.BuildStreamFile(Path.Combine(temporalOutputFile, "STREAMS.bin"), Path.Combine(temporalOutputFile, "STREAMS.lut"), Path.Combine(outputFilePath, sfxFileName & ".SFX"), False)
-                        End If
+                        ESUtils.MusXBuild_StreamFile.BuildStreamFile(binaryFilePath, lutFilepath, Path.Combine(outputFilePath, sfxFileName & ".SFX"), isBigEndian)
                     End If
                 End If
             Next

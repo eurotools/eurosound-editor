@@ -1,5 +1,4 @@
-﻿Imports System.Globalization
-Imports System.IO
+﻿Imports System.IO
 Imports sb_editor.ParsersObjects
 Imports sb_editor.ReaderClasses
 Imports sb_editor.WritersClasses
@@ -96,12 +95,12 @@ Public Class UserControl_SFXs
                     filesToAdd.Add(New KeyValuePair(Of String, String)(headerFileInfo.LastModify, Path.GetFileNameWithoutExtension(currentFilePath)))
                 Next
 
-                Dim sortedList = filesToAdd.OrderBy(Function(x) x.Key).ToList
+                Dim sortedList As String() = filesToAdd.OrderBy(Function(x) x.Key).ToList.Select(Function(x) x.Value).ToArray
 
                 'Add items to listbox
                 ListBox_SFXs.BeginUpdate()
                 ListBox_SFXs.Items.Clear()
-                ListBox_SFXs.Items.AddRange(sortedList.Select(Function(x) x.Value).ToArray)
+                ListBox_SFXs.Items.AddRange(sortedList)
                 ListBox_SFXs.EndUpdate()
             End If
         Else

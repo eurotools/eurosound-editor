@@ -59,7 +59,7 @@ namespace ESUtils
         {
             int finalData;
 
-            if (isBigEndian)
+            if (isBigEndian && valueToFlip > 0)
             {
                 finalData = (valueToFlip & 0x7F000000) >> (8 * 3) | /* 0x11______ -> 0x______11 */
                             (valueToFlip & 0x00FF0000) >> (8 * 1) | /* 0x__22____ -> 0x____22__ */

@@ -5,14 +5,14 @@ Partial Public Class ExporterForm
     '*===============================================================================================
     '* BINARY FILE FUNCTIONS
     '*===============================================================================================
-    Public Sub BuildTemporalFile(filesToEncode As List(Of String), outputPlatform As String, outputLanguage As String, outputFilePath As String)
+    Public Sub BuildTemporalFile(filesToEncode As List(Of String), outputPlatform As String, outputLanguage As String, binaryFilePath As String, lutFilePath As String, debugFilePath As String, isBigEndian As Boolean)
         'Reset progress bar
         Invoke(Sub() ProgressBar1.Value = 0)
         'Create a new binary writer for the binary file
         Dim StartOffsets As New Queue(Of UInteger)
-        Using binaryWriter As New BinaryWriter(File.Open(Path.Combine(outputFilePath, "STREAMS.bin"), FileMode.Create, FileAccess.ReadWrite), Encoding.ASCII)
+        Using binaryWriter As New BinaryWriter(File.Open(binaryFilePath, FileMode.Create, FileAccess.ReadWrite), Encoding.ASCII)
             'Debug File
-            Using outputFile As New StreamWriter(Path.Combine(WorkingDirectory, "Debug_Report", "StreamList_" & outputLanguage & "_" & outputPlatform & ".txt"))
+            Using outputFile As New StreamWriter(debugFilePath)
                 Dim fileIndex As Integer = 0
                 For Each filePath As String In filesToEncode
                     'Get files path
@@ -31,13 +31,13 @@ Partial Public Class ExporterForm
                         Dim markersFileData As Byte() = File.ReadAllBytes(markerFile)
                         Dim adpcmData As Byte() = File.ReadAllBytes(adpcmFile)
                         'Marker size
-                        binaryWriter.Write(markersFileData.Length)
+                        binaryWriter.Write(ESUtils.BytesFunctions.FlipInt32(markersFileData.Length, isBigEndian))
                         'Save position for the audio offset
                         Dim prevPosition As UInteger = binaryWriter.BaseStream.Position
                         'Audio Offset
                         binaryWriter.Write(0)
                         'Audio Size
-                        binaryWriter.Write(adpcmData.Length)
+                        binaryWriter.Write(ESUtils.BytesFunctions.FlipInt32(adpcmData.Length, isBigEndian))
                         'Marker Data
                         binaryWriter.Write(markersFileData)
                         'Alignment
@@ -56,7 +56,7 @@ Partial Public Class ExporterForm
                         Dim lastPosition As UInteger = binaryWriter.BaseStream.Position
                         'Go Back to write audio start pos
                         binaryWriter.Seek(prevPosition, SeekOrigin.Begin)
-                        binaryWriter.Write(audioStartOffset)
+                        binaryWriter.Write(ESUtils.BytesFunctions.FlipInt32(audioStartOffset, isBigEndian))
                         'Return to current pos
                         binaryWriter.Seek(lastPosition, SeekOrigin.Begin)
 
@@ -83,11 +83,12 @@ Partial Public Class ExporterForm
         'Ensure that we have items stored in the queue
         If StartOffsets.Count > 0 Then
             'Create a new binary writer for the lut file
-            Using binaryWriter As New BinaryWriter(File.Open(Path.Combine(outputFilePath, "STREAMS.lut"), FileMode.Create, FileAccess.ReadWrite), Encoding.ASCII)
+            Using binaryWriter As New BinaryWriter(File.Open(lutFilePath, FileMode.Create, FileAccess.ReadWrite), Encoding.ASCII)
                 'Wirte all start offsets
                 Do
-                    binaryWriter.Write(StartOffsets.Dequeue)
+                    binaryWriter.Write(ESUtils.BytesFunctions.FlipUInt32(StartOffsets.Dequeue, isBigEndian))
                 Loop While StartOffsets.Count > 0
+
                 'Close file
                 binaryWriter.Close()
             End Using

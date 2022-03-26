@@ -243,6 +243,10 @@ namespace ESUtils
             {
                 outBuff.WriteByte((byte)outputbuffer);
             }
+            else
+            {
+                outBuff.WriteByte(0);
+            }
 
             state.valprev = valpred;
             state.index = index;
