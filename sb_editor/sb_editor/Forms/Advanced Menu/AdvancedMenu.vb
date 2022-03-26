@@ -22,18 +22,22 @@ Partial Public Class AdvancedMenu
                 If mainFrame.TreeView_SoundBanks.SelectedNode IsNot Nothing Then
                     selectedSoundBank = mainFrame.TreeView_SoundBanks.SelectedNode.Text
                 End If
+
                 'Output folder
                 Dim outputFolder As String = Path.Combine(WorkingDirectory, "Report")
                 Directory.CreateDirectory(outputFolder)
+
                 'Ensure that the SoundBank Exists
                 Dim soundBankFilePath As String = Path.Combine(WorkingDirectory, "SoundBanks", selectedSoundBank & ".txt")
                 If File.Exists(soundBankFilePath) Then
                     Cursor.Current = Cursors.WaitCursor
+
                     'Output Language
                     Dim outLanguage As String = "English"
                     If mainFrame.ComboBox_OutputLanguage.SelectedItem IsNot Nothing Then
                         outLanguage = mainFrame.ComboBox_OutputLanguage.SelectedItem
                     End If
+
                     'Output Format
                     Dim outFormat As String = "PC"
                     If mainFrame.ComboBox_Format.SelectedItem IsNot Nothing Then
@@ -51,49 +55,53 @@ Partial Public Class AdvancedMenu
     '*===============================================================================================
     Private Sub Button_CheckForDuplicateHashCodes_Click(sender As Object, e As EventArgs) Handles Button_CheckForDuplicateHashCodes.Click
         Dim availableHashcode As New Dictionary(Of UInteger, String)
-        Dim duplicatedHashcodes As New List(Of String)
+        Dim outputMessages As New List(Of String)
 
         Dim baseDir As String = Path.Combine(WorkingDirectory, "SFXs")
         If Directory.Exists(baseDir) Then
-            Dim fileNameWithExtension As String = Dir(baseDir & "\*.txt", FileAttribute.Archive)
-            Do While fileNameWithExtension > ""
-                Dim sfxFilePath As String = Path.Combine(WorkingDirectory, "SFXs", fileNameWithExtension)
+            Dim filesToInspect As String() = Directory.GetFiles(baseDir, "*.txt", SearchOption.TopDirectoryOnly)
+            For fileIndex As Integer = 0 To filesToInspect.Length - 1
                 'Read SFX file as a string array
-                Dim fileData As String() = File.ReadAllLines(sfxFilePath)
+                Dim fileData As String() = File.ReadAllLines(filesToInspect(fileIndex))
                 Dim hashcodeIndex As Integer = Array.IndexOf(fileData, "#HASHCODE")
                 If hashcodeIndex >= 0 Then
                     'Get HashCode
                     Dim stringData As String() = fileData(hashcodeIndex + 1).Split(" "c)
                     If stringData.Length > 1 AndAlso IsNumeric(stringData(1)) Then
                         Dim hashcodeNumber As UInteger = stringData(1)
+
                         'Check if we have read this hashcode before
                         If availableHashcode.ContainsKey(hashcodeNumber) Then
-                            If duplicatedHashcodes.Count = 0 Then
-                                'Add file to list
-                                duplicatedHashcodes.Add("SFXs Found With Duplicate HashCodes")
-                                duplicatedHashcodes.Add("")
-                                'Update hashcode and write file again
-                                hashcodeNumber = SFXHashCodeNumber
-                                SFXHashCodeNumber += 1
-                                'Update hashcode and write the updated data
-                                fileData(hashcodeIndex + 1) = "HashCodeNumber " & hashcodeNumber
-                                File.WriteAllLines(sfxFilePath, fileData)
+                            'Text to output in the debug form                           
+                            If outputMessages.Count = 0 Then
+                                outputMessages.Add("SFXs Found With Duplicate HashCodes")
+                                outputMessages.Add("")
                             End If
-                            duplicatedHashcodes.Add(Path.GetFileNameWithoutExtension(fileNameWithExtension))
+
+                            'Update hashcode and write the updated data
+                            fileData(hashcodeIndex + 1) = "HashCodeNumber " & SFXHashCodeNumber
+                            SFXHashCodeNumber += 1
+                            File.WriteAllLines(filesToInspect(fileIndex), fileData)
+
+                            'Text to output in the debug form
+                            outputMessages.Add(Path.GetFileNameWithoutExtension(filesToInspect(fileIndex)))
                         Else
-                            availableHashcode.Add(hashcodeNumber, fileNameWithExtension)
+                            availableHashcode.Add(hashcodeNumber, filesToInspect(fileIndex))
                         End If
-                        fileNameWithExtension = Dir()
                     End If
                 End If
-            Loop
+            Next
             availableHashcode.Clear()
+
             'Add message if empty
-            If duplicatedHashcodes.Count = 0 Then
-                duplicatedHashcodes.Add("No Duplicate HashCodes Found")
+            If outputMessages.Count = 0 Then
+                outputMessages.Add("No Duplicate HashCodes Found")
+            Else
+                writers.UpdateMiscFile(Path.Combine(WorkingDirectory, "System", "Misc.txt"))
             End If
+
             'Show info to the user
-            Dim debugInfo As New Frm_DebugData(duplicatedHashcodes.ToArray)
+            Dim debugInfo As New Frm_DebugData(outputMessages.ToArray)
             debugInfo.ShowDialog()
         End If
     End Sub
@@ -105,33 +113,40 @@ Partial Public Class AdvancedMenu
         If Directory.Exists(Path.Combine(WorkingDirectory, "System")) Then
             'Set cursor as hourglass
             Cursor.Current = Cursors.WaitCursor
+
             '-----------------------------------------Reallocate SFX Files-----------------------------------------
             Dim sfxFilePath As String = Path.Combine(WorkingDirectory, "SFXs")
             If Directory.Exists(sfxFilePath) Then
                 'Reset variable
                 SFXHashCodeNumber = 1
+
                 'Get and modify files
                 Dim sfxFilesToCheck As String() = Directory.GetFiles(sfxFilePath, "*.txt", SearchOption.TopDirectoryOnly)
                 For fileIndex As Integer = 0 To sfxFilesToCheck.Length - 1
                     Dim currentFilePath As String = sfxFilesToCheck(fileIndex)
                     Dim sfxFileName As String = Path.GetFileNameWithoutExtension(currentFilePath)
+
                     '---------------------------Common
                     WriteSfxFile(currentFilePath)
+
                     '---------------------------GameCube
                     Dim gameCubeFilePath As String = Path.Combine(sfxFilePath, "GameCube", sfxFileName & ".txt")
                     If File.Exists(gameCubeFilePath) Then
                         WriteSfxFile(gameCubeFilePath)
                     End If
+
                     '---------------------------PC
                     Dim PCFilePath As String = Path.Combine(sfxFilePath, "PC", sfxFileName & ".txt")
                     If File.Exists(PCFilePath) Then
                         WriteSfxFile(PCFilePath)
                     End If
+
                     '---------------------------PlayStation2
                     Dim PlayStation2FilePath As String = Path.Combine(sfxFilePath, "PlayStation2", sfxFileName & ".txt")
                     If File.Exists(PlayStation2FilePath) Then
                         WriteSfxFile(PlayStation2FilePath)
                     End If
+
                     '---------------------------X Box
                     Dim xboxFilePath As String = Path.Combine(sfxFilePath, "X Box", sfxFileName & ".txt")
                     If File.Exists(xboxFilePath) Then
@@ -147,16 +162,20 @@ Partial Public Class AdvancedMenu
             If Directory.Exists(soundbankFilePath) Then
                 'Reset variable
                 SoundBankHashCodeNumber = 1
+
                 'Get and modify files
                 Dim soundbankFilesToCheck As String() = Directory.GetFiles(soundbankFilePath, "*.txt", SearchOption.TopDirectoryOnly)
                 For fileIndex As Integer = 0 To soundbankFilesToCheck.Length - 1
                     Dim currentFilePath As String = soundbankFilesToCheck(fileIndex)
+
                     'Read files
                     Dim fileLines As String() = File.ReadAllLines(currentFilePath)
+
                     'Update HashCode
                     Dim hashcodeLineIndex As Integer = Array.IndexOf(fileLines, "#HASHCODE") + 1
                     fileLines(hashcodeLineIndex) = "HashCodeNumber " & SoundBankHashCodeNumber
                     SoundBankHashCodeNumber += 1
+
                     'Write file again
                     File.WriteAllLines(currentFilePath, fileLines)
                 Next
@@ -167,22 +186,28 @@ Partial Public Class AdvancedMenu
             If Directory.Exists(musicsFilePath) Then
                 'Reset variable
                 MFXHashCodeNumber = 1
+
                 'Get and modify files
                 Dim musicFilesToCheck As String() = Directory.GetFiles(musicsFilePath, "*.txt", SearchOption.TopDirectoryOnly)
                 For fileIndex As Integer = 0 To musicFilesToCheck.Length - 1
                     Dim currentFilePath As String = musicFilesToCheck(fileIndex)
+
                     'Read files
                     Dim fileLines As String() = File.ReadAllLines(currentFilePath)
+
                     'Update HashCode
                     Dim hashcodeLineIndex As Integer = Array.IndexOf(fileLines, "#HASHCODE") + 1
                     fileLines(hashcodeLineIndex) = "HashCodeNumber " & MFXHashCodeNumber
                     MFXHashCodeNumber += 1
+
                     'Write file again
                     File.WriteAllLines(currentFilePath, fileLines)
                 Next
             End If
+
             'Update file
             writers.UpdateMiscFile(Path.Combine(WorkingDirectory, "System", "Misc.txt"))
+
             'Set cursor as default arrow
             Cursor.Current = Cursors.Default
         End If
@@ -303,6 +328,7 @@ Partial Public Class AdvancedMenu
                     For sampleIndex As Integer = 0 To sfxFileData.Samples.Count - 1
                         Dim linkHashCode As String = sfxFileData.Samples(sampleIndex).FilePath
                         Dim subSfxFilePath As String = Path.Combine(WorkingDirectory, "SFXs", linkHashCode & ".txt")
+
                         'Add missing link to list
                         If Not File.Exists(subSfxFilePath) Then
                             missingLinks.Add(Path.GetFileNameWithoutExtension(sfxFilePath) & " #=# " & linkHashCode)
@@ -331,30 +357,37 @@ Partial Public Class AdvancedMenu
     Private Sub Button_ValidateSfx_Click(sender As Object, e As EventArgs) Handles Button_ValidateSfx.Click
         Dim sfxPlatformsList As New List(Of String)
         Dim baseDir As String = Path.Combine(WorkingDirectory, "SFXs")
+
         'Set cursor as hourglass
         Cursor.Current = Cursors.WaitCursor
+
         'Get GameCube SFXs
         Dim gameCubeDir As String = Path.Combine(baseDir, "GameCube")
         If Directory.Exists(gameCubeDir) Then
             GetPlatformSFXs(gameCubeDir, sfxPlatformsList, "GameCube")
         End If
+
         'Get PC SFXs
         Dim pcDir As String = Path.Combine(baseDir, "PC")
         If Directory.Exists(pcDir) Then
             GetPlatformSFXs(pcDir, sfxPlatformsList, "PC")
         End If
+
         'Get PC SFXs
         Dim playStation2 As String = Path.Combine(baseDir, "PlayStation2")
         If Directory.Exists(playStation2) Then
             GetPlatformSFXs(playStation2, sfxPlatformsList, "PlayStation2")
         End If
+
         'Get X Box SFXs
         Dim Xbox As String = Path.Combine(baseDir, "X Box")
         If Directory.Exists(Xbox) Then
             GetPlatformSFXs(Xbox, sfxPlatformsList, "X Box")
         End If
+
         'Set cursor as default arrow
         Cursor.Current = Cursors.Default
+
         'Show info to user
         sfxPlatformsList.Sort()
         Dim debugInfo As New Frm_DebugData(sfxPlatformsList.ToArray)

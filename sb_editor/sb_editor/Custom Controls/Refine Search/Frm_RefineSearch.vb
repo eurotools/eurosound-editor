@@ -38,20 +38,18 @@ Public Class Frm_RefineSearch
     '*===============================================================================================
     Private Sub BackgroundWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker.DoWork
         'Update list
-        Dim fileNameWithExtension As String = Dir(Path.Combine(WorkingDirectory, "SFXs\*.txt"))
         Dim sfxFilesToCheck As New List(Of String)
+        Dim filesToCheck As String() = Directory.GetFiles(Path.Combine(WorkingDirectory, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly)
+        For fileIndex As Integer = 0 To filesToCheck.Length - 1
+            sfxFilesToCheck.Add(Path.GetFileNameWithoutExtension(filesToCheck(fileIndex)))
+        Next
+
         'Add item to listbox
         Invoke(Sub() mainframe.ListBox_SFXs.BeginUpdate())
         Invoke(Sub() mainframe.ListBox_SFXs.Items.Clear())
-        Do While fileNameWithExtension > ""
-            Dim fileNameLength As Integer = Len(fileNameWithExtension)
-            Dim fileName As String = Microsoft.VisualBasic.Left(fileNameWithExtension, fileNameLength - Len(".txt"))
-            sfxFilesToCheck.Add(fileName)
-            'Get new item
-            fileNameWithExtension = Dir()
-        Loop
         Invoke(Sub() mainframe.ListBox_SFXs.Items.AddRange(sfxFilesToCheck.ToArray))
         Invoke(Sub() mainframe.ListBox_SFXs.EndUpdate())
+
         'Update counter
         Invoke(Sub() mainframe.Label_TotalSfx.Text = "Total: " & mainframe.ListBox_SFXs.Items.Count)
 

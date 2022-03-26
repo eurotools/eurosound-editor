@@ -67,11 +67,11 @@ Friend Module GenericFunctions
         End If
     End Sub
 
-    Friend Function MultipleDeletionMessage(messageToShow As String, itemsToDelete As List(Of String)) As String
+    Friend Function MultipleDeletionMessage(messageToShow As String, itemsToDelete As String()) As String
         Dim maxItemsToShow As Byte = 33
         'Create message to inform user
         Dim filesListToDelete As String = messageToShow & vbNewLine & vbNewLine
-        Dim numItems As Integer = Math.Min(maxItemsToShow, itemsToDelete.Count)
+        Dim numItems As Integer = Math.Min(maxItemsToShow, itemsToDelete.Length)
         For index As Integer = 0 To numItems - 1
             filesListToDelete += "'" & itemsToDelete(index) & "'" & vbNewLine
         Next
@@ -79,7 +79,7 @@ Friend Module GenericFunctions
             filesListToDelete += "Plus Some More ....." & vbNewLine
             filesListToDelete += "............" & vbNewLine
         End If
-        filesListToDelete += vbNewLine & "Total Files: " & itemsToDelete.Count
+        filesListToDelete += vbNewLine & "Total Files: " & itemsToDelete.Length
         Return filesListToDelete
     End Function
 

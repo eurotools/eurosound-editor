@@ -182,20 +182,20 @@ Public Class UserControl_SFXs
         If mainForm IsNot Nothing Then
             'Ensure that we have selected an item
             If ListBox_SFXs.SelectedItems.Count > 0 AndAlso mainForm.ListBox_DataBases.SelectedItems.Count = 1 Then
-                'Get selected items
-                Dim selectedItems As ListBox.SelectedObjectCollection = ListBox_SFXs.SelectedItems
-                For Each sfxItem As String In selectedItems
-                    'Ensure that the item does not exist in this database
-                    If Not mainForm.ListBox_DataBaseSFX.Items.Contains(sfxItem) Then
-                        mainForm.ListBox_DataBaseSFX.Items.Add(sfxItem)
-                    End If
-                Next
-                'Get list of items
-                Dim databaseDependencies As String() = mainForm.ListBox_DataBaseSFX.Items.Cast(Of String).ToArray
+                'Get the items that we have to add
+                Dim itemsInDataBase As String() = mainForm.ListBox_DataBaseSFX.Items.Cast(Of String).ToArray
+                Dim selectedSfxItems As String() = ListBox_SFXs.SelectedItems.Cast(Of String).ToArray
+                Dim itemsToAdd As String() = selectedSfxItems.Except(itemsInDataBase)
+
+                'Sort items and add it to the listbox
+                Array.Sort(itemsToAdd)
+                mainForm.ListBox_DataBases.BeginUpdate()
+                mainForm.ListBox_DataBaseSFX.Items.AddRange(itemsToAdd)
+                mainForm.ListBox_DataBases.EndUpdate()
 
                 'Update text file
                 Dim databaseTxt As String = Path.Combine(WorkingDirectory, "DataBases", mainForm.ListBox_DataBases.SelectedItem & ".txt")
-                writers.UpdateDataBaseText(databaseTxt, databaseDependencies, textFileReaders)
+                writers.UpdateDataBaseText(databaseTxt, mainForm.ListBox_DataBaseSFX.Items.Cast(Of String).ToArray, textFileReaders)
             Else
                 My.Computer.Audio.PlaySystemSound(Media.SystemSounds.Asterisk)
             End If
@@ -313,10 +313,7 @@ Public Class UserControl_SFXs
 
     Private Sub ContextMenuSfx_Delete_Click(sender As Object, e As EventArgs) Handles ContextMenuSfx_Delete.Click
         'Create a list with the items that we have to remove
-        Dim itemsToDelete As New List(Of String)
-        For Each itemToRemove As String In ListBox_SFXs.SelectedItems
-            itemsToDelete.Add(itemToRemove)
-        Next
+        Dim itemsToDelete As String() = ListBox_SFXs.SelectedItems.Cast(Of String).ToArray
 
         'Ask user what he wants to do
         Dim answerQuestion As MsgBoxResult = MsgBox(MultipleDeletionMessage("Are you sure you want to delete SFX(s)", itemsToDelete), vbInformation + vbYesNo, "Confirm SFX Deletion")
@@ -330,7 +327,7 @@ Public Class UserControl_SFXs
             Dim sfxsTrash As String = Path.Combine(WorkingDirectory, "SFXs_Trash")
             Directory.CreateDirectory(sfxsTrash)
 
-            'Get database files
+            'Update Database files
             Dim databaseFiles As String() = Directory.GetFiles(Path.Combine(WorkingDirectory, "DataBases"), "*.txt", SearchOption.TopDirectoryOnly)
             For i As Integer = 0 To databaseFiles.Length - 1
                 Dim databaseData As String() = File.ReadAllLines(databaseFiles(i))
@@ -338,7 +335,7 @@ Public Class UserControl_SFXs
             Next
             Erase databaseFiles
 
-            'Update UI
+            'Remove SFXs
             ListBox_SFXs.BeginUpdate()
             For i As Integer = 0 To itemsToDelete.Count - 1
                 ListBox_SFXs.Items.Remove(itemsToDelete(i))
@@ -407,6 +404,8 @@ Public Class UserControl_SFXs
                 'Liberate Memmory
                 Erase databaseFiles
             End If
+        Else
+            My.Computer.Audio.PlaySystemSound(Media.SystemSounds.Asterisk)
         End If
     End Sub
 

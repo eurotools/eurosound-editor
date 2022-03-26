@@ -6,7 +6,7 @@ Partial Public Class MainFrame
         'Remove node
         For Each sb_database As TreeNode In soundbankNode.Nodes
             If sb_database IsNot Nothing Then
-                If StrComp(sb_database.Text, fileName) = 0 Then
+                If sb_database.Text.Equals(fileName, StringComparison.OrdinalIgnoreCase) Then
                     sb_database.Remove()
                 End If
             End If
@@ -45,24 +45,28 @@ Partial Public Class MainFrame
         nodeToAdd.Text = soundbankName
         nodeToAdd.Name = SoundBankHashCodeNumber
         TreeView_SoundBanks.Nodes.Add(nodeToAdd)
+
         'Create text file
         Dim soundbankFileData As SoundbankFile = textFileReaders.ReadSoundBankFile(Path.Combine(WorkingDirectory, "Soundbanks", sourceSoundbankNode.Text & ".txt"))
         soundbankFileData.HashCode = SoundBankHashCodeNumber
         writers.UpdateSoundbankFile(soundbankFileData, Path.Combine(WorkingDirectory, "Soundbanks", soundbankName & ".txt"), textFileReaders)
+
         'Update global var
         SoundBankHashCodeNumber += 1
         writers.UpdateMiscFile(Path.Combine(WorkingDirectory, "System", "Misc.txt"))
+
         'Sort control
         TreeView_SoundBanks.Sort()
+
         'Expand node
         nodeToAdd.Expand()
-        'Seect node
+
+        'Select node and update label
         TreeView_SoundBanks.SelectedNode = nodeToAdd
-        'Update label
         Label_SoundBanksCount.Text = "Total: " & TreeView_SoundBanks.Nodes.Count
     End Sub
 
-    Private Sub AddDatabaseToSoundbank(dataBasesToAdd As List(Of String), soundBank As TreeNode)
+    Private Sub AddDatabaseToSoundbank(dataBasesToAdd As String(), soundBank As TreeNode)
         Dim soundbankFilePath As String = Path.Combine(WorkingDirectory, "Soundbanks", soundBank.Text & ".txt")
         If File.Exists(soundbankFilePath) Then
             'Read file data 
@@ -70,26 +74,29 @@ Partial Public Class MainFrame
             If soundbankData IsNot Nothing Then
                 'Delete empty node if exists
                 If soundBank.Nodes.Count = 1 Then
-                    If StrComp(soundBank.Nodes(0).Name, "Empty") = 0 Then
+                    If soundBank.Nodes(0).Name.Equals("Empty", StringComparison.OrdinalIgnoreCase) Then
                         soundBank.Nodes(0).Remove()
                     End If
                 End If
+
                 'Get new items to add
                 Dim itemsToAdd As List(Of String) = dataBasesToAdd.Except(soundbankData.Dependencies).ToList
                 If itemsToAdd.Count > 0 Then
                     'Add new nodes
-                    For Each database In dataBasesToAdd
+                    For Each database In itemsToAdd
                         'Add databases
                         soundBank.Nodes.Add(database, database, 2, 2)
                     Next
-                    'Sort control
+
+                    'Sort control and select soundbank
                     TreeView_SoundBanks.Sort()
-                    'Select soundbank again
                     TreeView_SoundBanks.SelectedNode = soundBank
+
                     'Add items to file data
                     itemsToAdd.AddRange(soundbankData.Dependencies)
                     itemsToAdd.Sort()
                     soundbankData.Dependencies = itemsToAdd.ToArray
+
                     'Update text file
                     writers.UpdateSoundbankFile(soundbankData, soundbankFilePath, textFileReaders)
                 End If

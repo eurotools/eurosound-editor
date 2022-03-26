@@ -370,6 +370,8 @@ Partial Public Class MainFrame
                 Dim originalFilePath As String = Path.Combine(WorkingDirectory, "DataBases", ListBox_DataBases.SelectedItem & ".txt")
                 File.Copy(originalFilePath, Path.Combine(WorkingDirectory, "DataBases", sfxCopyName & ".txt"), True)
             End If
+        Else
+            My.Computer.Audio.PlaySystemSound(Media.SystemSounds.Asterisk)
         End If
     End Sub
 
@@ -377,10 +379,7 @@ Partial Public Class MainFrame
         'Ensure that there is an item selected
         If ListBox_DataBases.SelectedItems.Count > 0 Then
             'Create a list with the items that we have to remove
-            Dim itemsToDelete As New List(Of String)
-            For Each itemToRemove As String In ListBox_DataBases.SelectedItems
-                itemsToDelete.Add(itemToRemove)
-            Next
+            Dim itemsToDelete As String() = ListBox_DataBases.SelectedItems.Cast(Of String).ToArray
 
             'Ask user what he wants to do
             Dim answerQuestion As MsgBoxResult = MsgBox(MultipleDeletionMessage("Are you sure you want to delete Database(s)", itemsToDelete), vbInformation + vbYesNo, "Confirm Database Deletion")
@@ -389,7 +388,7 @@ Partial Public Class MainFrame
                 Dim databaseTrash As String = Path.Combine(WorkingDirectory, "Databases_Trash")
                 Directory.CreateDirectory(databaseTrash)
 
-                'Get Soundbanks files
+                'Update SoundBank files
                 Dim soundbankFiles As String() = Directory.GetFiles(Path.Combine(WorkingDirectory, "Soundbanks"), "*.txt", SearchOption.TopDirectoryOnly)
                 For i As Integer = 0 To soundbankFiles.Length - 1
                     Dim soundBankData As String() = File.ReadAllLines(soundbankFiles(i))
@@ -430,10 +429,10 @@ Partial Public Class MainFrame
     Private Sub ContextMenuDataBases_Rename_Click(sender As Object, e As EventArgs) Handles ContextMenuDataBases_Rename.Click
         If ListBox_DataBases.SelectedItems.Count = 1 Then
             'Get current fileName
-            Dim selectedName As String = ListBox_DataBases.SelectedItem
-            Dim currentFileName As String = Path.Combine(WorkingDirectory, "Databases", selectedName & ".txt")
+            'Dim selectedName As String = ListBox_DataBases.SelectedItem
+            Dim currentFileName As String = Path.Combine(WorkingDirectory, "Databases", ListBox_DataBases.SelectedItem & ".txt")
             'Ask for a new name
-            Dim diagResult As String = RenameFile(selectedName, "Database", Path.Combine(WorkingDirectory, "Databases"))
+            Dim diagResult As String = RenameFile(ListBox_DataBases.SelectedItem, "Database", Path.Combine(WorkingDirectory, "Databases"))
             If diagResult IsNot "" Then
                 'Build new file path
                 Dim newFileName = Path.Combine(WorkingDirectory, "Databases", diagResult & ".txt")
@@ -442,21 +441,20 @@ Partial Public Class MainFrame
                     File.Move(currentFileName, newFileName)
 
                     'Update Listbox
-                    Dim itemPos As Integer = ListBox_DataBases.Items.IndexOf(selectedName)
-                    If itemPos <> ListBox.NoMatches Then
-                        ListBox_DataBases.Items(itemPos) = diagResult
-                    End If
+                    Dim oldName As String = ListBox_DataBases.SelectedItem
+                    ListBox_DataBases.SelectedItem = diagResult
 
                     'Update databases in the soundbanks
                     For Each node As TreeNode In TreeView_SoundBanks.Nodes
                         'Boolean
                         Dim updateTextFile As Boolean = False
                         Dim dependenciesList As New List(Of String)
+
                         'Update nodes
                         If node.Nodes.Count > 0 Then
                             For Each childNode As TreeNode In node.Nodes
                                 'Update GUI
-                                If StrComp(childNode.Text, selectedName) = 0 Then
+                                If childNode.Text.Equals(oldName, StringComparison.OrdinalIgnoreCase) Then
                                     childNode.Name = diagResult
                                     childNode.Text = diagResult
                                     'Update boolean
@@ -466,6 +464,7 @@ Partial Public Class MainFrame
                                 dependenciesList.Add(childNode.Text)
                             Next
                         End If
+
                         'Update text file if required
                         If updateTextFile Then
                             Dim soundbankFilePath As String = Path.Combine(WorkingDirectory, "Soundbanks", node.Text & ".txt")
@@ -512,15 +511,15 @@ Partial Public Class MainFrame
         If e.Effect = DragDropEffects.Copy AndAlso ListBox_DataBases.SelectedItems.Count = 1 Then
             If e.Data.GetDataPresent(GetType(ListBox.SelectedObjectCollection)) Then
                 Dim itemsData As ListBox.SelectedObjectCollection = e.Data.GetData(GetType(ListBox.SelectedObjectCollection))
-                For Each sfxItem As String In itemsData
-                    'Ensure that the item does not exist in this database
-                    If Not ListBox_DataBaseSFX.Items.Contains(sfxItem) Then
-                        'Add item to the listbox
-                        ListBox_DataBaseSFX.Items.Add(sfxItem)
-                    End If
-                Next
-                'Update text file
-                If itemsData.Count > 0 Then
+
+                'Get items that we have to add
+                Dim sfxItems As String() = itemsData.Cast(Of String).ToArray
+                Dim listboxItems As String() = ListBox_DataBaseSFX.Items.Cast(Of String).ToArray
+                Dim itemsToAdd As String() = sfxItems.Except(listboxItems).ToArray
+
+                'Update text file and listbox
+                If itemsToAdd.Length > 0 Then
+                    ListBox_DataBaseSFX.Items.AddRange(itemsToAdd)
                     Dim databaseTxt As String = Path.Combine(WorkingDirectory, "DataBases", ListBox_DataBases.SelectedItem & ".txt")
                     Dim databaseDependencies As String() = ListBox_DataBaseSFX.Items.Cast(Of String).ToArray
                     writers.UpdateDataBaseText(databaseTxt, databaseDependencies, textFileReaders)

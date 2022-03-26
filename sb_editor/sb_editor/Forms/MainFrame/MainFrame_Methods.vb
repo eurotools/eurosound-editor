@@ -17,12 +17,7 @@ Partial Public Class MainFrame
                     selectedSoundBank = TreeView_SoundBanks.SelectedNode.Parent
                 End If
 
-                'Add databases to soundbank
-                Dim selectedDatabases As New List(Of String)
-                For Each database As String In ListBox_DataBases.SelectedItems
-                    selectedDatabases.Add(database)
-                Next
-                AddDatabaseToSoundbank(selectedDatabases, selectedSoundBank)
+                AddDatabaseToSoundbank(ListBox_DataBases.SelectedItems.Cast(Of String).ToArray, selectedSoundBank)
             End If
         Else
             My.Computer.Audio.PlaySystemSound(Media.SystemSounds.Asterisk)
