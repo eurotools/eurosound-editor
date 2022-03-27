@@ -59,8 +59,8 @@ namespace EngineXMarkersTool
 
                     //Get IMA Adpcm States
                     uint[][] pcImaDecodedStates = new uint[2][];
-                    pcImaDecodedStates[0] = DecodeStatesIma(imaData[0], imaData[0].Length * 2);
-                    pcImaDecodedStates[1] = DecodeStatesIma(imaData[1], imaData[1].Length * 2);
+                    //pcImaDecodedStates[0] = DecodeStatesIma(imaData[0], imaData[0].Length * 2);
+                    //pcImaDecodedStates[1] = DecodeStatesIma(imaData[1], imaData[1].Length * 2);
 
                     //Update Markers states
                     EXMarkersFunctions markersFunctions = new EXMarkersFunctions();
@@ -73,9 +73,9 @@ namespace EngineXMarkersTool
                             {
                                 if (startMarker.Index == marker.MarkerCount)
                                 {
-                                    uint[] IMA_States = markersFunctions.GetEngineXMarkerStates_Stereo(pcImaDecodedStates[0], pcImaDecodedStates[1], (int)marker.Position);
-                                    startMarker.State[0] = IMA_States[0];
-                                    startMarker.State[1] = IMA_States[1];
+                                    //uint[] IMA_States = markersFunctions.GetEngineXMarkerStates_Stereo(pcImaDecodedStates[0], pcImaDecodedStates[1], (int)marker.Position);
+                                    //startMarker.State[0] = IMA_States[0];
+                                    //startMarker.State[1] = IMA_States[1];
                                     break;
                                 }
                             }

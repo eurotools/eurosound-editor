@@ -1,10 +1,8 @@
-﻿using EngineXMarkersTool.Classes;
-using EngineXMarkersTool.Objects;
+﻿using EngineXMarkersTool.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using static ESUtils.CalculusLoopOffset;
-using static ESUtils.ImaCodec;
 
 namespace EngineXMarkersTool
 {
@@ -13,7 +11,7 @@ namespace EngineXMarkersTool
         //*===============================================================================================
         //* STREAM MARKER BINARY FILE
         //*===============================================================================================
-        internal void CreateMarkerBinFile(string imaFilePath, string markerFilePath, string outputFilePath, string outputPlatform, uint baseVolume)
+        internal void CreateMarkerBinFile(string smdFilePath, string markerFilePath, string outputFilePath, string outputPlatform, uint baseVolume)
         {
             //List to store the text file markers
             List<EXStartMarker> startMarkersList = new List<EXStartMarker>();
@@ -26,12 +24,7 @@ namespace EngineXMarkersTool
             //Calculate states -- PC & GameCube Platform
             if (outputPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("GameCube", StringComparison.OrdinalIgnoreCase))
             {
-                //Read IMA Data
-                byte[] imaData = File.ReadAllBytes(imaFilePath);
-                uint[] pcImaDecodedStates = DecodeStatesIma(imaData, imaData.Length * 2);
-
                 //Update Markers states
-                EXMarkersFunctions markersFunctions = new EXMarkersFunctions();
                 foreach (EXMarker marker in markersList)
                 {
                     if (marker.Position > 0)
@@ -40,9 +33,13 @@ namespace EngineXMarkersTool
                         {
                             if (startMarker.Index == marker.MarkerCount)
                             {
-                                uint[] IMA_States = markersFunctions.GetEngineXMarkerStates_Mono(pcImaDecodedStates, (int)marker.Position);
-                                startMarker.State[0] = IMA_States[0];
-                                startMarker.State[1] = IMA_States[1];
+                                using (BinaryReader breader = new BinaryReader(File.Open(smdFilePath, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                                {
+                                    breader.BaseStream.Seek((marker.Position / 256) * 256, SeekOrigin.Begin);
+                                    uint state = breader.ReadUInt32();
+                                    startMarker.State[0] = state;
+                                    startMarker.State[1] = state;
+                                }
                                 break;
                             }
                         }

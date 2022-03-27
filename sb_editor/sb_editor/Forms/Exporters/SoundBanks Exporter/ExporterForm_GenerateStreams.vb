@@ -84,7 +84,7 @@ Partial Public Class ExporterForm
                                 filesToBind.Add(destinationFilePath)
 
                                 'Create marker file
-                                CreateMarkerFileIfRequired(sampleFilePath, destinationFilePath, currentPlatform)
+                                CreateMarkerFileIfRequired(Path.ChangeExtension(sampleFullPath, ".smd"), sampleFilePath, destinationFilePath, currentPlatform)
 
                                 'Write to debug file
                                 outputFile.WriteLine("InputFile = " & sampleFullPath)
@@ -119,7 +119,7 @@ Partial Public Class ExporterForm
         Next
     End Sub
 
-    Private Sub CreateMarkerFileIfRequired(sampleFilePath As String, destFilePath As String, currentPlatform As String)
+    Private Sub CreateMarkerFileIfRequired(smdFilePath As String, sampleFilePath As String, destFilePath As String, currentPlatform As String)
         Dim masterWaveFilePath As String = Path.Combine(WorkingDirectory, "Master", sampleFilePath)
         Dim masterMarkerFilePath As String = Path.ChangeExtension(masterWaveFilePath, ".mrk")
         If Not File.Exists(masterMarkerFilePath) Then
@@ -128,6 +128,6 @@ Partial Public Class ExporterForm
                 markerFileFunctions.CreateStreamMarkerFile(masterMarkerFilePath, sampleChunkData, waveReader.Length / 2)
             End Using
         End If
-        markersFunctions.CreateStreamMarkers(destFilePath, masterMarkerFilePath, Path.ChangeExtension(destFilePath, ".smf"), currentPlatform, 100)
+        markersFunctions.CreateStreamMarkers(smdFilePath, masterMarkerFilePath, Path.ChangeExtension(destFilePath, ".smf"), currentPlatform, 100)
     End Sub
 End Class

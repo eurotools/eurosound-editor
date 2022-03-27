@@ -44,5 +44,21 @@ Namespace MarkerFunctions
                 outputFile.WriteLine("}")
             End Using
         End Sub
+
+        Friend Function GetMaxFilePosition(filepath As String) As Integer
+            Dim maxPosition = 0
+
+            Using sr As New StreamReader(File.OpenRead(filepath))
+                While Not sr.EndOfStream
+                    'Read text file
+                    Dim currentLine As String = sr.ReadLine.Trim
+                    If currentLine.StartsWith("Pos=", StringComparison.OrdinalIgnoreCase) Then
+                        maxPosition = Math.Max(maxPosition, CInt(currentLine.Substring(4)))
+                    End If
+                End While
+            End Using
+
+            Return maxPosition
+        End Function
     End Class
 End Namespace

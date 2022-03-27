@@ -171,19 +171,21 @@ Partial Public Class ExporterForm
 
         'Get file paths
         Dim ImaOutputFilePath As String = Path.Combine(WorkingDirectory, currentPlatform & "_Software_adpcm", sampleRelativePath)
-        Dim smdFilePath As String = Path.ChangeExtension(ImaOutputFilePath, ".smd")
 
         'Get PCM Data
         Dim pcmData As Byte()
         Using parsedWaveReader As New WaveFileReader(outputFilePath)
             pcmData = New Byte(parsedWaveReader.Length - 1) {}
             parsedWaveReader.Read(pcmData, 0, pcmData.Length)
-            File.WriteAllBytes(smdFilePath, pcmData)
         End Using
 
-        'Wave to ima
+        'Wave to IMA Adpcm
         Dim imaData As Byte() = ESUtils.ImaCodec.Encode(ConvertByteArrayToShortArray(pcmData))
         File.WriteAllBytes(Path.ChangeExtension(ImaOutputFilePath, ".ssp"), imaData)
+
+        'Get States
+        Dim imaStates As Byte() = ESUtils.ImaCodec.DecodeStatesIma(imaData, (imaData.Length * 2) - 1)
+        File.WriteAllBytes(Path.ChangeExtension(ImaOutputFilePath, ".smd"), imaStates)
 
         platformTimer.Stop()
     End Sub

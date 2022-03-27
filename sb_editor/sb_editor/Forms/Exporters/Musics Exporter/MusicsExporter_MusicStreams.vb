@@ -8,24 +8,29 @@ Partial Public Class MusicsExporter
         If Not MarkerFileOnly Then
             Dim temporalLeft As String = Path.Combine(WorkingDirectory, "System", "TempWave.wav")
             Dim temporalRight As String = Path.Combine(WorkingDirectory, "System", "TempWave2.wav")
+
             'Start main loop
             For fileIndex As Integer = 0 To outputQueue.Rows.Count - 1
                 Dim musicItem As DataRow = outputQueue.Rows(fileIndex)
                 Dim waveFilePath As String = Path.Combine(WorkingDirectory, "Music", musicItem.ItemArray(0) & ".wav")
                 Dim musicHashCode As Integer = musicItem.ItemArray(2)
                 Dim ResampleAndSplit As Boolean = True
+
                 'Split Wave channels with SoX (PC & GC)
                 For platformIndex As Integer = 0 To outputPlatforms.Length - 1
                     'Get the current platform
                     Dim currentPlatform As String = outputPlatforms(platformIndex)
                     Dim soundSampleData As String = Path.Combine(GetOutputFolder(musicHashCode, currentPlatform), "MFX_" & musicHashCode & ".ssd")
+
                     'Update title bar and progress
                     BackgroundWorker.ReportProgress(Decimal.Divide(platformIndex + (fileIndex * outputPlatforms.Length), outputQueue.Rows.Count * outputPlatforms.Length) * 100.0, "Making Music Stream: " & musicItem.ItemArray(0) & " for " & currentPlatform)
+
                     'Split channels - All platforms has the same sample rate at exception of Xbox
                     If ResampleAndSplit Then
                         ReSampleAndSplitWithSox(waveFilePath, temporalLeft, temporalRight, 32000)
                         ResampleAndSplit = False
                     End If
+
                     'Start ReSampling
                     Select Case currentPlatform
                         Case "PC", "GameCube"
@@ -33,21 +38,26 @@ Partial Public Class MusicsExporter
                             Dim PcOutLeft As String = Path.Combine(waveOutputFolder, musicItem.ItemArray(0))
                             Dim PcOutRight As String = Path.Combine(waveOutputFolder, musicItem.ItemArray(0))
                             CreateImaAdpcm(temporalLeft, temporalRight, PcOutLeft, PcOutRight)
+
                             'Music Stream (.ssd)
                             MergeChannels(File.ReadAllBytes(PcOutLeft & "_L.ima"), File.ReadAllBytes(PcOutRight & "_R.ima"), 1, soundSampleData)
                         Case "PlayStation2"
                             'Vag Tool
                             RunConsoleProcess("SystemFiles\AIFF2VAG.exe", """" & temporalLeft & """")
                             RunConsoleProcess("SystemFiles\AIFF2VAG.exe", """" & temporalRight & """")
-                            'Move Files
+
+                            'Get File Paths
                             Dim ps2VagL As String = Path.Combine(waveOutputFolder, musicItem.ItemArray(0)) & "_L.vag"
                             Dim ps2VagR As String = Path.Combine(waveOutputFolder, musicItem.ItemArray(0)) & "_R.vag"
                             Dim encoderOutputFileL As String = Path.ChangeExtension(temporalLeft, ".vag")
                             Dim encoderOutputFileR As String = Path.ChangeExtension(temporalRight, ".vag")
+
+                            'Move files
                             File.Copy(encoderOutputFileL, ps2VagL, True)
-                            File.Delete(encoderOutputFileL)
                             File.Copy(encoderOutputFileR, ps2VagR, True)
+                            File.Delete(encoderOutputFileL)
                             File.Delete(encoderOutputFileR)
+
                             'Music Stream (.ssd)
                             MergeChannels(GetVagFileDataChunk(ps2VagL), GetVagFileDataChunk(ps2VagR), 128, soundSampleData)
                         Case Else
@@ -86,9 +96,11 @@ Partial Public Class MusicsExporter
             Array.Resize(LeftChannelData, ((LeftChannelData.Length + (interleave_block_size - 1)) And Not (interleave_block_size - 1)))
             Array.Resize(RightChannelData, ((RightChannelData.Length + (interleave_block_size - 1)) And Not (interleave_block_size - 1)))
         End If
+
         'Get total length
         Dim ArrayLength As Integer = LeftChannelData.Length + RightChannelData.Length
         Dim interleavedData As Byte() = New Byte(ArrayLength - 1) {}
+
         'Start channels interleaving
         For i As Integer = 0 To ArrayLength - 1
             If (i Mod 2) = 0 Then
@@ -113,13 +125,15 @@ Partial Public Class MusicsExporter
         'FilePaths
         Dim wavePcmLeft As String = outputLeft & "_L.pcm"
         Dim wavePcmRight As String = outputRight & "_R.pcm"
+
         'Resampled wav
         RunConsoleProcess("SystemFiles\Sox.exe", """" & inputLeft & """ -t raw """ & wavePcmLeft & """")
         RunConsoleProcess("SystemFiles\Sox.exe", """" & inputRight & """ -t raw """ & wavePcmRight & """")
+
         'Wave to ima
         Dim imaLeftData As Byte() = ESUtils.ImaCodec.Encode(ConvertByteArrayToShortArray(File.ReadAllBytes(wavePcmLeft)))
-        File.WriteAllBytes(outputLeft & "_L.ima", imaLeftData)
         Dim imaRightData As Byte() = ESUtils.ImaCodec.Encode(ConvertByteArrayToShortArray(File.ReadAllBytes(wavePcmRight)))
+        File.WriteAllBytes(outputLeft & "_L.ima", imaLeftData)
         File.WriteAllBytes(outputRight & "_R.ima", imaRightData)
     End Sub
 End Class

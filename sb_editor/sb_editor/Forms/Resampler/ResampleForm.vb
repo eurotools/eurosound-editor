@@ -265,7 +265,7 @@ Partial Public Class ResampleForm
                         ListView_Samples.BeginUpdate()
                         For Each listItem As ListViewItem In ListView_Samples.SelectedItems
                             'Get file paths
-                            Dim sourceFilePath As String = Path.Combine(masterFolder, listItem.Text)
+                            Dim sourceFilePath As String = Path.Combine(masterFolder, listItem.Text.TrimStart("\"))
                             Dim relativeSourceFilePath As String = LCase(listItem.Text.Trim.TrimStart("\"))
                             Dim destFilePath As String = Path.Combine(TextBox_MoveSamplesTo.Text, Path.GetFileName(listItem.Text))
                             Dim relativeDestFilePath As String = Mid(destFilePath, substrStartIndex)

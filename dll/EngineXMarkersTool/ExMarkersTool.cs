@@ -8,10 +8,10 @@ namespace EngineXMarkersTool
         //*===============================================================================================
         //* MAIN METHOD
         //*===============================================================================================
-        public void CreateStreamMarkers(string AdpcmFile, string MarkersFilePath, string OutputFilePath, string OutputPlatform, uint Volume)
+        public void CreateStreamMarkers(string smdFilePath, string MarkersFilePath, string OutputFilePath, string OutputPlatform, uint Volume)
         {
             StreamFunctions streamsLib = new StreamFunctions();
-            streamsLib.CreateMarkerBinFile(AdpcmFile, MarkersFilePath, OutputFilePath, OutputPlatform, Volume);
+            streamsLib.CreateMarkerBinFile(smdFilePath, MarkersFilePath, OutputFilePath, OutputPlatform, Volume);
         }
 
         public void CreateMusicMarkers(string AdpcmFileL, string AdpcmFileR, string MarkerFilePath, string outJumpFilePath, string soundMarkerFile, string OutputPlatform, uint Volume)
