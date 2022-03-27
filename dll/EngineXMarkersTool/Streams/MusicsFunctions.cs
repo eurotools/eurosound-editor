@@ -1,16 +1,14 @@
-﻿using EngineXMarkersTool.Classes;
-using EngineXMarkersTool.Objects;
+﻿using EngineXMarkersTool.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using static ESUtils.CalculusLoopOffset;
-using static ESUtils.ImaCodec;
 
 namespace EngineXMarkersTool
 {
     internal class MusicsFunctions
     {
-        internal void CreateMarkerBinFile(string AdpcmFileL, string AdpcmFileR, string MarkerFilePath, string jumpFilePath, string smfFilePath, string outputPlatform, uint volume)
+        internal void CreateMarkerBinFile(string smdFilePathL, string smdFilePathR, string MarkerFilePath, string jumpFilePath, string smfFilePath, string outputPlatform, uint volume)
         {
             //List to store the text file markers
             List<EXStartMarker> startMarkersList = new List<EXStartMarker>();
@@ -50,20 +48,10 @@ namespace EngineXMarkersTool
                     }
                 }
 
-                //Read IMA Data LeftChannel
-                if (File.Exists(AdpcmFileL) && File.Exists(AdpcmFileR))
+                //Read IMA ADPCM States
+                if (File.Exists(smdFilePathL) && File.Exists(smdFilePathR))
                 {
-                    byte[][] imaData = new byte[2][];
-                    imaData[0] = File.ReadAllBytes(AdpcmFileL);
-                    imaData[1] = File.ReadAllBytes(AdpcmFileR);
-
-                    //Get IMA Adpcm States
-                    uint[][] pcImaDecodedStates = new uint[2][];
-                    //pcImaDecodedStates[0] = DecodeStatesIma(imaData[0], imaData[0].Length * 2);
-                    //pcImaDecodedStates[1] = DecodeStatesIma(imaData[1], imaData[1].Length * 2);
-
                     //Update Markers states
-                    EXMarkersFunctions markersFunctions = new EXMarkersFunctions();
                     foreach (EXMarker marker in markersList)
                     {
                         if (marker.Position > 0)
@@ -73,9 +61,28 @@ namespace EngineXMarkersTool
                             {
                                 if (startMarker.Index == marker.MarkerCount)
                                 {
-                                    //uint[] IMA_States = markersFunctions.GetEngineXMarkerStates_Stereo(pcImaDecodedStates[0], pcImaDecodedStates[1], (int)marker.Position);
-                                    //startMarker.State[0] = IMA_States[0];
-                                    //startMarker.State[1] = IMA_States[1];
+                                    uint state = 0;
+                                    using (BinaryReader breader = new BinaryReader(File.Open(smdFilePathL, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                                    {
+                                        long offset = ((marker.Position / 256) * 256) / 2;
+                                        if (offset <= breader.BaseStream.Length)
+                                        {
+                                            breader.BaseStream.Seek(offset, SeekOrigin.Begin);
+                                            state = breader.ReadUInt32();
+                                        }
+                                        startMarker.State[0] = state;
+                                    }
+
+                                    using (BinaryReader breader = new BinaryReader(File.Open(smdFilePathR, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                                    {
+                                        long offset = ((marker.Position / 256) * 256) / 2;
+                                        if (offset <= breader.BaseStream.Length)
+                                        {
+                                            breader.BaseStream.Seek(offset, SeekOrigin.Begin);
+                                            state = breader.ReadUInt32();
+                                        }
+                                        startMarker.State[1] = state;
+                                    }
                                     break;
                                 }
                             }

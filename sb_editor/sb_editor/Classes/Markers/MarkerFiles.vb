@@ -4,17 +4,17 @@ Namespace MarkerFunctions
     Public Class MarkerFiles
         Private Sub AddMarkerBlock(outputFile As StreamWriter, markerName As String, position As Integer, markerType As Integer, markerFlags As Integer, markerIndex As Integer)
             If markerIndex > 0 Then
-                outputFile.WriteLine("    Marker" & markerIndex)
+                outputFile.WriteLine(vbTab & "Marker" & markerIndex)
             Else
-                outputFile.WriteLine("    Marker")
+                outputFile.WriteLine(vbTab & "Marker")
             End If
-            outputFile.WriteLine("    {")
-            outputFile.WriteLine("        Name=" & markerName)
-            outputFile.WriteLine("        Pos=" + Trim(Str(position)))
-            outputFile.WriteLine("        Type=" + Trim(Str(markerType)))
-            outputFile.WriteLine("        Flags=" & markerFlags)
-            outputFile.WriteLine("        Extra=0")
-            outputFile.WriteLine("    }")
+            outputFile.WriteLine(vbTab & "{")
+            outputFile.WriteLine(vbTab & vbTab & "Name=" & markerName)
+            outputFile.WriteLine(vbTab & vbTab & "Pos=" + Trim(Str(position)))
+            outputFile.WriteLine(vbTab & vbTab & "Type=" + Trim(Str(markerType)))
+            outputFile.WriteLine(vbTab & vbTab & "Flags=" & markerFlags)
+            outputFile.WriteLine(vbTab & vbTab & "Extra=0")
+            outputFile.WriteLine(vbTab & "}")
         End Sub
 
         Friend Sub CreateStreamMarkerFile(filepath As String, sampleChunkData As Integer(), fileTotalSamples As Integer)

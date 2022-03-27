@@ -33,10 +33,15 @@ namespace EngineXMarkersTool
                         {
                             if (startMarker.Index == marker.MarkerCount)
                             {
+                                uint state = 0;
                                 using (BinaryReader breader = new BinaryReader(File.Open(smdFilePath, FileMode.Open, FileAccess.Read, FileShare.Read)))
                                 {
-                                    breader.BaseStream.Seek((marker.Position / 256) * 256, SeekOrigin.Begin);
-                                    uint state = breader.ReadUInt32();
+                                    long offset = (marker.Position / 256) * 256;
+                                    if (offset <= breader.BaseStream.Length)
+                                    {
+                                        breader.BaseStream.Seek(offset, SeekOrigin.Begin);
+                                        state = breader.ReadUInt32();
+                                    }
                                     startMarker.State[0] = state;
                                     startMarker.State[1] = state;
                                 }

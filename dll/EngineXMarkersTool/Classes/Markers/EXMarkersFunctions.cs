@@ -172,38 +172,5 @@ namespace EngineXMarkersTool.Classes
             }
             return prevValue;
         }
-
-        //*===============================================================================================
-        //* STATES FUNCTIONS
-        //*===============================================================================================
-        internal uint[] GetEngineXMarkerStates_Mono(uint[] decodedStates, int Position)
-        {
-            uint[] enginexStates = new uint[2];
-            int roundedIndex = (Position & -256) / 2;
-
-            //Get states
-            if (roundedIndex > 0 && roundedIndex <= decodedStates.Length)
-            {
-                enginexStates[0] = decodedStates[roundedIndex - 1];
-                enginexStates[1] = decodedStates[roundedIndex - 1];
-            }
-
-            return enginexStates;
-        }
-
-        internal uint[] GetEngineXMarkerStates_Stereo(uint[] decodedStates_leftChannel, uint[] decodedStates_rightChannel, int Position)
-        {
-            uint[] enginexStates = new uint[2];
-            int roundedIndex = ((Position / 256) * 256) / 4;
-
-            //Get states
-            if (roundedIndex > 0 && roundedIndex <= decodedStates_leftChannel.Length)
-            {
-                enginexStates[0] = decodedStates_leftChannel[roundedIndex - 1];
-                enginexStates[1] = decodedStates_rightChannel[roundedIndex - 1];
-            }
-
-            return enginexStates;
-        }
     }
 }

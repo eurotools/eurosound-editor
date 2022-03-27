@@ -2,7 +2,7 @@
 Imports EngineXMarkersTool
 
 Partial Public Class MusicsExporter
-    Private Sub CreateMarkerFiles(waveOutputFolder As String, outputPlatforms As String())
+    Private Sub CreateMarkerFiles(ESWorkFolderPath As String, outputPlatforms As String())
         Dim markersFunctions As New ExMarkersTool
         For fileIndex As Integer = 0 To outputQueue.Rows.Count - 1
             Dim musicItem As DataRow = outputQueue.Rows(fileIndex)
@@ -16,14 +16,14 @@ Partial Public Class MusicsExporter
                 'Get file data and output path
                 Dim outputFilePath As String = GetOutputFolder(musicHashCode, currentPlatform)
                 'Get Common files paths and create the jump maker file
-                Dim jumpMarkersFile As String = Path.Combine(waveOutputFolder, musicItem.ItemArray(0) & ".jmp")
+                Dim jumpMarkersFile As String = Path.Combine(ESWorkFolderPath, musicItem.ItemArray(0) & ".jmp")
                 Dim soundMarkerFile As String = Path.Combine(outputFilePath, "MFX_" & musicHashCode & ".smf")
                 'Get Marker file path
                 Dim mrkFilePath As String = Path.Combine(WorkingDirectory, "Music", musicItem.ItemArray(0) & ".mrk")
                 If StrComp(currentPlatform, "PC") = 0 Or StrComp(currentPlatform, "GameCube") = 0 Then
                     'Get Ima files
-                    Dim ImaOutLeft As String = Path.Combine(waveOutputFolder, musicItem.ItemArray(0)) & "_L.ima"
-                    Dim ImaOutRight As String = Path.Combine(waveOutputFolder, musicItem.ItemArray(0)) & "_R.ima"
+                    Dim ImaOutLeft As String = Path.Combine(ESWorkFolderPath, musicItem.ItemArray(0)) & ".asl"
+                    Dim ImaOutRight As String = Path.Combine(ESWorkFolderPath, musicItem.ItemArray(0)) & ".asr"
                     markersFunctions.CreateMusicMarkers(ImaOutLeft, ImaOutRight, mrkFilePath, jumpMarkersFile, soundMarkerFile, currentPlatform, musicItem.ItemArray(1))
                 Else
                     markersFunctions.CreateMusicMarkers(Nothing, Nothing, mrkFilePath, jumpMarkersFile, soundMarkerFile, currentPlatform, musicItem.ItemArray(1))

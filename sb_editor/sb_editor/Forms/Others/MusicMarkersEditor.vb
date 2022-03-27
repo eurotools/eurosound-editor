@@ -193,11 +193,19 @@ Public Class MusicMarkersEditor
     End Sub
 
     Private Sub Button_Ok_Click(sender As Object, e As EventArgs) Handles Button_Ok.Click
-        promptToSave = False
-        If File.Exists(TextBox_MusicFilePath.Text) Then
-            markersFunctions.CreateMusicMarkerFile(Path.ChangeExtension(TextBox_MusicFilePath.Text, ".mrk"), markersDictionary)
+        If markersDictionary.Count > 0 Then
+            If MarkerExistsInDictionary("*") Then
+                promptToSave = False
+                If File.Exists(TextBox_MusicFilePath.Text) Then
+                    markersFunctions.CreateMusicMarkerFile(Path.ChangeExtension(TextBox_MusicFilePath.Text, ".mrk"), markersDictionary)
+                End If
+                Close()
+            Else
+                MsgBox("This music does not contain an END marker, please add one.", vbOKOnly + vbCritical, "EuroSound")
+            End If
+        Else
+            Close()
         End If
-        Close()
     End Sub
 
     Private Sub Button_Close_Click(sender As Object, e As EventArgs) Handles Button_Close.Click

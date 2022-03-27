@@ -64,41 +64,39 @@ namespace EngineXMarkersTool
                 //Add new markers to list
                 for (int i = 0; i < fileData.Count; i++)
                 {
-                    if (fileData[i].Type == (byte)Enumerations.EXMarkerType.Start)
+                    switch (fileData[i].Type)
                     {
-                        markersFunctions.AddMarker(0, fileData[i].Position, Enumerations.EXMarkerType.Start, fileData[i].Flags, fileData[i].Extra, startMarkersList, markersList, IsMusic);
-                    }
-                    if (fileData[i].Type == (byte)Enumerations.EXMarkerType.End)
-                    {
-                        markersFunctions.AddMarker(0, fileData[i].Position, Enumerations.EXMarkerType.End, fileData[i].Flags, fileData[i].Extra, startMarkersList, markersList, IsMusic);
-                    }
-                    if (fileData[i].Type == (byte)Enumerations.EXMarkerType.Jump)
-                    {
-                        markersFunctions.AddMarker(0, fileData[i].Position, Enumerations.EXMarkerType.Jump, fileData[i].Flags, fileData[i].Extra, startMarkersList, markersList, IsMusic);
-                    }
-                    if (fileData[i].Type == (byte)Enumerations.EXMarkerType.Goto)
-                    {
-                        //Get start position
-                        string startMarkerName = fileData[i].Name.Substring("GOTO_".Length);
-                        uint startPos = 0;
-                        for (int j = 0; j < fileData.Count; j++)
-                        {
-                            if (fileData[j].Name.Equals(startMarkerName))
+                        case (byte)Enumerations.EXMarkerType.Start:
+                            markersFunctions.AddMarker(0, fileData[i].Position, Enumerations.EXMarkerType.Start, fileData[i].Flags, fileData[i].Extra, startMarkersList, markersList, IsMusic);
+                            break;
+                        case (byte)Enumerations.EXMarkerType.End:
+                            markersFunctions.AddMarker(0, fileData[i].Position, Enumerations.EXMarkerType.End, fileData[i].Flags, fileData[i].Extra, startMarkersList, markersList, IsMusic);
+                            break;
+                        case (byte)Enumerations.EXMarkerType.Jump:
+                            markersFunctions.AddMarker(0, fileData[i].Position, Enumerations.EXMarkerType.Jump, fileData[i].Flags, fileData[i].Extra, startMarkersList, markersList, IsMusic);
+                            break;
+                        case (byte)Enumerations.EXMarkerType.Goto:
+                            //Get start position
+                            string startMarkerName = fileData[i].Name.Substring("GOTO_".Length);
+                            uint startPos = 0;
+                            for (int j = 0; j < fileData.Count; j++)
                             {
-                                startPos = fileData[j].Position;
-                                break;
+                                if (fileData[j].Name.Equals(startMarkerName))
+                                {
+                                    startPos = fileData[j].Position;
+                                    break;
+                                }
                             }
-                        }
-                        //Create Marker
-                        markersFunctions.AddMarker(startPos, fileData[i].Position, Enumerations.EXMarkerType.Goto, fileData[i].Flags, fileData[i].Extra, startMarkersList, markersList, IsMusic);
-                    }
-                    if (fileData[i].Type == (byte)Enumerations.EXMarkerType.Loop)
-                    {
-                        if (i + 1 < fileData.Count && fileData[i + 1].Type == (byte)Enumerations.EXMarkerType.Start)
-                        {
-                            markersFunctions.AddMarker(fileData[i].Position, fileData[i + 1].Position, Enumerations.EXMarkerType.Loop, fileData[i].Flags, fileData[i].Extra, startMarkersList, markersList, IsMusic);
-                            i += 1;
-                        }
+                            //Create Marker
+                            markersFunctions.AddMarker(startPos, fileData[i].Position, Enumerations.EXMarkerType.Goto, fileData[i].Flags, fileData[i].Extra, startMarkersList, markersList, IsMusic);
+                            break;
+                        case (byte)Enumerations.EXMarkerType.Loop:
+                            if (i + 1 < fileData.Count && fileData[i + 1].Type == (byte)Enumerations.EXMarkerType.Start)
+                            {
+                                markersFunctions.AddMarker(fileData[i].Position, fileData[i + 1].Position, Enumerations.EXMarkerType.Loop, fileData[i].Flags, fileData[i].Extra, startMarkersList, markersList, IsMusic);
+                                i += 1;
+                            }
+                            break;
                     }
                 }
             }

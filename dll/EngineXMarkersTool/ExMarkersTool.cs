@@ -14,12 +14,12 @@ namespace EngineXMarkersTool
             streamsLib.CreateMarkerBinFile(smdFilePath, MarkersFilePath, OutputFilePath, OutputPlatform, Volume);
         }
 
-        public void CreateMusicMarkers(string AdpcmFileL, string AdpcmFileR, string MarkerFilePath, string outJumpFilePath, string soundMarkerFile, string OutputPlatform, uint Volume)
+        public void CreateMusicMarkers(string smdFilePathL, string smdFilePathR, string MarkerFilePath, string outJumpFilePath, string soundMarkerFile, string OutputPlatform, uint Volume)
         {
             if (File.Exists(MarkerFilePath))
             {
                 MusicsFunctions musicsLib = new MusicsFunctions();
-                musicsLib.CreateMarkerBinFile(AdpcmFileL, AdpcmFileR, MarkerFilePath, outJumpFilePath, soundMarkerFile, OutputPlatform, Volume);
+                musicsLib.CreateMarkerBinFile(smdFilePathL, smdFilePathR, MarkerFilePath, outJumpFilePath, soundMarkerFile, OutputPlatform, Volume);
             }
         }
 

@@ -44,8 +44,9 @@ Partial Public Class MusicsExporter
         BackgroundWorker.ReportProgress(Nothing, "Waiting")
 
         'Create ESWork folder if required
-        Dim waveOutputFolder As String = Path.Combine(WorkingDirectory, "Music", "ESWork")
-        Directory.CreateDirectory(waveOutputFolder)
+        Dim ESWorkFolder As String = Path.Combine(WorkingDirectory, "Music", "ESWork")
+        Dim ESMusicFolder As String = Path.Combine(WorkingDirectory, "Music")
+        Directory.CreateDirectory(ESWorkFolder)
 
         'Get output platforms
         Dim selectedPlatform As String = parentMusicForm.ComboBox_OutputFormat.Invoke(Function() parentMusicForm.ComboBox_OutputFormat.SelectedItem)
@@ -67,13 +68,17 @@ Partial Public Class MusicsExporter
         'Calculate execution time
         Dim watch = Stopwatch.StartNew
 
+        'ReSample Music Streams
+        Invoke(Sub() ProgressBar1.Value = 0)
+        ResampleMusicStreams(ESMusicFolder, ESWorkFolder, outPlaforms)
+
         'Create Music Stream (.ssd)
         Invoke(Sub() ProgressBar1.Value = 0)
-        CreateMusicStreams(waveOutputFolder, outPlaforms)
+        CreateMusicStreams(ESMusicFolder, outPlaforms)
 
         'Create Marker Files (.smf)
         Invoke(Sub() ProgressBar1.Value = 0)
-        CreateMarkerFiles(waveOutputFolder, outPlaforms)
+        CreateMarkerFiles(ESWorkFolder, outPlaforms)
 
         'Create MusX Files (.SFX)
         Invoke(Sub() ProgressBar1.Value = 0)

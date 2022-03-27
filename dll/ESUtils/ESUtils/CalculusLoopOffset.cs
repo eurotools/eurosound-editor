@@ -102,13 +102,6 @@ namespace ESUtils
             }
             return alignedNumber;
         }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        public static uint GetLoopOffsetForVag(uint loopOffset)
-        {
-            uint loopOffsetVag = (uint)(loopOffset / 28 + (((loopOffset % 28) != 0) ? 2 : 1));
-            return loopOffsetVag;
-        }
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------
