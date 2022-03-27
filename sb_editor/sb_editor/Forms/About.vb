@@ -1,5 +1,4 @@
-﻿Imports System.Reflection
-Imports System.Runtime.InteropServices
+﻿Imports System.Runtime.InteropServices
 Imports System.Threading.Tasks
 Imports Octokit
 
@@ -15,7 +14,7 @@ Public Class About
     '* FORM EVENTS
     '*===============================================================================================
     Private Async Sub About_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Label_CurrentVersion.Text = "This Version: " & Assembly.GetEntryAssembly().GetName().Version.ToString
+        Label_CurrentVersion.Text = "This Version: " & My.Application.Info.Version.ToString
         If CheckForInternetConnection(0) Then
             Await CheckGitHubNewerVersion()
         Else
@@ -48,7 +47,7 @@ Public Class About
             Dim releases As Release = Await client.Repository.Release.GetLatest("eurotools", "eurosound_project")
 
             'Setup the versions
-            Dim localVersion As New Version(Assembly.GetEntryAssembly().GetName().Version.ToString)
+            Dim localVersion As New Version(My.Application.Info.Version.ToString)
             Dim latestGitHubVersion As New Version(releases.TagName)
             Label_LatestVersion.Text = "Latest Version: " & releases.TagName
 
