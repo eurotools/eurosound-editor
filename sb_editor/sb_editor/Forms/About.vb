@@ -14,7 +14,7 @@ Public Class About
     '* FORM EVENTS
     '*===============================================================================================
     Private Async Sub About_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Label_CurrentVersion.Text = "This Version: " & My.Application.Info.Version.ToString
+        Label_CurrentVersion.Text = "This Version: " & New Version(My.Application.Info.Version.Major, My.Application.Info.Version.Minor, My.Application.Info.Version.Build).ToString
         If CheckForInternetConnection(0) Then
             Await CheckGitHubNewerVersion()
         Else
@@ -47,9 +47,9 @@ Public Class About
             Dim releases As Release = Await client.Repository.Release.GetLatest("eurotools", "eurosound_project")
 
             'Setup the versions
-            Dim localVersion As New Version(My.Application.Info.Version.ToString)
+            Dim localVersion As New Version(My.Application.Info.Version.Major, My.Application.Info.Version.Minor, My.Application.Info.Version.Build)
             Dim latestGitHubVersion As New Version(releases.TagName)
-            Label_LatestVersion.Text = "Latest Version: " & releases.TagName
+            Label_LatestVersion.Text = "Latest Version: " & New Version(latestGitHubVersion.Major, latestGitHubVersion.Minor, latestGitHubVersion.Build).ToString
 
             'Compare the Versions
             Dim versionComparison = localVersion.CompareTo(latestGitHubVersion)

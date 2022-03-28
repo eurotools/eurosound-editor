@@ -69,15 +69,15 @@ Partial Public Class ExporterForm
         End If
 
         'Get output soundbanks
-        Dim outSoundBanks As String() = New String() {}
+        Dim soundBanksQueue As String() = New String() {}
         If mainFrame.RadioButton_Output_SelectedSoundBank.Checked Then
             If mainFrame.TreeView_SoundBanks.Invoke(Function() mainFrame.TreeView_SoundBanks.SelectedNode) IsNot Nothing Then
-                outSoundBanks = New String() {mainFrame.TreeView_SoundBanks.Invoke(Function() mainFrame.TreeView_SoundBanks.SelectedNode.Text)}
+                soundBanksQueue = New String() {mainFrame.TreeView_SoundBanks.Invoke(Function() mainFrame.TreeView_SoundBanks.SelectedNode.Text)}
             End If
         Else
-            outSoundBanks = New String(mainFrame.TreeView_SoundBanks.Nodes.Count) {}
+            soundBanksQueue = New String(mainFrame.TreeView_SoundBanks.Nodes.Count) {}
             For nodeIndex As Integer = 0 To mainFrame.TreeView_SoundBanks.Nodes.Count - 1
-                outSoundBanks(nodeIndex) = mainFrame.TreeView_SoundBanks.Nodes(nodeIndex).Text
+                soundBanksQueue(nodeIndex) = mainFrame.TreeView_SoundBanks.Nodes(nodeIndex).Text
             Next
         End If
 
@@ -127,8 +127,8 @@ Partial Public Class ExporterForm
 
         '----------------------------------------------Output user selected Soundbanks----------------------------------------------
         Dim OutputAborted As Boolean = False
-        If outSoundBanks.Length > 0 Then
-            OutputSoundbanks(hashCodesDictionary, outSoundBanks, outputLanguage, outPlaforms, OutputAborted, soundsTable)
+        If soundBanksQueue.Length > 0 Then
+            OutputSoundbanks(hashCodesDictionary, soundBanksQueue, outputLanguage, outPlaforms, OutputAborted, soundsTable)
         End If
 
         'Continue if the output has not been aborted

@@ -1,3 +1,15 @@
 ﻿<Weavers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FodyWeavers.xsd">
-  <Costura />
+	<Costura>
+	  <IncludeAssemblies>
+		ESUtils
+		IniFile
+		ListView_ColumnSortingClickVb
+		Microsoft.VisualBasic.PowerPacks
+		MostRecentFilesMenu
+		MrkTool
+		NAudio
+		Octokit
+		System.Runtime.InteropServices.RuntimeInformation
+	  </IncludeAssemblies>
+	</Costura>
 </Weavers>

@@ -5,7 +5,7 @@ Namespace WritersClasses
         Friend Sub UpdateMiscFile(miscFilePath As String, Optional newProject As Boolean = False)
             Using outputFile As New StreamWriter(miscFilePath)
                 outputFile.WriteLine("#VERSION")
-                outputFile.WriteLine("VersionNumber 3.57")
+                outputFile.WriteLine("VersionNumber " & New Version(My.Application.Info.Version.Major, My.Application.Info.Version.Minor).ToString)
                 outputFile.WriteLine("#END")
                 outputFile.WriteLine("")
                 If newProject Then

@@ -26,61 +26,53 @@ Partial Public Class Project_Properties
     End Sub
 
     Private Sub Project_Properties_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        If File.Exists(SysFileProperties) Then
-            'Read data if is an existing project
-            If File.Exists(SysFileProperties) Then
-                ProjectSettingsFile = textFileReaders.ReadPropertiesFile(SysFileProperties)
-                'Put available formats and select the first one
-                If ProjectSettingsFile.AvailableFormats.Length > 0 Then
-                    'Print available formats
-                    CopyArrayToListView(ListView_Formats, ProjectSettingsFile.AvailableFormats)
-                    'Select first item
-                    ListView_Formats.Items(0).Selected = True
-                    ListView_Formats.Items(0).Focused = True
-                End If
-                'Select the first item by default - Formats
-                If ComboBox_Platform.Items.Count > 0 Then
-                    ComboBox_Platform.SelectedIndex = 0
-                End If
-                'Print available formats in the combo
-                If ProjectSettingsFile.AvailableReSampleRates.Count > 0 Then
-                    'Add available rates format to the combobox and select the first one
-                    If ProjectSettingsFile.AvailableFormats.Length > 0 Then
-                        ComboBox_RatesFormat.Items.AddRange(GetColumn(ProjectSettingsFile.AvailableFormats, 0))
-                        ComboBox_RatesFormat.SelectedIndex = 0
-                    End If
-                    Dim sampleRatesArray As String() = ProjectSettingsFile.AvailableReSampleRates.ToArray
-                    'Add available rates to the listbox
-                    ListBox_SampleRates.Items.AddRange(sampleRatesArray)
-                    'Add available rates to the combobox
-                    ComboBox_DefaultSampleRate.Items.AddRange(sampleRatesArray)
-                    ComboBox_DefaultSampleRate.SelectedIndex = ProjectSettingsFile.MiscProps.DefaultRate
-                End If
+        ProjectSettingsFile = textFileReaders.ReadPropertiesFile(SysFileProperties)
 
-                'Misc properties
-                Textbox_Master_Path.Text = ProjectSettingsFile.MiscProps.SampleFileFolder
-                Textbox_SonixFolder.Text = ProjectSettingsFile.MiscProps.HashCodeFileFolder
-                Textbox_EngineXFolder.Text = ProjectSettingsFile.MiscProps.EngineXFolder
-                Textbox_EuroLandServer.Text = ProjectSettingsFile.MiscProps.EuroLandHashCodeServerPath
-                TextBox_UserName.Text = EuroSoundUser
-                TextBox_EditWavs.Text = ProjAudioEditor
-                TextBox_TextEditor.Text = ProjTextEditor
-
-                'SoundBank Sizes
-                Numeric_PlayStationMaxSize.Value = SoundBankMaxPlayStation
-                Numeric_PcMaxSize.Value = SoundBankMaxPC
-                Numeric_GameCubeMaxSize.Value = SoundBankMaxGameCube
-                Numeric_XboxMaxSize.Value = SoundBankMaxXbox
-
-                'Others
-                CheckBox_PrefixHashCodes.Checked = ProjectSettingsFile.MiscProps.PrefixHtSound
-                Checkbox_ViewPrePostOutputCommands.Checked = ProjectSettingsFile.MiscProps.ViewOutputDos
-            End If
-        Else
-            MsgBox("File not found", vbOKOnly + vbCritical, "EuroSound")
-            promptSave = False
-            Close()
+        'Put available formats and select the first one
+        If ProjectSettingsFile.AvailableFormats.Length > 0 Then
+            'Print available formats
+            CopyArrayToListView(ListView_Formats, ProjectSettingsFile.AvailableFormats)
+            'Select first item
+            ListView_Formats.Items(0).Selected = True
+            ListView_Formats.Items(0).Focused = True
         End If
+        'Select the first item by default - Formats
+        If ComboBox_Platform.Items.Count > 0 Then
+            ComboBox_Platform.SelectedIndex = 0
+        End If
+        'Print available formats in the combo
+        If ProjectSettingsFile.AvailableReSampleRates.Count > 0 Then
+            'Add available rates format to the combobox and select the first one
+            If ProjectSettingsFile.AvailableFormats.Length > 0 Then
+                ComboBox_RatesFormat.Items.AddRange(GetColumn(ProjectSettingsFile.AvailableFormats, 0))
+                ComboBox_RatesFormat.SelectedIndex = 0
+            End If
+            Dim sampleRatesArray As String() = ProjectSettingsFile.AvailableReSampleRates.ToArray
+            'Add available rates to the listbox
+            ListBox_SampleRates.Items.AddRange(sampleRatesArray)
+            'Add available rates to the combobox
+            ComboBox_DefaultSampleRate.Items.AddRange(sampleRatesArray)
+            ComboBox_DefaultSampleRate.SelectedIndex = ProjectSettingsFile.MiscProps.DefaultRate
+        End If
+
+        'Misc properties
+        Textbox_Master_Path.Text = ProjectSettingsFile.MiscProps.SampleFileFolder
+        Textbox_SonixFolder.Text = ProjectSettingsFile.MiscProps.HashCodeFileFolder
+        Textbox_EngineXFolder.Text = ProjectSettingsFile.MiscProps.EngineXFolder
+        Textbox_EuroLandServer.Text = ProjectSettingsFile.MiscProps.EuroLandHashCodeServerPath
+        TextBox_UserName.Text = EuroSoundUser
+        TextBox_EditWavs.Text = ProjAudioEditor
+        TextBox_TextEditor.Text = ProjTextEditor
+
+        'SoundBank Sizes
+        Numeric_PlayStationMaxSize.Value = SoundBankMaxPlayStation
+        Numeric_PcMaxSize.Value = SoundBankMaxPC
+        Numeric_GameCubeMaxSize.Value = SoundBankMaxGameCube
+        Numeric_XboxMaxSize.Value = SoundBankMaxXbox
+
+        'Others
+        CheckBox_PrefixHashCodes.Checked = ProjectSettingsFile.MiscProps.PrefixHtSound
+        Checkbox_ViewPrePostOutputCommands.Checked = ProjectSettingsFile.MiscProps.ViewOutputDos
     End Sub
 
     Private Sub Project_Properties_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown

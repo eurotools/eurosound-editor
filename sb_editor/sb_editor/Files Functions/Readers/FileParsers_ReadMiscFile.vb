@@ -5,7 +5,8 @@ Namespace ReaderClasses
         '*===============================================================================================
         '* Misc File
         '*===============================================================================================
-        Friend Sub ReadMiscFile(miscFilePath As String)
+        Friend Function ReadMiscFile(miscFilePath As String) As String
+            Dim projectVersion As String = ""
             Using sr As New StreamReader(File.OpenRead(miscFilePath))
                 While Not sr.EndOfStream
                     Dim currentLine As String = sr.ReadLine.Trim
@@ -13,6 +14,17 @@ Namespace ReaderClasses
                     If String.IsNullOrEmpty(currentLine) Or currentLine.StartsWith("//") Then
                         Continue While
                     Else
+                        'File Version
+                        If currentLine.Equals("#VERSION", StringComparison.OrdinalIgnoreCase) Then
+                            'Read line
+                            currentLine = sr.ReadLine.Trim
+                            While Not currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase)
+                                projectVersion = GetStringValue("VersionNumber", currentLine)
+                                'Continue Reading
+                                currentLine = sr.ReadLine.Trim
+                            End While
+                        End If
+
                         'Streams Block
                         If currentLine.Equals("#STREAMS", StringComparison.OrdinalIgnoreCase) Then
                             'Read line
@@ -50,6 +62,8 @@ Namespace ReaderClasses
                     End If
                 End While
             End Using
-        End Sub
+
+            Return projectVersion
+        End Function
     End Class
 End Namespace

@@ -43,8 +43,8 @@ Partial Public Class MainFrame
 
             'Ask for UserName
             If StrComp(EuroSoundUser, "") = 0 Then
-                Dim projectPropsForm As New Project_Properties(Me)
-                projectPropsForm.ShowDialog()
+                AskForUserName("MyName")
+                RestartEuroSound()
             End If
 
             'Update ini file

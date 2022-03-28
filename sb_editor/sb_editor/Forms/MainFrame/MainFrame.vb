@@ -631,8 +631,12 @@ Partial Public Class MainFrame
     '*===============================================================================================
     Private Sub Button_ProjectProperties_Click(sender As Object, e As EventArgs) Handles Button_ProjectProperties.Click
         'Show form
-        Dim projectProps As New Project_Properties(Me)
-        projectProps.ShowDialog()
+        If File.Exists(SysFileProperties) Then
+            Dim projectProps As New Project_Properties(Me)
+            projectProps.ShowDialog()
+        Else
+            MsgBox("Properties file not found", vbOKOnly + vbCritical, "EuroSound")
+        End If
     End Sub
 
     Private Sub Button_ReSampling_Click(sender As Object, e As EventArgs) Handles Button_ReSampling.Click

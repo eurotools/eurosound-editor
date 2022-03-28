@@ -24,45 +24,70 @@ Partial Public NotInheritable Class SplashScreen
     '*===============================================================================================
     '* FORM EVENTS
     '*===============================================================================================
+    Private Sub SplashScreen_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Label_Version.Text = "Version: " & My.Application.Info.Version.Major & My.Application.Info.Version.Minor
+    End Sub
+
     Private Sub SplashScreen_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
         'Load ini file data
         LoadSystemFilesIni()
 
         'Inform user if the working directory exists
-        Dim projectFilePath As String = Path.Combine(WorkingDirectory, "Project.txt")
-        If File.Exists(projectFilePath) Then
-            'Update project variables
-            Dim propsFilePath As String = Path.Combine(WorkingDirectory, "System\Properties.txt")
-            If File.Exists(propsFilePath) Then
-                ProjectSettingsFile = textFileReaders.ReadPropertiesFile(propsFilePath)
-            End If
+        If Not String.IsNullOrEmpty(WorkingDirectory) Then
+            Dim projectFilePath As String = Path.Combine(WorkingDirectory, "Project.txt")
+            If File.Exists(projectFilePath) Then
+                'Load misc properties
+                Dim miscFilePath As String = Path.Combine(WorkingDirectory, "System", "Misc.txt")
+                Dim projectVersionSrting = textFileReaders.ReadMiscFile(miscFilePath)
 
-            'Load Project Data
-            LoadProjectData(mainform, projectFilePath)
+                'Compare current version with the project version
+                Dim projectVersion As New Version(projectVersionSrting)
+                Dim currentVersion As New Version(My.Application.Info.Version.Major, My.Application.Info.Version.Minor)
+                If currentVersion.CompareTo(projectVersion) = 0 Or currentVersion.CompareTo(projectVersion) = 1 Then
+                    'Update project variables
+                    Dim propsFilePath As String = Path.Combine(WorkingDirectory, "System\Properties.txt")
+                    If File.Exists(propsFilePath) Then
+                        ProjectSettingsFile = textFileReaders.ReadPropertiesFile(propsFilePath)
+                    End If
 
-            'Update all variables 
-            UpdateGlobalVariables()
+                    'Load Project Data
+                    LoadProjectData(mainform, projectFilePath)
 
-            'Ask for UserName if required
-            If String.IsNullOrEmpty(EuroSoundUser) Then
-                EuroSoundUser = AskForUserName("MyName")
-            End If
+                    'Update all variables 
+                    UpdateGlobalVariables()
 
-            'Update GUI
-            mainform.Text = "EuroSound: """ & WorkingDirectory & """"
-            LoadProgramLastState(mainform)
+                    'Update misc file
+                    writers.UpdateMiscFile(miscFilePath)
 
-            'Create refine search file if required
-            Dim refineSearchTextFile As String = Path.Combine(WorkingDirectory, "System", "RefineSearch.txt")
-            If Not File.Exists(refineSearchTextFile) Then
-                If Directory.Exists(Path.Combine(WorkingDirectory, "System")) Then
-                    writers.CreateRefineList(refineSearchTextFile, Nothing)
+                    'Ask for UserName if required
+                    If String.IsNullOrEmpty(EuroSoundUser) Then
+                        EuroSoundUser = AskForUserName("MyName")
+                    End If
+
+                    'Update GUI
+                    mainform.Text = "EuroSound: """ & WorkingDirectory & """"
+                    LoadProgramLastState(mainform)
+
+                    'Create refine search file if required
+                    Dim refineSearchTextFile As String = Path.Combine(WorkingDirectory, "System", "RefineSearch.txt")
+                    If Not File.Exists(refineSearchTextFile) Then
+                        If Directory.Exists(Path.Combine(WorkingDirectory, "System")) Then
+                            writers.CreateRefineList(refineSearchTextFile, Nothing)
+                        End If
+                    End If
+                Else
+                    mainform.GroupBox_SoundBanks.Enabled = False
+                    mainform.GroupBox_AvailableDataBases.Enabled = False
+                    mainform.GroupBox_SFXsInDataBase.Enabled = False
+                    mainform.GroupBox_AvailableSFXs.Enabled = False
+                    mainform.GroupBox_Misc.Enabled = False
+                    MsgBox("EuroSound out of Date for Project:" & vbCrLf & vbCrLf & "EuroSound Version: " & currentVersion.ToString & vbCrLf & "Project Version: " & projectVersion.ToString & vbCrLf & vbCrLf & "Must Get Latest EuroSound to Load this project!", vbOKOnly + vbCritical, "EuroSound out of Date!")
                 End If
+            Else
+                My.Computer.Audio.PlaySystemSound(Media.SystemSounds.Exclamation)
+                MsgBox("Project Not Found " & WorkingDirectory, vbOKOnly + vbCritical, "EuroSound Load Project Error")
+                Close()
             End If
-        Else
-            My.Computer.Audio.PlaySystemSound(Media.SystemSounds.Exclamation)
-            MsgBox("Project Not Found " & WorkingDirectory, vbOKOnly + vbCritical, "EuroSound Load Project Error")
-            Close()
         End If
 
         'Custom cursors

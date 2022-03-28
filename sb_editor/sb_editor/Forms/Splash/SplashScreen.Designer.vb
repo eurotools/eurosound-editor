@@ -32,14 +32,12 @@ Partial Class SplashScreen
         '
         'Label_Version
         '
-        Me.Label_Version.AutoSize = True
         Me.Label_Version.BackColor = System.Drawing.Color.White
         Me.Label_Version.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label_Version.Location = New System.Drawing.Point(517, 461)
         Me.Label_Version.Name = "Label_Version"
-        Me.Label_Version.Size = New System.Drawing.Size(127, 24)
+        Me.Label_Version.Size = New System.Drawing.Size(132, 24)
         Me.Label_Version.TabIndex = 2
-        Me.Label_Version.Text = "Version: 357"
         '
         'PictureBox1
         '

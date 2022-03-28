@@ -113,12 +113,6 @@ Module ProgramMainModule
         SysFileProperties = Path.Combine(WorkingDirectory, "System", "Properties.txt")
         SysFileSfxDefaults = Path.Combine(WorkingDirectory, "System", "SFX Defaults.txt")
         SysFileProjectIniPath = Path.Combine(WorkingDirectory, "System", "EuroSound.ini")
-
-        'Load misc properties
-        Dim miscFilePath As String = Path.Combine(WorkingDirectory, "System", "Misc.txt")
-        If File.Exists(miscFilePath) Then
-            textFileReaders.ReadMiscFile(miscFilePath)
-        End If
     End Sub
 
     '*===============================================================================================
