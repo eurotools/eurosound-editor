@@ -284,6 +284,18 @@ Partial Public Class Frm_SfxEditor
         End If
     End Sub
 
+    Private Sub ListBox_SamplePool_Click(sender As Object, e As EventArgs) Handles ListBox_SamplePool.Click
+        If CheckBox_EnableSubSFX.Checked = False Then
+            If ListBox_SamplePool.SelectedItems.Count = 1 Then
+                Dim selectedSample As Sample = ListBox_SamplePool.SelectedItem
+                Dim waveFullPath As String = Path.Combine(WorkingDirectory, "Master", selectedSample.FilePath)
+                If Not File.Exists(waveFullPath) Then
+                    MsgBox("File Not Found: " & waveFullPath, vbOKOnly & vbCritical, "EuroSound")
+                End If
+            End If
+        End If
+    End Sub
+
     '*===============================================================================================
     '* SAMPLE POOL LISTBOX EVENTS
     '*===============================================================================================

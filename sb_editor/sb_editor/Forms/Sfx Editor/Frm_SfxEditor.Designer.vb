@@ -80,7 +80,6 @@ Partial Class Frm_SfxEditor
         Me.MenuItem_SamplePool_Play = New System.Windows.Forms.MenuItem()
         Me.MenuItem_SamplePool_Stop = New System.Windows.Forms.MenuItem()
         Me.CheckBox_EnableSubSFX = New System.Windows.Forms.CheckBox()
-        Me.SfxParamsAndSamplePool = New sb_editor.SfxControl()
         Me.Panel_Options = New System.Windows.Forms.Panel()
         Me.Groupbox_RemoveFormat = New System.Windows.Forms.GroupBox()
         Me.Button_RemoveSpecificVersion = New System.Windows.Forms.Button()
@@ -97,6 +96,7 @@ Partial Class Frm_SfxEditor
         Me.Button_Cancel = New System.Windows.Forms.Button()
         Me.openFileDiag = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip_Buttons = New System.Windows.Forms.ToolTip(Me.components)
+        Me.SfxParamsAndSamplePool = New sb_editor.SfxControl()
         Me.TabControl_Platforms.SuspendLayout()
         Me.Panel_SfxParameters.SuspendLayout()
         Me.GroupBox_SamplePool.SuspendLayout()
@@ -660,14 +660,6 @@ Partial Class Frm_SfxEditor
         Me.CheckBox_EnableSubSFX.Text = "Enable Sub SFXs"
         Me.CheckBox_EnableSubSFX.UseVisualStyleBackColor = True
         '
-        'SfxParamsAndSamplePool
-        '
-        Me.SfxParamsAndSamplePool.Location = New System.Drawing.Point(3, 4)
-        Me.SfxParamsAndSamplePool.Name = "SfxParamsAndSamplePool"
-        Me.SfxParamsAndSamplePool.ShowSampleProperties = False
-        Me.SfxParamsAndSamplePool.Size = New System.Drawing.Size(891, 277)
-        Me.SfxParamsAndSamplePool.TabIndex = 14
-        '
         'Panel_Options
         '
         Me.Panel_Options.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
@@ -819,6 +811,14 @@ Partial Class Frm_SfxEditor
         '
         Me.openFileDiag.Filter = "Wave File (*.wav)|*.Wav"
         Me.openFileDiag.Multiselect = True
+        '
+        'SfxParamsAndSamplePool
+        '
+        Me.SfxParamsAndSamplePool.Location = New System.Drawing.Point(3, 4)
+        Me.SfxParamsAndSamplePool.Name = "SfxParamsAndSamplePool"
+        Me.SfxParamsAndSamplePool.ShowSampleProperties = False
+        Me.SfxParamsAndSamplePool.Size = New System.Drawing.Size(891, 277)
+        Me.SfxParamsAndSamplePool.TabIndex = 14
         '
         'Frm_SfxEditor
         '

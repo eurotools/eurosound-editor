@@ -305,7 +305,7 @@ Public Class UserControl_SFXs
                 Dim originalFilePath As String = Path.Combine(WorkingDirectory, "SFXs", ListBox_SFXs.SelectedItem & ".txt")
                 Dim fileContent As String() = File.ReadAllLines(originalFilePath)
                 'Update HashCode
-                Dim hashCodePosition As Integer = Array.IndexOf(fileContent, "#HASHCODE") + 1
+                Dim hashCodePosition As Integer = Array.FindIndex(fileContent, Function(t) t.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase)) + 1
                 If (hashCodePosition < fileContent.Length) Then
                     fileContent(hashCodePosition) = "HashCodeNumber " & SFXHashCodeNumber
                     SFXHashCodeNumber += 1
@@ -405,7 +405,7 @@ Public Class UserControl_SFXs
                     Dim fileLines As String() = File.ReadAllLines(databaseFiles(index))
 
                     'Update file and save changes
-                    Dim sfxItemIndex = Array.IndexOf(fileLines, selectedName)
+                    Dim sfxItemIndex = Array.FindIndex(fileLines, Function(t) t.Equals(selectedName, StringComparison.OrdinalIgnoreCase))
                     If sfxItemIndex >= 0 Then
                         fileLines(sfxItemIndex) = diagResult
                         File.WriteAllLines(databaseFiles(index), fileLines)

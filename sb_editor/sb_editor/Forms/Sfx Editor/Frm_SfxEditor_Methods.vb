@@ -165,7 +165,7 @@ Partial Public Class Frm_SfxEditor
                     'Check if is streamed
                     Label_SampleInfo_StreamedValue.Text = "??"
                     If StreamSamplesList IsNot Nothing Then
-                        Label_SampleInfo_StreamedValue.Text = Array.IndexOf(StreamSamplesList, UCase(selectedSample.FilePath.TrimStart("\"))) <> -1
+                        Label_SampleInfo_StreamedValue.Text = Array.FindIndex(StreamSamplesList, Function(t) t.Equals(selectedSample.FilePath.TrimStart("\"), StringComparison.OrdinalIgnoreCase)) <> -1
                     End If
                 End Using
             End If
@@ -235,6 +235,12 @@ Partial Public Class Frm_SfxEditor
                 hashcodesList.Show()
             End If
         Else
+            'Set master as initial directory
+            Dim masterFolder As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, "Master")
+            If Directory.Exists(masterFolder) Then
+                openFileDiag.InitialDirectory = masterFolder
+            End If
+
             'Open file dialog explorer
             If openFileDiag.ShowDialog = DialogResult.OK Then
                 Dim sfxFileData As SfxFile = sfxFilesData(currentPlatform)

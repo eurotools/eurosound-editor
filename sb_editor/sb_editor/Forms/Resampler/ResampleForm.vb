@@ -288,7 +288,7 @@ Partial Public Class ResampleForm
                             While fileListEnum.MoveNext
                                 Dim fileModified As Boolean = False
                                 Dim sfxTextFileData As String() = IO.File.ReadAllLines(fileListEnum.Current)
-                                Dim startPos As Integer = Array.IndexOf(sfxTextFileData, "#SFXSamplePoolFiles") + 1
+                                Dim startPos As Integer = Array.FindIndex(sfxTextFileData, Function(t) t.Equals("#SFXSamplePoolFiles", StringComparison.OrdinalIgnoreCase)) + 1
                                 Do While StrComp(sfxTextFileData(startPos), "#END") <> 0
                                     Dim keyToSearch As String = LCase(sfxTextFileData(startPos).Trim.TrimStart("\"))
                                     If filePathsDict.ContainsKey(keyToSearch) Then

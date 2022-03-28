@@ -208,6 +208,7 @@ Module ProgramMainModule
         Directory.CreateDirectory(Path.Combine(projectFolderPath, "Reverbs"))
         Directory.CreateDirectory(Path.Combine(projectFolderPath, "SoundBanks"))
         Directory.CreateDirectory(Path.Combine(projectFolderPath, "System"))
+
         'SFXs Folders
         Directory.CreateDirectory(Path.Combine(projectFolderPath, "SFXs"))
         Directory.CreateDirectory(Path.Combine(projectFolderPath, "SFXs", "PC"))
@@ -215,6 +216,7 @@ Module ProgramMainModule
         Directory.CreateDirectory(Path.Combine(projectFolderPath, "SFXs", "X Box"))
         Directory.CreateDirectory(Path.Combine(projectFolderPath, "SFXs", "GameCube"))
         Directory.CreateDirectory(Path.Combine(projectFolderPath, "SFXs", "Misc"))
+
         'Output folders
         Directory.CreateDirectory(Path.Combine(projectFolderPath, "TempOutputFolder", "GameCube", "SoundBanks"))
         Directory.CreateDirectory(Path.Combine(projectFolderPath, "TempOutputFolder", "PC", "SoundBanks"))
@@ -264,7 +266,7 @@ Module ProgramMainModule
             comboboxToModify.Items.Clear()
             For index As Integer = 0 To languages.Length - 1
                 Dim folderName As String = StrConv(New DirectoryInfo(languages(index)).Name, vbProperCase).Trim
-                If Array.IndexOf(SfxLanguages, folderName) <> -1 Then
+                If Array.FindIndex(SfxLanguages, Function(t) t.Equals(folderName, StringComparison.OrdinalIgnoreCase)) <> -1 Then
                     comboboxToModify.Items.Add(folderName)
                 End If
             Next

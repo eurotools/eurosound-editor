@@ -4,7 +4,7 @@ Imports NAudio.Wave
 Imports sb_editor.ParsersObjects
 
 Partial Public Class ExporterForm
-    Private Function CreateSfxDataTempFolder(samplesDt As DataTable) As Integer
+    Private Function CreateSfxDataTempFolder(samplesDt As DataTable, outputLanguages As String()) As Integer
         Dim maxHashCode As Integer = 0
         'Ensure that we have files to resample
         If samplesDt.Rows.Count > 0 Then
@@ -32,7 +32,12 @@ Partial Public Class ExporterForm
                     If sfxFile.Samples.Count > 0 Then
                         'Get file path
                         Dim waveRelPath As String = sfxFile.Samples(0).FilePath.TrimStart("\")
-                        Dim waveFilePath As String = Path.Combine(WorkingDirectory, "Master", waveRelPath)
+                        Dim waveFilePath As String
+                        If waveRelPath.IndexOf("SPEECH\ENGLISH", StringComparison.OrdinalIgnoreCase) >= 0 Then
+                            waveFilePath = Path.Combine(WorkingDirectory, "Master", "Speech", outputLanguages(outputLanguages.Length - 1), waveRelPath.Substring(15))
+                        Else
+                            waveFilePath = Path.Combine(WorkingDirectory, "Master", waveRelPath)
+                        End If
 
                         'Get duration
                         Dim waveDuration As Single = 0.00002267574F
@@ -48,7 +53,7 @@ Partial Public Class ExporterForm
 
                         'Check if is streamed or not
                         Dim sampleIsStreamed = 0
-                        If Array.IndexOf(StreamSamplesList, waveRelPath.ToUpper) <> -1 Then
+                        If Array.FindIndex(StreamSamplesList, Function(t) t.Equals(waveRelPath, StringComparison.OrdinalIgnoreCase)) <> -1 Then
                             sampleIsStreamed = 1
                         End If
 
@@ -71,37 +76,18 @@ Partial Public Class ExporterForm
         Return maxHashCode
     End Function
 
-    Friend Sub CreateSFXDataBinaryFiles(outPlatforms As String(), outputLanguages As String())
-        'Single Language
-        If outputLanguages.Length = 1 AndAlso outputLanguages(0).Equals("ENGLISH", StringComparison.OrdinalIgnoreCase) Then
-            Dim sfxDataFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Data.h")
-            For platformIndex As Integer = 0 To outPlatforms.Length - 1
-                Dim currentPlatform As String = outPlatforms(platformIndex)
+    Friend Sub CreateSFXDataBinaryFiles(sfxDataFilePath As String, outPlatforms As String(), outputLanguages As String())
+        Dim currentLanguage As String = outputLanguages(0)
+        For platformIndex As Integer = 0 To outPlatforms.Length - 1
+            Dim currentPlatform As String = outPlatforms(platformIndex)
 
-                'Output File Path
-                Dim outputFolder As String = Path.Combine(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder(currentPlatform), "_Eng")
-                Directory.CreateDirectory(outputFolder)
+            'Output File Path
+            Dim outputFolder As String = Path.Combine(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder(currentPlatform), "music")
+            Directory.CreateDirectory(outputFolder)
 
-                'Create bin file
-                Dim arguments As String = """" & sfxDataFilePath & """ """ & Path.Combine(outputFolder, "SFX_Data.bin") & """"
-                RunConsoleProcess("SystemFiles\CreateSFXDataBin.exe", arguments)
-            Next
-        Else 'Multiples Languages
-            For languageIndex As Integer = 0 To outputLanguages.Length - 1
-                Dim currentLanguage As String = outputLanguages(languageIndex)
-                Dim sfxDataFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, currentLanguage & "_SFX_Data.txt")
-                For platformIndex As Integer = 0 To outPlatforms.Length - 1
-                    Dim currentPlatform As String = outPlatforms(platformIndex)
-
-                    'Output File Path
-                    Dim outputFolder As String = Path.Combine(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder(currentPlatform), GetEngineXLangFolder(currentLanguage))
-                    Directory.CreateDirectory(outputFolder)
-
-                    'Create bin file
-                    RunConsoleProcess("SystemFiles\CreateSFXDataBin.exe", """" & sfxDataFilePath & """ """ & Path.Combine(outputFolder, "SFX_Data.bin") & """")
-                Next
-            Next
-        End If
+            'Create bin file
+            RunConsoleProcess("SystemFiles\CreateSFXDataBin.exe", """" & sfxDataFilePath & """ """ & Path.Combine(outputFolder, "SFX_Data.bin") & """")
+        Next
     End Sub
 
     Private Function GetWaveDurationFormatted(waveDuration As Single) As String

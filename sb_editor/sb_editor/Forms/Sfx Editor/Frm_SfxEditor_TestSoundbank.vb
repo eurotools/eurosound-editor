@@ -32,7 +32,7 @@ Partial Public Class Frm_SfxEditor
         Dim samplesDictionary As Dictionary(Of String, EXAudio) = ReadSampleData(sampleToInclude, "Master", CancelSoundBankOutput)
 
         'Get output file paths
-        Dim sfxFileName As String = "HC" & GetSfxFileName(Array.IndexOf(SfxLanguages, "English"), &HFFFE).ToString("X6")
+        Dim sfxFileName As String = "HC" & GetSfxFileName(Array.FindIndex(SfxLanguages, Function(t) t.Equals("English", StringComparison.OrdinalIgnoreCase)), &HFFFE).ToString("X6")
         Dim outputFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.EngineXFolder, "Binary", GetEngineXFolder("PC"), GetEngineXLangFolder("English"))
         Directory.CreateDirectory(outputFilePath)
 

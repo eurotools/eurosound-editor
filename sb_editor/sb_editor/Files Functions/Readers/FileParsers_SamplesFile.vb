@@ -67,7 +67,7 @@ Namespace ReaderClasses
                 Dim itemData As String = dataTable.Rows(rowIndex).Item(5)
                 If itemData.Equals("True", StringComparison.OrdinalIgnoreCase) Then
                     Dim sampleRelativePath As String = dataTable.Rows(rowIndex).Item(0)
-                    streamsList.Add(sampleRelativePath.TrimStart("\").ToUpper)
+                    streamsList.Add(sampleRelativePath.TrimStart("\"))
                 End If
             Next
 

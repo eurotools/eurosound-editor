@@ -63,7 +63,7 @@ Partial Public Class AdvancedMenu
             For fileIndex As Integer = 0 To filesToInspect.Length - 1
                 'Read SFX file as a string array
                 Dim fileData As String() = File.ReadAllLines(filesToInspect(fileIndex))
-                Dim hashcodeIndex As Integer = Array.IndexOf(fileData, "#HASHCODE")
+                Dim hashcodeIndex As Integer = Array.FindIndex(fileData, Function(t) t.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase))
                 If hashcodeIndex >= 0 Then
                     'Get HashCode
                     Dim stringData As String() = fileData(hashcodeIndex + 1).Split(" "c)
@@ -172,7 +172,7 @@ Partial Public Class AdvancedMenu
                     Dim fileLines As String() = File.ReadAllLines(currentFilePath)
 
                     'Update HashCode
-                    Dim hashcodeLineIndex As Integer = Array.IndexOf(fileLines, "#HASHCODE") + 1
+                    Dim hashcodeLineIndex As Integer = Array.FindIndex(fileLines, Function(t) t.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase)) + 1
                     fileLines(hashcodeLineIndex) = "HashCodeNumber " & SoundBankHashCodeNumber
                     SoundBankHashCodeNumber += 1
 
@@ -196,7 +196,7 @@ Partial Public Class AdvancedMenu
                     Dim fileLines As String() = File.ReadAllLines(currentFilePath)
 
                     'Update HashCode
-                    Dim hashcodeLineIndex As Integer = Array.IndexOf(fileLines, "#HASHCODE") + 1
+                    Dim hashcodeLineIndex As Integer = Array.FindIndex(fileLines, Function(t) t.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase)) + 1
                     fileLines(hashcodeLineIndex) = "HashCodeNumber " & MFXHashCodeNumber
                     MFXHashCodeNumber += 1
 

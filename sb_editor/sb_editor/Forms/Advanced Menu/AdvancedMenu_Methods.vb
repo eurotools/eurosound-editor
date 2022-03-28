@@ -15,7 +15,7 @@ Partial Public Class AdvancedMenu
         'Read files
         Dim fileLines As String() = File.ReadAllLines(sfxFilepath)
         'Update HashCode
-        Dim hashcodeLineINdex As Integer = Array.IndexOf(fileLines, "#HASHCODE") + 1
+        Dim hashcodeLineINdex As Integer = Array.FindIndex(fileLines, Function(t) t.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase)) + 1
         fileLines(hashcodeLineINdex) = "HashCodeNumber " & SFXHashCodeNumber
         'Write file again
         File.WriteAllLines(sfxFilepath, fileLines)

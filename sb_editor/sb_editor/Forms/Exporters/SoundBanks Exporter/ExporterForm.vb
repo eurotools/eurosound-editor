@@ -135,7 +135,7 @@ Partial Public Class ExporterForm
         If Not OutputAborted Then
             If Not quickOutput Then
                 '----------------------------------------------Create SFX Data----------------------------------------------
-                Dim maxHashCode = CreateSfxDataTempFolder(soundsTable)
+                Dim maxHashCode = CreateSfxDataTempFolder(soundsTable, outputLanguage)
 
                 '----------------------------------------------Create Hashtables----------------------------------------------
                 Dim sfxDefinesFilePath As String = Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "SFX_Defines.h")
@@ -150,7 +150,7 @@ Partial Public Class ExporterForm
                 CreateSoundhFile(soundhFilePath, sfxDefinesFilePath, Path.Combine(ProjectSettingsFile.MiscProps.HashCodeFileFolder, "MFX_Defines.h"), reverbsFilePath)
 
                 '----------------------------------------------Create SFX DATA BIN----------------------------------------------
-                CreateSFXDataBinaryFiles(outPlaforms, outputLanguage)
+                CreateSFXDataBinaryFiles(sfxDataFilePath, outPlaforms, outputLanguage)
             End If
 
             'Create SoundBanks Info file

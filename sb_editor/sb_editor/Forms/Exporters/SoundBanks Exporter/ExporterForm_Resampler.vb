@@ -161,6 +161,10 @@ Partial Public Class ExporterForm
 
                 'Update file
                 soundsTable.Rows(rowIndex).Item(4) = "False"
+                soundsTable.Rows(rowIndex).Item(6) = "False"
+                soundsTable.Rows(rowIndex).Item(7) = "False"
+                soundsTable.Rows(rowIndex).Item(8) = "False"
+                soundsTable.Rows(rowIndex).Item(9) = "False"
                 textFileWritters.SaveSamplesFile(SysFileSamples, soundsTable)
             Next
         End If

@@ -286,7 +286,7 @@ Friend Module GenericFunctions
             If Not hashCodesDictionary.ContainsKey(sfxLabel) Then
                 'Get HashCode
                 Dim sfxFileData As String() = File.ReadAllLines(currentFilePath)
-                Dim hashcodeIndex As Integer = Array.IndexOf(sfxFileData, "#HASHCODE")
+                Dim hashcodeIndex As Integer = Array.FindIndex(sfxFileData, Function(t) t.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase))
                 Dim stringData As String() = sfxFileData(hashcodeIndex + 1).Split(" "c)
                 If stringData.Length > 1 AndAlso IsNumeric(stringData(1)) Then
                     hashCodesDictionary.Add(sfxLabel, stringData(1))
@@ -307,7 +307,7 @@ Friend Module GenericFunctions
             If Not soundBanksDictionary.ContainsKey(soundBankLabel) Then
                 'Get HashCode
                 Dim soundBankFileData As String() = File.ReadAllLines(currentFilePath)
-                Dim hashcodeIndex As Integer = Array.IndexOf(soundBankFileData, "#HASHCODE")
+                Dim hashcodeIndex As Integer = Array.FindIndex(soundBankFileData, Function(t) t.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase))
                 Dim stringData As String() = soundBankFileData(hashcodeIndex + 1).Split(" "c)
                 If stringData.Length > 1 AndAlso IsNumeric(stringData(1)) Then
                     soundBanksDictionary.Add(soundBankLabel, stringData(1))
@@ -328,7 +328,7 @@ Friend Module GenericFunctions
             If Not reverbHashcodesDictionary.ContainsKey(soundBankLabel) Then
                 'Get HashCode
                 Dim reverbFilePath As String() = File.ReadAllLines(currentFilePath)
-                Dim hashcodeIndex As Integer = Array.IndexOf(reverbFilePath, "#MiscData")
+                Dim hashcodeIndex As Integer = Array.FindIndex(reverbFilePath, Function(t) t.Equals("#MiscData", StringComparison.OrdinalIgnoreCase))
                 Dim stringData As String() = reverbFilePath(hashcodeIndex + 1).Split(New Char() {" "c}, StringSplitOptions.RemoveEmptyEntries)
                 If stringData.Length > 1 AndAlso IsNumeric(stringData(1)) Then
                     reverbHashcodesDictionary.Add(soundBankLabel, stringData(1))

@@ -44,7 +44,7 @@ Namespace SoundBanksExporterFunctions
             For sfxIndex As Integer = 0 To SFXsArray.Length - 1
                 Dim currentSfx As String = SFXsArray(sfxIndex)
                 Dim sfxFileData As String() = File.ReadAllLines(Path.Combine(WorkingDirectory, "SFXs", currentSfx & ".txt"))
-                Dim startPos As Integer = Array.IndexOf(sfxFileData, "#SFXSamplePoolFiles") + 1
+                Dim startPos As Integer = Array.FindIndex(sfxFileData, Function(t) t.Equals("#SFXSamplePoolFiles", StringComparison.OrdinalIgnoreCase)) + 1
                 While Not sfxFileData(startPos).Equals("#END")
                     Dim currentSample As String = sfxFileData(startPos).ToUpper
                     If currentSample.Contains("SPEECH") Then
@@ -225,7 +225,7 @@ Namespace SoundBanksExporterFunctions
         End Sub
 
         Friend Function ReadSampleData(samplesList As String(), outputPlatform As String, ByRef CancelSoundBankOutput As Boolean) As Dictionary(Of String, EXAudio)
-            Dim samplesDictionary As New Dictionary(Of String, EXAudio)
+            Dim samplesDictionary As New Dictionary(Of String, EXAudio)(StringComparer.OrdinalIgnoreCase)
 
             For sampleIndex As Integer = 0 To samplesList.Length - 1
                 If CancelSoundBankOutput Then
@@ -234,7 +234,7 @@ Namespace SoundBanksExporterFunctions
                     'Get file path
                     Dim masterWaveFile As String = samplesList(sampleIndex)
                     Dim relativeFilePath As String = masterWaveFile.Substring((ProjectSettingsFile.MiscProps.SampleFileFolder & "\Master\").Length).TrimStart("\")
-                    If Not samplesDictionary.ContainsKey(relativeFilePath.ToUpper) Then
+                    If Not samplesDictionary.ContainsKey(relativeFilePath) Then
                         'Get Format sample
                         Dim platformWaveFile As String = Path.Combine(ProjectSettingsFile.MiscProps.SampleFileFolder, outputPlatform, relativeFilePath)
                         If outputPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase) Then
@@ -290,7 +290,7 @@ Namespace SoundBanksExporterFunctions
                                 End Select
 
                                 'Add readed data to the dictionary
-                                samplesDictionary.Add(relativeFilePath.ToUpper, soundDataObj)
+                                samplesDictionary.Add(relativeFilePath, soundDataObj)
                             Else
                                 MsgBox("Output Error: Sample File Missing: UNKNOWN SFX & BANK" & vbCrLf & platformWaveFile, vbOKOnly + vbCritical, "EuroSound")
                                 CancelSoundBankOutput = True
@@ -469,7 +469,7 @@ Namespace SoundBanksExporterFunctions
                         If samplesDictionary.ContainsKey(currentSample.FilePath) Then
                             fileRef = samplesDictionary(currentSample.FilePath).FileRef
                         Else
-                            Dim streamFileIndex As Integer = Array.IndexOf(streamsList, currentSample.FilePath)
+                            Dim streamFileIndex As Integer = Array.FindIndex(streamsList, Function(t) t.Equals(currentSample.FilePath, StringComparison.OrdinalIgnoreCase))
                             If streamFileIndex <> -1 Then
                                 fileRef = (streamFileIndex + 1) * -1
                                 streamsReport.Add(New KeyValuePair(Of String, Integer)(currentSample.FilePath, fileRef))
