@@ -54,7 +54,12 @@ Public Class UserControl_SFXs
         Dim refineFilePath As String = Path.Combine(WorkingDirectory, "System", "RefineSearch.txt")
         If File.Exists(refineFilePath) Then
             Dim keywords As String() = textFileReaders.ReadRefineList(refineFilePath)
+
+            'Update combobox
+            ComboBox_SFX_Section.BeginUpdate()
+            ComboBox_SFX_Section.Items.Clear()
             ComboBox_SFX_Section.Items.AddRange(keywords)
+            ComboBox_SFX_Section.EndUpdate()
 
             'Select first item
             If ComboBox_SFX_Section.Items.Count > 0 Then

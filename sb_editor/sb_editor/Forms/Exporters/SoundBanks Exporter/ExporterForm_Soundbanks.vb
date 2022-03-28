@@ -4,7 +4,10 @@ Imports sb_editor.ParsersObjects
 Imports sb_editor.SoundBanksExporterFunctions
 
 Partial Public Class ExporterForm
-    Public Sub OutputSoundbanks(hashCodesList As SortedDictionary(Of String, UInteger), soundbanksList As String(), outLanguages As String(), outPlatforms As String(), ByRef AbortOutput As Boolean, soundsTable As DataTable)
+    Public Function OutputSoundbanks(hashCodesList As SortedDictionary(Of String, UInteger), soundbanksList As String(), outLanguages As String(), outPlatforms As String(), ByRef AbortOutput As Boolean, soundsTable As DataTable) As String()
+        'Debug Timings
+        Dim debugTimings As New List(Of String)
+
         'Debug file
         Dim debugFolderPath As String = Path.Combine(WorkingDirectory, "Debug_Report")
         Directory.CreateDirectory(debugFolderPath)
@@ -28,12 +31,13 @@ Partial Public Class ExporterForm
         For soundBankIndex As Integer = 0 To soundbanksList.Length - 1
             If Not AbortOutput Then
                 'Calculate and report progress
-
                 Dim currentSoundBank As String = soundbanksList(soundBankIndex)
                 Dim soundbankFilePath As String = Path.Combine(WorkingDirectory, "SoundBanks", currentSoundBank & ".txt")
+
                 'Read soundbank file
                 If File.Exists(soundbankFilePath) Then
                     Dim soundBankInfo As SoundbankFile = textFileReaders.ReadSoundBankFile(soundbankFilePath)
+
                     'For each Language
                     For languageIndex As Integer = 0 To outLanguages.Length - 1
                         If Not AbortOutput Then
@@ -49,7 +53,7 @@ Partial Public Class ExporterForm
                                 BackgroundWorker.ReportProgress(Decimal.Divide(soundBankIndex, soundbanksList.Length) * 100.0, "Outputting " & currentLanguage & " SoundBank " & currentSoundBank & " for " & currentPlatform)
 
                                 'Debug info
-                                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Timings For " & currentSoundBank & vbCrLf)
+                                debugTimings.Add("Timings For " & currentSoundBank)
 
                                 'Get output folder
                                 Dim outputFolder As String = Path.Combine(WorkingDirectory, "TempOutputFolder", currentPlatform, "SoundBanks", currentLanguage)
@@ -78,7 +82,6 @@ Partial Public Class ExporterForm
                                 timerTotalTime.Stop()
 
                                 'Skip if there are samples missing
-
                                 If Not CancelSoundBankOutput Then
                                     Dim mainFilePath As String = Path.Combine(outputFolder, soundBankInfo.HashCode)
                                     'Get file paths
@@ -140,11 +143,11 @@ Partial Public Class ExporterForm
                                 End If
 
                                 'Show debug info
-                                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Total   = " & timerTotalTime.Elapsed.TotalMilliseconds.ToString.TrimStart("0"c) & vbCrLf)
-                                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Query   = " & timerQuery.Elapsed.TotalMilliseconds.ToString.TrimStart("0"c) & vbCrLf)
-                                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "SFXDate = " & timerSfxData.Elapsed.TotalMilliseconds.ToString.TrimStart("0"c) & vbCrLf)
-                                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += "Samples = " & timerSamples.Elapsed.TotalMilliseconds.ToString.TrimStart("0"c) & vbCrLf)
-                                mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text += vbCrLf)
+                                debugTimings.Add("Total   = " & timerTotalTime.Elapsed.TotalMilliseconds.ToString.TrimStart("0"c))
+                                debugTimings.Add("Query   = " & timerQuery.Elapsed.TotalMilliseconds.ToString.TrimStart("0"c))
+                                debugTimings.Add("SFXDate = " & timerSfxData.Elapsed.TotalMilliseconds.ToString.TrimStart("0"c))
+                                debugTimings.Add("Samples = " & timerSamples.Elapsed.TotalMilliseconds.ToString.TrimStart("0"c))
+                                debugTimings.Add(vbCrLf)
 
                                 'Check if we have to quit
                                 If AbortOutput Then
@@ -160,5 +163,7 @@ Partial Public Class ExporterForm
                 Exit For
             End If
         Next
-    End Sub
+
+        Return debugTimings.ToArray()
+    End Function
 End Class

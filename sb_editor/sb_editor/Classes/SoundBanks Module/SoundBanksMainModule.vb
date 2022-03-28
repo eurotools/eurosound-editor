@@ -113,7 +113,7 @@ Namespace SoundBanksExporterFunctions
                 Dim sampleIsStream As Boolean = False
                 For streamIndex As Integer = 0 To StreamsArray.Length - 1
                     Dim currentStream As String = StreamsArray(streamIndex)
-                    If currentSample.Contains(currentStream) Then
+                    If currentSample.IndexOf(currentStream, StringComparison.OrdinalIgnoreCase) >= 0 Then
                         sampleIsStream = True
                         Exit For
                     End If

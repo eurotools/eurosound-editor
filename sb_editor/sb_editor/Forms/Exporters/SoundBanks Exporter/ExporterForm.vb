@@ -128,7 +128,8 @@ Partial Public Class ExporterForm
         '----------------------------------------------Output user selected Soundbanks----------------------------------------------
         Dim OutputAborted As Boolean = False
         If soundBanksQueue.Length > 0 Then
-            OutputSoundbanks(hashCodesDictionary, soundBanksQueue, outputLanguage, outPlaforms, OutputAborted, soundsTable)
+            Dim debugData As String() = OutputSoundbanks(hashCodesDictionary, soundBanksQueue, outputLanguage, outPlaforms, OutputAborted, soundsTable)
+            mainFrame.Textbox_DebugInfo.Invoke(Sub() mainFrame.Textbox_DebugInfo.Text = String.Join(vbCrLf, debugData))
         End If
 
         'Continue if the output has not been aborted
