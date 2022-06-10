@@ -20,6 +20,7 @@ Namespace WritersClasses
                 WriteListOfItems(dataBases, "#DataBaseList", outputFile)
                 outputFile.WriteLine("")
                 WriteListOfItems(sfxList, "#SFXList", outputFile)
+                outputFile.WriteLine("")
             End Using
         End Sub
 
@@ -53,6 +54,7 @@ Namespace WritersClasses
                 Else
                     WriteListOfItems(projFileData.SFXList, "#SFXList", outputFile)
                 End If
+                outputFile.WriteLine("")
             End Using
         End Sub
     End Class

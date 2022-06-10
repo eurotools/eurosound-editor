@@ -37,7 +37,6 @@ Partial Public Class MainFrame
             'Save data in the Ini File
             If SysFileProjectIniPath > "" Then
                 Dim iniFunctions As New IniFile(SysFileProjectIniPath)
-                iniFunctions.Write("Last_Project_Opened", WorkingDirectory, "Form1_Misc")
                 iniFunctions.Write("FormatCombo_ListIndex", ComboBox_Format.SelectedIndex, "Form1_Misc")
                 iniFunctions.Write("AllBanksOption_Value", RadioButton_AllBanksSelectedFormat.Checked, "Form1_Misc")
                 iniFunctions.Write("SelectedlBankOption_Value", RadioButton_Output_SelectedSoundBank.Checked, "Form1_Misc")

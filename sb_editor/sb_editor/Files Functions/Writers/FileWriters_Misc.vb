@@ -28,6 +28,7 @@ Namespace WritersClasses
                     End If
                 End If
                 outputFile.WriteLine("#END")
+                outputFile.WriteLine("")
             End Using
         End Sub
     End Class
