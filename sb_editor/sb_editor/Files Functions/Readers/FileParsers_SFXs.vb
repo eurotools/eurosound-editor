@@ -236,6 +236,8 @@ Namespace ReaderClasses
                                         flagsArray(0) = Convert.ToBoolean(CByte(lineData(1)))
                                     Case "PRIORITY"
                                         sfxObj.Priority = CInt(lineData(1))
+                                    Case "DOPPLER"
+                                        flagsArray(1) = lineData(1).Equals("1")
                                     Case "IGNOREAGE"
                                         flagsArray(2) = lineData(1).Equals("1")
                                     Case "DUCKER"
