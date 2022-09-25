@@ -752,14 +752,8 @@
 #define HT_File_Map_AnimationTest		 0x0100030c
 #define HT_File_Map_SoundbanksTest		 0x0100030d
 #define HT_File_HASHCODE_END		 0x0100030e
-/* 0100030d */
-
-/* swy: reserved hashcodes for additional language files; the game enables one of these languages if it detects
-        that both its FrontEnd and PickUps exist in the Filelist. they aren't shipped with the game, though. */
 #define HT_File_F00_FrontEnd_Portuguese	 0x01ffffff
 #define HT_File_O01_PickUps_Portuguese	 0x01fffffe
-/* #define HT_File_F00_FrontEnd_Korean		 0x01fffffd (already defined in 2003) */
-/* #define HT_File_O01_PickUps_Korean		 0x01fffffc (already defined in 2003) */
 #define HT_File_F00_FrontEnd_Japanese	 0x01fffffb
 #define HT_File_O01_PickUps_Japanese	 0x01fffffa
 #define HT_File_F00_FrontEnd_Greek		 0x01fffff9
@@ -810,9 +804,7 @@
 #define HT_File_O01_PickUps_Bulgarian	 0x01ffffcc
 #define HT_File_F00_FrontEnd_Ukrainian	 0x01ffffcb
 #define HT_File_O01_PickUps_Ukrainian	 0x01ffffca
-/* swy: NOTE: as you can see these hardcoded hashcodes are issued
-              backwards, for mod compatibility reasons */
-
+/* 0100030d */
 /* HT_Entity */
 #define HT_Entity_HASHCODE_BASE	   	0x02000000
 #define HT_Entity_Test		0x02000001
@@ -1097,13 +1089,7 @@
 #define HT_Entity_HUD_XB_LeftShoulderFace_Italian		 0x02000121
 #define HT_Entity_HUD_XB_RightShoulderFace_French		 0x02000122
 #define HT_Entity_HASHCODE_END		 0x02000123l
-/* 02000123 */
-
-/* swy: reserved hashcodes for additional loading screen meshes; the game enables one of these languages if it detects
-        that both its FrontEnd and PickUps exist in the Filelist. they aren't shipped with the game, though. */
 #define HT_Entity_LS_DefaultLS_Portuguese	 0x02ffffff
-/* #define HT_Entity_LS_DefaultLS_Korean		 0x02fffffe (already defined in 2003) */
-/* #define HT_Entity_LS_DefaultLS_Japanese		 0x02fffffd (already defined in 2003; cancelled) */
 #define HT_Entity_LS_DefaultLS_Greek		 0x02fffffc
 #define HT_Entity_LS_DefaultLS_Dutch		 0x02fffffb
 #define HT_Entity_LS_DefaultLS_Danish		 0x02fffffa
@@ -1128,9 +1114,7 @@
 #define HT_Entity_LS_DefaultLS_Latvian		 0x02ffffe7
 #define HT_Entity_LS_DefaultLS_Bulgarian	 0x02ffffe6
 #define HT_Entity_LS_DefaultLS_Ukrainian	 0x02ffffe5
-/* swy: NOTE: as you can see these hardcoded hashcodes are issued
-              backwards, for mod compatibility reasons */
-
+/* 02000123 */
 /* HT_Animation */
 #define HT_Animation_HASHCODE_BASE		0x03000000
 #define HT_Animation_Test	   	0x03100001
@@ -1556,13 +1540,7 @@
 #define HT_Font_Default_US		 0x07000020
 #define HT_Font_BigFont		 0x07000021
 #define HT_Font_HASHCODE_END		 0x07000022
-/* 07000022 */
-
-/* swy: reserved hashcodes for additional language fonts; the game enables one of these languages if it detects
-        that both its FrontEnd and PickUps exist in the Filelist. they aren't shipped with the game, though. */
 #define HT_Font_Default_PORTUGUESE      0x07ffffff
-/* #define HT_Font_Default_KOREAN          0x07fffffe (already defined in 2003) */
-/* #define HT_Font_Default_JAPAN           0x07fffffd (already defined in 2003; cancelled) */
 #define HT_Font_Default_GREEK           0x07fffffc
 #define HT_Font_Default_DUTCH           0x07fffffb
 #define HT_Font_Default_DANISH          0x07fffffa
@@ -1587,9 +1565,7 @@
 #define HT_Font_Default_LATVIAN         0x07ffffe7
 #define HT_Font_Default_BULGARIAN       0x07ffffe6
 #define HT_Font_Default_UKRAINIAN       0x07ffffe5
-/* swy: NOTE: as you can see these hardcoded hashcodes are issued
-              backwards, for mod compatibility reasons */
-
+/* 07000022 */
 /* HT_Script */
 #define HT_Script_HASHCODE_BASE	   	0x04000000
 #define HT_Script_Test	   	0x04000001
@@ -13592,7 +13568,6 @@
 #define HT_GameScript_Macro_CameraModePlayer		 0x45300006
 #define HT_GameScript_Macro_IsHelpFading		 0x45300007
 #define HT_GameScript_Macro_AwardAchievement	 0x45300008
-/* swy: new Sphinx macros as of 2020-02-06 */
 #define HT_GameScript_Macro_GetModValue		 0x45300009
 #define HT_GameScript_Macro_SetModValue		 0x4530000a
 #define HT_GameScript_Macro_GetGlobalValue		 0x4530000b

@@ -1,0 +1,564 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Costura.Fody.5.7.0\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.5.7.0\build\Costura.Fody.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{627D1CD4-D388-4BC3-A78F-8F1B46F845F6}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>EuroSound_Editor</RootNamespace>
+    <AssemblyName>sb_editor</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Output\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Output\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>EuroSoundIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>EuroSound_Editor.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Microsoft.VisualBasic.PowerPacks, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Audio Classes\AiffFunctions.cs" />
+    <Compile Include="Audio Classes\ImaFunctions.cs" />
+    <Compile Include="Audio Classes\MidiFunctions.cs" />
+    <Compile Include="Classes\MultipleFilesFunctions.cs" />
+    <Compile Include="Classes\ProjectFileFunctions.cs" />
+    <Compile Include="Classes\SampleFiles.cs" />
+    <Compile Include="Forms\Advanced\Advanced_Report.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DebugForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DebugForm.Designer.cs">
+      <DependentUpon>DebugForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HelpForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\HelpForm.Designer.cs">
+      <DependentUpon>HelpForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LanguageFolderCompare.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LanguageFolderCompare.Designer.cs">
+      <DependentUpon>LanguageFolderCompare.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MissingSamplesFound.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MissingSamplesFound.Designer.cs">
+      <DependentUpon>MissingSamplesFound.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MultiEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MultiEditor.Designer.cs">
+      <DependentUpon>MultiEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\NewSamplesFound.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NewSamplesFound.Designer.cs">
+      <DependentUpon>NewSamplesFound.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ReverbTester.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ReverbTester.Designer.cs">
+      <DependentUpon>ReverbTester.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SetMaxBankSizeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SetMaxBankSizeForm.Designer.cs">
+      <DependentUpon>SetMaxBankSizeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SFX Output\SfxOutputForm_BindStreams.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SFX Output\SfxOutputForm_CreateStreams.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SFX Output\SfxOutputForm_SoundBanks.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SFX Output\SfxOutputForm_SoundBanks_TempFiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TextFiles_Classes\Objects\GroupFile.cs" />
+    <Compile Include="TextFiles_Classes\Objects\ReverbFile.cs" />
+    <Compile Include="TextFiles_Classes\Objects\WavInfo.cs" />
+    <Compile Include="Classes\CommonFunctions.cs" />
+    <Compile Include="Custom_Controls\ListViewColumnSorter.cs" />
+    <Compile Include="Forms\Advanced\Advanced.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Advanced\Advanced.Designer.cs">
+      <DependentUpon>Advanced.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SFX Output\SfxOutputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SFX Output\SfxOutputForm.Designer.cs">
+      <DependentUpon>SfxOutputForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SFX Output\SfxOutputForm_HashCodes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SFX Output\SfxOutputForm_ReSampler.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HashCodes\HashTables_Formatting.cs" />
+    <Compile Include="HashCodes\HashTables_Music.cs" />
+    <Compile Include="HashCodes\HashTables_Sfx.cs" />
+    <Compile Include="TextFiles_Classes\TextFiles_Groups.cs" />
+    <Compile Include="TextFiles_Classes\TextFiles_JumpFiles.cs" />
+    <Compile Include="TextFiles_Classes\TextFiles_MusicFile.cs" />
+    <Compile Include="TextFiles_Classes\TextFiles_PurgeFile.cs" />
+    <Compile Include="Audio Classes\WaveFunctions.cs" />
+    <Compile Include="Custom_Controls\ListView_ColumnSortingClick.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Custom_Controls\ListView_ColumnSortingClick.Designer.cs">
+      <DependentUpon>ListView_ColumnSortingClick.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_HashCodes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Frm_HashCodes.Designer.cs">
+      <DependentUpon>Frm_HashCodes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MultiCreate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MultiCreate.Designer.cs">
+      <DependentUpon>MultiCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SFX Form\PCGameDebugForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SFX Form\PCGameDebugForm.Designer.cs">
+      <DependentUpon>PCGameDebugForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MusicForm\MusicAppExporter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MusicForm\MusicAppExporter.Designer.cs">
+      <DependentUpon>MusicAppExporter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ReSampling Form\ReSampleForm_CreatePurgeList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ReSampling Form\ReSampleForm_CreatePurgeList.Designer.cs">
+      <DependentUpon>ReSampleForm_CreatePurgeList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ReSampling Form\ReSampleForm_RunPurge.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ReSampling Form\ReSampleForm_RunPurge.Designer.cs">
+      <DependentUpon>ReSampleForm_RunPurge.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TextFiles_Classes\Objects\Controls\ComboItemData.cs" />
+    <Compile Include="Classes\UI\FlashWindow.cs" />
+    <Compile Include="Classes\GlobalPrefs.cs" />
+    <Compile Include="Classes\IniFile.cs" />
+    <Compile Include="Classes\UI\MostRecentFilesMenu.cs" />
+    <Compile Include="Classes\SoundBankFunctions.cs" />
+    <Compile Include="TextFiles_Classes\TextFiles_DataBases.cs" />
+    <Compile Include="TextFiles_Classes\TextFiles_Misc.cs" />
+    <Compile Include="TextFiles_Classes\TextFiles_ProjectFile.cs" />
+    <Compile Include="TextFiles_Classes\TextFiles_PropertiesFile.cs" />
+    <Compile Include="TextFiles_Classes\TextFiles_RefineList.cs" />
+    <Compile Include="TextFiles_Classes\TextFiles_ReverbFile.cs" />
+    <Compile Include="TextFiles_Classes\TextFiles_Samples.cs" />
+    <Compile Include="TextFiles_Classes\TextFiles_SFXs.cs" />
+    <Compile Include="TextFiles_Classes\TextFiles_SoundBanks.cs" />
+    <Compile Include="TextFiles_Classes\TextFiles_Generic.cs" />
+    <Compile Include="Custom_Controls\MultiSelListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TextFiles_Classes\Objects\MusicFile.cs" />
+    <Compile Include="Forms\Panels\SFX Form\UserControl_SamplePool.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\SFX Form\UserControl_SamplePool.Designer.cs">
+      <DependentUpon>UserControl_SamplePool.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\SFX Form\UserControl_SamplePoolControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\SFX Form\UserControl_SamplePoolControl.Designer.cs">
+      <DependentUpon>UserControl_SamplePoolControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\SFX Form\UserControl_SFX_Parameters.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\SFX Form\UserControl_SFX_Parameters.Designer.cs">
+      <DependentUpon>UserControl_SFX_Parameters.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_InputBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Frm_InputBox.Designer.cs">
+      <DependentUpon>Frm_InputBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MusicForm\MusicApp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MusicForm\MusicApp.Designer.cs">
+      <DependentUpon>MusicApp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Properties\PropertiesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Properties\PropertiesForm.Designer.cs">
+      <DependentUpon>PropertiesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_RefineList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Frm_RefineList.Designer.cs">
+      <DependentUpon>Frm_RefineList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\GroupingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GroupingForm.Designer.cs">
+      <DependentUpon>GroupingForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SFX Form\SFXForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SFX Form\SFXForm.Designer.cs">
+      <DependentUpon>SFXForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Properties\DataBasePropertiesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Properties\DataBasePropertiesForm.Designer.cs">
+      <DependentUpon>DataBasePropertiesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TimerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TimerForm.Designer.cs">
+      <DependentUpon>TimerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Properties\SFXPropertiesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Properties\SFXPropertiesForm.Designer.cs">
+      <DependentUpon>SFXPropertiesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Properties\SoundBankPropertiesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Properties\SoundBankPropertiesForm.Designer.cs">
+      <DependentUpon>SoundBankPropertiesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ReSampling Form\ReSampleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ReSampling Form\ReSampleForm.Designer.cs">
+      <DependentUpon>ReSampleForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TextFiles_Classes\Objects\Controls\ListBoxItem.cs" />
+    <Compile Include="TextFiles_Classes\Objects\DataBase.cs" />
+    <Compile Include="TextFiles_Classes\Objects\FileHeader.cs" />
+    <Compile Include="TextFiles_Classes\Objects\Misc.cs" />
+    <Compile Include="TextFiles_Classes\Objects\ProjectFile.cs" />
+    <Compile Include="TextFiles_Classes\Objects\ProjProperties.cs" />
+    <Compile Include="TextFiles_Classes\Objects\SamplePool.cs" />
+    <Compile Include="TextFiles_Classes\Objects\SamplePoolItem.cs" />
+    <Compile Include="TextFiles_Classes\Objects\SFX.cs" />
+    <Compile Include="TextFiles_Classes\Objects\SoundBank.cs" />
+    <Compile Include="Forms\Panels\MainForm\UserControl_MainForm_AvailableDataBases.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\MainForm\UserControl_MainForm_AvailableDataBases.Designer.cs">
+      <DependentUpon>UserControl_MainForm_AvailableDataBases.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\MainForm\UserControl_MainForm_AvailableSFX.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\MainForm\UserControl_MainForm_AvailableSFX.Designer.cs">
+      <DependentUpon>UserControl_MainForm_AvailableSFX.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\MainForm\Unused\UserControl_MainForm_DataBasesInSoundBank.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\MainForm\Unused\UserControl_MainForm_DataBasesInSoundBank.Designer.cs">
+      <DependentUpon>UserControl_MainForm_DataBasesInSoundBank.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\MainForm\UserControl_MainForm_Misc.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\MainForm\UserControl_MainForm_Misc.Designer.cs">
+      <DependentUpon>UserControl_MainForm_Misc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\MainForm\UserControl_MainForm_Output.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\MainForm\UserControl_MainForm_Output.Designer.cs">
+      <DependentUpon>UserControl_MainForm_Output.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\MainForm\UserControl_MainForm_RefineSFXList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\MainForm\UserControl_MainForm_RefineSFXList.Designer.cs">
+      <DependentUpon>UserControl_MainForm_RefineSFXList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\MainForm\UserControl_MainForm_SfxInDataBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\MainForm\UserControl_MainForm_SfxInDataBase.Designer.cs">
+      <DependentUpon>UserControl_MainForm_SfxInDataBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\MainForm\Unused\UserControl_MainForm_SoundBanks_CheckBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\MainForm\Unused\UserControl_MainForm_SoundBanks_CheckBox.Designer.cs">
+      <DependentUpon>UserControl_MainForm_SoundBanks_CheckBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\MainForm\UserControl_ManForm_SoundBanks.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\MainForm\UserControl_ManForm_SoundBanks.Designer.cs">
+      <DependentUpon>UserControl_ManForm_SoundBanks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Splash.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Splash.Designer.cs">
+      <DependentUpon>Splash.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\Advanced\Advanced.resx">
+      <DependentUpon>Advanced.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DebugForm.resx">
+      <DependentUpon>DebugForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HelpForm.resx">
+      <DependentUpon>HelpForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LanguageFolderCompare.resx">
+      <DependentUpon>LanguageFolderCompare.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MissingSamplesFound.resx">
+      <DependentUpon>MissingSamplesFound.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MultiCreate.resx">
+      <DependentUpon>MultiCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MultiEditor.resx">
+      <DependentUpon>MultiEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NewSamplesFound.resx">
+      <DependentUpon>NewSamplesFound.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ReverbTester.resx">
+      <DependentUpon>ReverbTester.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SetMaxBankSizeForm.resx">
+      <DependentUpon>SetMaxBankSizeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SFX Form\PCGameDebugForm.resx">
+      <DependentUpon>PCGameDebugForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MusicForm\MusicAppExporter.resx">
+      <DependentUpon>MusicAppExporter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ReSampling Form\ReSampleForm_CreatePurgeList.resx">
+      <DependentUpon>ReSampleForm_CreatePurgeList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ReSampling Form\ReSampleForm_RunPurge.resx">
+      <DependentUpon>ReSampleForm_RunPurge.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\SFX Form\UserControl_SamplePool.resx">
+      <DependentUpon>UserControl_SamplePool.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\SFX Form\UserControl_SamplePoolControl.resx">
+      <DependentUpon>UserControl_SamplePoolControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\SFX Form\UserControl_SFX_Parameters.resx">
+      <DependentUpon>UserControl_SFX_Parameters.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_HashCodes.resx">
+      <DependentUpon>Frm_HashCodes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_InputBox.resx">
+      <DependentUpon>Frm_InputBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MusicForm\MusicApp.resx">
+      <DependentUpon>MusicApp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Properties\PropertiesForm.resx">
+      <DependentUpon>PropertiesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_RefineList.resx">
+      <DependentUpon>Frm_RefineList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GroupingForm.resx">
+      <DependentUpon>GroupingForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SFX Form\SFXForm.resx">
+      <DependentUpon>SFXForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Properties\DataBasePropertiesForm.resx">
+      <DependentUpon>DataBasePropertiesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SFX Output\SfxOutputForm.resx">
+      <DependentUpon>SfxOutputForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TimerForm.resx">
+      <DependentUpon>TimerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Properties\SFXPropertiesForm.resx">
+      <DependentUpon>SFXPropertiesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Properties\SoundBankPropertiesForm.resx">
+      <DependentUpon>SoundBankPropertiesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ReSampling Form\ReSampleForm.resx">
+      <DependentUpon>ReSampleForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\MainForm\UserControl_MainForm_AvailableDataBases.resx">
+      <DependentUpon>UserControl_MainForm_AvailableDataBases.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\MainForm\UserControl_MainForm_AvailableSFX.resx">
+      <DependentUpon>UserControl_MainForm_AvailableSFX.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\MainForm\Unused\UserControl_MainForm_DataBasesInSoundBank.resx">
+      <DependentUpon>UserControl_MainForm_DataBasesInSoundBank.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\MainForm\UserControl_MainForm_Misc.resx">
+      <DependentUpon>UserControl_MainForm_Misc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\MainForm\UserControl_MainForm_Output.resx">
+      <DependentUpon>UserControl_MainForm_Output.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\MainForm\UserControl_MainForm_RefineSFXList.resx">
+      <DependentUpon>UserControl_MainForm_RefineSFXList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\MainForm\UserControl_MainForm_SfxInDataBase.resx">
+      <DependentUpon>UserControl_MainForm_SfxInDataBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\MainForm\UserControl_ManForm_SoundBanks.resx">
+      <DependentUpon>UserControl_ManForm_SoundBanks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Splash.resx">
+      <DependentUpon>Splash.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\MainForm\Unused\UserControl_MainForm_SoundBanks_CheckBox.resx">
+      <DependentUpon>UserControl_MainForm_SoundBanks_CheckBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="EuroSoundIcon.ico" />
+    <None Include="Resources\lang_english.cur" />
+    <None Include="Resources\ChristmasTree.cur" />
+    <None Include="Resources\arrow_right.cur" />
+    <None Include="Resources\arrow_left.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ESUtils\ESUtils.csproj">
+      <Project>{a4e66469-32bb-42a3-acf8-4609d72921c1}</Project>
+      <Name>ESUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExMarkers\ExMarkers.csproj">
+      <Project>{55589C8C-989D-4AA9-AAA3-A22490666549}</Project>
+      <Name>ExMarkers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PcAudioTest\PcAudioTest.csproj">
+      <Project>{bc6310bf-caf7-4f06-a481-d800c5458c5b}</Project>
+      <Name>PcAudioTest</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Costura.Fody.5.7.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.5.7.0\build\Costura.Fody.props'))" />
+    <Error Condition="!Exists('..\packages\Costura.Fody.5.7.0\build\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.5.7.0\build\Costura.Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Fody.6.6.3\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.6.6.3\build\Fody.targets'))" />
+  </Target>
+  <Import Project="..\packages\Costura.Fody.5.7.0\build\Costura.Fody.targets" Condition="Exists('..\packages\Costura.Fody.5.7.0\build\Costura.Fody.targets')" />
+  <Import Project="..\packages\Fody.6.6.3\build\Fody.targets" Condition="Exists('..\packages\Fody.6.6.3\build\Fody.targets')" />
+</Project>
