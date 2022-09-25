@@ -1,11 +1,12 @@
 ﻿<Weavers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FodyWeavers.xsd">
 	<Costura>
 	  <IncludeAssemblies>
-		PcAudioTest
-		Microsoft.VisualBasic.PowerPacks
-		NAudio
 		ExMarkers
 		ESUtils
+		Microsoft.VisualBasic.PowerPacks
+		Microsoft.VisualBasic.PowerPacks.resources
+		NAudio
+		PcAudioTest
 	  </IncludeAssemblies>
 	</Costura>
 </Weavers>

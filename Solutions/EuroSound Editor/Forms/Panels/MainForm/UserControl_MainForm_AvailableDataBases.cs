@@ -1,5 +1,5 @@
-﻿using EuroSound_Editor.Forms;
-using EuroSound_Editor.Objects;
+﻿using sb_editor.Forms;
+using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Media;
 using System.Windows.Forms;
 
-namespace EuroSound_Editor.Panels
+namespace sb_editor.Panels
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
@@ -102,7 +102,7 @@ namespace EuroSound_Editor.Panels
                                 TextFiles.WriteDataBaseFile(filePath, databaseFile);
 
                                 //Update UI
-                                ProjectFileFunctions.UpdateDataBases((EuroSound_Editor.MainForm)Parent.Parent.Parent);
+                                ProjectFileFunctions.UpdateDataBases((sb_editor.MainForm)Parent.Parent.Parent);
                                 break;
                             }
                         }
@@ -289,7 +289,7 @@ namespace EuroSound_Editor.Panels
                 }
 
                 //Clear SFXs in DataBase control
-                ((EuroSound_Editor.MainForm)Parent.Parent.Parent).UserControl_DataBaseSfx.ClearControl();
+                ((sb_editor.MainForm)Parent.Parent.Parent).UserControl_DataBaseSfx.ClearControl();
 
                 //Update label
                 lblDataBases_Count.Text = string.Join(" ", "Total:", lstDataBases.Items.Count);

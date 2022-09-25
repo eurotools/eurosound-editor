@@ -1,7 +1,7 @@
-﻿using EuroSound_Editor.Custom_Controls;
+﻿using sb_editor.Custom_Controls;
 using System.Windows.Forms;
 
-namespace EuroSound_Editor.Panels
+namespace sb_editor.Panels
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------

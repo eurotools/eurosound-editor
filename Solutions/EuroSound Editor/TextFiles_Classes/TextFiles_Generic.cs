@@ -1,11 +1,11 @@
-﻿using EuroSound_Editor.Objects;
+﻿using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 
-namespace EuroSound_Editor
+namespace sb_editor
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------

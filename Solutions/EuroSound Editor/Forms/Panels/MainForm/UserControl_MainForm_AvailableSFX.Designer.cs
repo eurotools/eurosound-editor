@@ -1,5 +1,5 @@
 ﻿
-namespace EuroSound_Editor.Panels
+namespace sb_editor.Panels
 {
     partial class UserControl_MainForm_AvailableSFX
     {
@@ -33,7 +33,7 @@ namespace EuroSound_Editor.Panels
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControl_MainForm_AvailableSFX));
             this.grbAvailableSFXs = new System.Windows.Forms.GroupBox();
             this.chkIconView = new System.Windows.Forms.CheckBox();
-            this.UserControl_RefineSFX = new EuroSound_Editor.Panels.UserControl_MainForm_RefineSFXList();
+            this.UserControl_RefineSFX = new sb_editor.Panels.UserControl_MainForm_RefineSFXList();
             this.pnlListView = new System.Windows.Forms.Panel();
             this.lstTempSorted = new System.Windows.Forms.ListBox();
             this.lstAvailableSFXs = new MultiSelListBox();

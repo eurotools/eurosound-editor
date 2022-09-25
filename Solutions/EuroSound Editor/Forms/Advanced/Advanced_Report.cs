@@ -1,10 +1,10 @@
 ﻿using ESUtils;
-using EuroSound_Editor.Classes;
-using EuroSound_Editor.Objects;
+using sb_editor.Classes;
+using sb_editor.Objects;
 using System;
 using System.IO;
 
-namespace EuroSound_Editor.Forms
+namespace sb_editor.Forms
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------

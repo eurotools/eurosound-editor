@@ -1,13 +1,13 @@
 ﻿using ESUtils;
-using EuroSound_Editor.Classes;
-using EuroSound_Editor.Objects;
+using sb_editor.Classes;
+using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-namespace EuroSound_Editor.Forms
+namespace sb_editor.Forms
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------

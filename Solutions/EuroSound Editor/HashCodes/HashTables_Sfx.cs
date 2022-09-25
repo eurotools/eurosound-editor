@@ -1,10 +1,10 @@
-﻿using EuroSound_Editor.Audio_Classes;
-using EuroSound_Editor.Objects;
+﻿using sb_editor.Audio_Classes;
+using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace EuroSound_Editor.HashCodes
+namespace sb_editor.HashCodes
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------

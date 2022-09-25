@@ -1,5 +1,5 @@
 ﻿
-namespace EuroSound_Editor.Forms
+namespace sb_editor.Forms
 {
     partial class SFXForm
     {
@@ -45,9 +45,9 @@ namespace EuroSound_Editor.Forms
             this.btnTestSFX = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.UserControl_SamplePool = new EuroSound_Editor.Panels.UserControl_SamplePool();
-            this.UserControl_SFX_Parameters = new EuroSound_Editor.Panels.UserControl_SFX_Parameters();
-            this.UserControl_SamplePoolControl = new EuroSound_Editor.Panels.UserControl_SamplePoolControl();
+            this.UserControl_SamplePool = new sb_editor.Panels.UserControl_SamplePool();
+            this.UserControl_SFX_Parameters = new sb_editor.Panels.UserControl_SFX_Parameters();
+            this.UserControl_SamplePoolControl = new sb_editor.Panels.UserControl_SamplePoolControl();
             this.pnlOptions = new System.Windows.Forms.Panel();
             this.grbDeleteFormat = new System.Windows.Forms.GroupBox();
             this.btnRemoveFormat = new System.Windows.Forms.Button();

@@ -1,8 +1,8 @@
-﻿using EuroSound_Editor.Forms;
+﻿using sb_editor.Forms;
 using System.IO;
 using System.Windows.Forms;
 
-namespace EuroSound_Editor.Panels
+namespace sb_editor.Panels
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------

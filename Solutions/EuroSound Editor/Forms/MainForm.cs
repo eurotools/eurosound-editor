@@ -1,10 +1,10 @@
-﻿using EuroSound_Editor.Classes;
-using EuroSound_Editor.Objects;
+﻿using sb_editor.Classes;
+using sb_editor.Objects;
 using System.IO;
 using System.Windows.Forms;
-using static EuroSound_Editor.Classes.MostRecentFilesMenu;
+using static sb_editor.Classes.MostRecentFilesMenu;
 
-namespace EuroSound_Editor
+namespace sb_editor
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------

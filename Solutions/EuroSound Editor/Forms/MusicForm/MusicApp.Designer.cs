@@ -1,5 +1,5 @@
 ﻿
-namespace EuroSound_Editor.Forms
+namespace sb_editor.Forms
 {
     partial class MusicApp
     {
@@ -39,7 +39,7 @@ namespace EuroSound_Editor.Forms
             this.nudVolume = new System.Windows.Forms.NumericUpDown();
             this.btnOutput = new System.Windows.Forms.Button();
             this.btnUpdateFiles = new System.Windows.Forms.Button();
-            this.lvwMusicFiles = new EuroSound_Editor.Panels.ListView_ColumnSortingClick();
+            this.lvwMusicFiles = new sb_editor.Panels.ListView_ColumnSortingClick();
             this.Col_Musics_FileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Col_Musics_Volume = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Col_Musics_ErrorStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));

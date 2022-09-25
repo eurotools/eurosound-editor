@@ -1,9 +1,9 @@
-﻿using EuroSound_Editor.Objects;
+﻿using sb_editor.Objects;
 using NAudio.Wave;
 using System;
 using System.IO;
 
-namespace EuroSound_Editor.HashCodes
+namespace sb_editor.HashCodes
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------

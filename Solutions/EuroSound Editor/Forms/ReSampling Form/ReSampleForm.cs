@@ -1,5 +1,5 @@
-﻿using EuroSound_Editor.Custom_Controls;
-using EuroSound_Editor.Objects;
+﻿using sb_editor.Custom_Controls;
+using sb_editor.Objects;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.IO;
 using System.Media;
 using System.Windows.Forms;
 
-namespace EuroSound_Editor
+namespace sb_editor
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------

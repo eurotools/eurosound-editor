@@ -1,5 +1,5 @@
 ﻿
-namespace EuroSound_Editor.Panels
+namespace sb_editor.Panels
 {
     partial class UserControl_MainForm_RefineSFXList
     {

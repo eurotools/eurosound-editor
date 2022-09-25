@@ -1,5 +1,5 @@
 ﻿
-namespace EuroSound_Editor.Forms
+namespace sb_editor.Forms
 {
     partial class SfxOutputForm
     {

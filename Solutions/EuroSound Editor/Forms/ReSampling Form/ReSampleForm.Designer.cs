@@ -1,5 +1,5 @@
 ﻿
-namespace EuroSound_Editor
+namespace sb_editor
 {
     partial class ReSampleForm
     {
@@ -63,7 +63,7 @@ namespace EuroSound_Editor
             this.btnDeReSampleAll = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.lvwAllSamples = new EuroSound_Editor.Panels.ListView_ColumnSortingClick();
+            this.lvwAllSamples = new sb_editor.Panels.ListView_ColumnSortingClick();
             this.Column_SampleFileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Column_ResampleRate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Column_Size = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));

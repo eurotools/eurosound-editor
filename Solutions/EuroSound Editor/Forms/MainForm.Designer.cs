@@ -1,5 +1,5 @@
 ﻿
-namespace EuroSound_Editor
+namespace sb_editor
 {
     partial class MainForm
     {
@@ -41,15 +41,15 @@ namespace EuroSound_Editor
             this.mnuHelp = new System.Windows.Forms.MenuItem();
             this.mnuHelp_About = new System.Windows.Forms.MenuItem();
             this.SplitContainer_Lists = new System.Windows.Forms.SplitContainer();
-            this.UserControl_Available_Databases = new EuroSound_Editor.Panels.UserControl_MainForm_AvailableDataBases();
+            this.UserControl_Available_Databases = new sb_editor.Panels.UserControl_MainForm_AvailableDataBases();
             this.SplitContainers_Lists2 = new System.Windows.Forms.SplitContainer();
-            this.UserControl_DataBaseSfx = new EuroSound_Editor.Panels.UserControl_MainForm_SfxInDataBase();
-            this.UserControl_Available_SFXs = new EuroSound_Editor.Panels.UserControl_MainForm_AvailableSFX();
-            this.UserControl_DataBasesInSoundBank = new EuroSound_Editor.Panels.UserControl_MainForm_DataBasesInSoundBank();
-            this.UserControl_SoundBanks_CheckBox = new EuroSound_Editor.Panels.UserControl_MainForm_SoundBanks_CheckBox();
-            this.UserControl_Misc = new EuroSound_Editor.Panels.UserControl_MainForm_Misc();
-            this.UserControl_Output = new EuroSound_Editor.Panels.UserControl_MainForm_Output();
-            this.UserControl_SoundBanks = new EuroSound_Editor.Panels.UserControl_Manform_SoundBanks();
+            this.UserControl_DataBaseSfx = new sb_editor.Panels.UserControl_MainForm_SfxInDataBase();
+            this.UserControl_Available_SFXs = new sb_editor.Panels.UserControl_MainForm_AvailableSFX();
+            this.UserControl_DataBasesInSoundBank = new sb_editor.Panels.UserControl_MainForm_DataBasesInSoundBank();
+            this.UserControl_SoundBanks_CheckBox = new sb_editor.Panels.UserControl_MainForm_SoundBanks_CheckBox();
+            this.UserControl_Misc = new sb_editor.Panels.UserControl_MainForm_Misc();
+            this.UserControl_Output = new sb_editor.Panels.UserControl_MainForm_Output();
+            this.UserControl_SoundBanks = new sb_editor.Panels.UserControl_Manform_SoundBanks();
             this.OpenFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             ((System.ComponentModel.ISupportInitialize)(this.SplitContainer_Lists)).BeginInit();

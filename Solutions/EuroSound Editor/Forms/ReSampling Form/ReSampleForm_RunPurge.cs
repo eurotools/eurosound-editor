@@ -1,10 +1,10 @@
-﻿using EuroSound_Editor.Forms;
+﻿using sb_editor.Forms;
 using System;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
 
-namespace EuroSound_Editor
+namespace sb_editor
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------

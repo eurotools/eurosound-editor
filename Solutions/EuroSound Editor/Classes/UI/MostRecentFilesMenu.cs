@@ -4,7 +4,7 @@ using System.Threading;
 using System.Windows.Forms;
 using static System.Windows.Forms.Menu;
 
-namespace EuroSound_Editor.Classes
+namespace sb_editor.Classes
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------

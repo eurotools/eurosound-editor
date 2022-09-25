@@ -1,10 +1,10 @@
-﻿using EuroSound_Editor.HashCodes;
-using EuroSound_Editor.Objects;
+﻿using sb_editor.HashCodes;
+using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace EuroSound_Editor.Forms
+namespace sb_editor.Forms
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------

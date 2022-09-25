@@ -1,12 +1,12 @@
 ﻿using ESUtils;
-using EuroSound_Editor.Objects;
+using sb_editor.Objects;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace EuroSound_Editor.Classes
+namespace sb_editor.Classes
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------

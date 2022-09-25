@@ -1,4 +1,4 @@
-﻿using EuroSound_Editor.Classes;
+﻿using sb_editor.Classes;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
 
-namespace EuroSound_Editor.Forms
+namespace sb_editor.Forms
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------

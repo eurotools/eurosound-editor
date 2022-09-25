@@ -1,4 +1,4 @@
-﻿namespace EuroSound_Editor.Classes
+﻿namespace sb_editor.Classes
 {
     public class ComboItemData
     {

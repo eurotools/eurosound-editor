@@ -1,5 +1,5 @@
 ﻿
-namespace EuroSound_Editor
+namespace sb_editor
 {
     partial class Frm_InputBox
     {

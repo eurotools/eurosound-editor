@@ -1,6 +1,6 @@
-﻿using EuroSound_Editor.Audio_Classes;
-using EuroSound_Editor.HashCodes;
-using EuroSound_Editor.Objects;
+﻿using sb_editor.Audio_Classes;
+using sb_editor.HashCodes;
+using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,7 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-namespace EuroSound_Editor.Forms
+namespace sb_editor.Forms
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
