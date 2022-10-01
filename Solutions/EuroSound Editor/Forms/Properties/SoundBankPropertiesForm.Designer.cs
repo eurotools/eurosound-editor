@@ -109,7 +109,7 @@ namespace sb_editor
             this.grbCurrentSoundbank.Size = new System.Drawing.Size(725, 665);
             this.grbCurrentSoundbank.TabIndex = 0;
             this.grbCurrentSoundbank.TabStop = false;
-            this.grbCurrentSoundbank.Text = "Soundbank Name";
+            this.grbCurrentSoundbank.Text = "SoundBank Name";
             // 
             // lstSamples
             // 
@@ -425,7 +425,7 @@ namespace sb_editor
             this.Name = "SoundBankPropertiesForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Sound Bank Properties";
+            this.Text = "SoundBank Properties";
             this.Load += new System.EventHandler(this.Frm_Soundbank_Properties_Load);
             this.Shown += new System.EventHandler(this.Frm_Soundbank_Properties_Shown);
             this.grbCurrentSoundbank.ResumeLayout(false);

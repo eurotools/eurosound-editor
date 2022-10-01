@@ -146,59 +146,62 @@ namespace sb_editor
             projectFile.HeaderData.ModifiedBy = GlobalPrefs.EuroSoundUser;
 
             //Update text file
-            using (StreamWriter outputFile = new StreamWriter(File.Open(projectFilePath, FileMode.Create, FileAccess.Write, FileShare.Read), new UTF8Encoding(false)))
+            if (Directory.Exists(Path.GetDirectoryName(projectFilePath)))
             {
-                WriteHeader(outputFile, "Properties", projectFile.HeaderData);
-                outputFile.WriteLine("#AvailableFormats");
-                outputFile.WriteLine(" {0} ", projectFile.platformData.Count);
-                for (int i = 0; i < 3; i++)
+                using (StreamWriter outputFile = new StreamWriter(File.Open(projectFilePath, FileMode.Create, FileAccess.Write, FileShare.Read), new UTF8Encoding(false)))
                 {
-                    foreach (KeyValuePair<string, PlatformData> platformData in projectFile.platformData)
+                    WriteHeader(outputFile, "Properties", projectFile.HeaderData);
+                    outputFile.WriteLine("#AvailableFormats");
+                    outputFile.WriteLine(" {0} ", projectFile.platformData.Count);
+                    for (int i = 0; i < 3; i++)
                     {
-                        switch (i)
+                        foreach (KeyValuePair<string, PlatformData> platformData in projectFile.platformData)
                         {
-                            case 0:
-                                outputFile.WriteLine(platformData.Key);
-                                break;
-                            case 1:
-                                outputFile.WriteLine(platformData.Value.OutputFolder);
-                                break;
-                            case 2:
-                                outputFile.WriteLine(platformData.Value.AutoReSample ? "On" : "Off");
-                                break;
+                            switch (i)
+                            {
+                                case 0:
+                                    outputFile.WriteLine(platformData.Key);
+                                    break;
+                                case 1:
+                                    outputFile.WriteLine(platformData.Value.OutputFolder);
+                                    break;
+                                case 2:
+                                    outputFile.WriteLine(platformData.Value.AutoReSample ? "On" : "Off");
+                                    break;
 
+                            }
                         }
-                    }
-                }
-                outputFile.WriteLine("#END");
-                outputFile.WriteLine(string.Empty);
-                outputFile.WriteLine("#AvailableReSampleRates");
-                for (int i = 0; i < projectFile.ResampleRates.Count; i++)
-                {
-                    outputFile.WriteLine(projectFile.ResampleRates[i]);
-                }
-                outputFile.WriteLine("#END");
-                outputFile.WriteLine(string.Empty);
-                int platformIndex = 0;
-                foreach (KeyValuePair<string, PlatformData> formatData in projectFile.platformData)
-                {
-                    outputFile.WriteLine("// ReSample Rates for Format {0}", formatData.Key);
-                    outputFile.WriteLine("#ReSampleRates{0}", platformIndex++);
-                    for (int i = 0; i < formatData.Value.ReSampleRates.Count; i++)
-                    {
-                        outputFile.WriteLine(formatData.Value.ReSampleRates[i]);
                     }
                     outputFile.WriteLine("#END");
                     outputFile.WriteLine(string.Empty);
+                    outputFile.WriteLine("#AvailableReSampleRates");
+                    for (int i = 0; i < projectFile.ResampleRates.Count; i++)
+                    {
+                        outputFile.WriteLine(projectFile.ResampleRates[i]);
+                    }
+                    outputFile.WriteLine("#END");
+                    outputFile.WriteLine(string.Empty);
+                    int platformIndex = 0;
+                    foreach (KeyValuePair<string, PlatformData> formatData in projectFile.platformData)
+                    {
+                        outputFile.WriteLine("// ReSample Rates for Format {0}", formatData.Key);
+                        outputFile.WriteLine("#ReSampleRates{0}", platformIndex++);
+                        for (int i = 0; i < formatData.Value.ReSampleRates.Count; i++)
+                        {
+                            outputFile.WriteLine(formatData.Value.ReSampleRates[i]);
+                        }
+                        outputFile.WriteLine("#END");
+                        outputFile.WriteLine(string.Empty);
+                    }
+                    outputFile.WriteLine("#MiscProperites");
+                    outputFile.WriteLine("DefaultRate  {0}", projectFile.DefaultRate);
+                    outputFile.WriteLine("SampleFileFolder {0}", projectFile.SampleFilesFolder);
+                    outputFile.WriteLine("HashCodeFileFolder {0}", projectFile.HashCodeFileDirectory);
+                    outputFile.WriteLine("EngineXFolder {0}", projectFile.EngineXProjectPath);
+                    outputFile.WriteLine("EuroLandHashCodeServerPath {0}", projectFile.EuroLandHashCodeServerPath);
+                    outputFile.WriteLine("#END");
+                    outputFile.WriteLine(string.Empty);
                 }
-                outputFile.WriteLine("#MiscProperites");
-                outputFile.WriteLine("DefaultRate  {0}", projectFile.DefaultRate);
-                outputFile.WriteLine("SampleFileFolder {0}", projectFile.SampleFilesFolder);
-                outputFile.WriteLine("HashCodeFileFolder {0}", projectFile.HashCodeFileDirectory);
-                outputFile.WriteLine("EngineXFolder {0}", projectFile.EngineXProjectPath);
-                outputFile.WriteLine("EuroLandHashCodeServerPath {0}", projectFile.EuroLandHashCodeServerPath);
-                outputFile.WriteLine("#END");
-                outputFile.WriteLine(string.Empty);
             }
         }
     }

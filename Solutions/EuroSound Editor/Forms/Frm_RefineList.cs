@@ -40,120 +40,123 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            string[] sfxFilesToCheck = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
-
-            if (sfxFilesToCheck.Length > 0)
+            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs")))
             {
-                List<ComboItemData> cboTemporal = new List<ComboItemData>();
+                string[] sfxFilesToCheck = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
 
-                //Split only six words
-                for (int wordIndexCount = 0; wordIndexCount < 6; wordIndexCount++)
+                if (sfxFilesToCheck.Length > 0)
                 {
-                    //Iterate items
-                    int listboxItemsCount = sfxFilesToCheck.Length;
-                    for (int sfxItemIndex = 0; sfxItemIndex < listboxItemsCount; sfxItemIndex++)
-                    {
-                        //Calculate and report progress
-                        int totalItems = listboxItemsCount * 6;
-                        int progFromPrevIterations = listboxItemsCount * wordIndexCount;
-                        BackgroundWorker.ReportProgress((int)(decimal.Divide(sfxItemIndex + progFromPrevIterations, totalItems) * (decimal)100.0));
+                    List<ComboItemData> cboTemporal = new List<ComboItemData>();
 
-                        //Find matches
-                        for (int sfxItemIndexSub = 0; sfxItemIndexSub < listboxItemsCount; sfxItemIndexSub++)
+                    //Split only six words
+                    for (int wordIndexCount = 0; wordIndexCount < 6; wordIndexCount++)
+                    {
+                        //Iterate items
+                        int listboxItemsCount = sfxFilesToCheck.Length;
+                        for (int sfxItemIndex = 0; sfxItemIndex < listboxItemsCount; sfxItemIndex++)
                         {
-                            //Skip the line that we are checking in the previus loop
-                            if (sfxItemIndex == sfxItemIndexSub)
+                            //Calculate and report progress
+                            int totalItems = listboxItemsCount * 6;
+                            int progFromPrevIterations = listboxItemsCount * wordIndexCount;
+                            BackgroundWorker.ReportProgress((int)(decimal.Divide(sfxItemIndex + progFromPrevIterations, totalItems) * (decimal)100.0));
+
+                            //Find matches
+                            for (int sfxItemIndexSub = 0; sfxItemIndexSub < listboxItemsCount; sfxItemIndexSub++)
                             {
-                                continue;
-                            }
-                            //Get item to check
-                            string currentSFX = Path.GetFileNameWithoutExtension(sfxFilesToCheck[sfxItemIndex]);
-                            string wordToCheck = currentSFX;
-                            //Split words
-                            if (wordIndexCount > 0)
-                            {
-                                for (int wordIndex = 0; wordIndex < wordIndexCount; wordIndex++)
+                                //Skip the line that we are checking in the previus loop
+                                if (sfxItemIndex == sfxItemIndexSub)
                                 {
-                                    if (wordToCheck.IndexOf("_") > 0)
+                                    continue;
+                                }
+                                //Get item to check
+                                string currentSFX = Path.GetFileNameWithoutExtension(sfxFilesToCheck[sfxItemIndex]);
+                                string wordToCheck = currentSFX;
+                                //Split words
+                                if (wordIndexCount > 0)
+                                {
+                                    for (int wordIndex = 0; wordIndex < wordIndexCount; wordIndex++)
                                     {
-                                        int wordLength = wordToCheck.Length - (wordToCheck.IndexOf("_") + 1);
-                                        wordToCheck = Strings.Right(wordToCheck, wordLength);
+                                        if (wordToCheck.IndexOf("_") > 0)
+                                        {
+                                            int wordLength = wordToCheck.Length - (wordToCheck.IndexOf("_") + 1);
+                                            wordToCheck = Strings.Right(wordToCheck, wordLength);
+                                        }
                                     }
                                 }
-                            }
-                            if (wordToCheck.IndexOf("_") > 0)
-                            {
-                                int wordLength = wordToCheck.IndexOf("_");
-                                wordToCheck = Strings.Left(wordToCheck, wordLength);
-                            }
-                            //Find Matches
-                            if (!wordToCheck.Equals("SFX") && wordToCheck.Length > 2)
-                            {
-                                currentSFX = Path.GetFileNameWithoutExtension(sfxFilesToCheck[sfxItemIndexSub]);
-                                if (currentSFX.IndexOf(wordToCheck) >= 0)
+                                if (wordToCheck.IndexOf("_") > 0)
                                 {
-                                    //Get combo items count
-                                    bool addNewItem = true;
-                                    for (int comboboxIndex = 0; comboboxIndex < cboTemporal.Count; comboboxIndex++)
+                                    int wordLength = wordToCheck.IndexOf("_");
+                                    wordToCheck = Strings.Left(wordToCheck, wordLength);
+                                }
+                                //Find Matches
+                                if (!wordToCheck.Equals("SFX") && wordToCheck.Length > 2)
+                                {
+                                    currentSFX = Path.GetFileNameWithoutExtension(sfxFilesToCheck[sfxItemIndexSub]);
+                                    if (currentSFX.IndexOf(wordToCheck) >= 0)
                                     {
-                                        string comboWordItem = cboTemporal[comboboxIndex].Name;
-                                        //Check for duplicated
-                                        if (comboWordItem.IndexOf(wordToCheck) == -1)
+                                        //Get combo items count
+                                        bool addNewItem = true;
+                                        for (int comboboxIndex = 0; comboboxIndex < cboTemporal.Count; comboboxIndex++)
                                         {
-                                            continue;
+                                            string comboWordItem = cboTemporal[comboboxIndex].Name;
+                                            //Check for duplicated
+                                            if (comboWordItem.IndexOf(wordToCheck) == -1)
+                                            {
+                                                continue;
+                                            }
+                                            //Add match to the list
+                                            if (comboWordItem.Equals(wordToCheck))
+                                            {
+                                                cboTemporal[comboboxIndex].ItemData += 1;
+                                            }
+                                            addNewItem = false;
+                                            break;
                                         }
-                                        //Add match to the list
-                                        if (comboWordItem.Equals(wordToCheck))
+                                        //Check if we have to add the new item
+                                        if (addNewItem)
                                         {
-                                            cboTemporal[comboboxIndex].ItemData += 1;
+                                            cboTemporal.Add(new ComboItemData(wordToCheck, 0));
                                         }
-                                        addNewItem = false;
-                                        break;
-                                    }
-                                    //Check if we have to add the new item
-                                    if (addNewItem)
-                                    {
-                                        cboTemporal.Add(new ComboItemData(wordToCheck, 0));
                                     }
                                 }
                             }
                         }
                     }
-                }
 
-                //Get final keywords
-                List<string> finalWords = new List<string>
+                    //Get final keywords
+                    List<string> finalWords = new List<string>
                 {
                     "All",
                     "HighLighted"
                 };
-                int maxWordAppearances = 6;
-                while (maxWordAppearances > 5 && cboTemporal.Count > 0)
-                {
-                    int itemToRemove = -1;
-                    //Get max value from the remaining words
-                    maxWordAppearances = 0;
-                    for (int i = 0; i < cboTemporal.Count; i++)
+                    int maxWordAppearances = 6;
+                    while (maxWordAppearances > 5 && cboTemporal.Count > 0)
                     {
-                        int itemData = cboTemporal[i].ItemData;
-                        maxWordAppearances = Math.Max(maxWordAppearances, itemData);
-                    }
-                    //Get the item with the max value
-                    for (int i = 0; i < cboTemporal.Count; i++)
-                    {
-                        int itemData = cboTemporal[i].ItemData;
-                        if (itemData == maxWordAppearances && itemToRemove == -1)
+                        int itemToRemove = -1;
+                        //Get max value from the remaining words
+                        maxWordAppearances = 0;
+                        for (int i = 0; i < cboTemporal.Count; i++)
                         {
-                            itemToRemove = i;
+                            int itemData = cboTemporal[i].ItemData;
+                            maxWordAppearances = Math.Max(maxWordAppearances, itemData);
                         }
+                        //Get the item with the max value
+                        for (int i = 0; i < cboTemporal.Count; i++)
+                        {
+                            int itemData = cboTemporal[i].ItemData;
+                            if (itemData == maxWordAppearances && itemToRemove == -1)
+                            {
+                                itemToRemove = i;
+                            }
+                        }
+                        //Remove and add items
+                        finalWords.Add(cboTemporal[itemToRemove].Name);
+                        cboTemporal.RemoveAt(itemToRemove);
                     }
-                    //Remove and add items
-                    finalWords.Add(cboTemporal[itemToRemove].Name);
-                    cboTemporal.RemoveAt(itemToRemove);
-                }
 
-                //Write file
-                TextFiles.WriteRefine(Path.Combine(GlobalPrefs.ProjectFolder, "System", "RefineSearch.txt"), finalWords.ToArray());
+                    //Write file
+                    TextFiles.WriteRefine(Path.Combine(GlobalPrefs.ProjectFolder, "System", "RefineSearch.txt"), finalWords.ToArray());
+                }
             }
         }
 

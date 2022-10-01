@@ -67,7 +67,7 @@ namespace sb_editor.Panels
                         MessageBox.Show(string.Format("File Not Found '{0}'", iniFilePath), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                else
+                else if(cbllstSoundbanks.Items.Count > prevSelection)
                 {
                     cbllstSoundbanks.SetItemChecked(prevSelection, true);
                 }
@@ -187,11 +187,11 @@ namespace sb_editor.Panels
             if (cbllstSoundbanks.SelectedItem != null)
             {
                 //Ask user for a name
-                using (Frm_InputBox inputDiag = new Frm_InputBox() { Text = "Copy Sound Bank" })
+                using (Frm_InputBox inputDiag = new Frm_InputBox() { Text = "Copy SoundBank" })
                 {
                     string folderPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks");
 
-                    inputDiag.lblText.Text = string.Format("Enter New Name For Sound Bank {0}", cbllstSoundbanks.SelectedItem);
+                    inputDiag.lblText.Text = string.Format("Enter New Name For SoundBank {0}", cbllstSoundbanks.SelectedItem);
                     inputDiag.txtInputData.Text = cbllstSoundbanks.SelectedItem.ToString();
                     while (true)
                     {
@@ -239,7 +239,7 @@ namespace sb_editor.Panels
         {
             if (cbllstSoundbanks.SelectedItem != null)
             {
-                if (MessageBox.Show(string.Format("Are you sure you want delete Sound Bank(s)\n'{0}'\nTotal Files: {1}", cbllstSoundbanks.SelectedItem, 1), Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show(string.Format("Are you sure you want delete SoundBank(s)\n'{0}'\nTotal Files: {1}", cbllstSoundbanks.SelectedItem, 1), Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     //Create trash folder if not exists
                     string trashFolder = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks_Trash");
@@ -268,11 +268,11 @@ namespace sb_editor.Panels
             if (cbllstSoundbanks.SelectedItem != null)
             {
                 //Ask user for a name
-                using (Frm_InputBox inputDiag = new Frm_InputBox() { Text = "Rename Sound Bank" })
+                using (Frm_InputBox inputDiag = new Frm_InputBox() { Text = "Rename SoundBank" })
                 {
                     string folderPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks");
 
-                    inputDiag.lblText.Text = string.Format("Enter New Name For Sound Bank {0}", cbllstSoundbanks.SelectedItem);
+                    inputDiag.lblText.Text = string.Format("Enter New Name For SoundBank {0}", cbllstSoundbanks.SelectedItem);
                     inputDiag.txtInputData.Text = cbllstSoundbanks.SelectedItem.ToString();
                     while (true)
                     {

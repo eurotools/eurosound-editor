@@ -31,7 +31,14 @@ namespace sb_editor.Panels
                 {
                     //Add DataBases
                     AddDataBases(e.Node, TextFiles.ReadListBlock(soundBankFilePath, "#DEPENDENCIES"));
-                    lblDataBases_Total.Text = string.Join(" ", "DB Total:", e.Node.Nodes.Count);
+                    if (e.Node.Nodes.Count == 1 && e.Node.Nodes[0].Name.Equals("Empty"))
+                    {
+                        lblDataBases_Total.Text = "DB Total: 0";
+                    }
+                    else
+                    {
+                        lblDataBases_Total.Text = string.Join(" ", "DB Total:", e.Node.Nodes.Count);
+                    }
 
                     //Update Checklistbox
                     MainForm mainForm = (MainForm)Application.OpenForms[nameof(MainForm)];
@@ -56,7 +63,14 @@ namespace sb_editor.Panels
             }
             else
             {
-                lblDataBases_Total.Text = string.Join(" ", "DB Total:", e.Node.Parent.Nodes.Count);
+                if (e.Node.Parent.Nodes.Count == 1 && e.Node.Parent.Nodes[0].Name.Equals("Empty"))
+                {
+                    lblDataBases_Total.Text = "DB Total: 0";
+                }
+                else
+                {
+                    lblDataBases_Total.Text = string.Join(" ", "DB Total:", e.Node.Parent.Nodes.Count);
+                }
             }
         }
 
@@ -124,7 +138,7 @@ namespace sb_editor.Panels
         private void MnuNew_SoundBank_Click(object sender, System.EventArgs e)
         {
             //Ask user for a name
-            using (Frm_InputBox inputDiag = new Frm_InputBox() { Text = "Create New" })
+            using (Frm_InputBox inputDiag = new Frm_InputBox() { Text = "Create New SoundBank" })
             {
                 string folderPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks");
 
@@ -177,11 +191,11 @@ namespace sb_editor.Panels
             if (tvwSoundBanks.SelectedNode != null)
             {
                 //Ask user for a name
-                using (Frm_InputBox inputDiag = new Frm_InputBox() { Text = "Copy Sound Bank" })
+                using (Frm_InputBox inputDiag = new Frm_InputBox() { Text = "Copy SoundBank" })
                 {
                     string folderPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks");
 
-                    inputDiag.lblText.Text = string.Format("Enter New Name For Sound Bank {0}", tvwSoundBanks.SelectedNode.Text);
+                    inputDiag.lblText.Text = string.Format("Enter New Name For SoundBank {0}", tvwSoundBanks.SelectedNode.Text);
                     inputDiag.txtInputData.Text = tvwSoundBanks.SelectedNode.Text;
                     while (true)
                     {
@@ -235,7 +249,7 @@ namespace sb_editor.Panels
         {
             if (tvwSoundBanks.SelectedNode != null && tvwSoundBanks.SelectedNode.Level == 0)
             {
-                if (MessageBox.Show(string.Format("Are you sure you want delete Sound Bank(s)\n'{0}'\nTotal Files: {1}", tvwSoundBanks.SelectedNode.Text, 1), Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show(string.Format("Are you sure you want delete SoundBank(s)\n'{0}'\nTotal Files: {1}", tvwSoundBanks.SelectedNode.Text, 1), Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     //Create trash folder if not exists
                     string trashFolder = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks_Trash");
@@ -264,11 +278,11 @@ namespace sb_editor.Panels
             if (tvwSoundBanks.SelectedNode != null)
             {
                 //Ask user for a name
-                using (Frm_InputBox inputDiag = new Frm_InputBox() { Text = "Rename Sound Bank" })
+                using (Frm_InputBox inputDiag = new Frm_InputBox() { Text = "Rename SoundBank" })
                 {
                     string folderPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks");
 
-                    inputDiag.lblText.Text = string.Format("Enter New Name For Sound Bank {0}", tvwSoundBanks.SelectedNode.Text);
+                    inputDiag.lblText.Text = string.Format("Enter New Name For SoundBank {0}", tvwSoundBanks.SelectedNode.Text);
                     inputDiag.txtInputData.Text = tvwSoundBanks.SelectedNode.Text;
                     while (true)
                     {
@@ -327,8 +341,10 @@ namespace sb_editor.Panels
 
                 if (File.Exists(soundBankpath) && outputPlatform.SelectedItem != null)
                 {
-                    SoundBankPropertiesForm soundBankProperties = new SoundBankPropertiesForm(soundBankpath, outputPlatform.Text, outputLanguage.Text);
-                    soundBankProperties.ShowDialog();
+                    using (SoundBankPropertiesForm soundBankProperties = new SoundBankPropertiesForm(soundBankpath, outputPlatform.Text, outputLanguage.Text))
+                    {
+                        soundBankProperties.ShowDialog();
+                    }
                 }
             }
             else
@@ -385,11 +401,13 @@ namespace sb_editor.Panels
 
                 //Update label
                 lblSoundBanksTotal.Text = string.Join(" ", "SB Total:", tvwSoundBanks.Nodes.Count);
+                lblDataBases_Total.Text = "DB Total: 0";
+                EnableOrDisableButton();
             }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void AddDataBases(TreeNode soundBankNode, string[] dependencies)
+        internal void AddDataBases(TreeNode soundBankNode, string[] dependencies, bool autoExpand = false)
         {
             //Clear Current Dependencies
             if (soundBankNode.Nodes.Count > 0)
@@ -404,11 +422,21 @@ namespace sb_editor.Panels
                 {
                     soundBankNode.Nodes.Add(dependencies[j], dependencies[j], 2, 2);
                 }
+                if (autoExpand)
+                {
+                    soundBankNode.Expand();
+                }
             }
             else
             {
-                soundBankNode.Nodes.Add("Empty", "Empty Sound Bank", 3, 3);
+                soundBankNode.Nodes.Add("Empty", "Empty SoundBank", 3, 3);
             }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public void EnableOrDisableButton()
+        {
+            lblSoundBanksTutorial.Visible = !(tvwSoundBanks.Nodes.Count > 0);
         }
     }
 

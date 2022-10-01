@@ -101,7 +101,7 @@ namespace sb_editor.Panels
             this.Music_Misc_SfxDefault.Name = "Music_Misc_SfxDefault";
             this.Music_Misc_SfxDefault.Size = new System.Drawing.Size(160, 23);
             this.Music_Misc_SfxDefault.TabIndex = 3;
-            this.Music_Misc_SfxDefault.Text = "SFX Default";
+            this.Music_Misc_SfxDefault.Text = "Default SFX";
             this.Music_Misc_SfxDefault.UseVisualStyleBackColor = true;
             this.Music_Misc_SfxDefault.Click += new System.EventHandler(this.Music_Misc_SfxDefault_Click);
             // 

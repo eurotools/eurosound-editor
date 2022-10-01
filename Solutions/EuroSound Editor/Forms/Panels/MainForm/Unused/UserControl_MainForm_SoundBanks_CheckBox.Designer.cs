@@ -62,7 +62,7 @@ namespace sb_editor.Panels
             this.grbSoundBanks.Size = new System.Drawing.Size(196, 263);
             this.grbSoundBanks.TabIndex = 0;
             this.grbSoundBanks.TabStop = false;
-            this.grbSoundBanks.Text = "Sound Banks";
+            this.grbSoundBanks.Text = "SoundBanks";
             // 
             // lblBankNumber
             // 

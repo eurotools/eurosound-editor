@@ -32,7 +32,7 @@ namespace sb_editor.Panels
             this.components = new System.ComponentModel.Container();
             this.grbAvailableDataBases = new System.Windows.Forms.GroupBox();
             this.pnlListView = new System.Windows.Forms.Panel();
-            this.lstDataBases = new System.Windows.Forms.ListBox();
+            this.lblDataBaseTutorial = new System.Windows.Forms.Label();
             this.ContextMenu_DataBases = new System.Windows.Forms.ContextMenu();
             this.mnuAddDataBaseToSoundBank = new System.Windows.Forms.MenuItem();
             this.mnuNew = new System.Windows.Forms.MenuItem();
@@ -40,6 +40,7 @@ namespace sb_editor.Panels
             this.mnuDelete = new System.Windows.Forms.MenuItem();
             this.mnuRename = new System.Windows.Forms.MenuItem();
             this.mnuProperties = new System.Windows.Forms.MenuItem();
+            this.lstDataBases = new System.Windows.Forms.ListBox();
             this.lblDataBases_Count = new System.Windows.Forms.Label();
             this.btnAddDataBases = new System.Windows.Forms.Button();
             this.ToolTip_Controls = new System.Windows.Forms.ToolTip(this.components);
@@ -65,27 +66,28 @@ namespace sb_editor.Panels
             this.pnlListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlListView.Controls.Add(this.lblDataBaseTutorial);
             this.pnlListView.Controls.Add(this.lstDataBases);
             this.pnlListView.Location = new System.Drawing.Point(6, 48);
             this.pnlListView.Name = "pnlListView";
             this.pnlListView.Size = new System.Drawing.Size(364, 522);
             this.pnlListView.TabIndex = 3;
             // 
-            // lstDataBases
+            // lblDataBaseTutorial
             // 
-            this.lstDataBases.ContextMenu = this.ContextMenu_DataBases;
-            this.lstDataBases.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstDataBases.FormattingEnabled = true;
-            this.lstDataBases.HorizontalScrollbar = true;
-            this.lstDataBases.Location = new System.Drawing.Point(0, 0);
-            this.lstDataBases.Name = "lstDataBases";
-            this.lstDataBases.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lstDataBases.Size = new System.Drawing.Size(364, 522);
-            this.lstDataBases.Sorted = true;
-            this.lstDataBases.TabIndex = 1;
-            this.ToolTip_Controls.SetToolTip(this.lstDataBases, "All Available DataBases");
-            this.lstDataBases.SelectedIndexChanged += new System.EventHandler(this.LstDataBases_SelectedIndexChanged);
-            this.lstDataBases.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LstDataBases_MouseDoubleClick);
+            this.lblDataBaseTutorial.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblDataBaseTutorial.BackColor = System.Drawing.SystemColors.Window;
+            this.lblDataBaseTutorial.ContextMenu = this.ContextMenu_DataBases;
+            this.lblDataBaseTutorial.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDataBaseTutorial.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblDataBaseTutorial.Location = new System.Drawing.Point(3, 3);
+            this.lblDataBaseTutorial.Name = "lblDataBaseTutorial";
+            this.lblDataBaseTutorial.Size = new System.Drawing.Size(358, 58);
+            this.lblDataBaseTutorial.TabIndex = 2;
+            this.lblDataBaseTutorial.Text = "Right-click here to create your first DataBase (DB); a DataBase is a logical grou" +
+    "p of SFX, which you can include into various SoundBanks.";
             // 
             // ContextMenu_DataBases
             // 
@@ -108,28 +110,28 @@ namespace sb_editor.Panels
             // 
             this.mnuNew.Index = 1;
             this.mnuNew.Shortcut = System.Windows.Forms.Shortcut.CtrlN;
-            this.mnuNew.Text = "New";
+            this.mnuNew.Text = "New DB";
             this.mnuNew.Click += new System.EventHandler(this.MnuNew_Click);
             // 
             // mnuCopy
             // 
             this.mnuCopy.Index = 2;
             this.mnuCopy.Shortcut = System.Windows.Forms.Shortcut.CtrlC;
-            this.mnuCopy.Text = "Copy";
+            this.mnuCopy.Text = "Copy DB";
             this.mnuCopy.Click += new System.EventHandler(this.MnuCopy_Click);
             // 
             // mnuDelete
             // 
             this.mnuDelete.Index = 3;
             this.mnuDelete.Shortcut = System.Windows.Forms.Shortcut.Del;
-            this.mnuDelete.Text = "Delete";
+            this.mnuDelete.Text = "Delete DB";
             this.mnuDelete.Click += new System.EventHandler(this.MnuDelete_Click);
             // 
             // mnuRename
             // 
             this.mnuRename.Index = 4;
             this.mnuRename.Shortcut = System.Windows.Forms.Shortcut.F2;
-            this.mnuRename.Text = "Rename";
+            this.mnuRename.Text = "Rename DB";
             this.mnuRename.Click += new System.EventHandler(this.MnuRename_Click);
             // 
             // mnuProperties
@@ -138,6 +140,22 @@ namespace sb_editor.Panels
             this.mnuProperties.Shortcut = System.Windows.Forms.Shortcut.CtrlP;
             this.mnuProperties.Text = "Properties";
             this.mnuProperties.Click += new System.EventHandler(this.MnuProperties_Click);
+            // 
+            // lstDataBases
+            // 
+            this.lstDataBases.ContextMenu = this.ContextMenu_DataBases;
+            this.lstDataBases.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstDataBases.FormattingEnabled = true;
+            this.lstDataBases.HorizontalScrollbar = true;
+            this.lstDataBases.Location = new System.Drawing.Point(0, 0);
+            this.lstDataBases.Name = "lstDataBases";
+            this.lstDataBases.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.lstDataBases.Size = new System.Drawing.Size(364, 522);
+            this.lstDataBases.Sorted = true;
+            this.lstDataBases.TabIndex = 1;
+            this.ToolTip_Controls.SetToolTip(this.lstDataBases, "All Available DataBases");
+            this.lstDataBases.SelectedIndexChanged += new System.EventHandler(this.LstDataBases_SelectedIndexChanged);
+            this.lstDataBases.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LstDataBases_MouseDoubleClick);
             // 
             // lblDataBases_Count
             // 
@@ -153,6 +171,7 @@ namespace sb_editor.Panels
             // 
             this.btnAddDataBases.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAddDataBases.Enabled = false;
             this.btnAddDataBases.Location = new System.Drawing.Point(6, 19);
             this.btnAddDataBases.Name = "btnAddDataBases";
             this.btnAddDataBases.Size = new System.Drawing.Size(364, 23);
@@ -191,5 +210,6 @@ namespace sb_editor.Panels
         protected internal System.Windows.Forms.Button btnAddDataBases;
         protected internal System.Windows.Forms.ListBox lstDataBases;
         protected internal System.Windows.Forms.Label lblDataBases_Count;
+        private System.Windows.Forms.Label lblDataBaseTutorial;
     }
 }

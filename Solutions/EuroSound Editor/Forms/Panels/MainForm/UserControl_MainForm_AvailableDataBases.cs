@@ -52,6 +52,7 @@ namespace sb_editor.Panels
 
                 //Update Counter
                 SfxInDataBase.lblSfxCount.Text = string.Join(" ", "Total:", SfxInDataBase.lstSfxInDataBase.Items.Count);
+                SfxInDataBase.EnableOrDisableButton();
             }
         }
 
@@ -73,7 +74,7 @@ namespace sb_editor.Panels
         private void MnuNew_Click(object sender, EventArgs e)
         {
             //Ask user for a name
-            using (Frm_InputBox inputDiag = new Frm_InputBox() { Text = "Create New" })
+            using (Frm_InputBox inputDiag = new Frm_InputBox() { Text = "Create New Database" })
             {
                 string folderPath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases");
 
@@ -289,10 +290,11 @@ namespace sb_editor.Panels
                 }
 
                 //Clear SFXs in DataBase control
-                ((sb_editor.MainForm)Parent.Parent.Parent).UserControl_DataBaseSfx.ClearControl();
+                ((MainForm)Parent.Parent.Parent).UserControl_DataBaseSfx.ClearControl();
 
                 //Update label
                 lblDataBases_Count.Text = string.Join(" ", "Total:", lstDataBases.Items.Count);
+                EnableOrDisableButton();
             }
 
             //Sort list
@@ -325,7 +327,7 @@ namespace sb_editor.Panels
                     TextFiles.WriteSoundBankFile(soundBankPath, SoundBankData);
 
                     //Update Node
-                    SoundBanksControl.AddDataBases(SoundBanksControl.tvwSoundBanks.SelectedNode, SoundBankData.DataBases);
+                    SoundBanksControl.AddDataBases(SoundBanksControl.tvwSoundBanks.SelectedNode, SoundBankData.DataBases, true);
                 }
             }
             else
@@ -351,6 +353,17 @@ namespace sb_editor.Panels
             else
             {
                 SystemSounds.Beep.Play();
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public void EnableOrDisableButton()
+        {
+            bool status = lstDataBases.Items.Count > 0;
+            if (btnAddDataBases.Enabled != status)
+            {
+                btnAddDataBases.Enabled = status;
+                lblDataBaseTutorial.Visible = !status;
             }
         }
     }

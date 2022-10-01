@@ -62,6 +62,7 @@ namespace sb_editor.Panels
 
                         //Update label
                         lblSfxCount.Text = string.Format("Total: {0}", lstSfxInDataBase.Items.Count);
+                        EnableOrDisableButton();
                     }
                 }
             }
@@ -76,7 +77,10 @@ namespace sb_editor.Panels
         //-------------------------------------------------------------------------------------------------------------------------------
         private void LstSfxInDataBase_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            OpenSfxEditor();
+            if (lstSfxInDataBase.SelectedItem != null)
+            {
+                OpenSfxEditor();
+            }
         }
 
         //*===============================================================================================
@@ -176,10 +180,18 @@ namespace sb_editor.Panels
             UserControl_MainForm_AvailableDataBases AvailableDataBases = ((MainForm)Application.OpenForms[nameof(MainForm)]).UserControl_Available_Databases;
             if (lstSfxInDataBase.SelectedItems.Count > 0 && AvailableDataBases.lstDataBases.SelectedItems.Count == 1)
             {
+                int selectedIndex = lstSfxInDataBase.SelectedIndex;
+
                 //Remove selected items
                 for (int i = lstSfxInDataBase.SelectedItems.Count - 1; i >= 0; i--)
                 {
                     lstSfxInDataBase.Items.Remove(lstSfxInDataBase.SelectedItems[i]);
+                }
+
+                //Select next item
+                if (selectedIndex < lstSfxInDataBase.Items.Count)
+                {
+                    lstSfxInDataBase.SelectedIndex = selectedIndex;
                 }
 
                 //Update database file
@@ -190,6 +202,7 @@ namespace sb_editor.Panels
 
                 //Update label
                 lblSfxCount.Text = string.Format("Total: {0}", lstSfxInDataBase.Items.Count);
+                EnableOrDisableButton();
             }
             else
             {
@@ -204,6 +217,7 @@ namespace sb_editor.Panels
             {
                 lstSfxInDataBase.Items.Clear();
                 lblSfxCount.Text = string.Format("Total: {0}", lstSfxInDataBase.Items.Count);
+                EnableOrDisableButton();
             }
         }
 
@@ -216,6 +230,16 @@ namespace sb_editor.Panels
                 StartPosition = ((MainForm)Application.OpenForms[nameof(MainForm)]).StartPosition
             };
             sfxEditor.Show();
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public void EnableOrDisableButton()
+        {
+            bool status = lstSfxInDataBase.Items.Count > 0;
+            if (btnRemoveSfx.Enabled != status)
+            {
+                btnRemoveSfx.Enabled = status;
+            }
         }
     }
 

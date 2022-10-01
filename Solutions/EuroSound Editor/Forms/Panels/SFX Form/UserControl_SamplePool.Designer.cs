@@ -345,9 +345,8 @@ namespace sb_editor.Panels
             this.lblSampleInfo_StreamedValue.AutoSize = true;
             this.lblSampleInfo_StreamedValue.Location = new System.Drawing.Point(95, 76);
             this.lblSampleInfo_StreamedValue.Name = "lblSampleInfo_StreamedValue";
-            this.lblSampleInfo_StreamedValue.Size = new System.Drawing.Size(105, 13);
+            this.lblSampleInfo_StreamedValue.Size = new System.Drawing.Size(0, 13);
             this.lblSampleInfo_StreamedValue.TabIndex = 9;
-            this.lblSampleInfo_StreamedValue.Text = "##############";
             // 
             // lblSampleInfo_Streamed
             // 
@@ -363,9 +362,8 @@ namespace sb_editor.Panels
             this.lblSampleInfo_LoopValue.AutoSize = true;
             this.lblSampleInfo_LoopValue.Location = new System.Drawing.Point(95, 62);
             this.lblSampleInfo_LoopValue.Name = "lblSampleInfo_LoopValue";
-            this.lblSampleInfo_LoopValue.Size = new System.Drawing.Size(105, 13);
+            this.lblSampleInfo_LoopValue.Size = new System.Drawing.Size(0, 13);
             this.lblSampleInfo_LoopValue.TabIndex = 7;
-            this.lblSampleInfo_LoopValue.Text = "##############";
             // 
             // lblSampleInfo_Loop
             // 
@@ -381,9 +379,8 @@ namespace sb_editor.Panels
             this.lblSampleInfo_LengthValue.AutoSize = true;
             this.lblSampleInfo_LengthValue.Location = new System.Drawing.Point(95, 47);
             this.lblSampleInfo_LengthValue.Name = "lblSampleInfo_LengthValue";
-            this.lblSampleInfo_LengthValue.Size = new System.Drawing.Size(105, 13);
+            this.lblSampleInfo_LengthValue.Size = new System.Drawing.Size(0, 13);
             this.lblSampleInfo_LengthValue.TabIndex = 5;
-            this.lblSampleInfo_LengthValue.Text = "##############";
             // 
             // lblSampleInfo_Length
             // 
@@ -399,9 +396,8 @@ namespace sb_editor.Panels
             this.lblSampleInfo_SizeValue.AutoSize = true;
             this.lblSampleInfo_SizeValue.Location = new System.Drawing.Point(95, 31);
             this.lblSampleInfo_SizeValue.Name = "lblSampleInfo_SizeValue";
-            this.lblSampleInfo_SizeValue.Size = new System.Drawing.Size(105, 13);
+            this.lblSampleInfo_SizeValue.Size = new System.Drawing.Size(0, 13);
             this.lblSampleInfo_SizeValue.TabIndex = 3;
-            this.lblSampleInfo_SizeValue.Text = "##############";
             // 
             // lblSampleInfo_Size
             // 
@@ -417,9 +413,8 @@ namespace sb_editor.Panels
             this.lblSampleInfo_FrequencyValue.AutoSize = true;
             this.lblSampleInfo_FrequencyValue.Location = new System.Drawing.Point(95, 16);
             this.lblSampleInfo_FrequencyValue.Name = "lblSampleInfo_FrequencyValue";
-            this.lblSampleInfo_FrequencyValue.Size = new System.Drawing.Size(105, 13);
+            this.lblSampleInfo_FrequencyValue.Size = new System.Drawing.Size(0, 13);
             this.lblSampleInfo_FrequencyValue.TabIndex = 1;
-            this.lblSampleInfo_FrequencyValue.Text = "##############";
             // 
             // lblSampleInfo_Frequency
             // 

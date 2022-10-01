@@ -48,47 +48,50 @@ namespace sb_editor.Forms
             Cursor.Current = Cursors.WaitCursor;
 
             //Get files to check
-            string[] sfxFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
-            uint[] hashCodes = new uint[sfxFiles.Length];
-            List<string> Errors = new List<string>();
-            bool firstTime = true;
-
-            //Start Check
-            for (int i = 0; i < sfxFiles.Length; i++)
+            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs")))
             {
-                string[] fileData = File.ReadAllLines(sfxFiles[i]);
-                int hashCodeIndex = Array.FindIndex(fileData, s => s.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase));
-                string[] data = fileData[hashCodeIndex + 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                if (data.Length > 0)
+                string[] sfxFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
+                uint[] hashCodes = new uint[sfxFiles.Length];
+                List<string> Errors = new List<string>();
+                bool firstTime = true;
+
+                //Start Check
+                for (int i = 0; i < sfxFiles.Length; i++)
                 {
-                    uint hashCode = Convert.ToUInt32(data[1]);
-                    if (Array.IndexOf(hashCodes, hashCode) > 0)
+                    string[] fileData = File.ReadAllLines(sfxFiles[i]);
+                    int hashCodeIndex = Array.FindIndex(fileData, s => s.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase));
+                    string[] data = fileData[hashCodeIndex + 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    if (data.Length > 0)
                     {
-                        if (firstTime)
+                        uint hashCode = Convert.ToUInt32(data[1]);
+                        if (Array.IndexOf(hashCodes, hashCode) > 0)
                         {
-                            Errors.Add("SFXs Found With Duplicate HashCodes");
-                            Errors.Add(string.Empty);
-                            firstTime = !firstTime;
+                            if (firstTime)
+                            {
+                                Errors.Add("SFXs Found With Duplicate HashCodes");
+                                Errors.Add(string.Empty);
+                                firstTime = !firstTime;
+                            }
+                            Errors.Add(Path.GetFileNameWithoutExtension(sfxFiles[i]));
+
+                            //Update File
+                            fileData[hashCodeIndex + 1] = string.Format("HashCodeNumber {0}", GlobalPrefs.SFXHashCodeNumber++);
+                            File.WriteAllLines(sfxFiles[i], fileData);
                         }
-                        Errors.Add(Path.GetFileNameWithoutExtension(sfxFiles[i]));
-
-                        //Update File
-                        fileData[hashCodeIndex + 1] = string.Format("HashCodeNumber {0}", GlobalPrefs.SFXHashCodeNumber++);
-                        File.WriteAllLines(sfxFiles[i], fileData);
+                        hashCodes[i] = hashCode;
                     }
-                    hashCodes[i] = hashCode;
                 }
-            }
 
-            if (Errors.Count == 0)
-            {
-                Errors.Add("No Duplicate HashCodes Found");
-            }
+                if (Errors.Count == 0)
+                {
+                    Errors.Add("No Duplicate HashCodes Found");
+                }
 
-            //Show Form
-            using (DebugForm debugFrm = new DebugForm(Errors.ToArray()))
-            {
-                debugFrm.ShowDialog();
+                //Show Form
+                using (DebugForm debugFrm = new DebugForm(Errors.ToArray()))
+                {
+                    debugFrm.ShowDialog();
+                }
             }
 
             //Restore default cursor
@@ -102,53 +105,61 @@ namespace sb_editor.Forms
             Cursor.Current = Cursors.WaitCursor;
 
             //Reallocate SFX HashCodes
-            GlobalPrefs.SFXHashCodeNumber = 1;
-            string[] sfxFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
-            for (int i = 0; i < sfxFiles.Length; i++)
+            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs")))
             {
-                string[] fileData = File.ReadAllLines(sfxFiles[i]);
-                int hashCodeIndex = Array.FindIndex(fileData, s => s.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase));
-                string[] data = fileData[hashCodeIndex + 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                if (data.Length > 0)
+                GlobalPrefs.SFXHashCodeNumber = 1;
+                string[] sfxFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
+                for (int i = 0; i < sfxFiles.Length; i++)
                 {
-                    //Update File
-                    fileData[hashCodeIndex + 1] = string.Format("HashCodeNumber {0}", GlobalPrefs.SFXHashCodeNumber++);
-                    File.WriteAllLines(sfxFiles[i], fileData);
+                    string[] fileData = File.ReadAllLines(sfxFiles[i]);
+                    int hashCodeIndex = Array.FindIndex(fileData, s => s.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase));
+                    string[] data = fileData[hashCodeIndex + 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    if (data.Length > 0)
+                    {
+                        //Update File
+                        fileData[hashCodeIndex + 1] = string.Format("HashCodeNumber {0}", GlobalPrefs.SFXHashCodeNumber++);
+                        File.WriteAllLines(sfxFiles[i], fileData);
+                    }
                 }
             }
-
             //ReAllocate SoundBank HashCodes
-            GlobalPrefs.SoundBankHashCodeNumber = 1;
-            string[] sbFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks"), "*.txt", SearchOption.TopDirectoryOnly);
-            for (int i = 0; i < sbFiles.Length; i++)
+            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks")))
             {
-                string[] fileData = File.ReadAllLines(sbFiles[i]);
-                int hashCodeIndex = Array.FindIndex(fileData, s => s.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase));
-                string[] data = fileData[hashCodeIndex + 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                if (data.Length > 0)
+                GlobalPrefs.SoundBankHashCodeNumber = 1;
+                string[] sbFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks"), "*.txt", SearchOption.TopDirectoryOnly);
+                for (int i = 0; i < sbFiles.Length; i++)
                 {
-                    //Update File
-                    fileData[hashCodeIndex + 1] = string.Format("HashCodeNumber {0}", GlobalPrefs.SoundBankHashCodeNumber++);
-                    File.WriteAllLines(sbFiles[i], fileData);
+                    string[] fileData = File.ReadAllLines(sbFiles[i]);
+                    int hashCodeIndex = Array.FindIndex(fileData, s => s.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase));
+                    string[] data = fileData[hashCodeIndex + 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    if (data.Length > 0)
+                    {
+                        //Update File
+                        fileData[hashCodeIndex + 1] = string.Format("HashCodeNumber {0}", GlobalPrefs.SoundBankHashCodeNumber++);
+                        File.WriteAllLines(sbFiles[i], fileData);
+                    }
                 }
             }
 
             //ReAllocate Mfx Files
-            GlobalPrefs.MFXHashCodeNumber = 1;
-            string[] mfxFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData"), "*.txt", SearchOption.TopDirectoryOnly);
-            for (int i = 0; i < mfxFiles.Length; i++)
+            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData")))
             {
-                string[] fileData = File.ReadAllLines(mfxFiles[i]);
-                int hashCodeIndex = Array.FindIndex(fileData, s => s.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase));
-                string[] data = fileData[hashCodeIndex + 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                if (data.Length > 0)
+                   GlobalPrefs.MFXHashCodeNumber = 1;
+                string[] mfxFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData"), "*.txt", SearchOption.TopDirectoryOnly);
+                for (int i = 0; i < mfxFiles.Length; i++)
                 {
-                    //Update File
-                    fileData[hashCodeIndex + 1] = string.Format("HashCodeNumber {0}", GlobalPrefs.SoundBankHashCodeNumber++);
-                    File.WriteAllLines(mfxFiles[i], fileData);
+                    string[] fileData = File.ReadAllLines(mfxFiles[i]);
+                    int hashCodeIndex = Array.FindIndex(fileData, s => s.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase));
+                    string[] data = fileData[hashCodeIndex + 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    if (data.Length > 0)
+                    {
+                        //Update File
+                        fileData[hashCodeIndex + 1] = string.Format("HashCodeNumber {0}", GlobalPrefs.SoundBankHashCodeNumber++);
+                        File.WriteAllLines(mfxFiles[i], fileData);
+                    }
                 }
             }
-
+            
             //Restore default cursor
             Cursor.Current = Cursors.Default;
         }

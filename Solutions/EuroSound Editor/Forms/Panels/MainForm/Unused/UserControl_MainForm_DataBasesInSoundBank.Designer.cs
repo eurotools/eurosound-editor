@@ -52,7 +52,7 @@ namespace sb_editor.Panels
             this.grbDatabasesInSoundBank.Size = new System.Drawing.Size(223, 179);
             this.grbDatabasesInSoundBank.TabIndex = 0;
             this.grbDatabasesInSoundBank.TabStop = false;
-            this.grbDatabasesInSoundBank.Text = "DataBases In Sound Bank";
+            this.grbDatabasesInSoundBank.Text = "DataBases In SoundBank";
             // 
             // btnRemoveDataBase
             // 

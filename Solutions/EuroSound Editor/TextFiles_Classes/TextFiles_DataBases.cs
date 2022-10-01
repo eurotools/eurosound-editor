@@ -52,10 +52,7 @@ namespace sb_editor
             }
 
             //Add dependencies to the object
-            if (dependencies.Count > 0)
-            {
-                dataBase.SFXs = dependencies.ToArray();
-            }
+            dataBase.SFXs = dependencies.ToArray();
 
             return dataBase;
         }

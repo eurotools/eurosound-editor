@@ -22,7 +22,13 @@ namespace sb_editor.Panels
             {
                 refineList.ShowDialog();
             }
-            UpdateCombobox(Path.Combine(GlobalPrefs.ProjectFolder, "System", "RefineSearch.txt"));
+
+            //Reload Data
+            string textFilepath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "RefineSearch.txt");
+            if (File.Exists(textFilepath))
+            {
+                UpdateCombobox(textFilepath);
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -46,9 +52,12 @@ namespace sb_editor.Panels
             UserControl_MainForm_AvailableSFX availableSfxForm = (UserControl_MainForm_AvailableSFX)Parent.Parent;
 
             //Check if we need to reload
-            if (!cboWords.SelectedItem.Equals("All"))
+            if (cboWords.SelectedItem != null)
             {
-                availableSfxForm.LoadSFXs("All");
+                if (!cboWords.SelectedItem.Equals("All"))
+                {
+                    availableSfxForm.LoadSFXs("All");
+                }
             }
 
             //Get and select unused hashcodes
@@ -74,13 +83,16 @@ namespace sb_editor.Panels
             }
 
             //Show highlighted hashcodes
-            if (cboWords.SelectedItem.Equals("HighLighted"))
+            if (cboWords.Items.Count > 0 && cboWords.SelectedItem != null)
             {
-                availableSfxForm.LoadSFXs("HighLighted");
-            }
-            else
-            {
-                cboWords.SelectedItem = "HighLighted";
+                if (cboWords.SelectedItem.Equals("HighLighted"))
+                {
+                    availableSfxForm.LoadSFXs("HighLighted");
+                }
+                else
+                {
+                    cboWords.SelectedItem = "HighLighted";
+                }
             }
         }
 

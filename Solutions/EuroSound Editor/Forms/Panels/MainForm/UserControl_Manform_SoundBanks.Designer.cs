@@ -43,11 +43,13 @@ namespace sb_editor.Panels
             this.mnuProperties_SoundBank = new System.Windows.Forms.MenuItem();
             this.mnuMaxOutSize_SoundBank = new System.Windows.Forms.MenuItem();
             this.imlTreeView = new System.Windows.Forms.ImageList(this.components);
+            this.lblSoundBanksTutorial = new System.Windows.Forms.Label();
             this.grbSoundBanks.SuspendLayout();
             this.SuspendLayout();
             // 
             // grbSoundBanks
             // 
+            this.grbSoundBanks.Controls.Add(this.lblSoundBanksTutorial);
             this.grbSoundBanks.Controls.Add(this.lblDataBases_Total);
             this.grbSoundBanks.Controls.Add(this.lblSoundBanksTotal);
             this.grbSoundBanks.Controls.Add(this.tvwSoundBanks);
@@ -57,7 +59,7 @@ namespace sb_editor.Panels
             this.grbSoundBanks.Size = new System.Drawing.Size(294, 274);
             this.grbSoundBanks.TabIndex = 0;
             this.grbSoundBanks.TabStop = false;
-            this.grbSoundBanks.Text = "Sound Banks";
+            this.grbSoundBanks.Text = "SoundBanks";
             // 
             // lblDataBases_Total
             // 
@@ -116,28 +118,28 @@ namespace sb_editor.Panels
             // 
             this.mnuNew_SoundBank.Index = 0;
             this.mnuNew_SoundBank.Shortcut = System.Windows.Forms.Shortcut.CtrlN;
-            this.mnuNew_SoundBank.Text = "New";
+            this.mnuNew_SoundBank.Text = "New SB";
             this.mnuNew_SoundBank.Click += new System.EventHandler(this.MnuNew_SoundBank_Click);
             // 
             // mnuCopy_SoundBank
             // 
             this.mnuCopy_SoundBank.Index = 1;
             this.mnuCopy_SoundBank.Shortcut = System.Windows.Forms.Shortcut.CtrlC;
-            this.mnuCopy_SoundBank.Text = "Copy";
+            this.mnuCopy_SoundBank.Text = "Copy SB";
             this.mnuCopy_SoundBank.Click += new System.EventHandler(this.MnuCopy_SoundBank_Click);
             // 
             // mnuDelete_SoundBank
             // 
             this.mnuDelete_SoundBank.Index = 2;
             this.mnuDelete_SoundBank.Shortcut = System.Windows.Forms.Shortcut.Del;
-            this.mnuDelete_SoundBank.Text = "Delete";
+            this.mnuDelete_SoundBank.Text = "Delete SB";
             this.mnuDelete_SoundBank.Click += new System.EventHandler(this.MnuDelete_SoundBank_Click);
             // 
             // mnuRename_SoundBank
             // 
             this.mnuRename_SoundBank.Index = 3;
             this.mnuRename_SoundBank.Shortcut = System.Windows.Forms.Shortcut.F2;
-            this.mnuRename_SoundBank.Text = "Rename";
+            this.mnuRename_SoundBank.Text = "Rename SB";
             this.mnuRename_SoundBank.Click += new System.EventHandler(this.MnuRename_SoundBank_Click);
             // 
             // mnuProperties_SoundBank
@@ -161,6 +163,21 @@ namespace sb_editor.Panels
             this.imlTreeView.Images.SetKeyName(1, "directory_open_cool-1.png");
             this.imlTreeView.Images.SetKeyName(2, "soundbank_Database.png");
             this.imlTreeView.Images.SetKeyName(3, "Music-note-blue-icon.png");
+            // 
+            // lblSoundBanksTutorial
+            // 
+            this.lblSoundBanksTutorial.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblSoundBanksTutorial.BackColor = System.Drawing.SystemColors.Window;
+            this.lblSoundBanksTutorial.ContextMenu = this.ContextMenu_TreeView;
+            this.lblSoundBanksTutorial.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSoundBanksTutorial.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblSoundBanksTutorial.Location = new System.Drawing.Point(8, 20);
+            this.lblSoundBanksTutorial.Name = "lblSoundBanksTutorial";
+            this.lblSoundBanksTutorial.Size = new System.Drawing.Size(275, 130);
+            this.lblSoundBanksTutorial.TabIndex = 7;
+            this.lblSoundBanksTutorial.Text = resources.GetString("lblSoundBanksTutorial.Text");
             // 
             // UserControl_Manform_SoundBanks
             // 
@@ -189,5 +206,6 @@ namespace sb_editor.Panels
         private System.Windows.Forms.MenuItem mnuProperties_SoundBank;
         private System.Windows.Forms.MenuItem mnuMaxOutSize_SoundBank;
         protected internal System.Windows.Forms.TreeView tvwSoundBanks;
+        private System.Windows.Forms.Label lblSoundBanksTutorial;
     }
 }

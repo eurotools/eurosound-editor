@@ -32,7 +32,10 @@ namespace sb_editor.Panels
         internal void LoadData(SFX sfxFile)
         {
             sfxFileData = sfxFile;
-            samplesFileData = TextFiles.ReadSamplesFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "Samples.txt"));
+            if (File.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "System", "Samples.txt")))
+            {
+                samplesFileData = TextFiles.ReadSamplesFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "Samples.txt"));
+            }
 
             //Update checkboxes
             chkEnableSubSFX.Checked = sfxFile.SamplePool.EnableSubSFX;
@@ -91,7 +94,15 @@ namespace sb_editor.Panels
                         lblSampleInfo_SizeValue.Text = fileData.Length.ToString();
                         lblSampleInfo_LengthValue.Text = string.Format("{0:0.#}", fileData.TotalTime.TotalSeconds);
                         lblSampleInfo_LoopValue.Text = fileData.HasLoop ? "True" : "False";
-                        lblSampleInfo_StreamedValue.Text = samplesFileData.SamplePoolItems[MultipleFilesFunctions.GetFullFileName(selectedSample.FilePath)].StreamMe.ToString();
+                        string keyToCheck = MultipleFilesFunctions.GetFullFileName(selectedSample.FilePath);
+                        if (samplesFileData != null && samplesFileData.SamplePoolItems.ContainsKey(keyToCheck))
+                        {
+                            lblSampleInfo_StreamedValue.Text = samplesFileData.SamplePoolItems[keyToCheck].StreamMe.ToString();
+                        }
+                        else
+                        {
+                            lblSampleInfo_StreamedValue.Text = "??";
+                        }
                     }
                     else
                     {
@@ -461,10 +472,18 @@ namespace sb_editor.Panels
         {
             if (lstSamples.SelectedItems.Count > 0)
             {
+                int selectedIndex = lstSamples.SelectedIndex;
+
                 //Remove selected
                 while (lstSamples.SelectedItems.Count > 0)
                 {
                     lstSamples.Items.Remove(lstSamples.SelectedItems[0]);
+                }
+
+                //Select next item
+                if (selectedIndex < lstSamples.Items.Count)
+                {
+                    lstSamples.SelectedIndex = selectedIndex;
                 }
 
                 //Check Random Pick

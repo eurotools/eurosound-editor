@@ -31,34 +31,34 @@ namespace sb_editor.Forms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DataBasePropertiesForm));
             this.grbMargins = new System.Windows.Forms.GroupBox();
-            this.btnOK = new System.Windows.Forms.Button();
-            this.lblDependenciesCount = new System.Windows.Forms.Label();
-            this.lstDependencies = new System.Windows.Forms.ListBox();
-            this.lblDataBase_Dependencies = new System.Windows.Forms.Label();
-            this.lblSamplesCount = new System.Windows.Forms.Label();
-            this.lblTotalSamples = new System.Windows.Forms.Label();
-            this.lstTotalSamples = new System.Windows.Forms.ListBox();
-            this.lblSFXsCount = new System.Windows.Forms.Label();
-            this.lstSFXs = new System.Windows.Forms.ListBox();
-            this.lblTotalSFXs = new System.Windows.Forms.Label();
             this.lblDataBaseName = new System.Windows.Forms.Label();
             this.lblTotalSampleSize_Value = new System.Windows.Forms.Label();
+            this.btnOK = new System.Windows.Forms.Button();
             this.lblDataBaseName_Value = new System.Windows.Forms.Label();
+            this.lblDependenciesCount = new System.Windows.Forms.Label();
             this.lblTotalSampleSize = new System.Windows.Forms.Label();
+            this.lstDependencies = new System.Windows.Forms.ListBox();
             this.lblFileInfo1 = new System.Windows.Forms.Label();
+            this.lblDataBase_Dependencies = new System.Windows.Forms.Label();
             this.lblSampleCount_Value = new System.Windows.Forms.Label();
+            this.lblSamplesCount = new System.Windows.Forms.Label();
             this.lblFileInfo1_Value = new System.Windows.Forms.Label();
+            this.lblTotalSamples = new System.Windows.Forms.Label();
             this.lblSampleCount = new System.Windows.Forms.Label();
+            this.lstTotalSamples = new System.Windows.Forms.ListBox();
             this.lblFileInfo2 = new System.Windows.Forms.Label();
+            this.lblSFXsCount = new System.Windows.Forms.Label();
             this.lblSFXCount_Value = new System.Windows.Forms.Label();
+            this.lstSFXs = new System.Windows.Forms.ListBox();
             this.lblFileInfo2_Value = new System.Windows.Forms.Label();
+            this.lblTotalSFXs = new System.Windows.Forms.Label();
             this.lblSFXCount = new System.Windows.Forms.Label();
-            this.lblFileInfo3 = new System.Windows.Forms.Label();
-            this.lblDatabaseCount_Value = new System.Windows.Forms.Label();
-            this.lblFileInfo3_Value = new System.Windows.Forms.Label();
-            this.lblDatabaseCount = new System.Windows.Forms.Label();
-            this.lblFileInfo4 = new System.Windows.Forms.Label();
             this.lblFileInfo4_Value = new System.Windows.Forms.Label();
+            this.lblFileInfo3 = new System.Windows.Forms.Label();
+            this.lblFileInfo4 = new System.Windows.Forms.Label();
+            this.lblDatabaseCount_Value = new System.Windows.Forms.Label();
+            this.lblDatabaseCount = new System.Windows.Forms.Label();
+            this.lblFileInfo3_Value = new System.Windows.Forms.Label();
             this.grbMargins.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -101,100 +101,6 @@ namespace sb_editor.Forms
             this.grbMargins.TabIndex = 0;
             this.grbMargins.TabStop = false;
             // 
-            // btnOK
-            // 
-            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(281, 573);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 27;
-            this.btnOK.Text = "OK";
-            this.btnOK.UseVisualStyleBackColor = true;
-            // 
-            // lblDependenciesCount
-            // 
-            this.lblDependenciesCount.AutoSize = true;
-            this.lblDependenciesCount.Location = new System.Drawing.Point(307, 259);
-            this.lblDependenciesCount.Name = "lblDependenciesCount";
-            this.lblDependenciesCount.Size = new System.Drawing.Size(43, 13);
-            this.lblDependenciesCount.TabIndex = 26;
-            this.lblDependenciesCount.Text = "Total: 0";
-            // 
-            // lstDependencies
-            // 
-            this.lstDependencies.FormattingEnabled = true;
-            this.lstDependencies.HorizontalScrollbar = true;
-            this.lstDependencies.Location = new System.Drawing.Point(310, 31);
-            this.lstDependencies.Name = "lstDependencies";
-            this.lstDependencies.Size = new System.Drawing.Size(297, 225);
-            this.lstDependencies.Sorted = true;
-            this.lstDependencies.TabIndex = 25;
-            // 
-            // lblDataBase_Dependencies
-            // 
-            this.lblDataBase_Dependencies.AutoSize = true;
-            this.lblDataBase_Dependencies.Location = new System.Drawing.Point(307, 15);
-            this.lblDataBase_Dependencies.Name = "lblDataBase_Dependencies";
-            this.lblDataBase_Dependencies.Size = new System.Drawing.Size(169, 13);
-            this.lblDataBase_Dependencies.TabIndex = 24;
-            this.lblDataBase_Dependencies.Text = "Sound Bank File Dependencies: 0";
-            // 
-            // lblSamplesCount
-            // 
-            this.lblSamplesCount.AutoSize = true;
-            this.lblSamplesCount.Location = new System.Drawing.Point(307, 548);
-            this.lblSamplesCount.Name = "lblSamplesCount";
-            this.lblSamplesCount.Size = new System.Drawing.Size(43, 13);
-            this.lblSamplesCount.TabIndex = 23;
-            this.lblSamplesCount.Text = "Total: 0";
-            // 
-            // lblTotalSamples
-            // 
-            this.lblTotalSamples.AutoSize = true;
-            this.lblTotalSamples.Location = new System.Drawing.Point(307, 304);
-            this.lblTotalSamples.Name = "lblTotalSamples";
-            this.lblTotalSamples.Size = new System.Drawing.Size(77, 13);
-            this.lblTotalSamples.TabIndex = 22;
-            this.lblTotalSamples.Text = "Total Samples:";
-            // 
-            // lstTotalSamples
-            // 
-            this.lstTotalSamples.FormattingEnabled = true;
-            this.lstTotalSamples.HorizontalScrollbar = true;
-            this.lstTotalSamples.Location = new System.Drawing.Point(310, 320);
-            this.lstTotalSamples.Name = "lstTotalSamples";
-            this.lstTotalSamples.Size = new System.Drawing.Size(297, 225);
-            this.lstTotalSamples.Sorted = true;
-            this.lstTotalSamples.TabIndex = 21;
-            // 
-            // lblSFXsCount
-            // 
-            this.lblSFXsCount.AutoSize = true;
-            this.lblSFXsCount.Location = new System.Drawing.Point(12, 548);
-            this.lblSFXsCount.Name = "lblSFXsCount";
-            this.lblSFXsCount.Size = new System.Drawing.Size(43, 13);
-            this.lblSFXsCount.TabIndex = 20;
-            this.lblSFXsCount.Text = "Total: 0";
-            // 
-            // lstSFXs
-            // 
-            this.lstSFXs.FormattingEnabled = true;
-            this.lstSFXs.HorizontalScrollbar = true;
-            this.lstSFXs.Location = new System.Drawing.Point(9, 320);
-            this.lstSFXs.Name = "lstSFXs";
-            this.lstSFXs.Size = new System.Drawing.Size(295, 225);
-            this.lstSFXs.Sorted = true;
-            this.lstSFXs.TabIndex = 19;
-            // 
-            // lblTotalSFXs
-            // 
-            this.lblTotalSFXs.AutoSize = true;
-            this.lblTotalSFXs.Location = new System.Drawing.Point(6, 304);
-            this.lblTotalSFXs.Name = "lblTotalSFXs";
-            this.lblTotalSFXs.Size = new System.Drawing.Size(62, 13);
-            this.lblTotalSFXs.TabIndex = 18;
-            this.lblTotalSFXs.Text = "Total SFXs:";
-            // 
             // lblDataBaseName
             // 
             this.lblDataBaseName.AutoSize = true;
@@ -213,6 +119,16 @@ namespace sb_editor.Forms
             this.lblTotalSampleSize_Value.TabIndex = 53;
             this.lblTotalSampleSize_Value.Text = "label15";
             // 
+            // btnOK
+            // 
+            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnOK.Location = new System.Drawing.Point(281, 573);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(75, 23);
+            this.btnOK.TabIndex = 27;
+            this.btnOK.Text = "OK";
+            this.btnOK.UseVisualStyleBackColor = true;
+            // 
             // lblDataBaseName_Value
             // 
             this.lblDataBaseName_Value.AutoSize = true;
@@ -221,6 +137,15 @@ namespace sb_editor.Forms
             this.lblDataBaseName_Value.Size = new System.Drawing.Size(35, 13);
             this.lblDataBaseName_Value.TabIndex = 37;
             this.lblDataBaseName_Value.Text = "label1";
+            // 
+            // lblDependenciesCount
+            // 
+            this.lblDependenciesCount.AutoSize = true;
+            this.lblDependenciesCount.Location = new System.Drawing.Point(307, 259);
+            this.lblDependenciesCount.Name = "lblDependenciesCount";
+            this.lblDependenciesCount.Size = new System.Drawing.Size(43, 13);
+            this.lblDependenciesCount.TabIndex = 26;
+            this.lblDependenciesCount.Text = "Total: 0";
             // 
             // lblTotalSampleSize
             // 
@@ -231,6 +156,16 @@ namespace sb_editor.Forms
             this.lblTotalSampleSize.TabIndex = 52;
             this.lblTotalSampleSize.Text = "Total Sample Size:";
             // 
+            // lstDependencies
+            // 
+            this.lstDependencies.FormattingEnabled = true;
+            this.lstDependencies.HorizontalScrollbar = true;
+            this.lstDependencies.Location = new System.Drawing.Point(310, 31);
+            this.lstDependencies.Name = "lstDependencies";
+            this.lstDependencies.Size = new System.Drawing.Size(297, 225);
+            this.lstDependencies.Sorted = true;
+            this.lstDependencies.TabIndex = 25;
+            // 
             // lblFileInfo1
             // 
             this.lblFileInfo1.AutoSize = true;
@@ -239,6 +174,15 @@ namespace sb_editor.Forms
             this.lblFileInfo1.Size = new System.Drawing.Size(60, 13);
             this.lblFileInfo1.TabIndex = 38;
             this.lblFileInfo1.Text = "File Info #1";
+            // 
+            // lblDataBase_Dependencies
+            // 
+            this.lblDataBase_Dependencies.AutoSize = true;
+            this.lblDataBase_Dependencies.Location = new System.Drawing.Point(307, 15);
+            this.lblDataBase_Dependencies.Name = "lblDataBase_Dependencies";
+            this.lblDataBase_Dependencies.Size = new System.Drawing.Size(166, 13);
+            this.lblDataBase_Dependencies.TabIndex = 24;
+            this.lblDataBase_Dependencies.Text = "SoundBank File Dependencies: 0";
             // 
             // lblSampleCount_Value
             // 
@@ -249,6 +193,15 @@ namespace sb_editor.Forms
             this.lblSampleCount_Value.TabIndex = 51;
             this.lblSampleCount_Value.Text = "label9";
             // 
+            // lblSamplesCount
+            // 
+            this.lblSamplesCount.AutoSize = true;
+            this.lblSamplesCount.Location = new System.Drawing.Point(307, 548);
+            this.lblSamplesCount.Name = "lblSamplesCount";
+            this.lblSamplesCount.Size = new System.Drawing.Size(43, 13);
+            this.lblSamplesCount.TabIndex = 23;
+            this.lblSamplesCount.Text = "Total: 0";
+            // 
             // lblFileInfo1_Value
             // 
             this.lblFileInfo1_Value.AutoSize = true;
@@ -257,6 +210,15 @@ namespace sb_editor.Forms
             this.lblFileInfo1_Value.Size = new System.Drawing.Size(35, 13);
             this.lblFileInfo1_Value.TabIndex = 39;
             this.lblFileInfo1_Value.Text = "label1";
+            // 
+            // lblTotalSamples
+            // 
+            this.lblTotalSamples.AutoSize = true;
+            this.lblTotalSamples.Location = new System.Drawing.Point(307, 304);
+            this.lblTotalSamples.Name = "lblTotalSamples";
+            this.lblTotalSamples.Size = new System.Drawing.Size(77, 13);
+            this.lblTotalSamples.TabIndex = 22;
+            this.lblTotalSamples.Text = "Total Samples:";
             // 
             // lblSampleCount
             // 
@@ -267,6 +229,16 @@ namespace sb_editor.Forms
             this.lblSampleCount.TabIndex = 50;
             this.lblSampleCount.Text = "Sample Count:";
             // 
+            // lstTotalSamples
+            // 
+            this.lstTotalSamples.FormattingEnabled = true;
+            this.lstTotalSamples.HorizontalScrollbar = true;
+            this.lstTotalSamples.Location = new System.Drawing.Point(310, 320);
+            this.lstTotalSamples.Name = "lstTotalSamples";
+            this.lstTotalSamples.Size = new System.Drawing.Size(297, 225);
+            this.lstTotalSamples.Sorted = true;
+            this.lstTotalSamples.TabIndex = 21;
+            // 
             // lblFileInfo2
             // 
             this.lblFileInfo2.AutoSize = true;
@@ -275,6 +247,15 @@ namespace sb_editor.Forms
             this.lblFileInfo2.Size = new System.Drawing.Size(60, 13);
             this.lblFileInfo2.TabIndex = 40;
             this.lblFileInfo2.Text = "File Info #2";
+            // 
+            // lblSFXsCount
+            // 
+            this.lblSFXsCount.AutoSize = true;
+            this.lblSFXsCount.Location = new System.Drawing.Point(12, 548);
+            this.lblSFXsCount.Name = "lblSFXsCount";
+            this.lblSFXsCount.Size = new System.Drawing.Size(43, 13);
+            this.lblSFXsCount.TabIndex = 20;
+            this.lblSFXsCount.Text = "Total: 0";
             // 
             // lblSFXCount_Value
             // 
@@ -285,6 +266,16 @@ namespace sb_editor.Forms
             this.lblSFXCount_Value.TabIndex = 49;
             this.lblSFXCount_Value.Text = "label11";
             // 
+            // lstSFXs
+            // 
+            this.lstSFXs.FormattingEnabled = true;
+            this.lstSFXs.HorizontalScrollbar = true;
+            this.lstSFXs.Location = new System.Drawing.Point(9, 320);
+            this.lstSFXs.Name = "lstSFXs";
+            this.lstSFXs.Size = new System.Drawing.Size(295, 225);
+            this.lstSFXs.Sorted = true;
+            this.lstSFXs.TabIndex = 19;
+            // 
             // lblFileInfo2_Value
             // 
             this.lblFileInfo2_Value.AutoSize = true;
@@ -293,6 +284,15 @@ namespace sb_editor.Forms
             this.lblFileInfo2_Value.Size = new System.Drawing.Size(35, 13);
             this.lblFileInfo2_Value.TabIndex = 41;
             this.lblFileInfo2_Value.Text = "label3";
+            // 
+            // lblTotalSFXs
+            // 
+            this.lblTotalSFXs.AutoSize = true;
+            this.lblTotalSFXs.Location = new System.Drawing.Point(6, 304);
+            this.lblTotalSFXs.Name = "lblTotalSFXs";
+            this.lblTotalSFXs.Size = new System.Drawing.Size(62, 13);
+            this.lblTotalSFXs.TabIndex = 18;
+            this.lblTotalSFXs.Text = "Total SFXs:";
             // 
             // lblSFXCount
             // 
@@ -303,6 +303,15 @@ namespace sb_editor.Forms
             this.lblSFXCount.TabIndex = 48;
             this.lblSFXCount.Text = "SFX Count:";
             // 
+            // lblFileInfo4_Value
+            // 
+            this.lblFileInfo4_Value.AutoSize = true;
+            this.lblFileInfo4_Value.Location = new System.Drawing.Point(152, 93);
+            this.lblFileInfo4_Value.Name = "lblFileInfo4_Value";
+            this.lblFileInfo4_Value.Size = new System.Drawing.Size(35, 13);
+            this.lblFileInfo4_Value.TabIndex = 45;
+            this.lblFileInfo4_Value.Text = "label7";
+            // 
             // lblFileInfo3
             // 
             this.lblFileInfo3.AutoSize = true;
@@ -311,33 +320,6 @@ namespace sb_editor.Forms
             this.lblFileInfo3.Size = new System.Drawing.Size(60, 13);
             this.lblFileInfo3.TabIndex = 42;
             this.lblFileInfo3.Text = "File Info #3";
-            // 
-            // lblDatabaseCount_Value
-            // 
-            this.lblDatabaseCount_Value.AutoSize = true;
-            this.lblDatabaseCount_Value.Location = new System.Drawing.Point(152, 131);
-            this.lblDatabaseCount_Value.Name = "lblDatabaseCount_Value";
-            this.lblDatabaseCount_Value.Size = new System.Drawing.Size(41, 13);
-            this.lblDatabaseCount_Value.TabIndex = 47;
-            this.lblDatabaseCount_Value.Text = "label13";
-            // 
-            // lblFileInfo3_Value
-            // 
-            this.lblFileInfo3_Value.AutoSize = true;
-            this.lblFileInfo3_Value.Location = new System.Drawing.Point(152, 78);
-            this.lblFileInfo3_Value.Name = "lblFileInfo3_Value";
-            this.lblFileInfo3_Value.Size = new System.Drawing.Size(35, 13);
-            this.lblFileInfo3_Value.TabIndex = 43;
-            this.lblFileInfo3_Value.Text = "label5";
-            // 
-            // lblDatabaseCount
-            // 
-            this.lblDatabaseCount.AutoSize = true;
-            this.lblDatabaseCount.Location = new System.Drawing.Point(6, 131);
-            this.lblDatabaseCount.Name = "lblDatabaseCount";
-            this.lblDatabaseCount.Size = new System.Drawing.Size(87, 13);
-            this.lblDatabaseCount.TabIndex = 46;
-            this.lblDatabaseCount.Text = "Database Count:";
             // 
             // lblFileInfo4
             // 
@@ -348,14 +330,32 @@ namespace sb_editor.Forms
             this.lblFileInfo4.TabIndex = 44;
             this.lblFileInfo4.Text = "File Info #4";
             // 
-            // lblFileInfo4_Value
+            // lblDatabaseCount_Value
             // 
-            this.lblFileInfo4_Value.AutoSize = true;
-            this.lblFileInfo4_Value.Location = new System.Drawing.Point(152, 93);
-            this.lblFileInfo4_Value.Name = "lblFileInfo4_Value";
-            this.lblFileInfo4_Value.Size = new System.Drawing.Size(35, 13);
-            this.lblFileInfo4_Value.TabIndex = 45;
-            this.lblFileInfo4_Value.Text = "label7";
+            this.lblDatabaseCount_Value.AutoSize = true;
+            this.lblDatabaseCount_Value.Location = new System.Drawing.Point(152, 131);
+            this.lblDatabaseCount_Value.Name = "lblDatabaseCount_Value";
+            this.lblDatabaseCount_Value.Size = new System.Drawing.Size(41, 13);
+            this.lblDatabaseCount_Value.TabIndex = 47;
+            this.lblDatabaseCount_Value.Text = "label13";
+            // 
+            // lblDatabaseCount
+            // 
+            this.lblDatabaseCount.AutoSize = true;
+            this.lblDatabaseCount.Location = new System.Drawing.Point(6, 131);
+            this.lblDatabaseCount.Name = "lblDatabaseCount";
+            this.lblDatabaseCount.Size = new System.Drawing.Size(87, 13);
+            this.lblDatabaseCount.TabIndex = 46;
+            this.lblDatabaseCount.Text = "Database Count:";
+            // 
+            // lblFileInfo3_Value
+            // 
+            this.lblFileInfo3_Value.AutoSize = true;
+            this.lblFileInfo3_Value.Location = new System.Drawing.Point(152, 78);
+            this.lblFileInfo3_Value.Name = "lblFileInfo3_Value";
+            this.lblFileInfo3_Value.Size = new System.Drawing.Size(35, 13);
+            this.lblFileInfo3_Value.TabIndex = 43;
+            this.lblFileInfo3_Value.Text = "label5";
             // 
             // DataBasePropertiesForm
             // 

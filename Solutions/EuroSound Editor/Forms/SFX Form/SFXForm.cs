@@ -51,6 +51,10 @@ namespace sb_editor.Forms
             if (sfxDefaults)
             {
                 filepath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "SFX Defaults.txt");
+                if (!File.Exists(filepath))
+                {
+                    File.WriteAllText(filepath, string.Empty);
+                }
 
                 //Read Data
                 string systemIniPath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini");
@@ -121,7 +125,7 @@ namespace sb_editor.Forms
             if (tabCtrl.TabPages.Count > 0)
             {
                 tabCtrl.SelectedIndex = 0;
-                TabCtrl_SelectedIndexChanged(null, null);
+                TabCtrl_SelectedIndexChanged(null, EventArgs.Empty);
             }
         }
 
@@ -174,7 +178,7 @@ namespace sb_editor.Forms
                 tmrTabPageBlink.Start();
 
                 //Ask user what wants to do
-                if (MessageBox.Show("Are you sure you wish to Quit SFX without saving?", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show("Do you want to exit the SFX editor without saving first?", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     CloseSelectorAndShowMainForm();
                 }
@@ -344,36 +348,39 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnOK_Click(object sender, System.EventArgs e)
         {
-            //Check if is the default file or a common one
-            if (sfxDefaults)
+            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "System")) && Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs")))
             {
-                TabCtrl_Deselecting(null, null);
-                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "SFX Defaults.txt");
-                File.Delete(filePath);
-                File.Copy(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "Misc", tabCtrl.TabPages[0].Text + ".txt"), filePath);
-            }
-            else
-            {
-                //Remove previous SFXs
-                string commonFile = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", sfxFileName + ".txt");
-                File.Delete(commonFile);
-                foreach (string formatName in GlobalPrefs.CurrentProject.platformData.Keys)
+                //Check if is the default file or a common one
+                if (sfxDefaults)
                 {
-                    commonFile = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", formatName, sfxFileName + ".txt");
-                    File.Delete(commonFile);
+                    TabCtrl_Deselecting(null, null);
+                    string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "SFX Defaults.txt");
+                    File.Delete(filePath);
+                    File.Copy(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "Misc", tabCtrl.TabPages[0].Text + ".txt"), filePath);
                 }
-
-                //Save all Sfx File data
-                TabCtrl_Deselecting(null, null);
-                foreach (TabPage currentTab in tabCtrl.TabPages)
+                else
                 {
-                    string formatName = currentTab.Text;
-                    string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "Misc", formatName + ".txt");
-                    if (formatName.Equals("Common", System.StringComparison.OrdinalIgnoreCase))
+                    //Remove previous SFXs
+                    string commonFile = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", sfxFileName + ".txt");
+                    File.Delete(commonFile);
+                    foreach (string formatName in GlobalPrefs.CurrentProject.platformData.Keys)
                     {
-                        formatName = string.Empty;
+                        commonFile = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", formatName, sfxFileName + ".txt");
+                        File.Delete(commonFile);
                     }
-                    File.Copy(filePath, Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", formatName, sfxFileName + ".txt"));
+
+                    //Save all Sfx File data
+                    TabCtrl_Deselecting(null, null);
+                    foreach (TabPage currentTab in tabCtrl.TabPages)
+                    {
+                        string formatName = currentTab.Text;
+                        string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "Misc", formatName + ".txt");
+                        if (formatName.Equals("Common", System.StringComparison.OrdinalIgnoreCase))
+                        {
+                            formatName = string.Empty;
+                        }
+                        File.Copy(filePath, Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", formatName, sfxFileName + ".txt"));
+                    }
                 }
             }
 
@@ -405,7 +412,7 @@ namespace sb_editor.Forms
             }
 
             //Save current format
-            if (tabCtrl.SelectedTab != null)
+            if (tabCtrl.TabPages.Count > 0 && tabCtrl.SelectedTab != null)
             {
                 SaveSfxSamplePool(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "Misc", tabCtrl.SelectedTab.Text + ".txt"));
             }
@@ -417,9 +424,15 @@ namespace sb_editor.Forms
             //Load and show new format
             string formatName = tabCtrl.TabPages[tabCtrl.SelectedIndex].Text;
             string filepath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "Misc", formatName + ".txt");
-            SFX sfxFileData = TextFiles.ReadSfxFile(filepath);
-            UserControl_SamplePool.LoadData(sfxFileData);
-            UserControl_SamplePoolControl.LoadData(sfxFileData);
+            if (File.Exists(filepath))
+            {
+                SFX sfxFileData = TextFiles.ReadSfxFile(filepath);
+                UserControl_SamplePoolControl.LoadData(sfxFileData);
+                if (!sfxDefaults)
+                {
+                    UserControl_SamplePool.LoadData(sfxFileData);
+                }
+            }
 
             //Enable or disable delete format button
             btnRemoveFormat.Enabled = !tabCtrl.SelectedTab.Name.Equals("tabCommon");

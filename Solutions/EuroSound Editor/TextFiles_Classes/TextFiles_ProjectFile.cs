@@ -84,18 +84,9 @@ namespace sb_editor
                 }
 
                 //Add lists to project file
-                if (SoundBanks.Count > 0)
-                {
-                    projectData.SoundBanks = SoundBanks.ToArray();
-                }
-                if (DataBases.Count > 0)
-                {
-                    projectData.DataBases = DataBases.ToArray();
-                }
-                if (SFXs.Count > 0)
-                {
-                    projectData.SFXs = SFXs.ToArray();
-                }
+                projectData.SoundBanks = SoundBanks.ToArray();
+                projectData.DataBases = DataBases.ToArray();
+                projectData.SFXs = SFXs.ToArray();
             }
 
             return projectData;

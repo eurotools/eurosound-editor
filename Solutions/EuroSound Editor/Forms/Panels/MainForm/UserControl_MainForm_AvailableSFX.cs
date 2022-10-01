@@ -166,7 +166,7 @@ namespace sb_editor.Panels
             if (File.Exists(sfxDefaultPath) && File.ReadAllLines(sfxDefaultPath).Length > 8)
             {
                 //Ask user for a name
-                using (Frm_InputBox inputDiag = new Frm_InputBox() { Text = "Create New" })
+                using (Frm_InputBox inputDiag = new Frm_InputBox() { Text = "Create New SFX" })
                 {
                     string folderPath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs");
 
@@ -454,6 +454,7 @@ namespace sb_editor.Panels
 
                 //Update label
                 SfxInDataBase.lblSfxCount.Text = string.Format("Total: {0}", SfxInDataBase.lstSfxInDataBase.Items.Count);
+                SfxInDataBase.EnableOrDisableButton();
             }
             else
             {
@@ -479,119 +480,123 @@ namespace sb_editor.Panels
             //Save loaded tags
             List<string> LoadedLabels = new List<string>();
 
-            //Clear controls
-            lstTempSorted.Items.Clear();
-
-            //Get files that will be added to the list
-            string[] SfxToLoad;
-            if (keyWord.Equals("HighLighted"))
+            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs")))
             {
-                List<string> sfxTextFiles = new List<string>();
-                if (chkIconView.Checked)
-                {
-                    for (int i = 0; i < DataGrid_SFXs.SelectedRows.Count; i++)
-                    {
-                        sfxTextFiles.Add(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", DataGrid_SFXs.SelectedRows[i].Cells[1].Value + ".txt"));
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < lstAvailableSFXs.SelectedItems.Count; i++)
-                    {
-                        sfxTextFiles.Add(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", lstAvailableSFXs.SelectedItems[i] + ".txt"));
-                    }
-                }
-                SfxToLoad = sfxTextFiles.ToArray();
-            }
-            else if (keyWord.Equals("All"))
-            {
-                SfxToLoad = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
-            }
-            else
-            {
-                List<string> sfxDat = new List<string>();
-                string[] sfxTextFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
-                for (int i = 0; i < sfxTextFiles.Length; i++)
-                {
-                    string sfxLabel = Path.GetFileNameWithoutExtension(sfxTextFiles[i]);
-                    if (sfxLabel.Contains(keyWord))
-                    {
-                        sfxDat.Add(sfxTextFiles[i]);
-                    }
-                }
-                SfxToLoad = sfxDat.ToArray();
-            }
+                //Clear controls
+                lstTempSorted.Items.Clear();
 
-            //Load files
-            if (SfxToLoad != null)
-            {
-                //Clear data
-                lstAvailableSFXs.Items.Clear();
-                DataGrid_SFXs.Rows.Clear();
-
-                //Add items to a temporal list to sort them by the name or date. 
-                for (int i = 0; i < SfxToLoad.Length; i++)
+                //Get files that will be added to the list
+                string[] SfxToLoad;
+                if (keyWord.Equals("HighLighted"))
                 {
-                    string fileName = Path.GetFileNameWithoutExtension(SfxToLoad[i]);
-                    if (UserControl_RefineSFX.chkSortByDate.Checked)
-                    {
-                        string[] fileData = File.ReadAllLines(SfxToLoad[i]);
-                        string dateString = string.Empty;
-                        if (fileData.Length > 1)
-                        {
-                            if (fileData[1].StartsWith("## First Created ... "))
-                            {
-                                if (fileData[1].Contains("See VSS"))
-                                {
-                                    dateString = "020305";
-                                }
-                                else
-                                {
-                                    string fileLine = fileData[1].Substring("## First Created ... ".Length, "10-11-2001".Length);
-                                    dateString = string.Join(string.Empty, fileLine.Substring(8, 2), fileLine.Substring(0, 2), fileLine.Substring(3, 2));
-                                }
-                            }
-                        }
-                        lstTempSorted.Items.Add(new ListBoxItem(dateString, fileName));
-                    }
-                    else
-                    {
-                        lstTempSorted.Items.Add(new ListBoxItem(fileName, null));
-                    }
-
-                    //Save Label
-                    LoadedLabels.Add(fileName);
-                }
-
-                //Add SFX Labels to the final list. 
-                for (int i = 0; i < lstTempSorted.Items.Count; i++)
-                {
-                    string itemText = ((ListBoxItem)lstTempSorted.Items[i]).Text;
-                    if (UserControl_RefineSFX.chkSortByDate.Checked)
-                    {
-                        itemText = ((ListBoxItem)lstTempSorted.Items[i]).ItemData;
-                    }
-
+                    List<string> sfxTextFiles = new List<string>();
                     if (chkIconView.Checked)
                     {
-                        DataGrid_SFXs.Rows.Add(lvwImageList.Images[0], itemText);
+                        for (int i = 0; i < DataGrid_SFXs.SelectedRows.Count; i++)
+                        {
+                            sfxTextFiles.Add(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", DataGrid_SFXs.SelectedRows[i].Cells[1].Value + ".txt"));
+                        }
                     }
                     else
                     {
-                        lstAvailableSFXs.Items.Add(itemText);
+                        for (int i = 0; i < lstAvailableSFXs.SelectedItems.Count; i++)
+                        {
+                            sfxTextFiles.Add(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", lstAvailableSFXs.SelectedItems[i] + ".txt"));
+                        }
                     }
+                    SfxToLoad = sfxTextFiles.ToArray();
                 }
-
-                //Update label
-                if (chkIconView.Checked)
+                else if (keyWord.Equals("All"))
                 {
-                    UpdateListViewIcons();
-                    DataGrid_SFXs.ClearSelection();
-                    lblTotal_SFXs.Text = "Total: " + DataGrid_SFXs.Rows.Count;
+                    SfxToLoad = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
                 }
                 else
                 {
-                    lblTotal_SFXs.Text = "Total: " + lstAvailableSFXs.Items.Count;
+                    List<string> sfxDat = new List<string>();
+                    string[] sfxTextFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
+                    for (int i = 0; i < sfxTextFiles.Length; i++)
+                    {
+                        string sfxLabel = Path.GetFileNameWithoutExtension(sfxTextFiles[i]);
+                        if (sfxLabel.Contains(keyWord))
+                        {
+                            sfxDat.Add(sfxTextFiles[i]);
+                        }
+                    }
+                    SfxToLoad = sfxDat.ToArray();
+                }
+
+                //Load files
+                if (SfxToLoad != null)
+                {
+                    //Clear data
+                    lstAvailableSFXs.Items.Clear();
+                    DataGrid_SFXs.Rows.Clear();
+
+                    //Add items to a temporal list to sort them by the name or date. 
+                    for (int i = 0; i < SfxToLoad.Length; i++)
+                    {
+                        string fileName = Path.GetFileNameWithoutExtension(SfxToLoad[i]);
+                        if (UserControl_RefineSFX.chkSortByDate.Checked)
+                        {
+                            string[] fileData = File.ReadAllLines(SfxToLoad[i]);
+                            string dateString = string.Empty;
+                            if (fileData.Length > 1)
+                            {
+                                if (fileData[1].StartsWith("## First Created ... "))
+                                {
+                                    if (fileData[1].Contains("See VSS"))
+                                    {
+                                        dateString = "020305";
+                                    }
+                                    else
+                                    {
+                                        string fileLine = fileData[1].Substring("## First Created ... ".Length, "10-11-2001".Length);
+                                        dateString = string.Join(string.Empty, fileLine.Substring(8, 2), fileLine.Substring(0, 2), fileLine.Substring(3, 2));
+                                    }
+                                }
+                            }
+                            lstTempSorted.Items.Add(new ListBoxItem(dateString, fileName));
+                        }
+                        else
+                        {
+                            lstTempSorted.Items.Add(new ListBoxItem(fileName, null));
+                        }
+
+                        //Save Label
+                        LoadedLabels.Add(fileName);
+                    }
+
+                    //Add SFX Labels to the final list. 
+                    for (int i = 0; i < lstTempSorted.Items.Count; i++)
+                    {
+                        string itemText = ((ListBoxItem)lstTempSorted.Items[i]).Text;
+                        if (UserControl_RefineSFX.chkSortByDate.Checked)
+                        {
+                            itemText = ((ListBoxItem)lstTempSorted.Items[i]).ItemData;
+                        }
+
+                        if (chkIconView.Checked)
+                        {
+                            DataGrid_SFXs.Rows.Add(lvwImageList.Images[0], itemText);
+                        }
+                        else
+                        {
+                            lstAvailableSFXs.Items.Add(itemText);
+                        }
+                    }
+
+                    //Update label
+                    if (chkIconView.Checked)
+                    {
+                        UpdateListViewIcons();
+                        DataGrid_SFXs.ClearSelection();
+                        lblTotal_SFXs.Text = "Total: " + DataGrid_SFXs.Rows.Count;
+                    }
+                    else
+                    {
+                        lblTotal_SFXs.Text = "Total: " + lstAvailableSFXs.Items.Count;
+                    }
+                    EnableOrDisableButton();
                 }
             }
 
@@ -658,24 +663,30 @@ namespace sb_editor.Panels
             HashSet<string> AllSFXs = new HashSet<string>();
 
             //Inspect DataBases
-            string[] dataBases = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "DataBases"), "*.txt", SearchOption.TopDirectoryOnly);
-            for (int i = 0; i < dataBases.Length; i++)
+            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "DataBases")))
             {
-                string[] fileData = File.ReadAllLines(dataBases[i]);
-                int j = Array.IndexOf(fileData, "#DEPENDENCIES") + 1;
-                string currentLine = fileData[j];
-                while (!currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase))
+                string[] dataBases = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "DataBases"), "*.txt", SearchOption.TopDirectoryOnly);
+                for (int i = 0; i < dataBases.Length; i++)
                 {
-                    UsedSFXs.Add(currentLine);
-                    currentLine = fileData[j++];
+                    string[] fileData = File.ReadAllLines(dataBases[i]);
+                    int j = Array.IndexOf(fileData, "#DEPENDENCIES") + 1;
+                    string currentLine = fileData[j];
+                    while (!currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase))
+                    {
+                        UsedSFXs.Add(currentLine);
+                        currentLine = fileData[j++];
+                    }
                 }
             }
 
             //Get All Available SFXs
-            string[] SFXs = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
-            for (int i = 0; i < SFXs.Length; i++)
+            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs")))
             {
-                AllSFXs.Add(Path.GetFileNameWithoutExtension(SFXs[i]));
+                string[] SFXs = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
+                for (int i = 0; i < SFXs.Length; i++)
+                {
+                    AllSFXs.Add(Path.GetFileNameWithoutExtension(SFXs[i]));
+                }
             }
 
             return AllSFXs.Except(UsedSFXs).ToArray();
@@ -704,6 +715,7 @@ namespace sb_editor.Panels
 
                     //Update label
                     SfxInDataBase.lblSfxCount.Text = string.Format("Total: {0}", SfxInDataBase.lstSfxInDataBase.Items.Count);
+                    SfxInDataBase.EnableOrDisableButton();
                 }
             }
         }
@@ -711,22 +723,25 @@ namespace sb_editor.Panels
         //-------------------------------------------------------------------------------------------------------------------------------
         private void OpenSfxEditor()
         {
-            string sfxFileName;
+            string sfxFileName = string.Empty;
             if (chkIconView.Checked)
             {
                 sfxFileName = DataGrid_SFXs.SelectedRows[0].Cells[1].Value.ToString();
             }
-            else
+            else if (lstAvailableSFXs.SelectedItem != null)
             {
                 sfxFileName = lstAvailableSFXs.SelectedItem.ToString();
             }
 
             //Show form
-            SFXForm sfxEditor = new SFXForm(sfxFileName)
+            if (!string.IsNullOrEmpty(sfxFileName))
             {
-                StartPosition = ((MainForm)Application.OpenForms[nameof(MainForm)]).StartPosition
-            };
-            sfxEditor.Show();
+                SFXForm sfxEditor = new SFXForm(sfxFileName)
+                {
+                    StartPosition = ((MainForm)Application.OpenForms[nameof(MainForm)]).StartPosition
+                };
+                sfxEditor.Show();
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -802,6 +817,25 @@ namespace sb_editor.Panels
             }
 
             return SFXs;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public void EnableOrDisableButton()
+        {
+            bool status;
+            if (chkIconView.Checked)
+            {
+                status = DataGrid_SFXs.Rows.Count > 0;
+            }
+            else
+            {
+                status = lstAvailableSFXs.Items.Count > 0;
+            }
+            if (btnAddSFXs.Enabled != status)
+            {
+                btnAddSFXs.Enabled = status;
+                lblSFXsTutorial.Visible = !status;
+            }
         }
     }
 
