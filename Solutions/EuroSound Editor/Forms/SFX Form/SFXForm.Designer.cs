@@ -43,8 +43,8 @@ namespace sb_editor.Forms
             this.btnReverbTester = new System.Windows.Forms.Button();
             this.btnStopSFX = new System.Windows.Forms.Button();
             this.btnTestSFX = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtGameTime = new System.Windows.Forms.TextBox();
+            this.txtEsTime = new System.Windows.Forms.TextBox();
             this.UserControl_SamplePool = new sb_editor.Panels.UserControl_SamplePool();
             this.UserControl_SFX_Parameters = new sb_editor.Panels.UserControl_SFX_Parameters();
             this.UserControl_SamplePoolControl = new sb_editor.Panels.UserControl_SamplePoolControl();
@@ -98,8 +98,8 @@ namespace sb_editor.Forms
             this.pnlSFXParameters.Controls.Add(this.btnReverbTester);
             this.pnlSFXParameters.Controls.Add(this.btnStopSFX);
             this.pnlSFXParameters.Controls.Add(this.btnTestSFX);
-            this.pnlSFXParameters.Controls.Add(this.textBox2);
-            this.pnlSFXParameters.Controls.Add(this.textBox1);
+            this.pnlSFXParameters.Controls.Add(this.txtGameTime);
+            this.pnlSFXParameters.Controls.Add(this.txtEsTime);
             this.pnlSFXParameters.Controls.Add(this.UserControl_SamplePool);
             this.pnlSFXParameters.Controls.Add(this.UserControl_SFX_Parameters);
             this.pnlSFXParameters.Controls.Add(this.UserControl_SamplePoolControl);
@@ -215,21 +215,21 @@ namespace sb_editor.Forms
             // 
             // textBox2
             // 
-            this.textBox2.BackColor = System.Drawing.SystemColors.Window;
-            this.textBox2.Location = new System.Drawing.Point(787, 354);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(88, 20);
-            this.textBox2.TabIndex = 6;
+            this.txtGameTime.BackColor = System.Drawing.SystemColors.Window;
+            this.txtGameTime.Location = new System.Drawing.Point(787, 354);
+            this.txtGameTime.Name = "textBox2";
+            this.txtGameTime.ReadOnly = true;
+            this.txtGameTime.Size = new System.Drawing.Size(88, 20);
+            this.txtGameTime.TabIndex = 6;
             // 
             // textBox1
             // 
-            this.textBox1.BackColor = System.Drawing.SystemColors.Window;
-            this.textBox1.Location = new System.Drawing.Point(787, 328);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(88, 20);
-            this.textBox1.TabIndex = 5;
+            this.txtEsTime.BackColor = System.Drawing.SystemColors.Window;
+            this.txtEsTime.Location = new System.Drawing.Point(787, 328);
+            this.txtEsTime.Name = "textBox1";
+            this.txtEsTime.ReadOnly = true;
+            this.txtEsTime.Size = new System.Drawing.Size(88, 20);
+            this.txtEsTime.TabIndex = 5;
             // 
             // UserControl_SamplePool
             // 
@@ -458,8 +458,8 @@ namespace sb_editor.Forms
         private System.Windows.Forms.Button btnReverbTester;
         private System.Windows.Forms.Button btnStopSFX;
         private System.Windows.Forms.Button btnTestSFX;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtGameTime;
+        private System.Windows.Forms.TextBox txtEsTime;
         private System.Windows.Forms.TextBox txtHashCode;
         private System.Windows.Forms.Label lblHashCode;
         protected internal System.Windows.Forms.Panel pnlAlert;

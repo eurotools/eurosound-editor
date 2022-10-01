@@ -1,5 +1,5 @@
-﻿using sb_editor.Objects;
-using NAudio.Wave;
+﻿using NAudio.Wave;
+using sb_editor.Objects;
 using System;
 using System.IO;
 

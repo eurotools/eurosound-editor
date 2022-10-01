@@ -46,9 +46,9 @@ namespace sb_editor.Forms
 
                         //Get Current SoundBank Data
                         Query.Start();
-                        Dictionary<string, SFX> sbFileData = GetSfxDataDict(sbFunctions.GetSFXs(soundBankData.DataBases), outputPlatform[k], outLanguages[i]);
+                        Dictionary<string, SFX> sbFileData = sbFunctions.GetSfxDataDict(sbFunctions.GetSFXs(soundBankData.DataBases), outputPlatform[k], outLanguages[i]);
                         string[] samplesList = sbFunctions.GetSampleList(sbFileData, outLanguages[i]).Except(streamSamples).ToArray();
-                        UpdateDuckerLength(sbFileData, outputPlatform[k]);
+                        sbFunctions.UpdateDuckerLength(sbFileData, outputPlatform[k]);
                         Query.Stop();
 
                         //Get File Paths
@@ -70,12 +70,46 @@ namespace sb_editor.Forms
                             sw.WriteLine("SoundBankFileName = {0}", Path.ChangeExtension(outputTempFilePath, ".sfx"));
                             sw.WriteLine("Stream PoolFiles(n).FileRef");
 
-                            //Output temporal files
-                            long sampleBankSize = OutputTempFiles(hashCodesDict, sbFileData, samplesList, streamSamples, outputPlatform[k], outputTempFilePath, filesQueue[j], sw, isBigEndian, SFXData, Samples);
+                            //Write Temporal Files
+                            long sampleBankSize = 0;
+                            using (BinaryWriter sbfWritter = new BinaryWriter(File.Open(Path.ChangeExtension(outputTempFilePath, ".sbf"), FileMode.Create, FileAccess.Write, FileShare.Read)))
+                            {
+                                using (BinaryWriter sfxWritter = new BinaryWriter(File.Open(Path.ChangeExtension(outputTempFilePath, ".sfx"), FileMode.Create, FileAccess.Write, FileShare.Read)))
+                                {
+                                    using (BinaryWriter sifWritter = new BinaryWriter(File.Open(Path.ChangeExtension(outputTempFilePath, ".sif"), FileMode.Create, FileAccess.Write, FileShare.Read)))
+                                    {
+                                        List<byte[]> dspHeaderData = new List<byte[]>();
+
+                                        //Write SFX Data
+                                        SFXData.Start();
+                                        WriteSfxFile(hashCodesDict, sbFileData, samplesList, streamSamples, outputPlatform[k], filesQueue[j], sfxWritter, isBigEndian, sw);
+                                        SFXData.Stop();
+                                        if (!abortQuickOutput)
+                                        {
+                                            //Write SFX Samples
+                                            Samples.Start();
+                                            sampleBankSize = WriteSifFile(sifWritter, sbfWritter, samplesList, outputPlatform[k], dspHeaderData, isBigEndian);
+                                            Samples.Stop();
+
+                                            if (dspHeaderData.Count > 0)
+                                            {
+                                                using (BinaryWriter ssfWritter = new BinaryWriter(File.Open(Path.ChangeExtension(outputTempFilePath, ".ssf"), FileMode.Create, FileAccess.Write, FileShare.Read)))
+                                                {
+                                                    for (int l = 0; l < dspHeaderData.Count; l++)
+                                                    {
+                                                        ssfWritter.Write(dspHeaderData[l]);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            sampleBankSize = (long)Math.Round(decimal.Divide(sampleBankSize, 1024));
                             if (!abortQuickOutput)
                             {
                                 //Check Sample Bank Limit is not Exceeded
-                                long myMaxSize = GetMaxBankSize(outputPlatform[k], soundBankData);
+                                long myMaxSize = sbFunctions.GetMaxBankSize(outputPlatform[k], soundBankData);
                                 if (sampleBankSize > myMaxSize)
                                 {
                                     //Delete Files
@@ -121,95 +155,6 @@ namespace sb_editor.Forms
                     }
                 }
             }
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        private Dictionary<string, SFX> GetSfxDataDict(string[] sbSfxs, string platform, string language)
-        {
-            Dictionary<string, SFX> sfxFilesData = new Dictionary<string, SFX>();
-
-            for (int i = 0; i < sbSfxs.Length; i++)
-            {
-                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", platform, sbSfxs[i].TrimStart(Path.DirectorySeparatorChar) + ".txt");
-                if (!File.Exists(filePath))
-                {
-                    filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", sbSfxs[i].TrimStart(Path.DirectorySeparatorChar) + ".txt");
-                }
-
-                //Update Sample File Paths
-                SFX sfxData = TextFiles.ReadSfxFile(filePath);
-                foreach (SfxSample sampleData in sfxData.Samples)
-                {
-                    string samplePath = CommonFunctions.GetSampleFromSpeechFolder(sampleData.FilePath, language);
-                    if (!string.IsNullOrEmpty(filePath))
-                    {
-                        sampleData.FilePath = samplePath;
-                    }
-                }
-
-                //Add Data To Dictionary
-                sfxFilesData.Add(Path.GetFileNameWithoutExtension(filePath), sfxData);
-            }
-
-            return sfxFilesData;
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        private long GetMaxBankSize(string currentPlatform, SoundBank sbData)
-        {
-            long myMaxSize = 0;
-            string systemIniFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini");
-            if (File.Exists(systemIniFilePath))
-            {
-                //Max Sizes
-                IniFile systemIni = new IniFile(systemIniFilePath);
-                if (currentPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase))
-                {
-                    if (sbData.PCSize > 0)
-                    {
-                        myMaxSize = sbData.PCSize;
-                    }
-                    else
-                    {
-                        myMaxSize = Convert.ToUInt32(systemIni.Read("PCSize", "PropertiesForm"));
-                    }
-                }
-                else if (currentPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase))
-                {
-                    if (sbData.PlayStationSize > 0)
-                    {
-                        myMaxSize = sbData.PlayStationSize;
-                    }
-                    else
-                    {
-                        myMaxSize = Convert.ToUInt32(systemIni.Read("PlayStationSize", "PropertiesForm"));
-                    }
-                }
-                else if (currentPlatform.Equals("GameCube", StringComparison.OrdinalIgnoreCase))
-                {
-                    if (sbData.GameCubeSize > 0)
-                    {
-                        myMaxSize = sbData.GameCubeSize;
-                    }
-                    else
-                    {
-                        myMaxSize = Convert.ToUInt32(systemIni.Read("GameCubeSize", "PropertiesForm"));
-                    }
-                }
-                else
-                {
-                    if (sbData.XboxSize > 0)
-                    {
-                        myMaxSize = sbData.XboxSize;
-                    }
-                    else
-                    {
-                        myMaxSize = Convert.ToUInt32(systemIni.Read("XBoxSize", "PropertiesForm"));
-                    }
-                }
-            }
-
-            return myMaxSize;
         }
     }
 

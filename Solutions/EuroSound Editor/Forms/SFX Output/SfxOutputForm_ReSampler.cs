@@ -13,10 +13,6 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class SfxOutputForm
     {
-        private readonly WaveFunctions wavFunctions = new WaveFunctions();
-        private readonly ImaFunctions imaFunctions = new ImaFunctions();
-        private readonly AiffFunctions aiffFunctions = new AiffFunctions();
-
         //-------------------------------------------------------------------------------------------------------------------------------
         private void ResSample(SamplePool samplesList)
         {

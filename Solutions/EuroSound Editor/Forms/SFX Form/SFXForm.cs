@@ -1,6 +1,6 @@
-﻿using sb_editor.Objects;
+﻿using PcAudioTest;
+using sb_editor.Objects;
 using sb_editor.Panels;
-using PcAudioTest;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -296,6 +296,10 @@ namespace sb_editor.Forms
         //*===============================================================================================
         private void BtnTestSFX_Click(object sender, System.EventArgs e)
         {
+            //Create Test SFX
+            txtEsTime.Text = string.Format("ES Time {0:0.###}", CreateTestSfx());
+
+            //Run Game
             Stopwatch watch = Stopwatch.StartNew();
             if (!SfxTestMethods.GameIsOpen())
             {
@@ -311,7 +315,7 @@ namespace sb_editor.Forms
                 }
             }
             watch.Stop();
-            textBox2.Text = string.Format("GameBoot {0:0.###}", watch.Elapsed.TotalSeconds);
+            txtGameTime.Text = string.Format("GameBoot {0:0.###}", watch.Elapsed.TotalSeconds);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------

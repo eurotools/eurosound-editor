@@ -181,7 +181,7 @@ namespace sb_editor.Forms
             //-------------------------------------------------------------------------------[SFX_Reverbs.h]-------------------------------------------------------------------------------
             backgroundWorker1.ReportProgress(84, "Writing SFX_Defines.h Stage Pre Close");
             string reverbsFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "SFX_Reverbs.h");
-            Dictionary<string, uint> reverbsDict = GetHashCodesDictionary("Reverbs", "#MiscData");
+            Dictionary<string, uint> reverbsDict = sbFunctions.GetHashCodesDictionary("Reverbs", "#MiscData");
             using (StreamWriter sw = new StreamWriter(File.Open(reverbsFilePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
                 sw.WriteLine("// Reverb Hashcodes");

@@ -1,7 +1,7 @@
-﻿using sb_editor.Audio_Classes;
+﻿using NAudio.Wave;
+using sb_editor.Audio_Classes;
 using sb_editor.Forms;
 using sb_editor.Objects;
-using NAudio.Wave;
 using System;
 using System.Diagnostics;
 using System.Drawing;

@@ -1,6 +1,6 @@
-﻿using sb_editor.Custom_Controls;
+﻿using NAudio.Wave;
+using sb_editor.Custom_Controls;
 using sb_editor.Objects;
-using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

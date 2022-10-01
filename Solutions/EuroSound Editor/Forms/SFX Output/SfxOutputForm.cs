@@ -1,4 +1,6 @@
-﻿using sb_editor.Objects;
+﻿using sb_editor.Audio_Classes;
+using sb_editor.Classes;
+using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,11 +14,15 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class SfxOutputForm : TimerForm
     {
+        private readonly MainForm parentFormObj;
+        private readonly WaveFunctions wavFunctions = new WaveFunctions();
+        private readonly ImaFunctions imaFunctions = new ImaFunctions();
+        private readonly AiffFunctions aiffFunctions = new AiffFunctions();
+        private readonly SoundBankFunctions sbFunctions = new SoundBankFunctions();
         private readonly string[] filesQueue;
         private readonly string[] outputPlatform;
         private readonly string[] outLanguages;
         private readonly bool fastOutput;
-        private readonly MainForm parentFormObj;
         private bool abortQuickOutput = false;
         private double FullOutputTime = 0;
 
@@ -65,7 +71,7 @@ namespace sb_editor.Forms
             SamplePool samplesList = TextFiles.ReadSamplesFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "Samples.txt"));
 
             //Get HashCodes Dictionary
-            Dictionary<string, uint> HashCodesDict = GetHashCodesDictionary("SFXs", "#HASHCODE");
+            Dictionary<string, uint> HashCodesDict = sbFunctions.GetHashCodesDictionary("SFXs", "#HASHCODE");
 
             //Ensure that the debug folder exists
             DirectoryInfo debugFolder = Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "Debug_Report"));
@@ -134,34 +140,9 @@ namespace sb_editor.Forms
             }
             parentFormObj.Show();
 
-
             //Close Current Form
             Close();
         }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        private Dictionary<string, uint> GetHashCodesDictionary(string folder, string keyWord)
-        {
-            Dictionary<string, uint> HashCodesDict = new Dictionary<string, uint>(StringComparer.OrdinalIgnoreCase);
-
-            string[] files = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, folder), "*.txt", SearchOption.TopDirectoryOnly);
-            for (int i = 0; i < files.Length; i++)
-            {
-                string filePath = Path.GetFileNameWithoutExtension(files[i]);
-                if (!HashCodesDict.ContainsKey(filePath))
-                {
-                    string[] fileData = File.ReadAllLines(files[i]);
-                    int hashCodeIndex = Array.FindIndex(fileData, s => s.Equals(keyWord, StringComparison.OrdinalIgnoreCase));
-                    string[] data = fileData[hashCodeIndex + 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                    if (data.Length > 1)
-                    {
-                        HashCodesDict.Add(filePath, Convert.ToUInt32(data[1].Trim()));
-                    }
-                }
-            }
-
-            return HashCodesDict;
-        }        
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------

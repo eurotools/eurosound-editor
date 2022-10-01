@@ -1,7 +1,7 @@
 ﻿using ESUtils;
 using sb_editor.Audio_Classes;
+using sb_editor.Classes;
 using sb_editor.Objects;
-using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,53 +16,10 @@ namespace sb_editor.Forms
     public partial class SfxOutputForm
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        private long OutputTempFiles(Dictionary<string, uint> hashCodesDict, Dictionary<string, SFX> fileData, string[] sampleList, string[] streamsList, string outputPlatform, string outputPath, string outputBank, StreamWriter debugFile, bool isBigEndian, Stopwatch SFXData, Stopwatch Samples)
-        {
-            //Get Files Path
-            long sampleBankSize = 0;
-
-            //Write Temporal Files
-            using (BinaryWriter sbfWritter = new BinaryWriter(File.Open(Path.ChangeExtension(outputPath, ".sbf"), FileMode.Create, FileAccess.Write, FileShare.Read)))
-            {
-                using (BinaryWriter sfxWritter = new BinaryWriter(File.Open(Path.ChangeExtension(outputPath, ".sfx"), FileMode.Create, FileAccess.Write, FileShare.Read)))
-                {
-                    using (BinaryWriter sifWritter = new BinaryWriter(File.Open(Path.ChangeExtension(outputPath, ".sif"), FileMode.Create, FileAccess.Write, FileShare.Read)))
-                    {
-                        List<byte[]> dspHeaderData = new List<byte[]>();
-
-                        //Write SFX Data
-                        SFXData.Start();
-                        WriteSfxFile(hashCodesDict, fileData, sampleList, streamsList, outputPlatform, outputBank, sfxWritter, isBigEndian, debugFile);
-                        SFXData.Stop();
-                        if (!abortQuickOutput)
-                        {
-                            //Write SFX Samples
-                            Samples.Start();
-                            sampleBankSize = WriteSifFile(sifWritter, sbfWritter, sampleList, outputPlatform, dspHeaderData, isBigEndian);
-                            Samples.Stop();
-
-                            if (dspHeaderData.Count > 0)
-                            {
-                                using (BinaryWriter ssfWritter = new BinaryWriter(File.Open(Path.ChangeExtension(outputPath, ".ssf"), FileMode.Create, FileAccess.Write, FileShare.Read)))
-                                {
-                                    for (int i = 0; i < dspHeaderData.Count; i++)
-                                    {
-                                        ssfWritter.Write(dspHeaderData[i]);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            return (long)Math.Round(decimal.Divide(sampleBankSize, 1024));
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
         private void WriteSfxFile(Dictionary<string, uint> hashCodesDict, Dictionary<string, SFX> fileData, string[] sampleList, string[] streamsList, string outputPlatform, string outputBank, BinaryWriter sfxWritter, bool isBigEndian, StreamWriter debugFile)
         {
             List<long> sfxLut = new List<long>();
+            SoundBankFunctions sbFunctions = new SoundBankFunctions();
 
             //Sfx Header
             sfxWritter.Write(BytesFunctions.FlipInt32(fileData.Count, isBigEndian));
@@ -92,7 +49,7 @@ namespace sb_editor.Forms
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.Priority);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.Ducker);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.MasterVolume);
-                sfxWritter.Write((ushort)GetFlags(sfxData.Value));
+                sfxWritter.Write((ushort)sbFunctions.GetFlags(sfxData.Value));
 
                 //Calculate references
                 sfxWritter.Write(BytesFunctions.FlipUShort((ushort)sfxData.Value.Samples.Count, isBigEndian));
@@ -188,6 +145,7 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private long WriteSifFile(BinaryWriter sifWritter, BinaryWriter sbfWritter, string[] sampleList, string platform, List<byte[]> dspHeader, bool isBigEndian)
         {
+            SoundBankFunctions sbFunctions = new SoundBankFunctions();
             long sampleBankSize = 0;
             sifWritter.Write(BytesFunctions.FlipInt32(sampleList.Length, isBigEndian));
             for (int i = 0; i < sampleList.Length; i++)
@@ -214,7 +172,7 @@ namespace sb_editor.Forms
                         {
                             loopOffset = BytesFunctions.AlignNumber((uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, pcFileData.SampleRate, masterFileData.LoopStart * 2), 2);
                         }
-                        WriteSampleInfo(sifWritter, sbfWritter, masterFileData, pcFileData, BytesFunctions.AlignNumber((uint)pcFileData.Length, 4), (int)pcFileData.Length, i * 96, loopOffset, isBigEndian);
+                        sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, pcFileData, BytesFunctions.AlignNumber((uint)pcFileData.Length, 4), (int)pcFileData.Length, i * 96, loopOffset, isBigEndian);
 
                         //Write Sample Data
                         byte[] filedata = new byte[BytesFunctions.AlignNumber((uint)pcFileData.Length, 4)];
@@ -241,9 +199,8 @@ namespace sb_editor.Forms
                         WavInfo wavFileData = wavFunctions.ReadWaveProperties(wavFilePath);
                         if (File.Exists(dspFilePath))
                         {
-
                             byte[] dspData = CommonFunctions.RemoveFileHeader(dspFilePath, 96);
-                            dspHeader.Add(GetDspHeaderData(dspFilePath));
+                            dspHeader.Add(sbFunctions.GetDspHeaderData(dspFilePath));
 
                             //Write Header Data
                             uint loopOffset = 0;
@@ -251,7 +208,7 @@ namespace sb_editor.Forms
                             {
                                 loopOffset = (uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, wavFileData.SampleRate, masterFileData.LoopStart * 2);
                             }
-                            WriteSampleInfo(sifWritter, sbfWritter, masterFileData, wavFileData, BytesFunctions.AlignNumber((uint)dspData.Length, 32), dspData.Length, i * 96, loopOffset, isBigEndian);
+                            sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, wavFileData, BytesFunctions.AlignNumber((uint)dspData.Length, 32), dspData.Length, i * 96, loopOffset, isBigEndian);
 
                             //Write Sample Data
                             byte[] filedata = new byte[BytesFunctions.AlignNumber((uint)dspData.Length, 32)];
@@ -291,7 +248,7 @@ namespace sb_editor.Forms
                             {
                                 loopOffset = (uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, aifFileData.SampleRate, masterFileData.LoopStart * 2);
                             }
-                            WriteSampleInfo(sifWritter, sbfWritter, masterFileData, aifFileData, BytesFunctions.AlignNumber((uint)vagData.Length, 64), vagData.Length, i * 96, loopOffset, isBigEndian);
+                            sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, aifFileData, BytesFunctions.AlignNumber((uint)vagData.Length, 64), vagData.Length, i * 96, loopOffset, isBigEndian);
 
                             //Write Sample Data
                             byte[] filedata = new byte[BytesFunctions.AlignNumber((uint)vagData.Length, 64)];
@@ -329,7 +286,7 @@ namespace sb_editor.Forms
                             {
                                 loopOffset = CalculusLoopOffset.GetXboxAlignedNumber((uint)masterFileData.LoopStart);
                             }
-                            WriteSampleInfo(sifWritter, sbfWritter, masterFileData, wavFunctions.ReadWaveProperties(wavFilePath), (uint)adpcmData.Length, adpcmData.Length, i * 96, loopOffset, isBigEndian);
+                            sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, wavFunctions.ReadWaveProperties(wavFilePath), (uint)adpcmData.Length, adpcmData.Length, i * 96, loopOffset, isBigEndian);
 
                             //Write Sample Data
                             sbfWritter.Write(adpcmData);
@@ -350,145 +307,6 @@ namespace sb_editor.Forms
             }
 
             return sampleBankSize;
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        private void WriteSampleInfo(BinaryWriter sifWritter, BinaryWriter sbfWritter, WavInfo masterFileData, WavInfo wavFileData, uint lengthAligned, int formatLength, int psiSampleHeader, uint loopOffset, bool isBigEndian)
-        {
-            //Write Header Data
-            sifWritter.Write(BytesFunctions.FlipInt32(Convert.ToInt32(masterFileData.HasLoop), isBigEndian));
-            sifWritter.Write(BytesFunctions.FlipUInt32((uint)sbfWritter.BaseStream.Position, isBigEndian));
-            sifWritter.Write(BytesFunctions.FlipUInt32(lengthAligned, isBigEndian));
-            sifWritter.Write(BytesFunctions.FlipInt32(wavFileData.SampleRate, isBigEndian));
-            sifWritter.Write(BytesFunctions.FlipInt32(formatLength, isBigEndian));
-            sifWritter.Write(BytesFunctions.FlipInt32(wavFileData.Channels, isBigEndian));
-            sifWritter.Write(BytesFunctions.FlipInt32(4, isBigEndian));
-            sifWritter.Write(BytesFunctions.FlipInt32(psiSampleHeader, isBigEndian));
-            sifWritter.Write(BytesFunctions.FlipUInt32(loopOffset, isBigEndian));
-            sifWritter.Write((uint)masterFileData.TotalTime.TotalMilliseconds);
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        private void UpdateDuckerLength(Dictionary<string, SFX> fileData, string outputPlatform)
-        {
-            foreach (KeyValuePair<string, SFX> soundToCheck in fileData)
-            {
-                int duckerLength = 0;
-                if (soundToCheck.Value.Parameters.Ducker > 0)
-                {
-                    //Get Length of all samples
-                    foreach (SfxSample sampleToCheck in soundToCheck.Value.Samples)
-                    {
-                        string sampleFilePath = Path.Combine(GlobalPrefs.ProjectFolder, outputPlatform, sampleToCheck.FilePath.TrimStart(Path.DirectorySeparatorChar));
-                        if (outputPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase))
-                        {
-                            sampleFilePath = Path.ChangeExtension(sampleFilePath, ".aif");
-                            if (File.Exists(sampleFilePath))
-                            {
-                                using (AiffFileReader reader = new AiffFileReader(sampleFilePath))
-                                {
-                                    decimal cents = Math.Round(decimal.Divide((decimal)reader.TotalTime.TotalMilliseconds, 10));
-                                    duckerLength += (int)cents;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (File.Exists(sampleFilePath))
-                            {
-                                using (WaveFileReader reader = new WaveFileReader(sampleFilePath))
-                                {
-                                    decimal cents = Math.Round(decimal.Divide((decimal)reader.TotalTime.TotalMilliseconds, 10));
-                                    duckerLength += (int)cents;
-                                }
-                            }
-                        }
-                    }
-
-                    //Apply Value
-                    if (soundToCheck.Value.Parameters.DuckerLength < 0)
-                    {
-                        duckerLength -= Math.Abs(soundToCheck.Value.Parameters.DuckerLength);
-                    }
-                    else
-                    {
-                        duckerLength += Math.Abs(soundToCheck.Value.Parameters.DuckerLength);
-                    }
-                    soundToCheck.Value.Parameters.DuckerLength = duckerLength;
-                }
-            }
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        private int GetFlags(SFX sfxFile)
-        {
-            int flags = 0;
-            if (sfxFile.Parameters.Action1 == 1)
-            {
-                flags |= 1 << 0;
-            }
-            if (sfxFile.Parameters.Doppler)
-            {
-                flags |= 1 << 1;
-            }
-            if (sfxFile.Parameters.IgnoreAge)
-            {
-                flags |= 1 << 2;
-            }
-            if (sfxFile.SamplePool.Action1 == 1)
-            {
-                flags |= 1 << 3;
-            }
-            if (sfxFile.SamplePool.RandomPick)
-            {
-                flags |= 1 << 4;
-            }
-            if (sfxFile.SamplePool.Shuffled)
-            {
-                flags |= 1 << 5;
-            }
-            if (sfxFile.SamplePool.isLooped)
-            {
-                flags |= 1 << 6;
-            }
-            if (sfxFile.SamplePool.Polyphonic)
-            {
-                flags |= 1 << 7;
-            }
-            if (sfxFile.Parameters.Outdoors)
-            {
-                flags |= 1 << 8;
-            }
-            if (sfxFile.Parameters.PauseInNis)
-            {
-                flags |= 1 << 9;
-            }
-            if (sfxFile.SamplePool.EnableSubSFX)
-            {
-                flags |= 1 << 10;
-            }
-            if (sfxFile.Parameters.StealOnAge)
-            {
-                flags |= 1 << 11;
-            }
-            if (sfxFile.Parameters.MusicType)
-            {
-                flags |= 1 << 12;
-            }
-            return flags;
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        private byte[] GetDspHeaderData(string dspFilePath)
-        {
-            byte[] dspFileWithHeader = File.ReadAllBytes(dspFilePath);
-            byte[] dspHeaderData = new byte[96];
-            if (dspFileWithHeader.Length > 95)
-            {
-                Array.Copy(dspFileWithHeader, 0, dspHeaderData, 0, 96);
-            }
-
-            return dspHeaderData;
         }
     }
 

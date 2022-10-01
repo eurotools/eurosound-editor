@@ -51,7 +51,10 @@ namespace sb_editor
             {
                 IniFile iniFile = new IniFile(iniFilePath);
                 GlobalPrefs.ProjectFolder = iniFile.Read("Last_Project_Opened", "Form1_Misc");
-                frmMainForm.RecentFilesMenu.AddFile(GlobalPrefs.ProjectFolder);
+                if (!string.IsNullOrEmpty(GlobalPrefs.ProjectFolder))
+                {
+                    frmMainForm.RecentFilesMenu.AddFile(GlobalPrefs.ProjectFolder);
+                }
                 GlobalPrefs.EuroSoundUser = iniFile.Read("UserName", "Form1_Misc");
             }
 

@@ -1,5 +1,5 @@
-﻿using sb_editor.Classes;
-using Microsoft.VisualBasic;
+﻿using Microsoft.VisualBasic;
+using sb_editor.Classes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
