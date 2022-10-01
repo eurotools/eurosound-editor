@@ -17,7 +17,7 @@ namespace sb_editor
             GroupFile dataBase = new GroupFile();
             List<string> dependencies = new List<string>();
 
-            using (StreamReader sr = new StreamReader(File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read)))
+            using (StreamReader sr = new StreamReader(File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read), new UTF8Encoding(false)))
             {
                 while (!sr.EndOfStream)
                 {
@@ -96,7 +96,7 @@ namespace sb_editor
             fileData.HeaderData.ModifiedBy = GlobalPrefs.EuroSoundUser;
 
             //Update Text File
-            using (StreamWriter outputFile = new StreamWriter(File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read), Encoding.UTF8))
+            using (StreamWriter outputFile = new StreamWriter(File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read), new UTF8Encoding(false)))
             {
                 WriteHeader(outputFile, string.Empty, fileData.HeaderData);
                 outputFile.WriteLine("#DEPENDENCIES");

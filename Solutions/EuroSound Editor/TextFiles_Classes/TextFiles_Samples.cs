@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace sb_editor
 {
@@ -16,7 +17,7 @@ namespace sb_editor
         {
             SamplePool samplePool = new SamplePool();
 
-            using (StreamReader sr = new StreamReader(File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read)))
+            using (StreamReader sr = new StreamReader(File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read), new UTF8Encoding(false)))
             {
                 while (!sr.EndOfStream)
                 {
@@ -116,7 +117,7 @@ namespace sb_editor
             samplesFile.HeaderData.ModifiedBy = GlobalPrefs.EuroSoundUser;
 
             //Update text file
-            using (StreamWriter outputFile = new StreamWriter(File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
+            using (StreamWriter outputFile = new StreamWriter(File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read), new UTF8Encoding(false)))
             {
                 WriteHeader(outputFile, "Samples", samplesFile.HeaderData);
                 outputFile.WriteLine("#AvailableSamples");

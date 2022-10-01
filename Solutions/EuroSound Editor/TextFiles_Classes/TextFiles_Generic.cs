@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace sb_editor
 {
@@ -98,7 +99,7 @@ namespace sb_editor
         public static string ReadFileVersion(string filePath)
         {
             string fileVersion = "0";
-            using (StreamReader sr = new StreamReader(File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read)))
+            using (StreamReader sr = new StreamReader(File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read), new UTF8Encoding(false)))
             {
                 while (!sr.EndOfStream)
                 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace sb_editor
 {
@@ -14,7 +15,7 @@ namespace sb_editor
         {
             List<string> jumpHashCodes = new List<string>();
 
-            using (StreamReader sr = new StreamReader(File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read)))
+            using (StreamReader sr = new StreamReader(File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read), new UTF8Encoding(false)))
             {
                 while (!sr.EndOfStream)
                 {

@@ -14,7 +14,7 @@ namespace sb_editor
         public static SFX ReadSfxFile(string filePath)
         {
             SFX sfxData = new SFX();
-            using (StreamReader sr = new StreamReader(File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read)))
+            using (StreamReader sr = new StreamReader(File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read), new UTF8Encoding(false)))
             {
                 while (!sr.EndOfStream)
                 {
@@ -231,7 +231,7 @@ namespace sb_editor
 
             //Update text file
             string tmpFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "TempFileName.txt");
-            using (StreamWriter outputFile = new StreamWriter(File.Open(tmpFilePath, FileMode.Create, FileAccess.Write, FileShare.Read), Encoding.UTF8))
+            using (StreamWriter outputFile = new StreamWriter(File.Open(tmpFilePath, FileMode.Create, FileAccess.Write, FileShare.Read), new UTF8Encoding(false)))
             {
                 if (defaultsFile)
                 {

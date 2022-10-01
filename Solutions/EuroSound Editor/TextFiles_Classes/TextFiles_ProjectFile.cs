@@ -20,7 +20,7 @@ namespace sb_editor
             HashSet<string> DataBases = new HashSet<string>();
             HashSet<string> SFXs = new HashSet<string>();
 
-            using (StreamReader sr = new StreamReader(File.Open(projectFilePath, FileMode.Open, FileAccess.Read, FileShare.Read)))
+            using (StreamReader sr = new StreamReader(File.Open(projectFilePath, FileMode.Open, FileAccess.Read, FileShare.Read), new UTF8Encoding(false)))
             {
                 while (!sr.EndOfStream)
                 {
@@ -115,7 +115,7 @@ namespace sb_editor
             projectFile.HeaderData.ModifiedBy = GlobalPrefs.EuroSoundUser;
 
             //Update text file
-            using (StreamWriter outputFile = new StreamWriter(File.Open(projectFilePath, FileMode.Create, FileAccess.Write, FileShare.Read), Encoding.UTF8))
+            using (StreamWriter outputFile = new StreamWriter(File.Open(projectFilePath, FileMode.Create, FileAccess.Write, FileShare.Read), new UTF8Encoding(false)))
             {
                 WriteHeader(outputFile, "EuroSound Project File", projectFile.HeaderData);
                 outputFile.WriteLine("#SoundBankList");

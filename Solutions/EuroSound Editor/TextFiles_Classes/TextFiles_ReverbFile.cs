@@ -18,7 +18,7 @@ namespace sb_editor
                 TextFileName = Path.GetFileNameWithoutExtension(filePath)
             };
 
-            using (StreamReader sr = new StreamReader(File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read)))
+            using (StreamReader sr = new StreamReader(File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read), new UTF8Encoding(false)))
             {
                 while (!sr.EndOfStream)
                 {
@@ -95,7 +95,7 @@ namespace sb_editor
         //-------------------------------------------------------------------------------------------------------------------------------
         public static void WriteReverbFile(ReverbFile fileData, string filePath)
         {
-            using (StreamWriter outputFile = new StreamWriter(File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read), Encoding.UTF8))
+            using (StreamWriter outputFile = new StreamWriter(File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read), new UTF8Encoding(false)))
             {
                 outputFile.WriteLine("#MiscData");
                 outputFile.WriteLine("HashCode  {0}", fileData.HashCode);

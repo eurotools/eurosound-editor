@@ -16,7 +16,7 @@ namespace sb_editor
         {
             Misc MiscFileData = new Misc();
 
-            using (StreamReader sr = new StreamReader(File.Open(miscFilePath, FileMode.Open, FileAccess.Read, FileShare.Read)))
+            using (StreamReader sr = new StreamReader(File.Open(miscFilePath, FileMode.Open, FileAccess.Read, FileShare.Read), new UTF8Encoding(false)))
             {
                 while (!sr.EndOfStream)
                 {
@@ -97,7 +97,7 @@ namespace sb_editor
         //-------------------------------------------------------------------------------------------------------------------------------
         public static void WriteMiscFile(string miscFilePath, bool newProject = false)
         {
-            using (StreamWriter sw = new StreamWriter(File.Open(miscFilePath, FileMode.Create, FileAccess.Write, FileShare.Read), Encoding.UTF8))
+            using (StreamWriter sw = new StreamWriter(File.Open(miscFilePath, FileMode.Create, FileAccess.Write, FileShare.Read), new UTF8Encoding(false)))
             {
                 if (newProject)
                 {
