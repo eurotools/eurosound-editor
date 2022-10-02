@@ -112,6 +112,12 @@ namespace sb_editor.Forms
                 //Show parameters
                 UserControl_SFX_Parameters.LoadData(sfxFileData);
             }
+            else
+            {
+                MessageBox.Show(string.Format("File Not Found: {0}", filepath), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DialogResult = DialogResult.OK;
+                Close();
+            }
 
             //Add a tab for each specific format and disable button
             foreach (string formatName in GlobalPrefs.CurrentProject.platformData.Keys)
