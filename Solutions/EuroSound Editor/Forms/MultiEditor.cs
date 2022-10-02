@@ -11,7 +11,7 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class MultiEditor : Form
     {
-        readonly string[] sfxFiles;
+        private readonly string[] sfxFiles;
 
         //-------------------------------------------------------------------------------------------------------------------------------
         public MultiEditor(string[] filesToRead)

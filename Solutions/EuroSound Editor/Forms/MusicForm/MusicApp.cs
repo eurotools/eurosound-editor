@@ -356,7 +356,7 @@ namespace sb_editor.Forms
                             MusicFile musicFileData = TextFiles.ReadMusicFile(propsFile);
                             if (musicFileData.HashCode < 0)
                             {
-                                musicFileData.HashCode = (int)GlobalPrefs.MFXHashCodeNumber++;
+                                musicFileData.HashCode = GlobalPrefs.MFXHashCodeNumber++;
                             }
                             itemToAdd.SubItems[1].Text = musicFileData.Volume.ToString();
                             itemToAdd.SubItems[3].Text = musicFileData.HashCode.ToString();
@@ -390,7 +390,7 @@ namespace sb_editor.Forms
                             MusicFile musicFileData = new MusicFile
                             {
                                 Volume = 100,
-                                HashCode = (int)GlobalPrefs.MFXHashCodeNumber++
+                                HashCode = GlobalPrefs.MFXHashCodeNumber++
                             };
                             itemToAdd.SubItems[1].Text = musicFileData.Volume.ToString();
                             itemToAdd.SubItems[2].Text = "NewFile";
