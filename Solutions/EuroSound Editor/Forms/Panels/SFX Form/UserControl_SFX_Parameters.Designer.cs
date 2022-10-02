@@ -574,6 +574,7 @@ namespace sb_editor.Panels
             this.Highlighted.FillStyle = Microsoft.VisualBasic.PowerPacks.FillStyle.Solid;
             this.Highlighted.Location = new System.Drawing.Point(2, 122);
             this.Highlighted.Name = "Highlighted";
+            this.Highlighted.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.Highlighted.Size = new System.Drawing.Size(439, 18);
             // 
             // Trackbar_OuterRadius
