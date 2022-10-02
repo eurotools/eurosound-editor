@@ -249,7 +249,7 @@ namespace sb_editor
         //*===============================================================================================
         private void BtnAddSampleRate_Click(object sender, EventArgs e)
         {
-            using (Frm_InputBox inputForm = new Frm_InputBox())
+            using (Frm_InputBox inputForm = new Frm_InputBox() { Text = "New Re-sample Name" })
             {
                 inputForm.lblText.Text = "Enter New Re-sample Rate Name";
                 inputForm.txtInputData.Text = GetReSampleName();

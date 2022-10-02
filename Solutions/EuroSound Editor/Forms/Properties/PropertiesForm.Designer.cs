@@ -566,7 +566,7 @@ namespace sb_editor
             // chkPreviewCommands
             // 
             this.chkPreviewCommands.AutoSize = true;
-            this.chkPreviewCommands.Location = new System.Drawing.Point(339, 150);
+            this.chkPreviewCommands.Location = new System.Drawing.Point(329, 150);
             this.chkPreviewCommands.Name = "chkPreviewCommands";
             this.chkPreviewCommands.Size = new System.Drawing.Size(206, 17);
             this.chkPreviewCommands.TabIndex = 21;
@@ -576,7 +576,7 @@ namespace sb_editor
             // chkPrefixHashCodes
             // 
             this.chkPrefixHashCodes.AutoSize = true;
-            this.chkPrefixHashCodes.Location = new System.Drawing.Point(339, 133);
+            this.chkPrefixHashCodes.Location = new System.Drawing.Point(329, 133);
             this.chkPrefixHashCodes.Name = "chkPrefixHashCodes";
             this.chkPrefixHashCodes.Size = new System.Drawing.Size(207, 17);
             this.chkPrefixHashCodes.TabIndex = 20;
