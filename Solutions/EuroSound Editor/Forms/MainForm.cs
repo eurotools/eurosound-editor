@@ -1,5 +1,6 @@
 ﻿using sb_editor.Classes;
 using sb_editor.Objects;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using static sb_editor.Classes.MostRecentFilesMenu;
@@ -111,7 +112,7 @@ namespace sb_editor
                     Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "X Box"));
                     Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "Misc"));
                     TextFiles.WriteProjectFile(Path.Combine(GlobalPrefs.ProjectFolder, "Project.txt"), new ProjectFile());
-                    TextFiles.WritePropertiesFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt"), new ProjProperties() { SampleFilesFolder = Application.StartupPath });
+                    TextFiles.WritePropertiesFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt"), new ProjProperties() { ResampleRates = new List<string>() { "Default" } });
                     TextFiles.WriteRefine(Path.Combine(GlobalPrefs.ProjectFolder, "System", "RefineSearch.txt"), new string[] { "All", "HighLighted" });
                     TextFiles.WriteMiscFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "Misc.txt"), true);
 

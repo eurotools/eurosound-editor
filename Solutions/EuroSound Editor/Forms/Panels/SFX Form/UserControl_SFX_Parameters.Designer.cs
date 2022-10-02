@@ -371,7 +371,7 @@ namespace sb_editor.Panels
             this.txtOuterRadius.Size = new System.Drawing.Size(52, 20);
             this.txtOuterRadius.TabIndex = 11;
             this.txtOuterRadius.Text = "0";
-            this.txtOuterRadius.TextChanged += new System.EventHandler(this.TxtOuterRadius_TextChanged);
+            this.txtOuterRadius.Validated += new System.EventHandler(this.TxtOuterRadius_Validated);
             // 
             // lblOuterRadius
             // 
@@ -391,7 +391,7 @@ namespace sb_editor.Panels
             this.txtInnerRadius.Size = new System.Drawing.Size(52, 20);
             this.txtInnerRadius.TabIndex = 8;
             this.txtInnerRadius.Text = "0";
-            this.txtInnerRadius.TextChanged += new System.EventHandler(this.TxtInnerRadius_TextChanged);
+            this.txtInnerRadius.Validated += new System.EventHandler(this.TxtInnerRadius_Validated);
             // 
             // lblInnerRadius
             // 

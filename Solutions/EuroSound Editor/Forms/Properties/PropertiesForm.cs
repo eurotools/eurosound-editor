@@ -196,9 +196,22 @@ namespace sb_editor
             string selectedFormat = cboAvailableFormats.SelectedItem.ToString();
             if (!temporalObj.platformData.ContainsKey(selectedFormat))
             {
+                //Create new platform data
                 PlatformData formatPlatformData = new PlatformData { OutputFolder = "Set Output Folder.", AutoReSample = true };
+                for (int i = 0; i < temporalObj.ResampleRates.Count; i++)
+                {
+                    formatPlatformData.ReSampleRates.Add(22050);
+                }
+
+                //Add data
                 temporalObj.platformData.Add(selectedFormat, formatPlatformData);
                 lvwAvailableFormats.Items.Add(new ListViewItem(new string[] { selectedFormat, formatPlatformData.OutputFolder, formatPlatformData.AutoReSample ? "On" : "Off" }));
+
+                //Update Combobox
+                if (!cboFormat.Items.Contains(selectedFormat))
+                {
+                    cboFormat.Items.Add(selectedFormat);
+                }
             }
         }
 
@@ -245,13 +258,22 @@ namespace sb_editor
                     if (lstAvailableSampleRates.FindStringExact(inputForm.txtInputData.Text) == ListBox.NoMatches)
                     {
                         lstAvailableSampleRates.Items.Add(inputForm.txtInputData.Text);
-                        lvwReSampleFormats.Items.Add(new ListViewItem(new string[] { inputForm.txtInputData.Text, "22050" }));
+                        if (cboFormat.SelectedItem != null)
+                        {
+                            lvwReSampleFormats.Items.Add(new ListViewItem(new string[] { inputForm.txtInputData.Text, "22050" }));
+                        }
 
                         //Update All Formats & Project File
                         temporalObj.ResampleRates.Add(inputForm.txtInputData.Text);
                         foreach (KeyValuePair<string, PlatformData> formatInfo in temporalObj.platformData)
                         {
                             formatInfo.Value.ReSampleRates.Add(22050);
+                        }
+
+                        //Add Resample to combobox
+                        if (!cboDefaultRate.Items.Contains(inputForm.txtInputData.Text))
+                        {
+                            cboDefaultRate.Items.Add(inputForm.txtInputData.Text);
                         }
                     }
                 }
@@ -275,8 +297,6 @@ namespace sb_editor
                     {
                         lvwReSampleFormats.Items.Add(new ListViewItem(new string[] { temporalObj.ResampleRates[i].ToString(), formatRates[i].ToString() }));
                     }
-                    lvwReSampleFormats.Columns[0].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
-                    lvwReSampleFormats.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.HeaderSize);
                     lvwReSampleFormats.EndUpdate();
                 }
             }
@@ -299,7 +319,11 @@ namespace sb_editor
                         {
                             //Update subitem && dictionary
                             lvwReSampleFormats.SelectedItems[0].SubItems[1].Text = inputBox.txtInputData.Text;
-                            temporalObj.platformData[cboFormat.SelectedItem.ToString()].ReSampleRates[2] = inputSampleRate;
+                            string formatToUpdate = cboFormat.SelectedItem.ToString();
+                            if (temporalObj.platformData.ContainsKey(formatToUpdate))
+                            {
+                                temporalObj.platformData[formatToUpdate].ReSampleRates[lvwReSampleFormats.SelectedItems[0].Index] = inputSampleRate;
+                            }
                         }
                         else
                         {

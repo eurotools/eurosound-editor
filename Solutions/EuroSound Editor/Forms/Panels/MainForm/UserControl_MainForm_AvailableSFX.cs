@@ -458,7 +458,14 @@ namespace sb_editor.Panels
             }
             else
             {
-                SystemSounds.Beep.Play();
+                if (AvailableDataBases.lstDataBases.Items.Count > 0)
+                {
+                    MessageBox.Show("There isn't any DataBase selected where to add this SFX. Select a DataBase and try again.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                else
+                {
+                    MessageBox.Show("There isn't any DataBase where to add this SFX to, yet. Create a new DataBase first by right-clicking in the Available DataBases list and try again.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using sb_editor.Forms;
 using sb_editor.Objects;
 using System;
+using System.Media;
 using System.Windows.Forms;
 
 namespace sb_editor.Panels
@@ -14,17 +15,10 @@ namespace sb_editor.Panels
         public UserControl_SFX_Parameters()
         {
             InitializeComponent();
+
             //Reverb Track Bar
             txtReverbSend.DataBindings.Add(new Binding("Text", TrackBar_ReverbSend, "Value"));
             TrackBar_ReverbSend.DataBindings.Add(new Binding("Value", txtReverbSend, "Text"));
-
-            //Inner Radius Track Bar
-            txtInnerRadius.DataBindings.Add(new Binding("Text", Trackbar_InnerRadius, "Value"));
-            Trackbar_InnerRadius.DataBindings.Add(new Binding("Value", txtInnerRadius, "Text"));
-
-            //Reverb Track Bar
-            txtOuterRadius.DataBindings.Add(new Binding("Text", Trackbar_OuterRadius, "Value"));
-            Trackbar_OuterRadius.DataBindings.Add(new Binding("Value", txtOuterRadius, "Text"));
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -81,6 +75,7 @@ namespace sb_editor.Panels
             {
                 Trackbar_OuterRadius.Value = Trackbar_InnerRadius.Value;
             }
+            txtInnerRadius.Text = Trackbar_InnerRadius.Value.ToString();
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -90,6 +85,7 @@ namespace sb_editor.Panels
             {
                 Trackbar_InnerRadius.Value = Trackbar_OuterRadius.Value;
             }
+            txtOuterRadius.Text = Trackbar_OuterRadius.Value.ToString();
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -102,17 +98,24 @@ namespace sb_editor.Panels
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void TxtInnerRadius_TextChanged(object sender, EventArgs e)
+        private void TxtInnerRadius_Validated(object sender, EventArgs e)
         {
             if (int.TryParse(txtInnerRadius.Text, out int userValue))
             {
-                if (userValue > Trackbar_InnerRadius.Maximum)
-                {
-                    txtInnerRadius.Text = Trackbar_InnerRadius.Maximum.ToString();
-                }
                 if (userValue > Trackbar_OuterRadius.Value)
                 {
                     txtInnerRadius.Text = Trackbar_OuterRadius.Value.ToString();
+                    Trackbar_InnerRadius.Value = Trackbar_OuterRadius.Value;
+                    SystemSounds.Beep.Play();
+                }
+                else if (userValue < Trackbar_InnerRadius.Maximum)
+                {
+                    Trackbar_InnerRadius.Value = userValue;
+                }
+                else
+                {
+                    Trackbar_InnerRadius.Value = Trackbar_InnerRadius.Maximum;
+                    SystemSounds.Beep.Play();
                 }
             }
             else
@@ -122,17 +125,24 @@ namespace sb_editor.Panels
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void TxtOuterRadius_TextChanged(object sender, EventArgs e)
+        private void TxtOuterRadius_Validated(object sender, EventArgs e)
         {
             if (int.TryParse(txtOuterRadius.Text, out int userValue))
             {
-                if (userValue > Trackbar_OuterRadius.Maximum)
-                {
-                    txtOuterRadius.Text = Trackbar_OuterRadius.Maximum.ToString();
-                }
                 if (userValue < Trackbar_InnerRadius.Value)
                 {
                     txtOuterRadius.Text = Trackbar_InnerRadius.Value.ToString();
+                    Trackbar_OuterRadius.Value = Trackbar_InnerRadius.Value;
+                    SystemSounds.Beep.Play();
+                }
+                else if(userValue < Trackbar_OuterRadius.Maximum)
+                {
+                    Trackbar_OuterRadius.Value = userValue;
+                }
+                else
+                {
+                    Trackbar_OuterRadius.Value = Trackbar_OuterRadius.Maximum;
+                    SystemSounds.Beep.Play();
                 }
             }
             else

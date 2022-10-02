@@ -332,7 +332,14 @@ namespace sb_editor.Panels
             }
             else
             {
-                SystemSounds.Beep.Play();
+                if (SoundBanksControl.tvwSoundBanks.Nodes.Count > 0)
+                {
+                    MessageBox.Show("There isn't any SoundBank selected where to add this DataBase. Select a SoundBank and try again.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                else
+                {
+                    MessageBox.Show("There isn't any SoundBank where to add this DataBase to, yet. Create a new SoundBank first by right-clicking in the SoundBanks list and try again.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
             }
         }
 
