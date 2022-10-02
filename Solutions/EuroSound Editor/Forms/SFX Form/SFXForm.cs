@@ -94,6 +94,12 @@ namespace sb_editor.Forms
                 }
             }
 
+            //Enable ONLY available formats buttons
+            foreach (string formatName in GlobalPrefs.CurrentProject.platformData.Keys)
+            {
+                ((Button)grbCreateFormat.Controls[string.Join(string.Empty, "btn", formatName.ToUpper().Replace(" ", string.Empty))]).Enabled = true;
+            }
+
             //Common Tab 
             if (File.Exists(filepath))
             {

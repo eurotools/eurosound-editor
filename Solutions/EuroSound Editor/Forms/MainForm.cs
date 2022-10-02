@@ -112,20 +112,25 @@ namespace sb_editor
                     Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "X Box"));
                     Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "Misc"));
                     TextFiles.WriteProjectFile(Path.Combine(GlobalPrefs.ProjectFolder, "Project.txt"), new ProjectFile());
-                    TextFiles.WritePropertiesFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt"), new ProjProperties() { ResampleRates = new List<string>() { "Default" } });
+                    TextFiles.WritePropertiesFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt"), new ProjProperties() { ResampleRates = new List<string>() { "Default" }, SampleFilesFolder = Application.StartupPath });
                     TextFiles.WriteRefine(Path.Combine(GlobalPrefs.ProjectFolder, "System", "RefineSearch.txt"), new string[] { "All", "HighLighted" });
                     TextFiles.WriteMiscFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "Misc.txt"), true);
 
                     //Update recent files list
                     RecentFilesMenu.AddFile(GlobalPrefs.ProjectFolder);
 
-                    //Copy Ini File to the new project
-                    string iniPath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini");
-                    File.Delete(iniPath);
-                    File.Copy(Path.Combine(Application.StartupPath, "EuroSound.ini"), iniPath);
+                    //Add System Ini File To The New Project
+                    string systemIniPath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini");
+                    File.Delete(systemIniPath);
+                    string iniPath = Path.Combine(Application.StartupPath, "EuroSound.ini");
+                    if (!File.Exists(iniPath))
+                    {
+                        RecentFilesMenu.SaveToIniFile();
+                    }
+                    File.Copy(iniPath, systemIniPath);
 
                     //Update INI
-                    IniFile systemIni = new IniFile(iniPath);
+                    IniFile systemIni = new IniFile(systemIniPath);
                     systemIni.Write("Last_Project_Opened", GlobalPrefs.ProjectFolder, "Form1_Misc");
                     for (int i = 0; i < mnuFile_RecentProjects.MenuItems.Count; i++)
                     {

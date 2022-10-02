@@ -98,7 +98,7 @@ namespace sb_editor.Forms
                     }
 
                     //Create MFX Hashcodes
-                    string finalFile = Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Sonix", "MFX_Defines.h");
+                    string finalFile = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Defines.h");
                     string tempFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Temp_MFX_Defines.h");
                     List<string> missingInTempFile = CreateAndValidateMfxDefines();
                     if (missingInTempFile.Count > 0)
@@ -253,26 +253,29 @@ namespace sb_editor.Forms
                 string[] tempFileData = File.ReadAllLines(tempFilePath);
 
                 //Get the Final MFX Data
-                string mfxDefinesFilePath = Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Sonix", "MFX_Defines.h");
-                if (File.Exists(mfxDefinesFilePath))
+                if (!string.IsNullOrEmpty(GlobalPrefs.CurrentProject.HashCodeFileDirectory) && Directory.Exists(GlobalPrefs.CurrentProject.HashCodeFileDirectory))
                 {
-                    //Check items that are missing in the final
-                    string[] mfxDefinesData = File.ReadAllLines(mfxDefinesFilePath);
-                    for (int i = 0; i < mfxDefinesData.Length; i++)
+                    string mfxDefinesFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Defines.h");
+                    if (File.Exists(mfxDefinesFilePath))
                     {
-                        string currentLine = mfxDefinesData[i];
-                        if (currentLine.StartsWith("//") || string.IsNullOrEmpty(currentLine))
+                        //Check items that are missing in the final
+                        string[] mfxDefinesData = File.ReadAllLines(mfxDefinesFilePath);
+                        for (int i = 0; i < mfxDefinesData.Length; i++)
                         {
-                            continue;
-                        }
-
-                        //Add item to list
-                        if (Array.IndexOf(tempFileData, currentLine) == -1)
-                        {
-                            string[] fileData = currentLine.Split(null);
-                            if (fileData.Length > 2)
+                            string currentLine = mfxDefinesData[i];
+                            if (currentLine.StartsWith("//") || string.IsNullOrEmpty(currentLine))
                             {
-                                missingInTempFile.Add(fileData[1].Trim());
+                                continue;
+                            }
+
+                            //Add item to list
+                            if (Array.IndexOf(tempFileData, currentLine) == -1)
+                            {
+                                string[] fileData = currentLine.Split(null);
+                                if (fileData.Length > 2)
+                                {
+                                    missingInTempFile.Add(fileData[1].Trim());
+                                }
                             }
                         }
                     }
@@ -280,10 +283,10 @@ namespace sb_editor.Forms
             }
 
             //Valid List
-            if (Directory.Exists(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Sonix")))
+            if (!string.IsNullOrEmpty(GlobalPrefs.CurrentProject.HashCodeFileDirectory) && Directory.Exists(GlobalPrefs.CurrentProject.HashCodeFileDirectory))
             {
-                hashCodes.CreateMfxValidList(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Sonix", "MFX_ValidList.h"));
-                hashCodes.CreateMfxData(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Sonix", "MFX_Data.h"));
+                hashCodes.CreateMfxValidList(Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_ValidList.h"));
+                hashCodes.CreateMfxData(Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Data.h"));
             }
 
             return missingInTempFile;

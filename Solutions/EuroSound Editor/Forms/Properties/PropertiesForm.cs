@@ -152,6 +152,16 @@ namespace sb_editor
             {
                 txtMasterDirectory.Text = FolderBrowser.SelectedPath;
                 temporalObj.SampleFilesFolder = FolderBrowser.SelectedPath;
+
+                //Create Speech Folder
+                if (Directory.Exists(Path.Combine(FolderBrowser.SelectedPath, "Master")))
+                {
+                    Directory.CreateDirectory(Path.Combine(FolderBrowser.SelectedPath, "Master", "Speech", "English"));
+                }
+                else
+                {
+                    MessageBox.Show("'Master' folder not found.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 

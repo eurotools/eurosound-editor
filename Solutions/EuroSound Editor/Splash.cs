@@ -125,7 +125,7 @@ namespace sb_editor
                             }
 
                             //Check Languages From Speech Folder
-                            if (Directory.Exists(GlobalPrefs.CurrentProject.SampleFilesFolder))
+                            if (Directory.Exists(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master")))
                             {
                                 string speechDir = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", "Speech");
                                 Directory.CreateDirectory(Path.Combine(speechDir, "English"));

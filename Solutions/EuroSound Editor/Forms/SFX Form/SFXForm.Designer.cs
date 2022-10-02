@@ -213,20 +213,20 @@ namespace sb_editor.Forms
             this.btnTestSFX.UseVisualStyleBackColor = true;
             this.btnTestSFX.Click += new System.EventHandler(this.BtnTestSFX_Click);
             // 
-            // textBox2
+            // txtGameTime
             // 
             this.txtGameTime.BackColor = System.Drawing.SystemColors.Window;
             this.txtGameTime.Location = new System.Drawing.Point(787, 354);
-            this.txtGameTime.Name = "textBox2";
+            this.txtGameTime.Name = "txtGameTime";
             this.txtGameTime.ReadOnly = true;
             this.txtGameTime.Size = new System.Drawing.Size(88, 20);
             this.txtGameTime.TabIndex = 6;
             // 
-            // textBox1
+            // txtEsTime
             // 
             this.txtEsTime.BackColor = System.Drawing.SystemColors.Window;
             this.txtEsTime.Location = new System.Drawing.Point(787, 328);
-            this.txtEsTime.Name = "textBox1";
+            this.txtEsTime.Name = "txtEsTime";
             this.txtEsTime.ReadOnly = true;
             this.txtEsTime.Size = new System.Drawing.Size(88, 20);
             this.txtEsTime.TabIndex = 5;
@@ -329,6 +329,7 @@ namespace sb_editor.Forms
             // 
             // btnPC
             // 
+            this.btnPC.Enabled = false;
             this.btnPC.Location = new System.Drawing.Point(302, 18);
             this.btnPC.Name = "btnPC";
             this.btnPC.Size = new System.Drawing.Size(92, 23);
@@ -339,6 +340,7 @@ namespace sb_editor.Forms
             // 
             // btnXBOX
             // 
+            this.btnXBOX.Enabled = false;
             this.btnXBOX.Location = new System.Drawing.Point(204, 18);
             this.btnXBOX.Name = "btnXBOX";
             this.btnXBOX.Size = new System.Drawing.Size(92, 23);
@@ -349,6 +351,7 @@ namespace sb_editor.Forms
             // 
             // btnGAMECUBE
             // 
+            this.btnGAMECUBE.Enabled = false;
             this.btnGAMECUBE.Location = new System.Drawing.Point(106, 18);
             this.btnGAMECUBE.Name = "btnGAMECUBE";
             this.btnGAMECUBE.Size = new System.Drawing.Size(92, 23);
@@ -359,6 +362,7 @@ namespace sb_editor.Forms
             // 
             // btnPLAYSTATION2
             // 
+            this.btnPLAYSTATION2.Enabled = false;
             this.btnPLAYSTATION2.Location = new System.Drawing.Point(8, 18);
             this.btnPLAYSTATION2.Name = "btnPLAYSTATION2";
             this.btnPLAYSTATION2.Size = new System.Drawing.Size(92, 23);

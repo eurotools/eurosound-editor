@@ -44,15 +44,19 @@ namespace sb_editor.Panels
             Cursor.Current = Cursors.WaitCursor;
 
             // Check for new Samples
-            string samplesFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Samples.txt");
-            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "System")) && File.Exists(samplesFilePath))
+            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "System")))
             {
                 //Calculate Execution time
                 Stopwatch watcher = new Stopwatch();
                 watcher.Start();
 
                 //Get Samples File Data
-                SamplePool samples = TextFiles.ReadSamplesFile(samplesFilePath);
+                string samplesFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Samples.txt");
+                SamplePool samples = new SamplePool();
+                if (File.Exists(samplesFilePath))
+                {
+                    samples = TextFiles.ReadSamplesFile(samplesFilePath);
+                }
 
                 //Check For New Samples
                 string[] missingSamples = SampleFiles.GetMissingSamples(samples);
@@ -75,9 +79,12 @@ namespace sb_editor.Panels
                 }
 
                 //Show Form
-                using (ReSampleForm resampleForm = new ReSampleForm(samples, watcher))
+                if (samples.SamplePoolItems.Count > 0)
                 {
-                    resampleForm.ShowDialog();
+                    using (ReSampleForm resampleForm = new ReSampleForm(samples, watcher))
+                    {
+                        resampleForm.ShowDialog();
+                    }
                 }
             }
 

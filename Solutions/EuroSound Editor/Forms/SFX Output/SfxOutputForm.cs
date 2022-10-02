@@ -68,7 +68,12 @@ namespace sb_editor.Forms
 
             //Create Missing Folders 
             Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "TempSfxData"));
-            SamplePool samplesList = TextFiles.ReadSamplesFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "Samples.txt"));
+            string samplesFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Samples.txt");
+            SamplePool samplesList = new SamplePool();
+            if (File.Exists(samplesFilePath))
+            {
+                samplesList = TextFiles.ReadSamplesFile(samplesFilePath);
+            }
 
             //Get HashCodes Dictionary
             Dictionary<string, uint> HashCodesDict = sbFunctions.GetHashCodesDictionary("SFXs", "#HASHCODE");
@@ -93,7 +98,7 @@ namespace sb_editor.Forms
             OutputSoundBanks(samplesList, HashCodesDict, debugFolder.FullName);
 
             //Create HashTables
-            if (!fastOutput)
+            if (!fastOutput && !string.IsNullOrEmpty(GlobalPrefs.CurrentProject.HashCodeFileDirectory) && Directory.Exists(GlobalPrefs.CurrentProject.HashCodeFileDirectory))
             {
                 OutputHashCodes(samplesList);
 
