@@ -67,7 +67,7 @@ namespace sb_editor.Panels
                         MessageBox.Show(string.Format("File Not Found '{0}'", iniFilePath), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                else if(cbllstSoundbanks.Items.Count > prevSelection)
+                else if (cbllstSoundbanks.Items.Count > prevSelection)
                 {
                     cbllstSoundbanks.SetItemChecked(prevSelection, true);
                 }

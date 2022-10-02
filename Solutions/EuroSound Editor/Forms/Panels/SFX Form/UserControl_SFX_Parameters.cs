@@ -135,7 +135,7 @@ namespace sb_editor.Panels
                     Trackbar_OuterRadius.Value = Trackbar_InnerRadius.Value;
                     SystemSounds.Beep.Play();
                 }
-                else if(userValue < Trackbar_OuterRadius.Maximum)
+                else if (userValue < Trackbar_OuterRadius.Maximum)
                 {
                     Trackbar_OuterRadius.Value = userValue;
                 }

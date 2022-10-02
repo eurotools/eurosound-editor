@@ -144,7 +144,7 @@ namespace sb_editor.Forms
             //ReAllocate Mfx Files
             if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData")))
             {
-                   GlobalPrefs.MFXHashCodeNumber = 1;
+                GlobalPrefs.MFXHashCodeNumber = 1;
                 string[] mfxFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData"), "*.txt", SearchOption.TopDirectoryOnly);
                 for (int i = 0; i < mfxFiles.Length; i++)
                 {
@@ -159,7 +159,7 @@ namespace sb_editor.Forms
                     }
                 }
             }
-            
+
             //Restore default cursor
             Cursor.Current = Cursors.Default;
         }

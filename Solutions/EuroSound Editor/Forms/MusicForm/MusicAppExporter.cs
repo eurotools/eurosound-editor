@@ -212,11 +212,10 @@ namespace sb_editor.Forms
                     }
 
                     //Build SFX
-                    if (Directory.Exists(GlobalPrefs.CurrentProject.EngineXProjectPath))
+                    string outputPath = CommonFunctions.GetMusicOutputFolder("PlayStation2");
+                    if (!string.IsNullOrEmpty(outputPath) && Directory.Exists(outputPath))
                     {
-                        string sfxOutFolder = Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", CommonFunctions.GetEnginexFolder("PlayStation2"), "music");
-                        Directory.CreateDirectory(sfxOutFolder);
-                        MusXBuild_MusicFile.BuildMusicFile(soundMarkerFilePath, soundSampleDataFilePath, Path.Combine(sfxOutFolder, string.Format("HCE{0:X5}.SFX", musicFileData.HashCode)), (uint)musicFileData.HashCode, false);
+                        MusXBuild_MusicFile.BuildMusicFile(soundMarkerFilePath, soundSampleDataFilePath, Path.Combine(outputPath, string.Format("HCE{0:X5}.SFX", musicFileData.HashCode)), (uint)musicFileData.HashCode, false);
                     }
                 }
                 //ReSample for GameCube and PC
@@ -292,11 +291,10 @@ namespace sb_editor.Forms
                                 markerFiles.CreateMarkerFile(aslFilePath, asrFilePath, markerFile, musicFileData.Volume, platform, soundMarkerFilePath);
 
                                 //Build SFX
-                                if (Directory.Exists(GlobalPrefs.CurrentProject.EngineXProjectPath))
+                                string outputPath = CommonFunctions.GetMusicOutputFolder(platform);
+                                if (!string.IsNullOrEmpty(outputPath) && Directory.Exists(outputPath))
                                 {
-                                    string sfxOutFolder = Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", CommonFunctions.GetEnginexFolder(platform), "music");
-                                    Directory.CreateDirectory(sfxOutFolder);
-                                    MusXBuild_MusicFile.BuildMusicFile(soundMarkerFilePath, soundSampleDataFilePath, Path.Combine(sfxOutFolder, "HCE" + musicFileData.HashCode.ToString("X5") + ".SFX"), (uint)musicFileData.HashCode, platform.Equals("GameCube"));
+                                    MusXBuild_MusicFile.BuildMusicFile(soundMarkerFilePath, soundSampleDataFilePath, Path.Combine(outputPath, "HCE" + musicFileData.HashCode.ToString("X5") + ".SFX"), (uint)musicFileData.HashCode, platform.Equals("GameCube"));
                                 }
                             }
                         }
@@ -341,11 +339,14 @@ namespace sb_editor.Forms
                         }
 
                         //Build SFX
-                        if (Directory.Exists(GlobalPrefs.CurrentProject.EngineXProjectPath))
+                        string outputPath = CommonFunctions.GetMusicOutputFolder("X Box");
+                        if (string.IsNullOrEmpty(outputPath))
                         {
-                            string sfxOutFolder = Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", CommonFunctions.GetEnginexFolder("X Box"), "music");
-                            Directory.CreateDirectory(sfxOutFolder);
-                            MusXBuild_MusicFile.BuildMusicFile(soundMarkerFile, soundSampleDataFile, Path.Combine(sfxOutFolder, "HCE" + musicFileData.HashCode.ToString("X5") + ".SFX"), (uint)musicFileData.HashCode, false);
+                            outputPath = CommonFunctions.GetMusicOutputFolder("Xbox");
+                        }
+                        if (!string.IsNullOrEmpty(outputPath) && Directory.Exists(outputPath))
+                        {
+                            MusXBuild_MusicFile.BuildMusicFile(soundMarkerFile, soundSampleDataFile, Path.Combine(outputPath, "HCE" + musicFileData.HashCode.ToString("X5") + ".SFX"), (uint)musicFileData.HashCode, false);
                         }
                     }
                 }

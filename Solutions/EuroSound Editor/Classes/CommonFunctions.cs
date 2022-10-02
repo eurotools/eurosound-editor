@@ -178,7 +178,7 @@ namespace sb_editor
                 day = fileInfo.Day.ToString();
             }
 
-            return string.Format("{0}/{1}/{2} {3:00}:{4:00}:{5:00}", year, month, day, fileInfo.Hour, fileInfo.Minute, fileInfo.Second);
+            return string.Format("{0}/{1}/{2} {3:00}:{4:00}:{5:00}", year, day, month, fileInfo.Hour, fileInfo.Minute, fileInfo.Second);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -269,6 +269,56 @@ namespace sb_editor
                 }
                 RunConsoleProcess(filePath, string.Empty, viewOutputDos);
             }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public static string GetSoundBankOutputFolder(string platform, string language)
+        {
+            //Get Output Path
+            string outputPath = string.Empty;
+
+            //EngineX project Path
+            if (!string.IsNullOrEmpty(GlobalPrefs.CurrentProject.EngineXProjectPath) && Directory.Exists(GlobalPrefs.CurrentProject.EngineXProjectPath))
+            {
+                //Get Output Path 
+                Directory.CreateDirectory(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Sonix"));
+                outputPath = Directory.CreateDirectory(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", GetEnginexFolder(platform), GetLanguageFolder(language))).FullName;
+            }
+
+            //Default Path
+            if (string.IsNullOrEmpty(outputPath) && GlobalPrefs.CurrentProject.platformData.ContainsKey(platform))
+            {
+                string outFolder = GlobalPrefs.CurrentProject.platformData[platform].OutputFolder;
+                if (!string.IsNullOrEmpty(outFolder) && Path.IsPathRooted(outFolder))
+                {
+                    outputPath = Directory.CreateDirectory(outFolder).FullName;
+                }
+            }
+            return outputPath;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public static string GetMusicOutputFolder(string platform)
+        {
+            //Get Output Path
+            string outputPath = string.Empty;
+
+            //EngineX project Path
+            if (!string.IsNullOrEmpty(GlobalPrefs.CurrentProject.EngineXProjectPath) && Directory.Exists(GlobalPrefs.CurrentProject.EngineXProjectPath))
+            {
+                outputPath = Directory.CreateDirectory(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", GetEnginexFolder(platform), "music")).FullName;
+            }
+
+            //Default Path
+            if (string.IsNullOrEmpty(outputPath) && GlobalPrefs.CurrentProject.platformData.ContainsKey(platform))
+            {
+                string outFolder = GlobalPrefs.CurrentProject.platformData[platform].OutputFolder;
+                if (!string.IsNullOrEmpty(outFolder) && Path.IsPathRooted(outFolder))
+                {
+                    outputPath = Directory.CreateDirectory(outFolder).FullName;
+                }
+            }
+            return outputPath;
         }
     }
 

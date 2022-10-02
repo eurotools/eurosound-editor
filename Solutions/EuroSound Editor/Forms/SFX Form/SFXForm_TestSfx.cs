@@ -204,7 +204,7 @@ namespace sb_editor.Forms
                 else
                 {
                     throw new IOException(string.Format("Output Error: Sample File Missing: UNKNOWN SFX & BANK\n{0}", masterFile));
-                }                
+                }
             }
 
             return sampleBankSize;

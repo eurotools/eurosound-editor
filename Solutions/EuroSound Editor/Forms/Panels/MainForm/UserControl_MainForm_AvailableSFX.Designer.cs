@@ -33,7 +33,6 @@ namespace sb_editor.Panels
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControl_MainForm_AvailableSFX));
             this.grbAvailableSFXs = new System.Windows.Forms.GroupBox();
             this.chkIconView = new System.Windows.Forms.CheckBox();
-            this.UserControl_RefineSFX = new sb_editor.Panels.UserControl_MainForm_RefineSFXList();
             this.pnlListView = new System.Windows.Forms.Panel();
             this.lblSFXsTutorial = new System.Windows.Forms.Label();
             this.ContextMenu_ListView = new System.Windows.Forms.ContextMenu();
@@ -49,7 +48,6 @@ namespace sb_editor.Panels
             this.mnuNewMultiple = new System.Windows.Forms.MenuItem();
             this.mnuMultiEditor = new System.Windows.Forms.MenuItem();
             this.lstTempSorted = new System.Windows.Forms.ListBox();
-            this.lstAvailableSFXs = new MultiSelListBox();
             this.DataGrid_SFXs = new System.Windows.Forms.DataGridView();
             this.Col_Image = new System.Windows.Forms.DataGridViewImageColumn();
             this.Col_HashCodeLabel = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -57,6 +55,8 @@ namespace sb_editor.Panels
             this.btnAddSFXs = new System.Windows.Forms.Button();
             this.lvwImageList = new System.Windows.Forms.ImageList(this.components);
             this.ToolTip_Controls = new System.Windows.Forms.ToolTip(this.components);
+            this.UserControl_RefineSFX = new sb_editor.Panels.UserControl_MainForm_RefineSFXList();
+            this.lstAvailableSFXs = new MultiSelListBox();
             this.grbAvailableSFXs.SuspendLayout();
             this.pnlListView.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_SFXs)).BeginInit();
@@ -88,15 +88,6 @@ namespace sb_editor.Panels
             this.chkIconView.Text = "Icon View";
             this.chkIconView.UseVisualStyleBackColor = true;
             this.chkIconView.CheckedChanged += new System.EventHandler(this.ChkIconView_CheckedChanged);
-            // 
-            // UserControl_RefineSFX
-            // 
-            this.UserControl_RefineSFX.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.UserControl_RefineSFX.Location = new System.Drawing.Point(6, 453);
-            this.UserControl_RefineSFX.Name = "UserControl_RefineSFX";
-            this.UserControl_RefineSFX.Size = new System.Drawing.Size(292, 74);
-            this.UserControl_RefineSFX.TabIndex = 4;
             // 
             // pnlListView
             // 
@@ -227,24 +218,6 @@ namespace sb_editor.Panels
             this.lstTempSorted.ValueMember = "ItemData";
             this.lstTempSorted.Visible = false;
             // 
-            // lstAvailableSFXs
-            // 
-            this.lstAvailableSFXs.AllowDrop = true;
-            this.lstAvailableSFXs.ContextMenu = this.ContextMenu_ListView;
-            this.lstAvailableSFXs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstAvailableSFXs.DragDropEffectVal = System.Windows.Forms.DragDropEffects.Copy;
-            this.lstAvailableSFXs.FormattingEnabled = true;
-            this.lstAvailableSFXs.HorizontalScrollbar = true;
-            this.lstAvailableSFXs.Location = new System.Drawing.Point(0, 0);
-            this.lstAvailableSFXs.Name = "lstAvailableSFXs";
-            this.lstAvailableSFXs.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lstAvailableSFXs.Size = new System.Drawing.Size(292, 380);
-            this.lstAvailableSFXs.TabIndex = 0;
-            this.ToolTip_Controls.SetToolTip(this.lstAvailableSFXs, "All Available SFXs");
-            this.lstAvailableSFXs.DragDrop += new System.Windows.Forms.DragEventHandler(this.LstAvailableSFXs_DragDrop);
-            this.lstAvailableSFXs.DragOver += new System.Windows.Forms.DragEventHandler(this.LstAvailableSFXs_DragOver);
-            this.lstAvailableSFXs.DoubleClick += new System.EventHandler(this.LstAvailableSFXs_DoubleClick);
-            // 
             // DataGrid_SFXs
             // 
             this.DataGrid_SFXs.AllowDrop = true;
@@ -319,6 +292,33 @@ namespace sb_editor.Panels
             this.lvwImageList.Images.SetKeyName(0, "Normal.png");
             this.lvwImageList.Images.SetKeyName(1, "SubSFX.png");
             this.lvwImageList.Images.SetKeyName(2, "SubSFX2.png");
+            // 
+            // UserControl_RefineSFX
+            // 
+            this.UserControl_RefineSFX.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.UserControl_RefineSFX.Location = new System.Drawing.Point(6, 453);
+            this.UserControl_RefineSFX.Name = "UserControl_RefineSFX";
+            this.UserControl_RefineSFX.Size = new System.Drawing.Size(292, 74);
+            this.UserControl_RefineSFX.TabIndex = 4;
+            // 
+            // lstAvailableSFXs
+            // 
+            this.lstAvailableSFXs.AllowDrop = true;
+            this.lstAvailableSFXs.ContextMenu = this.ContextMenu_ListView;
+            this.lstAvailableSFXs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstAvailableSFXs.DragDropEffectVal = System.Windows.Forms.DragDropEffects.Copy;
+            this.lstAvailableSFXs.FormattingEnabled = true;
+            this.lstAvailableSFXs.HorizontalScrollbar = true;
+            this.lstAvailableSFXs.Location = new System.Drawing.Point(0, 0);
+            this.lstAvailableSFXs.Name = "lstAvailableSFXs";
+            this.lstAvailableSFXs.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.lstAvailableSFXs.Size = new System.Drawing.Size(292, 380);
+            this.lstAvailableSFXs.TabIndex = 0;
+            this.ToolTip_Controls.SetToolTip(this.lstAvailableSFXs, "All Available SFXs");
+            this.lstAvailableSFXs.DragDrop += new System.Windows.Forms.DragEventHandler(this.LstAvailableSFXs_DragDrop);
+            this.lstAvailableSFXs.DragOver += new System.Windows.Forms.DragEventHandler(this.LstAvailableSFXs_DragOver);
+            this.lstAvailableSFXs.DoubleClick += new System.EventHandler(this.LstAvailableSFXs_DoubleClick);
             // 
             // UserControl_MainForm_AvailableSFX
             // 

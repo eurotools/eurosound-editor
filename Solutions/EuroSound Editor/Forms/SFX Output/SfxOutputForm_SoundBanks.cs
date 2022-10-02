@@ -53,10 +53,10 @@ namespace sb_editor.Forms
 
                         //Get File Paths
                         string debugFilePath = Path.Combine(debugFolder, string.Format("StreamDebugSoundBank_{0}_{1}_{2}.txt", filesQueue[j], outputPlatform[k], outLanguages[i]));
-                        string outputTempFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatform[k], "SoundBanks", outLanguages[i], soundBankData.HashCode + ".tmp");
+                        string outTmpFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatform[k], "SoundBanks", outLanguages[i], soundBankData.HashCode + ".tmp");
 
                         //Create Folder to store the Temporal SoundBank files
-                        Directory.CreateDirectory(Path.GetDirectoryName(outputTempFilePath));
+                        Directory.CreateDirectory(Path.GetDirectoryName(outTmpFilePath));
 
                         //Create Debug File
                         using (StreamWriter sw = new StreamWriter(File.Open(debugFilePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
@@ -67,16 +67,16 @@ namespace sb_editor.Forms
                             sw.WriteLine("");
                             sw.WriteLine("SoundBankName = {0}", filesQueue[j]);
                             sw.WriteLine("SoundBankSaveName = {0}", soundBankData.HashCode);
-                            sw.WriteLine("SoundBankFileName = {0}", Path.ChangeExtension(outputTempFilePath, ".sfx"));
+                            sw.WriteLine("SoundBankFileName = {0}", Path.ChangeExtension(outTmpFilePath, ".sfx"));
                             sw.WriteLine("Stream PoolFiles(n).FileRef");
 
                             //Write Temporal Files
                             long sampleBankSize = 0;
-                            using (BinaryWriter sbfWritter = new BinaryWriter(File.Open(Path.ChangeExtension(outputTempFilePath, ".sbf"), FileMode.Create, FileAccess.Write, FileShare.Read)))
+                            using (BinaryWriter sbfWritter = new BinaryWriter(File.Open(Path.ChangeExtension(outTmpFilePath, ".sbf"), FileMode.Create, FileAccess.Write, FileShare.Read)))
                             {
-                                using (BinaryWriter sfxWritter = new BinaryWriter(File.Open(Path.ChangeExtension(outputTempFilePath, ".sfx"), FileMode.Create, FileAccess.Write, FileShare.Read)))
+                                using (BinaryWriter sfxWritter = new BinaryWriter(File.Open(Path.ChangeExtension(outTmpFilePath, ".sfx"), FileMode.Create, FileAccess.Write, FileShare.Read)))
                                 {
-                                    using (BinaryWriter sifWritter = new BinaryWriter(File.Open(Path.ChangeExtension(outputTempFilePath, ".sif"), FileMode.Create, FileAccess.Write, FileShare.Read)))
+                                    using (BinaryWriter sifWritter = new BinaryWriter(File.Open(Path.ChangeExtension(outTmpFilePath, ".sif"), FileMode.Create, FileAccess.Write, FileShare.Read)))
                                     {
                                         List<byte[]> dspHeaderData = new List<byte[]>();
 
@@ -93,7 +93,7 @@ namespace sb_editor.Forms
 
                                             if (dspHeaderData.Count > 0)
                                             {
-                                                using (BinaryWriter ssfWritter = new BinaryWriter(File.Open(Path.ChangeExtension(outputTempFilePath, ".ssf"), FileMode.Create, FileAccess.Write, FileShare.Read)))
+                                                using (BinaryWriter ssfWritter = new BinaryWriter(File.Open(Path.ChangeExtension(outTmpFilePath, ".ssf"), FileMode.Create, FileAccess.Write, FileShare.Read)))
                                                 {
                                                     for (int l = 0; l < dspHeaderData.Count; l++)
                                                     {
@@ -113,10 +113,10 @@ namespace sb_editor.Forms
                                 if (sampleBankSize > myMaxSize)
                                 {
                                     //Delete Files
-                                    File.Delete(Path.ChangeExtension(outputTempFilePath, ".sbf"));
-                                    File.Delete(Path.ChangeExtension(outputTempFilePath, ".sfx"));
-                                    File.Delete(Path.ChangeExtension(outputTempFilePath, ".sif"));
-                                    File.Delete(Path.ChangeExtension(outputTempFilePath, ".ssf"));
+                                    File.Delete(Path.ChangeExtension(outTmpFilePath, ".sbf"));
+                                    File.Delete(Path.ChangeExtension(outTmpFilePath, ".sfx"));
+                                    File.Delete(Path.ChangeExtension(outTmpFilePath, ".sif"));
+                                    File.Delete(Path.ChangeExtension(outTmpFilePath, ".ssf"));
 
                                     //Inform User
                                     string message = string.Format("Sample Bank Limit Exceeded With:\n\nSoundBank: {0}\nFormat: {1}\nMy Size: {2}K\nMy Max Size: {3}K\n\nOutput Aborted and Files Deleted.", filesQueue[j], outputPlatform[k], sampleBankSize, myMaxSize);
@@ -124,21 +124,16 @@ namespace sb_editor.Forms
                                 }
                                 else
                                 {
-                                    if (Directory.Exists(GlobalPrefs.CurrentProject.EngineXProjectPath))
+                                    //Get Output Path
+                                    string outputPath = CommonFunctions.GetSoundBankOutputFolder(outputPlatform[k], outLanguages[i]);
+                                    if (!string.IsNullOrEmpty(outputPath) && Directory.Exists(outputPath))
                                     {
-                                        //Build MusX
-                                        string sbfTempFile = Path.ChangeExtension(outputTempFilePath, ".sbf");
-                                        string sfxTempFile = Path.ChangeExtension(outputTempFilePath, ".sfx");
-                                        string sifTempFile = Path.ChangeExtension(outputTempFilePath, ".sif");
-                                        string ssfTempFile = Path.ChangeExtension(outputTempFilePath, ".ssf");
-
-                                        //Get Output Path 
-                                        Directory.CreateDirectory(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Sonix"));
-                                        DirectoryInfo musXFolder = Directory.CreateDirectory(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", CommonFunctions.GetEnginexFolder(outputPlatform[k]), CommonFunctions.GetLanguageFolder(outLanguages[i])));
                                         string fileName = string.Format("HC{0:X6}.SFX", CommonFunctions.GetSfxName(Array.FindIndex(GlobalPrefs.Languages, s => s.Equals(outLanguages[i], StringComparison.OrdinalIgnoreCase)), soundBankData.HashCode));
-
-                                        //Build File
-                                        MusXBuild_Soundbank.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, ssfTempFile, Path.Combine(musXFolder.FullName, fileName), soundBankData.HashCode, isBigEndian);
+                                        string sbfTempFile = Path.ChangeExtension(outTmpFilePath, ".sbf");
+                                        string sfxTempFile = Path.ChangeExtension(outTmpFilePath, ".sfx");
+                                        string sifTempFile = Path.ChangeExtension(outTmpFilePath, ".sif");
+                                        string ssfTempFile = Path.ChangeExtension(outTmpFilePath, ".ssf");
+                                        MusXBuild_Soundbank.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, ssfTempFile, Path.Combine(outputPath, fileName), soundBankData.HashCode, isBigEndian);
                                     }
                                 }
                             }

@@ -15,19 +15,15 @@ namespace sb_editor.HashCodes
         {
             //File Hashcodes
             int maxSfxHashcodeDefined = 0;
-            string[] musicFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData"), "*.txt", SearchOption.TopDirectoryOnly);
+            string[] musicFiles = TextFiles.ReadListBlock(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", "MFXFiles.txt"), "#MFXFiles");
             using (StreamWriter sw = new StreamWriter(File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
                 sw.WriteLine("// Music HashCodes");
                 for (int i = 0; i < musicFiles.Length; i++)
                 {
-                    string fileName = Path.GetFileNameWithoutExtension(musicFiles[i]);
-                    if (!fileName.Equals("MFXFiles", StringComparison.OrdinalIgnoreCase))
-                    {
-                        MusicFile fileData = TextFiles.ReadMusicFile(musicFiles[i]);
-                        sw.WriteLine(WriteHashCode("MFX_" + fileName, string.Format("0x{0:X8}", fileData.HashCode | 0x1BE00000)));
-                        maxSfxHashcodeDefined++;
-                    }
+                    MusicFile fileData = TextFiles.ReadMusicFile(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", musicFiles[i] + ".txt"));
+                    sw.WriteLine(WriteHashCode("MFX_" + musicFiles[i], string.Format("0x{0:X8}", fileData.HashCode | 0x1BE00000)));
+                    maxSfxHashcodeDefined++;
                 }
                 sw.WriteLine("#define MFX_MaximumDefined {0}", maxSfxHashcodeDefined);
             }
@@ -35,24 +31,19 @@ namespace sb_editor.HashCodes
             //Add Jump Markers
             for (int i = 0; i < musicFiles.Length; i++)
             {
-                //Get Music File Data
-                string fileName = Path.GetFileNameWithoutExtension(musicFiles[i]);
-                if (!fileName.Equals("MFXFiles", StringComparison.OrdinalIgnoreCase))
+                //Get Jump File Data
+                string jumpFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESWork", musicFiles[i] + ".jmp");
+                if (File.Exists(jumpFilePath))
                 {
-                    //Get Jump File Data
-                    string jumpFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESWork", fileName + ".jmp");
-                    if (File.Exists(jumpFilePath))
+                    MusicFile fileData = TextFiles.ReadMusicFile(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", musicFiles[i] + ".txt"));
+                    using (StreamWriter sw = new StreamWriter(File.Open(filePath, FileMode.Append, FileAccess.Write, FileShare.Read)))
                     {
-                        MusicFile fileData = TextFiles.ReadMusicFile(musicFiles[i]);
-                        using (StreamWriter sw = new StreamWriter(File.Open(filePath, FileMode.Append, FileAccess.Write, FileShare.Read)))
+                        sw.WriteLine(string.Empty);
+                        sw.WriteLine("// Music Jump Codes For Level {0}", "MFX_" + musicFiles[i]);
+                        string[] jumpHashcodes = TextFiles.ReadJumpHashCodes(jumpFilePath);
+                        for (int j = 0; j < jumpHashcodes.Length; j++)
                         {
-                            sw.WriteLine(string.Empty);
-                            sw.WriteLine("// Music Jump Codes For Level {0}", "MFX_" + fileName);
-                            string[] jumpHashcodes = TextFiles.ReadJumpHashCodes(jumpFilePath);
-                            for (int j = 0; j < jumpHashcodes.Length; j++)
-                            {
-                                sw.WriteLine("#define JMP_{0} 0x{1:X8}", jumpHashcodes[j], ((0x1BE & 0xFFF) << 20) | (((short)j & 0xFF) << 8) | ((fileData.HashCode & 0xFF) << 0));
-                            }
+                            sw.WriteLine("#define JMP_{0} 0x{1:X8}", jumpHashcodes[j], ((0x1BE & 0xFFF) << 20) | (((short)j & 0xFF) << 8) | ((fileData.HashCode & 0xFF) << 0));
                         }
                     }
                 }
@@ -62,27 +53,22 @@ namespace sb_editor.HashCodes
         //-------------------------------------------------------------------------------------------------------------------------------
         internal void CreateMfxValidList(string filePath)
         {
-            string[] musicFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData"), "*.txt", SearchOption.TopDirectoryOnly);
+            string[] musicFiles = TextFiles.ReadListBlock(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", "MFXFiles.txt"), "#MFXFiles");
             Array.Sort(musicFiles);
             using (StreamWriter sw = new StreamWriter(File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
                 sw.WriteLine("s32 MFX_ValidList[]={");
                 for (int i = 0; i < musicFiles.Length; i++)
                 {
-                    //Get Music File Data
-                    string fileName = Path.GetFileNameWithoutExtension(musicFiles[i]);
-                    if (!fileName.Equals("MFXFiles", StringComparison.OrdinalIgnoreCase))
+                    //Get Jump File Data
+                    string jumpFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESWork", musicFiles[i] + ".jmp");
+                    if (File.Exists(jumpFilePath))
                     {
-                        //Get Jump File Data
-                        string jumpFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESWork", fileName + ".jmp");
-                        if (File.Exists(jumpFilePath))
+                        MusicFile fileData = TextFiles.ReadMusicFile(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", musicFiles[i] + ".txt"));
+                        string[] jumpHashcodes = TextFiles.ReadJumpHashCodes(jumpFilePath);
+                        for (int j = 0; j < jumpHashcodes.Length; j++)
                         {
-                            MusicFile fileData = TextFiles.ReadMusicFile(musicFiles[i]);
-                            string[] jumpHashcodes = TextFiles.ReadJumpHashCodes(jumpFilePath);
-                            for (int j = 0; j < jumpHashcodes.Length; j++)
-                            {
-                                sw.WriteLine("0x{0:X8},// JMP_{1}", ((0x1BE & 0xFFF) << 20) | (((short)j & 0xFF) << 8) | ((fileData.HashCode & 0xFF) << 0), jumpHashcodes[j]);
-                            }
+                            sw.WriteLine("0x{0:X8},// JMP_{1}", ((0x1BE & 0xFFF) << 20) | (((short)j & 0xFF) << 8) | ((fileData.HashCode & 0xFF) << 0), jumpHashcodes[j]);
                         }
                     }
                 }
@@ -105,16 +91,15 @@ namespace sb_editor.HashCodes
                 sw.WriteLine("} MusicDetails;");
                 sw.WriteLine(string.Empty);
                 sw.WriteLine("MusicDetails MusicData[]={");
-                string[] musicFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData"), "*.txt", SearchOption.TopDirectoryOnly);
+                string[] musicFiles = TextFiles.ReadListBlock(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", "MFXFiles.txt"), "#MFXFiles");
                 for (int i = 0; i < musicFiles.Length; i++)
                 {
-                    string fileName = Path.GetFileNameWithoutExtension(musicFiles[i]);
-                    if (!fileName.Equals("MFXFiles", StringComparison.OrdinalIgnoreCase))
+                    string waveFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", musicFiles[i] + ".wav");
+                    if (File.Exists(waveFilePath))
                     {
-                        string waveFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", fileName + ".wav");
                         using (WaveFileReader wReader = new WaveFileReader(waveFilePath))
                         {
-                            MusicFile fileData = TextFiles.ReadMusicFile(musicFiles[i]);
+                            MusicFile fileData = TextFiles.ReadMusicFile(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", musicFiles[i] + ".txt"));
                             float duration = (float)decimal.Divide(wReader.Length, wReader.WaveFormat.AverageBytesPerSecond);
                             string strDuration = duration.ToString("G7", GlobalPrefs.NumericProvider);
                             if (duration % 1 == 0)

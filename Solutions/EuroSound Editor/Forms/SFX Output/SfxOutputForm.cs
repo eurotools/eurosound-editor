@@ -103,10 +103,10 @@ namespace sb_editor.Forms
                 OutputHashCodes(samplesList);
 
                 //Create SFX Data
-                for (int i = 0; i < outputPlatform.Length; i++)
+                string sfxFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "SFX_Data.h");
+                if (!string.IsNullOrEmpty(GlobalPrefs.CurrentProject.EngineXProjectPath) && Directory.Exists(GlobalPrefs.CurrentProject.EngineXProjectPath) && File.Exists(sfxFilePath))
                 {
-                    string sfxFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "SFX_Data.h");
-                    if (Directory.Exists(GlobalPrefs.CurrentProject.EngineXProjectPath) && File.Exists(sfxFilePath))
+                    for (int i = 0; i < outputPlatform.Length; i++)
                     {
                         string outputPath = Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", CommonFunctions.GetEnginexFolder(outputPlatform[i]), "Music");
                         Directory.CreateDirectory(outputPath);
