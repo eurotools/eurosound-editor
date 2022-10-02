@@ -569,8 +569,8 @@ namespace sb_editor.Panels
             // 
             this.Highlighted.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.Highlighted.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.Highlighted.FillColor = System.Drawing.Color.Gainsboro;
-            this.Highlighted.FillGradientColor = System.Drawing.Color.Gainsboro;
+            this.Highlighted.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.Highlighted.FillGradientColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.Highlighted.FillStyle = Microsoft.VisualBasic.PowerPacks.FillStyle.Solid;
             this.Highlighted.Location = new System.Drawing.Point(2, 122);
             this.Highlighted.Name = "Highlighted";

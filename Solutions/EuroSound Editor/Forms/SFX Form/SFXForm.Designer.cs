@@ -120,23 +120,24 @@ namespace sb_editor.Forms
             // 
             // pnlAlert
             // 
-            this.pnlAlert.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.pnlAlert.BackColor = System.Drawing.SystemColors.Control;
             this.pnlAlert.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pnlAlert.Controls.Add(this.lblAlert);
-            this.pnlAlert.Location = new System.Drawing.Point(124, 253);
+            this.pnlAlert.Location = new System.Drawing.Point(140, 253);
             this.pnlAlert.Name = "pnlAlert";
-            this.pnlAlert.Size = new System.Drawing.Size(657, 59);
+            this.pnlAlert.Size = new System.Drawing.Size(615, 50);
             this.pnlAlert.TabIndex = 10;
             this.pnlAlert.Visible = false;
             // 
             // lblAlert
             // 
+            this.lblAlert.BackColor = System.Drawing.SystemColors.Control;
             this.lblAlert.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblAlert.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAlert.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAlert.ForeColor = System.Drawing.Color.Red;
             this.lblAlert.Location = new System.Drawing.Point(0, 0);
             this.lblAlert.Name = "lblAlert";
-            this.lblAlert.Size = new System.Drawing.Size(653, 55);
+            this.lblAlert.Size = new System.Drawing.Size(611, 46);
             this.lblAlert.TabIndex = 0;
             this.lblAlert.Text = "Common Is Not Used By This SFX!";
             this.lblAlert.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

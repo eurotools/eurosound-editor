@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace sb_editor.Forms
@@ -336,7 +337,7 @@ namespace sb_editor.Forms
         private void LoadData()
         {
             //Update MFX Files
-            using (StreamWriter sw = new StreamWriter(File.Open(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", "MFXFiles.txt"), FileMode.Create, FileAccess.Write, FileShare.Read)))
+            using (StreamWriter sw = new StreamWriter(File.Open(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", "MFXFiles.txt"), FileMode.Create, FileAccess.Write, FileShare.Read), new UTF8Encoding(false)))
             {
                 sw.WriteLine("#MFXFiles");
                 //Check for new files
