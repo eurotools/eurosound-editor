@@ -212,7 +212,7 @@ namespace sb_editor.Forms
                     }
 
                     //Build SFX
-                    string outputPath = CommonFunctions.GetMusicOutputFolder("PlayStation2");
+                    string outputPath = CommonFunctions.GetSoundbankOutPath("PlayStation2", string.Empty, true);
                     if (!string.IsNullOrEmpty(outputPath) && Directory.Exists(outputPath))
                     {
                         MusXBuild_MusicFile.BuildMusicFile(soundMarkerFilePath, soundSampleDataFilePath, Path.Combine(outputPath, string.Format("HCE{0:X5}.SFX", musicFileData.HashCode)), (uint)musicFileData.HashCode, false);
@@ -291,7 +291,7 @@ namespace sb_editor.Forms
                                 markerFiles.CreateMarkerFile(aslFilePath, asrFilePath, markerFile, musicFileData.Volume, platform, soundMarkerFilePath);
 
                                 //Build SFX
-                                string outputPath = CommonFunctions.GetMusicOutputFolder(platform);
+                                string outputPath = CommonFunctions.GetSoundbankOutPath(platform, string.Empty, true);
                                 if (!string.IsNullOrEmpty(outputPath) && Directory.Exists(outputPath))
                                 {
                                     MusXBuild_MusicFile.BuildMusicFile(soundMarkerFilePath, soundSampleDataFilePath, Path.Combine(outputPath, "HCE" + musicFileData.HashCode.ToString("X5") + ".SFX"), (uint)musicFileData.HashCode, platform.Equals("GameCube"));
@@ -339,10 +339,10 @@ namespace sb_editor.Forms
                         }
 
                         //Build SFX
-                        string outputPath = CommonFunctions.GetMusicOutputFolder("X Box");
+                        string outputPath = CommonFunctions.GetSoundbankOutPath("X Box", string.Empty, true);
                         if (string.IsNullOrEmpty(outputPath))
                         {
-                            outputPath = CommonFunctions.GetMusicOutputFolder("Xbox");
+                            outputPath = CommonFunctions.GetSoundbankOutPath("Xbox", string.Empty, true);
                         }
                         if (!string.IsNullOrEmpty(outputPath) && Directory.Exists(outputPath))
                         {

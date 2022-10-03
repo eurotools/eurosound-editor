@@ -73,27 +73,20 @@ namespace sb_editor
         //-------------------------------------------------------------------------------------------------------------------------------
         public static string GetEnginexFolder(string platform)
         {
-            string folder = string.Empty;
             switch (platform.ToLower())
             {
                 case "pc":
-                    folder = "_bin_PC";
-                    break;
+                    return "_bin_PC";
                 case "playstation2":
-                    folder = "_bin_PS2";
-                    break;
+                    return "_bin_PS2";
                 case "gamecube":
-                    folder = "_bin_GC";
-                    break;
+                    return "_bin_GC";
                 case "xbox":
-                    folder = "_bin_XB";
-                    break;
                 case "x box":
-                    folder = "_bin_XB";
-                    break;
+                    return "_bin_XB";
+                default:
+                    return string.Empty;
             }
-
-            return folder;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -108,16 +101,11 @@ namespace sb_editor
         {
             //Get Output Platforms
             UserControl_MainForm_Output mainForm = ((MainForm)Application.OpenForms[nameof(MainForm)]).UserControl_Output;
-            string[] platforms;
+            string[] platforms = new string[] { mainForm.cboOutputFormat.SelectedItem.ToString() };
             if (mainForm.rdoAllForAll.Checked)
             {
                 platforms = GlobalPrefs.CurrentProject.platformData.Keys.ToArray();
             }
-            else
-            {
-                platforms = new string[] { mainForm.cboOutputFormat.SelectedItem.ToString() };
-            }
-
             return platforms;
         }
 
@@ -160,22 +148,14 @@ namespace sb_editor
         {
             DateTime fileInfo = new FileInfo(filePath).LastWriteTime;
             string year = fileInfo.Year.ToString();
-            string month, day;
+            string month = fileInfo.Month.ToString(), day = fileInfo.Day.ToString();
             if (fileInfo.Month < 10)
             {
                 month = "00" + fileInfo.Month.ToString();
             }
-            else
-            {
-                month = fileInfo.Month.ToString();
-            }
             if (fileInfo.Day < 10)
             {
                 day = "00" + fileInfo.Day.ToString();
-            }
-            else
-            {
-                day = fileInfo.Day.ToString();
             }
 
             return string.Format("{0}/{1}/{2} {3:#0}:{4:00}:{5:00}", year, day, month, fileInfo.Hour, fileInfo.Minute, fileInfo.Second);
@@ -191,7 +171,6 @@ namespace sb_editor
         //-------------------------------------------------------------------------------------------------------------------------------
         internal static string GetSampleFromSpeechFolder(string sampleRelPath, string outLanguage)
         {
-            string samplePath = string.Empty;
             if (sampleRelPath.IndexOf("Speech", StringComparison.OrdinalIgnoreCase) >= 0)
             {
                 string[] data = sampleRelPath.Split(new string[] { "\\" }, StringSplitOptions.RemoveEmptyEntries);
@@ -199,15 +178,15 @@ namespace sb_editor
                 if (startPoint >= 0)
                 {
                     data[startPoint + 1] = outLanguage;
-                    samplePath = string.Join("\\", data);
+                    return string.Join("\\", data);
                 }
             }
             else
             {
-                samplePath = sampleRelPath;
+                return sampleRelPath;
             }
 
-            return samplePath;
+            return string.Empty;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -272,7 +251,7 @@ namespace sb_editor
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static string GetSoundBankOutputFolder(string platform, string language)
+        public static string GetSoundbankOutPath(string platform, string language, bool musicFolder = false)
         {
             //Get Output Path
             string outputPath = string.Empty;
@@ -280,33 +259,15 @@ namespace sb_editor
             //EngineX project Path
             if (!string.IsNullOrEmpty(GlobalPrefs.CurrentProject.EngineXProjectPath) && Directory.Exists(GlobalPrefs.CurrentProject.EngineXProjectPath))
             {
-                //Get Output Path 
-                Directory.CreateDirectory(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Sonix"));
-                outputPath = Directory.CreateDirectory(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", GetEnginexFolder(platform), GetLanguageFolder(language))).FullName;
-            }
-
-            //Default Path
-            if (string.IsNullOrEmpty(outputPath) && GlobalPrefs.CurrentProject.platformData.ContainsKey(platform))
-            {
-                string outFolder = GlobalPrefs.CurrentProject.platformData[platform].OutputFolder;
-                if (!string.IsNullOrEmpty(outFolder) && Path.IsPathRooted(outFolder))
+                if (musicFolder)
                 {
-                    outputPath = Directory.CreateDirectory(outFolder).FullName;
+                    outputPath = Directory.CreateDirectory(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", GetEnginexFolder(platform), "music")).FullName;
                 }
-            }
-            return outputPath;
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        public static string GetMusicOutputFolder(string platform)
-        {
-            //Get Output Path
-            string outputPath = string.Empty;
-
-            //EngineX project Path
-            if (!string.IsNullOrEmpty(GlobalPrefs.CurrentProject.EngineXProjectPath) && Directory.Exists(GlobalPrefs.CurrentProject.EngineXProjectPath))
-            {
-                outputPath = Directory.CreateDirectory(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", GetEnginexFolder(platform), "music")).FullName;
+                else
+                {
+                    Directory.CreateDirectory(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Sonix"));
+                    outputPath = Directory.CreateDirectory(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", GetEnginexFolder(platform), GetLanguageFolder(language))).FullName;
+                }
             }
 
             //Default Path

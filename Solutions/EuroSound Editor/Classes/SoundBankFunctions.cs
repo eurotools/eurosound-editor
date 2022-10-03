@@ -272,59 +272,26 @@ namespace sb_editor.Classes
         //-------------------------------------------------------------------------------------------------------------------------------
         internal long GetMaxBankSize(string currentPlatform, SoundBank sbData)
         {
-            long myMaxSize = 0;
             string systemIniFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini");
             if (File.Exists(systemIniFilePath))
             {
                 //Max Sizes
                 IniFile systemIni = new IniFile(systemIniFilePath);
-                if (currentPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase))
+                switch (currentPlatform.ToLower())
                 {
-                    if (sbData.PCSize > 0)
-                    {
-                        myMaxSize = sbData.PCSize;
-                    }
-                    else
-                    {
-                        myMaxSize = Convert.ToUInt32(systemIni.Read("PCSize", "PropertiesForm"));
-                    }
-                }
-                else if (currentPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase))
-                {
-                    if (sbData.PlayStationSize > 0)
-                    {
-                        myMaxSize = sbData.PlayStationSize;
-                    }
-                    else
-                    {
-                        myMaxSize = Convert.ToUInt32(systemIni.Read("PlayStationSize", "PropertiesForm"));
-                    }
-                }
-                else if (currentPlatform.Equals("GameCube", StringComparison.OrdinalIgnoreCase))
-                {
-                    if (sbData.GameCubeSize > 0)
-                    {
-                        myMaxSize = sbData.GameCubeSize;
-                    }
-                    else
-                    {
-                        myMaxSize = Convert.ToUInt32(systemIni.Read("GameCubeSize", "PropertiesForm"));
-                    }
-                }
-                else
-                {
-                    if (sbData.XboxSize > 0)
-                    {
-                        myMaxSize = sbData.XboxSize;
-                    }
-                    else
-                    {
-                        myMaxSize = Convert.ToUInt32(systemIni.Read("XBoxSize", "PropertiesForm"));
-                    }
+                    case "pc":
+                        return sbData.PCSize > 0 ? sbData.PCSize : Convert.ToUInt32(systemIni.Read("PCSize", "PropertiesForm"));
+                    case "playstation2":
+                        return sbData.PlayStationSize > 0 ? sbData.PlayStationSize : Convert.ToUInt32(systemIni.Read("PlayStationSize", "PropertiesForm"));
+                    case "gamecube":
+                        return sbData.GameCubeSize > 0 ? sbData.GameCubeSize : Convert.ToUInt32(systemIni.Read("GameCubeSize", "PropertiesForm"));
+                    case "xbox":
+                    case "x box":
+                        return sbData.XboxSize > 0 ? sbData.XboxSize : Convert.ToUInt32(systemIni.Read("XBoxSize", "PropertiesForm"));
                 }
             }
 
-            return myMaxSize;
+            return 0;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -332,9 +299,10 @@ namespace sb_editor.Classes
         {
             foreach (KeyValuePair<string, SFX> soundToCheck in fileData)
             {
-                int duckerLength = 0;
                 if (soundToCheck.Value.Parameters.Ducker > 0)
                 {
+                    int duckerLength = 0;
+
                     //Get Length of all samples
                     foreach (SfxSample sampleToCheck in soundToCheck.Value.Samples)
                     {
