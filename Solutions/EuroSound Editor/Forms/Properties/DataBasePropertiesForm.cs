@@ -97,7 +97,7 @@ namespace sb_editor.Forms
                 }
                 lstDependencies.EndUpdate();
                 lblDataBase_Dependencies.Text = string.Format("SoundBank File Dependencies: {0}", lstDependencies.Items.Count);
-                lblDependenciesCount.Text = string.Format("Total {0}", lstDependencies.Items.Count);
+                lblDependenciesCount.Text = string.Format("Total: {0}", lstDependencies.Items.Count);
             }
 
             // Set cursor as default arrow
