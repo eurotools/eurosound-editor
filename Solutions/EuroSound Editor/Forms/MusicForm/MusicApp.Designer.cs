@@ -247,12 +247,6 @@ namespace sb_editor.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cboOutputFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboOutputFormat.FormattingEnabled = true;
-            this.cboOutputFormat.Items.AddRange(new object[] {
-            "PlayStation2",
-            "GameCube",
-            "PC",
-            "X Box",
-            "All"});
             this.cboOutputFormat.Location = new System.Drawing.Point(6, 16);
             this.cboOutputFormat.Name = "cboOutputFormat";
             this.cboOutputFormat.Size = new System.Drawing.Size(222, 21);

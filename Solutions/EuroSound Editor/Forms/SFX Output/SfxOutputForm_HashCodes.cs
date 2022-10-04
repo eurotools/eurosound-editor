@@ -202,37 +202,7 @@ namespace sb_editor.Forms
 
             //-------------------------------------------------------------------------------[Sound.h]-------------------------------------------------------------------------------
             backgroundWorker1.ReportProgress(100, "End");
-            using (StreamWriter sw = new StreamWriter(File.Open(Path.Combine(GlobalPrefs.CurrentProject.EuroLandHashCodeServerPath, "Sound.h"), FileMode.Create, FileAccess.Write, FileShare.Read)))
-            {
-                sw.WriteLine("/* HT_Sound */");
-                if (File.Exists(sfxDefinesFilePath))
-                {
-                    string[] fileData = File.ReadAllLines(sfxDefinesFilePath);
-                    for (int i = 0; i < fileData.Length; i++)
-                    {
-                        sw.WriteLine(fileData[i]);
-                    }
-                }
-                string mfxDefines = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Defines.h");
-                if (File.Exists(mfxDefines))
-                {
-                    sw.WriteLine(string.Empty);
-                    string[] fileData = File.ReadAllLines(mfxDefines);
-                    for (int i = 0; i < fileData.Length; i++)
-                    {
-                        sw.WriteLine(fileData[i]);
-                    }
-                }
-                if (File.Exists(reverbsFilePath))
-                {
-                    sw.WriteLine(string.Empty);
-                    string[] fileData = File.ReadAllLines(reverbsFilePath);
-                    for (int i = 0; i < fileData.Length; i++)
-                    {
-                        sw.WriteLine(fileData[i]);
-                    }
-                }
-            }
+            CommonFunctions.BuildSoundHFile();
         }
     }
 

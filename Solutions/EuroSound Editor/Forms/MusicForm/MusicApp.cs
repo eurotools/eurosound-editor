@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -25,8 +26,17 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void Frm_MusicMaker_Load(object sender, EventArgs e)
         {
-            //Load Data
+            //Get Output Platforms
+            cboOutputFormat.BeginUpdate();
+            foreach(string outPlatform in GlobalPrefs.CurrentProject.platformData.Keys)
+            {
+                cboOutputFormat.Items.Add(outPlatform);
+            }
+            cboOutputFormat.Items.Add("All");
             cboOutputFormat.SelectedItem = "All";
+            cboOutputFormat.EndUpdate();
+
+            //Load MFX Data
             LoadData();
         }
 
@@ -92,27 +102,46 @@ namespace sb_editor.Forms
                 if (filesToOutput.Count > 0)
                 {
                     //Open Output Form
-                    using (MusicAppExporter exporter = new MusicAppExporter(filesToOutput.ToArray(), cboOutputFormat.SelectedItem.ToString(), this))
+                    string[] outputPlatform = new string[] { cboOutputFormat.SelectedItem.ToString() };
+                    if (cboOutputFormat.SelectedItem.ToString().Equals("All"))
                     {
-                        exporter.ShowDialog();
-                        if (!Visible)
+                        outputPlatform = GlobalPrefs.CurrentProject.platformData.Keys.ToArray();
+                    }
+                    if (outputPlatform.Length > 0)
+                    {
+                        using (MusicAppExporter exporter = new MusicAppExporter(filesToOutput.ToArray(), outputPlatform, this))
                         {
-                            Show();
-                        }
-
-                        //Create MFX Hashcodes
-                        string finalFile = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Defines.h");
-                        string tempFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Temp_MFX_Defines.h");
-                        List<string> missingInTempFile = CreateAndValidateMfxDefines();
-                        if (missingInTempFile.Count > 0)
-                        {
-                            string message = string.Join("\n", missingInTempFile.ToArray());
-                            //Truncate string if required
-                            if (message.Length > 914)
+                            exporter.ShowDialog();
+                            if (!Visible)
                             {
-                                message = message.Substring(0, 914);
+                                Show();
                             }
-                            if (MessageBox.Show(string.Format("{0}:\n\n{1}\n\nAre you sure you wish to overwrite this file?", "The following defines are missing from the new MFX_Defines.h file", message), Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+
+                            //Create MFX Hashcodes
+                            string finalFile = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Defines.h");
+                            string tempFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Temp_MFX_Defines.h");
+                            List<string> missingInTempFile = CreateAndValidateMfxDefines();
+                            if (missingInTempFile.Count > 0)
+                            {
+                                string message = string.Join("\n", missingInTempFile.ToArray());
+                                //Truncate string if required
+                                if (message.Length > 914)
+                                {
+                                    message = message.Substring(0, 914);
+                                }
+                                if (MessageBox.Show(string.Format("{0}:\n\n{1}\n\nAre you sure you wish to overwrite this file?", "The following defines are missing from the new MFX_Defines.h file", message), Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                                {
+                                    if (File.Exists(tempFile))
+                                    {
+                                        if (File.Exists(finalFile))
+                                        {
+                                            File.Delete(finalFile);
+                                        }
+                                        File.Copy(tempFile, finalFile);
+                                    }
+                                }
+                            }
+                            else
                             {
                                 if (File.Exists(tempFile))
                                 {
@@ -122,17 +151,6 @@ namespace sb_editor.Forms
                                     }
                                     File.Copy(tempFile, finalFile);
                                 }
-                            }
-                        }
-                        else
-                        {
-                            if (File.Exists(tempFile))
-                            {
-                                if (File.Exists(finalFile))
-                                {
-                                    File.Delete(finalFile);
-                                }
-                                File.Copy(tempFile, finalFile);
                             }
                         }
                     }
@@ -302,6 +320,7 @@ namespace sb_editor.Forms
             {
                 hashCodes.CreateMfxValidList(Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_ValidList.h"));
                 hashCodes.CreateMfxData(Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Data.h"));
+                CommonFunctions.BuildSoundHFile();
             }
 
             return missingInTempFile;
