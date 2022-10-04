@@ -131,6 +131,7 @@ namespace sb_editor
             this.lblFormatInfo3.Size = new System.Drawing.Size(72, 13);
             this.lblFormatInfo3.TabIndex = 25;
             this.lblFormatInfo3.Text = "format #4 info";
+            this.lblFormatInfo3.Visible = false;
             // 
             // lblFormatInfo2
             // 
@@ -140,6 +141,7 @@ namespace sb_editor
             this.lblFormatInfo2.Size = new System.Drawing.Size(72, 13);
             this.lblFormatInfo2.TabIndex = 23;
             this.lblFormatInfo2.Text = "format #3 info";
+            this.lblFormatInfo2.Visible = false;
             // 
             // lblFormatInfo1
             // 
@@ -149,6 +151,7 @@ namespace sb_editor
             this.lblFormatInfo1.Size = new System.Drawing.Size(72, 13);
             this.lblFormatInfo1.TabIndex = 21;
             this.lblFormatInfo1.Text = "format #2 info";
+            this.lblFormatInfo1.Visible = false;
             // 
             // lblFormatInfo0
             // 
@@ -158,6 +161,7 @@ namespace sb_editor
             this.lblFormatInfo0.Size = new System.Drawing.Size(72, 13);
             this.lblFormatInfo0.TabIndex = 19;
             this.lblFormatInfo0.Text = "format #1 info";
+            this.lblFormatInfo0.Visible = false;
             // 
             // lblFormatName3
             // 
@@ -167,6 +171,7 @@ namespace sb_editor
             this.lblFormatName3.Size = new System.Drawing.Size(81, 13);
             this.lblFormatName3.TabIndex = 24;
             this.lblFormatName3.Text = "format name #4";
+            this.lblFormatName3.Visible = false;
             // 
             // lblFormatName2
             // 
@@ -176,6 +181,7 @@ namespace sb_editor
             this.lblFormatName2.Size = new System.Drawing.Size(81, 13);
             this.lblFormatName2.TabIndex = 22;
             this.lblFormatName2.Text = "format name #3";
+            this.lblFormatName2.Visible = false;
             // 
             // lblFormatName1
             // 
@@ -185,6 +191,7 @@ namespace sb_editor
             this.lblFormatName1.Size = new System.Drawing.Size(81, 13);
             this.lblFormatName1.TabIndex = 20;
             this.lblFormatName1.Text = "format name #2";
+            this.lblFormatName1.Visible = false;
             // 
             // lblFormatName0
             // 
@@ -194,6 +201,7 @@ namespace sb_editor
             this.lblFormatName0.Size = new System.Drawing.Size(81, 13);
             this.lblFormatName0.TabIndex = 18;
             this.lblFormatName0.Text = "format name #1";
+            this.lblFormatName0.Visible = false;
             // 
             // lblOutputFileName_Value
             // 

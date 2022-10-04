@@ -149,7 +149,7 @@ namespace sb_editor.Forms
                         {
                             SfxSample sampleToAdd = new SfxSample
                             {
-                                FilePath = sampleToCheck.Substring(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master").Length),
+                                FilePath = sampleToCheck.Substring(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master").Length + 1),
                                 PitchOffset = PitchOffset,
                                 RandomPitch = RandomPitch,
                                 BaseVolume = BaseVolume,

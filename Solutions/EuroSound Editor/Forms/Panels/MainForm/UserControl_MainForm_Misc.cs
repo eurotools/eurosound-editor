@@ -44,7 +44,7 @@ namespace sb_editor.Panels
             Cursor.Current = Cursors.WaitCursor;
 
             // Check for new Samples
-            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "System")))
+            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "System")) && Directory.Exists(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master")))
             {
                 //Calculate Execution time
                 Stopwatch watcher = new Stopwatch();

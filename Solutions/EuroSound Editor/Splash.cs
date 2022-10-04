@@ -77,6 +77,9 @@ namespace sb_editor
                         string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
                         if (File.Exists(projectPropertiesFile))
                         {
+                            //Create Temporal Output Folders
+                            CommonFunctions.CheckForMissingFolders();
+
                             //Update variables
                             GlobalPrefs.SFXHashCodeNumber = miscFileSettings.SFXHashCodeNumber;
                             GlobalPrefs.SoundBankHashCodeNumber = miscFileSettings.SoundBankHashCodeNumber;
@@ -189,8 +192,15 @@ namespace sb_editor
                                 frmMainForm.UserControl_Output.btnQuickOutput.Enabled = false;
                             }
 
-                            //Create Temporal Output Folders
-                            CommonFunctions.CheckForMissingFolders();
+                            //SFXs
+                            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs")))
+                            {
+                                Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "Misc"));
+                                Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "PC"));
+                                Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "X Box"));
+                                Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "GameCube"));
+                                Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "PlayStation2"));
+                            }
                         }
                         else
                         {

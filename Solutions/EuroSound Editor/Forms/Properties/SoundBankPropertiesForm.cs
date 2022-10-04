@@ -52,11 +52,15 @@ namespace sb_editor
         private void LoadData(string soundBankFile)
         {
             SoundBankFunctions sbFunctions = new SoundBankFunctions();
-            SamplePool samplePool = TextFiles.ReadSamplesFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "Samples.txt"));
             SoundBank soundBankData = TextFiles.ReadSoundbankFile(soundBankFile);
-
+            SamplePool samplePool = new SamplePool();
+            string samplePoolFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Samples.txt");
             string[] SFXs = sbFunctions.GetSFXs(soundBankData.DataBases, outputFormat);
             string[] samples = sbFunctions.GetSampleList(SFXs, outputLanguage);
+            if (File.Exists(samplePoolFile))
+            {
+                samplePool = TextFiles.ReadSamplesFile(samplePoolFile);
+            }
 
             //Info to the GUI
             grbCurrentSoundbank.Text = Path.GetFileNameWithoutExtension(soundBankFile);
@@ -120,12 +124,14 @@ namespace sb_editor
                 Control[] formatNameLabels = grbCurrentSoundbank.Controls.Find("lblFormatName" + i.ToString(), false);
                 if (formatNameLabels.Length > 0)
                 {
+                    ((Label)formatNameLabels[0]).Visible = true;
                     ((Label)formatNameLabels[0]).Text = GlobalPrefs.CurrentProject.platformData.ElementAt(i).Key;
                 }
 
                 Control[] formatValueLabels = grbCurrentSoundbank.Controls.Find("lblFormatInfo" + i.ToString(), false);
                 if (formatValueLabels.Length > 0)
                 {
+                    ((Label)formatValueLabels[0]).Visible = true;
                     ((Label)formatValueLabels[0]).Text = fileSize;
                 }
             }

@@ -182,26 +182,30 @@ namespace sb_editor.Classes
                     }
 
                     //ReSampled wave size
-                    SamplePoolItem sampleItem = samplePool.SamplePoolItems[MultipleFilesFunctions.GetFullFileName(samplesList[i])];
-                    int sampleRateIndex = GlobalPrefs.CurrentProject.ResampleRates.IndexOf(sampleItem.ReSampleRate);
-                    int formatRate = GlobalPrefs.CurrentProject.platformData[outputPlatform].ReSampleRates[sampleRateIndex];
-                    decimal resampledWaveSize = decimal.Divide(masterWaveSize, decimal.Divide(masterWaveFreq, formatRate));
-                    switch (outputPlatform)
+                    string keyToCheck = MultipleFilesFunctions.GetFullFileName(samplesList[i]);
+                    if (samplePool.SamplePoolItems.ContainsKey(keyToCheck))
                     {
-                        case "PC":
-                            fileSize += CalculusLoopOffset.GetStreamLoopOffsetPCandGC((uint)resampledWaveSize / 2);
-                            break;
-                        case "GameCube":
-                            decimal dspFileSize = decimal.Divide(resampledWaveSize, (decimal)3.46);
-                            fileSize += CalculusLoopOffset.GetStreamLoopOffsetPCandGC((uint)dspFileSize);
-                            break;
-                        case "PlayStation2":
-                            fileSize += CalculusLoopOffset.GetStreamLoopOffsetPlayStation2((uint)resampledWaveSize / 4);
-                            break;
-                        default:
-                            decimal xboxAdpcm = decimal.Divide(resampledWaveSize, (decimal)2.36);
-                            fileSize += CalculusLoopOffset.GetXboxAlignedNumber((uint)xboxAdpcm);
-                            break;
+                        SamplePoolItem sampleItem = samplePool.SamplePoolItems[keyToCheck];
+                        int sampleRateIndex = GlobalPrefs.CurrentProject.ResampleRates.IndexOf(sampleItem.ReSampleRate);
+                        int formatRate = GlobalPrefs.CurrentProject.platformData[outputPlatform].ReSampleRates[sampleRateIndex];
+                        decimal resampledWaveSize = decimal.Divide(masterWaveSize, decimal.Divide(masterWaveFreq, formatRate));
+                        switch (outputPlatform)
+                        {
+                            case "PC":
+                                fileSize += CalculusLoopOffset.GetStreamLoopOffsetPCandGC((uint)resampledWaveSize / 2);
+                                break;
+                            case "GameCube":
+                                decimal dspFileSize = decimal.Divide(resampledWaveSize, (decimal)3.46);
+                                fileSize += CalculusLoopOffset.GetStreamLoopOffsetPCandGC((uint)dspFileSize);
+                                break;
+                            case "PlayStation2":
+                                fileSize += CalculusLoopOffset.GetStreamLoopOffsetPlayStation2((uint)resampledWaveSize / 4);
+                                break;
+                            default:
+                                decimal xboxAdpcm = decimal.Divide(resampledWaveSize, (decimal)2.36);
+                                fileSize += CalculusLoopOffset.GetXboxAlignedNumber((uint)xboxAdpcm);
+                                break;
+                        }
                     }
                 }
             }
