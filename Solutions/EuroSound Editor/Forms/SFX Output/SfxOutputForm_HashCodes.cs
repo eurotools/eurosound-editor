@@ -51,8 +51,16 @@ namespace sb_editor.Forms
                 string[] data = File.ReadAllLines(availableFiles[i]);
                 if (data.Length == 2)
                 {
-                    string[] hashCode = data[1].Split(',', '{');
-                    itemsData.Add(Convert.ToUInt32(hashCode[1].Trim()), data[1]);
+                    string[] dataSplit = data[1].Split(',', '{');
+                    uint hashCode = Convert.ToUInt32(dataSplit[1].Trim());
+                    if (itemsData.ContainsKey(hashCode))
+                    {
+                        itemsData[hashCode] = data[1];
+                    }
+                    else
+                    {
+                        itemsData.Add(hashCode, data[1]);
+                    }
                 }
             }
 

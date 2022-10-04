@@ -145,6 +145,7 @@ namespace sb_editor.Forms
                     foreach (KeyValuePair<string, List<string>> HashCodeToCheck in HashCodesToAdd)
                     {
                         SFX fileData = TextFiles.ReadSfxFile(defaultsFile);
+                        fileData.HashCode = GlobalPrefs.SFXHashCodeNumber++;
                         foreach (string sampleToCheck in HashCodeToCheck.Value)
                         {
                             SfxSample sampleToAdd = new SfxSample
