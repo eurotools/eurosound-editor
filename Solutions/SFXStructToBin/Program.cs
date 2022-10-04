@@ -44,7 +44,7 @@ namespace SFXStructToBin
                             {
                                 float[] valuesToWrite = GetArrayValues(currentLine);
                                 // HashCode
-                                BinWriter.Write((uint)valuesToWrite[5]);
+                                BinWriter.Write((uint)valuesToWrite[0]);
                                 // Inner Radius
                                 BinWriter.Write(valuesToWrite[1]);
                                 // Outer Radius
@@ -75,10 +75,11 @@ namespace SFXStructToBin
             float[] ArrayOfValues = new float[8];
             for (int index = 0; index < ArrayOfValues.Length; index++)
             {
+                string numberToParse = SplitedLine[index].Trim();
                 // Parse text data to floats and add items to the list
-                if (!string.IsNullOrEmpty(SplitedLine[index]))
+                if (!string.IsNullOrEmpty(numberToParse))
                 {
-                    ArrayOfValues[index] = StringFloatToDouble(SplitedLine[index]);
+                    ArrayOfValues[index] = StringFloatToDouble(numberToParse);
                 }
             }
             return ArrayOfValues;
