@@ -121,6 +121,11 @@ namespace sb_editor.Forms
         {
             Text = e.UserState.ToString();
             ProgressBar1.Value = e.ProgressPercentage;
+            if (!IsDisposed && Environment.OSVersion.Version >= new Version(6, 1))
+            {
+                TaskbarProgress.SetValue(Handle, e.ProgressPercentage, ProgressBar1.Maximum);
+                TaskbarProgress.SetState(Handle, TaskbarProgress.TaskbarStates.Normal);
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -128,6 +133,10 @@ namespace sb_editor.Forms
         {
             if (e.Error != null)
             {
+                if (!IsDisposed && Environment.OSVersion.Version >= new Version(6, 1))
+                {
+                    TaskbarProgress.SetState(Handle, TaskbarProgress.TaskbarStates.Error);
+                }
                 MessageBox.Show(e.Error.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 

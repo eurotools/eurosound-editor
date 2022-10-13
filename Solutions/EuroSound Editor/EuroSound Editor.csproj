@@ -67,6 +67,7 @@
     <Compile Include="Classes\MultipleFilesFunctions.cs" />
     <Compile Include="Classes\ProjectFileFunctions.cs" />
     <Compile Include="Classes\SampleFiles.cs" />
+    <Compile Include="Classes\TaskbarProgress.cs" />
     <Compile Include="Forms\Advanced\Advanced_Report.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -1,6 +1,7 @@
 ﻿using ESUtils;
 using ExMarkers;
 using sb_editor.Audio_Classes;
+using sb_editor.Classes;
 using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
@@ -327,6 +328,10 @@ namespace sb_editor.Forms
             outputTimer.Stop();
             if (e.Error != null)
             {
+                if (!IsDisposed && Environment.OSVersion.Version >= new Version(6, 1))
+                {
+                    TaskbarProgress.SetState(Handle, TaskbarProgress.TaskbarStates.Error);
+                }
                 if (midiClass != null && midiClass.errorsList.Count > 0)
                 {
                     for (int i = 0; i < midiClass.errorsList.Count; i++)
@@ -353,6 +358,11 @@ namespace sb_editor.Forms
         {
             Text = e.UserState.ToString();
             ProgressBar1.Value = e.ProgressPercentage;
+            if (!IsDisposed && Environment.OSVersion.Version >= new Version(6, 1))
+            {
+                TaskbarProgress.SetValue(Handle, e.ProgressPercentage, ProgressBar1.Maximum);
+                TaskbarProgress.SetState(Handle, TaskbarProgress.TaskbarStates.Normal);
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------

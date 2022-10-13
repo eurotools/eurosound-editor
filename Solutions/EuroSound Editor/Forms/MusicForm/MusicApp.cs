@@ -28,7 +28,7 @@ namespace sb_editor.Forms
         {
             //Get Output Platforms
             cboOutputFormat.BeginUpdate();
-            foreach(string outPlatform in GlobalPrefs.CurrentProject.platformData.Keys)
+            foreach (string outPlatform in GlobalPrefs.CurrentProject.platformData.Keys)
             {
                 cboOutputFormat.Items.Add(outPlatform);
             }

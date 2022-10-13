@@ -164,11 +164,24 @@ namespace sb_editor.Forms
         private void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             ProgressBar1.Value = e.ProgressPercentage;
+            if (!IsDisposed && Environment.OSVersion.Version >= new Version(6, 1))
+            {
+                TaskbarProgress.SetValue(Handle, e.ProgressPercentage, ProgressBar1.Maximum);
+                TaskbarProgress.SetState(Handle, TaskbarProgress.TaskbarStates.Normal);
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            if (e.Error != null)
+            {
+                if (!IsDisposed && Environment.OSVersion.Version >= new Version(6, 1))
+                {
+                    TaskbarProgress.SetState(Handle, TaskbarProgress.TaskbarStates.Error);
+                }
+                MessageBox.Show(e.Error.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             Close();
         }
     }

@@ -1,4 +1,5 @@
-﻿using sb_editor.Forms;
+﻿using sb_editor.Classes;
+using sb_editor.Forms;
 using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
@@ -118,6 +119,10 @@ namespace sb_editor
         {
             if (e.Error != null)
             {
+                if (!IsDisposed && Environment.OSVersion.Version >= new Version(6, 1))
+                {
+                    TaskbarProgress.SetState(Handle, TaskbarProgress.TaskbarStates.Error);
+                }
                 MessageBox.Show(e.Error.ToString(), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else if (e.Cancelled)
@@ -134,8 +139,13 @@ namespace sb_editor
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            ProgressBar1.Value = e.ProgressPercentage;
             Text = (string)e.UserState;
+            ProgressBar1.Value = e.ProgressPercentage;
+            if (!IsDisposed && Environment.OSVersion.Version >= new Version(6, 1))
+            {
+                TaskbarProgress.SetValue(Handle, e.ProgressPercentage, ProgressBar1.Maximum);
+                TaskbarProgress.SetState(Handle, TaskbarProgress.TaskbarStates.Normal);
+            }
         }
     }
 
