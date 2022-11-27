@@ -81,7 +81,7 @@ namespace sb_editor.Panels
                 //Show Form
                 if (samples.SamplePoolItems.Count > 0)
                 {
-                    using (ReSampleForm resampleForm = new ReSampleForm(samples, watcher))
+                    using (ReSampleForm resampleForm = new ReSampleForm(watcher))
                     {
                         resampleForm.ShowDialog();
                     }

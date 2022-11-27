@@ -15,17 +15,16 @@ namespace sb_editor
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class ReSampleForm : Form
     {
-        private readonly SamplePool samples;
         private readonly Stopwatch watcher;
         private SoundPlayer audioPlayer;
+        private SamplePool samples;
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public ReSampleForm(SamplePool samplesFileData, Stopwatch methodWatcher)
+        public ReSampleForm(Stopwatch methodWatcher)
         {
             InitializeComponent();
             Width = 925;
             Height = 605;
-            samples = samplesFileData;
             watcher = methodWatcher;
         }
 
@@ -56,19 +55,14 @@ namespace sb_editor
             }
             cboSampleRate.EndUpdate();
 
-            //Add samples
-            lvwAllSamples.BeginUpdate();
-            foreach (KeyValuePair<string, SamplePoolItem> sampleItem in samples.SamplePoolItems)
+            //Check for updates and Print Sample Pool
+            string samplesFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Samples.txt");
+            if (File.Exists(samplesFilePath))
             {
-                ListViewItem itemData = new ListViewItem(new string[] { sampleItem.Key, sampleItem.Value.ReSampleRate, sampleItem.Value.Size.ToString(), sampleItem.Value.Date, sampleItem.Value.ReSample.ToString(), sampleItem.Value.StreamMe.ToString(), sampleItem.Value.ReSmp1.ToString(), sampleItem.Value.ReSmp2.ToString(), sampleItem.Value.ReSmp3.ToString(), sampleItem.Value.ReSmp4.ToString() });
-                lvwAllSamples.Items.Add(itemData);
+                samples = TextFiles.ReadSamplesFile(samplesFilePath);
+                samples.CheckForUpdates();
+                SamplePoolToListView(samples);
             }
-            if (lvwAllSamples.Items.Count > 0)
-            {
-                lvwAllSamples.Items[0].Selected = true;
-            }
-            lvwAllSamples.EndUpdate();
-            lblSampleCount.Text = string.Format("Sample Count:   {0}", lvwAllSamples.Items.Count);
 
             //Restore last path
             string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini");
@@ -223,21 +217,49 @@ namespace sb_editor
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnReSampleAll_Click(object sender, EventArgs e)
         {
+            //Reload file
+            string samplesFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Samples.txt");
+            if (File.Exists(samplesFilePath))
+            {
+                samples = TextFiles.ReadSamplesFile(samplesFilePath);
+                SamplePoolToListView(samples);
+            }
+
+            //Update global var
             GlobalPrefs.ReSampleStreams = true;
+
+            //Update rows
             for (int i = 0; i < lvwAllSamples.Items.Count; i++)
             {
                 lvwAllSamples.Items[i].SubItems[4].Text = "True";
             }
+
+            //Save Changes
+            SaveSamplesFile();
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnDeReSampleAll_Click(object sender, EventArgs e)
         {
+            //Reload file
+            string samplesFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Samples.txt");
+            if (File.Exists(samplesFilePath))
+            {
+                samples = TextFiles.ReadSamplesFile(samplesFilePath);
+                SamplePoolToListView(samples);
+            }
+
+            //Update global var
             GlobalPrefs.ReSampleStreams = false;
+
+            //Update rows
             for (int i = 0; i < lvwAllSamples.Items.Count; i++)
             {
                 lvwAllSamples.Items[i].SubItems[4].Text = "False";
             }
+
+            //Save Changes
+            SaveSamplesFile();
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -559,6 +581,26 @@ namespace sb_editor
                 samples.SamplePoolItems.Add(listItem.Text, sampleData);
             }
             TextFiles.WriteSamplesFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "Samples.txt"), samples);
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void SamplePoolToListView(SamplePool samples)
+        {
+            lvwAllSamples.Items.Clear();
+            lvwAllSamples.BeginUpdate();
+            if (samples.SamplePoolItems.Count > 0)
+            {
+                int i = 0;
+                ListViewItem[] itemsToAdd = new ListViewItem[samples.SamplePoolItems.Count];
+                foreach (KeyValuePair<string, SamplePoolItem> sampleItem in samples.SamplePoolItems)
+                {
+                    itemsToAdd[i++] = new ListViewItem(new string[] { sampleItem.Key, sampleItem.Value.ReSampleRate, sampleItem.Value.Size.ToString(), sampleItem.Value.Date, sampleItem.Value.ReSample.ToString(), sampleItem.Value.StreamMe.ToString(), sampleItem.Value.ReSmp1.ToString(), sampleItem.Value.ReSmp2.ToString(), sampleItem.Value.ReSmp3.ToString(), sampleItem.Value.ReSmp4.ToString() });
+                }
+                lvwAllSamples.Items.AddRange(itemsToAdd);
+                lvwAllSamples.Items[0].Selected = true;
+            }
+            lvwAllSamples.EndUpdate();
+            lblSampleCount.Text = string.Format("Sample Count:   {0}", lvwAllSamples.Items.Count);
         }
     }
 

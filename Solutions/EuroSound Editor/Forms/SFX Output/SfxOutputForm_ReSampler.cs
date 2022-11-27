@@ -217,8 +217,6 @@ namespace sb_editor.Forms
                     }
 
                     //Update File
-                    sample.Value.Date = CommonFunctions.GetSampleDate(sampleFullPath);
-                    sample.Value.Size = CommonFunctions.GetSampleSize(sampleFullPath);
                     sample.Value.ReSample = false;
                     sample.Value.ReSmp1 = "False";
                     sample.Value.ReSmp2 = "False";

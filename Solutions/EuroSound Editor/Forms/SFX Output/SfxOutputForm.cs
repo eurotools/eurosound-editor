@@ -73,6 +73,7 @@ namespace sb_editor.Forms
             if (File.Exists(samplesFilePath))
             {
                 samplesList = TextFiles.ReadSamplesFile(samplesFilePath);
+                samplesList.CheckForUpdates();
             }
 
             //Get HashCodes Dictionary

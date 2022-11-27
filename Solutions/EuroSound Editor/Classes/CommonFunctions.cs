@@ -146,7 +146,10 @@ namespace sb_editor
         //-------------------------------------------------------------------------------------------------------------------------------
         public static string GetSampleDate(string filePath)
         {
-            DateTime fileInfo = new FileInfo(filePath).LastWriteTime;
+            //Get Last Write Time
+            DateTime fileInfo = File.GetLastWriteTimeUtc(filePath).Add(TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now));
+
+            //Apply EuroSound Format.
             string year = fileInfo.Year.ToString();
             string month = fileInfo.Month.ToString(), day = fileInfo.Day.ToString();
             if (fileInfo.Month < 10)
@@ -157,7 +160,8 @@ namespace sb_editor
             {
                 day = "00" + fileInfo.Day.ToString();
             }
-
+            
+            //Return as a string
             return string.Format("{0}/{1}/{2} {3:#0}:{4:00}:{5:00}", year, day, month, fileInfo.Hour, fileInfo.Minute, fileInfo.Second);
         }
 

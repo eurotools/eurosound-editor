@@ -82,24 +82,6 @@ namespace sb_editor
                 }
             }
 
-            //Check For Extra ReSample
-            foreach (KeyValuePair<string, SamplePoolItem> itemToCheck in samplePool.SamplePoolItems)
-            {
-                string fullpath = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", itemToCheck.Key.TrimStart(Path.DirectorySeparatorChar));
-                if (File.Exists(fullpath))
-                {
-                    string lastDate = CommonFunctions.GetSampleDate(fullpath);
-                    if (!itemToCheck.Value.Date.Trim().Equals(lastDate))
-                    {
-                        itemToCheck.Value.ReSample = true;
-                    }
-                    if (!itemToCheck.Value.Size.Trim().Equals(new FileInfo(fullpath).Length.ToString()))
-                    {
-                        itemToCheck.Value.ReSample = true;
-                    }
-                }
-            }
-
             return samplePool;
         }
 
