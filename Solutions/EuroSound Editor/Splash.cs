@@ -81,6 +81,7 @@ namespace sb_editor
                             CommonFunctions.CheckForMissingFolders();
 
                             //Update variables
+                            GlobalPrefs.ReSampleStreams = miscFileSettings.ReSampleStreams;
                             GlobalPrefs.SFXHashCodeNumber = miscFileSettings.SFXHashCodeNumber;
                             GlobalPrefs.SoundBankHashCodeNumber = miscFileSettings.SoundBankHashCodeNumber;
                             GlobalPrefs.MFXHashCodeNumber = miscFileSettings.MFXHashCodeNumber;
