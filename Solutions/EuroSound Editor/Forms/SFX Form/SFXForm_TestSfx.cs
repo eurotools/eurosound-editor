@@ -4,7 +4,6 @@ using sb_editor.Classes;
 using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
@@ -16,10 +15,9 @@ namespace sb_editor.Forms
     public partial class SFXForm
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        private double CreateTestSfx()
+        private void CreateTestSfx(string outputFolder, string fileName)
         {
             SoundBankFunctions sbFunctions = new SoundBankFunctions();
-            Stopwatch watch = Stopwatch.StartNew();
 
             //Ensure that the debug folder exists
             DirectoryInfo debugFolder = Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "Debug_Report"));
@@ -64,7 +62,7 @@ namespace sb_editor.Forms
                         }
                     }
                 }
-                string outputFolder = Path.Combine(Application.StartupPath, "SystemFiles", "testAudioMod", "_Eng");
+
                 if (Directory.Exists(outputFolder))
                 {
                     //Build MusX
@@ -74,15 +72,11 @@ namespace sb_editor.Forms
 
                     //Get Output Path 
                     DirectoryInfo musXFolder = Directory.CreateDirectory(outputFolder);
-                    string fileName = string.Format("HC{0:X6}.SFX", CommonFunctions.GetSfxName(Array.FindIndex(GlobalPrefs.Languages, s => s.Equals("English", StringComparison.OrdinalIgnoreCase)), 65534));
 
                     //Build File
                     MusXBuild_Soundbank.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, string.Empty, Path.Combine(musXFolder.FullName, fileName), 65534, false);
                 }
             }
-
-            watch.Stop();
-            return watch.Elapsed.TotalSeconds;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -95,7 +89,7 @@ namespace sb_editor.Forms
             sfxWritter.Write(BytesFunctions.FlipInt32(fileData.Count, isBigEndian));
             foreach (KeyValuePair<string, SFX> sfxItem in fileData)
             {
-                sfxWritter.Write(BytesFunctions.FlipInt32(3, isBigEndian));
+                sfxWritter.Write(BytesFunctions.FlipInt32(0, isBigEndian));
                 sfxWritter.Write(0);
             }
 

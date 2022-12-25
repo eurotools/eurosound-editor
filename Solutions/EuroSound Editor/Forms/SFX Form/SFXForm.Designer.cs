@@ -43,7 +43,7 @@ namespace sb_editor.Forms
             this.btnReverbTester = new System.Windows.Forms.Button();
             this.btnStopSFX = new System.Windows.Forms.Button();
             this.btnTestSFX = new System.Windows.Forms.Button();
-            this.txtGameTime = new System.Windows.Forms.TextBox();
+            this.txtDllTime = new System.Windows.Forms.TextBox();
             this.txtEsTime = new System.Windows.Forms.TextBox();
             this.UserControl_SamplePool = new sb_editor.Panels.UserControl_SamplePool();
             this.UserControl_SFX_Parameters = new sb_editor.Panels.UserControl_SFX_Parameters();
@@ -63,6 +63,7 @@ namespace sb_editor.Forms
             this.btnOK = new System.Windows.Forms.Button();
             this.lblCurrentSFX = new System.Windows.Forms.Label();
             this.tmrTabPageBlink = new System.Windows.Forms.Timer(this.components);
+            this.ButtonDllVoices = new System.Windows.Forms.Button();
             this.pnlSFXParameters.SuspendLayout();
             this.pnlAlert.SuspendLayout();
             this.pnlOptions.SuspendLayout();
@@ -89,6 +90,7 @@ namespace sb_editor.Forms
             // pnlSFXParameters
             // 
             this.pnlSFXParameters.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pnlSFXParameters.Controls.Add(this.ButtonDllVoices);
             this.pnlSFXParameters.Controls.Add(this.btnSfxTestDebug);
             this.pnlSFXParameters.Controls.Add(this.pnlAlert);
             this.pnlSFXParameters.Controls.Add(this.btnDefSettings_Cancel);
@@ -98,7 +100,7 @@ namespace sb_editor.Forms
             this.pnlSFXParameters.Controls.Add(this.btnReverbTester);
             this.pnlSFXParameters.Controls.Add(this.btnStopSFX);
             this.pnlSFXParameters.Controls.Add(this.btnTestSFX);
-            this.pnlSFXParameters.Controls.Add(this.txtGameTime);
+            this.pnlSFXParameters.Controls.Add(this.txtDllTime);
             this.pnlSFXParameters.Controls.Add(this.txtEsTime);
             this.pnlSFXParameters.Controls.Add(this.UserControl_SamplePool);
             this.pnlSFXParameters.Controls.Add(this.UserControl_SFX_Parameters);
@@ -114,7 +116,7 @@ namespace sb_editor.Forms
             this.btnSfxTestDebug.Name = "btnSfxTestDebug";
             this.btnSfxTestDebug.Size = new System.Drawing.Size(88, 23);
             this.btnSfxTestDebug.TabIndex = 9;
-            this.btnSfxTestDebug.Text = "Test Debug";
+            this.btnSfxTestDebug.Text = "PC DLL Debug";
             this.btnSfxTestDebug.UseVisualStyleBackColor = true;
             this.btnSfxTestDebug.Click += new System.EventHandler(this.BtnSfxTestDebug_Click);
             // 
@@ -169,20 +171,20 @@ namespace sb_editor.Forms
             // lblHashCode
             // 
             this.lblHashCode.AutoSize = true;
-            this.lblHashCode.Location = new System.Drawing.Point(801, 493);
+            this.lblHashCode.Location = new System.Drawing.Point(801, 522);
             this.lblHashCode.Name = "lblHashCode";
             this.lblHashCode.Size = new System.Drawing.Size(60, 13);
-            this.lblHashCode.TabIndex = 11;
+            this.lblHashCode.TabIndex = 12;
             this.lblHashCode.Text = "HashCode:";
             // 
             // txtHashCode
             // 
             this.txtHashCode.BackColor = System.Drawing.SystemColors.Window;
-            this.txtHashCode.Location = new System.Drawing.Point(787, 509);
+            this.txtHashCode.Location = new System.Drawing.Point(787, 538);
             this.txtHashCode.Name = "txtHashCode";
             this.txtHashCode.ReadOnly = true;
             this.txtHashCode.Size = new System.Drawing.Size(88, 20);
-            this.txtHashCode.TabIndex = 12;
+            this.txtHashCode.TabIndex = 13;
             // 
             // btnReverbTester
             // 
@@ -214,14 +216,14 @@ namespace sb_editor.Forms
             this.btnTestSFX.UseVisualStyleBackColor = true;
             this.btnTestSFX.Click += new System.EventHandler(this.BtnTestSFX_Click);
             // 
-            // txtGameTime
+            // txtDllTime
             // 
-            this.txtGameTime.BackColor = System.Drawing.SystemColors.Window;
-            this.txtGameTime.Location = new System.Drawing.Point(787, 354);
-            this.txtGameTime.Name = "txtGameTime";
-            this.txtGameTime.ReadOnly = true;
-            this.txtGameTime.Size = new System.Drawing.Size(88, 20);
-            this.txtGameTime.TabIndex = 6;
+            this.txtDllTime.BackColor = System.Drawing.SystemColors.Window;
+            this.txtDllTime.Location = new System.Drawing.Point(787, 354);
+            this.txtDllTime.Name = "txtDllTime";
+            this.txtDllTime.ReadOnly = true;
+            this.txtDllTime.Size = new System.Drawing.Size(88, 20);
+            this.txtDllTime.TabIndex = 6;
             // 
             // txtEsTime
             // 
@@ -408,6 +410,16 @@ namespace sb_editor.Forms
             this.tmrTabPageBlink.Interval = 500;
             this.tmrTabPageBlink.Tick += new System.EventHandler(this.TmrTabPageBlink_Tick);
             // 
+            // ButtonDllVoices
+            // 
+            this.ButtonDllVoices.Location = new System.Drawing.Point(787, 496);
+            this.ButtonDllVoices.Name = "ButtonDllVoices";
+            this.ButtonDllVoices.Size = new System.Drawing.Size(88, 23);
+            this.ButtonDllVoices.TabIndex = 11;
+            this.ButtonDllVoices.Text = "PC DLL Voices";
+            this.ButtonDllVoices.UseVisualStyleBackColor = true;
+            this.ButtonDllVoices.Click += new System.EventHandler(this.ButtonDllVoices_Click);
+            // 
             // SFXForm
             // 
             this.AcceptButton = this.btnOK;
@@ -463,7 +475,7 @@ namespace sb_editor.Forms
         private System.Windows.Forms.Button btnReverbTester;
         private System.Windows.Forms.Button btnStopSFX;
         private System.Windows.Forms.Button btnTestSFX;
-        private System.Windows.Forms.TextBox txtGameTime;
+        private System.Windows.Forms.TextBox txtDllTime;
         private System.Windows.Forms.TextBox txtEsTime;
         private System.Windows.Forms.TextBox txtHashCode;
         private System.Windows.Forms.Label lblHashCode;
@@ -477,5 +489,6 @@ namespace sb_editor.Forms
         protected internal System.Windows.Forms.Button btnDefSettings_Cancel;
         protected internal System.Windows.Forms.Panel pnlOptions;
         private System.Windows.Forms.Button btnSfxTestDebug;
+        private System.Windows.Forms.Button ButtonDllVoices;
     }
 }

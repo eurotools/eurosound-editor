@@ -160,7 +160,7 @@ namespace sb_editor
             {
                 day = "00" + fileInfo.Day.ToString();
             }
-            
+
             //Return as a string
             return string.Format("{0}/{1}/{2} {3:#0}:{4:00}:{5:00}", year, day, month, fileInfo.Hour, fileInfo.Minute, fileInfo.Second);
         }

@@ -312,7 +312,7 @@ namespace sb_editor.Forms
                             }
                         }
                     }
-                    else if(File.Exists(tempFilePath))
+                    else if (File.Exists(tempFilePath))
                     {
                         File.Copy(tempFilePath, mfxDefinesFilePath);
                     }

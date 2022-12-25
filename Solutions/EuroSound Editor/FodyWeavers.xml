@@ -6,7 +6,6 @@
 		Microsoft.VisualBasic.PowerPacks
 		Microsoft.VisualBasic.PowerPacks.resources
 		NAudio
-		PcAudioTest
 	  </IncludeAssemblies>
 	</Costura>
 </Weavers>

@@ -119,6 +119,12 @@
     <Compile Include="Forms\SetMaxBankSizeForm.Designer.cs">
       <DependentUpon>SetMaxBankSizeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SFX Form\PCDllVoicesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SFX Form\PCDllVoicesForm.Designer.cs">
+      <DependentUpon>PCDllVoicesForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SFX Form\SFXForm_TestSfx.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -419,6 +425,9 @@
     <EmbeddedResource Include="Forms\SetMaxBankSizeForm.resx">
       <DependentUpon>SetMaxBankSizeForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SFX Form\PCDllVoicesForm.resx">
+      <DependentUpon>PCDllVoicesForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SFX Form\PCGameDebugForm.resx">
       <DependentUpon>PCGameDebugForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -549,9 +558,10 @@
       <Project>{55589C8C-989D-4AA9-AAA3-A22490666549}</Project>
       <Name>ExMarkers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PcAudioTest\PcAudioTest.csproj">
-      <Project>{bc6310bf-caf7-4f06-a481-d800c5458c5b}</Project>
-      <Name>PcAudioTest</Name>
+    <ProjectReference Include="..\PCAudioDLL\PCAudioDLL.csproj">
+      <Project>{9b6c594f-8e3e-4ef4-b1c2-18772719bcaf}</Project>
+      <Name>PCAudioDLL</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

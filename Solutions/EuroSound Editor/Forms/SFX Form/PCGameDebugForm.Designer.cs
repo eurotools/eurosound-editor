@@ -46,6 +46,7 @@ namespace sb_editor.Forms
             this.chkPauseDebug.TabIndex = 1;
             this.chkPauseDebug.Text = "Pause Debug Input";
             this.chkPauseDebug.UseVisualStyleBackColor = true;
+            this.chkPauseDebug.Click += new System.EventHandler(this.ChkPauseDebug_Click);
             // 
             // btnClear
             // 
@@ -80,6 +81,7 @@ namespace sb_editor.Forms
             this.txtDebugData.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtDebugData.Size = new System.Drawing.Size(514, 528);
             this.txtDebugData.TabIndex = 4;
+            this.txtDebugData.WordWrap = false;
             // 
             // PCGameDebugForm
             // 
@@ -99,6 +101,7 @@ namespace sb_editor.Forms
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Console Debug Form";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PCGameDebugForm_FormClosing);
             this.Shown += new System.EventHandler(this.Frm_TestSfxDebug_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();

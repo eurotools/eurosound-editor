@@ -1,5 +1,4 @@
-﻿using PcAudioTest;
-using sb_editor.Objects;
+﻿using sb_editor.Objects;
 using sb_editor.Panels;
 using System;
 using System.Diagnostics;
@@ -18,6 +17,7 @@ namespace sb_editor.Forms
     {
         private readonly bool sfxDefaults;
         private readonly string sfxFileName;
+        private readonly PCAudioDLL.PCAudioDll audioTool = ((MainForm)Application.OpenForms[nameof(MainForm)]).audioTool;
         private Color currentColor = SystemColors.Control;
         private Brush colorText = SystemBrushes.ControlText;
 
@@ -161,13 +161,7 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void Frm_SFX_Form_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //Close game if required and restore ini
-            if (SfxTestMethods.GameIsOpen())
-            {
-                SfxTestMethods.CloseGame();
-            }
-            SfxTestMethods.RestoreTestIni();
-            CloseDebuggerForm();
+            audioTool.StopAudio();
 
             //Stop any audio that could be playing
             if (UserControl_SamplePool.audioPlayer != null)
@@ -312,36 +306,37 @@ namespace sb_editor.Forms
         //*===============================================================================================
         private void BtnTestSFX_Click(object sender, System.EventArgs e)
         {
-            //Create Test SFX
-            txtEsTime.Text = string.Format("ES Time {0:0.###}", CreateTestSfx());
-
-            //Run Game
+            //Start Timer
             Stopwatch watch = Stopwatch.StartNew();
-            if (!SfxTestMethods.GameIsOpen())
-            {
-                string sphinxPath = SfxTestExeMethods.GetExeGamePath();
-                if (File.Exists(sphinxPath))
-                {
-                    SfxTestMethods.SetTestIni();
-                    SfxTestMethods.OpenGame(sphinxPath);
-                }
-                else
-                {
-                    MessageBox.Show("Could not find the 'SphinxD_GL.exe' file path. Seems that is not installed via GoG or Steam.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+
+            //Get output folder & name
+            string outputFilePath = CommonFunctions.GetSoundbankOutPath("PC", "English");
+            string fileName = string.Format("HC{0:X6}.SFX", CommonFunctions.GetSfxName(Array.FindIndex(GlobalPrefs.Languages, s => s.Equals("English", StringComparison.OrdinalIgnoreCase)), 0xFFFE));
+
+            //Create file
+            CreateTestSfx(outputFilePath, fileName);
+
+            //Show time
+            txtEsTime.Text = string.Format("ES Time {0:0.###}", watch.Elapsed.TotalSeconds);
             watch.Stop();
-            txtGameTime.Text = string.Format("GameBoot {0:0.###}", watch.Elapsed.TotalSeconds);
+
+            //Call DLL
+            string filePath = Path.Combine(outputFilePath, fileName);
+            if (File.Exists(filePath))
+            {
+                if (audioTool.IsSoundBankLoaded(0xFFFE))
+                {
+                    audioTool.UnloadSoundbank();
+                }
+                txtDllTime.Text = string.Format("DLL Time {0:0.###}", audioTool.LoadSoundBank(filePath));
+                audioTool.PlaySound();
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnStopSFX_Click(object sender, System.EventArgs e)
         {
-            if (SfxTestMethods.GameIsOpen())
-            {
-                SfxTestMethods.CloseGame();
-            }
-            SfxTestMethods.RestoreTestIni();
+            audioTool.StopAudio();
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -352,13 +347,28 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void BtnAccept_Click(object sender, System.EventArgs e)
+        private void ButtonDllVoices_Click(object sender, EventArgs e)
         {
-            BtnOK_Click(null, System.EventArgs.Empty);
+            OpenVoicesDebuggerForm(DesktopLocation);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void BtnOK_Click(object sender, System.EventArgs e)
+        private void BtnReverbTester_Click(object sender, EventArgs e)
+        {
+            using (ReverbTester reverbForm = new ReverbTester())
+            {
+                reverbForm.ShowDialog();
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void BtnAccept_Click(object sender, EventArgs e)
+        {
+            BtnOK_Click(null, EventArgs.Empty);
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void BtnOK_Click(object sender, EventArgs e)
         {
             if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "System")) && Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs")))
             {
@@ -400,13 +410,13 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void BtnCancel_Click(object sender, System.EventArgs e)
+        private void BtnCancel_Click(object sender, EventArgs e)
         {
             Close();
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void BtnDefSettings_Cancel_Click(object sender, System.EventArgs e)
+        private void BtnDefSettings_Cancel_Click(object sender, EventArgs e)
         {
             Close();
         }
@@ -431,7 +441,7 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void TabCtrl_SelectedIndexChanged(object sender, System.EventArgs e)
+        private void TabCtrl_SelectedIndexChanged(object sender, EventArgs e)
         {
             //Load and show new format
             string formatName = tabCtrl.TabPages[tabCtrl.SelectedIndex].Text;
@@ -467,7 +477,7 @@ namespace sb_editor.Forms
         //*===============================================================================================
         //* TIMER
         //*===============================================================================================
-        private void TmrTabPageBlink_Tick(object sender, System.EventArgs e)
+        private void TmrTabPageBlink_Tick(object sender, EventArgs e)
         {
             if (currentColor == SystemColors.Control)
             {
@@ -581,7 +591,6 @@ namespace sb_editor.Forms
         internal void OpenHashCodesSelector(Point desktopLoc)
         {
             Form selectorForm = Application.OpenForms[nameof(Frm_HashCodes)];
-            //Show selector
             if (selectorForm == null)
             {
                 desktopLoc.X += 915;
@@ -613,7 +622,6 @@ namespace sb_editor.Forms
         internal void OpenDebuggerForm(Point desktopLoc)
         {
             Form debuggerForm = Application.OpenForms[nameof(PCGameDebugForm)];
-            //Show selector
             if (debuggerForm == null)
             {
                 desktopLoc.X += 915;
@@ -630,21 +638,21 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void BtnReverbTester_Click(object sender, EventArgs e)
+        internal void OpenVoicesDebuggerForm(Point desktopLoc)
         {
-            using (ReverbTester reverbForm = new ReverbTester())
+            Form debuggerForm = Application.OpenForms[nameof(PCDllVoicesForm)];
+            if (debuggerForm == null)
             {
-                reverbForm.ShowDialog();
+                desktopLoc.X += 915;
+                PCDllVoicesForm hashCodesSelector = new PCDllVoicesForm
+                {
+                    DesktopLocation = desktopLoc
+                };
+                hashCodesSelector.Show();
             }
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        internal void CloseDebuggerForm()
-        {
-            Form debuggerForm = Application.OpenForms[nameof(PCGameDebugForm)];
-            if (debuggerForm != null)
+            else
             {
-                debuggerForm.Close();
+                debuggerForm.Focus();
             }
         }
     }
