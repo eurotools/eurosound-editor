@@ -13,7 +13,7 @@ namespace PCAudioDLL.AudioClasses
         private readonly AudioMaths audioMaths = new AudioMaths();
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal IWaveProvider GetWaveProvider(SampleData sampleData, SampleInfo sampleInfo, int minDelay, int maxDelay)
+        internal IWaveProvider GetWaveProviderLoop(SampleData sampleData, SampleInfo sampleInfo, int minDelay, int maxDelay)
         {
             //Create Provider
             RawSourceWaveStream provider = new RawSourceWaveStream(new MemoryStream(sampleData.EncodedData), new WaveFormat(audioMaths.SemitonesToFreq(sampleData.Frequency, audioMaths.GetPitch(sampleInfo)), 16, 1));
@@ -23,6 +23,17 @@ namespace PCAudioDLL.AudioClasses
                 Position = 0
             };
             PanningSampleProvider panProvider = new PanningSampleProvider(loop.ToSampleProvider()) { Pan = audioMaths.GetPan(sampleInfo) };
+            VolumeSampleProvider volumeProvider = new VolumeSampleProvider(panProvider) { Volume = audioMaths.GetVolume(sampleInfo) };
+
+            return volumeProvider.ToWaveProvider();
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        internal IWaveProvider GetWaveProviderPolyPhonic(SampleData sampleData, SampleInfo sampleInfo, int minDelay, int maxDelay)
+        {
+            //Create Provider
+            RawSourceWaveStream provider = new RawSourceWaveStream(new MemoryStream(sampleData.EncodedData), new WaveFormat(audioMaths.SemitonesToFreq(sampleData.Frequency, audioMaths.GetPitch(sampleInfo)), 16, 1));
+            PanningSampleProvider panProvider = new PanningSampleProvider(provider.ToSampleProvider()) { Pan = audioMaths.GetPan(sampleInfo) };
             VolumeSampleProvider volumeProvider = new VolumeSampleProvider(panProvider) { Volume = audioMaths.GetVolume(sampleInfo) };
 
             return volumeProvider.ToWaveProvider();

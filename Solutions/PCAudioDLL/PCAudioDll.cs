@@ -113,42 +113,52 @@ namespace PCAudioDLL
             //Look hashcodes
             foreach (KeyValuePair<uint, Sample> soundToCheck in sfxSamples)
             {
-                if (soundToCheck.Key == 0)
+                if (soundToCheck.Key == 0 && ((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.HasSubSfx) & 1) == 0 && soundToCheck.Value.samplesList.Count > 0)
                 {
                     bool loopFlag = ((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.Loop) & 1) == 1;
 
                     //If false it will pick and play randomly one of the samples in the list. 
-                    if (((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.MultiSample) & 1) == 0)
+                    if (((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.MultiSample) & 1) == 0 || sfxStoredData[0].Flags == 1)
                     {
                         SampleInfo sampleInfo = soundToCheck.Value.samplesList[Utils.GetRandomInt(soundToCheck.Value.samplesList.Count)];
                         SampleData sampleData = sfxStoredData[sampleInfo.FileRef];
 
                         audioPlayer.PlaySingleSfx(sampleInfo, sampleData, soundToCheck.Value.MinDelay, soundToCheck.Value.MaxDelay);
                     }
-
-                    //It will interpret the list of samples
-                    if (((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.MultiSample) & 1) == 1)
+                    else
                     {
-                        if (((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.Polyphonic) & 1) == 1)
+                        //It will interpret the list of samples
+                        if (((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.MultiSample) & 1) == 1)
                         {
-                            audioPlayer.PlayPolyphonic(soundToCheck.Value, sfxStoredData, soundToCheck.Value.MinDelay, soundToCheck.Value.MaxDelay);
+                            if (((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.Polyphonic) & 1) == 1)
+                            {
+                                audioPlayer.PlayPolyphonic(soundToCheck.Value, sfxStoredData, soundToCheck.Value.MinDelay, soundToCheck.Value.MaxDelay);
+                            }
+                            else
+                            {
+                                bool shuffled = ((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.Shuffled) & 1) == 1;
+                                audioPlayer.PlayList(soundToCheck.Value, sfxStoredData, shuffled, soundToCheck.Value.MinDelay, soundToCheck.Value.MaxDelay);
+                            }
+                        }
+
+                        //Call again if loops
+                        if (loopFlag)
+                        {
+                            PlaySfx();
                         }
                         else
                         {
-                            bool shuffled = ((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.Shuffled) & 1) == 1;
-                            audioPlayer.PlayList(soundToCheck.Value, sfxStoredData, shuffled, soundToCheck.Value.MinDelay, soundToCheck.Value.MaxDelay);
+                            canPlayAgain = true;
                         }
                     }
-
-                    //Call again if loops
-                    if (loopFlag)
-                    {
-                        PlaySfx();
-                    }
-                    else
-                    {
-                        canPlayAgain = true;
-                    }
+                }
+                else
+                {
+#if DEBUG
+                    Debug.Write("Sub SFXs not supported!");
+#elif TRACE
+                    Trace.Write("Sub SFXs not supported!");
+#endif
                 }
             }
         }
