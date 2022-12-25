@@ -15,9 +15,9 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class SFXForm : Form
     {
+        private readonly PCAudioDLL.PCAudioDLL audioTool = ((MainForm)Application.OpenForms[nameof(MainForm)]).audioTool;
         private readonly bool sfxDefaults;
         private readonly string sfxFileName;
-        private readonly PCAudioDLL.PCAudioDll audioTool = ((MainForm)Application.OpenForms[nameof(MainForm)]).audioTool;
         private Color currentColor = SystemColors.Control;
         private Brush colorText = SystemBrushes.ControlText;
 
@@ -161,7 +161,7 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void Frm_SFX_Form_FormClosing(object sender, FormClosingEventArgs e)
         {
-            audioTool.StopAudio();
+            audioTool.StopSounds();
 
             //Stop any audio that could be playing
             if (UserControl_SamplePool.audioPlayer != null)
@@ -336,7 +336,10 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnStopSFX_Click(object sender, System.EventArgs e)
         {
-            audioTool.StopAudio();
+            if (audioTool.IsSoundBankLoaded(0xFFFE))
+            {
+                audioTool.StopSounds();
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -625,7 +628,7 @@ namespace sb_editor.Forms
             if (debuggerForm == null)
             {
                 desktopLoc.X += 915;
-                PCGameDebugForm hashCodesSelector = new PCGameDebugForm
+                PCGameDebugForm hashCodesSelector = new PCGameDebugForm()
                 {
                     DesktopLocation = desktopLoc
                 };

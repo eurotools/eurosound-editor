@@ -1,288 +1,94 @@
-﻿using NAudio.Wave;
-using NAudio.Wave.SampleProviders;
-using PCAudioDLL.MusXStuff.Objects;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
+﻿using PCAudioDLL.AudioClasses;
 
-namespace PCAudioDLL.AudioClasses
+namespace PCAudioDLL
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    internal class PCVoices
+    public class PCVoices
     {
-        private readonly VoiceItem[] pcAudioVoices;
-        private readonly WaveOut waveout = new WaveOut();
-        private readonly AudioPlayback audioPlayFunctions = new AudioPlayback();
-        private int pcAudioVoicesIndex = 9;
+        public ExWaveOut[] VoicesArray = new ExWaveOut[61];
+        internal int lastRequestIndex = 9;
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public PCVoices(VoiceItem[] pcVoicesMatrix)
+        internal int RequestVoice(bool isLooped, DebugConsole outputConsole)
         {
-            pcAudioVoices = pcVoicesMatrix;
-            waveout.PlaybackStopped += WaveOutStop;
+            //Avoid Get out of bounds
+            lastRequestIndex++;
+            if (lastRequestIndex >= VoicesArray.Length)
+            {
+                lastRequestIndex = 10;
+            }
+
+            //Update Object
+            VoicesArray[lastRequestIndex].Active = true;
+            VoicesArray[lastRequestIndex].Played = true;
+            VoicesArray[lastRequestIndex].Playing = true;
+            VoicesArray[lastRequestIndex].Looping = isLooped;
+            VoicesArray[lastRequestIndex].Reverb = true;
+            VoicesArray[lastRequestIndex].Stop_ = false;
+            VoicesArray[lastRequestIndex].Stopped = false;
+            VoicesArray[lastRequestIndex].Locked = true;
+
+            //Inform user
+            outputConsole.WriteLine(string.Format("ES-> ES_RequestVoiceHandle() = {0}", lastRequestIndex));
+            outputConsole.WriteLine("Voice::Play");
+
+            return lastRequestIndex;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void WaveOutStop(object sender, StoppedEventArgs e)
+        internal void PreCloseVoice(int voiceIndex, DebugConsole outputConsole)
         {
-            CloseAllVoices();
+            VoicesArray[voiceIndex].Active = true;
+            VoicesArray[voiceIndex].Played = false;
+            VoicesArray[voiceIndex].Playing = false;
+            VoicesArray[voiceIndex].Looping = false;
+            VoicesArray[voiceIndex].Reverb = false;
+            VoicesArray[voiceIndex].Stop_ = true;
+            VoicesArray[voiceIndex].Stopped = false;
+            VoicesArray[voiceIndex].Locked = true;
+
+            //Inform User
+            outputConsole.WriteLine(string.Format("ES-> ES_AudioHasEnded() = {0} Ok.", voiceIndex));
+            outputConsole.WriteLine(string.Format("ES-> ES_UnLockVoiceHandle() = {0}", voiceIndex));
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void StopAudioPlayer()
+        internal void CloseVoice(int voiceIndex)
         {
-            //Stop Player
-            if (waveout != null && waveout.PlaybackState == PlaybackState.Playing)
-            {
-                waveout.Stop();
-
-                //Close all voices
-                CloseAllVoices();
-            }
+            VoicesArray[voiceIndex].Active = false;
+            VoicesArray[voiceIndex].Played = false;
+            VoicesArray[voiceIndex].Playing = false;
+            VoicesArray[voiceIndex].Looping = false;
+            VoicesArray[voiceIndex].Reverb = false;
+            VoicesArray[voiceIndex].Stop_ = false;
+            VoicesArray[voiceIndex].Stopped = false;
+            VoicesArray[voiceIndex].Locked = false;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void PlaySingleSfx(SampleInfo sampleInfo, SampleData sampleData, int minDelay, int maxDelay)
+        internal void CloseAllVoices(DebugConsole outputConsole)
         {
-            //Stop previous audios that could be playing
-            StopAudioPlayer();
-
-            //Get Voice
-            ActivateVoice(GetVoiceIndex(), sampleData.Flags == 1);
-
-            //Build Wav file
-            waveout.Init(audioPlayFunctions.GetWaveProviderLoop(sampleData, sampleInfo, minDelay, maxDelay));
-            waveout.Play();
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        internal void PlayList(Sample sfxSample, List<SampleData> sfxStoredData, bool shuffled, int minDelay, int maxDelay)
-        {
-            //Stop previous audios that could be playing
-            StopAudioPlayer();
-
-            //Shuffle list if required
-            if (shuffled)
+            for (int i = 10; i < VoicesArray.Length; i++)
             {
-                sfxSample.samplesList.Shuffle();
+                VoicesArray[i].Active = false;
+                VoicesArray[i].Played = false;
+                VoicesArray[i].Playing = false;
+                VoicesArray[i].Looping = false;
+                VoicesArray[i].Reverb = false;
+                VoicesArray[i].Stop_ = false;
+                VoicesArray[i].Stopped = false;
+                VoicesArray[i].Locked = false;
             }
 
-            //Create a wave format
-            WaveFormat waveFormat = new WaveFormat(44100, 16, 1);
-
-            //Parse each item of the list
-            foreach (SampleInfo sampleInfo in sfxSample.samplesList)
-            {
-                int index = GetVoiceIndex();
-                ActivateVoice(index, false);
-
-                //Create Sample Provider
-                SampleData sampleData = sfxStoredData[sampleInfo.FileRef];
-                IWaveProvider sampleProv = audioPlayFunctions.GetWaveProviderLoop(sampleData, sampleInfo, minDelay, maxDelay);
-
-                //Ensure that all has the same format
-                if (sampleProv.WaveFormat.SampleRate != 44100 || sampleProv.WaveFormat.Channels != 1)
-                {
-                    sampleProv = new MediaFoundationResampler(sampleProv, waveFormat) { ResamplerQuality = 60 };
-                }
-
-                //Write wave to a stream
-                using (MemoryStream outBuff = new MemoryStream())
-                {
-                    //Start reading
-                    WaveFileWriter.WriteWavFileToStream(outBuff, sampleProv);
-                    outBuff.Position = 0;
-
-                    //Initialize buffered Stream
-                    BufferedWaveProvider bufferedWaveProvider = new BufferedWaveProvider(waveFormat)
-                    {
-                        ReadFully = false
-                    };
-                    bufferedWaveProvider.ClearBuffer();
-                    waveout.Init(bufferedWaveProvider);
-
-                    //Get Pcm Data
-                    using (WaveFileReader wReader = new WaveFileReader(outBuff))
-                    {
-                        byte[] pcmData = new byte[wReader.Length];
-                        wReader.Read(pcmData, 0, pcmData.Length);
-
-                        //Add data to stream
-                        bufferedWaveProvider.BufferLength = pcmData.Length;
-                        bufferedWaveProvider.AddSamples(pcmData, 0, pcmData.Length);
-                    }
-
-                    //Start playing
-                    waveout.Play();
-                    while (bufferedWaveProvider.BufferedBytes > 0)
-                    {
-
-                    }
-                    PreCloseVoice(index);
-                }
-            }
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        internal void PlayPolyphonic(Sample sfxSample, List<SampleData> sfxStoredData, int minDelay, int maxDelay)
-        {
-            //Stop previous audios that could be playing
-            StopAudioPlayer();
-
-            //Create a wave format
-            WaveFormat waveFormat = new WaveFormat(44100, 16, 1);
-
-            ISampleProvider[] sampleProvider = new ISampleProvider[sfxSample.samplesList.Count];
-            for (int i = 0; i < sfxSample.samplesList.Count; i++)
-            {
-                //Get Voice
-                ActivateVoice(GetVoiceIndex(), false);
-
-                SampleInfo sampleInfo = sfxSample.samplesList[i];
-                SampleData sampleData = sfxStoredData[sampleInfo.FileRef];
-
-                //Create Sample Provider
-                IWaveProvider sampleProv = audioPlayFunctions.GetWaveProviderLoop(sampleData, sampleInfo, minDelay, maxDelay);
-
-                //Ensure that all has the same format
-                if (sampleProv.WaveFormat.SampleRate != 44100 || sampleProv.WaveFormat.Channels != 1)
-                {
-                    sampleProv = new MediaFoundationResampler(sampleProv, waveFormat) { ResamplerQuality = 60 };
-                }
-                sampleProvider[i] = sampleProv.ToSampleProvider();
-            }
-            IWaveProvider mixedWave = new MixingSampleProvider(sampleProvider).ToWaveProvider();
-
-            //Write wave to a stream
-            using (MemoryStream outBuff = new MemoryStream())
-            {
-                //Start reading
-                WaveFileWriter.WriteWavFileToStream(outBuff, mixedWave.ToSampleProvider().ToWaveProvider16());
-                outBuff.Position = 0;
-
-                //Initialize buffered Stream
-                BufferedWaveProvider bufferedWaveProvider = new BufferedWaveProvider(waveFormat)
-                {
-                    ReadFully = false
-                };
-                bufferedWaveProvider.ClearBuffer();
-                waveout.Init(bufferedWaveProvider);
-
-                //Get Pcm Data
-                using (WaveFileReader wReader = new WaveFileReader(outBuff))
-                {
-                    byte[] pcmData = new byte[wReader.Length];
-                    wReader.Read(pcmData, 0, pcmData.Length);
-
-                    //Add data to stream
-                    bufferedWaveProvider.BufferLength = pcmData.Length;
-                    bufferedWaveProvider.AddSamples(pcmData, 0, pcmData.Length);
-                }
-
-                //Start playing
-                waveout.Play();
-                while (bufferedWaveProvider.BufferedBytes > 0)
-                {
-
-                }
-
-                //Close all active voices
-                for (int i = 0; i < pcAudioVoices.Length; i++)
-                {
-                    PreCloseVoice(i);
-                }
-            }
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        internal void ActivateVoice(int index, bool looping)
-        {
-            pcAudioVoices[index].Active = true;
-            pcAudioVoices[index].Played = true;
-            pcAudioVoices[index].Playing = true;
-            pcAudioVoices[index].Looping = looping;
-            pcAudioVoices[index].Reverb = true;
-            pcAudioVoices[index].Locked = true;
-
-#if DEBUG
-            Debug.WriteLine(string.Format("ES-> ES_RequestVoiceHandle() = {0}", index));
-            Debug.WriteLine("Voice::Play");
-#elif TRACE
-            Trace.WriteLine(string.Format("ES-> ES_RequestVoiceHandle() = {0}", index));
-            Trace.WriteLine("Voice::Play");
-#endif
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        internal void PreCloseVoice(int i)
-        {
-            if (pcAudioVoices[i].Active)
-            {
-                pcAudioVoices[i].Played = false;
-                pcAudioVoices[i].Playing = false;
-                pcAudioVoices[i].Looping = false;
-                pcAudioVoices[i].Reverb = false;
-                pcAudioVoices[i].Stop = true;
-                pcAudioVoices[i].Locked = true;
-#if DEBUG
-                Debug.WriteLine(string.Format("ES-> ES_AudioHasEnded() = {0} Ok.", i));
-                Debug.WriteLine(string.Format("ES-> ES_UnLockVoiceHandle() = {0}", i));
-#elif TRACE
-                Trace.WriteLine(string.Format("ES-> ES_AudioHasEnded() = {0} Ok.", i));
-                Trace.WriteLine(string.Format("ES-> ES_UnLockVoiceHandle() = {0}", i));
-#endif
-            }
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        internal void CloseAllVoices()
-        {
-            for (int i = 10; i < pcAudioVoices.Length; i++)
-            {
-                if (pcAudioVoices[i].Active)
-                {
-                    pcAudioVoices[i].Active = false;
-                    pcAudioVoices[i].Played = false;
-                    pcAudioVoices[i].Playing = false;
-                    pcAudioVoices[i].Looping = false;
-                    pcAudioVoices[i].Reverb = false;
-                    pcAudioVoices[i].Stop = false;
-                    pcAudioVoices[i].Stopped = false;
-                    pcAudioVoices[i].Locked = false;
-#if DEBUG
-                    Debug.WriteLine("ES-> ES_SFXRemove()");
-                    Debug.WriteLine(string.Format("ES-> psiSampleKeyOff( {0} )", pcAudioVoicesIndex));
-                    Debug.WriteLine("Voice::Stop");
-                    Debug.WriteLine(string.Format("ES-> ES_AudioHasEnded() = {0} Ok.", pcAudioVoicesIndex));
-                    Debug.WriteLine(string.Format("ES-> ES_UnLockVoiceHandle() = {0}", pcAudioVoicesIndex));
-                    Debug.WriteLine("ES-> Sfx->KeyOffWait OK.");
-#elif TRACE
-                    Trace.WriteLine("ES-> ES_SFXRemove()");
-                    Trace.WriteLine(string.Format("ES-> psiSampleKeyOff( {0} )", pcAudioVoicesIndex));
-                    Trace.WriteLine("Voice::Stop");
-                    Trace.WriteLine(string.Format("ES-> ES_AudioHasEnded() = {0} Ok.", pcAudioVoicesIndex));
-                    Trace.WriteLine(string.Format("ES-> ES_UnLockVoiceHandle() = {0}", pcAudioVoicesIndex));
-                    Trace.WriteLine("ES-> Sfx->KeyOffWait OK.");
-#endif
-                }
-            }
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        internal int GetVoiceIndex()
-        {
-            if (pcAudioVoicesIndex < pcAudioVoices.Length)
-            {
-                pcAudioVoicesIndex++;
-            }
-            if (pcAudioVoicesIndex >= pcAudioVoices.Length)
-            {
-                pcAudioVoicesIndex = 10;
-            }
-
-            return pcAudioVoicesIndex;
+            //Add Debug Test
+            outputConsole.WriteLine("ES-> ES_SFXRemove()");
+            outputConsole.WriteLine(string.Format("ES-> psiSampleKeyOff( {0} )", lastRequestIndex));
+            outputConsole.WriteLine("Voice::Stop");
+            outputConsole.WriteLine(string.Format("ES-> ES_AudioHasEnded() = {0} Ok.", lastRequestIndex));
+            outputConsole.WriteLine(string.Format("ES-> ES_UnLockVoiceHandle() = {0}", lastRequestIndex));
+            outputConsole.WriteLine("ES-> Sfx->KeyOffWait OK.");
         }
     }
 

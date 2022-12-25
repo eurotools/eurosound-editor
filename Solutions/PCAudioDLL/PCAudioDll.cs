@@ -1,4 +1,5 @@
-﻿using PCAudioDLL.AudioClasses;
+﻿using NAudio.Wave;
+using PCAudioDLL.AudioClasses;
 using PCAudioDLL.MusXStuff;
 using PCAudioDLL.MusXStuff.Objects;
 using System.Collections.Generic;
@@ -12,35 +13,40 @@ namespace PCAudioDLL
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    public class PCAudioDll
+    public class PCAudioDLL
     {
-        //PC Voices
-        public static VoiceItem[] pcAudioVoices = new VoiceItem[61];
-        private readonly PCVoices audioPlayer = new PCVoices(pcAudioVoices);
-        private bool canPlayAgain = true;
+        //Local variables and classes
         private int sbHashCode = -1;
-        private Thread playThread;
+        private readonly WaveOut _waveOut = new WaveOut();
 
         //Sb Data
         private readonly SortedDictionary<uint, Sample> sfxSamples = new SortedDictionary<uint, Sample>();
         private readonly List<SampleData> sfxStoredData = new List<SampleData>();
 
-        //Debug List
-        public TextBoxTraceListener tbl;
+        //Main Thread
+        public readonly PCVoices pcOutVoices = new PCVoices();
+        public DebugConsole outputConsole = new DebugConsole();
+        private Thread _thread;
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public PCAudioDll()
+        public PCAudioDLL()
         {
-            for (int i = 0; i < pcAudioVoices.Length; i++)
+            //Initialize game reserved voices
+            for (int i = 0; i < pcOutVoices.VoicesArray.Length; i++)
             {
-                pcAudioVoices[i] = new VoiceItem();
-            }
-
-            for (int i = 0; i < 10; i++)
-            {
-                pcAudioVoices[i].Active = true;
-                pcAudioVoices[i].Looping = true;
-                pcAudioVoices[i].Locked = true;
+                if (i < 10)
+                {
+                    pcOutVoices.VoicesArray[i] = new ExWaveOut
+                    {
+                        Active = true,
+                        Looping = true,
+                        Locked = true
+                    };
+                }
+                else
+                {
+                    pcOutVoices.VoicesArray[i] = new ExWaveOut();
+                }
             }
         }
 
@@ -50,21 +56,12 @@ namespace PCAudioDLL
             Stopwatch watch = Stopwatch.StartNew();
 
             //Add Debug Text
-#if DEBUG
-            Debug.WriteLine("");
-            Debug.WriteLine(string.Format("CMD_SFX_INITIALISE : {0}", Path.GetDirectoryName(soundBankPath)));
-            Debug.WriteLine(string.Format("CMD_SFX_INITIALISE2 : {0}", Path.GetFileName(soundBankPath)));
-            Debug.WriteLine(string.Format("AsyncOpenFile : {0}", soundBankPath));
-            Debug.WriteLine("");
-            Debug.WriteLine("CMD_SFXLOADSOUNDBANK");
-#elif TRACE
-            Trace.WriteLine("");
-            Trace.WriteLine(string.Format("CMD_SFX_INITIALISE : {0}", Path.GetDirectoryName(soundBankPath)));
-            Trace.WriteLine(string.Format("CMD_SFX_INITIALISE2 : {0}", Path.GetFileName(soundBankPath)));
-            Trace.WriteLine(string.Format("AsyncOpenFile : {0}", soundBankPath));
-            Trace.WriteLine("");
-            Trace.WriteLine("CMD_SFXLOADSOUNDBANK");
-#endif
+            outputConsole.WriteLine("");
+            outputConsole.WriteLine(string.Format("CMD_SFX_INITIALISE : {0}", Path.GetDirectoryName(soundBankPath)));
+            outputConsole.WriteLine(string.Format("CMD_SFX_INITIALISE2 : {0}", Path.GetFileName(soundBankPath)));
+            outputConsole.WriteLine(string.Format("AsyncOpenFile : {0}", soundBankPath));
+            outputConsole.WriteLine("");
+            outputConsole.WriteLine("CMD_SFXLOADSOUNDBANK");
 
             //Call reader
             SoundBanksReader reader = new SoundBanksReader();
@@ -90,109 +87,91 @@ namespace PCAudioDLL
         {
             sfxSamples.Clear();
             sfxStoredData.Clear();
+            sfxStoredData.TrimExcess();
+
             sbHashCode = -1;
+            outputConsole.WriteLine("ES-> ES_UnLoadSoundBankReleaseFinished End");
+            outputConsole.WriteLine("pih");
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         public void PlaySound()
         {
-            if (canPlayAgain)
+            if (_thread == null || !_thread.IsAlive)
             {
-                playThread = new Thread(new ThreadStart(PlaySfx))
+                _thread = new Thread(PlayHashCode)
                 {
                     IsBackground = true
                 };
-                playThread.Start();
-                canPlayAgain = false;
+                _thread.Start();
             }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void PlaySfx()
+        private void PlayHashCode()
         {
+            AudioPlayer audioPlayer = new AudioPlayer();
+
             //Look hashcodes
             foreach (KeyValuePair<uint, Sample> soundToCheck in sfxSamples)
             {
                 if (soundToCheck.Key == 0 && ((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.HasSubSfx) & 1) == 0 && soundToCheck.Value.samplesList.Count > 0)
                 {
-                    bool loopFlag = ((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.Loop) & 1) == 1;
-
                     //If false it will pick and play randomly one of the samples in the list. 
                     if (((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.MultiSample) & 1) == 0 || sfxStoredData[0].Flags == 1)
                     {
-                        SampleInfo sampleInfo = soundToCheck.Value.samplesList[Utils.GetRandomInt(soundToCheck.Value.samplesList.Count)];
-                        SampleData sampleData = sfxStoredData[sampleInfo.FileRef];
-
-                        audioPlayer.PlaySingleSfx(sampleInfo, sampleData, soundToCheck.Value.MinDelay, soundToCheck.Value.MaxDelay);
+                        audioPlayer.PlaySingleSfx(outputConsole, _waveOut, pcOutVoices, soundToCheck.Value, sfxStoredData);
                     }
                     else
                     {
+
                         //It will interpret the list of samples
                         if (((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.MultiSample) & 1) == 1)
                         {
                             if (((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.Polyphonic) & 1) == 1)
                             {
-                                audioPlayer.PlayPolyphonic(soundToCheck.Value, sfxStoredData, soundToCheck.Value.MinDelay, soundToCheck.Value.MaxDelay);
+                                audioPlayer.PlayPolyphonic(outputConsole, _waveOut, pcOutVoices, soundToCheck.Value, sfxStoredData);
                             }
                             else
                             {
                                 bool shuffled = ((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.Shuffled) & 1) == 1;
-                                audioPlayer.PlayList(soundToCheck.Value, sfxStoredData, shuffled, soundToCheck.Value.MinDelay, soundToCheck.Value.MaxDelay);
+                                audioPlayer.PlayList(outputConsole, _waveOut, shuffled, pcOutVoices, soundToCheck.Value, sfxStoredData);
                             }
-                        }
-
-                        //Call again if loops
-                        if (loopFlag)
-                        {
-                            PlaySfx();
-                        }
-                        else
-                        {
-                            canPlayAgain = true;
                         }
                     }
                 }
                 else
                 {
-#if DEBUG
-                    Debug.Write("Sub SFXs not supported!");
-#elif TRACE
-                    Trace.Write("Sub SFXs not supported!");
-#endif
+                    outputConsole.WriteLine("Sub SFXs not supported!");
                 }
             }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void StopAudio()
+        public void StopSounds()
         {
-            if (playThread != null)
+            //Stop Output Player
+            if (_waveOut != null)
             {
-                audioPlayer.StopAudioPlayer();
-                playThread.Abort();
-                canPlayAgain = true;
+                _waveOut.Stop();
             }
+
+            //Close Thread
+            if (_thread != null)
+            {
+                _thread.Abort();
+            }
+
+            //Stop all voices
+            pcOutVoices.CloseAllVoices(outputConsole);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         public void InitializeConsole(TextBox outputControl)
         {
-            tbl = new TextBoxTraceListener(outputControl);
-#if DEBUG
-            Debug.Listeners.Add(tbl);
-            Debug.WriteLine("Debug Console Initialised!");
-            Debug.WriteLine("5.1 Mixer Initialise");
-#elif TRACE
-            Trace.Listeners.Add(tbl);
-            Trace.WriteLine("Debug Console Initialised!");
-            Trace.WriteLine("5.1 Mixer Initialise");
-#endif
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        public void DebugConsoleState(bool pauseDebugOutput)
-        {
-            tbl.PauseOutput = pauseDebugOutput;
+            outputConsole.TxtConsole = outputControl;
+            outputConsole.WriteLine("Debug Console Initialised!");
+            outputConsole.WriteLine("5.1 Mixer Initialise");
         }
     }
 

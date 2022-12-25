@@ -45,10 +45,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioClasses\AudioMaths.cs" />
-    <Compile Include="AudioClasses\AudioPlayback.cs" />
+    <Compile Include="AudioClasses\AudioMixer.cs" />
+    <Compile Include="AudioClasses\AudioPlayer.cs" />
     <Compile Include="AudioClasses\LoopStream.cs" />
-    <Compile Include="AudioClasses\Objects\VoiceItem.cs" />
+    <Compile Include="AudioClasses\Objects\ExWaveOut.cs" />
     <Compile Include="AudioClasses\PCVoices.cs" />
+    <Compile Include="DebugConsole.cs" />
     <Compile Include="MusXStuff\Objects\Sample.cs" />
     <Compile Include="MusXStuff\Objects\SampleData.cs" />
     <Compile Include="MusXStuff\Objects\SampleInfo.cs" />
@@ -56,7 +58,6 @@
     <Compile Include="MusXStuff\SoundBanksReader.cs" />
     <Compile Include="PCAudioDll.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TextBoxTraceListener.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace sb_editor.Forms
@@ -11,7 +8,7 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class PCGameDebugForm : Form
     {
-        private readonly PCAudioDLL.PCAudioDll audioTool = ((MainForm)Application.OpenForms[nameof(MainForm)]).audioTool;
+        private readonly PCAudioDLL.PCAudioDLL audioTool = ((MainForm)Application.OpenForms[nameof(MainForm)]).audioTool;
 
         //-------------------------------------------------------------------------------------------------------------------------------
         public PCGameDebugForm()
@@ -28,13 +25,13 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void ChkPauseDebug_Click(object sender, EventArgs e)
         {
-            audioTool.DebugConsoleState(chkPauseDebug.Checked);
+            audioTool.outputConsole.PauseOutput = chkPauseDebug.Checked;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void PCGameDebugForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            audioTool.DebugConsoleState(true);
+            audioTool.outputConsole.TxtConsole = null;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------

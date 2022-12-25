@@ -1,34 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
+using System.Windows.Forms;
 
 namespace PCAudioDLL
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    internal static class Utils
+    public class DebugConsole
     {
-        internal static Random random = new Random();
+        public TextBox TxtConsole { get; set; }
+        public bool PauseOutput { get; set; }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal static void Shuffle<T>(this IList<T> list)
+        internal void WriteLine(string message)
         {
-            RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
-            int n = list.Count;
-            while (n > 1)
+            if (!PauseOutput && TxtConsole != null)
             {
-                byte[] box = new byte[1];
-                do
+                if (TxtConsole.InvokeRequired)
                 {
-                    provider.GetBytes(box);
+                    TxtConsole.Invoke((MethodInvoker)delegate
+                    {
+
+                        TxtConsole.Text += message + Environment.NewLine;
+                    });
                 }
-                while (!(box[0] < n * (byte.MaxValue / n)));
-                int k = (box[0] % n);
-                n--;
-                T value = list[k];
-                list[k] = list[n];
-                list[n] = value;
+                else
+                {
+                    TxtConsole.Text += message + Environment.NewLine;
+                }
             }
         }
     }

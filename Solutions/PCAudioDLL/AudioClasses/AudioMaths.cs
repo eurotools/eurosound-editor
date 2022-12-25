@@ -23,28 +23,43 @@ namespace PCAudioDLL.AudioClasses
         //-------------------------------------------------------------------------------------------------------------------------------
         internal float GetPitch(SampleInfo sampleInfo)
         {
-            float[] rndPitch = new float[] { 0, sampleInfo.PitchOffset, sampleInfo.PitchOffset * -1 };
-            float _pitch = sampleInfo.Pitch + rndPitch[Utils.random.Next(0, rndPitch.Length)];
-
-            return _pitch;
+            switch (Utils.random.Next(0, 3))
+            {
+                case 0:
+                    return sampleInfo.Pitch + sampleInfo.PitchOffset;
+                case 1:
+                    return sampleInfo.Pitch + (sampleInfo.PitchOffset * -1);
+                default:
+                    return sampleInfo.Pitch;
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         internal float GetPan(SampleInfo sampleInfo)
         {
-            float[] rndPan = new float[] { 0, sampleInfo.PanOffset, sampleInfo.PanOffset * -1 };
-            float _pan = sampleInfo.Pan + rndPan[Utils.random.Next(0, rndPan.Length)];
-
-            return _pan;
+            switch (Utils.random.Next(0, 3))
+            {
+                case 0:
+                    return sampleInfo.Pan + sampleInfo.PanOffset;
+                case 1:
+                    return sampleInfo.Pan + (sampleInfo.PanOffset * -1);
+                default:
+                    return sampleInfo.Pan;
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         internal float GetVolume(SampleInfo sampleInfo)
         {
-            float[] rndVolume = new float[] { 0, sampleInfo.VolumeOffset, sampleInfo.VolumeOffset * -1 };
-            float _volume = sampleInfo.Volume + rndVolume[Utils.random.Next(0, rndVolume.Length)];
-
-            return _volume;
+            switch (Utils.random.Next(0, 3))
+            {
+                case 0:
+                    return sampleInfo.Volume + sampleInfo.VolumeOffset;
+                case 1:
+                    return sampleInfo.Volume + (sampleInfo.VolumeOffset * -1);
+                default:
+                    return sampleInfo.Volume;
+            }
         }
     }
 
