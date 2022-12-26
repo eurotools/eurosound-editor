@@ -17,11 +17,11 @@ namespace PCAudioDLL
     {
         //Local variables and classes
         private int sbHashCode = -1;
-        private readonly WaveOut _waveOut = new WaveOut();
+        private WaveOut _waveOut;
 
         //Sb Data
-        private readonly SortedDictionary<uint, Sample> sfxSamples = new SortedDictionary<uint, Sample>();
-        private readonly List<SampleData> sfxStoredData = new List<SampleData>();
+        private Sample sfxSample;
+        private SampleData[] sfxStoredData;
 
         //Main Thread
         public readonly PCVoices pcOutVoices = new PCVoices();
@@ -68,7 +68,7 @@ namespace PCAudioDLL
 
             //Read SoundBank
             SfxHeaderData soundBankHeaderData = reader.ReadSfxHeader(soundBankPath);
-            reader.ReadSoundbank(soundBankPath, soundBankHeaderData, sfxSamples, sfxStoredData);
+            sfxSample = reader.ReadSoundbank(soundBankPath, soundBankHeaderData, ref sfxStoredData);
 
             //Update global var.
             sbHashCode = (int)soundBankHeaderData.FileHashCode;
@@ -85,9 +85,8 @@ namespace PCAudioDLL
         //-------------------------------------------------------------------------------------------------------------------------------
         public void UnloadSoundbank()
         {
-            sfxSamples.Clear();
-            sfxStoredData.Clear();
-            sfxStoredData.TrimExcess();
+            sfxSample = null;
+            sfxStoredData = null;
 
             sbHashCode = -1;
             outputConsole.WriteLine("ES-> ES_UnLoadSoundBankReleaseFinished End");
@@ -97,13 +96,16 @@ namespace PCAudioDLL
         //-------------------------------------------------------------------------------------------------------------------------------
         public void PlaySound()
         {
-            if (_thread == null || !_thread.IsAlive)
+            if (sfxSample != null && sfxStoredData != null)
             {
-                _thread = new Thread(PlayHashCode)
+                if (_thread == null || !_thread.IsAlive)
                 {
-                    IsBackground = true
-                };
-                _thread.Start();
+                    _thread = new Thread(PlayHashCode)
+                    {
+                        IsBackground = true
+                    };
+                    _thread.Start();
+                }
             }
         }
 
@@ -111,39 +113,36 @@ namespace PCAudioDLL
         private void PlayHashCode()
         {
             AudioPlayer audioPlayer = new AudioPlayer();
+            _waveOut = new WaveOut();
 
-            //Look hashcodes
-            foreach (KeyValuePair<uint, Sample> soundToCheck in sfxSamples)
+            if (((sfxSample.Flags >> (int)SoundBanksReader.Flags.HasSubSfx) & 1) == 0 && sfxSample.samplesList.Count > 0)
             {
-                if (soundToCheck.Key == 0 && ((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.HasSubSfx) & 1) == 0 && soundToCheck.Value.samplesList.Count > 0)
+                //If false it will pick and play randomly one of the samples in the list. 
+                if (((sfxSample.Flags >> (int)SoundBanksReader.Flags.MultiSample) & 1) == 0 || sfxStoredData[0].Flags == 1)
                 {
-                    //If false it will pick and play randomly one of the samples in the list. 
-                    if (((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.MultiSample) & 1) == 0 || sfxStoredData[0].Flags == 1)
-                    {
-                        audioPlayer.PlaySingleSfx(outputConsole, _waveOut, pcOutVoices, soundToCheck.Value, sfxStoredData);
-                    }
-                    else
-                    {
-
-                        //It will interpret the list of samples
-                        if (((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.MultiSample) & 1) == 1)
-                        {
-                            if (((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.Polyphonic) & 1) == 1)
-                            {
-                                audioPlayer.PlayPolyphonic(outputConsole, _waveOut, pcOutVoices, soundToCheck.Value, sfxStoredData);
-                            }
-                            else
-                            {
-                                bool shuffled = ((soundToCheck.Value.Flags >> (int)SoundBanksReader.Flags.Shuffled) & 1) == 1;
-                                audioPlayer.PlayList(outputConsole, _waveOut, shuffled, pcOutVoices, soundToCheck.Value, sfxStoredData);
-                            }
-                        }
-                    }
+                    audioPlayer.PlaySingleSfx(outputConsole, _waveOut, pcOutVoices, sfxSample, sfxStoredData);
                 }
                 else
                 {
-                    outputConsole.WriteLine("Sub SFXs not supported!");
+
+                    //It will interpret the list of samples
+                    if (((sfxSample.Flags >> (int)SoundBanksReader.Flags.MultiSample) & 1) == 1)
+                    {
+                        if (((sfxSample.Flags >> (int)SoundBanksReader.Flags.Polyphonic) & 1) == 1)
+                        {
+                            audioPlayer.PlayPolyphonic(outputConsole, _waveOut, pcOutVoices, sfxSample, sfxStoredData);
+                        }
+                        else
+                        {
+                            bool shuffled = ((sfxSample.Flags >> (int)SoundBanksReader.Flags.Shuffled) & 1) == 1;
+                            audioPlayer.PlayList(outputConsole, _waveOut, shuffled, pcOutVoices, sfxSample, sfxStoredData);
+                        }
+                    }
                 }
+            }
+            else
+            {
+                outputConsole.WriteLine("Sub SFXs not supported!");
             }
         }
 
@@ -154,6 +153,7 @@ namespace PCAudioDLL
             if (_waveOut != null)
             {
                 _waveOut.Stop();
+                _waveOut.Dispose();
             }
 
             //Close Thread
@@ -161,6 +161,10 @@ namespace PCAudioDLL
             {
                 _thread.Abort();
             }
+
+            //Unload All
+            sfxSample = null;
+            sfxStoredData = null;
 
             //Stop all voices
             pcOutVoices.CloseAllVoices(outputConsole);

@@ -16,7 +16,7 @@ namespace PCAudioDLL.AudioClasses
         private readonly AudioMixer mixer = new AudioMixer();
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void PlaySingleSfx(DebugConsole outputConsole, WaveOut _waveOut, PCVoices pcVoices, Sample sfxSample, List<SampleData> sfxStoredData)
+        internal void PlaySingleSfx(DebugConsole outputConsole, WaveOut _waveOut, PCVoices pcVoices, Sample sfxSample, SampleData[] sfxStoredData)
         {
             bool loopFlag = ((sfxSample.Flags >> (int)SoundBanksReader.Flags.Loop) & 1) == 1;
 
@@ -52,7 +52,7 @@ namespace PCAudioDLL.AudioClasses
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void PlayPolyphonic(DebugConsole outputConsole, WaveOut _waveOut, PCVoices pcVoices, Sample sfxSample, List<SampleData> sfxStoredData)
+        internal void PlayPolyphonic(DebugConsole outputConsole, WaveOut _waveOut, PCVoices pcVoices, Sample sfxSample, SampleData[] sfxStoredData)
         {
             bool loopFlag = ((sfxSample.Flags >> (int)SoundBanksReader.Flags.Loop) & 1) == 1;
 
@@ -102,7 +102,7 @@ namespace PCAudioDLL.AudioClasses
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void PlayList(DebugConsole outputConsole, WaveOut _waveOut, bool shuffled, PCVoices pcVoices, Sample sfxSample, List<SampleData> sfxStoredData)
+        internal void PlayList(DebugConsole outputConsole, WaveOut _waveOut, bool shuffled, PCVoices pcVoices, Sample sfxSample, SampleData[] sfxStoredData)
         {
             bool loopFlag = ((sfxSample.Flags >> (int)SoundBanksReader.Flags.Loop) & 1) == 1;
             do

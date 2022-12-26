@@ -285,11 +285,11 @@ namespace sb_editor
                         }
                         if (sfxFile.Samples[i].PitchOffset != 0)
                         {
-                            outputFile.WriteLine(string.Format(GlobalPrefs.NumericProvider, "PitchOffset {0:#.#}", sfxFile.Samples[i].PitchOffset));
+                            outputFile.WriteLine(string.Format(GlobalPrefs.NumericProvider, "PitchOffset  {0:#.#}", sfxFile.Samples[i].PitchOffset));
                         }
                         else
                         {
-                            outputFile.WriteLine("PitchOffset {0:0}", sfxFile.Samples[i].PitchOffset);
+                            outputFile.WriteLine("PitchOffset  {0:0}", sfxFile.Samples[i].PitchOffset);
                         }
                         if (sfxFile.Samples[i].RandomPitch != 0)
                         {
@@ -333,8 +333,8 @@ namespace sb_editor
                 outputFile.WriteLine("Shuffled  {0}", Convert.ToByte(sfxFile.SamplePool.Shuffled));
                 outputFile.WriteLine("Loop  {0}", Convert.ToByte(sfxFile.SamplePool.isLooped));
                 outputFile.WriteLine("Polyphonic  {0}", Convert.ToByte(sfxFile.SamplePool.Polyphonic));
-                outputFile.WriteLine("MinDelay  {0}", sfxFile.SamplePool.MinDelay);
-                outputFile.WriteLine("MaxDelay  {0}", sfxFile.SamplePool.MaxDelay);
+                outputFile.WriteLine("MinDelay {0}", sfxFile.SamplePool.MinDelay);
+                outputFile.WriteLine("MaxDelay {0}", sfxFile.SamplePool.MaxDelay);
                 outputFile.WriteLine("EnableSubSFX  {0}", Convert.ToByte(sfxFile.SamplePool.EnableSubSFX));
                 outputFile.WriteLine("EnableStereo  {0}", Convert.ToByte(sfxFile.SamplePool.EnableStereo));
                 outputFile.WriteLine("#END");
@@ -342,6 +342,7 @@ namespace sb_editor
                 outputFile.WriteLine("#HASHCODE");
                 outputFile.WriteLine("HashCodeNumber {0}", sfxFile.HashCode);
                 outputFile.WriteLine("#END");
+                outputFile.WriteLine("");
             }
 
             //Copy file to the final folder

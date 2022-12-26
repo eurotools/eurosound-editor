@@ -74,8 +74,9 @@ namespace PCAudioDLL.MusXStuff
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void ReadSoundbank(string filePath, SfxHeaderData headerData, SortedDictionary<uint, Sample> samplesDictionary, List<SampleData> wavesList)
+        internal Sample ReadSoundbank(string filePath, SfxHeaderData headerData, ref SampleData[] wavesList)
         {
+            Sample sample = null;
             using (BinaryReader BReader = new BinaryReader(File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read)))
             {
                 //Go to SFX Start
@@ -93,7 +94,7 @@ namespace PCAudioDLL.MusXStuff
                     BReader.BaseStream.Seek(sfxPos + headerData.SFXStart, SeekOrigin.Begin);
 
                     //Read sound properties
-                    Sample sample = new Sample
+                    sample = new Sample
                     {
                         DuckerLenght = BReader.ReadInt16(),
                         MinDelay = BReader.ReadInt16(),
@@ -134,12 +135,6 @@ namespace PCAudioDLL.MusXStuff
                         BReader.BaseStream.Seek(2, SeekOrigin.Current);
                     }
 
-                    //Save in dictionary
-                    if (!samplesDictionary.ContainsKey(hashcode))
-                    {
-                        samplesDictionary.Add(hashcode, sample);
-                    }
-
                     //Read data to show in the Hex viewer
                     BReader.BaseStream.Seek(sfxPos + headerData.SFXStart, SeekOrigin.Begin);
 
@@ -149,8 +144,8 @@ namespace PCAudioDLL.MusXStuff
 
                 //Go to sample info section
                 BReader.BaseStream.Seek(headerData.SampleInfoStart, SeekOrigin.Begin);
-                uint waveCount = BReader.ReadUInt32();
-                for (int i = 0; i < waveCount; i++)
+                wavesList = new SampleData[BReader.ReadInt32()];
+                for (int i = 0; i < wavesList.Length; i++)
                 {
                     SampleData wavHeaderData = new SampleData
                     {
@@ -174,12 +169,14 @@ namespace PCAudioDLL.MusXStuff
                     wavHeaderData.EncodedData = BReader.ReadBytes(wavHeaderData.SampleSize);
 
                     //Store data
-                    wavesList.Add(wavHeaderData);
+                    wavesList[i] = wavHeaderData;
 
                     //Return to previous position
                     BReader.BaseStream.Seek(prevPos, SeekOrigin.Begin);
                 }
             }
+
+            return sample;
         }
     }
 
