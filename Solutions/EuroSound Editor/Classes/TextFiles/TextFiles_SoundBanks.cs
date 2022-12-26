@@ -31,7 +31,7 @@ namespace sb_editor
                     //Header info
                     if (currentLine.StartsWith("##"))
                     {
-                        ReadHeaderData(soundBank.HeaderData, currentLine);
+                        ReadHeaderData(soundBank, currentLine);
                     }
 
                     //Dependencies Block
@@ -103,17 +103,17 @@ namespace sb_editor
             DateTime currentData = DateTime.Now;
             if (!File.Exists(filePath))
             {
-                soundBankFile.HeaderData.FirstCreated = currentData;
-                soundBankFile.HeaderData.CreatedBy = GlobalPrefs.EuroSoundUser;
+                soundBankFile.FirstCreated = currentData;
+                soundBankFile.CreatedBy = GlobalPrefs.EuroSoundUser;
             }
-            soundBankFile.HeaderData.LastModified = currentData;
-            soundBankFile.HeaderData.ModifiedBy = GlobalPrefs.EuroSoundUser;
+            soundBankFile.LastModified = currentData;
+            soundBankFile.ModifiedBy = GlobalPrefs.EuroSoundUser;
 
             //Update text file
             string tmpFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "TempFileName.txt");
             using (StreamWriter outputFile = new StreamWriter(File.Open(tmpFilePath, FileMode.Create, FileAccess.Write, FileShare.Read), new UTF8Encoding(false)))
             {
-                WriteHeader(outputFile, string.Empty, soundBankFile.HeaderData);
+                WriteHeader(outputFile, string.Empty, soundBankFile);
                 outputFile.WriteLine("#DEPENDENCIES");
                 for (int i = 0; i < soundBankFile.DataBases.Length; i++)
                 {

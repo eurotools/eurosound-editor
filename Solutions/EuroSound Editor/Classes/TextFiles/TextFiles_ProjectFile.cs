@@ -34,7 +34,7 @@ namespace sb_editor
                     //Header info
                     if (currentLine.StartsWith("##"))
                     {
-                        ReadHeaderData(projectData.HeaderData, currentLine);
+                        ReadHeaderData(projectData, currentLine);
                     }
 
                     //Dependencies Block
@@ -99,16 +99,16 @@ namespace sb_editor
             DateTime currentData = DateTime.Now;
             if (!File.Exists(projectFilePath))
             {
-                projectFile.HeaderData.FirstCreated = currentData;
-                projectFile.HeaderData.CreatedBy = GlobalPrefs.EuroSoundUser;
+                projectFile.FirstCreated = currentData;
+                projectFile.CreatedBy = GlobalPrefs.EuroSoundUser;
             }
-            projectFile.HeaderData.LastModified = currentData;
-            projectFile.HeaderData.ModifiedBy = GlobalPrefs.EuroSoundUser;
+            projectFile.LastModified = currentData;
+            projectFile.ModifiedBy = GlobalPrefs.EuroSoundUser;
 
             //Update text file
             using (StreamWriter outputFile = new StreamWriter(File.Open(projectFilePath, FileMode.Create, FileAccess.Write, FileShare.Read), new UTF8Encoding(false)))
             {
-                WriteHeader(outputFile, "EuroSound Project File", projectFile.HeaderData);
+                WriteHeader(outputFile, "EuroSound Project File", projectFile);
                 outputFile.WriteLine("#SoundBankList");
                 if (projectFile.SoundBanks != null)
                 {

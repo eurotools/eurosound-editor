@@ -3,12 +3,14 @@
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    public class ProjectFile
+    public class SoundBank : FileHeader
     {
-        public FileHeader HeaderData = new FileHeader();
-        public string[] SoundBanks;
-        public string[] DataBases;
-        public string[] SFXs;
+        public string[] DataBases = new string[0];
+        public int HashCode;
+        public uint PlayStationSize;
+        public uint PCSize;
+        public uint XboxSize;
+        public uint GameCubeSize;
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------

@@ -31,7 +31,7 @@ namespace sb_editor
                     //Header info
                     if (currentLine.StartsWith("##"))
                     {
-                        ReadHeaderData(samplePool.HeaderData, currentLine);
+                        ReadHeaderData(samplePool, currentLine);
                     }
 
                     //Available formats section
@@ -92,16 +92,16 @@ namespace sb_editor
             DateTime currentData = DateTime.Now;
             if (!File.Exists(filePath))
             {
-                samplesFile.HeaderData.FirstCreated = currentData;
-                samplesFile.HeaderData.CreatedBy = GlobalPrefs.EuroSoundUser;
+                samplesFile.FirstCreated = currentData;
+                samplesFile.CreatedBy = GlobalPrefs.EuroSoundUser;
             }
-            samplesFile.HeaderData.LastModified = currentData;
-            samplesFile.HeaderData.ModifiedBy = GlobalPrefs.EuroSoundUser;
+            samplesFile.LastModified = currentData;
+            samplesFile.ModifiedBy = GlobalPrefs.EuroSoundUser;
 
             //Update text file
             using (StreamWriter outputFile = new StreamWriter(File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read), new UTF8Encoding(false)))
             {
-                WriteHeader(outputFile, "Samples", samplesFile.HeaderData);
+                WriteHeader(outputFile, "Samples", samplesFile);
                 outputFile.WriteLine("#AvailableSamples");
                 outputFile.WriteLine(" {0} ", samplesFile.SamplePoolItems.Count);
                 for (int i = 0; i < 10; i++)

@@ -31,7 +31,7 @@ namespace sb_editor
                     //Header info
                     if (currentLine.StartsWith("##"))
                     {
-                        ReadHeaderData(projectData.HeaderData, currentLine);
+                        ReadHeaderData(projectData, currentLine);
                     }
 
                     //Available formats section
@@ -139,18 +139,18 @@ namespace sb_editor
             DateTime currentData = DateTime.Now;
             if (!File.Exists(projectFilePath))
             {
-                projectFile.HeaderData.FirstCreated = currentData;
-                projectFile.HeaderData.CreatedBy = GlobalPrefs.EuroSoundUser;
+                projectFile.FirstCreated = currentData;
+                projectFile.CreatedBy = GlobalPrefs.EuroSoundUser;
             }
-            projectFile.HeaderData.LastModified = currentData;
-            projectFile.HeaderData.ModifiedBy = GlobalPrefs.EuroSoundUser;
+            projectFile.LastModified = currentData;
+            projectFile.ModifiedBy = GlobalPrefs.EuroSoundUser;
 
             //Update text file
             if (Directory.Exists(Path.GetDirectoryName(projectFilePath)))
             {
                 using (StreamWriter outputFile = new StreamWriter(File.Open(projectFilePath, FileMode.Create, FileAccess.Write, FileShare.Read), new UTF8Encoding(false)))
                 {
-                    WriteHeader(outputFile, "Properties", projectFile.HeaderData);
+                    WriteHeader(outputFile, "Properties", projectFile);
                     outputFile.WriteLine("#AvailableFormats");
                     outputFile.WriteLine(" {0} ", projectFile.platformData.Count);
                     for (int i = 0; i < 3; i++)

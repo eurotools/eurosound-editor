@@ -3,14 +3,15 @@
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    public class GroupFile
+    public class Misc : FileHeader
     {
-        public FileHeader HeaderData = new FileHeader();
-        public string[] Dependencies = new string[] { };
-        public byte Action1;
-        public int MaxVoices;
-        public int Priority;
-        public bool UseDistCheck;
+        public string Version;
+        public bool ReSampleStreams;
+        public int SFXHashCodeNumber;
+        public int SoundBankHashCodeNumber;
+        public int MFXHashCodeNumber;
+        public int ReverbHashCodeNumber;
+        public int SFXGroupNumber;
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------

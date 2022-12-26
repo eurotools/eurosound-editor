@@ -5,9 +5,8 @@ namespace sb_editor.Objects
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    public class SFX
+    public class SFX : FileHeader
     {
-        public FileHeader HeaderData = new FileHeader();
         public SfxParameters Parameters = new SfxParameters();
         public List<SfxSample> Samples = new List<SfxSample>();
         public SamplePoolControl SamplePool = new SamplePoolControl();

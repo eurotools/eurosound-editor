@@ -30,7 +30,7 @@ namespace sb_editor
                     //Header info
                     if (currentLine.StartsWith("##"))
                     {
-                        ReadHeaderData(MiscFileData.HeaderData, currentLine);
+                        ReadHeaderData(MiscFileData, currentLine);
                     }
 
                     //Read project version

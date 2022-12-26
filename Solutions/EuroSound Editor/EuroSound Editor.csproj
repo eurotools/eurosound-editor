@@ -61,9 +61,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Audio Classes\AiffFunctions.cs" />
-    <Compile Include="Audio Classes\ImaFunctions.cs" />
-    <Compile Include="Audio Classes\MidiFunctions.cs" />
+    <Compile Include="Classes\Audio\AiffFunctions.cs" />
+    <Compile Include="Classes\Audio\ImaFunctions.cs" />
+    <Compile Include="Classes\Audio\MidiFunctions.cs" />
     <Compile Include="Classes\MultipleFilesFunctions.cs" />
     <Compile Include="Classes\ProjectFileFunctions.cs" />
     <Compile Include="Classes\SampleFiles.cs" />
@@ -140,9 +140,9 @@
     <Compile Include="Forms\SFX Output\SfxOutputForm_SoundBanks_TempFiles.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TextFiles_Classes\Objects\GroupFile.cs" />
-    <Compile Include="TextFiles_Classes\Objects\ReverbFile.cs" />
-    <Compile Include="TextFiles_Classes\Objects\WavInfo.cs" />
+    <Compile Include="Classes\TextFiles\Objects\GroupFile.cs" />
+    <Compile Include="Classes\TextFiles\Objects\ReverbFile.cs" />
+    <Compile Include="Objects\WavInfo.cs" />
     <Compile Include="Classes\CommonFunctions.cs" />
     <Compile Include="Custom_Controls\ListViewColumnSorter.cs" />
     <Compile Include="Forms\Advanced\Advanced.cs">
@@ -166,11 +166,11 @@
     <Compile Include="HashCodes\HashTables_Formatting.cs" />
     <Compile Include="HashCodes\HashTables_Music.cs" />
     <Compile Include="HashCodes\HashTables_Sfx.cs" />
-    <Compile Include="TextFiles_Classes\TextFiles_Groups.cs" />
-    <Compile Include="TextFiles_Classes\TextFiles_JumpFiles.cs" />
-    <Compile Include="TextFiles_Classes\TextFiles_MusicFile.cs" />
-    <Compile Include="TextFiles_Classes\TextFiles_PurgeFile.cs" />
-    <Compile Include="Audio Classes\WaveFunctions.cs" />
+    <Compile Include="Classes\TextFiles\TextFiles_Groups.cs" />
+    <Compile Include="Classes\TextFiles\TextFiles_JumpFiles.cs" />
+    <Compile Include="Classes\TextFiles\TextFiles_MusicFile.cs" />
+    <Compile Include="Classes\TextFiles\TextFiles_PurgeFile.cs" />
+    <Compile Include="Classes\Audio\WaveFunctions.cs" />
     <Compile Include="Custom_Controls\ListView_ColumnSortingClick.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -213,26 +213,26 @@
     <Compile Include="Forms\ReSampling Form\ReSampleForm_RunPurge.Designer.cs">
       <DependentUpon>ReSampleForm_RunPurge.cs</DependentUpon>
     </Compile>
-    <Compile Include="TextFiles_Classes\Objects\Controls\ComboItemData.cs" />
+    <Compile Include="Objects\ComboItemData.cs" />
     <Compile Include="Classes\UI\FlashWindow.cs" />
     <Compile Include="Classes\GlobalPrefs.cs" />
     <Compile Include="Classes\IniFile.cs" />
     <Compile Include="Classes\UI\MostRecentFilesMenu.cs" />
     <Compile Include="Classes\SoundBankFunctions.cs" />
-    <Compile Include="TextFiles_Classes\TextFiles_DataBases.cs" />
-    <Compile Include="TextFiles_Classes\TextFiles_Misc.cs" />
-    <Compile Include="TextFiles_Classes\TextFiles_ProjectFile.cs" />
-    <Compile Include="TextFiles_Classes\TextFiles_PropertiesFile.cs" />
-    <Compile Include="TextFiles_Classes\TextFiles_RefineList.cs" />
-    <Compile Include="TextFiles_Classes\TextFiles_ReverbFile.cs" />
-    <Compile Include="TextFiles_Classes\TextFiles_Samples.cs" />
-    <Compile Include="TextFiles_Classes\TextFiles_SFXs.cs" />
-    <Compile Include="TextFiles_Classes\TextFiles_SoundBanks.cs" />
-    <Compile Include="TextFiles_Classes\TextFiles_Generic.cs" />
+    <Compile Include="Classes\TextFiles\TextFiles_DataBases.cs" />
+    <Compile Include="Classes\TextFiles\TextFiles_Misc.cs" />
+    <Compile Include="Classes\TextFiles\TextFiles_ProjectFile.cs" />
+    <Compile Include="Classes\TextFiles\TextFiles_PropertiesFile.cs" />
+    <Compile Include="Classes\TextFiles\TextFiles_RefineList.cs" />
+    <Compile Include="Classes\TextFiles\TextFiles_ReverbFile.cs" />
+    <Compile Include="Classes\TextFiles\TextFiles_Samples.cs" />
+    <Compile Include="Classes\TextFiles\TextFiles_SFXs.cs" />
+    <Compile Include="Classes\TextFiles\TextFiles_SoundBanks.cs" />
+    <Compile Include="Classes\TextFiles\TextFiles_Generic.cs" />
     <Compile Include="Custom_Controls\MultiSelListBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="TextFiles_Classes\Objects\MusicFile.cs" />
+    <Compile Include="Classes\TextFiles\Objects\MusicFile.cs" />
     <Compile Include="Forms\Panels\SFX Form\UserControl_SamplePool.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -323,16 +323,16 @@
     <Compile Include="Forms\ReSampling Form\ReSampleForm.Designer.cs">
       <DependentUpon>ReSampleForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TextFiles_Classes\Objects\Controls\ListBoxItem.cs" />
-    <Compile Include="TextFiles_Classes\Objects\DataBase.cs" />
-    <Compile Include="TextFiles_Classes\Objects\FileHeader.cs" />
-    <Compile Include="TextFiles_Classes\Objects\Misc.cs" />
-    <Compile Include="TextFiles_Classes\Objects\ProjectFile.cs" />
-    <Compile Include="TextFiles_Classes\Objects\ProjProperties.cs" />
-    <Compile Include="TextFiles_Classes\Objects\SamplePool.cs" />
-    <Compile Include="TextFiles_Classes\Objects\SamplePoolItem.cs" />
-    <Compile Include="TextFiles_Classes\Objects\SFX.cs" />
-    <Compile Include="TextFiles_Classes\Objects\SoundBank.cs" />
+    <Compile Include="Objects\ListBoxItem.cs" />
+    <Compile Include="Classes\TextFiles\Objects\DataBase.cs" />
+    <Compile Include="Classes\TextFiles\Objects\FileHeader.cs" />
+    <Compile Include="Classes\TextFiles\Objects\Misc.cs" />
+    <Compile Include="Classes\TextFiles\Objects\ProjectFile.cs" />
+    <Compile Include="Classes\TextFiles\Objects\ProjProperties.cs" />
+    <Compile Include="Classes\TextFiles\Objects\SamplePool.cs" />
+    <Compile Include="Classes\TextFiles\Objects\SamplePoolItem.cs" />
+    <Compile Include="Classes\TextFiles\Objects\SFX.cs" />
+    <Compile Include="Classes\TextFiles\Objects\SoundBank.cs" />
     <Compile Include="Forms\Panels\MainForm\UserControl_MainForm_AvailableDataBases.cs">
       <SubType>UserControl</SubType>
     </Compile>

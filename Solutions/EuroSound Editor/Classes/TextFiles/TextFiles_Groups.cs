@@ -31,7 +31,7 @@ namespace sb_editor
                     //Header info
                     if (currentLine.StartsWith("##"))
                     {
-                        ReadHeaderData(dataBase.HeaderData, currentLine);
+                        ReadHeaderData(dataBase, currentLine);
                     }
 
                     //Dependencies Block
@@ -89,16 +89,16 @@ namespace sb_editor
             DateTime currentData = DateTime.Now;
             if (!File.Exists(filePath))
             {
-                fileData.HeaderData.FirstCreated = currentData;
-                fileData.HeaderData.CreatedBy = GlobalPrefs.EuroSoundUser;
+                fileData.FirstCreated = currentData;
+                fileData.CreatedBy = GlobalPrefs.EuroSoundUser;
             }
-            fileData.HeaderData.LastModified = currentData;
-            fileData.HeaderData.ModifiedBy = GlobalPrefs.EuroSoundUser;
+            fileData.LastModified = currentData;
+            fileData.ModifiedBy = GlobalPrefs.EuroSoundUser;
 
             //Update Text File
             using (StreamWriter outputFile = new StreamWriter(File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read), new UTF8Encoding(false)))
             {
-                WriteHeader(outputFile, string.Empty, fileData.HeaderData);
+                WriteHeader(outputFile, string.Empty, fileData);
                 outputFile.WriteLine("#DEPENDENCIES");
                 if (fileData.Dependencies != null)
                 {

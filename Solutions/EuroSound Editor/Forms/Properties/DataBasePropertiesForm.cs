@@ -32,14 +32,14 @@ namespace sb_editor.Forms
 
             //Show info
             lblDataBaseName_Value.Text = string.Format("'{0}'", Path.GetFileNameWithoutExtension(DataBaseFilePath));
-            lblFileInfo1.Text = string.Format("{0} :", dbData.HeaderData.bankInfo1.TrimStart('#'));
-            lblFileInfo2.Text = string.Format("{0} :", dbData.HeaderData.bankInfo2.TrimStart('#'));
-            lblFileInfo3.Text = string.Format("{0} :", dbData.HeaderData.bankInfo3.TrimStart('#'));
-            lblFileInfo4.Text = string.Format("{0} :", dbData.HeaderData.bankInfo4.TrimStart('#'));
-            lblFileInfo1_Value.Text = dbData.HeaderData.FirstCreated.Equals(DateTime.MinValue) ? string.Empty : dbData.HeaderData.FirstCreated.ToString(GlobalPrefs.FilesDateFormat);
-            lblFileInfo2_Value.Text = dbData.HeaderData.CreatedBy.ToString();
-            lblFileInfo3_Value.Text = dbData.HeaderData.LastModified.Equals(DateTime.MinValue) ? string.Empty : dbData.HeaderData.LastModified.ToString(GlobalPrefs.FilesDateFormat);
-            lblFileInfo4_Value.Text = dbData.HeaderData.ModifiedBy.ToString();
+            lblFileInfo1.Text = string.Format("{0} :", dbData.bankInfo1.TrimStart('#'));
+            lblFileInfo2.Text = string.Format("{0} :", dbData.bankInfo2.TrimStart('#'));
+            lblFileInfo3.Text = string.Format("{0} :", dbData.bankInfo3.TrimStart('#'));
+            lblFileInfo4.Text = string.Format("{0} :", dbData.bankInfo4.TrimStart('#'));
+            lblFileInfo1_Value.Text = dbData.FirstCreated.Equals(DateTime.MinValue) ? string.Empty : dbData.FirstCreated.ToString(GlobalPrefs.FilesDateFormat);
+            lblFileInfo2_Value.Text = dbData.CreatedBy.ToString();
+            lblFileInfo3_Value.Text = dbData.LastModified.Equals(DateTime.MinValue) ? string.Empty : dbData.LastModified.ToString(GlobalPrefs.FilesDateFormat);
+            lblFileInfo4_Value.Text = dbData.ModifiedBy.ToString();
 
             //Temporal
             lblDatabaseCount_Value.Text = "10";

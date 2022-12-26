@@ -3,16 +3,11 @@
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    public class Misc
+    public class ProjectFile : FileHeader
     {
-        public FileHeader HeaderData = new FileHeader();
-        public string Version;
-        public bool ReSampleStreams;
-        public int SFXHashCodeNumber;
-        public int SoundBankHashCodeNumber;
-        public int MFXHashCodeNumber;
-        public int ReverbHashCodeNumber;
-        public int SFXGroupNumber;
+        public string[] SoundBanks;
+        public string[] DataBases;
+        public string[] SFXs;
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------

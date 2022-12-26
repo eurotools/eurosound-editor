@@ -64,20 +64,20 @@ namespace sb_editor
 
             //Info to the GUI
             grbCurrentSoundbank.Text = Path.GetFileNameWithoutExtension(soundBankFile);
-            lblBankInfo1.Text = string.Format("{0} :", soundBankData.HeaderData.bankInfo1.TrimStart('#'));
-            lblBankInfo2.Text = string.Format("{0} :", soundBankData.HeaderData.bankInfo2.TrimStart('#'));
-            lblBankInfo3.Text = string.Format("{0} :", soundBankData.HeaderData.bankInfo3.TrimStart('#'));
-            lblBankInfo4.Text = string.Format("{0} :", soundBankData.HeaderData.bankInfo4.TrimStart('#'));
-            if (!soundBankData.HeaderData.FirstCreated.Equals(DateTime.MinValue))
+            lblBankInfo1.Text = string.Format("{0} :", soundBankData.bankInfo1.TrimStart('#'));
+            lblBankInfo2.Text = string.Format("{0} :", soundBankData.bankInfo2.TrimStart('#'));
+            lblBankInfo3.Text = string.Format("{0} :", soundBankData.bankInfo3.TrimStart('#'));
+            lblBankInfo4.Text = string.Format("{0} :", soundBankData.bankInfo4.TrimStart('#'));
+            if (!soundBankData.FirstCreated.Equals(DateTime.MinValue))
             {
-                lblBankInfo1_Value.Text = soundBankData.HeaderData.FirstCreated.ToString(GlobalPrefs.FilesDateFormat);
+                lblBankInfo1_Value.Text = soundBankData.FirstCreated.ToString(GlobalPrefs.FilesDateFormat);
             }
-            lblBankInfo2_Value.Text = soundBankData.HeaderData.CreatedBy.ToString();
-            if (!soundBankData.HeaderData.LastModified.Equals(DateTime.MinValue))
+            lblBankInfo2_Value.Text = soundBankData.CreatedBy.ToString();
+            if (!soundBankData.LastModified.Equals(DateTime.MinValue))
             {
-                lblBankInfo3_Value.Text = soundBankData.HeaderData.LastModified.ToString(GlobalPrefs.FilesDateFormat);
+                lblBankInfo3_Value.Text = soundBankData.LastModified.ToString(GlobalPrefs.FilesDateFormat);
             }
-            lblBankInfo4_Value.Text = soundBankData.HeaderData.ModifiedBy.ToString();
+            lblBankInfo4_Value.Text = soundBankData.ModifiedBy.ToString();
             lblDatabaseCount_Value.Text = soundBankData.DataBases.Length.ToString();
             lblSFXCount_Value.Text = SFXs.Length.ToString();
             lblSampleCount_Value.Text = samples.Length.ToString();

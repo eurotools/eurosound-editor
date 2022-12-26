@@ -32,14 +32,14 @@ namespace sb_editor.Forms
 
             //Show info
             lblDataBaseName_Value.Text = string.Format("'{0}'", Path.GetFileNameWithoutExtension(SfxFilePath));
-            lblFileInfo1.Text = string.Format("{0} :", sfxData.HeaderData.bankInfo1.TrimStart('#'));
-            lblFileInfo2.Text = string.Format("{0} :", sfxData.HeaderData.bankInfo2.TrimStart('#'));
-            lblFileInfo3.Text = string.Format("{0} :", sfxData.HeaderData.bankInfo3.TrimStart('#'));
-            lblFileInfo4.Text = string.Format("{0} :", sfxData.HeaderData.bankInfo4.TrimStart('#'));
-            lblFileInfo1_Value.Text = sfxData.HeaderData.FirstCreated.Equals(DateTime.MinValue) ? string.Empty : sfxData.HeaderData.FirstCreated.ToString(GlobalPrefs.FilesDateFormat);
-            lblFileInfo2_Value.Text = sfxData.HeaderData.CreatedBy.ToString();
-            lblFileInfo3_Value.Text = sfxData.HeaderData.LastModified.Equals(DateTime.MinValue) ? string.Empty : sfxData.HeaderData.LastModified.ToString(GlobalPrefs.FilesDateFormat);
-            lblFileInfo4_Value.Text = sfxData.HeaderData.ModifiedBy.ToString();
+            lblFileInfo1.Text = string.Format("{0} :", sfxData.bankInfo1.TrimStart('#'));
+            lblFileInfo2.Text = string.Format("{0} :", sfxData.bankInfo2.TrimStart('#'));
+            lblFileInfo3.Text = string.Format("{0} :", sfxData.bankInfo3.TrimStart('#'));
+            lblFileInfo4.Text = string.Format("{0} :", sfxData.bankInfo4.TrimStart('#'));
+            lblFileInfo1_Value.Text = sfxData.FirstCreated.Equals(DateTime.MinValue) ? string.Empty : sfxData.FirstCreated.ToString(GlobalPrefs.FilesDateFormat);
+            lblFileInfo2_Value.Text = sfxData.CreatedBy.ToString();
+            lblFileInfo3_Value.Text = sfxData.LastModified.Equals(DateTime.MinValue) ? string.Empty : sfxData.LastModified.ToString(GlobalPrefs.FilesDateFormat);
+            lblFileInfo4_Value.Text = sfxData.ModifiedBy.ToString();
 
             //Temporal
             lblDatabaseCount_Value.Text = "10";

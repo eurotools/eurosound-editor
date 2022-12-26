@@ -28,7 +28,7 @@ namespace sb_editor
                     //Header info
                     if (currentLine.StartsWith("##"))
                     {
-                        ReadHeaderData(sfxData.HeaderData, currentLine);
+                        ReadHeaderData(sfxData, currentLine);
                     }
 
                     //Read parameters block
@@ -223,11 +223,11 @@ namespace sb_editor
             DateTime currentData = DateTime.Now;
             if (!File.Exists(outputFilePath))
             {
-                sfxFile.HeaderData.FirstCreated = currentData;
-                sfxFile.HeaderData.CreatedBy = GlobalPrefs.EuroSoundUser;
+                sfxFile.FirstCreated = currentData;
+                sfxFile.CreatedBy = GlobalPrefs.EuroSoundUser;
             }
-            sfxFile.HeaderData.LastModified = currentData;
-            sfxFile.HeaderData.ModifiedBy = GlobalPrefs.EuroSoundUser;
+            sfxFile.LastModified = currentData;
+            sfxFile.ModifiedBy = GlobalPrefs.EuroSoundUser;
 
             //Update text file
             string tmpFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "TempFileName.txt");
@@ -235,11 +235,11 @@ namespace sb_editor
             {
                 if (defaultsFile)
                 {
-                    WriteHeader(outputFile, "SFX Defaults File", sfxFile.HeaderData);
+                    WriteHeader(outputFile, "SFX Defaults File", sfxFile);
                 }
                 else
                 {
-                    WriteHeader(outputFile, "SFX", sfxFile.HeaderData);
+                    WriteHeader(outputFile, "SFX", sfxFile);
                 }
                 outputFile.WriteLine("#SFXParameters");
                 outputFile.WriteLine("ReverbSend  {0}", sfxFile.Parameters.ReverbSend);

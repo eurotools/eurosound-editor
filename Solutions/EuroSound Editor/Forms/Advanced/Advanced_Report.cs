@@ -28,10 +28,10 @@ namespace sb_editor.Forms
                 sw.WriteLine(string.Empty);
                 sw.WriteLine("SoundBank Name: {0}", Path.GetFileNameWithoutExtension(soundBankPath));
                 sw.WriteLine(string.Empty);
-                sw.WriteLine("{0} : \t\t {1}", soundBankData.HeaderData.bankInfo1.TrimStart('#').Trim(), soundBankData.HeaderData.FirstCreated.ToString(GlobalPrefs.FilesDateFormat));
-                sw.WriteLine("{0} : \t\t {1}", soundBankData.HeaderData.bankInfo2.TrimStart('#').Trim(), soundBankData.HeaderData.CreatedBy);
-                sw.WriteLine("{0} : \t\t {1}", soundBankData.HeaderData.bankInfo3.TrimStart('#').Trim(), soundBankData.HeaderData.LastModified.ToString(GlobalPrefs.FilesDateFormat));
-                sw.WriteLine("{0} : \t\t {1}", soundBankData.HeaderData.bankInfo4.TrimStart('#').Trim(), soundBankData.HeaderData.ModifiedBy);
+                sw.WriteLine("{0} : \t\t {1}", soundBankData.bankInfo1.TrimStart('#').Trim(), soundBankData.FirstCreated.ToString(GlobalPrefs.FilesDateFormat));
+                sw.WriteLine("{0} : \t\t {1}", soundBankData.bankInfo2.TrimStart('#').Trim(), soundBankData.CreatedBy);
+                sw.WriteLine("{0} : \t\t {1}", soundBankData.bankInfo3.TrimStart('#').Trim(), soundBankData.LastModified.ToString(GlobalPrefs.FilesDateFormat));
+                sw.WriteLine("{0} : \t\t {1}", soundBankData.bankInfo4.TrimStart('#').Trim(), soundBankData.ModifiedBy);
                 sw.WriteLine(string.Empty);
                 sw.WriteLine("Database Count:\t\t{0}", soundBankData.DataBases.Length);
                 sw.WriteLine("SFX Count:\t\t{0}", SFXs.Length);

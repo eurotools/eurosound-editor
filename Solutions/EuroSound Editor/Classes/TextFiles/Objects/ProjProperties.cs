@@ -6,10 +6,8 @@ namespace sb_editor.Objects
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    public class ProjProperties
+    public class ProjProperties : FileHeader
     {
-        public FileHeader HeaderData = new FileHeader();
-
         //Misc
         public int DefaultRate;
         public string SampleFilesFolder;
@@ -39,13 +37,10 @@ namespace sb_editor.Objects
                 ResampleRates = new List<string>(ResampleRates),
                 EuroLandHashCodeServerPath = EuroLandHashCodeServerPath,
                 platformData = platformData.ToDictionary(entry => entry.Key, entry => entry.Value.Clone()),
-                HeaderData = new FileHeader
-                {
-                    CreatedBy = HeaderData.CreatedBy,
-                    ModifiedBy = HeaderData.ModifiedBy,
-                    LastModified = HeaderData.LastModified,
-                    FirstCreated = HeaderData.FirstCreated,
-                }
+                CreatedBy = CreatedBy,
+                ModifiedBy = ModifiedBy,
+                LastModified = LastModified,
+                FirstCreated = FirstCreated
             };
 
             //Return
