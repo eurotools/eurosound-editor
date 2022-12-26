@@ -142,6 +142,7 @@
     </Compile>
     <Compile Include="Classes\TextFiles\Objects\GroupFile.cs" />
     <Compile Include="Classes\TextFiles\Objects\ReverbFile.cs" />
+    <Compile Include="HashCodes\HashTables_Soundh.cs" />
     <Compile Include="Objects\WavInfo.cs" />
     <Compile Include="Classes\CommonFunctions.cs" />
     <Compile Include="Custom_Controls\ListViewColumnSorter.cs" />

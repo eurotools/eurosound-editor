@@ -324,7 +324,7 @@ namespace sb_editor.Forms
             {
                 hashCodes.CreateMfxValidList(Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_ValidList.h"));
                 hashCodes.CreateMfxData(Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Data.h"));
-                CommonFunctions.BuildSoundHFile();
+                hashCodes.BuildSoundHhFile(Path.Combine(GlobalPrefs.CurrentProject.EuroLandHashCodeServerPath, "Sound.h"));
             }
 
             return missingInTempFile;

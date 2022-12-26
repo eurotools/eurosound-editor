@@ -285,44 +285,6 @@ namespace sb_editor
             }
             return outputPath;
         }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        public static void BuildSoundHFile()
-        {
-            using (StreamWriter sw = new StreamWriter(File.Open(Path.Combine(GlobalPrefs.CurrentProject.EuroLandHashCodeServerPath, "Sound.h"), FileMode.Create, FileAccess.Write, FileShare.Read)))
-            {
-                sw.WriteLine("/* HT_Sound */");
-                string sfxDefinesFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "SFX_Defines.h");
-                if (File.Exists(sfxDefinesFilePath))
-                {
-                    string[] fileData = File.ReadAllLines(sfxDefinesFilePath);
-                    for (int i = 0; i < fileData.Length; i++)
-                    {
-                        sw.WriteLine(fileData[i]);
-                    }
-                }
-                string mfxDefinesFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Defines.h");
-                if (File.Exists(mfxDefinesFilePath))
-                {
-                    sw.WriteLine(string.Empty);
-                    string[] fileData = File.ReadAllLines(mfxDefinesFilePath);
-                    for (int i = 0; i < fileData.Length; i++)
-                    {
-                        sw.WriteLine(fileData[i]);
-                    }
-                }
-                string reverbsFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "SFX_Reverbs.h");
-                if (File.Exists(reverbsFilePath))
-                {
-                    sw.WriteLine(string.Empty);
-                    string[] fileData = File.ReadAllLines(reverbsFilePath);
-                    for (int i = 0; i < fileData.Length; i++)
-                    {
-                        sw.WriteLine(fileData[i]);
-                    }
-                }
-            }
-        }
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------

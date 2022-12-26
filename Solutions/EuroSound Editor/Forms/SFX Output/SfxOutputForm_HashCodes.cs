@@ -202,7 +202,7 @@ namespace sb_editor.Forms
 
             //-------------------------------------------------------------------------------[Sound.h]-------------------------------------------------------------------------------
             backgroundWorker1.ReportProgress(100, "End");
-            CommonFunctions.BuildSoundHFile();
+            hashCodes.BuildSoundHhFile(Path.Combine(GlobalPrefs.CurrentProject.EuroLandHashCodeServerPath, "Sound.h"));
         }
     }
 
