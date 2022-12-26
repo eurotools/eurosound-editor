@@ -509,6 +509,26 @@ namespace sb_editor.Forms
         {
             //Read and update file
             SFX sfxFileData = TextFiles.ReadSfxFile(filePath);
+            ParseSfxCommonData(sfxFileData);
+
+            //Update textfile
+            TextFiles.WriteSfxFile(filePath, sfxFileData, sfxDefaults);
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void SaveSfxSamplePool(string filePath)
+        {
+            //Read and update file
+            SFX sfxFileData = TextFiles.ReadSfxFile(filePath);
+            ParseSfxSamplePool(sfxFileData);
+
+            //Update textfile
+            TextFiles.WriteSfxFile(filePath, sfxFileData, sfxDefaults);
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private SFX ParseSfxCommonData(SFX sfxFileData)
+        {
             sfxFileData.Parameters.ReverbSend = UserControl_SFX_Parameters.TrackBar_ReverbSend.Value;
             sfxFileData.Parameters.MasterVolume = (int)UserControl_SFX_Parameters.nudMasterVolume.Value;
             if (UserControl_SFX_Parameters.RadiobtnTrackingType_2D.Checked)
@@ -553,16 +573,12 @@ namespace sb_editor.Forms
             sfxFileData.Parameters.MusicType = UserControl_SFX_Parameters.chkMusicType.Checked;
             sfxFileData.Parameters.Doppler = UserControl_SFX_Parameters.chkDoppler.Checked;
 
-            //Update textfile
-            TextFiles.WriteSfxFile(filePath, sfxFileData, sfxDefaults);
+            return sfxFileData;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void SaveSfxSamplePool(string filePath)
+        private SFX ParseSfxSamplePool(SFX sfxFileData)
         {
-            //Read and update file
-            SFX sfxFileData = TextFiles.ReadSfxFile(filePath);
-
             sfxFileData.SamplePool.isLooped = UserControl_SamplePoolControl.chkLoop.Checked;
             sfxFileData.SamplePool.MaxDelay = (int)UserControl_SamplePoolControl.nudMaxDelay.Value;
             sfxFileData.SamplePool.MinDelay = (int)UserControl_SamplePoolControl.nudMinDelay.Value;
@@ -585,9 +601,7 @@ namespace sb_editor.Forms
             {
                 sfxFileData.Samples.Add((SfxSample)UserControl_SamplePool.lstSamples.Items[i]);
             }
-
-            //Update textfile
-            TextFiles.WriteSfxFile(filePath, sfxFileData, sfxDefaults);
+            return sfxFileData;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------

@@ -17,35 +17,27 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void CreateTestSfx(string outputFolder, string fileName)
         {
+            int hashCode = 65534;
             SoundBankFunctions sbFunctions = new SoundBankFunctions();
 
             //Ensure that the debug folder exists
             DirectoryInfo debugFolder = Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "Debug_Report"));
 
-            //Get HashCodes Dictionary
-            Dictionary<string, uint> HashCodesDict = sbFunctions.GetHashCodesDictionary("SFXs", "#HASHCODE");
-
-            //Build SFX File
-            Dictionary<string, SFX> sbFileData = sbFunctions.GetSfxDataDict(new string[] { Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "Misc", "Common") }, "PC", "English");
-            string[] samplesList = sbFunctions.GetSampleList(sbFileData, "English");
-            sbFunctions.UpdateDuckerLength(sbFileData, "PC");
-
             //Get File Paths
-            string debugFilePath = Path.Combine(debugFolder.FullName, string.Format("StreamDebugSoundBank_{0}_{1}_{2}.txt", "___SB_TEST_SFX___", "PC", "English"));
-            string outputTempFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", "PC", "SoundBanks", "English", "65534.tmp");
+            string outputTempFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", "PC", "SoundBanks", "English", hashCode + ".tmp");
 
             //Create Folder to store the Temporal SoundBank files
             Directory.CreateDirectory(Path.GetDirectoryName(outputTempFilePath));
 
             //Create Debug File
-            using (StreamWriter sw = new StreamWriter(File.Open(debugFilePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
+            using (StreamWriter sw = new StreamWriter(File.Open(Path.Combine(debugFolder.FullName, string.Format("StreamDebugSoundBank_{0}_{1}_{2}.txt", "___SB_TEST_SFX___", "PC", "English")), FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
                 sw.WriteLine("SoundBank Output Debug Data");
                 sw.WriteLine(DateTime.Now.ToString("MM/dd/yyyy"));
                 sw.WriteLine(DateTime.Now.ToString("HH:mm:ss"));
                 sw.WriteLine("");
                 sw.WriteLine("SoundBankName = {0}", "___SB_TEST_SFX___");
-                sw.WriteLine("SoundBankSaveName = {0}", 65534);
+                sw.WriteLine("SoundBankSaveName = {0}", hashCode);
                 sw.WriteLine("SoundBankFileName = {0}", Path.ChangeExtension(outputTempFilePath, ".sfx"));
                 sw.WriteLine("Stream PoolFiles(n).FileRef");
 
@@ -56,6 +48,19 @@ namespace sb_editor.Forms
                     {
                         using (BinaryWriter sifWritter = new BinaryWriter(File.Open(Path.ChangeExtension(outputTempFilePath, ".sif"), FileMode.Create, FileAccess.Write, FileShare.Read)))
                         {
+                            //Get HashCodes Dictionary
+                            Dictionary<string, uint> HashCodesDict = sbFunctions.GetHashCodesDictionary("SFXs", "#HASHCODE");
+
+                            //Get Data
+                            SFX sfxData = new SFX();
+                            sfxData = ParseSfxCommonData(sfxData);
+                            sfxData = ParseSfxSamplePool(sfxData);
+
+                            //Build SFX File
+                            Dictionary<string, SFX> sbFileData = new Dictionary<string, SFX>() { { "Common", sfxData } };
+                            string[] samplesList = sbFunctions.GetSampleList(sbFileData, "English");
+                            sbFunctions.UpdateDuckerLength(sbFileData, "PC");
+
                             //Write SFX Data
                             WriteSfxFile(HashCodesDict, sbFileData, samplesList, "___SB_TEST_SFX___", sfxWritter, false, sw);
                             WriteSifFile(sifWritter, sbfWritter, samplesList, false);
@@ -74,7 +79,7 @@ namespace sb_editor.Forms
                     DirectoryInfo musXFolder = Directory.CreateDirectory(outputFolder);
 
                     //Build File
-                    MusXBuild_Soundbank.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, string.Empty, Path.Combine(musXFolder.FullName, fileName), 65534, false);
+                    MusXBuild_Soundbank.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, string.Empty, Path.Combine(musXFolder.FullName, fileName), hashCode, false);
                 }
             }
         }
