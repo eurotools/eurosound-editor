@@ -8,8 +8,6 @@ namespace sb_editor
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class Frm_InputBox : Form
     {
-        private readonly string NamesFormat = "^[a-zA-Z0-9_]*$";
-
         //-------------------------------------------------------------------------------------------------------------------------------
         public Frm_InputBox()
         {
@@ -27,7 +25,7 @@ namespace sb_editor
         {
             if (DialogResult == DialogResult.OK && !string.IsNullOrEmpty(txtInputData.Text))
             {
-                Match match = Regex.Match(txtInputData.Text, NamesFormat);
+                Match match = Regex.Match(txtInputData.Text, "^[a-zA-Z0-9_]*$");
                 if (!match.Success)
                 {
                     e.Cancel = true;

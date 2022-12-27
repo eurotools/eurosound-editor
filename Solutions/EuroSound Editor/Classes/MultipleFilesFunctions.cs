@@ -11,49 +11,71 @@ namespace sb_editor
     public static class MultipleFilesFunctions
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static string GetNextAvailableFilename(string folderToCheck, string filenamePattern)
+        public static string GetNextAvailableFilename(string folderPath, string fileNamePattern)
         {
+            // Set the initial file number to 0
             int fileNumber = 0;
-            while (File.Exists(Path.Combine(folderToCheck, filenamePattern + fileNumber + ".txt")))
+
+            // Construct the full file path using the given folder path and file name pattern
+            string fullFilePath = Path.Combine(folderPath, fileNamePattern + fileNumber + ".txt");
+
+            // Check if the file exists
+            while (File.Exists(fullFilePath))
             {
+                // If the file exists, increment the file number and update the full file path
                 fileNumber++;
+                fullFilePath = Path.Combine(folderPath, fileNamePattern + fileNumber + ".txt");
             }
-            return string.Join(string.Empty, filenamePattern, fileNumber);
+
+            // Return the constructed file name
+            return string.Join(string.Empty, fileNamePattern, fileNumber);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         public static string GetFullFileName(string fileName)
         {
-            string finalName = fileName;
+            // Check if the file name is an absolute path (i.e., if it is rooted)
             if (!Path.IsPathRooted(fileName))
             {
-                finalName = Path.DirectorySeparatorChar + fileName;
+                // If the file name is not an absolute path, add the directory separator character to the beginning of the file name
+                fileName = Path.DirectorySeparatorChar + fileName;
             }
-            return finalName;
+
+            // Return the modified file name
+            return fileName;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         public static string GetFilesRemovingMessage(string questionText, string[] DataBasesToDelete)
         {
+            // Initialize the message string
             string message = string.Format("{0}\n\n", questionText);
+            
+            // Add the names of the first 33 files to the message
             for (int i = 0; i < Math.Min(33, DataBasesToDelete.Length); i++)
             {
                 message += string.Format("'{0}'\n", DataBasesToDelete[i]);
             }
+
+            // If there are more than 33 files, add a note to the message
             if (DataBasesToDelete.Length > 33)
             {
                 message += "Plus Some More .....\n";
                 message += "............\n";
             }
+            
+            // Add the total number of files to the message
             message += string.Format("\nTotal Files:  {0}", DataBasesToDelete.Length);
+
+            // Return the completed message
             return message;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static void RemoveFilesAndUpdateDependencies(string[] filesToRemove, string filesFolderName, string dependenciesFolder)
+        public static void RemoveFilesAndUpdateDependencies(string[] filesToRemove, string folderName, string dependenciesFolder)
         {
             //Trash Folder
-            string trashFolder = Path.Combine(GlobalPrefs.ProjectFolder, filesFolderName + "_Trash");
+            string trashFolder = Path.Combine(GlobalPrefs.ProjectFolder, folderName + "_Trash");
             Directory.CreateDirectory(trashFolder);
 
             //Iterate over all SoundBanks 
@@ -85,7 +107,7 @@ namespace sb_editor
             {
                 string trashFilePath = Path.Combine(trashFolder, filesToRemove[i] + ".txt");
                 File.Delete(trashFilePath);
-                File.Move(Path.Combine(GlobalPrefs.ProjectFolder, filesFolderName, filesToRemove[i] + ".txt"), trashFilePath);
+                File.Move(Path.Combine(GlobalPrefs.ProjectFolder, folderName, filesToRemove[i] + ".txt"), trashFilePath);
             }
         }
     }

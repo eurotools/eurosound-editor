@@ -40,7 +40,7 @@ namespace sb_editor.Forms
             if (!backgroundWorker1.IsBusy)
             {
                 //Run Bat scripts
-                CommonFunctions.RunOutputScripts(true);
+                CommonFunctions.RunOutputScripts(Path.Combine(GlobalPrefs.ProjectFolder, "System", "PreOutput.bat"), "rem Add your pre-output stuff here");
 
                 outputTimer.Start();
                 backgroundWorker1.RunWorkerAsync();
@@ -343,7 +343,7 @@ namespace sb_editor.Forms
             }
 
             //Run Bat scripts
-            CommonFunctions.RunOutputScripts();
+            CommonFunctions.RunOutputScripts(Path.Combine(GlobalPrefs.ProjectFolder, "System", "PostOutput.bat"), "rem Add your post-output stuff here");
 
             //Update Textbox and show form again
             parentFormObj.txtOutputTime.Text = string.Format("Output Time =  {0:0.0000000000000}", outputTimer.Elapsed.TotalMilliseconds);

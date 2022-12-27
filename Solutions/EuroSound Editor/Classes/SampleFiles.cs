@@ -13,42 +13,49 @@ namespace sb_editor
         //-------------------------------------------------------------------------------------------------------------------------------
         public static string[] GetNewSamples(SamplePool samples)
         {
+            // Create a list to store the missing files
             List<string> missingFiles = new List<string>();
 
-            string masterFiles = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master");
-            string[] waveFiles = Directory.GetFiles(masterFiles, "*.wav", SearchOption.AllDirectories);
-            for (int i = 0; i < waveFiles.Length; i++)
+            // Get the path to the "Master" folder
+            string masterFolderPath = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master");
+
+            // Get the paths to all wave files in the "Master" folder and its subfolders
+            string[] waveFilePaths = Directory.GetFiles(masterFolderPath, "*.wav", SearchOption.AllDirectories);
+
+            // Iterate over the wave file paths
+            foreach (string waveFilePath in waveFilePaths)
             {
-                string filePath = waveFiles[i].Substring(masterFiles.Length);
-                if (!samples.SamplePoolItems.ContainsKey(filePath))
+                // Get the relative path of the wave file
+                string relativeFilePath = waveFilePath.Substring(masterFolderPath.Length);
+
+                // Check if the relative path of the wave file exists in the sample pool
+                if (!samples.SamplePoolItems.ContainsKey(relativeFilePath))
                 {
-                    missingFiles.Add(filePath);
+                    // If the relative path does not exist in the sample pool, add it to the list of missing files
+                    missingFiles.Add(relativeFilePath);
                 }
             }
 
+            // Return the list of missing files as an array
             return missingFiles.ToArray();
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         public static string[] GetMissingSamples(SamplePool samples)
         {
-            //Get All Available Samples
-            List<string> availableSamples = new List<string>();
-            string masterFiles = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master");
-            string[] waveFiles = Directory.GetFiles(masterFiles, "*.wav", SearchOption.AllDirectories);
-            for (int i = 0; i < waveFiles.Length; i++)
-            {
-                availableSamples.Add(waveFiles[i].Substring(masterFiles.Length));
-            }
+            // Get the path of the master sample files folder
+            string masterSampleFilesFolder = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master");
 
-            //Get Used Samples
-            List<string> usedSamples = new List<string>();
-            foreach (KeyValuePair<string, SamplePoolItem> itemData in samples.SamplePoolItems)
-            {
-                usedSamples.Add(itemData.Key);
-            }
+            // Get a list of all available sample file paths
+            string[] availableSampleFilePaths = Directory.GetFiles(masterSampleFilesFolder, "*.wav", SearchOption.AllDirectories)
+                .Select(filePath => filePath.Substring(masterSampleFilesFolder.Length))
+                .ToArray();
 
-            return usedSamples.Except(availableSamples).ToArray();
+            // Get a list of all used sample file paths
+            string[] usedSampleFilePaths = samples.SamplePoolItems.Keys.ToArray();
+
+            // Return the list of used sample file paths that are not available
+            return usedSampleFilePaths.Except(availableSampleFilePaths).ToArray();
         }
     }
 

@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.32002.261
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoopOffsetUnitTests", "LoopOffsetUnitTests.csproj", "{D63A9BB3-625D-4DF4-BDB9-475EB148A2A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESUtils", "..\..\dll\ESUtils\ESUtils\ESUtils.csproj", "{E72AEF10-6327-43C6-AFE0-9B2B100B558E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESUtils", "..\..\Solutions\ESUtils\ESUtils.csproj", "{A4E66469-32BB-42A3-ACF8-4609D72921C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{D63A9BB3-625D-4DF4-BDB9-475EB148A2A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D63A9BB3-625D-4DF4-BDB9-475EB148A2A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D63A9BB3-625D-4DF4-BDB9-475EB148A2A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E72AEF10-6327-43C6-AFE0-9B2B100B558E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E72AEF10-6327-43C6-AFE0-9B2B100B558E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E72AEF10-6327-43C6-AFE0-9B2B100B558E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E72AEF10-6327-43C6-AFE0-9B2B100B558E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4E66469-32BB-42A3-ACF8-4609D72921C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4E66469-32BB-42A3-ACF8-4609D72921C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4E66469-32BB-42A3-ACF8-4609D72921C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4E66469-32BB-42A3-ACF8-4609D72921C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

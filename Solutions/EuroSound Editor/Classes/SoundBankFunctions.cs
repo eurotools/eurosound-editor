@@ -17,35 +17,44 @@ namespace sb_editor.Classes
         //-------------------------------------------------------------------------------------------------------------------------------
         internal string[] GetSFXs(string[] DataBases, string platform = "")
         {
+            // Use a HashSet to store unique SFX names
             HashSet<string> soundBankSFX = new HashSet<string>();
 
+            string dataBasesFolder = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases");
+            string sfxsFolder = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs");
+
+            // Iterate over all given data bases
             for (int i = 0; i < DataBases.Length; i++)
             {
-                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", DataBases[i] + ".txt");
+                // Get the file path of the data base
+                string filePath = Path.Combine(dataBasesFolder, DataBases[i] + ".txt");
+
+                // Check if the data base file exists
                 if (File.Exists(filePath))
                 {
+                    // Read the file data into an array of lines
                     string[] fileData = File.ReadAllLines(filePath);
+
+                    // Find the index of the "#DEPENDENCIES" line
                     int index = Array.IndexOf(fileData, "#DEPENDENCIES") + 1;
+
+                    // Check if the "#DEPENDENCIES" line was found
                     if (index > 0)
                     {
+                        // Iterate over all lines after the "#DEPENDENCIES" line
                         string currentLine = fileData[index];
                         while (!currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase))
                         {
-                            if (string.IsNullOrEmpty(platform))
+                            // Check if a platform was specified
+                            if (!string.IsNullOrEmpty(platform) && File.Exists(Path.Combine(sfxsFolder, platform, currentLine + ".txt")))
                             {
-                                soundBankSFX.Add(currentLine);
+                                // If the platform-specific version exists, add it to the set
+                                soundBankSFX.Add(string.Format("{0}/{1}", platform, currentLine));
                             }
                             else
                             {
-                                string specificFormat = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", platform, currentLine + ".txt");
-                                if (File.Exists(specificFormat))
-                                {
-                                    soundBankSFX.Add(string.Format("{0}/{1}", platform, currentLine));
-                                }
-                                else
-                                {
-                                    soundBankSFX.Add(currentLine);
-                                }
+                                // If the platform-specific version does not exist, add the regular version to the set
+                                soundBankSFX.Add(currentLine);
                             }
                             currentLine = fileData[index++].Trim();
                         }
@@ -53,7 +62,7 @@ namespace sb_editor.Classes
                 }
             }
 
-            //Hashset to array
+            // Convert the hash set to an array and sort it
             string[] SfxArray = soundBankSFX.ToArray();
             Array.Sort(SfxArray);
 
@@ -67,25 +76,33 @@ namespace sb_editor.Classes
 
             for (int i = 0; i < SFXs.Length; i++)
             {
+                // Combine the path to the SFXs folder with the file name
                 string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", SFXs[i] + ".txt");
+
+                // Read all lines from each SFX file
                 string[] fileData = File.ReadAllLines(filePath);
-                int index = Array.IndexOf(fileData, "#SFXSamplePoolFiles") + 1;
-                if (index > 0)
+
+                // Find the index of the line that starts the sample pool section
+                int samplePoolIndex = Array.IndexOf(fileData, "#SFXSamplePoolFiles") + 1;
+                if (samplePoolIndex > 0)
                 {
-                    string currentLine = fileData[index];
+                    // Iterate over all lines after the "#SFXSamplePoolFiles" line
+                    string currentLine = fileData[samplePoolIndex];
                     while (!currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase))
                     {
+                        // Get the samples from the speech folder
                         string sampleName = CommonFunctions.GetSampleFromSpeechFolder(currentLine, outputLanguage);
                         if (!string.IsNullOrEmpty(sampleName))
                         {
+                            // Add the samples to the list
                             samplesList.Add(sampleName);
                         }
-                        currentLine = fileData[index++].Trim();
+                        currentLine = fileData[samplePoolIndex++].Trim();
                     }
                 }
             }
 
-            //Hashset to array
+            // Convert the hash set to an array and sort it
             string[] samplesArray = samplesList.ToArray();
             Array.Sort(samplesArray);
 
@@ -95,15 +112,22 @@ namespace sb_editor.Classes
         //-------------------------------------------------------------------------------------------------------------------------------
         internal string[] GetSampleList(Dictionary<string, SFX> fileData, string outputLanguage)
         {
+            // Create a hash set to store the unique sample names
             HashSet<string> samplesList = new HashSet<string>();
 
+            // Iterate through the sfx data
             foreach (KeyValuePair<string, SFX> sfxItem in fileData)
             {
+                // Check if the sample pool for this SFX is enabled and that it has samples
                 if (!sfxItem.Value.SamplePool.EnableSubSFX && sfxItem.Value.Samples.Count > 0)
                 {
+                    // Iterate through the samples for this SFX
                     foreach (SfxSample sampleData in sfxItem.Value.Samples)
                     {
+                        // Get the sample name from the speech folder for the specified output language
                         string sampleName = CommonFunctions.GetSampleFromSpeechFolder(sampleData.FilePath, outputLanguage);
+
+                        // If the sample name is not empty, add it to the hash set
                         if (!string.IsNullOrEmpty(sampleName))
                         {
                             samplesList.Add(sampleName);
@@ -112,7 +136,7 @@ namespace sb_editor.Classes
                 }
             }
 
-            //Hashset to array
+            // Convert the hash set to an array and sort it
             string[] samplesArray = samplesList.ToArray();
             Array.Sort(samplesArray);
 
@@ -124,33 +148,34 @@ namespace sb_editor.Classes
         {
             long sampleSize = 0;
 
+            // Iterate through all samples
             for (int i = 0; i < Samples.Length; i++)
             {
+                // Get the full file name and check if it exists in the sample pool
                 string fileName = MultipleFilesFunctions.GetFullFileName(Samples[i]);
                 if (samplePool.SamplePoolItems.ContainsKey(fileName) && Path.HasExtension(fileName) && !Path.IsPathRooted(Samples[i]))
                 {
-                    //Get wave length
                     long waveLength = 0;
-                    if (Directory.Exists(samplesFolder))
+                    string samplePath = Path.Combine(samplesFolder, Samples[i]);
+
+                    // Check if the sample file exists
+                    if (File.Exists(samplePath))
                     {
-                        string samplePath = Path.Combine(samplesFolder, Samples[i]);
-                        if (File.Exists(samplePath))
+                        // Get the length of the wave file in bytes
+                        using (WaveFileReader WReader = new WaveFileReader(samplePath))
                         {
-                            using (WaveFileReader WReader = new WaveFileReader(samplePath))
-                            {
-                                waveLength = WReader.Length;
-                            }
+                            waveLength = WReader.Length;
                         }
                     }
 
-                    //Count soundbank size
+                    // Calculate the size of the sample based on whether it should be streamed or fully loaded into memory
                     if (samplePool.SamplePoolItems[fileName].StreamMe)
                     {
-                        sampleSize += 2 * Math.Max(waveLength, 1);
+                        sampleSize += 2 * Math.Max(waveLength, 1); // Multiply by 2 because streaming requires twice the memory
                     }
                     else
                     {
-                        sampleSize += 4 * Math.Max(waveLength, 1);
+                        sampleSize += 4 * Math.Max(waveLength, 1); // Multiply by 4 because fully loading into memory requires 4 times the memory
                     }
                 }
             }
