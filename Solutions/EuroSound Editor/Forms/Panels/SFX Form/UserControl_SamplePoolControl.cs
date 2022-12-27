@@ -20,10 +20,14 @@ namespace sb_editor.Panels
         //-------------------------------------------------------------------------------------------------------------------------------
         internal void LoadData(SFX sfxFile)
         {
-            //Show Data
+            //Set the looping property
             chkLoop.Checked = sfxFile.SamplePool.isLooped;
+
+            //Set the maximum and minimum delay value
             nudMaxDelay.Value = Math.Min(Math.Max(nudMaxDelay.Minimum, sfxFile.SamplePool.MaxDelay), nudMaxDelay.Maximum);
             nudMinDelay.Value = Math.Min(Math.Max(nudMinDelay.Minimum, sfxFile.SamplePool.MinDelay), nudMinDelay.Maximum);
+
+            //Set the action radio button
             if (sfxFile.SamplePool.Action1 == 0)
             {
                 rdoSingle.Checked = true;
@@ -32,6 +36,8 @@ namespace sb_editor.Panels
             {
                 rdoMultiSample.Checked = true;
             }
+
+            //Update properties values
             chkRandomPick.Checked = sfxFile.SamplePool.RandomPick;
             chkShuffled.Checked = sfxFile.SamplePool.Shuffled;
             chkPolyphonic.Checked = sfxFile.SamplePool.Polyphonic;
@@ -61,21 +67,24 @@ namespace sb_editor.Panels
         //-------------------------------------------------------------------------------------------------------------------------------
         private void RdoMultiSample_CheckedChanged(object sender, EventArgs e)
         {
+            // Check if the "MultiSample" radio button is checked
             if (rdoMultiSample.Checked)
             {
+                // Uncheck the "Random Pick" checkbox and enable the "Shuffled" and "Polyphonic" checkboxes
                 chkRandomPick.Checked = false;
                 chkShuffled.Enabled = true;
                 chkPolyphonic.Enabled = true;
 
-                //Update min value
+                // Set the minimum value for the "Minimum Delay" and "Maximum Delay" numeric updown controls to -32000
                 nudMinDelay.Minimum = -32000;
                 nudMaxDelay.Minimum = -32000;
             }
             else
             {
-                //Inform user if required
+                // If the "MultiSample" radio button is not checked, check if the value of either the "Minimum Delay" or "Maximum Delay" is less than 0
                 if (nudMinDelay.Value < 0 || nudMaxDelay.Value < 0)
                 {
+                    // If either value is less than 0, show an error message and set the "MultiSample" radio button to be checked
                     MessageBox.Show("Inter Sample Delay cannot be -ve", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     rdoMultiSample.Checked = true;
                 }

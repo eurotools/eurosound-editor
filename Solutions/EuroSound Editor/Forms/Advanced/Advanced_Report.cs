@@ -16,7 +16,7 @@ namespace sb_editor.Forms
         {
             // Create a new SoundBankFunctions instance
             SoundBankFunctions sbFunctions = new SoundBankFunctions();
-            
+
             // Read the samples file and sound bank file
             SamplePool samplePool = TextFiles.ReadSamplesFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "Samples.txt"));
             SoundBank soundBankData = TextFiles.ReadSoundbankFile(soundBankPath);

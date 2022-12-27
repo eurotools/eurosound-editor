@@ -435,7 +435,7 @@ namespace sb_editor.Forms
 
                         // Create a ListViewItem to represent the current .wav file
                         ListViewItem itemToAdd = new ListViewItem(new string[] { fileName, "##", "No Errors", "##", "Output", "Output", "#####", "##" });
-                        
+
                         // Get the path to the .txt file for the current .wav file
                         string musicFilePropertiesPath = Path.Combine(musicFolderPath, "ESData", fileName + ".txt");
 

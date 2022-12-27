@@ -69,7 +69,7 @@ namespace sb_editor.Forms
                 if (File.Exists(midiFilePath))
                 {
                     backgroundWorker1.ReportProgress(0, string.Format("Making Marker File: {0}", filesQueue[i]));
-                    
+
                     // Copy the MIDI file to the working directory
                     string midiWorkFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESWork", filesQueue[i] + ".midi");
                     if (File.Exists(midiWorkFilePath))
@@ -165,7 +165,7 @@ namespace sb_editor.Forms
                 string wavePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", filesQueue[i] + ".wav");
                 string aslFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESWork", filesQueue[i] + ".asl");
                 string asrFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESWork", filesQueue[i] + ".asr");
-               
+
                 // Initialize arrays for storing left and right audio data in IMA format
                 byte[] imaLeftChannelData = null;
                 byte[] imaRightChannelData = null;
@@ -448,7 +448,7 @@ namespace sb_editor.Forms
                     rightChannelIndex += interleaveBlockSize;
                 }
             }
-                    
+
             File.WriteAllBytes(outputFilePath, interleavedData);
         }
     }

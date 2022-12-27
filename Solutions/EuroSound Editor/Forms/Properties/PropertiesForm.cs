@@ -228,9 +228,13 @@ namespace sb_editor
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnSearchOutputFolder_Click(object sender, EventArgs e)
         {
+            //Check if any format is selected in the list view
             if (lvwAvailableFormats.SelectedItems.Count > 0)
             {
+                //Set the description for the folder browser dialog
                 FolderBrowser.Description = "Set Folder For Binary Files.";
+
+                //Open the folder browser dialog
                 if (FolderBrowser.ShowDialog() == DialogResult.OK)
                 {
                     foreach (ListViewItem selectedFormat in lvwAvailableFormats.SelectedItems)
@@ -259,14 +263,19 @@ namespace sb_editor
         //*===============================================================================================
         private void BtnAddSampleRate_Click(object sender, EventArgs e)
         {
+            // create an input form to get the new re-sample rate name
             using (Frm_InputBox inputForm = new Frm_InputBox() { Text = "New Re-sample Name" })
             {
+                // set the label text and default value for the input form
                 inputForm.lblText.Text = "Enter New Re-sample Rate Name";
                 inputForm.txtInputData.Text = GetReSampleName();
+
+                // show the input form and check if the user clicked OK
                 if (inputForm.ShowDialog() == DialogResult.OK)
                 {
                     if (lstAvailableSampleRates.FindStringExact(inputForm.txtInputData.Text) == ListBox.NoMatches)
                     {
+                        // add the new re-sample rate name to the list of available sample rates
                         lstAvailableSampleRates.Items.Add(inputForm.txtInputData.Text);
                         if (cboFormat.SelectedItem != null)
                         {
@@ -447,16 +456,14 @@ namespace sb_editor
             //ReSample Rates for formats can't be empty
             foreach (KeyValuePair<string, PlatformData> formatData in tempObject.platformData)
             {
+                // If there are no resample rates for the current platform data
                 if (formatData.Value.ReSampleRates.Count == 0)
                 {
+                    // Add default resample rate (22050) for each resample rate in the temporary object
                     for (int i = 0; i < tempObject.ResampleRates.Count; i++)
                     {
                         formatData.Value.ReSampleRates.Add(22050);
                     }
-                }
-                else if (formatData.Value.ReSampleRates.Count != temporalObj.ResampleRates.Count)
-                {
-
                 }
             }
         }

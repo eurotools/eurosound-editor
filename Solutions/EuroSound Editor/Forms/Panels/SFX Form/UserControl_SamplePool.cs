@@ -202,9 +202,14 @@ namespace sb_editor.Panels
         //*===============================================================================================
         private void ChkEnableSubSFX_CheckedChanged(object sender, System.EventArgs e)
         {
+            // Get a reference to the SFXParameters control
             UserControl_SFX_Parameters sfxParametersControl = ((SFXForm)Parent.Parent).UserControl_SFX_Parameters;
+
+            // Toggle the visibility and enabled state of the LockedOnAllFormats group box
             sfxParametersControl.grbLockedOnAllFormats.Visible = !sfxParametersControl.grbLockedOnAllFormats.Visible;
             sfxParametersControl.grbLockedOnAllFormats.Enabled = !sfxParametersControl.grbLockedOnAllFormats.Enabled;
+
+            // Toggle the visibility and enabled state of the SampleProperties group box
             grbSampleProperties.Visible = !grbSampleProperties.Visible;
             grbSampleProperties.Enabled = !grbSampleProperties.Enabled;
         }
@@ -212,11 +217,15 @@ namespace sb_editor.Panels
         //-------------------------------------------------------------------------------------------------------------------------------
         private void ChkEnableSubSFX_Click(object sender, System.EventArgs e)
         {
+            // Check if there are items in the sample list
             if (lstSamples.Items.Count > 0)
             {
+                // If there are items in the sample list, uncheck the enable subsfx checkbox
                 chkEnableSubSFX.Checked = false;
                 ((SFXForm)Parent.Parent).pnlAlert.Visible = true;
                 ((SFXForm)Parent.Parent).tmrTabPageBlink.Start();
+
+                // Show an error message
                 if (MessageBox.Show("Sample Pool File List Must be empty!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error) == DialogResult.OK)
                 {
                     ((SFXForm)Parent.Parent).pnlAlert.Visible = false;
@@ -236,6 +245,7 @@ namespace sb_editor.Panels
         //-------------------------------------------------------------------------------------------------------------------------------
         private void ChkEnableStereo_CheckStateChanged(object sender, EventArgs e)
         {
+            // If the sample pool has items, display an error message and prevent the stereo mode from being enabled
             if (lstSamples.Items.Count > 0)
             {
                 chkEnableSubSFX.Checked = false;
@@ -299,13 +309,19 @@ namespace sb_editor.Panels
         //*===============================================================================================
         private void BtnMoveUp_Click(object sender, System.EventArgs e)
         {
+            // Get the indices of the selected items in the list
             int[] indexes = lstSamples.SelectedIndices.Cast<int>().ToArray();
+
+            // If there are items selected and they are not already at the top of the list
             if (indexes.Length > 0 && indexes[0] > 0)
             {
+                // Loop through the items in the list
                 for (int i = 0; i < lstSamples.Items.Count; ++i)
                 {
+                    // If the current item is selected
                     if (indexes.Contains(i))
                     {
+                        // Remove the item from the list and insert it one position above its current position
                         object moveItem = lstSamples.Items[i];
                         lstSamples.Items.Remove(moveItem);
                         lstSamples.Items.Insert(i - 1, moveItem);
@@ -318,13 +334,19 @@ namespace sb_editor.Panels
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnMoveDown_Click(object sender, System.EventArgs e)
         {
+            // Get the selected indices in the list
             int[] indexes = lstSamples.SelectedIndices.Cast<int>().ToArray();
+
+            // Check if there are any selected items, and if the last selected item is not already the last item in the list
             if (indexes.Length > 0 && indexes[indexes.Length - 1] < lstSamples.Items.Count - 1)
             {
+                // Iterate through the list in reverse order
                 for (int i = lstSamples.Items.Count - 1; i > -1; --i)
                 {
+                    // If the current index is in the list of selected indices
                     if (indexes.Contains(i))
                     {
+                        // Save the item to move
                         object moveItem = lstSamples.Items[i];
                         lstSamples.Items.Remove(moveItem);
                         lstSamples.Items.Insert(i + 1, moveItem);
@@ -408,13 +430,19 @@ namespace sb_editor.Panels
         //-------------------------------------------------------------------------------------------------------------------------------
         private void NudRandomVolume_ValueChanged(object sender, EventArgs e)
         {
-            if (((SFXForm)Parent.Parent).UserControl_SFX_Parameters.chkStealOnLouder.Checked && nudRandomVolume.Value != 0)
+            // Get the SFX Parameters control from the parent form
+            UserControl_SFX_Parameters sfxParametersControl = ((SFXForm)Parent.Parent).UserControl_SFX_Parameters;
+
+            // Check if the "Steal On Louder" option is checked and the new random volume value is not 0
+            if (sfxParametersControl.chkStealOnLouder.Checked && nudRandomVolume.Value != 0)
             {
+                // Show a message warning the user that these options cannot be used together
                 MessageBox.Show("Steal On Louder & Random Volume NOT allowed.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 nudRandomVolume.Value = 0;
             }
             else
             {
+                // Set the random volume value for each selected sample
                 for (int i = 0; i < lstSamples.SelectedItems.Count; i++)
                 {
                     ((SfxSample)lstSamples.SelectedItems[i]).RandomVolume = (sbyte)nudRandomVolume.Value;
@@ -445,55 +473,65 @@ namespace sb_editor.Panels
         //*===============================================================================================
         private void ContextActionAdd()
         {
+            // Check if sub-sfx is enabled
             if (chkEnableSubSFX.Checked)
             {
-                //Show selector
+                // Get the parent form
                 SFXForm mainForm = (SFXForm)Parent.Parent;
+                // Open the hash codes selector
                 mainForm.OpenHashCodesSelector(mainForm.DesktopLocation);
             }
             else
             {
+                // Set the initial directory for the open file dialog to the "Master" folder inside the project's sample files folder
                 OpenFileDiag_Samples.InitialDirectory = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master");
+
+                // Show the open file dialog
                 if (OpenFileDiag_Samples.ShowDialog() == DialogResult.OK)
                 {
+                    // Loop through all the selected files
                     for (int i = 0; i < OpenFileDiag_Samples.FileNames.Length; i++)
                     {
+                        // Add the selected file to the sample pool
                         AddItemToSamplePool(OpenFileDiag_Samples.FileNames[i]);
                     }
                 }
             }
 
-            //Check Random Pick
+            // Enable the random pick option if there are more than 1 item in the sample pool
             ((SFXForm)Parent.Parent).UserControl_SamplePoolControl.chkRandomPick.Checked = lstSamples.Items.Count > 1;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void ContextActionRemove()
         {
+            // Check if there are any selected items in the list
             if (lstSamples.SelectedItems.Count > 0)
             {
+                // Store the index of the currently selected item
                 int selectedIndex = lstSamples.SelectedIndex;
 
-                //Remove selected
+                // Remove all the selected items from the list
                 while (lstSamples.SelectedItems.Count > 0)
                 {
                     lstSamples.Items.Remove(lstSamples.SelectedItems[0]);
                 }
 
-                //Select next item
+                // If the index of the previously selected item is still within the range of the list, set it as the currently selected item again
                 if (selectedIndex < lstSamples.Items.Count)
                 {
                     lstSamples.SelectedIndex = selectedIndex;
                 }
 
-                //Check Random Pick
+                // If there is more than one item in the list, set the random pick checkbox to true, otherwise set it to false
                 ((SFXForm)Parent.Parent).UserControl_SamplePoolControl.chkRandomPick.Checked = lstSamples.Items.Count > 1;
 
-                //Update file
+                // Update the list of samples in the sfxFileData object
                 sfxFileData.Samples = lstSamples.Items.OfType<SfxSample>().ToList();
             }
             else
             {
+                // If there are no selected items, play the system beep sound
                 SystemSounds.Beep.Play();
             }
         }
@@ -501,13 +539,18 @@ namespace sb_editor.Panels
         //-------------------------------------------------------------------------------------------------------------------------------
         private void ContextActionCopy()
         {
+            // Check if there are any items selected in the list
             if (lstSamples.SelectedItems.Count > 0)
             {
+                // Add a copy of all selected items to the list
                 lstSamples.Items.AddRange(lstSamples.SelectedItems.OfType<SfxSample>().ToArray());
+
+                // Update the list of samples in the sfx file data object
                 sfxFileData.Samples = lstSamples.Items.OfType<SfxSample>().ToList();
             }
             else
             {
+                // Play an error sound if no items are selected
                 SystemSounds.Beep.Play();
             }
         }
@@ -536,21 +579,36 @@ namespace sb_editor.Panels
         //-------------------------------------------------------------------------------------------------------------------------------
         private void ContextActioEdit()
         {
+            //Check if Sub-SFXs are enabled
             if (chkEnableSubSFX.Checked)
             {
                 if (lstSamples.SelectedItems.Count == 1)
                 {
+                    //Get selected SFX hashcode
+                    string sfxFileName = ((SfxSample)lstSamples.SelectedItems[0]).FilePath;
+
+                    //Open SFX Form with the selected SFX
+                    SFXForm sfxEditor = new SFXForm(sfxFileName)
+                    {
+                        StartPosition = ((MainForm)Application.OpenForms[nameof(MainForm)]).StartPosition
+                    };
+                    sfxEditor.Show();
                 }
                 else
                 {
+                    //Error sound if no or multiple items are selected
                     SystemSounds.Beep.Play();
                 }
             }
             else
             {
+                //Check if any items are selected
                 if (lstSamples.SelectedItems.Count > 0)
                 {
+                    //Get base INI file path
                     string baseIniFile = Path.Combine(Application.StartupPath, "EuroSound.ini");
+
+                    //Check if INI file exists
                     if (File.Exists(baseIniFile))
                     {
                         //Get Audio File Path
@@ -564,6 +622,7 @@ namespace sb_editor.Panels
                             {
                                 try
                                 {
+                                    //Open the selected audio file in the audio editor
                                     Process.Start(AudioEditorPath, Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", ((SfxSample)lstSamples.SelectedItems[i]).FilePath));
                                 }
                                 catch (Exception ex)
@@ -574,12 +633,14 @@ namespace sb_editor.Panels
                         }
                         else
                         {
+                            //Show message if no audio editor is setup
                             MessageBox.Show("No editor setup.\nUse Properties form to setup.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                 }
                 else
                 {
+                    //Error sound if no items are selected
                     SystemSounds.Beep.Play();
                 }
             }
@@ -590,20 +651,25 @@ namespace sb_editor.Panels
         {
             if (!chkEnableSubSFX.Checked && lstSamples.SelectedItems.Count == 1)
             {
-                //Play sound
+                //Play sound if the SubSFX checkbox is not checked and only one sample is selected
                 try
                 {
+                    //Get the selected sample's file path
                     string soundRelativePath = ((SfxSample)lstSamples.SelectedItem).FilePath.TrimStart(Path.DirectorySeparatorChar);
+
+                    //Create a new SoundPlayer object with the full file path of the selected sample
                     audioPlayer = new SoundPlayer(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", soundRelativePath));
                     audioPlayer.Play();
                 }
                 catch (Exception ex)
                 {
+                    //Show an error message if there was a problem playing the sound
                     MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
             {
+                //Play a beep if no samples are selected or more than one sample is selected
                 SystemSounds.Beep.Play();
             }
         }
@@ -624,18 +690,24 @@ namespace sb_editor.Panels
         //-------------------------------------------------------------------------------------------------------------------------------
         private void AddItemToSamplePool(string filePath)
         {
+            //Check if filePath is inside SampleFilesFolder
             if (filePath.StartsWith(GlobalPrefs.CurrentProject.SampleFilesFolder))
             {
                 try
                 {
+                    //Open wave file
                     using (WaveFileReader waveFile = new WaveFileReader(filePath))
                     {
                         bool addSample = true;
+
+                        //Check if sample is 16 bits
                         if (waveFile.WaveFormat.BitsPerSample != 16)
                         {
                             addSample = false;
                             MessageBox.Show(string.Format("Sample {0} is not 16 bit.", filePath), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
+
+                        //Check if sample has 1 channel
                         if (waveFile.WaveFormat.Channels != 1)
                         {
                             addSample = false;
