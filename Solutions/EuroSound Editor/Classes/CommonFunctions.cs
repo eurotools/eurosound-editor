@@ -98,7 +98,7 @@ namespace sb_editor
         {
             // Get the first character of the language string and make it uppercase
             char firstCharacter = char.ToUpper(language[0]);
-            
+
             // Get the next two characters of the language string and make them lowercase
             string nextTwoCharacters = language.Substring(1, 2).ToLower();
 

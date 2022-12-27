@@ -14,16 +14,21 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void CreateReport(string reportFilePath, string soundBankPath, string outputFormat, string outputLanguage)
         {
-            //Get SoundBank Data
+            // Create a new SoundBankFunctions instance
             SoundBankFunctions sbFunctions = new SoundBankFunctions();
+            
+            // Read the samples file and sound bank file
             SamplePool samplePool = TextFiles.ReadSamplesFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "Samples.txt"));
             SoundBank soundBankData = TextFiles.ReadSoundbankFile(soundBankPath);
+
+            // Get the list of SFXs and samples
             string[] SFXs = sbFunctions.GetSFXs(soundBankData.DataBases, outputFormat);
             string[] samples = sbFunctions.GetSampleList(SFXs, outputLanguage);
 
-            //Write Report File
+            // Open the report file for writing
             using (StreamWriter sw = new StreamWriter(File.Open(reportFilePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
+                // Write the report data to the file
                 sw.WriteLine("SoundBank Report Created:\t {0:MM/dd/yyyy} {0:HH:mm:ss}", DateTime.Now);
                 sw.WriteLine(string.Empty);
                 sw.WriteLine("SoundBank Name: {0}", Path.GetFileNameWithoutExtension(soundBankPath));

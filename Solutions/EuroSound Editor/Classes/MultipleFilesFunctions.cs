@@ -50,7 +50,7 @@ namespace sb_editor
         {
             // Initialize the message string
             string message = string.Format("{0}\n\n", questionText);
-            
+
             // Add the names of the first 33 files to the message
             for (int i = 0; i < Math.Min(33, DataBasesToDelete.Length); i++)
             {
@@ -63,7 +63,7 @@ namespace sb_editor
                 message += "Plus Some More .....\n";
                 message += "............\n";
             }
-            
+
             // Add the total number of files to the message
             message += string.Format("\nTotal Files:  {0}", DataBasesToDelete.Length);
 

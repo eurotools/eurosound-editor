@@ -26,8 +26,10 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void Frm_MusicMaker_Load(object sender, EventArgs e)
         {
-            //Get Output Platforms
+            // Begin updating the combo box so that it doesn't redraw after every item is added
             cboOutputFormat.BeginUpdate();
+
+            // Iterate through the keys (platform names) in the platformData dictionary and add them to the combo box as options
             foreach (string outPlatform in GlobalPrefs.CurrentProject.platformData.Keys)
             {
                 cboOutputFormat.Items.Add(outPlatform);
@@ -36,7 +38,7 @@ namespace sb_editor.Forms
             cboOutputFormat.SelectedItem = "All";
             cboOutputFormat.EndUpdate();
 
-            //Load MFX Data
+            // Call the LoadData method
             LoadData();
         }
 
@@ -53,18 +55,18 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnUpdateFiles_Click(object sender, EventArgs e)
         {
-            //Search for the midi file
+            // Check if an item is selected in the listview
             if (lvwMusicFiles.SelectedItems.Count == 1)
             {
-                //Update control
+                // Reset text color and error message for the selected item
                 lvwMusicFiles.SelectedItems[0].SubItems[0].ForeColor = SystemColors.WindowText;
                 lvwMusicFiles.SelectedItems[0].SubItems[2].Text = "No Errors";
 
-                //Check Midi and start conversion
+                // Get the path of the selected MIDI file
                 string midiFile = Path.Combine(GlobalPrefs.ProjectFolder, "Music", lvwMusicFiles.SelectedItems[0].Text + ".mid");
                 if (File.Exists(midiFile))
                 {
-                    //Copy midi file in the working directory
+                    // Create a copy of the MIDI file in the "ESWork" directory
                     string midiFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESWork", lvwMusicFiles.SelectedItems[0].Text + ".midi");
                     if (File.Exists(midiFilePath))
                     {
@@ -72,10 +74,13 @@ namespace sb_editor.Forms
                     }
                     File.Copy(midiFile, midiFilePath);
 
-                    //Start process
+                    // Set the UseItemStyleForSubItems property to false to allow changing the text color of the selected item's subitems
                     lvwMusicFiles.SelectedItems[0].UseItemStyleForSubItems = false;
+
+                    // Check if the "CreateMarkerFile" method returns true (indicating that there are errors in the MIDI file)
                     if (CreateMarkerFile(midiFilePath))
                     {
+                        // Set the text color and error message for the selected item
                         lvwMusicFiles.SelectedItems[0].SubItems[0].ForeColor = Color.Red;
                         lvwMusicFiles.SelectedItems[0].SubItems[2].Text = "Has Errors!";
                     }
@@ -86,9 +91,11 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnOutput_Click(object sender, EventArgs e)
         {
-            if (File.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", "MFXFiles.txt")))
+            // Check if MFXFiles.txt exists
+            string mfxFilesPath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", "MFXFiles.txt");
+            if (File.Exists(mfxFilesPath))
             {
-                //Get files to output
+                // Get a list of music files that need to be output
                 List<string> filesToOutput = new List<string>();
                 for (int i = 0; i < lvwMusicFiles.Items.Count; i++)
                 {
@@ -98,15 +105,17 @@ namespace sb_editor.Forms
                     }
                 }
 
-                //Check for output files
+                // Check if there are any files to output
                 if (filesToOutput.Count > 0)
                 {
-                    //Open Output Form
+                    // Determine the output platform
                     string[] outputPlatform = new string[] { cboOutputFormat.SelectedItem.ToString() };
                     if (cboOutputFormat.SelectedItem.ToString().Equals("All"))
                     {
                         outputPlatform = GlobalPrefs.CurrentProject.platformData.Keys.ToArray();
                     }
+
+                    // Output the music files
                     if (outputPlatform.Length > 0)
                     {
                         using (MusicAppExporter exporter = new MusicAppExporter(filesToOutput.ToArray(), outputPlatform, this))
@@ -117,13 +126,15 @@ namespace sb_editor.Forms
                                 Show();
                             }
 
-                            //Create MFX Hashcodes
+                            // Create and validate MfxDefines.h file
                             string finalFile = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Defines.h");
                             string tempFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Temp_MFX_Defines.h");
                             List<string> missingInTempFile = CreateAndValidateMfxDefines();
                             if (missingInTempFile.Count > 0)
                             {
+                                // Show a warning message if there are missing defines in the new MfxDefines.h file
                                 string message = string.Join("\n", missingInTempFile.ToArray());
+
                                 //Truncate string if required
                                 if (message.Length > 914)
                                 {
@@ -165,15 +176,20 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void NudVolume_ValueChanged(object sender, EventArgs e)
         {
+            // Make sure that an item is selected in the list view
             if (lvwMusicFiles.SelectedItems.Count == 1)
             {
-                //Get file data
+                // Get the properties file path
                 string propsFile = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", lvwMusicFiles.SelectedItems[0].Text + ".txt");
+
+                // Read the music file data from the properties file
                 MusicFile fileData = new MusicFile();
                 if (File.Exists(propsFile))
                 {
                     fileData = TextFiles.ReadMusicFile(propsFile);
                 }
+
+                // If the volume has changed, update the file data and the list view
                 if (fileData.Volume != nudVolume.Value)
                 {
                     //Update List
@@ -191,28 +207,35 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnViewErrorFile_Click(object sender, EventArgs e)
         {
+            // Check if a single item is selected in the list view
             if (lvwMusicFiles.SelectedItems.Count == 1)
             {
-                string baseIniFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini");
-                if (File.Exists(baseIniFile))
+                // Get the path to the base INI file
+                string baseIniFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini");
+                if (File.Exists(baseIniFilePath))
                 {
-                    //Get Audio File Path
-                    IniFile iniFile = new IniFile(baseIniFile);
+                    // Read the INI file
+                    IniFile iniFile = new IniFile(baseIniFilePath);
+                    // Get the path to the text editor specified in the INI file
                     string TextEditorPath = iniFile.Read("TextEditor", "PropertiesForm");
                     if (File.Exists(TextEditorPath))
                     {
                         try
                         {
+                            // Get the path to the error file
                             string errorFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESWork", lvwMusicFiles.SelectedItems[0].Text + ".err");
+                            // Open the error file with the text editor
                             Process.Start(TextEditorPath, errorFilePath);
                         }
                         catch (Exception ex)
                         {
+                            // Show an error message if an exception occurs
                             MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                     else
                     {
+                        // Show a message if no text editor is setup
                         MessageBox.Show("No Text Editor setup.\nUse Properties form to setup one.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
@@ -239,20 +262,22 @@ namespace sb_editor.Forms
             }
         }
 
-
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnVerifyHashCodes_Click(object sender, EventArgs e)
         {
-            //Do Comparison
-            if (File.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", "MFXFiles.txt")))
+            // Check if MFXFiles.txt exists
+            string mfxFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", "MFXFiles.txt");
+            if (File.Exists(mfxFilePath))
             {
+                // Check if there are any items in the list view
                 if (lvwMusicFiles.Items.Count > 0)
                 {
+                    // Check if there are any missing defines in the temp MFX_Defines.h file
                     List<string> missingInTempFile = CreateAndValidateMfxDefines();
                     if (missingInTempFile.Count > 0)
                     {
+                        // Truncate message if necessary
                         string message = string.Join("\n", missingInTempFile.ToArray());
-                        //Truncate string if required
                         if (message.Length > 914)
                         {
                             message = message.Substring(0, 914);
@@ -274,34 +299,46 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private List<string> CreateAndValidateMfxDefines()
         {
+            // Initialize a list to store missing MFX defines
             List<string> missingInTempFile = new List<string>();
 
-            //HashTables
+            // Create a new instance of the HashTables class
             HashTables hashCodes = new HashTables();
+
+            // Set the file path for the temp MFX defines file
             string tempFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Temp_MFX_Defines.h");
+
+            // Check if System directory exists
             if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "System")))
             {
-                //Get the MFX Temporal Data
+                // Create MFX defines in temp file
                 hashCodes.CreateMfxDefines(tempFilePath);
+
+                // Read the file data into memory for faster search
                 string[] tempFileData = File.ReadAllLines(tempFilePath);
 
-                //Get the Final MFX Data
+                // Check if the project's hash code directory exists
                 if (!string.IsNullOrEmpty(GlobalPrefs.CurrentProject.HashCodeFileDirectory) && Directory.Exists(GlobalPrefs.CurrentProject.HashCodeFileDirectory))
                 {
+                    // Set file path for MFX defines file
                     string mfxDefinesFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Defines.h");
                     if (File.Exists(mfxDefinesFilePath))
                     {
-                        //Check items that are missing in the final
+                        // Read the MFX defines data into memory for faster search
                         string[] mfxDefinesData = File.ReadAllLines(mfxDefinesFilePath);
+
+                        // Iterate through the MFX defines data
                         for (int i = 0; i < mfxDefinesData.Length; i++)
                         {
                             string currentLine = mfxDefinesData[i];
+
+                            // Skip empty lines or lines that start with "//"
                             if (currentLine.StartsWith("//") || string.IsNullOrEmpty(currentLine))
                             {
                                 continue;
                             }
 
-                            //Add item to list
+                            // If the current line is not found in the temp file data, add it to the missing defines list
                             if (Array.IndexOf(tempFileData, currentLine) == -1)
                             {
                                 string[] fileData = currentLine.Split(null);
@@ -314,12 +351,13 @@ namespace sb_editor.Forms
                     }
                     else if (File.Exists(tempFilePath))
                     {
+                        // If the MFX defines file does not exist, copy the temp file to create it
                         File.Copy(tempFilePath, mfxDefinesFilePath);
                     }
                 }
             }
 
-            //Valid List
+            // Check if the project's hash code directory exists
             if (!string.IsNullOrEmpty(GlobalPrefs.CurrentProject.HashCodeFileDirectory) && Directory.Exists(GlobalPrefs.CurrentProject.HashCodeFileDirectory))
             {
                 hashCodes.CreateMfxValidList(Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_ValidList.h"));
@@ -333,25 +371,34 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void NudUserValue_ValueChanged(object sender, EventArgs e)
         {
+            // Check if a single item is selected in the music file list
             if (lvwMusicFiles.SelectedItems.Count == 1)
             {
-                //Get file data
-                string propsFile = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", lvwMusicFiles.SelectedItems[0].Text + ".txt");
-                MusicFile fileData = new MusicFile();
-                if (File.Exists(propsFile))
+                // Get the path of the selected music file's properties file
+                string musicFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", lvwMusicFiles.SelectedItems[0].Text + ".txt");
+
+                // Initialize the music file data object with default values
+                MusicFile musicFileData = new MusicFile();
+
+                // If the properties file exists, read the music file data from it
+                if (File.Exists(musicFilePath))
                 {
-                    fileData = TextFiles.ReadMusicFile(propsFile);
+                    musicFileData = TextFiles.ReadMusicFile(musicFilePath);
                 }
-                if (fileData.UserValue != nudUserValue.Value)
+
+                // If the user value of the music file has changed
+                if (musicFileData.UserValue != nudUserValue.Value)
                 {
-                    //Update List
+                    // Update the user value displayed in the list view
                     lvwMusicFiles.SelectedItems[0].SubItems[1].Text = nudUserValue.Value.ToString();
                     lvwMusicFiles.SelectedItems[0].SubItems[4].Text = "Output";
 
-                    //Update text file
-                    fileData.UserValue = (uint)nudUserValue.Value;
-                    fileData.MidiFileLastOutput = "99";
-                    TextFiles.WriteMusicFile(fileData, propsFile);
+                    // Update the user value in the music file data object
+                    musicFileData.UserValue = (uint)nudUserValue.Value;
+                    musicFileData.MidiFileLastOutput = "99";
+
+                    // Write the updated music file data to the properties file
+                    TextFiles.WriteMusicFile(musicFileData, musicFilePath);
                 }
             }
         }
@@ -359,34 +406,59 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------<
         private void LoadData()
         {
-            //Update MFX Files
-            using (StreamWriter sw = new StreamWriter(File.Open(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", "MFXFiles.txt"), FileMode.Create, FileAccess.Write, FileShare.Read), new UTF8Encoding(false)))
+            // Open the MFXFiles.txt file for writing and truncate it
+            using (StreamWriter mfxFileWriter = new StreamWriter(File.Open(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", "MFXFiles.txt"), FileMode.Create, FileAccess.Write, FileShare.Read), new UTF8Encoding(false)))
             {
-                sw.WriteLine("#MFXFiles");
-                //Check for new files
-                string[] waveFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Music"), "*.wav", SearchOption.TopDirectoryOnly);
+                // Write the header line to the MFXFiles.txt file
+                mfxFileWriter.WriteLine("#MFXFiles");
+
+                // Get the path to the project's Music folder
+                string musicFolderPath = Path.Combine(GlobalPrefs.ProjectFolder, "Music");
+
+                // Get an array of all the .wav files in the Music folder
+                string[] waveFiles = Directory.GetFiles(musicFolderPath, "*.wav", SearchOption.TopDirectoryOnly);
+
+                // Iterate through each .wav file
                 for (int i = 0; i < waveFiles.Length; i++)
                 {
-                    //Find new Files
-                    string markerFile = Path.ChangeExtension(waveFiles[i], ".mrk");
-                    string midFile = Path.ChangeExtension(waveFiles[i], ".mid");
-                    if (File.Exists(markerFile) || File.Exists(midFile))
+                    // Get the path to the .mrk file for the current .wav file
+                    string markerFilePath = Path.ChangeExtension(waveFiles[i], ".mrk");
+
+                    // Get the path to the .mid file for the current .wav file
+                    string midFilePath = Path.ChangeExtension(waveFiles[i], ".mid");
+
+                    // Check if either the .mrk file or the .mid file exists for the current .wav file
+                    if (File.Exists(markerFilePath) || File.Exists(midFilePath))
                     {
+                        // Get the name of the current .wav file without the extension
                         string fileName = Path.GetFileNameWithoutExtension(waveFiles[i]);
+
+                        // Create a ListViewItem to represent the current .wav file
                         ListViewItem itemToAdd = new ListViewItem(new string[] { fileName, "##", "No Errors", "##", "Output", "Output", "#####", "##" });
-                        string propsFile = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", fileName + ".txt");
-                        if (File.Exists(propsFile))
+                        
+                        // Get the path to the .txt file for the current .wav file
+                        string musicFilePropertiesPath = Path.Combine(musicFolderPath, "ESData", fileName + ".txt");
+
+                        // Check if the .txt file for the current .wav file exists
+                        if (File.Exists(musicFilePropertiesPath))
                         {
-                            MusicFile musicFileData = TextFiles.ReadMusicFile(propsFile);
+                            // Read the properties of the current .wav file from the .txt file
+                            MusicFile musicFileData = TextFiles.ReadMusicFile(musicFilePropertiesPath);
+
+                            // If the hash code for the current .wav file is negative, assign it a new hash code
                             if (musicFileData.HashCode < 0)
                             {
                                 musicFileData.HashCode = GlobalPrefs.MFXHashCodeNumber++;
                             }
+
+                            // Update the volume and hash code columns of the ListViewItem with the values from the .txt file
                             itemToAdd.SubItems[1].Text = musicFileData.Volume.ToString();
                             itemToAdd.SubItems[3].Text = musicFileData.HashCode.ToString();
 
-                            //Check Marker File
-                            string midiFileDate = new FileInfo(markerFile).LastWriteTime.ToString("dd/MM/yyyy HH:mm:ss");
+                            // Get the last write time of the .mid file for the current .wav file
+                            string midiFileDate = new FileInfo(markerFilePath).LastWriteTime.ToString("dd/MM/yyyy HH:mm:ss");
+
+                            // Check if the last modified date of the .mid file matches the recorded output date...
                             if (musicFileData.MidiFileLastOutput.Equals(midiFileDate))
                             {
                                 itemToAdd.SubItems[4].Text = "OK";
@@ -396,8 +468,10 @@ namespace sb_editor.Forms
                                 itemToAdd.SubItems[2].Text = "Output Required.";
                             }
 
-                            //Check Wave File
+                            // Get the last modified date of the .wav file
                             string waveFileDate = new FileInfo(waveFiles[i]).LastWriteTime.ToString("dd/MM/yyyy HH:mm:ss");
+
+                            // If the last modified date of the .wav file matches the recorded output date...
                             if (musicFileData.WavFileLastOutput.Equals(waveFileDate))
                             {
                                 itemToAdd.SubItems[5].Text = "OK";
@@ -411,92 +485,125 @@ namespace sb_editor.Forms
                         }
                         else
                         {
+                            // Create a new MusicFile with default values
                             MusicFile musicFileData = new MusicFile
                             {
                                 Volume = 100,
                                 HashCode = GlobalPrefs.MFXHashCodeNumber++
                             };
+
+                            // Set the volume and hash code values for the ListViewItem
                             itemToAdd.SubItems[1].Text = musicFileData.Volume.ToString();
                             itemToAdd.SubItems[2].Text = "NewFile";
                             itemToAdd.SubItems[3].Text = musicFileData.HashCode.ToString();
                             itemToAdd.SubItems[6].Text = string.Format("HC{0}.SFX", musicFileData.HashCode.ToString("X6"));
                             itemToAdd.SubItems[7].Text = musicFileData.UserValue.ToString();
-                            TextFiles.WriteMusicFile(musicFileData, propsFile);
+
+                            // Write the MusicFile data to the .txt file
+                            TextFiles.WriteMusicFile(musicFileData, musicFilePropertiesPath);
                         }
 
-                        //Add item to list
+                        // Add the ListViewItem to the list view
                         lvwMusicFiles.Items.Add(itemToAdd);
-                        sw.WriteLine(fileName);
+
+                        // Write the file name to the MFXFiles.txt file
+                        mfxFileWriter.WriteLine(fileName);
                     }
                 }
-                sw.WriteLine("#END");
-                sw.WriteLine(string.Empty);
+                mfxFileWriter.WriteLine("#END");
+                mfxFileWriter.WriteLine(string.Empty);
             }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private bool CreateMarkerFile(string midiFile)
         {
-            bool fatalErrors = false;
+            bool hasFatalErrors = false; // flag to track if there are fatal errors
+
+            // Path for the MIDI text file
             string midiTextFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESWork", Path.GetFileNameWithoutExtension(midiFile) + ".txt");
+
+            // Convert MIDI file to text file
             CommonFunctions.RunConsoleProcess(Path.Combine(Application.StartupPath, "SystemFiles", "MIDI2TXT.exe"), string.Join(" ", "-ms", "\"" + midiFile + "\"", "\"" + midiTextFilePath + "\""), false);
+
+            // Check if the MIDI text file exists
             if (File.Exists(midiTextFilePath))
             {
-                //Initialice Class
+                // Create new instance of HashTables
                 MidiFunctions midiClass = new MidiFunctions();
+
+                // Open a StreamWriter to write errors to a .err file
                 using (StreamWriter sw = new StreamWriter(File.Open(Path.ChangeExtension(midiTextFilePath, ".err"), FileMode.Create, FileAccess.Write, FileShare.Read)))
                 {
                     sw.WriteLine("Midi to Marker File Errors Found");
                     sw.WriteLine(string.Empty);
 
-                    //Read midi file and validate
-                    fatalErrors = midiClass.CheckMarkersFatalErrors(midiClass.GetNotes(midiTextFilePath), midiClass.GetTexts(midiTextFilePath), sw);
-                    if (!fatalErrors)
-                    {
-                        string markerFile = Path.ChangeExtension(midiTextFilePath, ".mrk");
-                        fatalErrors = midiClass.CheckMarkersWarnings(sw);
-                        midiClass.WriteMarkerFile(markerFile);
+                    // Check for fatal errors in the marker file
+                    hasFatalErrors = midiClass.CheckMarkersFatalErrors(midiClass.GetNotes(midiTextFilePath), midiClass.GetTexts(midiTextFilePath), sw);
 
-                        //Move marker file to the final location
-                        string markerFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", lvwMusicFiles.SelectedItems[0].Text + ".mrk");
-                        if (File.Exists(markerFilePath))
+                    // If there are no fatal errors, create the marker file
+                    if (!hasFatalErrors)
+                    {
+                        // Path for the marker file
+                        string markerFilePath = Path.ChangeExtension(midiTextFilePath, ".mrk");
+
+                        // Check for warnings in the marker file
+                        hasFatalErrors = midiClass.CheckMarkersWarnings(sw);
+
+                        // Write the marker file
+                        midiClass.WriteMarkerFile(markerFilePath);
+
+                        // Path for the marker file in the Music folder
+                        string markerFilePathDest = Path.Combine(GlobalPrefs.ProjectFolder, "Music", lvwMusicFiles.SelectedItems[0].Text + ".mrk");
+
+                        // If the marker file in the Music folder already exists, delete it
+                        if (File.Exists(markerFilePathDest))
                         {
-                            File.Delete(markerFilePath);
+                            File.Delete(markerFilePathDest);
                         }
-                        File.Copy(markerFile, markerFilePath);
+
+                        // Copy the marker file to the Music folder
+                        File.Copy(markerFilePath, markerFilePathDest);
                     }
                 }
 
-                //Print Error Messages
+                // Display any errors
                 for (int i = 0; i < midiClass.errorsList.Count; i++)
                 {
                     MessageBox.Show(midiClass.errorsList[i], Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            else
+            else // If the MIDI text file doesn't exist
             {
+                // Display an error message
                 MessageBox.Show(string.Format("Cannot create txt version of midi file {0}\n\nEnsure that Midi files located on a local (non-Network) drive", midiFile), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            return fatalErrors;
+            return hasFatalErrors;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnRemapHashCodes_Click(object sender, EventArgs e)
         {
+            // Iterate through all the items in the list view
             foreach (ListViewItem listItem in lvwMusicFiles.Items)
             {
+                // Construct the path to the music file
                 string musicFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", listItem.Text + ".txt");
+
+                // Check if the music file exists
                 if (File.Exists(musicFilePath))
                 {
-                    //Update HashCode
+                    // Read the music file data
                     MusicFile musicFileData = TextFiles.ReadMusicFile(musicFilePath);
+
+                    // Increment the global MFX hash code number and assign it to the current music file's hash code
                     musicFileData.HashCode = GlobalPrefs.MFXHashCodeNumber++;
 
-                    //Update ListView
+                    // Update the hash code in the list item's subitem
                     listItem.SubItems[3].Text = musicFileData.HashCode.ToString();
 
-                    //Update File
+                    // Write the updated music file data to the music file
                     TextFiles.WriteMusicFile(musicFileData, musicFilePath);
                 }
             }

@@ -33,25 +33,30 @@ namespace sb_editor.Panels
         //*===============================================================================================
         private void LstDataBases_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //Clear current items
+            // Get the UserControl instance for displaying sfx of the selected database
             UserControl_MainForm_SfxInDataBase SfxInDataBase = ((MainForm)Application.OpenForms[nameof(MainForm)]).UserControl_DataBaseSfx;
             SfxInDataBase.ClearControl();
 
             //Load DataBase dependencies
             if (lstDataBases.SelectedItems.Count == 1)
             {
-                string DataBasePath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", lstDataBases.SelectedItem + ".txt");
-                if (File.Exists(DataBasePath))
+                // Get the path of the selected database file
+                string databasePath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", lstDataBases.SelectedItem + ".txt");
+                if (File.Exists(databasePath))
                 {
-                    SfxInDataBase.lstSfxInDataBase.Items.AddRange(TextFiles.ReadListBlock(DataBasePath, "#DEPENDENCIES"));
+                    // Read the sfx dependencies list from the database file and display it in the control
+                    SfxInDataBase.lstSfxInDataBase.Items.AddRange(TextFiles.ReadListBlock(databasePath, "#DEPENDENCIES"));
                 }
                 else
                 {
-                    MessageBox.Show(string.Join(" ", "File not found", DataBasePath), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // Show an error message if the database file does not exist
+                    MessageBox.Show(string.Join(" ", "File not found", databasePath), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
-                //Update Counter
+                // Update the sfx count label
                 SfxInDataBase.lblSfxCount.Text = string.Join(" ", "Total:", SfxInDataBase.lstSfxInDataBase.Items.Count);
+
+                // Enable or disable buttons in the control based on the number of sfx in the list
                 SfxInDataBase.EnableOrDisableButton();
             }
         }
@@ -73,42 +78,53 @@ namespace sb_editor.Panels
         //-------------------------------------------------------------------------------------------------------------------------------
         private void MnuNew_Click(object sender, EventArgs e)
         {
-            //Ask user for a name
+            // Show an input dialog to prompt for the new database file name
             using (Frm_InputBox inputDiag = new Frm_InputBox() { Text = "Create New Database" })
             {
-                string folderPath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases");
+                // Get the path of the DataBases folder
+                string dataBasesFolderPath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases");
 
+                // Set the label text and default input value for the input dialog box
                 inputDiag.lblText.Text = "Enter Name";
-                inputDiag.txtInputData.Text = MultipleFilesFunctions.GetNextAvailableFilename(folderPath, "DB_Label");
+                inputDiag.txtInputData.Text = MultipleFilesFunctions.GetNextAvailableFilename(dataBasesFolderPath, "DB_Label");
+
+                // Keep looping until the user clicks the OK button or cancels the input dialog box
                 while (true)
                 {
                     if (inputDiag.ShowDialog() == DialogResult.OK)
                     {
+                        // Get the user-entered file name
                         string fileName = inputDiag.txtInputData.Text.Trim();
+
+                        // If the user entered an empty string, exit the loop
                         if (string.IsNullOrEmpty(fileName))
                         {
                             break;
                         }
                         else
                         {
-                            string filePath = Path.Combine(folderPath, fileName + ".txt");
+                            // Get the path of the new file
+                            string filePath = Path.Combine(dataBasesFolderPath, fileName + ".txt");
                             if (File.Exists(filePath))
                             {
+                                // If the file already exists, show an error message and loop again
                                 MessageBox.Show(string.Format("Label '{0}' already exists please use another name!", fileName), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                             else
                             {
-                                //Create new soundbank file
+                                // Create a new DataBase object
                                 DataBase databaseFile = new DataBase();
+
+                                // Write the new database file to the file system
                                 TextFiles.WriteDataBaseFile(filePath, databaseFile);
 
-                                //Update UI
+                                // Update the list of databases in the main form
                                 ProjectFileFunctions.UpdateDataBases((sb_editor.MainForm)Parent.Parent.Parent);
                                 break;
                             }
                         }
                     }
-                    else
+                    else // If the user clicks "Cancel" in the dialog, exit the loop
                     {
                         break;
                     }
@@ -119,38 +135,45 @@ namespace sb_editor.Panels
         //-------------------------------------------------------------------------------------------------------------------------------
         private void MnuCopy_Click(object sender, System.EventArgs e)
         {
+            // Make sure only one item is selected
             if (lstDataBases.SelectedItems.Count == 1)
             {
-                //Ask user for a name
-                using (Frm_InputBox inputDiag = new Frm_InputBox() { Text = "Copy Database" })
+                // Open input dialog to ask for the name of the copied database
+                using (Frm_InputBox inputDialog = new Frm_InputBox() { Text = "Copy Database" })
                 {
-                    string folderPath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases");
+                    // Get the path to the DataBases folder
+                    string dataBasesFolderPath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases");
 
-                    inputDiag.lblText.Text = string.Format("Enter Copy Name For Database {0}", lstDataBases.SelectedItems[0]);
-                    inputDiag.txtInputData.Text = (string)lstDataBases.SelectedItems[0];
+                    // Set the label text and default value for the input field
+                    inputDialog.lblText.Text = string.Format("Enter Copy Name For Database {0}", lstDataBases.SelectedItems[0]);
+                    inputDialog.txtInputData.Text = (string)lstDataBases.SelectedItems[0];
+
+                    // Keep showing the input dialog until the user provides a valid name
                     while (true)
                     {
-                        if (inputDiag.ShowDialog() == DialogResult.OK)
+                        if (inputDialog.ShowDialog() == DialogResult.OK)
                         {
-                            string fileName = inputDiag.txtInputData.Text.Trim();
+                            // Get the input name
+                            string fileName = inputDialog.txtInputData.Text.Trim();
+
+                            // Check if the name is empty
                             if (string.IsNullOrEmpty(fileName))
                             {
                                 break;
                             }
                             else
                             {
-                                string newFilePath = Path.Combine(folderPath, fileName + ".txt");
+                                // Check if a database with the same name already exists
+                                string newFilePath = Path.Combine(dataBasesFolderPath, fileName + ".txt");
                                 if (File.Exists(newFilePath))
                                 {
                                     MessageBox.Show(string.Format("Label '{0}' already exists please use another name!", fileName), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 }
                                 else
                                 {
-                                    //Copy file
-                                    string filePath = Path.Combine(folderPath, lstDataBases.SelectedItems[0] + ".txt");
+                                    string filePath = Path.Combine(dataBasesFolderPath, lstDataBases.SelectedItems[0] + ".txt");
                                     File.Copy(filePath, newFilePath);
 
-                                    //Update UI
                                     lstDataBases.Items.Add(fileName);
                                     break;
                                 }

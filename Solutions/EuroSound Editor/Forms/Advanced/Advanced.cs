@@ -32,8 +32,15 @@ namespace sb_editor.Forms
                 string soundBankPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks", soundBankName + ".txt");
                 if (File.Exists(soundBankPath))
                 {
-                    DirectoryInfo reportFolder = Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "Report"));
-                    CreateReport(Path.Combine(reportFolder.FullName, soundBankName + ".txt"), soundBankPath, CommonFunctions.GetOutputPlatforms()[0], CommonFunctions.GetOutputLanguages()[0]);
+                    // Create the report folder if it doesn't exist
+                    string reportFolderPath = Path.Combine(GlobalPrefs.ProjectFolder, "Report");
+                    if (!Directory.Exists(reportFolderPath))
+                    {
+                        Directory.CreateDirectory(reportFolderPath);
+                    }
+
+                    // Create the report file in the report folder
+                    CreateReport(Path.Combine(reportFolderPath, soundBankName + ".txt"), soundBankPath, CommonFunctions.GetOutputPlatforms()[0], CommonFunctions.GetOutputLanguages()[0]);
                 }
             }
 
@@ -44,51 +51,58 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnCheckHashCodes_Click(object sender, System.EventArgs e)
         {
-            //Update to wait cursor
+            // Change cursor to wait cursor
             Cursor.Current = Cursors.WaitCursor;
 
-            //Get files to check
-            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs")))
+            // Get the SFX files in the SFXs folder
+            string sfxFolderPath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs");
+            if (Directory.Exists(sfxFolderPath))
             {
-                string[] sfxFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
-                uint[] hashCodes = new uint[sfxFiles.Length];
-                List<string> Errors = new List<string>();
-                bool firstTime = true;
+                string[] sfxFilePaths = Directory.GetFiles(sfxFolderPath, "*.txt", SearchOption.TopDirectoryOnly);
 
-                //Start Check
-                for (int i = 0; i < sfxFiles.Length; i++)
+                // Array to store the hash codes of all SFX files
+                uint[] hashCodes = new uint[sfxFilePaths.Length];
+                // List to store the names of SFX files with duplicate hash codes
+                List<string> duplicateSfxNames = new List<string>() { "No Duplicate HashCodes Found" };
+                // Flag to check if this is the first time a duplicate hash code is found
+                bool firstDuplicateFound = true;
+
+                // Start checking the hash codes of the SFX files
+                for (int i = 0; i < sfxFilePaths.Length; i++)
                 {
-                    string[] fileData = File.ReadAllLines(sfxFiles[i]);
-                    int hashCodeIndex = Array.FindIndex(fileData, s => s.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase));
-                    string[] data = fileData[hashCodeIndex + 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                    if (data.Length > 0)
+                    string[] fileLines = File.ReadAllLines(sfxFilePaths[i]);
+                    // Get the index of the line with the hash code
+                    int hashCodeLineIndex = Array.FindIndex(fileLines, line => line.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase));
+                    // Split the line with the hash code value into an array of strings
+                    string[] hashCodeData = fileLines[hashCodeLineIndex + 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    if (hashCodeData.Length > 0)
                     {
-                        uint hashCode = Convert.ToUInt32(data[1]);
+                        // Get the hash code value as an unsigned integer
+                        uint hashCode = Convert.ToUInt32(hashCodeData[1]);
+                        // Check if the hash code has already been found in another SFX file
                         if (Array.IndexOf(hashCodes, hashCode) > 0)
                         {
-                            if (firstTime)
+                            // If this is the first time a duplicate hash code is found, add a header to the list of duplicate SFX names
+                            if (firstDuplicateFound)
                             {
-                                Errors.Add("SFXs Found With Duplicate HashCodes");
-                                Errors.Add(string.Empty);
-                                firstTime = !firstTime;
+                                duplicateSfxNames[0] = "SFXs Found With Duplicate HashCodes";
+                                duplicateSfxNames.Add(string.Empty);
+                                firstDuplicateFound = !firstDuplicateFound;
                             }
-                            Errors.Add(Path.GetFileNameWithoutExtension(sfxFiles[i]));
+                            // Add the name of the current SFX file to the list
+                            duplicateSfxNames.Add(Path.GetFileNameWithoutExtension(sfxFilePaths[i]));
 
-                            //Update File
-                            fileData[hashCodeIndex + 1] = string.Format("HashCodeNumber {0}", GlobalPrefs.SFXHashCodeNumber++);
-                            File.WriteAllLines(sfxFiles[i], fileData);
+                            // Update the hash code value in the SFX file
+                            fileLines[hashCodeLineIndex + 1] = string.Format("HashCodeNumber {0}", GlobalPrefs.SFXHashCodeNumber++);
+                            File.WriteAllLines(sfxFilePaths[i], fileLines);
                         }
+                        // Store the hash code value in the array
                         hashCodes[i] = hashCode;
                     }
                 }
 
-                if (Errors.Count == 0)
-                {
-                    Errors.Add("No Duplicate HashCodes Found");
-                }
-
                 //Show Form
-                using (DebugForm debugFrm = new DebugForm(Errors.ToArray()))
+                using (DebugForm debugFrm = new DebugForm(duplicateSfxNames.ToArray()))
                 {
                     debugFrm.ShowDialog();
                 }
@@ -101,66 +115,87 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnReAllocateHashcodes_Click(object sender, EventArgs e)
         {
-            //Update to wait cursor
+            // Change cursor to wait cursor
             Cursor.Current = Cursors.WaitCursor;
 
-            //Reallocate SFX HashCodes
-            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs")))
+            // Reallocate hashCodes for SFX files
+            string sfxFolderPath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs");
+            if (Directory.Exists(sfxFolderPath))
             {
+                // Reset the SFX hash code number
                 GlobalPrefs.SFXHashCodeNumber = 1;
-                string[] sfxFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
-                for (int i = 0; i < sfxFiles.Length; i++)
+                // Get the SFX files in the SFXs folder
+                string[] sfxFilePaths = Directory.GetFiles(sfxFolderPath, "*.txt", SearchOption.TopDirectoryOnly);
+                // Loop through the SFX files
+                for (int i = 0; i < sfxFilePaths.Length; i++)
                 {
-                    string[] fileData = File.ReadAllLines(sfxFiles[i]);
-                    int hashCodeIndex = Array.FindIndex(fileData, s => s.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase));
-                    string[] data = fileData[hashCodeIndex + 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                    if (data.Length > 0)
+                    // Read the lines of the SFX file
+                    string[] fileLines = File.ReadAllLines(sfxFilePaths[i]);
+                    // Get the index of the line with the hashCode
+                    int hashCodeLineIndex = Array.FindIndex(fileLines, s => s.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase));
+                    // Split the line with the hash code value into an array of strings
+                    string[] hashCodeData = fileLines[hashCodeLineIndex + 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    if (hashCodeData.Length > 0)
                     {
-                        //Update File
-                        fileData[hashCodeIndex + 1] = string.Format("HashCodeNumber {0}", GlobalPrefs.SFXHashCodeNumber++);
-                        File.WriteAllLines(sfxFiles[i], fileData);
+                        // Update the SFX file with the new hash code value
+                        fileLines[hashCodeLineIndex + 1] = string.Format("HashCodeNumber {0}", GlobalPrefs.SFXHashCodeNumber++);
+                        File.WriteAllLines(sfxFilePaths[i], fileLines);
                     }
                 }
             }
             //ReAllocate SoundBank HashCodes
-            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks")))
+            string sbFolderPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks");
+            if (Directory.Exists(sbFolderPath))
             {
+                // Reset the SoundBank hash code number
                 GlobalPrefs.SoundBankHashCodeNumber = 1;
-                string[] sbFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks"), "*.txt", SearchOption.TopDirectoryOnly);
+                // Get the SB files in the SoundBanks folder
+                string[] sbFiles = Directory.GetFiles(sbFolderPath, "*.txt", SearchOption.TopDirectoryOnly);
+                // Loop through the SB files
                 for (int i = 0; i < sbFiles.Length; i++)
                 {
-                    string[] fileData = File.ReadAllLines(sbFiles[i]);
-                    int hashCodeIndex = Array.FindIndex(fileData, s => s.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase));
-                    string[] data = fileData[hashCodeIndex + 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                    if (data.Length > 0)
+                    // Read the lines of the SB file
+                    string[] fileLines = File.ReadAllLines(sbFiles[i]);
+                    // Get the index of the line with the hashCode
+                    int hashCodeLineIndex = Array.FindIndex(fileLines, s => s.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase));
+                    // Split the line with the hash code value into an array of strings
+                    string[] hashCodeData = fileLines[hashCodeLineIndex + 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    if (hashCodeData.Length > 0)
                     {
-                        //Update File
-                        fileData[hashCodeIndex + 1] = string.Format("HashCodeNumber {0}", GlobalPrefs.SoundBankHashCodeNumber++);
-                        File.WriteAllLines(sbFiles[i], fileData);
+                        // Update the SB file with the new hash code value
+                        fileLines[hashCodeLineIndex + 1] = string.Format("HashCodeNumber {0}", GlobalPrefs.SoundBankHashCodeNumber++);
+                        File.WriteAllLines(sbFiles[i], fileLines);
                     }
                 }
             }
 
             //ReAllocate Mfx Files
-            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData")))
+            string mfxFolderPath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData");
+            if (Directory.Exists(mfxFolderPath))
             {
+                // Reset the MFX hash code number
                 GlobalPrefs.MFXHashCodeNumber = 1;
-                string[] mfxFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData"), "*.txt", SearchOption.TopDirectoryOnly);
+                // Get the MFX files in the Music folder
+                string[] mfxFiles = Directory.GetFiles(mfxFolderPath, "*.txt", SearchOption.TopDirectoryOnly);
+                // Loop through the MFX files
                 for (int i = 0; i < mfxFiles.Length; i++)
                 {
-                    string[] fileData = File.ReadAllLines(mfxFiles[i]);
-                    int hashCodeIndex = Array.FindIndex(fileData, s => s.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase));
-                    string[] data = fileData[hashCodeIndex + 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                    if (data.Length > 0)
+                    // Read the lines of the MFX file
+                    string[] fileLines = File.ReadAllLines(mfxFiles[i]);
+                    // Get the index of the line with the hashCode
+                    int hashCodeLineIndex = Array.FindIndex(fileLines, s => s.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase));
+                    // Split the line with the hashCode value into an array of strings
+                    string[] hashCodeData = fileLines[hashCodeLineIndex + 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    if (hashCodeData.Length > 0)
                     {
-                        //Update File
-                        fileData[hashCodeIndex + 1] = string.Format("HashCodeNumber {0}", GlobalPrefs.SoundBankHashCodeNumber++);
-                        File.WriteAllLines(mfxFiles[i], fileData);
+                        // Update the MFX file with the new hash code value
+                        fileLines[hashCodeLineIndex + 1] = string.Format("HashCodeNumber {0}", GlobalPrefs.SoundBankHashCodeNumber++);
+                        File.WriteAllLines(mfxFiles[i], fileLines);
                     }
                 }
             }
 
-            //Restore default cursor
+            //Change cursor to default cursor
             Cursor.Current = Cursors.Default;
         }
 
@@ -170,32 +205,34 @@ namespace sb_editor.Forms
             // Set cursor as hourglass
             Cursor.Current = Cursors.WaitCursor;
 
-            // Get all SFXs that has sub SFXs
-            List<string> errorsToShow = new List<string>();
+            // Get all SFXs that have sub SFXs
+            List<string> errorMessages = new List<string>();
 
-            string baseDir = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs");
-            if (Directory.Exists(baseDir))
+            string sfxsFolder = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs");
+            if (Directory.Exists(sfxsFolder))
             {
-                // Inspect files
-                string[] filesToInspect = Directory.GetFiles(baseDir, "*.txt", SearchOption.TopDirectoryOnly);
-                for (int fileIndex = 0; fileIndex <= filesToInspect.Length - 1; fileIndex++)
-                {
-                    string sfxFilePath = filesToInspect[fileIndex];
-                    SFX sfxFileData = TextFiles.ReadSfxFile(sfxFilePath);
+                // Read all SFX files in the SFXs folder
+                string[] sfxFiles = Directory.GetFiles(sfxsFolder, "*.txt", SearchOption.TopDirectoryOnly);
 
-                    // Check for negative multi samples and loops
-                    if (sfxFileData.SamplePool.Action1 == 1 && sfxFileData.SamplePool.EnableSubSFX)
+                // Inspect each SFX file
+                foreach (string sfxFilePath in sfxFiles)
+                {
+                    // Read the SFX data from the file
+                    SFX sfxData = TextFiles.ReadSfxFile(sfxFilePath);
+
+                    // Check if the SFX has negative multi samples or loops
+                    if (sfxData.SamplePool.Action1 == 1 && sfxData.SamplePool.EnableSubSFX)
                     {
-                        if (sfxFileData.SamplePool.MinDelay < 0 | sfxFileData.SamplePool.MaxDelay < 0)
+                        if (sfxData.SamplePool.MinDelay < 0 | sfxData.SamplePool.MaxDelay < 0)
                         {
-                            errorsToShow.Add(Path.GetFileNameWithoutExtension(sfxFilePath) + "   -ve Multi");
+                            errorMessages.Add(Path.GetFileNameWithoutExtension(sfxFilePath) + "   -ve Multi");
                         }
                     }
-                    else if (sfxFileData.SamplePool.isLooped && sfxFileData.SamplePool.Action1 == 0)
+                    else if (sfxData.SamplePool.isLooped && sfxData.SamplePool.Action1 == 0)
                     {
-                        if (sfxFileData.SamplePool.MinDelay < 0 | sfxFileData.SamplePool.MaxDelay < 0)
+                        if (sfxData.SamplePool.MinDelay < 0 | sfxData.SamplePool.MaxDelay < 0)
                         {
-                            errorsToShow.Add(Path.GetFileNameWithoutExtension(sfxFilePath) + "   -ve Loop");
+                            errorMessages.Add(Path.GetFileNameWithoutExtension(sfxFilePath) + "   -ve Loop");
                         }
                     }
                 }
@@ -204,16 +241,17 @@ namespace sb_editor.Forms
                 Cursor.Current = Cursors.Default;
 
                 // Check what we need to show to the user
-                if (errorsToShow.Count > 0)
+                if (errorMessages.Count > 0)
                 {
-                    // Show info to the user
-                    using (DebugForm debugInfo = new DebugForm(errorsToShow.ToArray()))
+                    // Show the error messages to the user
+                    using (DebugForm debugInfo = new DebugForm(errorMessages.ToArray()))
                     {
                         debugInfo.ShowDialog();
                     }
                 }
                 else
                 {
+                    // No errors were found, show a success message
                     MessageBox.Show("All OK", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
@@ -234,27 +272,30 @@ namespace sb_editor.Forms
             // Set cursor as hourglass
             Cursor.Current = Cursors.WaitCursor;
 
-            // Get all SFXs that has sub SFXs
-            List<string> errorsToShow = new List<string>();
-            string baseDir = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs");
-            if (Directory.Exists(baseDir))
+            // Initialize list of error messages
+            List<string> errorMessages = new List<string>();
+
+            // Get path of SFXs folder
+            string sfxsFolder = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs");
+            if (Directory.Exists(sfxsFolder))
             {
                 // Inspect files
-                string[] filesToInspect = Directory.GetFiles(baseDir, "*.txt", SearchOption.TopDirectoryOnly);
-                for (int fileIndex = 0; fileIndex <= filesToInspect.Length - 1; fileIndex++)
+                string[] sfxFiles = Directory.GetFiles(sfxsFolder, "*.txt", SearchOption.TopDirectoryOnly);
+                foreach (string sfxFilePath in sfxFiles)
                 {
-                    string sfxFilePath = filesToInspect[fileIndex];
-                    SFX sfxFileData = TextFiles.ReadSfxFile(sfxFilePath);
+                    SFX sfxData = TextFiles.ReadSfxFile(sfxFilePath);
 
-                    // Seems that if the flag Steal On Age is on and the random volume is different than zero is interpreted as an error
-                    if (sfxFileData.Parameters.StealOnAge)
+                    // Check if Steal On Age flag is on
+                    if (sfxData.Parameters.StealOnAge)
                     {
-                        for (int sampleIndex = 0; sampleIndex <= sfxFileData.Samples.Count - 1; sampleIndex++)
+                        // Check if any of the samples have non-zero random volume
+                        for (int sampleIndex = 0; sampleIndex < sfxData.Samples.Count; sampleIndex++)
                         {
-                            SfxSample currentSample = sfxFileData.Samples[sampleIndex];
+                            SfxSample currentSample = sfxData.Samples[sampleIndex];
                             if (currentSample.RandomVolume != 0)
                             {
-                                errorsToShow.Add(Path.GetFileNameWithoutExtension(sfxFilePath) + " -->> " + currentSample.FilePath);
+                                // Add error message to list
+                                errorMessages.Add(Path.GetFileNameWithoutExtension(sfxFilePath) + " -->> " + currentSample.FilePath);
                             }
                         }
                     }
@@ -263,11 +304,11 @@ namespace sb_editor.Forms
                 // Set cursor as default arrow
                 Cursor.Current = Cursors.Default;
 
-                // Check what we need to show to the user
-                if (errorsToShow.Count > 0)
+                // Check if any errors were found
+                if (errorMessages.Count > 0)
                 {
                     // Show info to the user
-                    using (DebugForm debugInfo = new DebugForm(errorsToShow.ToArray()))
+                    using (DebugForm debugInfo = new DebugForm(errorMessages.ToArray()))
                     {
                         debugInfo.ShowDialog();
                     }
@@ -285,29 +326,38 @@ namespace sb_editor.Forms
             // Set cursor as hourglass
             Cursor.Current = Cursors.WaitCursor;
 
-            // Get all SFXs that has sub SFXs
+            // List to store missing links
             List<string> missingLinks = new List<string>();
 
-            string baseDir = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs");
-            if (Directory.Exists(baseDir))
+            // Get the path of the SFXs folder
+            string sfxsFolder = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs");
+
+            // Check if the SFXs folder exists
+            if (Directory.Exists(sfxsFolder))
             {
                 // Inspect files
-                string[] filesToInspect = Directory.GetFiles(baseDir, "*.txt", SearchOption.TopDirectoryOnly);
-                for (int fileIndex = 0; fileIndex <= filesToInspect.Length - 1; fileIndex++)
+                string[] sfxFiles = Directory.GetFiles(sfxsFolder, "*.txt", SearchOption.TopDirectoryOnly);
+
+                // Inspect each SFX file
+                foreach (string sfxFilePath in sfxFiles)
                 {
-                    string sfxFilePath = filesToInspect[fileIndex];
+                    // Read the SFX file data
                     SFX sfxFileData = TextFiles.ReadSfxFile(sfxFilePath);
+
+                    // Check if the SFX file has sub SFXs enabled
                     if (sfxFileData.SamplePool.EnableSubSFX)
                     {
-                        // Add links to dictionary
-                        for (int sampleIndex = 0; sampleIndex <= sfxFileData.Samples.Count - 1; sampleIndex++)
+                        // Check each sample in the SFX file
+                        for (int sampleIndex = 0; sampleIndex < sfxFileData.Samples.Count; sampleIndex++)
                         {
+                            // Get the file path of the sub SFX file
                             string linkHashCode = sfxFileData.Samples[sampleIndex].FilePath;
                             string subSfxFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", linkHashCode + ".txt");
 
-                            // Add missing link to list
+                            // Check if the sub SFX file exists
                             if (!File.Exists(subSfxFilePath))
                             {
+                                // Add the missing link to the list
                                 missingLinks.Add(Path.GetFileNameWithoutExtension(sfxFilePath) + " #=# " + linkHashCode);
                             }
                         }
@@ -317,11 +367,13 @@ namespace sb_editor.Forms
                 // Set cursor as default arrow
                 Cursor.Current = Cursors.Default;
 
-                // Check what we need to show to the user
+                // Check if any missing links were found
                 if (missingLinks.Count > 0)
                 {
+                    // Add a separator to the list
                     missingLinks.Add("------------------------------------------");
-                    // Show info to the user
+
+                    // Show the missing links to the user
                     using (DebugForm debugInfo = new DebugForm(missingLinks.ToArray()))
                     {
                         debugInfo.ShowDialog();
@@ -329,6 +381,7 @@ namespace sb_editor.Forms
                 }
                 else
                 {
+                    // No missing links were found, show a message to the user
                     MessageBox.Show("All OK", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
@@ -337,44 +390,30 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnValidatePlatforms_Click(object sender, EventArgs e)
         {
+            // Create a list to store the SFXs for each platform
             List<string> sfxPlatformsList = new List<string>();
-            string baseDir = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs");
+
+            // Get the base directory for the SFXs
+            string sfxFolderPath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs");
 
             // Set cursor as hourglass
             Cursor.Current = Cursors.WaitCursor;
 
-            // Get GameCube SFXs
-            string gameCubeDir = Path.Combine(baseDir, "GameCube");
-            if (Directory.Exists(gameCubeDir))
+            // Get the directories for each platform
+            string[] platforms = { "GameCube", "PC", "PlayStation2", "X Box" };
+            foreach (string platform in platforms)
             {
-                GetPlatformSFXs(gameCubeDir, sfxPlatformsList, "GameCube");
-            }
-
-            // Get PC SFXs
-            string pcDir = Path.Combine(baseDir, "PC");
-            if (Directory.Exists(pcDir))
-            {
-                GetPlatformSFXs(pcDir, sfxPlatformsList, "PC");
-            }
-
-            // Get PC SFXs
-            string playStation2 = Path.Combine(baseDir, "PlayStation2");
-            if (Directory.Exists(playStation2))
-            {
-                GetPlatformSFXs(playStation2, sfxPlatformsList, "PlayStation2");
-            }
-
-            // Get X Box SFXs
-            string Xbox = Path.Combine(baseDir, "X Box");
-            if (Directory.Exists(Xbox))
-            {
-                GetPlatformSFXs(Xbox, sfxPlatformsList, "X Box");
+                string platformDir = Path.Combine(sfxFolderPath, platform);
+                if (Directory.Exists(platformDir))
+                {
+                    GetPlatformSFXs(platformDir, sfxPlatformsList, platform);
+                }
             }
 
             // Set cursor as default arrow
             Cursor.Current = Cursors.Default;
 
-            // Show info to user
+            // Show the list of SFXs for each platform to the user
             sfxPlatformsList.Sort();
             using (DebugForm debugInfo = new DebugForm(sfxPlatformsList.ToArray()))
             {
@@ -385,8 +424,11 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void GetPlatformSFXs(string folderToInspect, List<string> sfxPlatformsList, string platform)
         {
+            // Get all the files in the specified folder
             string[] filesToInspect = Directory.GetFiles(folderToInspect, "*.txt", SearchOption.TopDirectoryOnly);
-            for (int fileIndex = 0; fileIndex <= filesToInspect.Length - 1; fileIndex++)
+
+            // Iterate over the files and add their names and the platform to the sfxPlatformsList
+            for (int fileIndex = 0; fileIndex < filesToInspect.Length; fileIndex++)
             {
                 string currentFilePath = filesToInspect[fileIndex];
                 sfxPlatformsList.Add(Path.GetFileNameWithoutExtension(currentFilePath) + "  " + platform);

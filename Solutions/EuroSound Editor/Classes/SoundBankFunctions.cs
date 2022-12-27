@@ -270,20 +270,28 @@ namespace sb_editor.Classes
         //-------------------------------------------------------------------------------------------------------------------------------
         internal Dictionary<string, SFX> GetSfxDataDict(string[] sbSfxs, string platform, string language)
         {
+            // Dictionary to store the SFX data for each file
             Dictionary<string, SFX> sfxFilesData = new Dictionary<string, SFX>();
 
+            // Iterate over the array of SFX file names
             for (int i = 0; i < sbSfxs.Length; i++)
             {
+                // Create the full path to the SFX file
                 string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", platform, sbSfxs[i].TrimStart(Path.DirectorySeparatorChar) + ".txt");
+
+                // If the file does not exist in the specified platform folder, check the root SFXs folder
                 if (!File.Exists(filePath))
                 {
                     filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", sbSfxs[i].TrimStart(Path.DirectorySeparatorChar) + ".txt");
                 }
 
-                //Update Sample File Paths
+                // Read the SFX data from the file
                 SFX sfxData = TextFiles.ReadSfxFile(filePath);
+
+                // Iterate over the samples in the SFX data
                 foreach (SfxSample sampleData in sfxData.Samples)
                 {
+                    // Update the file path of the sample to the correct language folder
                     string samplePath = CommonFunctions.GetSampleFromSpeechFolder(sampleData.FilePath, language);
                     if (!string.IsNullOrEmpty(filePath))
                     {
@@ -291,7 +299,7 @@ namespace sb_editor.Classes
                     }
                 }
 
-                //Add Data To Dictionary
+                // Add the SFX data to the dictionary using the file name as the key
                 sfxFilesData.Add(Path.GetFileNameWithoutExtension(filePath), sfxData);
             }
 
