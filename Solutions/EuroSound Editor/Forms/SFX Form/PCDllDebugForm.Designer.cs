@@ -1,7 +1,7 @@
 ﻿
 namespace sb_editor.Forms
 {
-    partial class PCGameDebugForm
+    partial class PCDllDebugForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@ namespace sb_editor.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PCGameDebugForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PCDllDebugForm));
             this.chkPauseDebug = new System.Windows.Forms.CheckBox();
             this.btnClear = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
@@ -83,7 +83,7 @@ namespace sb_editor.Forms
             this.txtDebugData.TabIndex = 4;
             this.txtDebugData.WordWrap = false;
             // 
-            // PCGameDebugForm
+            // PCDllDebugForm
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -97,11 +97,11 @@ namespace sb_editor.Forms
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "PCGameDebugForm";
+            this.Name = "PCDllDebugForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Console Debug Form";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PCGameDebugForm_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PCDllDebugForm_FormClosing);
             this.Shown += new System.EventHandler(this.Frm_TestSfxDebug_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();

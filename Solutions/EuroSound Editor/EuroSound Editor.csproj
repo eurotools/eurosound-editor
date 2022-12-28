@@ -190,11 +190,11 @@
     <Compile Include="Forms\MultiCreate.Designer.cs">
       <DependentUpon>MultiCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SFX Form\PCGameDebugForm.cs">
+    <Compile Include="Forms\SFX Form\PCDllDebugForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\SFX Form\PCGameDebugForm.Designer.cs">
-      <DependentUpon>PCGameDebugForm.cs</DependentUpon>
+    <Compile Include="Forms\SFX Form\PCDllDebugForm.Designer.cs">
+      <DependentUpon>PCDllDebugForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\MusicForm\MusicAppExporter.cs">
       <SubType>Form</SubType>
@@ -429,8 +429,8 @@
     <EmbeddedResource Include="Forms\SFX Form\PCDllVoicesForm.resx">
       <DependentUpon>PCDllVoicesForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SFX Form\PCGameDebugForm.resx">
-      <DependentUpon>PCGameDebugForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\SFX Form\PCDllDebugForm.resx">
+      <DependentUpon>PCDllDebugForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MusicForm\MusicAppExporter.resx">
       <DependentUpon>MusicAppExporter.cs</DependentUpon>

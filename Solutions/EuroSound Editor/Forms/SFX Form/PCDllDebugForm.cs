@@ -6,12 +6,12 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    public partial class PCGameDebugForm : Form
+    public partial class PCDllDebugForm : Form
     {
         private readonly PCAudioDLL.PCAudioDLL audioTool = ((MainForm)Application.OpenForms[nameof(MainForm)]).audioTool;
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public PCGameDebugForm()
+        public PCDllDebugForm()
         {
             InitializeComponent();
         }
@@ -29,7 +29,7 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void PCGameDebugForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void PCDllDebugForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             audioTool.outputConsole.TxtConsole = null;
         }

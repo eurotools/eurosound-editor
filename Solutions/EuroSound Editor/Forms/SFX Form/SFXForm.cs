@@ -638,11 +638,11 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         internal void OpenDebuggerForm(Point desktopLoc)
         {
-            Form debuggerForm = Application.OpenForms[nameof(PCGameDebugForm)];
+            Form debuggerForm = Application.OpenForms[nameof(PCDllDebugForm)];
             if (debuggerForm == null)
             {
                 desktopLoc.X += 915;
-                PCGameDebugForm hashCodesSelector = new PCGameDebugForm()
+                PCDllDebugForm hashCodesSelector = new PCDllDebugForm()
                 {
                     DesktopLocation = desktopLoc
                 };
