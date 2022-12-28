@@ -556,6 +556,7 @@ namespace sb_editor.Panels
             this.lstSamples.SelectedIndexChanged += new System.EventHandler(this.LstSamples_SelectedIndexChanged);
             this.lstSamples.DragDrop += new System.Windows.Forms.DragEventHandler(this.LstSamples_DragDrop);
             this.lstSamples.DragOver += new System.Windows.Forms.DragEventHandler(this.LstSamples_DragOver);
+            this.lstSamples.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LstSamples_MouseDoubleClick);
             // 
             // ContextMenu_Listbox
             // 

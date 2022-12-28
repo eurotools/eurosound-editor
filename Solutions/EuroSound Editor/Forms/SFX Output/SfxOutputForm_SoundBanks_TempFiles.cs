@@ -156,152 +156,150 @@ namespace sb_editor.Forms
                     masterFileData = wavFunctions.ReadWaveProperties(masterFile);
                 }
 
-                //-------------------------------------------------------------------------------[ PC ]-------------------------------------------------------------------
-                if (platform.Equals("PC", StringComparison.OrdinalIgnoreCase))
+                // Convert the wave file to the required format for the current platform
+                switch (platform.ToLower())
                 {
-                    string pcFilepath = Path.Combine(GlobalPrefs.ProjectFolder, "PC", sampleList[i].TrimStart(Path.DirectorySeparatorChar));
-                    if (File.Exists(pcFilepath))
-                    {
-                        WavInfo pcFileData = wavFunctions.ReadWaveProperties(pcFilepath);
-                        byte[] pcmData = wavFunctions.GetByteWaveData(pcFilepath);
+                    //-------------------------------------------------------------------------------[ PlayStation 2 ]-------------------------------------------------------------------
+                    case "playstation2":
+                        string aifFilePath = Path.ChangeExtension(Path.Combine(GlobalPrefs.ProjectFolder, "PlayStation2", sampleList[i].TrimStart(Path.DirectorySeparatorChar)), ".aif");
+                        string vagFilePath = Path.ChangeExtension(Path.Combine(GlobalPrefs.ProjectFolder, "PlayStation2_VAG", sampleList[i].TrimStart(Path.DirectorySeparatorChar)), ".vag");
 
-                        //Write Header Data
-                        uint loopOffset = 0;
-                        if (masterFileData.HasLoop)
+                        if (File.Exists(aifFilePath))
                         {
-                            loopOffset = BytesFunctions.AlignNumber((uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, pcFileData.SampleRate, masterFileData.LoopStart * 2), 2);
+                            WavInfo aifFileData = aiffFunctions.ReadWaveProperties(aifFilePath);
+                            if (File.Exists(vagFilePath))
+                            {
+                                byte[] vagData = CommonFunctions.RemoveFileHeader(vagFilePath, 48);
+
+                                //Write Header Data
+                                uint loopOffset = 0;
+                                if (masterFileData.HasLoop)
+                                {
+                                    loopOffset = (uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, aifFileData.SampleRate, masterFileData.LoopStart * 2);
+                                }
+                                sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, aifFileData, BytesFunctions.AlignNumber((uint)vagData.Length, 64), vagData.Length, i * 96, loopOffset, isBigEndian);
+
+                                //Write Sample Data
+                                byte[] filedata = new byte[BytesFunctions.AlignNumber((uint)vagData.Length, 64)];
+                                Array.Copy(vagData, filedata, vagData.Length);
+                                sbfWritter.Write(filedata);
+
+                                //Update value
+                                sampleBankSize += vagData.Length;
+                            }
+                            else
+                            {
+                                throw new IOException(string.Format("Output Error: Sample File Missing: UNKNOWN SFX & BANK\n{0}", vagFilePath));
+                            }
                         }
-                        sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, pcFileData, BytesFunctions.AlignNumber((uint)pcFileData.Length, 4), (int)pcFileData.Length, i * 96, loopOffset, isBigEndian);
-
-                        //Write Sample Data
-                        byte[] filedata = new byte[BytesFunctions.AlignNumber((uint)pcFileData.Length, 4)];
-                        Array.Copy(pcmData, filedata, pcmData.Length);
-                        sbfWritter.Write(filedata);
-
-                        //Update value
-                        sampleBankSize += pcmData.Length;
-                    }
-                    else if (!fastOutput)
-                    {
-                        throw new IOException(string.Format("Output Error: Sample File Missing: UNKNOWN SFX & BANK\n{0}", pcFilepath));
-                    }
-                }
-
-                //-------------------------------------------------------------------------------[ GameCube ]-------------------------------------------------------------------
-                if (platform.Equals("GameCube", StringComparison.OrdinalIgnoreCase))
-                {
-                    string wavFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "GameCube", sampleList[i].TrimStart(Path.DirectorySeparatorChar));
-                    string dspFilePath = Path.ChangeExtension(Path.Combine(GlobalPrefs.ProjectFolder, "GameCube_dsp_adpcm", sampleList[i].TrimStart(Path.DirectorySeparatorChar)), ".dsp");
-
-                    if (File.Exists(wavFilePath))
-                    {
-                        WavInfo wavFileData = wavFunctions.ReadWaveProperties(wavFilePath);
-                        if (File.Exists(dspFilePath))
+                        else if (!fastOutput)
                         {
-                            byte[] dspData = CommonFunctions.RemoveFileHeader(dspFilePath, 96);
-                            dspHeader.Add(sbFunctions.GetDspHeaderData(dspFilePath));
+                            throw new IOException(string.Format("Output Error: Sample File Missing: UNKNOWN SFX & BANK\n{0}", aifFilePath));
+                        }
+                        break;
+                    //-------------------------------------------------------------------------------[ PC ]-------------------------------------------------------------------
+                    case "pc":
+                        string pcFilepath = Path.Combine(GlobalPrefs.ProjectFolder, "PC", sampleList[i].TrimStart(Path.DirectorySeparatorChar));
+                        if (File.Exists(pcFilepath))
+                        {
+                            WavInfo pcFileData = wavFunctions.ReadWaveProperties(pcFilepath);
+                            byte[] pcmData = wavFunctions.GetByteWaveData(pcFilepath);
 
                             //Write Header Data
                             uint loopOffset = 0;
                             if (masterFileData.HasLoop)
                             {
-                                loopOffset = (uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, wavFileData.SampleRate, masterFileData.LoopStart * 2);
+                                loopOffset = BytesFunctions.AlignNumber((uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, pcFileData.SampleRate, masterFileData.LoopStart * 2), 2);
                             }
-                            sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, wavFileData, BytesFunctions.AlignNumber((uint)dspData.Length, 32), dspData.Length, i * 96, loopOffset, isBigEndian);
+                            sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, pcFileData, BytesFunctions.AlignNumber((uint)pcFileData.Length, 4), (int)pcFileData.Length, i * 96, loopOffset, isBigEndian);
 
                             //Write Sample Data
-                            byte[] filedata = new byte[BytesFunctions.AlignNumber((uint)dspData.Length, 32)];
-                            Array.Copy(dspData, filedata, dspData.Length);
+                            byte[] filedata = new byte[BytesFunctions.AlignNumber((uint)pcFileData.Length, 4)];
+                            Array.Copy(pcmData, filedata, pcmData.Length);
                             sbfWritter.Write(filedata);
 
                             //Update value
-                            sampleBankSize += dspData.Length;
+                            sampleBankSize += pcmData.Length;
                         }
-                        else
+                        else if (!fastOutput)
                         {
-                            throw new IOException(string.Format("Output Error: Sample File Missing: UNKNOWN SFX & BANK\n{0}", dspFilePath));
+                            throw new IOException(string.Format("Output Error: Sample File Missing: UNKNOWN SFX & BANK\n{0}", pcFilepath));
                         }
-                    }
-                    else if (!fastOutput)
-                    {
-                        throw new IOException(string.Format("Output Error: Sample File Missing: UNKNOWN SFX & BANK\n{0}", wavFilePath));
-                    }
-                }
+                        break;
+                    //-------------------------------------------------------------------------------[ GameCube ]-------------------------------------------------------------------
+                    case "gamecube":
+                        string wavFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "GameCube", sampleList[i].TrimStart(Path.DirectorySeparatorChar));
+                        string dspFilePath = Path.ChangeExtension(Path.Combine(GlobalPrefs.ProjectFolder, "GameCube_dsp_adpcm", sampleList[i].TrimStart(Path.DirectorySeparatorChar)), ".dsp");
 
-                //-------------------------------------------------------------------------------[ PlayStation 2 ]-------------------------------------------------------------------
-                if (platform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase))
-                {
-                    string aifFilePath = Path.ChangeExtension(Path.Combine(GlobalPrefs.ProjectFolder, "PlayStation2", sampleList[i].TrimStart(Path.DirectorySeparatorChar)), ".aif");
-                    string vagFilePath = Path.ChangeExtension(Path.Combine(GlobalPrefs.ProjectFolder, "PlayStation2_VAG", sampleList[i].TrimStart(Path.DirectorySeparatorChar)), ".vag");
-
-                    if (File.Exists(aifFilePath))
-                    {
-                        WavInfo aifFileData = aiffFunctions.ReadWaveProperties(aifFilePath);
-                        if (File.Exists(vagFilePath))
+                        if (File.Exists(wavFilePath))
                         {
-                            byte[] vagData = CommonFunctions.RemoveFileHeader(vagFilePath, 48);
-
-                            //Write Header Data
-                            uint loopOffset = 0;
-                            if (masterFileData.HasLoop)
+                            WavInfo wavFileData = wavFunctions.ReadWaveProperties(wavFilePath);
+                            if (File.Exists(dspFilePath))
                             {
-                                loopOffset = (uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, aifFileData.SampleRate, masterFileData.LoopStart * 2);
+                                byte[] dspData = CommonFunctions.RemoveFileHeader(dspFilePath, 96);
+                                dspHeader.Add(sbFunctions.GetDspHeaderData(dspFilePath));
+
+                                //Write Header Data
+                                uint loopOffset = 0;
+                                if (masterFileData.HasLoop)
+                                {
+                                    loopOffset = (uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, wavFileData.SampleRate, masterFileData.LoopStart * 2);
+                                }
+                                sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, wavFileData, BytesFunctions.AlignNumber((uint)dspData.Length, 32), dspData.Length, i * 96, loopOffset, isBigEndian);
+
+                                //Write Sample Data
+                                byte[] filedata = new byte[BytesFunctions.AlignNumber((uint)dspData.Length, 32)];
+                                Array.Copy(dspData, filedata, dspData.Length);
+                                sbfWritter.Write(filedata);
+
+                                //Update value
+                                sampleBankSize += dspData.Length;
                             }
-                            sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, aifFileData, BytesFunctions.AlignNumber((uint)vagData.Length, 64), vagData.Length, i * 96, loopOffset, isBigEndian);
-
-                            //Write Sample Data
-                            byte[] filedata = new byte[BytesFunctions.AlignNumber((uint)vagData.Length, 64)];
-                            Array.Copy(vagData, filedata, vagData.Length);
-                            sbfWritter.Write(filedata);
-
-                            //Update value
-                            sampleBankSize += vagData.Length;
-                        }
-                        else
-                        {
-                            throw new IOException(string.Format("Output Error: Sample File Missing: UNKNOWN SFX & BANK\n{0}", vagFilePath));
-                        }
-                    }
-                    else if (!fastOutput)
-                    {
-                        throw new IOException(string.Format("Output Error: Sample File Missing: UNKNOWN SFX & BANK\n{0}", aifFilePath));
-                    }
-                }
-
-                //-------------------------------------------------------------------------------[ Xbox ]-------------------------------------------------------------------
-                if (platform.Equals("Xbox", StringComparison.OrdinalIgnoreCase) || platform.Equals("X Box", StringComparison.OrdinalIgnoreCase))
-                {
-                    string wavFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "X Box", sampleList[i].TrimStart(Path.DirectorySeparatorChar));
-                    if (File.Exists(wavFilePath))
-                    {
-                        string adpcmFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "XBox_adpcm", sampleList[i].TrimStart(Path.DirectorySeparatorChar));
-                        if (File.Exists(adpcmFilePath))
-                        {
-                            byte[] adpcmData = CommonFunctions.RemoveFileHeader(adpcmFilePath, 48);
-
-                            //Write Header Data
-                            uint loopOffset = 0;
-                            if (masterFileData.HasLoop)
+                            else
                             {
-                                loopOffset = CalculusLoopOffset.GetXboxAlignedNumber((uint)masterFileData.LoopStart);
+                                throw new IOException(string.Format("Output Error: Sample File Missing: UNKNOWN SFX & BANK\n{0}", dspFilePath));
                             }
-                            sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, wavFunctions.ReadWaveProperties(wavFilePath), (uint)adpcmData.Length, adpcmData.Length, i * 96, loopOffset, isBigEndian);
-
-                            //Write Sample Data
-                            sbfWritter.Write(adpcmData);
-
-                            //Update value
-                            sampleBankSize += adpcmData.Length;
                         }
-                        else
+                        else if (!fastOutput)
                         {
-                            throw new IOException(string.Format("Output Error: Sample File Missing: UNKNOWN SFX & BANK\n{0}", adpcmFilePath));
+                            throw new IOException(string.Format("Output Error: Sample File Missing: UNKNOWN SFX & BANK\n{0}", wavFilePath));
                         }
-                    }
-                    else if (!fastOutput)
-                    {
-                        throw new IOException(string.Format("Output Error: Sample File Missing: UNKNOWN SFX & BANK\n{0}", wavFilePath));
-                    }
+                        break;
+                    //-------------------------------------------------------------------------------[ Xbox ]-------------------------------------------------------------------
+                    case "x box":
+                    case "xbox":
+                        wavFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "X Box", sampleList[i].TrimStart(Path.DirectorySeparatorChar));
+                        if (File.Exists(wavFilePath))
+                        {
+                            string adpcmFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "XBox_adpcm", sampleList[i].TrimStart(Path.DirectorySeparatorChar));
+                            if (File.Exists(adpcmFilePath))
+                            {
+                                byte[] adpcmData = CommonFunctions.RemoveFileHeader(adpcmFilePath, 48);
+
+                                //Write Header Data
+                                uint loopOffset = 0;
+                                if (masterFileData.HasLoop)
+                                {
+                                    loopOffset = CalculusLoopOffset.GetXboxAlignedNumber((uint)masterFileData.LoopStart);
+                                }
+                                sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, wavFunctions.ReadWaveProperties(wavFilePath), (uint)adpcmData.Length, adpcmData.Length, i * 96, loopOffset, isBigEndian);
+
+                                //Write Sample Data
+                                sbfWritter.Write(adpcmData);
+
+                                //Update value
+                                sampleBankSize += adpcmData.Length;
+                            }
+                            else
+                            {
+                                throw new IOException(string.Format("Output Error: Sample File Missing: UNKNOWN SFX & BANK\n{0}", adpcmFilePath));
+                            }
+                        }
+                        else if (!fastOutput)
+                        {
+                            throw new IOException(string.Format("Output Error: Sample File Missing: UNKNOWN SFX & BANK\n{0}", wavFilePath));
+                        }
+                        break;
                 }
             }
 

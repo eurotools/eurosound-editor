@@ -197,6 +197,12 @@ namespace sb_editor.Panels
             }
         }
 
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void LstSamples_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            ContextActioEdit();
+        }
+
         //*===============================================================================================
         //* CHECKBOXES
         //*===============================================================================================
@@ -473,16 +479,24 @@ namespace sb_editor.Panels
         //*===============================================================================================
         private void ContextActionAdd()
         {
+            // Get the parent form
+            SFXForm mainForm = (SFXForm)Parent.Parent;
+
             // Check if sub-sfx is enabled
             if (chkEnableSubSFX.Checked)
             {
-                // Get the parent form
-                SFXForm mainForm = (SFXForm)Parent.Parent;
                 // Open the hash codes selector
                 mainForm.OpenHashCodesSelector(mainForm.DesktopLocation);
             }
             else
             {
+                //Start blinking
+                if (mainForm.tabCtrl.SelectedIndex == 0)
+                {
+                    mainForm.pnlAlert.Visible = true;
+                }
+                mainForm.tmrTabPageBlink.Start();
+
                 // Set the initial directory for the open file dialog to the "Master" folder inside the project's sample files folder
                 OpenFileDiag_Samples.InitialDirectory = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master");
 
@@ -496,10 +510,18 @@ namespace sb_editor.Panels
                         AddItemToSamplePool(OpenFileDiag_Samples.FileNames[i]);
                     }
                 }
+
+                //Stop Blinking
+                if (mainForm.tabCtrl.SelectedIndex == 0)
+                {
+                    mainForm.pnlAlert.Visible = false;
+                }
+                mainForm.tmrTabPageBlink.Stop();
+                mainForm.tabCtrl.Refresh();
             }
 
             // Enable the random pick option if there are more than 1 item in the sample pool
-            ((SFXForm)Parent.Parent).UserControl_SamplePoolControl.chkRandomPick.Checked = lstSamples.Items.Count > 1;
+            mainForm.UserControl_SamplePoolControl.chkRandomPick.Checked = lstSamples.Items.Count > 1;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
