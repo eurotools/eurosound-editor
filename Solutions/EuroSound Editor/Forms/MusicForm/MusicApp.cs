@@ -589,7 +589,8 @@ namespace sb_editor.Forms
                     // Update the hash code in the list item's subitem
                     listItem.SubItems[3].Text = musicFileData.HashCode.ToString();
 
-                    // Update Wav Column
+                    // Update Wav & Marker Column
+                    listItem.SubItems[4].Text = "Output";
                     listItem.SubItems[5].Text = "Output";
 
                     // Update output filename
