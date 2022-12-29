@@ -77,7 +77,7 @@ namespace sb_editor.Forms
             }
 
             //Get HashCodes Dictionary
-            Dictionary<string, uint> HashCodesDict = sbFunctions.GetHashCodesDictionary("SFXs", "#HASHCODE");
+            Dictionary<string, int> HashCodesDict = sbFunctions.GetHashCodesDictionary("SFXs", "#HASHCODE");
 
             //Ensure that the debug folder exists
             DirectoryInfo debugFolder = Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "Debug_Report"));

@@ -15,7 +15,7 @@ namespace sb_editor.Forms
     public partial class SfxOutputForm
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void OutputSoundBanks(SamplePool samplePoolList, Dictionary<string, uint> hashCodesDict, string debugFolder)
+        private void OutputSoundBanks(SamplePool samplePoolList, Dictionary<string, int> hashCodesDict, string debugFolder)
         {
             SoundBankFunctions sbFunctions = new SoundBankFunctions();
 

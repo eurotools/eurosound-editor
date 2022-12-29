@@ -96,21 +96,21 @@ namespace sb_editor.Forms
                 //Misc Defines Section
                 backgroundWorker1.ReportProgress(36, "Writing SFX_Defines.h Stage 0");
                 sw.WriteLine("// SFX Misc defines");
-                sw.WriteLine(hashCodes.WriteHashCode("SBIHashCode", "0x" + 0xFFFFFF.ToString("X8")));
-                sw.WriteLine(hashCodes.WriteHashCode("EX_SFX_PREFIX", "0x" + 0x1A000000.ToString("X8")));
-                sw.WriteLine(hashCodes.WriteHashCode("EX_SONG_PREFIX", "0x" + 0x1B000000.ToString("X8")));
-                sw.WriteLine(hashCodes.WriteHashCodeComment("EX_SOUNDBANK_PREFIX", "0x" + 0x1C000000.ToString("X8")));
+                sw.WriteLine(hashCodes.WriteHashCode("SBIHashCode", 0xFFFFFF));
+                sw.WriteLine(hashCodes.WriteHashCode("EX_SFX_PREFIX", 0x1A000000));
+                sw.WriteLine(hashCodes.WriteHashCode("EX_SONG_PREFIX", 0x1B000000));
+                sw.WriteLine(hashCodes.WriteHashCodeComment("EX_SOUNDBANK_PREFIX", 0x1C000000));
                 sw.WriteLine(string.Empty);
 
                 //Language Defines 
                 sw.WriteLine("// SFX Language defines");
-                sw.WriteLine(hashCodes.WriteHashCode("LanguageHashCodeOffset", "0x" + 0x10000.ToString("X8")));
+                sw.WriteLine(hashCodes.WriteHashCode("LanguageHashCodeOffset", 0x10000));
                 sw.WriteLine(string.Empty);
                 for (int i = 0; i < GlobalPrefs.Languages.Length; i++)
                 {
                     sw.WriteLine(hashCodes.WriteNumber("SFXLanguage_" + GlobalPrefs.Languages[i].ToUpper(), i));
                 }
-                sw.WriteLine(hashCodes.WriteNoAlign("StreamFileHashCode", "0x" + 0xFFFF.ToString("X8")));
+                sw.WriteLine(hashCodes.WriteNoAlign("StreamFileHashCode", 0xFFFF));
                 sw.WriteLine(string.Empty);
 
                 //SFX HashCodes
@@ -122,20 +122,19 @@ namespace sb_editor.Forms
                 hashCodes.GetHashCodesWithLabels(hashCodesDict, null);
                 foreach (KeyValuePair<string, int> sfxItem in hashCodesDict)
                 {
-                    string hashCode = "0x" + (sfxItem.Value | 0x1A000000).ToString("X8");
                     if (prefixHashCode)
                     {
-                        sw.WriteLine(hashCodes.WriteHashCode("HT_Sound_" + sfxItem.Key, hashCode));
+                        sw.WriteLine(hashCodes.WriteHashCode("HT_Sound_" + sfxItem.Key, sfxItem.Value | 0x1A000000));
                     }
                     else
                     {
-                        sw.WriteLine(hashCodes.WriteHashCode(sfxItem.Key, hashCode));
+                        sw.WriteLine(hashCodes.WriteHashCode(sfxItem.Key, sfxItem.Value | 0x1A000000));
                     }
                     maxSfxHashcodeDefined = Math.Max(maxSfxHashcodeDefined, sfxItem.Value);
                 }
                 backgroundWorker1.ReportProgress(60, "Writing SFX_Defines.h Stage 2");
-                sw.WriteLine(hashCodes.WriteHashCode("SFX_MaximumDefined", "0x" + hashCodesDict.Count.ToString("X8")));
-                sw.WriteLine(hashCodes.WriteHashCode("SFX_HashCodeHighest", "0x" + maxSfxHashcodeDefined.ToString("X8")));
+                sw.WriteLine(hashCodes.WriteHashCode("SFX_MaximumDefined", hashCodesDict.Count));
+                sw.WriteLine(hashCodes.WriteHashCode("SFX_HashCodeHighest", maxSfxHashcodeDefined));
                 sw.WriteLine(string.Empty);
 
                 //Soundbank HashCodes
@@ -143,17 +142,16 @@ namespace sb_editor.Forms
                 hashCodes.GetHashCodesWithLabels(null, soundBankDict);
                 foreach (KeyValuePair<string, int> soundbankItem in soundBankDict)
                 {
-                    string hashCode = "0x" + soundbankItem.Value.ToString("X8");
                     if (prefixHashCode)
                     {
-                        sw.WriteLine(hashCodes.WriteHashCode("HT_Sound_" + soundbankItem.Key, hashCode));
+                        sw.WriteLine(hashCodes.WriteHashCode("HT_Sound_" + soundbankItem.Key, soundbankItem.Value));
                     }
                     else
                     {
-                        sw.WriteLine(hashCodes.WriteHashCode(soundbankItem.Key, hashCode));
+                        sw.WriteLine(hashCodes.WriteHashCode(soundbankItem.Key, soundbankItem.Value));
                     }
                 }
-                sw.WriteLine(hashCodes.WriteHashCode("SB_MaximumDefined", "0x" + soundBankDict.Count.ToString("X8")));
+                sw.WriteLine(hashCodes.WriteHashCode("SB_MaximumDefined", soundBankDict.Count));
             }
 
             //-------------------------------------------------------------------------------[SFX_Debug.h]-------------------------------------------------------------------------------
@@ -189,14 +187,13 @@ namespace sb_editor.Forms
             //-------------------------------------------------------------------------------[SFX_Reverbs.h]-------------------------------------------------------------------------------
             backgroundWorker1.ReportProgress(84, "Writing SFX_Defines.h Stage Pre Close");
             string reverbsFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "SFX_Reverbs.h");
-            Dictionary<string, uint> reverbsDict = sbFunctions.GetHashCodesDictionary("Reverbs", "#MiscData");
+            Dictionary<string, int> reverbsDict = sbFunctions.GetHashCodesDictionary("Reverbs", "#MiscData");
             using (StreamWriter sw = new StreamWriter(File.Open(reverbsFilePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
                 sw.WriteLine("// Reverb Hashcodes");
-                foreach (KeyValuePair<string, uint> reverbData in reverbsDict)
+                foreach (KeyValuePair<string, int> reverbData in reverbsDict)
                 {
-                    string hashCode = "0x" + reverbData.Value.ToString("X8");
-                    sw.WriteLine(hashCodes.WriteHashCode(reverbData.Key, hashCode));
+                    sw.WriteLine(hashCodes.WriteHashCode(reverbData.Key, reverbData.Value));
                 }
             }
 

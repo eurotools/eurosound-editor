@@ -472,9 +472,9 @@ namespace sb_editor.Classes
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal Dictionary<string, uint> GetHashCodesDictionary(string folder, string keyWord)
+        internal Dictionary<string, int> GetHashCodesDictionary(string folder, string keyWord)
         {
-            Dictionary<string, uint> HashCodesDict = new Dictionary<string, uint>(StringComparer.OrdinalIgnoreCase);
+            Dictionary<string, int> HashCodesDict = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
 
             string[] files = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, folder), "*.txt", SearchOption.TopDirectoryOnly);
             for (int i = 0; i < files.Length; i++)
@@ -487,7 +487,7 @@ namespace sb_editor.Classes
                     string[] data = fileData[hashCodeIndex + 1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                     if (data.Length > 1)
                     {
-                        HashCodesDict.Add(filePath, Convert.ToUInt32(data[1].Trim()));
+                        HashCodesDict.Add(filePath, Convert.ToInt32(data[1].Trim()));
                     }
                 }
             }

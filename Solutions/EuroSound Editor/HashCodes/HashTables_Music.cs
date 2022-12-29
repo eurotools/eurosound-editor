@@ -22,7 +22,7 @@ namespace sb_editor.HashCodes
                 for (int i = 0; i < musicFiles.Length; i++)
                 {
                     MusicFile fileData = TextFiles.ReadMusicFile(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", musicFiles[i] + ".txt"));
-                    sw.WriteLine(WriteHashCode("MFX_" + musicFiles[i], string.Format("0x{0:X8}", fileData.HashCode | 0x1BE00000)));
+                    sw.WriteLine(WriteHashCode("MFX_" + musicFiles[i], fileData.HashCode | 0x1BE00000));
                     maxSfxHashcodeDefined++;
                 }
                 sw.WriteLine("#define MFX_MaximumDefined {0}", maxSfxHashcodeDefined);

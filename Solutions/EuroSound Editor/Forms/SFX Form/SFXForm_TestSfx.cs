@@ -49,7 +49,7 @@ namespace sb_editor.Forms
                         using (BinaryWriter sifWritter = new BinaryWriter(File.Open(Path.ChangeExtension(outputTempFilePath, ".sif"), FileMode.Create, FileAccess.Write, FileShare.Read)))
                         {
                             //Get HashCodes Dictionary
-                            Dictionary<string, uint> HashCodesDict = sbFunctions.GetHashCodesDictionary("SFXs", "#HASHCODE");
+                            Dictionary<string, int> HashCodesDict = sbFunctions.GetHashCodesDictionary("SFXs", "#HASHCODE");
 
                             //Get Data
                             SFX sfxData = new SFX();
@@ -85,7 +85,7 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void WriteSfxFile(Dictionary<string, uint> hashCodesDict, Dictionary<string, SFX> fileData, string[] sampleList, string outputBank, BinaryWriter sfxWritter, bool isBigEndian, StreamWriter debugFile)
+        private void WriteSfxFile(Dictionary<string, int> hashCodesDict, Dictionary<string, SFX> fileData, string[] sampleList, string outputBank, BinaryWriter sfxWritter, bool isBigEndian, StreamWriter debugFile)
         {
             List<long> sfxLut = new List<long>();
             SoundBankFunctions sbFunctions = new SoundBankFunctions();
