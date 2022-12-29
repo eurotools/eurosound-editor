@@ -132,7 +132,7 @@ namespace sb_editor.Forms
 
                             //Create hashtable and get missing HashCodes
                             string[] missingInTempFile = CreateAndValidateMfxDefines();
-                            if (missingInTempFile != null)
+                            if (missingInTempFile != null && missingInTempFile.Length > 0)
                             {
                                 // Show a warning message if there are missing defines in the new MfxDefines.h file
                                 string message = string.Join("\n", missingInTempFile);
@@ -272,7 +272,7 @@ namespace sb_editor.Forms
                 {
                     // Check if there are any missing defines in the temp MFX_Defines.h file
                     string[] missingInTempFile = CreateAndValidateMfxDefines();
-                    if (missingInTempFile != null)
+                    if (missingInTempFile != null && missingInTempFile.Length > 0)
                     {
                         // Truncate message if necessary
                         string message = string.Join("\n", missingInTempFile);
