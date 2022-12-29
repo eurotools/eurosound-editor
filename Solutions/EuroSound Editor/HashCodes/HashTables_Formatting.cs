@@ -8,20 +8,13 @@
         //-------------------------------------------------------------------------------------------------------------------------------
         internal string WriteHashCode(string hashCodeLabel, string hashCodeNumber)
         {
-            string formattedString;
-            int stringLength = 20;
-            if (hashCodeLabel.Length < stringLength)
+            int stringLength = 19;
+            if (hashCodeLabel.Length > stringLength)
             {
-                formattedString = string.Format("#define {0,-19} {1,8}", hashCodeLabel, hashCodeNumber);
+                stringLength = ((((hashCodeLabel.Length - 20) / 14) + 1) * 14) + 19;
             }
-            else
-            {
-                while (stringLength <= hashCodeLabel.Length)
-                {
-                    stringLength += 14;
-                }
-                formattedString = string.Format("#define {0,-" + (stringLength - 1) + "} {1,8}", hashCodeLabel, hashCodeNumber);
-            }
+            string formattedString = string.Format("#define {0,-" + stringLength + "} {1,8}", hashCodeLabel, hashCodeNumber);
+
             return formattedString;
         }
 
@@ -41,22 +34,15 @@
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal string WriteNumber(string hashCodeLabel, string hashCodeNumber)
+        internal string WriteNumber(string hashCodeLabel, int hashCodeNumber)
         {
-            int stringLength = 20;
-            string formattedString;
-            if (hashCodeLabel.Length < stringLength)
+            int stringLength = 19;
+            if (hashCodeLabel.Length > stringLength)
             {
-                formattedString = string.Format("#define {0,-19} {1,1}", hashCodeLabel, hashCodeNumber);
+                stringLength = ((((hashCodeLabel.Length - 20) / 14) + 1) * 14) + 19;
             }
-            else
-            {
-                while (stringLength <= hashCodeLabel.Length)
-                {
-                    stringLength += 14;
-                }
-                formattedString = string.Format("#define {0,-" + (stringLength - 1) + "} {1,1}", hashCodeLabel, hashCodeNumber);
-            }
+            string formattedString = string.Format("#define {0,-" + stringLength + "} {1,1}", hashCodeLabel, hashCodeNumber);
+
             return formattedString;
         }
 

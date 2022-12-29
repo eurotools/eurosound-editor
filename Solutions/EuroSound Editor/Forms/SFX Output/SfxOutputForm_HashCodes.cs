@@ -108,7 +108,7 @@ namespace sb_editor.Forms
                 sw.WriteLine(string.Empty);
                 for (int i = 0; i < GlobalPrefs.Languages.Length; i++)
                 {
-                    sw.WriteLine(hashCodes.WriteNumber("SFXLanguage_" + GlobalPrefs.Languages[i].ToUpper(), i.ToString()));
+                    sw.WriteLine(hashCodes.WriteNumber("SFXLanguage_" + GlobalPrefs.Languages[i].ToUpper(), i));
                 }
                 sw.WriteLine(hashCodes.WriteNoAlign("StreamFileHashCode", "0x" + 0xFFFF.ToString("X8")));
                 sw.WriteLine(string.Empty);
