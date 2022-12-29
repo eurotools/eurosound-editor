@@ -2,7 +2,6 @@
 using PCAudioDLL.AudioClasses;
 using PCAudioDLL.MusXStuff;
 using PCAudioDLL.MusXStuff.Objects;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;

@@ -129,11 +129,13 @@ namespace sb_editor.Forms
                             // Create and validate MfxDefines.h file
                             string finalFile = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Defines.h");
                             string tempFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Temp_MFX_Defines.h");
-                            List<string> missingInTempFile = CreateAndValidateMfxDefines();
-                            if (missingInTempFile.Count > 0)
+
+                            //Create hashtable and get missing HashCodes
+                            string[] missingInTempFile = CreateAndValidateMfxDefines();
+                            if (missingInTempFile != null)
                             {
                                 // Show a warning message if there are missing defines in the new MfxDefines.h file
-                                string message = string.Join("\n", missingInTempFile.ToArray());
+                                string message = string.Join("\n", missingInTempFile);
 
                                 //Truncate string if required
                                 if (message.Length > 914)
@@ -142,24 +144,20 @@ namespace sb_editor.Forms
                                 }
                                 if (MessageBox.Show(string.Format("{0}:\n\n{1}\n\nAre you sure you wish to overwrite this file?", "The following defines are missing from the new MFX_Defines.h file", message), Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                                 {
-                                    if (File.Exists(tempFile))
+                                    //Copy the temporal file to the final output folder (Sonix)
+                                    if (File.Exists(tempFile) && File.Exists(finalFile))
                                     {
-                                        if (File.Exists(finalFile))
-                                        {
-                                            File.Delete(finalFile);
-                                        }
+                                        File.Delete(finalFile);
                                         File.Copy(tempFile, finalFile);
                                     }
                                 }
                             }
                             else
                             {
-                                if (File.Exists(tempFile))
+                                //Copy the temporal file to the final output folder (Sonix)
+                                if (File.Exists(tempFile) && File.Exists(finalFile))
                                 {
-                                    if (File.Exists(finalFile))
-                                    {
-                                        File.Delete(finalFile);
-                                    }
+                                    File.Delete(finalFile);
                                     File.Copy(tempFile, finalFile);
                                 }
                             }
@@ -273,11 +271,11 @@ namespace sb_editor.Forms
                 if (lvwMusicFiles.Items.Count > 0)
                 {
                     // Check if there are any missing defines in the temp MFX_Defines.h file
-                    List<string> missingInTempFile = CreateAndValidateMfxDefines();
-                    if (missingInTempFile.Count > 0)
+                    string[] missingInTempFile = CreateAndValidateMfxDefines();
+                    if (missingInTempFile != null)
                     {
                         // Truncate message if necessary
-                        string message = string.Join("\n", missingInTempFile.ToArray());
+                        string message = string.Join("\n", missingInTempFile);
                         if (message.Length > 914)
                         {
                             message = message.Substring(0, 914);
@@ -297,10 +295,10 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private List<string> CreateAndValidateMfxDefines()
+        private string[] CreateAndValidateMfxDefines()
         {
             // Initialize a list to store missing MFX defines
-            List<string> missingInTempFile = new List<string>();
+            string[] missingInTempFile = null;
 
             // Create a new instance of the HashTables class
             HashTables hashCodes = new HashTables();
@@ -315,7 +313,7 @@ namespace sb_editor.Forms
                 hashCodes.CreateMfxDefines(tempFilePath);
 
                 // Read the file data into memory for faster search
-                string[] tempFileData = File.ReadAllLines(tempFilePath);
+                string[] tempFileData = hashCodes.GetHashtableLabels(tempFilePath);
 
                 // Check if the project's hash code directory exists
                 if (!string.IsNullOrEmpty(GlobalPrefs.CurrentProject.HashCodeFileDirectory) && Directory.Exists(GlobalPrefs.CurrentProject.HashCodeFileDirectory))
@@ -325,29 +323,11 @@ namespace sb_editor.Forms
                     if (File.Exists(mfxDefinesFilePath))
                     {
                         // Read the MFX defines data into memory for faster search
-                        string[] mfxDefinesData = File.ReadAllLines(mfxDefinesFilePath);
+                        string[] mfxDefinesData = hashCodes.GetHashtableLabels(mfxDefinesFilePath);
 
-                        // Iterate through the MFX defines data
-                        for (int i = 0; i < mfxDefinesData.Length; i++)
-                        {
-                            string currentLine = mfxDefinesData[i];
+                        //Get missing HashCodes
+                        missingInTempFile = mfxDefinesData.Except(tempFileData).ToArray();
 
-                            // Skip empty lines or lines that start with "//"
-                            if (currentLine.StartsWith("//") || string.IsNullOrEmpty(currentLine))
-                            {
-                                continue;
-                            }
-
-                            // If the current line is not found in the temp file data, add it to the missing defines list
-                            if (Array.IndexOf(tempFileData, currentLine) == -1)
-                            {
-                                string[] fileData = currentLine.Split(null);
-                                if (fileData.Length > 2)
-                                {
-                                    missingInTempFile.Add(fileData[1].Trim());
-                                }
-                            }
-                        }
                     }
                     else if (File.Exists(tempFilePath))
                     {
@@ -585,6 +565,9 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnRemapHashCodes_Click(object sender, EventArgs e)
         {
+            //Reset variable
+            GlobalPrefs.MFXHashCodeNumber = 1;
+
             // Iterate through all the items in the list view
             foreach (ListViewItem listItem in lvwMusicFiles.Items)
             {
@@ -600,8 +583,17 @@ namespace sb_editor.Forms
                     // Increment the global MFX hash code number and assign it to the current music file's hash code
                     musicFileData.HashCode = GlobalPrefs.MFXHashCodeNumber++;
 
+                    // Update Error Status Column
+                    listItem.SubItems[2].Text = "Output Required.";
+
                     // Update the hash code in the list item's subitem
                     listItem.SubItems[3].Text = musicFileData.HashCode.ToString();
+
+                    // Update Wav Column
+                    listItem.SubItems[5].Text = "Output";
+
+                    // Update output filename
+                    listItem.SubItems[6].Text = string.Format("HC{0}.SFX", musicFileData.HashCode.ToString("X6"));
 
                     // Write the updated music file data to the music file
                     TextFiles.WriteMusicFile(musicFileData, musicFilePath);
