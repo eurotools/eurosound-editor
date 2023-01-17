@@ -32,9 +32,7 @@ namespace sb_editor.Panels
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControl_Manform_SoundBanks));
             this.grbSoundBanks = new System.Windows.Forms.GroupBox();
-            this.lblDataBases_Total = new System.Windows.Forms.Label();
-            this.lblSoundBanksTotal = new System.Windows.Forms.Label();
-            this.tvwSoundBanks = new System.Windows.Forms.TreeView();
+            this.lblSoundBanksTutorial = new System.Windows.Forms.Label();
             this.ContextMenu_TreeView = new System.Windows.Forms.ContextMenu();
             this.mnuNew_SoundBank = new System.Windows.Forms.MenuItem();
             this.mnuCopy_SoundBank = new System.Windows.Forms.MenuItem();
@@ -42,8 +40,10 @@ namespace sb_editor.Panels
             this.mnuRename_SoundBank = new System.Windows.Forms.MenuItem();
             this.mnuProperties_SoundBank = new System.Windows.Forms.MenuItem();
             this.mnuMaxOutSize_SoundBank = new System.Windows.Forms.MenuItem();
+            this.lblDataBases_Total = new System.Windows.Forms.Label();
+            this.lblSoundBanksTotal = new System.Windows.Forms.Label();
+            this.tvwSoundBanks = new System.Windows.Forms.TreeView();
             this.imlTreeView = new System.Windows.Forms.ImageList(this.components);
-            this.lblSoundBanksTutorial = new System.Windows.Forms.Label();
             this.grbSoundBanks.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,48 +61,20 @@ namespace sb_editor.Panels
             this.grbSoundBanks.TabStop = false;
             this.grbSoundBanks.Text = "SoundBanks";
             // 
-            // lblDataBases_Total
+            // lblSoundBanksTutorial
             // 
-            this.lblDataBases_Total.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblDataBases_Total.AutoSize = true;
-            this.lblDataBases_Total.Location = new System.Drawing.Point(213, 244);
-            this.lblDataBases_Total.Name = "lblDataBases_Total";
-            this.lblDataBases_Total.Size = new System.Drawing.Size(61, 13);
-            this.lblDataBases_Total.TabIndex = 2;
-            this.lblDataBases_Total.Text = "DB Total: 0";
-            // 
-            // lblSoundBanksTotal
-            // 
-            this.lblSoundBanksTotal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblSoundBanksTotal.AutoSize = true;
-            this.lblSoundBanksTotal.Location = new System.Drawing.Point(6, 244);
-            this.lblSoundBanksTotal.Name = "lblSoundBanksTotal";
-            this.lblSoundBanksTotal.Size = new System.Drawing.Size(60, 13);
-            this.lblSoundBanksTotal.TabIndex = 1;
-            this.lblSoundBanksTotal.Text = "SB Total: 0";
-            // 
-            // tvwSoundBanks
-            // 
-            this.tvwSoundBanks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lblSoundBanksTutorial.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tvwSoundBanks.ContextMenu = this.ContextMenu_TreeView;
-            this.tvwSoundBanks.ImageIndex = 0;
-            this.tvwSoundBanks.ImageList = this.imlTreeView;
-            this.tvwSoundBanks.Indent = 39;
-            this.tvwSoundBanks.Location = new System.Drawing.Point(6, 19);
-            this.tvwSoundBanks.Name = "tvwSoundBanks";
-            this.tvwSoundBanks.SelectedImageIndex = 0;
-            this.tvwSoundBanks.ShowNodeToolTips = true;
-            this.tvwSoundBanks.ShowPlusMinus = false;
-            this.tvwSoundBanks.ShowRootLines = false;
-            this.tvwSoundBanks.Size = new System.Drawing.Size(282, 222);
-            this.tvwSoundBanks.TabIndex = 0;
-            this.tvwSoundBanks.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.TvwSoundBanks_BeforeCollapse);
-            this.tvwSoundBanks.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.TvwSoundBanks_BeforeExpand);
-            this.tvwSoundBanks.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TvwSoundBanks_AfterSelect);
-            this.tvwSoundBanks.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TvwSoundBanks_NodeMouseClick);
-            this.tvwSoundBanks.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TvwSoundBanks_NodeMouseDoubleClick);
+            this.lblSoundBanksTutorial.BackColor = System.Drawing.SystemColors.Window;
+            this.lblSoundBanksTutorial.ContextMenu = this.ContextMenu_TreeView;
+            this.lblSoundBanksTutorial.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSoundBanksTutorial.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblSoundBanksTutorial.Location = new System.Drawing.Point(8, 20);
+            this.lblSoundBanksTutorial.Name = "lblSoundBanksTutorial";
+            this.lblSoundBanksTutorial.Size = new System.Drawing.Size(275, 130);
+            this.lblSoundBanksTutorial.TabIndex = 7;
+            this.lblSoundBanksTutorial.Text = resources.GetString("lblSoundBanksTutorial.Text");
             // 
             // ContextMenu_TreeView
             // 
@@ -155,6 +127,49 @@ namespace sb_editor.Panels
             this.mnuMaxOutSize_SoundBank.Text = "Max Output Size?";
             this.mnuMaxOutSize_SoundBank.Click += new System.EventHandler(this.MnuMaxOutSize_SoundBank_Click);
             // 
+            // lblDataBases_Total
+            // 
+            this.lblDataBases_Total.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblDataBases_Total.AutoSize = true;
+            this.lblDataBases_Total.Location = new System.Drawing.Point(213, 244);
+            this.lblDataBases_Total.Name = "lblDataBases_Total";
+            this.lblDataBases_Total.Size = new System.Drawing.Size(61, 13);
+            this.lblDataBases_Total.TabIndex = 2;
+            this.lblDataBases_Total.Text = "DB Total: 0";
+            // 
+            // lblSoundBanksTotal
+            // 
+            this.lblSoundBanksTotal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblSoundBanksTotal.AutoSize = true;
+            this.lblSoundBanksTotal.Location = new System.Drawing.Point(6, 244);
+            this.lblSoundBanksTotal.Name = "lblSoundBanksTotal";
+            this.lblSoundBanksTotal.Size = new System.Drawing.Size(60, 13);
+            this.lblSoundBanksTotal.TabIndex = 1;
+            this.lblSoundBanksTotal.Text = "SB Total: 0";
+            // 
+            // tvwSoundBanks
+            // 
+            this.tvwSoundBanks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tvwSoundBanks.ContextMenu = this.ContextMenu_TreeView;
+            this.tvwSoundBanks.ImageIndex = 0;
+            this.tvwSoundBanks.ImageList = this.imlTreeView;
+            this.tvwSoundBanks.Indent = 39;
+            this.tvwSoundBanks.Location = new System.Drawing.Point(6, 19);
+            this.tvwSoundBanks.Name = "tvwSoundBanks";
+            this.tvwSoundBanks.SelectedImageIndex = 0;
+            this.tvwSoundBanks.ShowNodeToolTips = true;
+            this.tvwSoundBanks.ShowPlusMinus = false;
+            this.tvwSoundBanks.ShowRootLines = false;
+            this.tvwSoundBanks.Size = new System.Drawing.Size(282, 222);
+            this.tvwSoundBanks.TabIndex = 0;
+            this.tvwSoundBanks.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.TvwSoundBanks_BeforeCollapse);
+            this.tvwSoundBanks.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.TvwSoundBanks_BeforeExpand);
+            this.tvwSoundBanks.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TvwSoundBanks_AfterSelect);
+            this.tvwSoundBanks.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TvwSoundBanks_NodeMouseClick);
+            this.tvwSoundBanks.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TvwSoundBanks_NodeMouseDoubleClick);
+            // 
             // imlTreeView
             // 
             this.imlTreeView.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imlTreeView.ImageStream")));
@@ -163,21 +178,6 @@ namespace sb_editor.Panels
             this.imlTreeView.Images.SetKeyName(1, "directory_open_cool-1.png");
             this.imlTreeView.Images.SetKeyName(2, "soundbank_Database.png");
             this.imlTreeView.Images.SetKeyName(3, "Music-note-blue-icon.png");
-            // 
-            // lblSoundBanksTutorial
-            // 
-            this.lblSoundBanksTutorial.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblSoundBanksTutorial.BackColor = System.Drawing.SystemColors.Window;
-            this.lblSoundBanksTutorial.ContextMenu = this.ContextMenu_TreeView;
-            this.lblSoundBanksTutorial.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSoundBanksTutorial.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblSoundBanksTutorial.Location = new System.Drawing.Point(8, 20);
-            this.lblSoundBanksTutorial.Name = "lblSoundBanksTutorial";
-            this.lblSoundBanksTutorial.Size = new System.Drawing.Size(275, 130);
-            this.lblSoundBanksTutorial.TabIndex = 7;
-            this.lblSoundBanksTutorial.Text = resources.GetString("lblSoundBanksTutorial.Text");
             // 
             // UserControl_Manform_SoundBanks
             // 

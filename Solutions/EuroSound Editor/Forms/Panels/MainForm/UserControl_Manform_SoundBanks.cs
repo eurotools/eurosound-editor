@@ -1,7 +1,6 @@
 ﻿using sb_editor.Forms;
 using sb_editor.Objects;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Media;
 using System.Windows.Forms;
@@ -25,7 +24,7 @@ namespace sb_editor.Panels
         private void TvwSoundBanks_AfterSelect(object sender, TreeViewEventArgs e)
         {
             //Update label
-            if (e.Node.Level == 0)
+            if (e.Node.Level == 0 && !e.Node.IsExpanded)
             {
                 //Load SoundBank Data
                 string soundBankFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks", e.Node.Text + ".txt");
@@ -63,7 +62,7 @@ namespace sb_editor.Panels
                     MessageBox.Show("File Not Found", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            else
+            else if (e.Node.Level > 0) // Update Databases count
             {
                 if (e.Node.Parent.Nodes.Count == 1 && e.Node.Parent.Nodes[0].Name.Equals("Empty"))
                 {
@@ -277,6 +276,7 @@ namespace sb_editor.Panels
                     string soundBankPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks", soundBankNode.Text + ".txt");
 
                     //Remove database
+                    int selectedIndex = tvwSoundBanks.SelectedNode.Index;
                     soundBankNode.Nodes.Remove(tvwSoundBanks.SelectedNode);
 
                     //Read and update soundbank
@@ -286,6 +286,12 @@ namespace sb_editor.Panels
 
                     //Update Node
                     AddDataBases(soundBankNode, soundBankData.DataBases, true);
+
+                    //Select previous index
+                    if (selectedIndex < soundBankNode.Nodes.Count)
+                    {
+                        tvwSoundBanks.SelectedNode = soundBankNode.Nodes[selectedIndex];
+                    }
                 }
             }
             else
@@ -471,6 +477,9 @@ namespace sb_editor.Panels
             {
                 soundBankNode.Nodes.Add("Empty", "Empty SoundBank", 3, 3);
             }
+
+            // Update Label
+            lblDataBases_Total.Text = string.Join(" ", "DB Total:", dependencies.Length);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
