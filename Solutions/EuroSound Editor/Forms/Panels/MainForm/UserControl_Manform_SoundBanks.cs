@@ -1,5 +1,7 @@
 ﻿using sb_editor.Forms;
 using sb_editor.Objects;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Media;
 using System.Windows.Forms;
@@ -247,29 +249,67 @@ namespace sb_editor.Panels
         //-------------------------------------------------------------------------------------------------------------------------------
         private void MnuDelete_SoundBank_Click(object sender, System.EventArgs e)
         {
-            if (tvwSoundBanks.SelectedNode != null && tvwSoundBanks.SelectedNode.Level == 0)
+            if (tvwSoundBanks.SelectedNode != null)
             {
-                if (MessageBox.Show(string.Format("Are you sure you want delete SoundBank(s)\n'{0}'\nTotal Files: {1}", tvwSoundBanks.SelectedNode.Text, 1), Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (tvwSoundBanks.SelectedNode.Level == 0)
                 {
-                    //Create trash folder if not exists
-                    string trashFolder = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks_Trash");
-                    Directory.CreateDirectory(trashFolder);
+                    if (MessageBox.Show(string.Format("Are you sure you want delete SoundBank(s)\n'{0}'\nTotal Files: {1}", tvwSoundBanks.SelectedNode.Text, 1), Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        //Create trash folder if not exists
+                        string trashFolder = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks_Trash");
+                        Directory.CreateDirectory(trashFolder);
 
-                    string source = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks", tvwSoundBanks.SelectedNode.Text + ".txt");
-                    string destination = Path.Combine(trashFolder, tvwSoundBanks.SelectedNode.Text + ".txt");
+                        string source = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks", tvwSoundBanks.SelectedNode.Text + ".txt");
+                        string destination = Path.Combine(trashFolder, tvwSoundBanks.SelectedNode.Text + ".txt");
 
-                    //Ensure that the file doesn't exists
-                    File.Delete(destination);
-                    File.Move(source, destination);
+                        //Ensure that the file doesn't exists
+                        File.Delete(destination);
+                        File.Move(source, destination);
 
-                    //Update UI
-                    ProjectFileFunctions.UpdateAll((MainForm)Parent);
+                        //Update UI
+                        ProjectFileFunctions.UpdateAll((MainForm)Parent);
+                    }
+                }
+                else if (tvwSoundBanks.SelectedNode.Level > 0 && !tvwSoundBanks.SelectedNode.Name.Equals("Empty")) // DataBase Level
+                {
+                    //Get file path
+                    TreeNode soundBankNode = tvwSoundBanks.SelectedNode.Parent;
+                    string soundBankPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks", soundBankNode.Text + ".txt");
+
+                    //Remove database
+                    soundBankNode.Nodes.Remove(tvwSoundBanks.SelectedNode);
+
+                    //Read and update soundbank
+                    SoundBank soundBankData = TextFiles.ReadSoundbankFile(soundBankPath);
+                    soundBankData.DataBases = GetChildNodeTextValues(soundBankNode);
+                    TextFiles.WriteSoundBankFile(soundBankPath, soundBankData);
+
+                    //Update Node
+                    AddDataBases(soundBankNode, soundBankData.DataBases, true);
                 }
             }
             else
             {
                 SystemSounds.Beep.Play();
             }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private string[] GetChildNodeTextValues(TreeNode node)
+        {
+            TreeNodeCollection childNodes = node.Nodes;
+
+            //Fill array
+            string[] childNodeTextValues = new string[childNodes.Count];
+            for (int i = 0; i < childNodes.Count; i++)
+            {
+                childNodeTextValues[i] = (childNodes[i].Text);
+            }
+
+            //Sort array
+            Array.Sort(childNodeTextValues);
+
+            return childNodeTextValues;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
