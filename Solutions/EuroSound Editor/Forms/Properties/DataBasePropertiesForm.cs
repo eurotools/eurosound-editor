@@ -86,13 +86,13 @@ namespace sb_editor.Forms
             {
                 lstDependencies.BeginUpdate();
                 string dataBaseName = Path.GetFileNameWithoutExtension(DataBaseFilePath);
-                string[] soundbankFiles = Directory.GetFiles(soundBanksPath, "*.txt", SearchOption.TopDirectoryOnly);
-                for (int i = 0; i < soundbankFiles.Length; i++)
+                IEnumerable<string> soundbankFiles = Directory.EnumerateFiles(soundBanksPath, "*.txt", SearchOption.TopDirectoryOnly);
+                foreach(string soundBankPath in soundbankFiles)
                 {
-                    string[] fileData = File.ReadAllLines(soundbankFiles[i]);
+                    string[] fileData = File.ReadAllLines(soundBankPath);
                     if (Array.IndexOf(fileData, dataBaseName) > 0)
                     {
-                        lstDependencies.Items.Add(Path.GetFileNameWithoutExtension(soundbankFiles[i]));
+                        lstDependencies.Items.Add(Path.GetFileNameWithoutExtension(soundBankPath));
                     }
                 }
                 lstDependencies.EndUpdate();

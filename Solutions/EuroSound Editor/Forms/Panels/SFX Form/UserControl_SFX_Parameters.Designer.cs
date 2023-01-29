@@ -659,11 +659,11 @@ namespace sb_editor.Panels
             // lblSFX_Name
             // 
             this.lblSFX_Name.AutoSize = true;
-            this.lblSFX_Name.Location = new System.Drawing.Point(6, 22);
+            this.lblSFX_Name.Location = new System.Drawing.Point(9, 22);
             this.lblSFX_Name.Name = "lblSFX_Name";
-            this.lblSFX_Name.Size = new System.Drawing.Size(61, 13);
+            this.lblSFX_Name.Size = new System.Drawing.Size(58, 13);
             this.lblSFX_Name.TabIndex = 0;
-            this.lblSFX_Name.Text = "SFX Name:";
+            this.lblSFX_Name.Text = "SFX Name";
             // 
             // UserControl_SFX_Parameters
             // 

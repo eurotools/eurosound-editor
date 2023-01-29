@@ -334,11 +334,11 @@ namespace sb_editor
                             if (!duplicates)
                             {
                                 tempList.Clear();
-                                string[] sfxFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
-                                for (int i = 0; i < sfxFiles.Length; i++)
+                                IEnumerable<string> sfxFiles = Directory.EnumerateFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
+                                foreach(string sfxFile in sfxFiles)
                                 {
                                     bool fileModified = false;
-                                    string[] fileData = File.ReadAllLines(sfxFiles[i]);
+                                    string[] fileData = File.ReadAllLines(sfxFile);
                                     foreach (KeyValuePair<string, string> fileName in RenameDict)
                                     {
                                         int index = Array.IndexOf(fileData, fileName.Key.TrimStart('\\'));
@@ -361,7 +361,7 @@ namespace sb_editor
                                     //Update Text File
                                     if (fileModified)
                                     {
-                                        File.WriteAllLines(sfxFiles[i], fileData);
+                                        File.WriteAllLines(sfxFile, fileData);
                                     }
                                 }
 

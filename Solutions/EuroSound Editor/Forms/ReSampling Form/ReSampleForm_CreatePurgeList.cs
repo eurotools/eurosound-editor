@@ -51,11 +51,11 @@ namespace sb_editor
             HashSet<string> availableSamples = new HashSet<string>();
 
             //Get All Samples
-            string[] sampleFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master"), "*.wav", SearchOption.AllDirectories);
-            for (int i = 0; i < sampleFiles.Length; i++)
+            var sampleFiles = Directory.EnumerateFiles(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master"), "*.wav", SearchOption.AllDirectories);
+            foreach(var samplePath in sampleFiles)
             {
                 int MasterFolderLength = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master").Length;
-                availableSamples.Add(sampleFiles[i].Substring(MasterFolderLength));
+                availableSamples.Add(samplePath.Substring(MasterFolderLength));
             }
 
             //Get Used Samples from SFX Files

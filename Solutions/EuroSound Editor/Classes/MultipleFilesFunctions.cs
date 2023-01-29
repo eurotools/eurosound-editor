@@ -79,10 +79,10 @@ namespace sb_editor
             Directory.CreateDirectory(trashFolder);
 
             //Iterate over all SoundBanks 
-            string[] dependencies = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, dependenciesFolder), "*.txt", SearchOption.TopDirectoryOnly);
-            for (int j = 0; j < dependencies.Length; j++)
+            IEnumerable<string> dependencies = Directory.EnumerateFiles(Path.Combine(GlobalPrefs.ProjectFolder, dependenciesFolder), "*.txt", SearchOption.TopDirectoryOnly);
+            foreach(string dependency in dependencies)
             {
-                List<string> fileData = File.ReadAllLines(dependencies[j]).ToList();
+                List<string> fileData = File.ReadAllLines(dependency).ToList();
                 bool fileHasChanges = false;
                 for (int i = 0; i < filesToRemove.Length; i++)
                 {
@@ -98,7 +98,7 @@ namespace sb_editor
                 //Write file again
                 if (fileHasChanges)
                 {
-                    File.WriteAllLines(dependencies[j], fileData.ToArray());
+                    File.WriteAllLines(dependency, fileData.ToArray());
                 }
             }
 

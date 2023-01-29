@@ -56,11 +56,11 @@ namespace sb_editor.HashCodes
             if (hashCodesDict != null)
             {
                 hashCodesDict.Clear();
-                string[] filesToCheck = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
-                for (int i = 0; i < filesToCheck.Length; i++)
+                IEnumerable<string> filesToCheck = Directory.EnumerateFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
+                foreach(string filePath in filesToCheck)
                 {
-                    SFX sfxFileDat = TextFiles.ReadSfxFile(filesToCheck[i]);
-                    hashCodesDict.Add(Path.GetFileNameWithoutExtension(filesToCheck[i]), sfxFileDat.HashCode);
+                    SFX sfxFileDat = TextFiles.ReadSfxFile(filePath);
+                    hashCodesDict.Add(Path.GetFileNameWithoutExtension(filePath), sfxFileDat.HashCode);
                 }
             }
 
@@ -68,11 +68,11 @@ namespace sb_editor.HashCodes
             if (soundBankDict != null)
             {
                 soundBankDict.Clear();
-                string[] soundbankToCheck = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Soundbanks"), "*.txt", SearchOption.TopDirectoryOnly);
-                for (int i = 0; i < soundbankToCheck.Length; i++)
+                IEnumerable<string> soundbankToCheck = Directory.EnumerateFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Soundbanks"), "*.txt", SearchOption.TopDirectoryOnly);
+                foreach (string filePath in soundbankToCheck)
                 {
-                    SoundBank sndFileDat = TextFiles.ReadSoundbankFile(soundbankToCheck[i]);
-                    soundBankDict.Add(Path.GetFileNameWithoutExtension(soundbankToCheck[i]), sndFileDat.HashCode);
+                    SoundBank sndFileDat = TextFiles.ReadSoundbankFile(filePath);
+                    soundBankDict.Add(Path.GetFileNameWithoutExtension(filePath), sndFileDat.HashCode);
                 }
             }
         }

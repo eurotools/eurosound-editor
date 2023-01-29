@@ -150,12 +150,12 @@ namespace sb_editor.Forms
                 // Reset the SoundBank hash code number
                 GlobalPrefs.SoundBankHashCodeNumber = 1;
                 // Get the SB files in the SoundBanks folder
-                string[] sbFiles = Directory.GetFiles(sbFolderPath, "*.txt", SearchOption.TopDirectoryOnly);
+                IEnumerable<string> sbFiles = Directory.EnumerateFiles(sbFolderPath, "*.txt", SearchOption.TopDirectoryOnly);
                 // Loop through the SB files
-                for (int i = 0; i < sbFiles.Length; i++)
+                foreach(string sbFile in sbFiles)
                 {
                     // Read the lines of the SB file
-                    string[] fileLines = File.ReadAllLines(sbFiles[i]);
+                    string[] fileLines = File.ReadAllLines(sbFile);
                     // Get the index of the line with the hashCode
                     int hashCodeLineIndex = Array.FindIndex(fileLines, s => s.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase));
                     // Split the line with the hash code value into an array of strings
@@ -164,7 +164,7 @@ namespace sb_editor.Forms
                     {
                         // Update the SB file with the new hash code value
                         fileLines[hashCodeLineIndex + 1] = string.Format("HashCodeNumber {0}", GlobalPrefs.SoundBankHashCodeNumber++);
-                        File.WriteAllLines(sbFiles[i], fileLines);
+                        File.WriteAllLines(sbFile, fileLines);
                     }
                 }
             }
@@ -176,12 +176,12 @@ namespace sb_editor.Forms
                 // Reset the MFX hash code number
                 GlobalPrefs.MFXHashCodeNumber = 1;
                 // Get the MFX files in the Music folder
-                string[] mfxFiles = Directory.GetFiles(mfxFolderPath, "*.txt", SearchOption.TopDirectoryOnly);
+                IEnumerable<string> mfxFiles = Directory.EnumerateFiles(mfxFolderPath, "*.txt", SearchOption.TopDirectoryOnly);
                 // Loop through the MFX files
-                for (int i = 0; i < mfxFiles.Length; i++)
+                foreach(string mfxFile in mfxFiles)
                 {
                     // Read the lines of the MFX file
-                    string[] fileLines = File.ReadAllLines(mfxFiles[i]);
+                    string[] fileLines = File.ReadAllLines(mfxFile);
                     // Get the index of the line with the hashCode
                     int hashCodeLineIndex = Array.FindIndex(fileLines, s => s.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase));
                     // Split the line with the hashCode value into an array of strings
@@ -190,7 +190,7 @@ namespace sb_editor.Forms
                     {
                         // Update the MFX file with the new hash code value
                         fileLines[hashCodeLineIndex + 1] = string.Format("HashCodeNumber {0}", GlobalPrefs.SoundBankHashCodeNumber++);
-                        File.WriteAllLines(mfxFiles[i], fileLines);
+                        File.WriteAllLines(mfxFile, fileLines);
                     }
                 }
             }
@@ -212,7 +212,7 @@ namespace sb_editor.Forms
             if (Directory.Exists(sfxsFolder))
             {
                 // Read all SFX files in the SFXs folder
-                string[] sfxFiles = Directory.GetFiles(sfxsFolder, "*.txt", SearchOption.TopDirectoryOnly);
+                IEnumerable<string> sfxFiles = Directory.EnumerateFiles(sfxsFolder, "*.txt", SearchOption.TopDirectoryOnly);
 
                 // Inspect each SFX file
                 foreach (string sfxFilePath in sfxFiles)
@@ -280,7 +280,7 @@ namespace sb_editor.Forms
             if (Directory.Exists(sfxsFolder))
             {
                 // Inspect files
-                string[] sfxFiles = Directory.GetFiles(sfxsFolder, "*.txt", SearchOption.TopDirectoryOnly);
+                IEnumerable<string> sfxFiles = Directory.EnumerateFiles(sfxsFolder, "*.txt", SearchOption.TopDirectoryOnly);
                 foreach (string sfxFilePath in sfxFiles)
                 {
                     SFX sfxData = TextFiles.ReadSfxFile(sfxFilePath);
@@ -336,7 +336,7 @@ namespace sb_editor.Forms
             if (Directory.Exists(sfxsFolder))
             {
                 // Inspect files
-                string[] sfxFiles = Directory.GetFiles(sfxsFolder, "*.txt", SearchOption.TopDirectoryOnly);
+                IEnumerable<string> sfxFiles = Directory.EnumerateFiles(sfxsFolder, "*.txt", SearchOption.TopDirectoryOnly);
 
                 // Inspect each SFX file
                 foreach (string sfxFilePath in sfxFiles)
@@ -425,12 +425,11 @@ namespace sb_editor.Forms
         private void GetPlatformSFXs(string folderToInspect, List<string> sfxPlatformsList, string platform)
         {
             // Get all the files in the specified folder
-            string[] filesToInspect = Directory.GetFiles(folderToInspect, "*.txt", SearchOption.TopDirectoryOnly);
+            IEnumerable<string> filesToInspect = Directory.EnumerateFiles(folderToInspect, "*.txt", SearchOption.TopDirectoryOnly);
 
             // Iterate over the files and add their names and the platform to the sfxPlatformsList
-            for (int fileIndex = 0; fileIndex < filesToInspect.Length; fileIndex++)
+            foreach(string currentFilePath in filesToInspect)
             {
-                string currentFilePath = filesToInspect[fileIndex];
                 sfxPlatformsList.Add(Path.GetFileNameWithoutExtension(currentFilePath) + "  " + platform);
             }
         }
