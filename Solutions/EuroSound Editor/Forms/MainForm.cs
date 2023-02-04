@@ -133,9 +133,9 @@ namespace sb_editor
                     //Update INI
                     IniFile systemIni = new IniFile(systemIniPath);
                     systemIni.Write("Last_Project_Opened", GlobalPrefs.ProjectFolder, "Form1_Misc");
-                    for (int i = 0; i < mnuFile_RecentProjects.MenuItems.Count; i++)
+                    for (int i = 0; i < mnuFile_RecentProjects.DropDownItems.Count; i++)
                     {
-                        systemIni.Write("Recent" + i, ((MruMenuItem)mnuFile_RecentProjects.MenuItems[i]).Filename, "RecentFiles");
+                        systemIni.Write("Recent" + i, ((MruMenuItem)mnuFile_RecentProjects.DropDownItems[i]).Filename, "RecentFiles");
                     }
 
                     //Restart Tool

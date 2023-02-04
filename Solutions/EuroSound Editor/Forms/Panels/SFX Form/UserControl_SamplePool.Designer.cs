@@ -29,6 +29,7 @@ namespace sb_editor.Panels
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControl_SamplePool));
             this.grbSamplePool = new System.Windows.Forms.GroupBox();
             this.grbSampleProperties = new System.Windows.Forms.GroupBox();
@@ -69,14 +70,14 @@ namespace sb_editor.Panels
             this.btnRemove = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
             this.lstSamples = new System.Windows.Forms.ListBox();
-            this.ContextMenu_Listbox = new System.Windows.Forms.ContextMenu();
-            this.mnuAdd = new System.Windows.Forms.MenuItem();
-            this.mnuRemove = new System.Windows.Forms.MenuItem();
-            this.mnuOpen = new System.Windows.Forms.MenuItem();
-            this.mnuCopy = new System.Windows.Forms.MenuItem();
-            this.mnuEdit = new System.Windows.Forms.MenuItem();
-            this.mnuPlay = new System.Windows.Forms.MenuItem();
-            this.mnuStop = new System.Windows.Forms.MenuItem();
+            this.ContextMenu_Listbox = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuAdd = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuRemove = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuPlay = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuStop = new System.Windows.Forms.ToolStripMenuItem();
             this.chkEnableSubSFX = new System.Windows.Forms.CheckBox();
             this.OpenFileDiag_Samples = new System.Windows.Forms.OpenFileDialog();
             this.grbSamplePool.SuspendLayout();
@@ -88,6 +89,7 @@ namespace sb_editor.Panels
             ((System.ComponentModel.ISupportInitialize)(this.nudRandomPitchOffset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPitchOffset)).BeginInit();
             this.grbSampleInformation.SuspendLayout();
+            this.ContextMenu_Listbox.SuspendLayout();
             this.SuspendLayout();
             // 
             // grbSamplePool
@@ -545,7 +547,7 @@ namespace sb_editor.Panels
             // lstSamples
             // 
             this.lstSamples.AllowDrop = true;
-            this.lstSamples.ContextMenu = this.ContextMenu_Listbox;
+            this.lstSamples.ContextMenuStrip = this.ContextMenu_Listbox;
             this.lstSamples.DisplayMember = "FilePath";
             this.lstSamples.FormattingEnabled = true;
             this.lstSamples.Location = new System.Drawing.Point(16, 76);
@@ -560,7 +562,7 @@ namespace sb_editor.Panels
             // 
             // ContextMenu_Listbox
             // 
-            this.ContextMenu_Listbox.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.ContextMenu_Listbox.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuAdd,
             this.mnuRemove,
             this.mnuOpen,
@@ -568,50 +570,64 @@ namespace sb_editor.Panels
             this.mnuEdit,
             this.mnuPlay,
             this.mnuStop});
+            this.ContextMenu_Listbox.Name = "ContextMenu_Listbox";
+            this.ContextMenu_Listbox.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.ContextMenu_Listbox.Size = new System.Drawing.Size(210, 158);
             // 
             // mnuAdd
             // 
-            this.mnuAdd.Index = 0;
-            this.mnuAdd.Shortcut = System.Windows.Forms.Shortcut.CtrlN;
+            this.mnuAdd.Name = "mnuAdd";
+            this.mnuAdd.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.mnuAdd.Size = new System.Drawing.Size(209, 22);
             this.mnuAdd.Text = "Add";
             this.mnuAdd.Click += new System.EventHandler(this.MnuAdd_Click);
             // 
             // mnuRemove
             // 
-            this.mnuRemove.Index = 1;
-            this.mnuRemove.Shortcut = System.Windows.Forms.Shortcut.Del;
+            this.mnuRemove.Name = "mnuRemove";
+            this.mnuRemove.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+            this.mnuRemove.Size = new System.Drawing.Size(209, 22);
             this.mnuRemove.Text = "Remove";
             this.mnuRemove.Click += new System.EventHandler(this.MnuRemove_Click);
             // 
             // mnuOpen
             // 
-            this.mnuOpen.Index = 2;
-            this.mnuOpen.Shortcut = System.Windows.Forms.Shortcut.CtrlO;
+            this.mnuOpen.Name = "mnuOpen";
+            this.mnuOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.mnuOpen.Size = new System.Drawing.Size(209, 22);
             this.mnuOpen.Text = "Open";
             this.mnuOpen.Click += new System.EventHandler(this.MnuOpen_Click);
             // 
             // mnuCopy
             // 
-            this.mnuCopy.Index = 3;
-            this.mnuCopy.Shortcut = System.Windows.Forms.Shortcut.CtrlC;
+            this.mnuCopy.Name = "mnuCopy";
+            this.mnuCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.mnuCopy.Size = new System.Drawing.Size(209, 22);
             this.mnuCopy.Text = "Copy";
             this.mnuCopy.Click += new System.EventHandler(this.MnuCopy_Click);
             // 
             // mnuEdit
             // 
-            this.mnuEdit.Index = 4;
+            this.mnuEdit.Name = "mnuEdit";
+            this.mnuEdit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
+            this.mnuEdit.Size = new System.Drawing.Size(209, 22);
             this.mnuEdit.Text = "Edit";
             this.mnuEdit.Click += new System.EventHandler(this.MnuEdit_Click);
             // 
             // mnuPlay
             // 
-            this.mnuPlay.Index = 5;
+            this.mnuPlay.Name = "mnuPlay";
+            this.mnuPlay.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Space)));
+            this.mnuPlay.Size = new System.Drawing.Size(209, 22);
             this.mnuPlay.Text = "Play";
             this.mnuPlay.Click += new System.EventHandler(this.MnuPlay_Click);
             // 
             // mnuStop
             // 
-            this.mnuStop.Index = 6;
+            this.mnuStop.Name = "mnuStop";
+            this.mnuStop.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.Space)));
+            this.mnuStop.Size = new System.Drawing.Size(209, 22);
             this.mnuStop.Text = "Stop";
             this.mnuStop.Click += new System.EventHandler(this.MnuStop_Click);
             // 
@@ -651,6 +667,7 @@ namespace sb_editor.Panels
             ((System.ComponentModel.ISupportInitialize)(this.nudPitchOffset)).EndInit();
             this.grbSampleInformation.ResumeLayout(false);
             this.grbSampleInformation.PerformLayout();
+            this.ContextMenu_Listbox.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -681,14 +698,14 @@ namespace sb_editor.Panels
         private System.Windows.Forms.Button btnCopy;
         private System.Windows.Forms.Button btnRemove;
         private System.Windows.Forms.Button btnAdd;
-        private System.Windows.Forms.ContextMenu ContextMenu_Listbox;
-        private System.Windows.Forms.MenuItem mnuAdd;
-        private System.Windows.Forms.MenuItem mnuRemove;
-        private System.Windows.Forms.MenuItem mnuOpen;
-        private System.Windows.Forms.MenuItem mnuCopy;
-        private System.Windows.Forms.MenuItem mnuEdit;
-        private System.Windows.Forms.MenuItem mnuPlay;
-        private System.Windows.Forms.MenuItem mnuStop;
+        private System.Windows.Forms.ContextMenuStrip ContextMenu_Listbox;
+        private System.Windows.Forms.ToolStripMenuItem mnuAdd;
+        private System.Windows.Forms.ToolStripMenuItem mnuRemove;
+        private System.Windows.Forms.ToolStripMenuItem mnuOpen;
+        private System.Windows.Forms.ToolStripMenuItem mnuCopy;
+        private System.Windows.Forms.ToolStripMenuItem mnuEdit;
+        private System.Windows.Forms.ToolStripMenuItem mnuPlay;
+        private System.Windows.Forms.ToolStripMenuItem mnuStop;
         protected internal System.Windows.Forms.ListBox lstSamples;
         private System.Windows.Forms.OpenFileDialog OpenFileDiag_Samples;
         private System.Windows.Forms.GroupBox grbSampleProperties;
