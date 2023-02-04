@@ -17,6 +17,8 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class MusicApp : Form
     {
+        private readonly HashTables htFunctions = new HashTables();
+
         //-------------------------------------------------------------------------------------------------------------------------------
         public MusicApp()
         {
@@ -131,7 +133,7 @@ namespace sb_editor.Forms
                             string tempFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Temp_MFX_Defines.h");
 
                             //Create hashtable and get missing HashCodes
-                            string[] missingInTempFile = CreateAndValidateMfxDefines();
+                            string[] missingInTempFile = htFunctions.CreateAndValidateMfxDefines();
                             if (missingInTempFile != null && missingInTempFile.Length > 0)
                             {
                                 // Show a warning message if there are missing defines in the new MfxDefines.h file
@@ -271,7 +273,7 @@ namespace sb_editor.Forms
                 if (lvwMusicFiles.Items.Count > 0)
                 {
                     // Check if there are any missing defines in the temp MFX_Defines.h file
-                    string[] missingInTempFile = CreateAndValidateMfxDefines();
+                    string[] missingInTempFile = htFunctions.CreateAndValidateMfxDefines();
                     if (missingInTempFile != null && missingInTempFile.Length > 0)
                     {
                         // Truncate message if necessary
@@ -292,60 +294,6 @@ namespace sb_editor.Forms
             {
                 MessageBox.Show("File Not Found: 'MFXFiles.txt'", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        private string[] CreateAndValidateMfxDefines()
-        {
-            // Initialize a list to store missing MFX defines
-            string[] missingInTempFile = null;
-
-            // Create a new instance of the HashTables class
-            HashTables hashCodes = new HashTables();
-
-            // Set the file path for the temp MFX defines file
-            string tempFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Temp_MFX_Defines.h");
-
-            // Check if System directory exists
-            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "System")))
-            {
-                // Create MFX defines in temp file
-                hashCodes.CreateMfxDefines(tempFilePath);
-
-                // Read the file data into memory for faster search
-                string[] tempFileData = hashCodes.GetHashtableLabels(tempFilePath);
-
-                // Check if the project's hash code directory exists
-                if (!string.IsNullOrEmpty(GlobalPrefs.CurrentProject.HashCodeFileDirectory) && Directory.Exists(GlobalPrefs.CurrentProject.HashCodeFileDirectory))
-                {
-                    // Set file path for MFX defines file
-                    string mfxDefinesFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Defines.h");
-                    if (File.Exists(mfxDefinesFilePath))
-                    {
-                        // Read the MFX defines data into memory for faster search
-                        string[] mfxDefinesData = hashCodes.GetHashtableLabels(mfxDefinesFilePath);
-
-                        //Get missing HashCodes
-                        missingInTempFile = mfxDefinesData.Except(tempFileData).ToArray();
-
-                    }
-                    else if (File.Exists(tempFilePath))
-                    {
-                        // If the MFX defines file does not exist, copy the temp file to create it
-                        File.Copy(tempFilePath, mfxDefinesFilePath);
-                    }
-                }
-            }
-
-            // Check if the project's hash code directory exists
-            if (!string.IsNullOrEmpty(GlobalPrefs.CurrentProject.HashCodeFileDirectory) && Directory.Exists(GlobalPrefs.CurrentProject.HashCodeFileDirectory))
-            {
-                hashCodes.CreateMfxValidList(Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_ValidList.h"));
-                hashCodes.CreateMfxData(Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Data.h"));
-                hashCodes.BuildSoundHhFile(Path.Combine(GlobalPrefs.CurrentProject.EuroLandHashCodeServerPath, "Sound.h"));
-            }
-
-            return missingInTempFile;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
