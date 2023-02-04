@@ -82,7 +82,7 @@ namespace sb_editor
             lblDatabaseCount_Value.Text = soundBankData.DataBases.Length.ToString();
             lblSFXCount_Value.Text = SFXs.Length.ToString();
             lblSampleCount_Value.Text = samples.Length.ToString();
-            lblOutputFileName_Value.Text = string.Join(string.Empty, "HC", soundBankData.HashCode.ToString("X6"), ".SFX");
+            lblOutputFileName_Value.Text = string.Format("HC{0:X6}.SFX", CommonFunctions.GetSfxName((int)outputLanguage, soundBankData.HashCode));
 
             //Databases
             lstDatabases.BeginUpdate();
