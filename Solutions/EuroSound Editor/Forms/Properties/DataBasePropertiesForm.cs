@@ -87,7 +87,7 @@ namespace sb_editor.Forms
                 lstDependencies.BeginUpdate();
                 string dataBaseName = Path.GetFileNameWithoutExtension(DataBaseFilePath);
                 IEnumerable<string> soundbankFiles = Directory.EnumerateFiles(soundBanksPath, "*.txt", SearchOption.TopDirectoryOnly);
-                foreach(string soundBankPath in soundbankFiles)
+                foreach (string soundBankPath in soundbankFiles)
                 {
                     string[] fileData = File.ReadAllLines(soundBankPath);
                     if (Array.IndexOf(fileData, dataBaseName) > 0)
