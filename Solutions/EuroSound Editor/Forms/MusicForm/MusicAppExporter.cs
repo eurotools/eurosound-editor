@@ -272,9 +272,9 @@ namespace sb_editor.Forms
 
                                 // Split the wave file into left and right channels and re-sample the waves file to 32000 Hz
                                 backgroundWorker1.ReportProgress(0, string.Format("Making Music Stream: {0} for {1}", filesQueue[i], outputPlatforms[j]));
-                                CommonFunctions.RunConsoleProcess(SoxPath, string.Format("\"{0}\" -c 1 -r 44100 \"{1}\" resample -qs 0.97 avg -l", wavePath, wavLeftChannelData), false);
+                                CommonFunctions.RunConsoleProcess(SoxPath, string.Format("\"{0}\" -c 1 \"{1}\" avg -l", wavePath, wavLeftChannelData), false);
                                 backgroundWorker1.ReportProgress(99, string.Format("Making Music Stream: {0} for {1}", filesQueue[i], outputPlatforms[j]));
-                                CommonFunctions.RunConsoleProcess(SoxPath, string.Format("\"{0}\" -c 1 -r 44100 \"{1}\" resample -qs 0.97 avg -r", wavePath, wavRightChannelData), false);
+                                CommonFunctions.RunConsoleProcess(SoxPath, string.Format("\"{0}\" -c 1 \"{1}\" avg -r", wavePath, wavRightChannelData), false);
 
                                 // Convert the split wave files to Ima ADPCM
                                 imaLeftChannelData = eurocomIma.Encode(waveData.GetWaveSamples(wavLeftChannelData));

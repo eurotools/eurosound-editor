@@ -37,7 +37,7 @@ namespace ESUtils
         //-------------------------------------------------------------------------------------------------------------------------------
         public static uint GetMusicLoopOffsetXbox(uint loopOffset)
         {
-            double division = loopOffset / 0.88888887;
+            double division = loopOffset / 0.875;
             return (uint)Math.Floor(division);
         }
 
