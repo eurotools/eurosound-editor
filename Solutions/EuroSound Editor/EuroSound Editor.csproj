@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Audio\AiffFunctions.cs" />
+    <Compile Include="Classes\Audio\EurocomImaFunctions.cs" />
     <Compile Include="Classes\Audio\ImaFunctions.cs" />
     <Compile Include="Classes\Audio\MidiFunctions.cs" />
     <Compile Include="Classes\MultipleFilesFunctions.cs" />
