@@ -62,10 +62,13 @@ namespace sb_editor.Panels
             nudDucker.Value = Math.Min(Math.Max(nudDucker.Minimum, sfxFile.Parameters.Ducker), nudDucker.Maximum);
             nudDuckerLength.Value = Math.Min(Math.Max(nudDuckerLength.Minimum, sfxFile.Parameters.DuckerLength), nudDuckerLength.Maximum);
             chkUnderWater.Checked = sfxFile.Parameters.Outdoors;
-            chkPauseInNis.Checked = sfxFile.Parameters.PauseInNis;
-            chkIgnoreAge.Checked = sfxFile.Parameters.IgnoreAge;
+            chkPauseInstant.Checked = sfxFile.Parameters.PauseInstant;
+            chkUnPausable.Checked = sfxFile.Parameters.UnPausable;
             chkMusicType.Checked = sfxFile.Parameters.MusicType;
             chkDoppler.Checked = sfxFile.Parameters.Doppler;
+            chkOneInstancePerFrame.Checked = sfxFile.Parameters.OneInstancePerFrame;
+            chkKillMeOwnGroup.Checked = sfxFile.Parameters.KillMeOwnGroup;
+            chkIgnoreMasterVolume.Checked = sfxFile.Parameters.IgnoreMasterVolume;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------

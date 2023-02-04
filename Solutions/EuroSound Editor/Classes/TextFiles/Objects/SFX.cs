@@ -26,15 +26,19 @@ namespace sb_editor.Objects
         public int Group;
         public byte Action2;
         public int Alertness;
-        public bool IgnoreAge;
         public int Ducker;
         public int DuckerLength;
         public int MasterVolume;
         public bool Outdoors;
-        public bool PauseInNis;
+        public bool PauseInstant;
+        public bool UnPausable;
         public bool StealOnAge;
         public bool MusicType;
         public bool Doppler;
+        public bool OneInstancePerFrame;
+        public bool KillMeOwnGroup;
+        public bool IgnoreMasterVolume;
+        public bool GroupStealReject;
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------

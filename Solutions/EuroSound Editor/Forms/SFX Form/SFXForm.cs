@@ -569,11 +569,13 @@ namespace sb_editor.Forms
             sfxFileData.Parameters.Ducker = (int)UserControl_SFX_Parameters.nudDucker.Value;
             sfxFileData.Parameters.DuckerLength = (int)UserControl_SFX_Parameters.nudDuckerLength.Value;
             sfxFileData.Parameters.Outdoors = UserControl_SFX_Parameters.chkUnderWater.Checked;
-            sfxFileData.Parameters.PauseInNis = UserControl_SFX_Parameters.chkPauseInNis.Checked;
-            sfxFileData.Parameters.IgnoreAge = UserControl_SFX_Parameters.chkIgnoreAge.Checked;
+            sfxFileData.Parameters.PauseInstant = UserControl_SFX_Parameters.chkPauseInstant.Checked;
+            sfxFileData.Parameters.UnPausable = UserControl_SFX_Parameters.chkUnPausable.Checked;
+            sfxFileData.Parameters.IgnoreMasterVolume = UserControl_SFX_Parameters.chkIgnoreMasterVolume.Checked;
             sfxFileData.Parameters.MusicType = UserControl_SFX_Parameters.chkMusicType.Checked;
             sfxFileData.Parameters.Doppler = UserControl_SFX_Parameters.chkDoppler.Checked;
-
+            sfxFileData.Parameters.OneInstancePerFrame = UserControl_SFX_Parameters.chkOneInstancePerFrame.Checked;
+            sfxFileData.Parameters.KillMeOwnGroup = UserControl_SFX_Parameters.chkKillMeOwnGroup.Checked;
             return sfxFileData;
         }
 

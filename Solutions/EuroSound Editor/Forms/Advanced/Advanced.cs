@@ -155,7 +155,7 @@ namespace sb_editor.Forms
                 // Get the SB files in the SoundBanks folder
                 IEnumerable<string> sbFiles = Directory.EnumerateFiles(sbFolderPath, "*.txt", SearchOption.TopDirectoryOnly);
                 // Loop through the SB files
-                foreach(string sbFile in sbFiles)
+                foreach (string sbFile in sbFiles)
                 {
                     // Read the lines of the SB file
                     string[] fileLines = File.ReadAllLines(sbFile);
@@ -181,7 +181,7 @@ namespace sb_editor.Forms
                 // Get the MFX files in the Music folder
                 IEnumerable<string> mfxFiles = Directory.EnumerateFiles(mfxFolderPath, "*.txt", SearchOption.TopDirectoryOnly);
                 // Loop through the MFX files
-                foreach(string mfxFile in mfxFiles)
+                foreach (string mfxFile in mfxFiles)
                 {
                     // Read the lines of the MFX file
                     string[] fileLines = File.ReadAllLines(mfxFile);
@@ -431,7 +431,7 @@ namespace sb_editor.Forms
             IEnumerable<string> filesToInspect = Directory.EnumerateFiles(folderToInspect, "*.txt", SearchOption.TopDirectoryOnly);
 
             // Iterate over the files and add their names and the platform to the sfxPlatformsList
-            foreach(string currentFilePath in filesToInspect)
+            foreach (string currentFilePath in filesToInspect)
             {
                 sfxPlatformsList.Add(Path.GetFileNameWithoutExtension(currentFilePath) + "  " + platform);
             }

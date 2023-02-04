@@ -392,11 +392,11 @@ namespace sb_editor.Classes
             {
                 flags |= 1 << 0;
             }
-            if (sfxFile.Parameters.Doppler)
+            if (sfxFile.Parameters.UnPausable)
             {
                 flags |= 1 << 1;
             }
-            if (sfxFile.Parameters.IgnoreAge)
+            if (sfxFile.Parameters.IgnoreMasterVolume)
             {
                 flags |= 1 << 2;
             }
@@ -424,7 +424,7 @@ namespace sb_editor.Classes
             {
                 flags |= 1 << 8;
             }
-            if (sfxFile.Parameters.PauseInNis)
+            if (sfxFile.Parameters.PauseInstant)
             {
                 flags |= 1 << 9;
             }
@@ -439,6 +439,18 @@ namespace sb_editor.Classes
             if (sfxFile.Parameters.MusicType)
             {
                 flags |= 1 << 12;
+            }
+            if (sfxFile.Parameters.KillMeOwnGroup)
+            {
+                flags |= 1 << 13;
+            }
+            if (sfxFile.Parameters.GroupStealReject)
+            {
+                flags |= 1 << 14;
+            }
+            if (sfxFile.Parameters.OneInstancePerFrame)
+            {
+                flags |= 1 << 15;
             }
             return flags;
         }

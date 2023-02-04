@@ -70,8 +70,8 @@ namespace sb_editor
                                 case "ALERTNESS":
                                     sfxData.Parameters.Alertness = Convert.ToInt32(lineData[1].Trim());
                                     break;
-                                case "IGNOREAGE":
-                                    sfxData.Parameters.IgnoreAge = Convert.ToBoolean(byte.Parse(lineData[1].Trim()));
+                                case "IGNOREMASTERVOLUME":
+                                    sfxData.Parameters.IgnoreMasterVolume = Convert.ToBoolean(byte.Parse(lineData[1].Trim()));
                                     break;
                                 case "DUCKER":
                                     sfxData.Parameters.Ducker = Convert.ToInt32(lineData[1].Trim());
@@ -88,8 +88,11 @@ namespace sb_editor
                                 case "OUTDOORS":
                                     sfxData.Parameters.Outdoors = Convert.ToBoolean(byte.Parse(lineData[1].Trim()));
                                     break;
-                                case "PAUSEINNIS":
-                                    sfxData.Parameters.PauseInNis = Convert.ToBoolean(byte.Parse(lineData[1].Trim()));
+                                case "PAUSEINSTANT":
+                                    sfxData.Parameters.PauseInstant = Convert.ToBoolean(byte.Parse(lineData[1].Trim()));
+                                    break;
+                                case "UNPAUSABLE":
+                                    sfxData.Parameters.UnPausable = Convert.ToBoolean(byte.Parse(lineData[1].Trim()));
                                     break;
                                 case "STEALONAGE":
                                     sfxData.Parameters.StealOnAge = Convert.ToBoolean(byte.Parse(lineData[1].Trim()));
@@ -99,6 +102,15 @@ namespace sb_editor
                                     break;
                                 case "DOPPLER":
                                     sfxData.Parameters.Doppler = Convert.ToBoolean(byte.Parse(lineData[1].Trim()));
+                                    break;
+                                case "KILLMEOWNGROUP":
+                                    sfxData.Parameters.KillMeOwnGroup = Convert.ToBoolean(byte.Parse(lineData[1].Trim()));
+                                    break;
+                                case "ONEINSTANCEPERFRAME":
+                                    sfxData.Parameters.OneInstancePerFrame = Convert.ToBoolean(byte.Parse(lineData[1].Trim()));
+                                    break;
+                                case "GROUPSTEALREJECT":
+                                    sfxData.Parameters.GroupStealReject = Convert.ToBoolean(byte.Parse(lineData[1].Trim()));
                                     break;
                             }
                             currentLine = sr.ReadLine().Trim();
@@ -252,15 +264,19 @@ namespace sb_editor
                 outputFile.WriteLine("Group  {0}", sfxFile.Parameters.Group);
                 outputFile.WriteLine("Action2  {0}", sfxFile.Parameters.Action2);
                 outputFile.WriteLine("Alertness  {0}", sfxFile.Parameters.Alertness);
-                outputFile.WriteLine("IgnoreAge  {0}", Convert.ToByte(sfxFile.Parameters.IgnoreAge));
+                outputFile.WriteLine("IgnoreMasterVolume  {0}", Convert.ToByte(sfxFile.Parameters.IgnoreMasterVolume));
                 outputFile.WriteLine("Ducker  {0}", sfxFile.Parameters.Ducker);
                 outputFile.WriteLine("DuckerLenght  {0}", sfxFile.Parameters.DuckerLength);
                 outputFile.WriteLine("MasterVolume  {0}", sfxFile.Parameters.MasterVolume);
                 outputFile.WriteLine("Outdoors  {0}", Convert.ToByte(sfxFile.Parameters.Outdoors));
-                outputFile.WriteLine("PauseInNis  {0}", Convert.ToByte(sfxFile.Parameters.PauseInNis));
+                outputFile.WriteLine("PauseInstant  {0}", Convert.ToByte(sfxFile.Parameters.PauseInstant));
+                outputFile.WriteLine("UnPausable  {0}", Convert.ToByte(sfxFile.Parameters.UnPausable));
                 outputFile.WriteLine("StealOnAge  {0}", Convert.ToByte(sfxFile.Parameters.StealOnAge));
                 outputFile.WriteLine("MusicType  {0}", Convert.ToByte(sfxFile.Parameters.MusicType));
                 outputFile.WriteLine("Doppler  {0}", Convert.ToByte(sfxFile.Parameters.Doppler));
+                outputFile.WriteLine("OneInstancePerFrame  {0}", Convert.ToByte(sfxFile.Parameters.OneInstancePerFrame));
+                outputFile.WriteLine("KillMeOwnGroup  {0}", Convert.ToByte(sfxFile.Parameters.KillMeOwnGroup));
+                outputFile.WriteLine("GroupStealReject  {0}", Convert.ToByte(sfxFile.Parameters.GroupStealReject));
                 outputFile.WriteLine("#END");
                 outputFile.WriteLine(string.Empty);
                 if (!defaultsFile)
