@@ -15,7 +15,7 @@ namespace ExMarkers
         {
             //Read Markers File
             MarkerFilesFunctions streamMarkersFunctions = new MarkerFilesFunctions();
-            List<MarkerInfo> fileData = streamMarkersFunctions.LoadFile(markerFilePath, null, null, true);
+            List<MarkerInfo> fileData = streamMarkersFunctions.LoadTextMarkerFile(markerFilePath, null, null, true);
 
             //Write Jump Markers
             using (StreamWriter sw = new StreamWriter(File.Open(outputFilePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
@@ -40,7 +40,7 @@ namespace ExMarkers
 
             //Read Markers File
             MarkerFilesFunctions streamMarkersFunctions = new MarkerFilesFunctions();
-            streamMarkersFunctions.LoadFile(markerFilePath, startMarkersList, markersList, true);
+            streamMarkersFunctions.LoadTextMarkerFile(markerFilePath, startMarkersList, markersList, true);
 
             //Calculate states -- PC & GameCube Platform
             if (outputPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase)|| outputPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("GameCube", StringComparison.OrdinalIgnoreCase))

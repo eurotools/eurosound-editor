@@ -2,6 +2,7 @@
 using ExMarkers;
 using sb_editor.Audio_Classes;
 using sb_editor.Classes;
+using sb_editor.HashCodes;
 using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
@@ -341,6 +342,22 @@ namespace sb_editor.Forms
                 });
             }
 
+            //Build Music Details File
+            HashTables htHandler = new HashTables();
+            string mfxValidListFile = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Data.h");
+            htHandler.CreateMfxData(mfxValidListFile);
+            if (File.Exists(mfxValidListFile))
+            {
+                for (int j = 0; j < outputPlatforms.Length; j++)
+                {
+                    string tempOutputFolder = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatforms[j], "Music", "_musicdetails.sfx");
+                    BuildMusicDetailsFile(mfxValidListFile, tempOutputFolder);
+
+                    string sfxOutputPath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatforms[j], string.Empty, true), string.Format("_musicdetails.SFX").ToLower());
+                    MusXBuild_MusicDetails.BuildMusicDetails(tempOutputFolder, sfxOutputPath, CommonFunctions.GetPlatformLabel(outputPlatforms[j]), 0x000000A0);
+                }
+            }
+
             //Write MFX Valid List
             using (StreamWriter sw = new StreamWriter(File.Open(Path.Combine(GlobalPrefs.ProjectFolder, "System", "Valid_MFX_List.txt"), FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
@@ -457,6 +474,57 @@ namespace sb_editor.Forms
             }
 
             File.WriteAllBytes(outputFilePath, interleavedData);
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void BuildMusicDetailsFile(string musicDataTableFile, string musicDetailsPlatform)
+        {
+            //Open hashtable and create binary file
+            using (StreamReader sr = new StreamReader(File.Open(musicDataTableFile, FileMode.Open, FileAccess.Read, FileShare.Read)))
+            {
+                using (BinaryWriter bw = new BinaryWriter(File.Open(musicDetailsPlatform, FileMode.Create, FileAccess.Write, FileShare.Read)))
+                {
+                    int minValue = 0;
+                    int maxValue = 0;
+
+                    //Write placeholders
+                    bw.Write(0);
+                    bw.Write(0);
+
+                    //Read data
+                    while (!sr.EndOfStream)
+                    {
+                        string currentLine = sr.ReadLine().Trim();
+                        //Skip empty or commented lines
+                        if (string.IsNullOrEmpty(currentLine) || currentLine.StartsWith("//"))
+                        {
+                            continue;
+                        }
+
+                        //Header info
+                        if (currentLine.StartsWith("{0"))
+                        {
+                            string[] lineData = currentLine.Split(new char[] { ',', '{', '}' }, StringSplitOptions.RemoveEmptyEntries);
+                            if (lineData.Length == 4)
+                            {
+                                int hashcode = Convert.ToInt32(lineData[0], 16);
+                                bw.Write(hashcode | 0x1B000000);
+                                bw.Write(Convert.ToSingle(lineData[1].TrimEnd('f'), GlobalPrefs.NumericProvider));
+                                bw.Write(Convert.ToInt32(Convert.ToBoolean(lineData[2])));
+                                bw.Write(Convert.ToInt32(lineData[3]));
+
+                                minValue = Math.Min(minValue, hashcode);
+                                maxValue = Math.Max(maxValue, hashcode);
+                            }
+                        }
+                    }
+
+                    //Write min and max values
+                    bw.Seek(0, SeekOrigin.Begin);
+                    bw.Write(minValue | 0x1B000000);
+                    bw.Write(maxValue | 0x1B000000);
+                }
+            }
         }
     }
 

@@ -9,21 +9,21 @@ namespace ExMarkers
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    internal struct MarkerInfo
+    public struct MarkerInfo
     {
-        internal string Name;
-        internal uint Position;
-        internal byte Type;
-        internal byte Flags;
-        internal byte Extra;
+        public string Name;
+        public uint Position;
+        public byte Type;
+        public byte Flags;
+        public byte Extra;
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    internal class MarkerFilesFunctions
+    public class MarkerFilesFunctions
     {
-        internal List<MarkerInfo> LoadFile(string filePath, List<EXStartMarker> startMarkersList, List<EXMarker> markersList, bool IsMusic = false)
+        public List<MarkerInfo> LoadTextMarkerFile(string filePath, List<EXStartMarker> startMarkersList, List<EXMarker> markersList, bool IsMusic = false)
         {
             //List to store mrk file data
             List<MarkerInfo> fileData = new List<MarkerInfo>();
