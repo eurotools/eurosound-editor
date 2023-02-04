@@ -33,21 +33,23 @@ namespace sb_editor.Panels
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControl_MainForm_AvailableSFX));
             this.grbAvailableSFXs = new System.Windows.Forms.GroupBox();
             this.chkIconView = new System.Windows.Forms.CheckBox();
+            this.UserControl_RefineSFX = new sb_editor.Panels.UserControl_MainForm_RefineSFXList();
             this.pnlListView = new System.Windows.Forms.Panel();
             this.lblSFXsTutorial = new System.Windows.Forms.Label();
-            this.ContextMenu_ListView = new System.Windows.Forms.ContextMenu();
-            this.mnuAddToDB = new System.Windows.Forms.MenuItem();
-            this.mnuPlay = new System.Windows.Forms.MenuItem();
-            this.mnuStop = new System.Windows.Forms.MenuItem();
-            this.mnuProperties = new System.Windows.Forms.MenuItem();
-            this.mnuEdit = new System.Windows.Forms.MenuItem();
-            this.mnuNew = new System.Windows.Forms.MenuItem();
-            this.mnuCopy = new System.Windows.Forms.MenuItem();
-            this.mnuDelete = new System.Windows.Forms.MenuItem();
-            this.mnuRename = new System.Windows.Forms.MenuItem();
-            this.mnuNewMultiple = new System.Windows.Forms.MenuItem();
-            this.mnuMultiEditor = new System.Windows.Forms.MenuItem();
+            this.ContextMenu_ListView = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuAddToDB = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuPlay = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuStop = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuProperties = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuNew = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuRename = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuNewMultiple = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMultiEditor = new System.Windows.Forms.ToolStripMenuItem();
             this.lstTempSorted = new System.Windows.Forms.ListBox();
+            this.lstAvailableSFXs = new MultiSelListBox();
             this.DataGrid_SFXs = new System.Windows.Forms.DataGridView();
             this.Col_Image = new System.Windows.Forms.DataGridViewImageColumn();
             this.Col_HashCodeLabel = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -55,10 +57,9 @@ namespace sb_editor.Panels
             this.btnAddSFXs = new System.Windows.Forms.Button();
             this.lvwImageList = new System.Windows.Forms.ImageList(this.components);
             this.ToolTip_Controls = new System.Windows.Forms.ToolTip(this.components);
-            this.UserControl_RefineSFX = new sb_editor.Panels.UserControl_MainForm_RefineSFXList();
-            this.lstAvailableSFXs = new MultiSelListBox();
             this.grbAvailableSFXs.SuspendLayout();
             this.pnlListView.SuspendLayout();
+            this.ContextMenu_ListView.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_SFXs)).BeginInit();
             this.SuspendLayout();
             // 
@@ -89,6 +90,15 @@ namespace sb_editor.Panels
             this.chkIconView.UseVisualStyleBackColor = true;
             this.chkIconView.CheckedChanged += new System.EventHandler(this.ChkIconView_CheckedChanged);
             // 
+            // UserControl_RefineSFX
+            // 
+            this.UserControl_RefineSFX.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.UserControl_RefineSFX.Location = new System.Drawing.Point(6, 453);
+            this.UserControl_RefineSFX.Name = "UserControl_RefineSFX";
+            this.UserControl_RefineSFX.Size = new System.Drawing.Size(292, 74);
+            this.UserControl_RefineSFX.TabIndex = 4;
+            // 
             // pnlListView
             // 
             this.pnlListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -109,7 +119,7 @@ namespace sb_editor.Panels
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSFXsTutorial.BackColor = System.Drawing.SystemColors.Window;
-            this.lblSFXsTutorial.ContextMenu = this.ContextMenu_ListView;
+            this.lblSFXsTutorial.ContextMenuStrip = this.ContextMenu_ListView;
             this.lblSFXsTutorial.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSFXsTutorial.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.lblSFXsTutorial.Location = new System.Drawing.Point(4, 2);
@@ -120,7 +130,7 @@ namespace sb_editor.Panels
             // 
             // ContextMenu_ListView
             // 
-            this.ContextMenu_ListView.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.ContextMenu_ListView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuAddToDB,
             this.mnuPlay,
             this.mnuStop,
@@ -132,77 +142,92 @@ namespace sb_editor.Panels
             this.mnuRename,
             this.mnuNewMultiple,
             this.mnuMultiEditor});
+            this.ContextMenu_ListView.Name = "ContextMenu_ListView";
+            this.ContextMenu_ListView.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.ContextMenu_ListView.Size = new System.Drawing.Size(169, 246);
             // 
             // mnuAddToDB
             // 
-            this.mnuAddToDB.Index = 0;
-            this.mnuAddToDB.Shortcut = System.Windows.Forms.Shortcut.AltBksp;
+            this.mnuAddToDB.Name = "mnuAddToDB";
+            this.mnuAddToDB.Size = new System.Drawing.Size(168, 22);
             this.mnuAddToDB.Text = "Add To DB";
             this.mnuAddToDB.Click += new System.EventHandler(this.MnuAddToDB_Click);
             // 
             // mnuPlay
             // 
             this.mnuPlay.Enabled = false;
-            this.mnuPlay.Index = 1;
+            this.mnuPlay.Name = "mnuPlay";
+            this.mnuPlay.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Space)));
+            this.mnuPlay.Size = new System.Drawing.Size(168, 22);
             this.mnuPlay.Text = "Play";
             // 
             // mnuStop
             // 
             this.mnuStop.Enabled = false;
-            this.mnuStop.Index = 2;
+            this.mnuStop.Name = "mnuStop";
+            this.mnuStop.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Escape)));
+            this.mnuStop.Size = new System.Drawing.Size(168, 22);
             this.mnuStop.Text = "Stop";
             // 
             // mnuProperties
             // 
-            this.mnuProperties.Index = 3;
-            this.mnuProperties.Shortcut = System.Windows.Forms.Shortcut.CtrlP;
+            this.mnuProperties.Name = "mnuProperties";
+            this.mnuProperties.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            this.mnuProperties.Size = new System.Drawing.Size(168, 22);
             this.mnuProperties.Text = "Properties";
             this.mnuProperties.Click += new System.EventHandler(this.MnuProperties_Click);
             // 
             // mnuEdit
             // 
-            this.mnuEdit.Index = 4;
-            this.mnuEdit.Shortcut = System.Windows.Forms.Shortcut.AltBksp;
-            this.mnuEdit.Text = "Edit SFX";
+            this.mnuEdit.Name = "mnuEdit";
+            this.mnuEdit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Back)));
+            this.mnuEdit.Size = new System.Drawing.Size(168, 22);
+            this.mnuEdit.Text = "Edit";
             this.mnuEdit.Click += new System.EventHandler(this.MnuEdit_Click);
             // 
             // mnuNew
             // 
-            this.mnuNew.Index = 5;
-            this.mnuNew.Shortcut = System.Windows.Forms.Shortcut.CtrlN;
-            this.mnuNew.Text = "New SFX";
+            this.mnuNew.Name = "mnuNew";
+            this.mnuNew.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.mnuNew.Size = new System.Drawing.Size(168, 22);
+            this.mnuNew.Text = "New";
             this.mnuNew.Click += new System.EventHandler(this.MnuNew_Click);
             // 
             // mnuCopy
             // 
-            this.mnuCopy.Index = 6;
-            this.mnuCopy.Shortcut = System.Windows.Forms.Shortcut.CtrlC;
-            this.mnuCopy.Text = "Copy SFX";
+            this.mnuCopy.Name = "mnuCopy";
+            this.mnuCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.mnuCopy.Size = new System.Drawing.Size(168, 22);
+            this.mnuCopy.Text = "Copy";
             this.mnuCopy.Click += new System.EventHandler(this.MnuCopy_Click);
             // 
             // mnuDelete
             // 
-            this.mnuDelete.Index = 7;
-            this.mnuDelete.Shortcut = System.Windows.Forms.Shortcut.Del;
-            this.mnuDelete.Text = "Delete SFX";
+            this.mnuDelete.Name = "mnuDelete";
+            this.mnuDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+            this.mnuDelete.Size = new System.Drawing.Size(168, 22);
+            this.mnuDelete.Text = "Delete";
             this.mnuDelete.Click += new System.EventHandler(this.MnuDelete_Click);
             // 
             // mnuRename
             // 
-            this.mnuRename.Index = 8;
-            this.mnuRename.Shortcut = System.Windows.Forms.Shortcut.F2;
-            this.mnuRename.Text = "Rename SFX";
+            this.mnuRename.Name = "mnuRename";
+            this.mnuRename.ShortcutKeys = System.Windows.Forms.Keys.F2;
+            this.mnuRename.Size = new System.Drawing.Size(168, 22);
+            this.mnuRename.Text = "Rename";
             this.mnuRename.Click += new System.EventHandler(this.MnuRename_Click);
             // 
             // mnuNewMultiple
             // 
-            this.mnuNewMultiple.Index = 9;
+            this.mnuNewMultiple.Name = "mnuNewMultiple";
+            this.mnuNewMultiple.Size = new System.Drawing.Size(168, 22);
             this.mnuNewMultiple.Text = "New Multiple";
             this.mnuNewMultiple.Click += new System.EventHandler(this.MnuNewMultiple_Click);
             // 
             // mnuMultiEditor
             // 
-            this.mnuMultiEditor.Index = 10;
+            this.mnuMultiEditor.Name = "mnuMultiEditor";
+            this.mnuMultiEditor.Size = new System.Drawing.Size(168, 22);
             this.mnuMultiEditor.Text = "Multi Editor";
             this.mnuMultiEditor.Click += new System.EventHandler(this.MnuMultiEditor_Click);
             // 
@@ -218,6 +243,24 @@ namespace sb_editor.Panels
             this.lstTempSorted.ValueMember = "ItemData";
             this.lstTempSorted.Visible = false;
             // 
+            // lstAvailableSFXs
+            // 
+            this.lstAvailableSFXs.AllowDrop = true;
+            this.lstAvailableSFXs.ContextMenuStrip = this.ContextMenu_ListView;
+            this.lstAvailableSFXs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstAvailableSFXs.DragDropEffectVal = System.Windows.Forms.DragDropEffects.Copy;
+            this.lstAvailableSFXs.FormattingEnabled = true;
+            this.lstAvailableSFXs.HorizontalScrollbar = true;
+            this.lstAvailableSFXs.Location = new System.Drawing.Point(0, 0);
+            this.lstAvailableSFXs.Name = "lstAvailableSFXs";
+            this.lstAvailableSFXs.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.lstAvailableSFXs.Size = new System.Drawing.Size(292, 380);
+            this.lstAvailableSFXs.TabIndex = 0;
+            this.ToolTip_Controls.SetToolTip(this.lstAvailableSFXs, "All Available SFXs");
+            this.lstAvailableSFXs.DragDrop += new System.Windows.Forms.DragEventHandler(this.LstAvailableSFXs_DragDrop);
+            this.lstAvailableSFXs.DragOver += new System.Windows.Forms.DragEventHandler(this.LstAvailableSFXs_DragOver);
+            this.lstAvailableSFXs.DoubleClick += new System.EventHandler(this.LstAvailableSFXs_DoubleClick);
+            // 
             // DataGrid_SFXs
             // 
             this.DataGrid_SFXs.AllowDrop = true;
@@ -229,7 +272,7 @@ namespace sb_editor.Panels
             this.DataGrid_SFXs.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Col_Image,
             this.Col_HashCodeLabel});
-            this.DataGrid_SFXs.ContextMenu = this.ContextMenu_ListView;
+            this.DataGrid_SFXs.ContextMenuStrip = this.ContextMenu_ListView;
             this.DataGrid_SFXs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DataGrid_SFXs.Location = new System.Drawing.Point(0, 0);
             this.DataGrid_SFXs.Name = "DataGrid_SFXs";
@@ -293,33 +336,6 @@ namespace sb_editor.Panels
             this.lvwImageList.Images.SetKeyName(1, "SubSFX.png");
             this.lvwImageList.Images.SetKeyName(2, "SubSFX2.png");
             // 
-            // UserControl_RefineSFX
-            // 
-            this.UserControl_RefineSFX.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.UserControl_RefineSFX.Location = new System.Drawing.Point(6, 453);
-            this.UserControl_RefineSFX.Name = "UserControl_RefineSFX";
-            this.UserControl_RefineSFX.Size = new System.Drawing.Size(292, 74);
-            this.UserControl_RefineSFX.TabIndex = 4;
-            // 
-            // lstAvailableSFXs
-            // 
-            this.lstAvailableSFXs.AllowDrop = true;
-            this.lstAvailableSFXs.ContextMenu = this.ContextMenu_ListView;
-            this.lstAvailableSFXs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstAvailableSFXs.DragDropEffectVal = System.Windows.Forms.DragDropEffects.Copy;
-            this.lstAvailableSFXs.FormattingEnabled = true;
-            this.lstAvailableSFXs.HorizontalScrollbar = true;
-            this.lstAvailableSFXs.Location = new System.Drawing.Point(0, 0);
-            this.lstAvailableSFXs.Name = "lstAvailableSFXs";
-            this.lstAvailableSFXs.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lstAvailableSFXs.Size = new System.Drawing.Size(292, 380);
-            this.lstAvailableSFXs.TabIndex = 0;
-            this.ToolTip_Controls.SetToolTip(this.lstAvailableSFXs, "All Available SFXs");
-            this.lstAvailableSFXs.DragDrop += new System.Windows.Forms.DragEventHandler(this.LstAvailableSFXs_DragDrop);
-            this.lstAvailableSFXs.DragOver += new System.Windows.Forms.DragEventHandler(this.LstAvailableSFXs_DragOver);
-            this.lstAvailableSFXs.DoubleClick += new System.EventHandler(this.LstAvailableSFXs_DoubleClick);
-            // 
             // UserControl_MainForm_AvailableSFX
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -331,6 +347,7 @@ namespace sb_editor.Panels
             this.grbAvailableSFXs.ResumeLayout(false);
             this.grbAvailableSFXs.PerformLayout();
             this.pnlListView.ResumeLayout(false);
+            this.ContextMenu_ListView.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_SFXs)).EndInit();
             this.ResumeLayout(false);
 
@@ -341,18 +358,18 @@ namespace sb_editor.Panels
         private System.Windows.Forms.GroupBox grbAvailableSFXs;
         private System.Windows.Forms.Panel pnlListView;
         private System.Windows.Forms.ToolTip ToolTip_Controls;
-        private System.Windows.Forms.ContextMenu ContextMenu_ListView;
-        private System.Windows.Forms.MenuItem mnuAddToDB;
-        private System.Windows.Forms.MenuItem mnuPlay;
-        private System.Windows.Forms.MenuItem mnuStop;
-        private System.Windows.Forms.MenuItem mnuProperties;
-        private System.Windows.Forms.MenuItem mnuEdit;
-        private System.Windows.Forms.MenuItem mnuNew;
-        private System.Windows.Forms.MenuItem mnuCopy;
-        private System.Windows.Forms.MenuItem mnuDelete;
-        private System.Windows.Forms.MenuItem mnuRename;
-        private System.Windows.Forms.MenuItem mnuNewMultiple;
-        private System.Windows.Forms.MenuItem mnuMultiEditor;
+        private System.Windows.Forms.ContextMenuStrip ContextMenu_ListView;
+        private System.Windows.Forms.ToolStripMenuItem mnuAddToDB;
+        private System.Windows.Forms.ToolStripMenuItem mnuPlay;
+        private System.Windows.Forms.ToolStripMenuItem mnuStop;
+        private System.Windows.Forms.ToolStripMenuItem mnuProperties;
+        private System.Windows.Forms.ToolStripMenuItem mnuEdit;
+        private System.Windows.Forms.ToolStripMenuItem mnuNew;
+        private System.Windows.Forms.ToolStripMenuItem mnuCopy;
+        private System.Windows.Forms.ToolStripMenuItem mnuDelete;
+        private System.Windows.Forms.ToolStripMenuItem mnuRename;
+        private System.Windows.Forms.ToolStripMenuItem mnuNewMultiple;
+        private System.Windows.Forms.ToolStripMenuItem mnuMultiEditor;
         protected internal MultiSelListBox lstAvailableSFXs;
         protected internal System.Windows.Forms.Label lblTotal_SFXs;
         protected internal System.Windows.Forms.Button btnAddSFXs;

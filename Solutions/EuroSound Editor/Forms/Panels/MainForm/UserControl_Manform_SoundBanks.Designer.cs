@@ -33,18 +33,19 @@ namespace sb_editor.Panels
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControl_Manform_SoundBanks));
             this.grbSoundBanks = new System.Windows.Forms.GroupBox();
             this.lblSoundBanksTutorial = new System.Windows.Forms.Label();
-            this.ContextMenu_TreeView = new System.Windows.Forms.ContextMenu();
-            this.mnuNew_SoundBank = new System.Windows.Forms.MenuItem();
-            this.mnuCopy_SoundBank = new System.Windows.Forms.MenuItem();
-            this.mnuDelete_SoundBank = new System.Windows.Forms.MenuItem();
-            this.mnuRename_SoundBank = new System.Windows.Forms.MenuItem();
-            this.mnuProperties_SoundBank = new System.Windows.Forms.MenuItem();
-            this.mnuMaxOutSize_SoundBank = new System.Windows.Forms.MenuItem();
+            this.ContextMenu_TreeView = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuNew_SoundBank = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuCopy_SoundBank = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuDelete_SoundBank = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuRename_SoundBank = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuProperties_SoundBank = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMaxOutSize_SoundBank = new System.Windows.Forms.ToolStripMenuItem();
             this.lblDataBases_Total = new System.Windows.Forms.Label();
             this.lblSoundBanksTotal = new System.Windows.Forms.Label();
             this.tvwSoundBanks = new System.Windows.Forms.TreeView();
             this.imlTreeView = new System.Windows.Forms.ImageList(this.components);
             this.grbSoundBanks.SuspendLayout();
+            this.ContextMenu_TreeView.SuspendLayout();
             this.SuspendLayout();
             // 
             // grbSoundBanks
@@ -67,7 +68,7 @@ namespace sb_editor.Panels
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSoundBanksTutorial.BackColor = System.Drawing.SystemColors.Window;
-            this.lblSoundBanksTutorial.ContextMenu = this.ContextMenu_TreeView;
+            this.lblSoundBanksTutorial.ContextMenuStrip = this.ContextMenu_TreeView;
             this.lblSoundBanksTutorial.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSoundBanksTutorial.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.lblSoundBanksTutorial.Location = new System.Drawing.Point(8, 20);
@@ -78,52 +79,61 @@ namespace sb_editor.Panels
             // 
             // ContextMenu_TreeView
             // 
-            this.ContextMenu_TreeView.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.ContextMenu_TreeView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuNew_SoundBank,
             this.mnuCopy_SoundBank,
             this.mnuDelete_SoundBank,
             this.mnuRename_SoundBank,
             this.mnuProperties_SoundBank,
             this.mnuMaxOutSize_SoundBank});
+            this.ContextMenu_TreeView.Name = "ContextMenu_TreeView";
+            this.ContextMenu_TreeView.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.ContextMenu_TreeView.Size = new System.Drawing.Size(181, 158);
             // 
             // mnuNew_SoundBank
             // 
-            this.mnuNew_SoundBank.Index = 0;
-            this.mnuNew_SoundBank.Shortcut = System.Windows.Forms.Shortcut.CtrlN;
-            this.mnuNew_SoundBank.Text = "New SB";
+            this.mnuNew_SoundBank.Name = "mnuNew_SoundBank";
+            this.mnuNew_SoundBank.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.mnuNew_SoundBank.Size = new System.Drawing.Size(180, 22);
+            this.mnuNew_SoundBank.Text = "New";
             this.mnuNew_SoundBank.Click += new System.EventHandler(this.MnuNew_SoundBank_Click);
             // 
             // mnuCopy_SoundBank
             // 
-            this.mnuCopy_SoundBank.Index = 1;
-            this.mnuCopy_SoundBank.Shortcut = System.Windows.Forms.Shortcut.CtrlC;
-            this.mnuCopy_SoundBank.Text = "Copy SB";
+            this.mnuCopy_SoundBank.Name = "mnuCopy_SoundBank";
+            this.mnuCopy_SoundBank.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.mnuCopy_SoundBank.Size = new System.Drawing.Size(180, 22);
+            this.mnuCopy_SoundBank.Text = "Copy";
             this.mnuCopy_SoundBank.Click += new System.EventHandler(this.MnuCopy_SoundBank_Click);
             // 
             // mnuDelete_SoundBank
             // 
-            this.mnuDelete_SoundBank.Index = 2;
-            this.mnuDelete_SoundBank.Shortcut = System.Windows.Forms.Shortcut.Del;
-            this.mnuDelete_SoundBank.Text = "Delete SB";
+            this.mnuDelete_SoundBank.Name = "mnuDelete_SoundBank";
+            this.mnuDelete_SoundBank.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+            this.mnuDelete_SoundBank.Size = new System.Drawing.Size(180, 22);
+            this.mnuDelete_SoundBank.Text = "Delete";
             this.mnuDelete_SoundBank.Click += new System.EventHandler(this.MnuDelete_SoundBank_Click);
             // 
             // mnuRename_SoundBank
             // 
-            this.mnuRename_SoundBank.Index = 3;
-            this.mnuRename_SoundBank.Shortcut = System.Windows.Forms.Shortcut.F2;
-            this.mnuRename_SoundBank.Text = "Rename SB";
+            this.mnuRename_SoundBank.Name = "mnuRename_SoundBank";
+            this.mnuRename_SoundBank.ShortcutKeys = System.Windows.Forms.Keys.F2;
+            this.mnuRename_SoundBank.Size = new System.Drawing.Size(180, 22);
+            this.mnuRename_SoundBank.Text = "Rename";
             this.mnuRename_SoundBank.Click += new System.EventHandler(this.MnuRename_SoundBank_Click);
             // 
             // mnuProperties_SoundBank
             // 
-            this.mnuProperties_SoundBank.Index = 4;
-            this.mnuProperties_SoundBank.Shortcut = System.Windows.Forms.Shortcut.CtrlP;
+            this.mnuProperties_SoundBank.Name = "mnuProperties_SoundBank";
+            this.mnuProperties_SoundBank.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            this.mnuProperties_SoundBank.Size = new System.Drawing.Size(180, 22);
             this.mnuProperties_SoundBank.Text = "Properties";
             this.mnuProperties_SoundBank.Click += new System.EventHandler(this.MnuProperties_SoundBank_Click);
             // 
             // mnuMaxOutSize_SoundBank
             // 
-            this.mnuMaxOutSize_SoundBank.Index = 5;
+            this.mnuMaxOutSize_SoundBank.Name = "mnuMaxOutSize_SoundBank";
+            this.mnuMaxOutSize_SoundBank.Size = new System.Drawing.Size(180, 22);
             this.mnuMaxOutSize_SoundBank.Text = "Max Output Size?";
             this.mnuMaxOutSize_SoundBank.Click += new System.EventHandler(this.MnuMaxOutSize_SoundBank_Click);
             // 
@@ -152,7 +162,7 @@ namespace sb_editor.Panels
             this.tvwSoundBanks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tvwSoundBanks.ContextMenu = this.ContextMenu_TreeView;
+            this.tvwSoundBanks.ContextMenuStrip = this.ContextMenu_TreeView;
             this.tvwSoundBanks.ImageIndex = 0;
             this.tvwSoundBanks.ImageList = this.imlTreeView;
             this.tvwSoundBanks.Indent = 39;
@@ -188,6 +198,7 @@ namespace sb_editor.Panels
             this.Size = new System.Drawing.Size(294, 274);
             this.grbSoundBanks.ResumeLayout(false);
             this.grbSoundBanks.PerformLayout();
+            this.ContextMenu_TreeView.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -198,13 +209,13 @@ namespace sb_editor.Panels
         private System.Windows.Forms.Label lblDataBases_Total;
         private System.Windows.Forms.Label lblSoundBanksTotal;
         private System.Windows.Forms.ImageList imlTreeView;
-        private System.Windows.Forms.ContextMenu ContextMenu_TreeView;
-        private System.Windows.Forms.MenuItem mnuNew_SoundBank;
-        private System.Windows.Forms.MenuItem mnuCopy_SoundBank;
-        private System.Windows.Forms.MenuItem mnuDelete_SoundBank;
-        private System.Windows.Forms.MenuItem mnuRename_SoundBank;
-        private System.Windows.Forms.MenuItem mnuProperties_SoundBank;
-        private System.Windows.Forms.MenuItem mnuMaxOutSize_SoundBank;
+        private System.Windows.Forms.ContextMenuStrip ContextMenu_TreeView;
+        private System.Windows.Forms.ToolStripMenuItem mnuNew_SoundBank;
+        private System.Windows.Forms.ToolStripMenuItem mnuCopy_SoundBank;
+        private System.Windows.Forms.ToolStripMenuItem mnuDelete_SoundBank;
+        private System.Windows.Forms.ToolStripMenuItem mnuRename_SoundBank;
+        private System.Windows.Forms.ToolStripMenuItem mnuProperties_SoundBank;
+        private System.Windows.Forms.ToolStripMenuItem mnuMaxOutSize_SoundBank;
         protected internal System.Windows.Forms.TreeView tvwSoundBanks;
         private System.Windows.Forms.Label lblSoundBanksTutorial;
     }

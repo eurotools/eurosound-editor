@@ -33,19 +33,20 @@ namespace sb_editor.Panels
             this.grbAvailableDataBases = new System.Windows.Forms.GroupBox();
             this.pnlListView = new System.Windows.Forms.Panel();
             this.lblDataBaseTutorial = new System.Windows.Forms.Label();
-            this.ContextMenu_DataBases = new System.Windows.Forms.ContextMenu();
-            this.mnuAddDataBaseToSoundBank = new System.Windows.Forms.MenuItem();
-            this.mnuNew = new System.Windows.Forms.MenuItem();
-            this.mnuCopy = new System.Windows.Forms.MenuItem();
-            this.mnuDelete = new System.Windows.Forms.MenuItem();
-            this.mnuRename = new System.Windows.Forms.MenuItem();
-            this.mnuProperties = new System.Windows.Forms.MenuItem();
+            this.ContextMenu_DataBases = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuAddDataBaseToSoundBank = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuNew = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuRename = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuProperties = new System.Windows.Forms.ToolStripMenuItem();
             this.lstDataBases = new System.Windows.Forms.ListBox();
             this.lblDataBases_Count = new System.Windows.Forms.Label();
             this.btnAddDataBases = new System.Windows.Forms.Button();
             this.ToolTip_Controls = new System.Windows.Forms.ToolTip(this.components);
             this.grbAvailableDataBases.SuspendLayout();
             this.pnlListView.SuspendLayout();
+            this.ContextMenu_DataBases.SuspendLayout();
             this.SuspendLayout();
             // 
             // grbAvailableDataBases
@@ -79,7 +80,7 @@ namespace sb_editor.Panels
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDataBaseTutorial.BackColor = System.Drawing.SystemColors.Window;
-            this.lblDataBaseTutorial.ContextMenu = this.ContextMenu_DataBases;
+            this.lblDataBaseTutorial.ContextMenuStrip = this.ContextMenu_DataBases;
             this.lblDataBaseTutorial.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDataBaseTutorial.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.lblDataBaseTutorial.Location = new System.Drawing.Point(3, 3);
@@ -91,59 +92,68 @@ namespace sb_editor.Panels
             // 
             // ContextMenu_DataBases
             // 
-            this.ContextMenu_DataBases.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.ContextMenu_DataBases.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuAddDataBaseToSoundBank,
             this.mnuNew,
             this.mnuCopy,
             this.mnuDelete,
             this.mnuRename,
             this.mnuProperties});
+            this.ContextMenu_DataBases.Name = "ContextMenu_DataBases";
+            this.ContextMenu_DataBases.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.ContextMenu_DataBases.Size = new System.Drawing.Size(206, 136);
             // 
             // mnuAddDataBaseToSoundBank
             // 
-            this.mnuAddDataBaseToSoundBank.Index = 0;
-            this.mnuAddDataBaseToSoundBank.Shortcut = System.Windows.Forms.Shortcut.AltBksp;
+            this.mnuAddDataBaseToSoundBank.Name = "mnuAddDataBaseToSoundBank";
+            this.mnuAddDataBaseToSoundBank.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Back)));
+            this.mnuAddDataBaseToSoundBank.Size = new System.Drawing.Size(205, 22);
             this.mnuAddDataBaseToSoundBank.Text = "Add DB to SB";
             this.mnuAddDataBaseToSoundBank.Click += new System.EventHandler(this.MnuAddDataBaseToSoundBank_Click);
             // 
             // mnuNew
             // 
-            this.mnuNew.Index = 1;
-            this.mnuNew.Shortcut = System.Windows.Forms.Shortcut.CtrlN;
-            this.mnuNew.Text = "New DB";
+            this.mnuNew.Name = "mnuNew";
+            this.mnuNew.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.mnuNew.Size = new System.Drawing.Size(205, 22);
+            this.mnuNew.Text = "New";
             this.mnuNew.Click += new System.EventHandler(this.MnuNew_Click);
             // 
             // mnuCopy
             // 
-            this.mnuCopy.Index = 2;
-            this.mnuCopy.Shortcut = System.Windows.Forms.Shortcut.CtrlC;
-            this.mnuCopy.Text = "Copy DB";
+            this.mnuCopy.Name = "mnuCopy";
+            this.mnuCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.mnuCopy.Size = new System.Drawing.Size(205, 22);
+            this.mnuCopy.Text = "Copy";
             this.mnuCopy.Click += new System.EventHandler(this.MnuCopy_Click);
             // 
             // mnuDelete
             // 
-            this.mnuDelete.Index = 3;
-            this.mnuDelete.Shortcut = System.Windows.Forms.Shortcut.Del;
-            this.mnuDelete.Text = "Delete DB";
+            this.mnuDelete.Name = "mnuDelete";
+            this.mnuDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+            this.mnuDelete.Size = new System.Drawing.Size(205, 22);
+            this.mnuDelete.Text = "Delete";
             this.mnuDelete.Click += new System.EventHandler(this.MnuDelete_Click);
             // 
             // mnuRename
             // 
-            this.mnuRename.Index = 4;
-            this.mnuRename.Shortcut = System.Windows.Forms.Shortcut.F2;
-            this.mnuRename.Text = "Rename DB";
+            this.mnuRename.Name = "mnuRename";
+            this.mnuRename.ShortcutKeys = System.Windows.Forms.Keys.F2;
+            this.mnuRename.Size = new System.Drawing.Size(205, 22);
+            this.mnuRename.Text = "Rename";
             this.mnuRename.Click += new System.EventHandler(this.MnuRename_Click);
             // 
             // mnuProperties
             // 
-            this.mnuProperties.Index = 5;
-            this.mnuProperties.Shortcut = System.Windows.Forms.Shortcut.CtrlP;
+            this.mnuProperties.Name = "mnuProperties";
+            this.mnuProperties.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            this.mnuProperties.Size = new System.Drawing.Size(205, 22);
             this.mnuProperties.Text = "Properties";
             this.mnuProperties.Click += new System.EventHandler(this.MnuProperties_Click);
             // 
             // lstDataBases
             // 
-            this.lstDataBases.ContextMenu = this.ContextMenu_DataBases;
+            this.lstDataBases.ContextMenuStrip = this.ContextMenu_DataBases;
             this.lstDataBases.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstDataBases.FormattingEnabled = true;
             this.lstDataBases.HorizontalScrollbar = true;
@@ -191,6 +201,7 @@ namespace sb_editor.Panels
             this.grbAvailableDataBases.ResumeLayout(false);
             this.grbAvailableDataBases.PerformLayout();
             this.pnlListView.ResumeLayout(false);
+            this.ContextMenu_DataBases.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -200,13 +211,13 @@ namespace sb_editor.Panels
         private System.Windows.Forms.GroupBox grbAvailableDataBases;
         private System.Windows.Forms.Panel pnlListView;
         private System.Windows.Forms.ToolTip ToolTip_Controls;
-        private System.Windows.Forms.ContextMenu ContextMenu_DataBases;
-        private System.Windows.Forms.MenuItem mnuAddDataBaseToSoundBank;
-        private System.Windows.Forms.MenuItem mnuNew;
-        private System.Windows.Forms.MenuItem mnuCopy;
-        private System.Windows.Forms.MenuItem mnuDelete;
-        private System.Windows.Forms.MenuItem mnuRename;
-        private System.Windows.Forms.MenuItem mnuProperties;
+        private System.Windows.Forms.ContextMenuStrip ContextMenu_DataBases;
+        private System.Windows.Forms.ToolStripMenuItem mnuAddDataBaseToSoundBank;
+        private System.Windows.Forms.ToolStripMenuItem mnuNew;
+        private System.Windows.Forms.ToolStripMenuItem mnuCopy;
+        private System.Windows.Forms.ToolStripMenuItem mnuDelete;
+        private System.Windows.Forms.ToolStripMenuItem mnuRename;
+        private System.Windows.Forms.ToolStripMenuItem mnuProperties;
         protected internal System.Windows.Forms.Button btnAddDataBases;
         protected internal System.Windows.Forms.ListBox lstDataBases;
         protected internal System.Windows.Forms.Label lblDataBases_Count;
