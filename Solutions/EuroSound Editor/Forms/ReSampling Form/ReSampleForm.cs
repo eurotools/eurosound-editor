@@ -335,7 +335,7 @@ namespace sb_editor
                             {
                                 tempList.Clear();
                                 IEnumerable<string> sfxFiles = Directory.EnumerateFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
-                                foreach(string sfxFile in sfxFiles)
+                                foreach (string sfxFile in sfxFiles)
                                 {
                                     bool fileModified = false;
                                     string[] fileData = File.ReadAllLines(sfxFile);

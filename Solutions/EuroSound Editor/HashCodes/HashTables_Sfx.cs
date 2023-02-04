@@ -57,7 +57,7 @@ namespace sb_editor.HashCodes
             {
                 hashCodesDict.Clear();
                 IEnumerable<string> filesToCheck = Directory.EnumerateFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
-                foreach(string filePath in filesToCheck)
+                foreach (string filePath in filesToCheck)
                 {
                     SFX sfxFileDat = TextFiles.ReadSfxFile(filePath);
                     hashCodesDict.Add(Path.GetFileNameWithoutExtension(filePath), sfxFileDat.HashCode);

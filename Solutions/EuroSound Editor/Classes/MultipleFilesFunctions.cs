@@ -80,7 +80,7 @@ namespace sb_editor
 
             //Iterate over all SoundBanks 
             IEnumerable<string> dependencies = Directory.EnumerateFiles(Path.Combine(GlobalPrefs.ProjectFolder, dependenciesFolder), "*.txt", SearchOption.TopDirectoryOnly);
-            foreach(string dependency in dependencies)
+            foreach (string dependency in dependencies)
             {
                 List<string> fileData = File.ReadAllLines(dependency).ToList();
                 bool fileHasChanges = false;

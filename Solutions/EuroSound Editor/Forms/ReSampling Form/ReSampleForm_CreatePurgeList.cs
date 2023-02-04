@@ -52,7 +52,7 @@ namespace sb_editor
 
             //Get All Samples
             var sampleFiles = Directory.EnumerateFiles(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master"), "*.wav", SearchOption.AllDirectories);
-            foreach(var samplePath in sampleFiles)
+            foreach (var samplePath in sampleFiles)
             {
                 int MasterFolderLength = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master").Length;
                 availableSamples.Add(samplePath.Substring(MasterFolderLength));
