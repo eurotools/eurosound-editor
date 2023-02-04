@@ -1,7 +1,9 @@
 ﻿using NAudio.Wave;
 using sb_editor.Objects;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace sb_editor.HashCodes
 {
@@ -79,6 +81,34 @@ namespace sb_editor.HashCodes
         //-------------------------------------------------------------------------------------------------------------------------------
         internal void CreateMfxData(string filePath)
         {
+            //Get music data and sort it ascending by hashcode
+            SortedDictionary<int, string> itemsData = new SortedDictionary<int, string>();
+            string[] musicFiles = TextFiles.ReadListBlock(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", "MFXFiles.txt"), "#MFXFiles");
+            for (int i = 0; i < musicFiles.Length; i++)
+            {
+                string waveFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", musicFiles[i] + ".wav");
+                if (File.Exists(waveFilePath))
+                {
+                    using (WaveFileReader wReader = new WaveFileReader(waveFilePath))
+                    {
+                        MusicFile fileData = TextFiles.ReadMusicFile(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", musicFiles[i] + ".txt"));
+                        float duration = (float)decimal.Divide(wReader.Length, wReader.WaveFormat.AverageBytesPerSecond);
+                        string strDuration = duration.ToString("G7", GlobalPrefs.NumericProvider);
+                        if (duration % 1 == 0)
+                        {
+                            strDuration = duration.ToString("F1", GlobalPrefs.NumericProvider);
+                        }
+
+                        //Add item to dictionary if not exists
+                        if (!itemsData.ContainsKey(fileData.HashCode))
+                        {
+                            itemsData.Add(fileData.HashCode, string.Format("\t{{0x{0:X8},{1}f,{2}}},", fileData.HashCode | 0x1BE00000, strDuration, "FALSE"));
+                        }
+                    }
+                }
+            }
+
+            //Print data in the header file
             using (StreamWriter sw = new StreamWriter(File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
                 sw.WriteLine("// Music Data table from EuroSound 1");
@@ -91,27 +121,70 @@ namespace sb_editor.HashCodes
                 sw.WriteLine("} MusicDetails;");
                 sw.WriteLine(string.Empty);
                 sw.WriteLine("MusicDetails MusicData[]={");
-                string[] musicFiles = TextFiles.ReadListBlock(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", "MFXFiles.txt"), "#MFXFiles");
-                for (int i = 0; i < musicFiles.Length; i++)
+                uint index = 0;
+                foreach (KeyValuePair<int, string> item in itemsData)
                 {
-                    string waveFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", musicFiles[i] + ".wav");
-                    if (File.Exists(waveFilePath))
+                    while (index != item.Key)
                     {
-                        using (WaveFileReader wReader = new WaveFileReader(waveFilePath))
-                        {
-                            MusicFile fileData = TextFiles.ReadMusicFile(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", musicFiles[i] + ".txt"));
-                            float duration = (float)decimal.Divide(wReader.Length, wReader.WaveFormat.AverageBytesPerSecond);
-                            string strDuration = duration.ToString("G7", GlobalPrefs.NumericProvider);
-                            if (duration % 1 == 0)
-                            {
-                                strDuration = duration.ToString("F1", GlobalPrefs.NumericProvider);
-                            }
-                            sw.WriteLine("\t{{0x{0:X8},{1}f,{2}}},", fileData.HashCode | 0x1BE00000, strDuration, "FALSE");
-                        }
+                        sw.WriteLine("\t{0,0,0},");
+                        index++;
                     }
+                    sw.WriteLine(item.Value);
+                    index++;
                 }
                 sw.WriteLine("};");
             }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        internal string[] CreateAndValidateMfxDefines()
+        {
+            // Initialize a list to store missing MFX defines
+            string[] missingInTempFile = null;
+
+            // Set the file path for the temp MFX defines file
+            string tempFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Temp_MFX_Defines.h");
+
+            // Check if System directory exists
+            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "System")))
+            {
+                // Create MFX defines in temp file
+                CreateMfxDefines(tempFilePath);
+
+                // Read the file data into memory for faster search
+                string[] tempFileData = GetHashtableLabels(tempFilePath);
+
+                // Check if the project's hash code directory exists
+                if (!string.IsNullOrEmpty(GlobalPrefs.CurrentProject.HashCodeFileDirectory) && Directory.Exists(GlobalPrefs.CurrentProject.HashCodeFileDirectory))
+                {
+                    // Set file path for MFX defines file
+                    string mfxDefinesFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Defines.h");
+                    if (File.Exists(mfxDefinesFilePath))
+                    {
+                        // Read the MFX defines data into memory for faster search
+                        string[] mfxDefinesData = GetHashtableLabels(mfxDefinesFilePath);
+
+                        //Get missing HashCodes
+                        missingInTempFile = mfxDefinesData.Except(tempFileData).ToArray();
+
+                    }
+                    else if (File.Exists(tempFilePath))
+                    {
+                        // If the MFX defines file does not exist, copy the temp file to create it
+                        File.Copy(tempFilePath, mfxDefinesFilePath);
+                    }
+                }
+            }
+
+            // Check if the project's hash code directory exists
+            if (!string.IsNullOrEmpty(GlobalPrefs.CurrentProject.HashCodeFileDirectory) && Directory.Exists(GlobalPrefs.CurrentProject.HashCodeFileDirectory))
+            {
+                CreateMfxValidList(Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_ValidList.h"));
+                CreateMfxData(Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Data.h"));
+                BuildSoundHhFile(Path.Combine(GlobalPrefs.CurrentProject.EuroLandHashCodeServerPath, "Sound.h"));
+            }
+
+            return missingInTempFile;
         }
     }
 
