@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using static ESUtils.Enumerations;
 
 namespace sb_editor.Classes
 {
@@ -70,7 +71,7 @@ namespace sb_editor.Classes
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal string[] GetSampleList(string[] SFXs, string outputLanguage)
+        internal string[] GetSampleList(string[] SFXs, Language outputLanguage)
         {
             HashSet<string> samplesList = new HashSet<string>();
 
@@ -110,7 +111,7 @@ namespace sb_editor.Classes
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal string[] GetSampleList(Dictionary<string, SFX> fileData, string outputLanguage)
+        internal string[] GetSampleList(Dictionary<string, SFX> fileData, Language outputLanguage)
         {
             // Create a hash set to store the unique sample names
             HashSet<string> samplesList = new HashSet<string>();
@@ -268,7 +269,7 @@ namespace sb_editor.Classes
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal Dictionary<string, SFX> GetSfxDataDict(string[] sbSfxs, string platform, string language)
+        internal Dictionary<string, SFX> GetSfxDataDict(string[] sbSfxs, string platform, Language language)
         {
             // Dictionary to store the SFX data for each file
             Dictionary<string, SFX> sfxFilesData = new Dictionary<string, SFX>();

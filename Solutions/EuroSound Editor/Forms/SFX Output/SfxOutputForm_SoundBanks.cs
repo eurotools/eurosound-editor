@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using static ESUtils.Enumerations;
 
 namespace sb_editor.Forms
 {
@@ -22,7 +23,8 @@ namespace sb_editor.Forms
             //For Each Language
             for (int i = 0; i < outLanguages.Length; i++)
             {
-                string[] streamSamples = GetStreamSamples(samplePoolList, outLanguages[i]);
+                Language outputLanguage = (Language)Enum.Parse(typeof(Language), outLanguages[i], true);
+                string[] streamSamples = GetStreamSamples(samplePoolList, outputLanguage);
 
                 //For Each SoundBank
                 for (int j = 0; j < filesQueue.Length; j++)
@@ -46,8 +48,8 @@ namespace sb_editor.Forms
 
                         //Get Current SoundBank Data
                         Query.Start();
-                        Dictionary<string, SFX> sbFileData = sbFunctions.GetSfxDataDict(sbFunctions.GetSFXs(soundBankData.DataBases), outputPlatform[k], outLanguages[i]);
-                        string[] samplesList = sbFunctions.GetSampleList(sbFileData, outLanguages[i]).Except(streamSamples).ToArray();
+                        Dictionary<string, SFX> sbFileData = sbFunctions.GetSfxDataDict(sbFunctions.GetSFXs(soundBankData.DataBases), outputPlatform[k], outputLanguage);
+                        string[] samplesList = sbFunctions.GetSampleList(sbFileData, outputLanguage).Except(streamSamples).ToArray();
                         sbFunctions.UpdateDuckerLength(sbFileData, outputPlatform[k]);
                         Query.Stop();
 
@@ -128,7 +130,7 @@ namespace sb_editor.Forms
                                     string outputPath = CommonFunctions.GetSoundbankOutPath(outputPlatform[k], outLanguages[i]);
                                     if (!string.IsNullOrEmpty(outputPath) && Directory.Exists(outputPath))
                                     {
-                                        string fileName = string.Format("HC{0:X6}.SFX", CommonFunctions.GetSfxName(Array.FindIndex(GlobalPrefs.Languages, s => s.Equals(outLanguages[i], StringComparison.OrdinalIgnoreCase)), soundBankData.HashCode));
+                                        string fileName = string.Format("HC{0:X6}.SFX", CommonFunctions.GetSfxName((int)Enum.Parse(typeof(Enumerations.Language), outLanguages[i], true), soundBankData.HashCode));
                                         string sbfTempFile = Path.ChangeExtension(outTmpFilePath, ".sbf");
                                         string sfxTempFile = Path.ChangeExtension(outTmpFilePath, ".sfx");
                                         string sifTempFile = Path.ChangeExtension(outTmpFilePath, ".sif");

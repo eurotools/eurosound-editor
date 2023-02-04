@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="BytesFunctions.cs" />
     <Compile Include="CalculusLoopOffset.cs" />
+    <Compile Include="Enumerations.cs" />
     <Compile Include="ImaCodec.cs" />
     <Compile Include="MusX\MusXBuild_MusicFile.cs" />
     <Compile Include="MusX\MusXBuild_Soundbank.cs" />

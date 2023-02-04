@@ -1,4 +1,5 @@
-﻿using sb_editor.Objects;
+﻿using ESUtils;
+using sb_editor.Objects;
 using sb_editor.Panels;
 using System;
 using System.Diagnostics;
@@ -311,7 +312,7 @@ namespace sb_editor.Forms
 
             //Get output folder & name
             string outputFilePath = CommonFunctions.GetSoundbankOutPath("PC", "English");
-            string fileName = string.Format("HC{0:X6}.SFX", CommonFunctions.GetSfxName(Array.FindIndex(GlobalPrefs.Languages, s => s.Equals("English", StringComparison.OrdinalIgnoreCase)), 0xFFFE));
+            string fileName = string.Format("HC{0:X6}.SFX", CommonFunctions.GetSfxName((int)Enumerations.Language.English, 0xFFFE));
 
             //Create file
             CreateTestSfx(outputFilePath, fileName);

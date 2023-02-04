@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using static ESUtils.Enumerations;
 
 namespace sb_editor
 {
@@ -224,7 +225,7 @@ namespace sb_editor
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal static string GetSampleFromSpeechFolder(string sampleFilePath, string languageFolder)
+        internal static string GetSampleFromSpeechFolder(string sampleFilePath, Language languageFolder)
         {
             // Split the file path into an array of strings
             string[] pathElements = sampleFilePath.Split('\\');
@@ -236,7 +237,7 @@ namespace sb_editor
             if (speechFolderIndex >= 0)
             {
                 // If it was found, change the folder after "Speech" to the given language folder name
-                pathElements[speechFolderIndex + 1] = languageFolder;
+                pathElements[speechFolderIndex + 1] = languageFolder.ToString();
 
                 // Join the array of strings back into a file path and return it
                 return string.Join("\\", pathElements);

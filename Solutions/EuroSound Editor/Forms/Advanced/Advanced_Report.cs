@@ -3,6 +3,7 @@ using sb_editor.Classes;
 using sb_editor.Objects;
 using System;
 using System.IO;
+using static ESUtils.Enumerations;
 
 namespace sb_editor.Forms
 {
@@ -12,7 +13,7 @@ namespace sb_editor.Forms
     public partial class Advanced
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void CreateReport(string reportFilePath, string soundBankPath, string outputFormat, string outputLanguage)
+        private void CreateReport(string reportFilePath, string soundBankPath, string outputFormat, Language outputLanguage)
         {
             // Create a new SoundBankFunctions instance
             SoundBankFunctions sbFunctions = new SoundBankFunctions();
@@ -46,7 +47,7 @@ namespace sb_editor.Forms
                 sw.WriteLine(string.Empty);
                 foreach (string currentFormat in GlobalPrefs.CurrentProject.platformData.Keys)
                 {
-                    string temporalFiles = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", currentFormat, "SoundBanks", outputLanguage, soundBankData.HashCode + ".sbf");
+                    string temporalFiles = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", currentFormat, "SoundBanks", outputLanguage.ToString(), soundBankData.HashCode + ".sbf");
                     string fileSize;
                     if (File.Exists(temporalFiles))
                     {

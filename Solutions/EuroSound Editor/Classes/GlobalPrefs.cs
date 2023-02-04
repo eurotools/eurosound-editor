@@ -18,7 +18,6 @@ namespace sb_editor
         public static string SoxEffect = "resample -qs 0.97";
 
         //Formats
-        public static string[] Languages = new string[] { "English", "American", "Japanese", "Danish", "Dutch", "Finnish", "French", "German", "Italian", "Norwegian", "Portuguese", "Spanish", "Swedish" };
         public static string FilesDateFormat = "MM-dd-yyyy HH:mm:ss";
         public static string DateFormat = "yyyy/dd/MM HH:mm:ss";
 

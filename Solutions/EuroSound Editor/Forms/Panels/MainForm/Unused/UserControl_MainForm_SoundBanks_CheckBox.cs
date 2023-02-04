@@ -1,4 +1,5 @@
-﻿using sb_editor.Objects;
+﻿using ESUtils;
+using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -328,7 +329,7 @@ namespace sb_editor.Panels
 
                 if (File.Exists(soundBankpath) && outputPlatform.SelectedItem != null)
                 {
-                    SoundBankPropertiesForm soundBankProperties = new SoundBankPropertiesForm(soundBankpath, outputPlatform.Text, outputLanguage.Text);
+                    SoundBankPropertiesForm soundBankProperties = new SoundBankPropertiesForm(soundBankpath, outputPlatform.Text, (Enumerations.Language)Enum.Parse(typeof(Enumerations.Language), outputLanguage.Text, true));
                     soundBankProperties.ShowDialog();
                 }
             }

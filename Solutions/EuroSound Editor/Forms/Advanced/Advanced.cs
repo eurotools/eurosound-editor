@@ -1,9 +1,11 @@
-﻿using sb_editor.Objects;
+﻿using ESUtils;
+using sb_editor.Objects;
 using sb_editor.Panels;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using static ESUtils.Enumerations;
 
 namespace sb_editor.Forms
 {
@@ -40,7 +42,8 @@ namespace sb_editor.Forms
                     }
 
                     // Create the report file in the report folder
-                    CreateReport(Path.Combine(reportFolderPath, soundBankName + ".txt"), soundBankPath, CommonFunctions.GetOutputPlatforms()[0], CommonFunctions.GetOutputLanguages()[0]);
+                    Language outLang = (Language)Enum.Parse(typeof(Language), CommonFunctions.GetOutputLanguages()[0], true);
+                    CreateReport(Path.Combine(reportFolderPath, soundBankName + ".txt"), soundBankPath, CommonFunctions.GetOutputPlatforms()[0], outLang);
                 }
             }
 

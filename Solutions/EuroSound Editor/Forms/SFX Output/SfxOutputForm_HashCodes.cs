@@ -1,4 +1,5 @@
-﻿using sb_editor.HashCodes;
+﻿using ESUtils;
+using sb_editor.HashCodes;
 using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
@@ -106,9 +107,9 @@ namespace sb_editor.Forms
                 sw.WriteLine("// SFX Language defines");
                 sw.WriteLine(hashCodes.WriteHashCode("LanguageHashCodeOffset", 0x10000));
                 sw.WriteLine(string.Empty);
-                for (int i = 0; i < GlobalPrefs.Languages.Length; i++)
+                foreach (Enumerations.Language language in Enum.GetValues(typeof(Enumerations.Language)))
                 {
-                    sw.WriteLine(hashCodes.WriteNumber("SFXLanguage_" + GlobalPrefs.Languages[i].ToUpper(), i));
+                    sw.WriteLine(hashCodes.WriteNumber("SFXLanguage_" + language, (int)language));
                 }
                 sw.WriteLine(hashCodes.WriteNoAlign("StreamFileHashCode", 0xFFFF));
                 sw.WriteLine(string.Empty);

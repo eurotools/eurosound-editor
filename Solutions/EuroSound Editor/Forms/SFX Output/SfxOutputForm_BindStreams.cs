@@ -1,6 +1,7 @@
 ﻿using ESUtils;
 using System;
 using System.IO;
+using static ESUtils.Enumerations;
 
 namespace sb_editor.Forms
 {
@@ -10,10 +11,10 @@ namespace sb_editor.Forms
     public partial class SfxOutputForm
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void BindStreams(string[] filesToBind, string Language, string Platform)
+        private void BindStreams(string[] filesToBind, Language outputLanguage, string Platform)
         {
             //Get Output Path
-            string outputFolder = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", Platform, Language, "Streams");
+            string outputFolder = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", Platform, outputLanguage.ToString(), "Streams");
             Directory.CreateDirectory(outputFolder);
 
             //Ensure that the output directory exists. 
@@ -24,7 +25,7 @@ namespace sb_editor.Forms
             string sfxOutputFolder = string.Empty;
             if (Directory.Exists(GlobalPrefs.CurrentProject.EngineXProjectPath))
             {
-                sfxOutputFolder = Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", CommonFunctions.GetEnginexFolder(Platform), CommonFunctions.GetLanguageFolder(Language));
+                sfxOutputFolder = Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", CommonFunctions.GetEnginexFolder(Platform), CommonFunctions.GetLanguageFolder(outputLanguage.ToString()));
                 Directory.CreateDirectory(sfxOutputFolder);
             }
 
@@ -33,7 +34,7 @@ namespace sb_editor.Forms
             //Create Files
             string binaryFile = Path.Combine(outputFolder, "STREAMS.bin");
             string lutFile = Path.Combine(outputFolder, "STREAMS.lut");
-            using (StreamWriter sw = new StreamWriter(File.Open(Path.Combine(debugfileFolder, string.Format("StreamList_{0}_{1}.txt", Language, Platform)), FileMode.Create, FileAccess.Write, FileShare.Read)))
+            using (StreamWriter sw = new StreamWriter(File.Open(Path.Combine(debugfileFolder, string.Format("StreamList_{0}_{1}.txt", outputLanguage, Platform)), FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
                 using (BinaryWriter streamsWritter = new BinaryWriter(File.Open(binaryFile, FileMode.Create, FileAccess.Write, FileShare.Read)))
                 {
@@ -44,7 +45,7 @@ namespace sb_editor.Forms
                         {
                             //Report progress
                             decimal progress = decimal.Divide(index, filesToBind.Length) * 100;
-                            backgroundWorker1.ReportProgress((int)progress, string.Format("Binding {0} Audio Stream Data {1} For {2}", Language, filesToBind[index], Platform));
+                            backgroundWorker1.ReportProgress((int)progress, string.Format("Binding {0} Audio Stream Data {1} For {2}", outputLanguage, filesToBind[index], Platform));
 
                             byte[] markerFileData = File.ReadAllBytes(filesToBind[index++]);
                             byte[] audioFileData = File.ReadAllBytes(filesToBind[index++]);
@@ -92,7 +93,7 @@ namespace sb_editor.Forms
             //Create MusX File
             if (!string.IsNullOrEmpty(sfxOutputFolder) && Directory.Exists(sfxOutputFolder))
             {
-                string fileName = string.Format("HC{0:X6}.SFX", CommonFunctions.GetSfxName(Array.FindIndex(GlobalPrefs.Languages, s => s.Equals(Language, StringComparison.OrdinalIgnoreCase)), 0xFFFF));
+                string fileName = string.Format("HC{0:X6}.SFX", CommonFunctions.GetSfxName((int)outputLanguage, 0xFFFF));
                 MusXBuild_StreamFile.BuildStreamFile(binaryFile, lutFile, Path.Combine(sfxOutputFolder, fileName), isBigEndian);
             }
         }

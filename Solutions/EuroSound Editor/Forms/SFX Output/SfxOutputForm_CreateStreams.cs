@@ -1,10 +1,12 @@
-﻿using ExMarkers;
+﻿using ESUtils;
+using ExMarkers;
 using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using static ESUtils.Enumerations;
 
 namespace sb_editor.Forms
 {
@@ -22,8 +24,10 @@ namespace sb_editor.Forms
             {
                 for (int i = 0; i < languages.Length; i++)
                 {
+                    Language outputLanguage = (Language)Enum.Parse(typeof(Language), languages[i], true);
+
                     //Get Streams List in the current Language
-                    string[] streamsList = GetStreamSamples(samplesList, languages[i]);
+                    string[] streamsList = GetStreamSamples(samplesList, outputLanguage);
                     if (streamsList.Length > 0)
                     {
                         //Ensure that the output directory exists. 
@@ -110,14 +114,14 @@ namespace sb_editor.Forms
 
                         //Bind Streams into one single file
                         backgroundWorker1.ReportProgress(100, string.Format("Binding {0} Audio Stream Data For {1}", languages[i], platform.Key));
-                        BindStreams(itemsToBind.ToArray(), languages[i], platform.Key);
+                        BindStreams(itemsToBind.ToArray(), outputLanguage, platform.Key);
                     }
                 }
             }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private string[] GetStreamSamples(SamplePool samplesList, string Language = "English")
+        private string[] GetStreamSamples(SamplePool samplesList, Language Language = Language.English)
         {
             HashSet<string> streamSamples = new HashSet<string>();
             foreach (KeyValuePair<string, SamplePoolItem> sample in samplesList.SamplePoolItems)

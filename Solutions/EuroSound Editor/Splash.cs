@@ -1,4 +1,5 @@
-﻿using sb_editor.Classes;
+﻿using ESUtils;
+using sb_editor.Classes;
 using sb_editor.Objects;
 using System;
 using System.IO;
@@ -139,13 +140,13 @@ namespace sb_editor
                                 for (int i = 0; i < langDirectories.Length; i++)
                                 {
                                     string lang = Path.GetFileName(langDirectories[i]);
-                                    if (Array.FindIndex(GlobalPrefs.Languages, s => s.Equals(lang, StringComparison.OrdinalIgnoreCase)) == -1)
+                                    if (Enum.TryParse(lang, true, out Enumerations.Language language))
                                     {
-                                        MessageBox.Show(string.Format("{0} is not a valid Language!", lang), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                        frmMainForm.UserControl_Output.cboOutputLanguage.Items.Add(lang);
                                     }
                                     else
                                     {
-                                        frmMainForm.UserControl_Output.cboOutputLanguage.Items.Add(lang);
+                                        MessageBox.Show(string.Format("{0} is not a valid Language!", lang), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                                     }
                                 }
 

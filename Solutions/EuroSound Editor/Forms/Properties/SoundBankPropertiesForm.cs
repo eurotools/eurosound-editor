@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using static ESUtils.Enumerations;
 
 namespace sb_editor
 {
@@ -14,11 +15,11 @@ namespace sb_editor
     public partial class SoundBankPropertiesForm : Form
     {
         private readonly string outputFormat;
-        private readonly string outputLanguage;
+        private readonly Language outputLanguage;
         private readonly string soundBankFile;
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public SoundBankPropertiesForm(string soundBankPath, string formatToShow, string language)
+        public SoundBankPropertiesForm(string soundBankPath, string formatToShow, Language language)
         {
             InitializeComponent();
             outputFormat = formatToShow;
@@ -109,7 +110,7 @@ namespace sb_editor
             for (int i = 0; i < GlobalPrefs.CurrentProject.platformData.Count; i++)
             {
                 string currentFormat = GlobalPrefs.CurrentProject.platformData.ElementAt(i).Key;
-                string temporalFiles = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", currentFormat, "SoundBanks", outputLanguage, soundBankData.HashCode + ".sbf");
+                string temporalFiles = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", currentFormat, "SoundBanks", outputLanguage.ToString(), soundBankData.HashCode + ".sbf");
                 string fileSize;
                 if (File.Exists(temporalFiles))
                 {

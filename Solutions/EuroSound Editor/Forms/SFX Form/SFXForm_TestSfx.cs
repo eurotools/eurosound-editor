@@ -58,7 +58,7 @@ namespace sb_editor.Forms
 
                             //Build SFX File
                             Dictionary<string, SFX> sbFileData = new Dictionary<string, SFX>() { { "Common", sfxData } };
-                            string[] samplesList = sbFunctions.GetSampleList(sbFileData, "English");
+                            string[] samplesList = sbFunctions.GetSampleList(sbFileData, Enumerations.Language.English);
                             sbFunctions.UpdateDuckerLength(sbFileData, "PC");
 
                             //Write SFX Data
