@@ -130,7 +130,7 @@ namespace sb_editor.Forms
                                     string outputPath = CommonFunctions.GetSoundbankOutPath(outputPlatform[k], outLanguages[i]);
                                     if (!string.IsNullOrEmpty(outputPath) && Directory.Exists(outputPath))
                                     {
-                                        string fileName = string.Format("HC{0:X6}.SFX", CommonFunctions.GetSfxName((int)Enum.Parse(typeof(Enumerations.Language), outLanguages[i], true), soundBankData.HashCode));
+                                        string fileName = CommonFunctions.GetSfxName((Language)Enum.Parse(typeof(Language), outLanguages[i], true), Path.GetFileNameWithoutExtension(filesQueue[j]));
                                         string sbfTempFile = Path.ChangeExtension(outTmpFilePath, ".sbf");
                                         string sfxTempFile = Path.ChangeExtension(outTmpFilePath, ".sfx");
                                         string sifTempFile = Path.ChangeExtension(outTmpFilePath, ".sif");

@@ -460,7 +460,7 @@ namespace sb_editor.Forms
                             {
                                 itemToAdd.SubItems[2].Text = "Output Required.";
                             }
-                            itemToAdd.SubItems[6].Text = string.Format("HC{0}.SFX", musicFileData.HashCode.ToString("X6"));
+                            itemToAdd.SubItems[6].Text = string.Format("_mus_mfx_{0}.SFX", fileName).ToLower();
                             itemToAdd.SubItems[7].Text = musicFileData.UserValue.ToString();
                         }
                         else

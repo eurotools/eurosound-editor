@@ -32,7 +32,7 @@ namespace ExMarkers
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void CreateMarkerFile(string imaFileLeft, string imaFileRight, string markerFilePath, uint volume, string outputPlatform, string outputPath)
+        public void CreateMarkerFile(string markerFilePath, uint volume, string outputPlatform, string outputPath)
         {
             //List to store the text file markers
             List<EXStartMarker> startMarkersList = new List<EXStartMarker>();
@@ -43,94 +43,7 @@ namespace ExMarkers
             streamMarkersFunctions.LoadFile(markerFilePath, startMarkersList, markersList, true);
 
             //Calculate states -- PC & GameCube Platform
-            if (outputPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("GameCube", StringComparison.OrdinalIgnoreCase))
-            {
-                //Update positions Start Markers
-                foreach (EXStartMarker startMarker in startMarkersList)
-                {
-                    //Calculate offsets for IMA Adpcm
-                    if (startMarker.Position > 0)
-                    {
-                        startMarker.Position = CalculusLoopOffset.GetMusicLoopOffsetPCandGC(startMarker.Position);
-                    }
-                    if (startMarker.LoopStart > 0)
-                    {
-                        startMarker.LoopStart = CalculusLoopOffset.GetMusicLoopOffsetPCandGC(startMarker.LoopStart);
-                    }
-                }
-
-                //Update positions Markers
-                foreach (EXMarker marker in markersList)
-                {
-                    if (marker.Position > 0)
-                    {
-                        marker.Position = CalculusLoopOffset.GetMusicLoopOffsetPCandGC(marker.Position);
-                    }
-                    if (marker.LoopStart > 0)
-                    {
-                        marker.LoopStart = CalculusLoopOffset.GetMusicLoopOffsetPCandGC(marker.LoopStart);
-                    }
-                }
-
-                //Update STATES
-                if (File.Exists(imaFileLeft) && File.Exists(imaFileRight))
-                {
-                    List<string> stl = new List<string>();
-                    List<string> str = new List<string>();
-
-                    //Update Markers states
-                    foreach (EXMarker marker in markersList)
-                    {
-                        if (marker.Position > 0)
-                        {
-                            //Update Ima States
-                            foreach (EXStartMarker startMarker in startMarkersList)
-                            {
-                                if (startMarker.Index == marker.MarkerCount)
-                                {
-                                    uint state = 0;
-                                    using (BinaryReader breader = new BinaryReader(File.Open(imaFileLeft, FileMode.Open, FileAccess.Read, FileShare.Read)))
-                                    {
-                                        long offset = ((marker.Position / 256) * 256) / 2;
-                                        if (offset <= breader.BaseStream.Length)
-                                        {
-                                            breader.BaseStream.Seek(offset, SeekOrigin.Begin);
-                                            state = breader.ReadUInt32();
-                                        }
-                                        startMarker.State[0] = state;
-
-                                        //Add items to list
-                                        stl.Add(state.ToString());
-                                        stl.Add(startMarker.Position.ToString());
-                                    }
-                                    using (BinaryReader breader = new BinaryReader(File.Open(imaFileRight, FileMode.Open, FileAccess.Read, FileShare.Read)))
-                                    {
-                                        long offset = ((marker.Position / 256) * 256) / 2;
-                                        if (offset <= breader.BaseStream.Length)
-                                        {
-                                            breader.BaseStream.Seek(offset, SeekOrigin.Begin);
-                                            state = breader.ReadUInt32();
-                                        }
-                                        startMarker.State[1] = state;
-
-                                        //Add items to list
-                                        str.Add(state.ToString());
-                                        str.Add(startMarker.Position.ToString());
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    //Write file
-                    File.WriteAllLines(Path.Combine(Path.ChangeExtension(imaFileLeft, ".str")), str);
-                    File.WriteAllLines(Path.Combine(Path.ChangeExtension(imaFileLeft, ".stl")), stl);
-                }
-            }
-
-            //Update Positions PS2 Platform
-            if (outputPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase))
+            if (outputPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase)|| outputPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("GameCube", StringComparison.OrdinalIgnoreCase))
             {
                 //Start markers
                 foreach (EXStartMarker startMarker in startMarkersList)

@@ -93,7 +93,7 @@ namespace sb_editor.Forms
             //Create MusX File
             if (!string.IsNullOrEmpty(sfxOutputFolder) && Directory.Exists(sfxOutputFolder))
             {
-                string fileName = string.Format("HC{0:X6}.SFX", CommonFunctions.GetSfxName((int)outputLanguage, 0xFFFF));
+                string fileName = CommonFunctions.GetSfxName(outputLanguage, "streamdata");
                 MusXBuild_StreamFile.BuildStreamFile(binaryFile, lutFile, Path.Combine(sfxOutputFolder, fileName), isBigEndian);
             }
         }

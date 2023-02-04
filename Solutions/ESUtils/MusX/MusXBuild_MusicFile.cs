@@ -9,6 +9,7 @@
 //-------------------------------------------------------------------------------------------------------------------------------
 // MUSX FUNCTIONS -- FINAL SFX FILES
 //-------------------------------------------------------------------------------------------------------------------------------
+using System;
 using System.IO;
 using System.Text;
 using static ESUtils.BytesFunctions;
@@ -21,11 +22,13 @@ namespace ESUtils
     public static class MusXBuild_MusicFile
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static void BuildMusicFile(string mkrFilePath, string ssdFilePath, string OutputFilePath, uint fileHashCode, bool isBigEndian)
+        public static void BuildMusicFile(string mkrFilePath, string ssdFilePath, string OutputFilePath, string platform, uint fileHashCode)
         {
             //Ensure that the output file path is not null
             if (!string.IsNullOrEmpty(OutputFilePath))
             {
+                bool isBigEndian = platform.Equals("GC__");
+
                 //Create a new binary writer
                 using (BinaryWriter binWriter = new BinaryWriter(File.Open(OutputFilePath, FileMode.Create, FileAccess.Write, FileShare.Read), Encoding.ASCII))
                 {
@@ -35,8 +38,17 @@ namespace ESUtils
                     //--hashc[Hashcode for the current soundbank without the section prefix]--
                     binWriter.Write(fileHashCode | 0xE00000);
                     //--offst[Constant offset to the next section,]--
-                    binWriter.Write(0xC9);
+                    binWriter.Write(4);
                     //--fulls[Size of the whole file, in bytes. Unused. ]--
+                    binWriter.Write(0);
+                    //--Platform
+                    binWriter.Write(Encoding.ASCII.GetBytes(platform));
+                    //--Timespan
+                    DateTime initialDate = new DateTime(2000, 1, 1, 1, 0, 0);
+                    binWriter.Write((uint)(DateTime.Now.TimeOfDay - initialDate.TimeOfDay).TotalSeconds);
+                    //--Adpcm Encoding
+                    binWriter.Write(!platform.Equals("PS2_"));
+                    //--Padding
                     binWriter.Write(0);
 
                     //--------------------------------------------------[File Sections]--------------------------------------------------
@@ -47,10 +59,6 @@ namespace ESUtils
                     //--File start 2; offset to the second section with the sample data. Set to 0x1000 in the original software. --
                     binWriter.Write(0);
                     //--File length 2; size of the second section, in bytes. --
-                    binWriter.Write(0);
-                    //--File start 3; unused offset. Set to zero.--
-                    binWriter.Write(0);
-                    //--File length 3; unused. Set to zero.--
                     binWriter.Write(0);
 
                     //--------------------------------------------------[Read and Write Files Content]--------------------------------------------------
@@ -67,7 +75,7 @@ namespace ESUtils
                         positionAligned = AlignNumber((uint)binWriter.BaseStream.Position, 0x800);
                         soundMarkerFileStart = positionAligned;
                         //Write data
-                        binWriter.Seek((int)positionAligned, SeekOrigin.Begin);
+                        WriteAlignedDecoration(binWriter, positionAligned);
                         binWriter.Write(markersFileData);
                     }
 
@@ -82,7 +90,7 @@ namespace ESUtils
                         positionAligned = AlignNumber((uint)binWriter.BaseStream.Position, 0x800);
                         soundSampleDataStart = positionAligned;
                         //Write data
-                        binWriter.Seek((int)positionAligned, SeekOrigin.Begin);
+                        WriteAlignedDecoration(binWriter, positionAligned);
                         binWriter.Write(soundSampleData);
                     }
 
@@ -95,6 +103,7 @@ namespace ESUtils
                     binWriter.Write((uint)totalFileLength);
 
                     //File length 1
+                    binWriter.BaseStream.Seek(16, SeekOrigin.Current);
                     binWriter.Write(FlipUInt32(soundMarkerFileStart, isBigEndian));
                     binWriter.Write(FlipUInt32(soundMarkerFileLength, isBigEndian));
 
@@ -102,6 +111,15 @@ namespace ESUtils
                     binWriter.Write(FlipUInt32(soundSampleDataStart, isBigEndian));
                     binWriter.Write(FlipUInt32(soundSampleDataLength, isBigEndian));
                 }
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private static void WriteAlignedDecoration(BinaryWriter bw, uint PositionAligned)
+        {
+            while (bw.BaseStream.Position != PositionAligned)
+            {
+                bw.Write((byte)171);
             }
         }
     }

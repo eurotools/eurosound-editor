@@ -146,13 +146,10 @@ namespace sb_editor
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static int GetSfxName(int language, int fileHashCode)
+        public static string GetSfxName(Language language, string fileName)
         {
-            // Get the language index by taking the maximum of the language and 0
-            int languageIndex = Math.Max(language, 0);
-
-            // Shift the language index left by 16 bits and OR it with the file hash code shifted left by 0 bits
-            return ((languageIndex & 0xF) << 16) | ((fileHashCode & 0xFFFF) << 0);
+            string lang = language.ToString();
+            return string.Format("{0}_{1}.SFX", lang.Substring(0, Math.Min(3, lang.Length)), fileName).ToLower();
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -338,6 +335,30 @@ namespace sb_editor
             }
 
             return outputPath;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public static string GetPlatformLabel(string outPlatform)
+        {
+            string platform = "____";
+            if(outPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase))
+            {
+                platform = "PS2_";
+            }
+            else if (outPlatform.Equals("GameCube", StringComparison.OrdinalIgnoreCase))
+            {
+                platform = "GC__";
+            }
+            else if (outPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase))
+            {
+                platform = "PC__";
+            }
+            else if (outPlatform.Equals("X Box", StringComparison.OrdinalIgnoreCase)|| outPlatform.Equals("Xbox", StringComparison.OrdinalIgnoreCase))
+            {
+                platform = "XB__";
+            }
+
+            return platform;
         }
     }
 
