@@ -263,10 +263,10 @@ namespace sb_editor.Forms
                         wavFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "X Box", sampleList[i].TrimStart(Path.DirectorySeparatorChar));
                         if (File.Exists(wavFilePath))
                         {
-                            string adpcmFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "XBox_adpcm", sampleList[i].TrimStart(Path.DirectorySeparatorChar));
+                            string adpcmFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "XBox_adpcm", Path.ChangeExtension(sampleList[i].TrimStart(Path.DirectorySeparatorChar), ".ssp"));
                             if (File.Exists(adpcmFilePath))
                             {
-                                byte[] adpcmData = CommonFunctions.RemoveFileHeader(adpcmFilePath, 48);
+                                byte[] adpcmData = File.ReadAllBytes(adpcmFilePath);
 
                                 //Write Header Data
                                 uint loopOffset = 0;
