@@ -19,7 +19,7 @@ namespace ExMarkers
             MarkerFilesFunctions streamMarkersFunctions = new MarkerFilesFunctions();
 
             //Read Markers File
-            streamMarkersFunctions.LoadFile(markerFilePath, startMarkersList, markersList);
+            streamMarkersFunctions.LoadTextMarkerFile(markerFilePath, startMarkersList, markersList);
 
             //Calculate states -- PC & GameCube Platform
             if (outputPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("GameCube", StringComparison.OrdinalIgnoreCase))
