@@ -40,7 +40,6 @@ namespace sb_editor.Forms
             this.btnCheckHashCodes = new System.Windows.Forms.Button();
             this.btnMakeReport = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.btnSetupSfxGroups = new System.Windows.Forms.Button();
             this.grbAdvancedOptions.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,7 +48,6 @@ namespace sb_editor.Forms
             this.grbAdvancedOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.grbAdvancedOptions.Controls.Add(this.btnSetupSfxGroups);
             this.grbAdvancedOptions.Controls.Add(this.btnValidatePlatforms);
             this.grbAdvancedOptions.Controls.Add(this.btnValidateSubSFXs);
             this.grbAdvancedOptions.Controls.Add(this.btnCheckStealOnLouder);
@@ -60,7 +58,7 @@ namespace sb_editor.Forms
             this.grbAdvancedOptions.Controls.Add(this.btnMakeReport);
             this.grbAdvancedOptions.Location = new System.Drawing.Point(12, 12);
             this.grbAdvancedOptions.Name = "grbAdvancedOptions";
-            this.grbAdvancedOptions.Size = new System.Drawing.Size(201, 265);
+            this.grbAdvancedOptions.Size = new System.Drawing.Size(201, 239);
             this.grbAdvancedOptions.TabIndex = 0;
             this.grbAdvancedOptions.TabStop = false;
             this.grbAdvancedOptions.Text = "Advanced Options";
@@ -165,31 +163,19 @@ namespace sb_editor.Forms
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(75, 283);
+            this.btnOK.Location = new System.Drawing.Point(75, 257);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 1;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             // 
-            // btnSetupSfxGroups
-            // 
-            this.btnSetupSfxGroups.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSetupSfxGroups.Location = new System.Drawing.Point(6, 235);
-            this.btnSetupSfxGroups.Name = "btnSetupSfxGroups";
-            this.btnSetupSfxGroups.Size = new System.Drawing.Size(189, 21);
-            this.btnSetupSfxGroups.TabIndex = 8;
-            this.btnSetupSfxGroups.Text = "Setup SFX Groups";
-            this.btnSetupSfxGroups.UseVisualStyleBackColor = true;
-            this.btnSetupSfxGroups.Click += new System.EventHandler(this.BtnSetupSfxGroups_Click);
-            // 
             // Advanced
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(225, 318);
+            this.ClientSize = new System.Drawing.Size(225, 292);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.grbAdvancedOptions);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -217,6 +203,5 @@ namespace sb_editor.Forms
         private System.Windows.Forms.Button btnCheckHashCodes;
         private System.Windows.Forms.Button btnMakeReport;
         private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.Button btnSetupSfxGroups;
     }
 }
