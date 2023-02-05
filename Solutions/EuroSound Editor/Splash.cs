@@ -207,7 +207,7 @@ namespace sb_editor
                     if (euroSoundVersion.CompareTo(projectVersion) == 0 || euroSoundVersion.CompareTo(projectVersion) == 1)
                     {
                         //Update title bar
-                        frmMainForm.Text = string.Format("EuroSound - \"{0}\"", GlobalPrefs.ProjectFolder);
+                        frmMainForm.Text = string.Format("EuroSound:  \"{0}\"", GlobalPrefs.ProjectFolder);
                     }
                     else
                     {
