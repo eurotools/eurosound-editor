@@ -199,12 +199,16 @@ namespace sb_editor.Classes
                         continue;
                     }
                     //Master wave freq
-                    long masterWaveSize;
-                    int masterWaveFreq;
-                    using (WaveFileReader waveReader = new WaveFileReader(Path.Combine(GlobalPrefs.ProjectFolder, "Master", samplesList[i].TrimStart('\\'))))
+                    long masterWaveSize = 0;
+                    int masterWaveFreq = 0;
+                    string samplePath = Path.Combine(GlobalPrefs.ProjectFolder, "Master", samplesList[i].TrimStart('\\'));
+                    if (File.Exists(samplePath))
                     {
-                        masterWaveSize = waveReader.Length;
-                        masterWaveFreq = waveReader.WaveFormat.SampleRate;
+                        using (WaveFileReader waveReader = new WaveFileReader(samplePath))
+                        {
+                            masterWaveSize = waveReader.Length;
+                            masterWaveFreq = waveReader.WaveFormat.SampleRate;
+                        }
                     }
 
                     //ReSampled wave size
