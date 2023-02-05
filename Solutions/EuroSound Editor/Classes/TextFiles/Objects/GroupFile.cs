@@ -10,6 +10,7 @@
         public int MaxVoices;
         public int Priority;
         public bool UseDistCheck;
+        public int HashCode;
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------

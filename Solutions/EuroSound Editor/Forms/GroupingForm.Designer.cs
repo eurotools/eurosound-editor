@@ -131,7 +131,7 @@ namespace sb_editor.Forms
             this.nudMaxChannels_Group.Name = "nudMaxChannels_Group";
             this.nudMaxChannels_Group.Size = new System.Drawing.Size(53, 20);
             this.nudMaxChannels_Group.TabIndex = 3;
-            this.nudMaxChannels_Group.ValueChanged += new System.EventHandler(this.NudMaxChannels_Group_ValueChanged);
+            this.nudMaxChannels_Group.Click += new System.EventHandler(this.NudMaxChannels_Group_Click);
             // 
             // btnRemoveSFXsFromGroup
             // 
@@ -207,21 +207,22 @@ namespace sb_editor.Forms
             this.lvwSFXsInGroup.TabIndex = 0;
             this.lvwSFXsInGroup.UseCompatibleStateImageBehavior = false;
             this.lvwSFXsInGroup.View = System.Windows.Forms.View.Details;
+            this.lvwSFXsInGroup.SelectedIndexChanged += new System.EventHandler(this.LvwSFXsInGroup_SelectedIndexChanged);
             // 
             // Col_SfxGroup_Hashcode
             // 
             this.Col_SfxGroup_Hashcode.Text = "SFX";
-            this.Col_SfxGroup_Hashcode.Width = 160;
+            this.Col_SfxGroup_Hashcode.Width = 200;
             // 
             // Col_SfxGroup_MaxVoices
             // 
             this.Col_SfxGroup_MaxVoices.Text = "Max";
-            this.Col_SfxGroup_MaxVoices.Width = 75;
+            this.Col_SfxGroup_MaxVoices.Width = 50;
             // 
             // Col_SfxGroup_Steal
             // 
             this.Col_SfxGroup_Steal.Text = "Steal?";
-            this.Col_SfxGroup_Steal.Width = 75;
+            this.Col_SfxGroup_Steal.Width = 50;
             // 
             // grbAvailableSfx
             // 
@@ -258,21 +259,22 @@ namespace sb_editor.Forms
             this.lvwAvailable_SFXs.TabIndex = 7;
             this.lvwAvailable_SFXs.UseCompatibleStateImageBehavior = false;
             this.lvwAvailable_SFXs.View = System.Windows.Forms.View.Details;
+            this.lvwAvailable_SFXs.SelectedIndexChanged += new System.EventHandler(this.LvwAvailable_SFXs_SelectedIndexChanged);
             // 
             // Col_AvailableSFXs_HashCode
             // 
             this.Col_AvailableSFXs_HashCode.Text = "SFX";
-            this.Col_AvailableSFXs_HashCode.Width = 160;
+            this.Col_AvailableSFXs_HashCode.Width = 200;
             // 
             // Col_AvailableSFXs_MaxVoices
             // 
             this.Col_AvailableSFXs_MaxVoices.Text = "Max";
-            this.Col_AvailableSFXs_MaxVoices.Width = 75;
+            this.Col_AvailableSFXs_MaxVoices.Width = 50;
             // 
             // Col_AvailableSFXs_Steal
             // 
             this.Col_AvailableSFXs_Steal.Text = "Steal?";
-            this.Col_AvailableSFXs_Steal.Width = 75;
+            this.Col_AvailableSFXs_Steal.Width = 50;
             // 
             // nudMaxChannels_SFXs
             // 
@@ -282,7 +284,7 @@ namespace sb_editor.Forms
             this.nudMaxChannels_SFXs.Name = "nudMaxChannels_SFXs";
             this.nudMaxChannels_SFXs.Size = new System.Drawing.Size(53, 20);
             this.nudMaxChannels_SFXs.TabIndex = 3;
-            this.nudMaxChannels_SFXs.ValueChanged += new System.EventHandler(this.NudMaxChannels_SFXs_ValueChanged);
+            this.nudMaxChannels_SFXs.Click += new System.EventHandler(this.NudMaxChannels_SFXs_Click);
             // 
             // btnAddSFXsToGroup
             // 
@@ -512,17 +514,17 @@ namespace sb_editor.Forms
             // Col_Label
             // 
             this.Col_Label.Text = "Label";
-            this.Col_Label.Width = 100;
+            this.Col_Label.Width = 150;
             // 
             // Col_Max
             // 
             this.Col_Max.Text = "Max";
-            this.Col_Max.Width = 85;
+            this.Col_Max.Width = 50;
             // 
             // Col_Priority
             // 
             this.Col_Priority.Text = "Priority";
-            this.Col_Priority.Width = 70;
+            this.Col_Priority.Width = 50;
             // 
             // btnRename
             // 

@@ -297,7 +297,7 @@ namespace sb_editor
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static string GetSoundbankOutPath(string platform, string language, bool musicFolder = false)
+        public static string GetSoundbankOutPath(string platform)
         {
             // Initialize the output path to an empty string
             string outputPath = string.Empty;
@@ -305,19 +305,11 @@ namespace sb_editor
             // Check if the EngineX project path is not null and the directory exists
             if (!string.IsNullOrEmpty(GlobalPrefs.CurrentProject.EngineXProjectPath) && Directory.Exists(GlobalPrefs.CurrentProject.EngineXProjectPath))
             {
-                // If the musicFolder flag is true, set the output path to the "music" folder within the EngineX project path
-                if (musicFolder)
-                {
-                    outputPath = Directory.CreateDirectory(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", GetEnginexFolder(platform), "music")).FullName;
-                }
-                else
-                {
-                    // Create the "Sonix" folder within the EngineX project path
-                    Directory.CreateDirectory(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Sonix"));
+                // Create the "Sonix" folder within the EngineX project path
+                Directory.CreateDirectory(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Sonix"));
 
-                    // Set the output path to the language folder within the EngineX project path
-                    outputPath = Directory.CreateDirectory(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", GetEnginexFolder(platform), GetLanguageFolder(language))).FullName;
-                }
+                // Set the output path to the language folder within the EngineX project path
+                outputPath = Directory.CreateDirectory(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", GetEnginexFolder(platform), "audio")).FullName;
             }
 
             // If the output path is still empty, check if the platform is in the platformData dictionary

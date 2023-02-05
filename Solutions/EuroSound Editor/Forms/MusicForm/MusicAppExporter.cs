@@ -308,7 +308,7 @@ namespace sb_editor.Forms
                     }
 
                     //Build SFX
-                    string sfxOutputFolder = CommonFunctions.GetSoundbankOutPath(outputPlatforms[j], string.Empty, true);
+                    string sfxOutputFolder = CommonFunctions.GetSoundbankOutPath(outputPlatforms[j]);
                     if (!string.IsNullOrEmpty(sfxOutputFolder) && Directory.Exists(sfxOutputFolder))
                     {
                         string sfxOutputPath = Path.Combine(sfxOutputFolder, string.Format("_mus_mfx_{0}.SFX", filesQueue[i]).ToLower());
@@ -353,7 +353,7 @@ namespace sb_editor.Forms
                     string tempOutputFolder = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatforms[j], "Music", "mfxdetails.bin");
                     BuildMusicDetailsFile(mfxValidListFile, tempOutputFolder);
 
-                    string sfxOutputPath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatforms[j], string.Empty, true), string.Format("_musicdetails.SFX").ToLower());
+                    string sfxOutputPath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatforms[j]), string.Format("_musicdetails.SFX").ToLower());
                     MusXBuild_MusicDetails.BuildMusicDetails(tempOutputFolder, sfxOutputPath, CommonFunctions.GetPlatformLabel(outputPlatforms[j]));
                 }
             }

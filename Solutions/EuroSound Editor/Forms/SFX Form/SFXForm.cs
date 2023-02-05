@@ -310,7 +310,7 @@ namespace sb_editor.Forms
             Stopwatch watch = Stopwatch.StartNew();
 
             //Get output folder & name
-            string outputFilePath = CommonFunctions.GetSoundbankOutPath("PC", "English");
+            string outputFilePath = CommonFunctions.GetSoundbankOutPath("PC");
             string fileName = string.Format("HC{0:X6}.SFX", 0xFFFE);
 
             //Create file

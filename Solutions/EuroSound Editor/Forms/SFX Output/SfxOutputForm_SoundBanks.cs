@@ -127,7 +127,7 @@ namespace sb_editor.Forms
                                 else
                                 {
                                     //Get Output Path
-                                    string outputPath = CommonFunctions.GetSoundbankOutPath(outputPlatform[k], outLanguages[i]);
+                                    string outputPath = CommonFunctions.GetSoundbankOutPath(outputPlatform[k]);
                                     if (!string.IsNullOrEmpty(outputPath) && Directory.Exists(outputPath))
                                     {
                                         string fileName = CommonFunctions.GetSfxName((Language)Enum.Parse(typeof(Language), outLanguages[i], true), Path.GetFileNameWithoutExtension(filesQueue[j]));

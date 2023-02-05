@@ -14,7 +14,7 @@ namespace sb_editor
         //-------------------------------------------------------------------------------------------------------------------------------
         public static GroupFile ReadGroupsFile(string filePath)
         {
-            GroupFile dataBase = new GroupFile();
+            GroupFile sfxGroup = new GroupFile();
             List<string> dependencies = new List<string>();
 
             using (StreamReader sr = new StreamReader(File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read), new UTF8Encoding(false)))
@@ -31,7 +31,7 @@ namespace sb_editor
                     //Header info
                     if (currentLine.StartsWith("##"))
                     {
-                        ReadHeaderData(dataBase, currentLine);
+                        ReadHeaderData(sfxGroup, currentLine);
                     }
 
                     //Dependencies Block
@@ -55,18 +55,30 @@ namespace sb_editor
                             switch (lineData[0].ToUpper())
                             {
                                 case "MAXVOICES":
-                                    dataBase.MaxVoices = Convert.ToInt32(lineData[1].Trim());
+                                    sfxGroup.MaxVoices = Convert.ToInt32(lineData[1].Trim());
                                     break;
                                 case "ACTION1":
-                                    dataBase.Action1 = Convert.ToByte(lineData[1].Trim());
+                                    sfxGroup.Action1 = Convert.ToByte(lineData[1].Trim());
                                     break;
                                 case "PRIORITY":
-                                    dataBase.Priority = Convert.ToInt32(lineData[1].Trim());
+                                    sfxGroup.Priority = Convert.ToInt32(lineData[1].Trim());
                                     break;
                                 case "USEDISTCHECK":
-                                    dataBase.UseDistCheck = lineData[1].Trim().Equals("True");
+                                    sfxGroup.UseDistCheck = lineData[1].Trim().Equals("True");
                                     break;
                             }
+                            currentLine = sr.ReadLine().Trim();
+                        }
+                    }
+
+                    //HashCodes Block
+                    if (currentLine.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase))
+                    {
+                        currentLine = sr.ReadLine().Trim();
+                        while (!currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase))
+                        {
+                            string hashcodeNumber = currentLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)[1];
+                            sfxGroup.HashCode = Convert.ToInt32(hashcodeNumber);
                             currentLine = sr.ReadLine().Trim();
                         }
                     }
@@ -76,10 +88,10 @@ namespace sb_editor
             //Add dependencies to the object
             if (dependencies.Count > 0)
             {
-                dataBase.Dependencies = dependencies.ToArray();
+                sfxGroup.Dependencies = dependencies.ToArray();
             }
 
-            return dataBase;
+            return sfxGroup;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -114,6 +126,10 @@ namespace sb_editor
                 outputFile.WriteLine("Action1 {0}", fileData.Action1);
                 outputFile.WriteLine("Priority {0}", fileData.Priority);
                 outputFile.WriteLine("UseDistCheck {0}", fileData.UseDistCheck);
+                outputFile.WriteLine("#END");
+                outputFile.WriteLine(string.Empty);
+                outputFile.WriteLine("#HASHCODE");
+                outputFile.WriteLine("HashCodeNumber {0}", fileData.HashCode);
                 outputFile.WriteLine("#END");
                 outputFile.WriteLine(string.Empty);
             }
