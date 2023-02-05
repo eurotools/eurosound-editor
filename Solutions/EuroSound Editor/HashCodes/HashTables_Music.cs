@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿using ExMarkers;
+using NAudio.Wave;
 using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
@@ -81,17 +82,21 @@ namespace sb_editor.HashCodes
         //-------------------------------------------------------------------------------------------------------------------------------
         internal void CreateMfxData(string filePath)
         {
+            MarkerFilesFunctions streamMarkersFunctions = new MarkerFilesFunctions();
+
             //Get music data and sort it ascending by hashcode
             SortedDictionary<int, string> itemsData = new SortedDictionary<int, string>();
             string[] musicFiles = TextFiles.ReadListBlock(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", "MFXFiles.txt"), "#MFXFiles");
             for (int i = 0; i < musicFiles.Length; i++)
             {
                 string waveFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", musicFiles[i] + ".wav");
+                string markerFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", musicFiles[i] + ".mrk");
                 if (File.Exists(waveFilePath))
                 {
                     using (WaveFileReader wReader = new WaveFileReader(waveFilePath))
                     {
-                        MusicFile fileData = TextFiles.ReadMusicFile(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", musicFiles[i] + ".txt"));
+                        MusicFile musicFileData = TextFiles.ReadMusicFile(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", musicFiles[i] + ".txt"));
+                        List<MarkerInfo> markerData = streamMarkersFunctions.LoadTextMarkerFile(markerFilePath, null, null, true);
                         float duration = (float)decimal.Divide(wReader.Length, wReader.WaveFormat.AverageBytesPerSecond);
                         string strDuration = duration.ToString("G7", GlobalPrefs.NumericProvider);
                         if (duration % 1 == 0)
@@ -100,9 +105,9 @@ namespace sb_editor.HashCodes
                         }
 
                         //Add item to dictionary if not exists
-                        if (!itemsData.ContainsKey(fileData.HashCode))
+                        if (!itemsData.ContainsKey(musicFileData.HashCode))
                         {
-                            itemsData.Add(fileData.HashCode, string.Format("\t{{0x{0:X8},{1}f,{2}}},", fileData.HashCode | 0x1BE00000, strDuration, "FALSE"));
+                            itemsData.Add(musicFileData.HashCode, string.Format("\t{{0x{0:X8},{1}f,{2}}},", musicFileData.HashCode | 0x1BE00000, strDuration, MusicLoops(markerData).ToString().ToUpper()));
                         }
                     }
                 }
@@ -134,6 +139,20 @@ namespace sb_editor.HashCodes
                 }
                 sw.WriteLine("};");
             }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private bool MusicLoops(List<MarkerInfo> markerFileData)
+        {
+            foreach (MarkerInfo markerData in markerFileData)
+            {
+                if (markerData.Type == 6)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
