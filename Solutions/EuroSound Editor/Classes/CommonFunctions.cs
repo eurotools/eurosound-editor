@@ -341,7 +341,7 @@ namespace sb_editor
         public static string GetPlatformLabel(string outPlatform)
         {
             string platform = "____";
-            if(outPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase))
+            if (outPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase))
             {
                 platform = "PS2_";
             }
@@ -353,7 +353,7 @@ namespace sb_editor
             {
                 platform = "PC__";
             }
-            else if (outPlatform.Equals("X Box", StringComparison.OrdinalIgnoreCase)|| outPlatform.Equals("Xbox", StringComparison.OrdinalIgnoreCase))
+            else if (outPlatform.Equals("X Box", StringComparison.OrdinalIgnoreCase) || outPlatform.Equals("Xbox", StringComparison.OrdinalIgnoreCase))
             {
                 platform = "XB__";
             }

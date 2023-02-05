@@ -40,14 +40,13 @@ namespace sb_editor.Forms
                 sfxWritter.Write(BytesFunctions.FlipShort((short)sfxData.Value.Parameters.DuckerLength, isBigEndian));
                 sfxWritter.Write(BytesFunctions.FlipShort((short)sfxData.Value.SamplePool.MinDelay, isBigEndian));
                 sfxWritter.Write(BytesFunctions.FlipShort((short)sfxData.Value.SamplePool.MaxDelay, isBigEndian));
-                sfxWritter.Write(BytesFunctions.FlipShort((short)sfxData.Value.Parameters.InnerRadius, isBigEndian));
-                sfxWritter.Write(BytesFunctions.FlipShort((short)sfxData.Value.Parameters.OuterRadius, isBigEndian));
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.ReverbSend);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.TrackingType);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.MaxVoices);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.Priority);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.Ducker);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.MasterVolume);
+                sfxWritter.Write((((short)sfxData.Value.Parameters.Group & 0xfff) << 0) | ((sfxData.Value.Parameters.GroupMaxChannels & 0xf) << 1));
                 sfxWritter.Write((ushort)sbFunctions.GetFlags(sfxData.Value));
 
                 //Calculate references
@@ -117,14 +116,12 @@ namespace sb_editor.Forms
                         }
                     }
                     sfxWritter.Write(BytesFunctions.FlipShort((short)fileRef, isBigEndian));
-                    sfxWritter.Write(BytesFunctions.FlipShort((short)Math.Round(sampleToCheck.PitchOffset * 1024), isBigEndian));
-                    sfxWritter.Write(BytesFunctions.FlipShort((short)Math.Round(sampleToCheck.RandomPitch * 1024), isBigEndian));
+                    sfxWritter.Write((sbyte)decimal.Divide(sampleToCheck.PitchOffset, (decimal)0.2));
+                    sfxWritter.Write((sbyte)decimal.Divide(sampleToCheck.RandomPitch, (decimal)0.1));
                     sfxWritter.Write(sampleToCheck.BaseVolume);
                     sfxWritter.Write(sampleToCheck.RandomVolume);
                     sfxWritter.Write(sampleToCheck.Pan);
                     sfxWritter.Write(sampleToCheck.RandomPan);
-                    sfxWritter.Write((byte)0);
-                    sfxWritter.Write((byte)0);
                 }
             }
             debugFile.WriteLine("StreamFileRefCheckSum = {0}", streamFileCheckSum * -1);
@@ -172,12 +169,7 @@ namespace sb_editor.Forms
                                 byte[] vagData = CommonFunctions.RemoveFileHeader(vagFilePath, 48);
 
                                 //Write Header Data
-                                uint loopOffset = 0;
-                                if (masterFileData.HasLoop)
-                                {
-                                    loopOffset = (uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, aifFileData.SampleRate, masterFileData.LoopStart * 2);
-                                }
-                                sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, aifFileData, BytesFunctions.AlignNumber((uint)vagData.Length, 64), vagData.Length, i * 96, loopOffset, isBigEndian);
+                                sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, aifFileData, BytesFunctions.AlignNumber((uint)vagData.Length, 64), vagData.Length, i * 96, 0, isBigEndian);
 
                                 //Write Sample Data
                                 byte[] filedata = new byte[BytesFunctions.AlignNumber((uint)vagData.Length, 64)];

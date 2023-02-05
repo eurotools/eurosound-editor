@@ -477,11 +477,9 @@ namespace sb_editor.Classes
             sifWritter.Write(BytesFunctions.FlipUInt32(lengthAligned, isBigEndian));
             sifWritter.Write(BytesFunctions.FlipInt32(wavFileData.SampleRate, isBigEndian));
             sifWritter.Write(BytesFunctions.FlipInt32(formatLength, isBigEndian));
-            sifWritter.Write(BytesFunctions.FlipInt32(wavFileData.Channels, isBigEndian));
-            sifWritter.Write(BytesFunctions.FlipInt32(4, isBigEndian));
             sifWritter.Write(BytesFunctions.FlipInt32(psiSampleHeader, isBigEndian));
             sifWritter.Write(BytesFunctions.FlipUInt32(loopOffset, isBigEndian));
-            sifWritter.Write((uint)masterFileData.TotalTime.TotalMilliseconds);
+            sifWritter.Write(BytesFunctions.FlipUInt32((uint)masterFileData.TotalTime.TotalMilliseconds, isBigEndian));
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------

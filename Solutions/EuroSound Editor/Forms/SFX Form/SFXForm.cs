@@ -1,5 +1,4 @@
-﻿using ESUtils;
-using sb_editor.Objects;
+﻿using sb_editor.Objects;
 using sb_editor.Panels;
 using System;
 using System.Diagnostics;

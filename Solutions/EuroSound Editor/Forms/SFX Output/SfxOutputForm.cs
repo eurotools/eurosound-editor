@@ -16,7 +16,7 @@ namespace sb_editor.Forms
     {
         private readonly MainForm parentFormObj;
         private readonly WaveFunctions wavFunctions = new WaveFunctions();
-        private readonly ImaFunctions imaFunctions = new ImaFunctions();
+        private readonly EurocomImaFunctions eurocomImaFunction = new EurocomImaFunctions();
         private readonly AiffFunctions aiffFunctions = new AiffFunctions();
         private readonly SoundBankFunctions sbFunctions = new SoundBankFunctions();
         private readonly string[] filesQueue;
