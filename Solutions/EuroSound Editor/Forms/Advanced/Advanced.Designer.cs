@@ -58,7 +58,7 @@ namespace sb_editor.Forms
             this.grbAdvancedOptions.Controls.Add(this.btnMakeReport);
             this.grbAdvancedOptions.Location = new System.Drawing.Point(12, 12);
             this.grbAdvancedOptions.Name = "grbAdvancedOptions";
-            this.grbAdvancedOptions.Size = new System.Drawing.Size(201, 238);
+            this.grbAdvancedOptions.Size = new System.Drawing.Size(201, 239);
             this.grbAdvancedOptions.TabIndex = 0;
             this.grbAdvancedOptions.TabStop = false;
             this.grbAdvancedOptions.Text = "Advanced Options";
@@ -163,7 +163,7 @@ namespace sb_editor.Forms
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(75, 256);
+            this.btnOK.Location = new System.Drawing.Point(75, 257);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 1;
@@ -175,7 +175,7 @@ namespace sb_editor.Forms
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(225, 291);
+            this.ClientSize = new System.Drawing.Size(225, 292);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.grbAdvancedOptions);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
