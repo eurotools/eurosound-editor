@@ -69,149 +69,160 @@ namespace sb_editor
                 {
                     Misc miscFileSettings = TextFiles.ReadMiscFile(miscFilePath);
 
+                    //Load properties file
+                    string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
+                    if (File.Exists(projectPropertiesFile))
+                    {
+                        //Create Temporal Output Folders
+                        CommonFunctions.CheckForMissingFolders();
+
+                        //Update variables
+                        GlobalPrefs.ReSampleStreams = miscFileSettings.ReSampleStreams;
+                        GlobalPrefs.SFXHashCodeNumber = miscFileSettings.SFXHashCodeNumber;
+                        GlobalPrefs.SoundBankHashCodeNumber = miscFileSettings.SoundBankHashCodeNumber;
+                        GlobalPrefs.MFXHashCodeNumber = miscFileSettings.MFXHashCodeNumber;
+                        GlobalPrefs.ReverbHashCodeNumber = miscFileSettings.ReverbHashCodeNumber;
+                        GlobalPrefs.CurrentProject = TextFiles.ReadPropertiesFile(projectPropertiesFile);
+
+                        //Ask for userName if we don't have it
+                        if (string.IsNullOrEmpty(GlobalPrefs.EuroSoundUser))
+                        {
+                            CommonFunctions.AskForUserName();
+                        }
+
+                        //Get project paths
+                        string projectFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Project.txt");
+
+                        //Load project data
+                        ProjectFile projectData = TextFiles.ReadProjectFile(projectFilePath, true);
+                        projectData.SoundBanks = frmMainForm.UserControl_SoundBanks_CheckBox.LoadSoundBanks();
+                        projectData.DataBases = frmMainForm.UserControl_Available_Databases.LoadDataBases();
+                        TextFiles.WriteProjectFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "TempFileName.txt"), projectData);
+                        frmMainForm.UserControl_SoundBanks.LoadSoundBanks(frmMainForm.UserControl_SoundBanks_CheckBox.cbllstSoundbanks);
+                        frmMainForm.UserControl_Available_SFXs.UserControl_RefineSFX.LoadKeywords();
+                        frmMainForm.UserControl_DataBaseSfx.ClearControl();
+
+                        //Load SFX Labels
+                        string[] sfxFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
+                        string[] labels = new string[sfxFiles.Length];
+                        for (int i = 0; i < sfxFiles.Length; i++)
+                        {
+                            labels[i] = Path.GetFileNameWithoutExtension(sfxFiles[i]);
+                        }
+                        projectData.SFXs = labels;
+
+                        //Update text file
+                        TextFiles.WriteProjectFile(projectFilePath, projectData);
+
+                        //Fill comboboxes
+                        frmMainForm.UserControl_Output.cboOutputFormat.Items.AddRange(GlobalPrefs.CurrentProject.platformData.Keys.ToArray());
+                        if (frmMainForm.UserControl_Output.cboOutputFormat.Items.Count > 0)
+                        {
+                            frmMainForm.UserControl_Output.cboOutputFormat.SelectedIndex = 0;
+                        }
+
+                        //Check Languages From Speech Folder
+                        if (Directory.Exists(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master")))
+                        {
+                            string speechDir = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", "Speech");
+                            Directory.CreateDirectory(Path.Combine(speechDir, "English"));
+
+                            //Get All Language Directories
+                            string[] langDirectories = Directory.GetDirectories(Path.Combine(speechDir));
+                            for (int i = 0; i < langDirectories.Length; i++)
+                            {
+                                string lang = Path.GetFileName(langDirectories[i]);
+                                if (Enum.TryParse(lang, true, out Enumerations.Language language))
+                                {
+                                    frmMainForm.UserControl_Output.cboOutputLanguage.Items.Add(lang);
+                                }
+                                else
+                                {
+                                    MessageBox.Show(string.Format("{0} is not a valid Language!", lang), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                }
+                            }
+
+                            //Select First Item
+                            if (frmMainForm.UserControl_Output.cboOutputLanguage.Items.Count > 0)
+                            {
+                                frmMainForm.UserControl_Output.cboOutputLanguage.SelectedIndex = 0;
+                            }
+                        }
+
+                        //Restore last state
+                        string systemIniFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini");
+                        if (File.Exists(systemIniFilePath))
+                        {
+                            //Update SFX Panel UI
+                            IniFile sysIniFile = new IniFile(systemIniFilePath);
+                            frmMainForm.UserControl_Available_SFXs.UserControl_RefineSFX.chkSortByDate.Checked = sysIniFile.Read("Check2", "MainForm").Trim().Equals("1");
+                            frmMainForm.UserControl_Available_SFXs.chkIconView.Checked = sysIniFile.Read("Check3", "MainForm").Trim().Equals("1");
+                            //Update Output Panel
+                            frmMainForm.UserControl_Output.chkFastReSample.Checked = sysIniFile.Read("Check1", "MainForm").Equals("1");
+                            if (int.TryParse(sysIniFile.Read("FormatCombo_ListIndex", "Form1_Misc"), out int formatIndex))
+                            {
+                                if (formatIndex > 0 && formatIndex < frmMainForm.UserControl_Output.cboOutputFormat.Items.Count)
+                                {
+                                    frmMainForm.UserControl_Output.cboOutputFormat.SelectedIndex = formatIndex;
+                                }
+                            }
+                            if (int.TryParse(sysIniFile.Read("LanguageCombo", "MainForm"), out int langIndex))
+                            {
+                                if (langIndex > 0 && langIndex < frmMainForm.UserControl_Output.cboOutputLanguage.Items.Count)
+                                {
+                                    frmMainForm.UserControl_Output.cboOutputLanguage.SelectedIndex = langIndex;
+                                }
+                            }
+                            frmMainForm.UserControl_Output.chkOutputAllLanguages.Checked = sysIniFile.Read("OutputAllLanguages", "MainForm").Equals("1");
+                            frmMainForm.UserControl_Output.rdoOutput_Selected.Checked = sysIniFile.Read("SelectedlBankOption_Value", "Form1_Misc").Equals("True", StringComparison.OrdinalIgnoreCase);
+                            frmMainForm.UserControl_Output.rdoAllBanksSelectedFormat.Checked = sysIniFile.Read("AllBanksOption_Value", "Form1_Misc").Equals("True", StringComparison.OrdinalIgnoreCase);
+                            frmMainForm.UserControl_Output.rdoAllForAll.Checked = sysIniFile.Read("AllFormatsOption_Value", "Form1_Misc").Equals("True", StringComparison.OrdinalIgnoreCase);
+                        }
+
+                        //Enable or disable output buttons
+                        if (GlobalPrefs.CurrentProject.platformData.Count == 0)
+                        {
+                            frmMainForm.UserControl_Output.btnFullOutput.Enabled = false;
+                            frmMainForm.UserControl_Output.btnQuickOutput.Enabled = false;
+                        }
+
+                        //SFXs
+                        if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs")))
+                        {
+                            Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "Misc"));
+                            Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "PC"));
+                            Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "X Box"));
+                            Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "GameCube"));
+                            Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "PlayStation2"));
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show(string.Format("Project Properties File Not Found {0}", projectPropertiesFile), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
                     //Compare current version with the project version
                     Version projectVersion = new Version(miscFileSettings.Version.ToString());
                     Version euroSoundVersion = new Version(Assembly.GetExecutingAssembly().GetName().Version.Major, Assembly.GetExecutingAssembly().GetName().Version.Minor);
                     if (euroSoundVersion.CompareTo(projectVersion) == 0 || euroSoundVersion.CompareTo(projectVersion) == 1)
                     {
-                        //Load properties file
-                        string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
-                        if (File.Exists(projectPropertiesFile))
-                        {
-                            //Create Temporal Output Folders
-                            CommonFunctions.CheckForMissingFolders();
+                        //Disable controls
+                        frmMainForm.UserControl_Available_SFXs.Enabled = false;
+                        frmMainForm.UserControl_DataBasesInSoundBank.Enabled = false;
+                        frmMainForm.UserControl_DataBaseSfx.Enabled = false;
+                        frmMainForm.UserControl_Available_Databases.Enabled = false;
+                        frmMainForm.UserControl_Misc.Enabled = false;
+                        frmMainForm.UserControl_SoundBanks.Enabled = false;
+                        frmMainForm.UserControl_Output.Enabled = false;
 
-                            //Update variables
-                            GlobalPrefs.ReSampleStreams = miscFileSettings.ReSampleStreams;
-                            GlobalPrefs.SFXHashCodeNumber = miscFileSettings.SFXHashCodeNumber;
-                            GlobalPrefs.SoundBankHashCodeNumber = miscFileSettings.SoundBankHashCodeNumber;
-                            GlobalPrefs.MFXHashCodeNumber = miscFileSettings.MFXHashCodeNumber;
-                            GlobalPrefs.ReverbHashCodeNumber = miscFileSettings.ReverbHashCodeNumber;
-                            GlobalPrefs.CurrentProject = TextFiles.ReadPropertiesFile(projectPropertiesFile);
-
-                            //Ask for userName if we don't have it
-                            if (string.IsNullOrEmpty(GlobalPrefs.EuroSoundUser))
-                            {
-                                CommonFunctions.AskForUserName();
-                            }
-
-                            //Update title bar
-                            frmMainForm.Text = string.Format("EuroSound - \"{0}\"", GlobalPrefs.ProjectFolder);
-
-                            //Get project paths
-                            string projectFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Project.txt");
-
-                            //Load project data
-                            ProjectFile projectData = TextFiles.ReadProjectFile(projectFilePath, true);
-                            projectData.SoundBanks = frmMainForm.UserControl_SoundBanks_CheckBox.LoadSoundBanks();
-                            projectData.DataBases = frmMainForm.UserControl_Available_Databases.LoadDataBases();
-                            TextFiles.WriteProjectFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "TempFileName.txt"), projectData);
-                            frmMainForm.UserControl_SoundBanks.LoadSoundBanks(frmMainForm.UserControl_SoundBanks_CheckBox.cbllstSoundbanks);
-                            frmMainForm.UserControl_Available_SFXs.UserControl_RefineSFX.LoadKeywords();
-                            frmMainForm.UserControl_DataBaseSfx.ClearControl();
-
-                            //Load SFX Labels
-                            string[] sfxFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.TopDirectoryOnly);
-                            string[] labels = new string[sfxFiles.Length];
-                            for (int i = 0; i < sfxFiles.Length; i++)
-                            {
-                                labels[i] = Path.GetFileNameWithoutExtension(sfxFiles[i]);
-                            }
-                            projectData.SFXs = labels;
-
-                            //Update text file
-                            TextFiles.WriteProjectFile(projectFilePath, projectData);
-
-                            //Fill comboboxes
-                            frmMainForm.UserControl_Output.cboOutputFormat.Items.AddRange(GlobalPrefs.CurrentProject.platformData.Keys.ToArray());
-                            if (frmMainForm.UserControl_Output.cboOutputFormat.Items.Count > 0)
-                            {
-                                frmMainForm.UserControl_Output.cboOutputFormat.SelectedIndex = 0;
-                            }
-
-                            //Check Languages From Speech Folder
-                            if (Directory.Exists(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master")))
-                            {
-                                string speechDir = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", "Speech");
-                                Directory.CreateDirectory(Path.Combine(speechDir, "English"));
-
-                                //Get All Language Directories
-                                string[] langDirectories = Directory.GetDirectories(Path.Combine(speechDir));
-                                for (int i = 0; i < langDirectories.Length; i++)
-                                {
-                                    string lang = Path.GetFileName(langDirectories[i]);
-                                    if (Enum.TryParse(lang, true, out Enumerations.Language language))
-                                    {
-                                        frmMainForm.UserControl_Output.cboOutputLanguage.Items.Add(lang);
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show(string.Format("{0} is not a valid Language!", lang), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                    }
-                                }
-
-                                //Select First Item
-                                if (frmMainForm.UserControl_Output.cboOutputLanguage.Items.Count > 0)
-                                {
-                                    frmMainForm.UserControl_Output.cboOutputLanguage.SelectedIndex = 0;
-                                }
-                            }
-
-                            //Restore last state
-                            string systemIniFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini");
-                            if (File.Exists(systemIniFilePath))
-                            {
-                                //Update SFX Panel UI
-                                IniFile sysIniFile = new IniFile(systemIniFilePath);
-                                frmMainForm.UserControl_Available_SFXs.UserControl_RefineSFX.chkSortByDate.Checked = sysIniFile.Read("Check2", "MainForm").Trim().Equals("1");
-                                frmMainForm.UserControl_Available_SFXs.chkIconView.Checked = sysIniFile.Read("Check3", "MainForm").Trim().Equals("1");
-                                //Update Output Panel
-                                frmMainForm.UserControl_Output.chkFastReSample.Checked = sysIniFile.Read("Check1", "MainForm").Equals("1");
-                                if (int.TryParse(sysIniFile.Read("FormatCombo_ListIndex", "Form1_Misc"), out int formatIndex))
-                                {
-                                    if (formatIndex > 0 && formatIndex < frmMainForm.UserControl_Output.cboOutputFormat.Items.Count)
-                                    {
-                                        frmMainForm.UserControl_Output.cboOutputFormat.SelectedIndex = formatIndex;
-                                    }
-                                }
-                                if (int.TryParse(sysIniFile.Read("LanguageCombo", "MainForm"), out int langIndex))
-                                {
-                                    if (langIndex > 0 && langIndex < frmMainForm.UserControl_Output.cboOutputLanguage.Items.Count)
-                                    {
-                                        frmMainForm.UserControl_Output.cboOutputLanguage.SelectedIndex = langIndex;
-                                    }
-                                }
-                                frmMainForm.UserControl_Output.chkOutputAllLanguages.Checked = sysIniFile.Read("OutputAllLanguages", "MainForm").Equals("1");
-                                frmMainForm.UserControl_Output.rdoOutput_Selected.Checked = sysIniFile.Read("SelectedlBankOption_Value", "Form1_Misc").Equals("True", StringComparison.OrdinalIgnoreCase);
-                                frmMainForm.UserControl_Output.rdoAllBanksSelectedFormat.Checked = sysIniFile.Read("AllBanksOption_Value", "Form1_Misc").Equals("True", StringComparison.OrdinalIgnoreCase);
-                                frmMainForm.UserControl_Output.rdoAllForAll.Checked = sysIniFile.Read("AllFormatsOption_Value", "Form1_Misc").Equals("True", StringComparison.OrdinalIgnoreCase);
-                            }
-
-                            //Enable or disable output buttons
-                            if (GlobalPrefs.CurrentProject.platformData.Count == 0)
-                            {
-                                frmMainForm.UserControl_Output.btnFullOutput.Enabled = false;
-                                frmMainForm.UserControl_Output.btnQuickOutput.Enabled = false;
-                            }
-
-                            //SFXs
-                            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs")))
-                            {
-                                Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "Misc"));
-                                Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "PC"));
-                                Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "X Box"));
-                                Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "GameCube"));
-                                Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", "PlayStation2"));
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show(string.Format("Project Properties File Not Found {0}", projectPropertiesFile), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
+                        //Inform user
+                        MessageBox.Show(string.Format("{0}:\n\n{1}: {2}\n{3}: {4}\n\n{5}", "EuroSound out of Date for Project", "EuroSound Version", euroSoundVersion.ToString(), "Project Version", projectVersion.ToString(), "Must Get Latest EuroSound to Load this project!"), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(string.Format("Failed to Open Project\n{0}", GlobalPrefs.ProjectFolder), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     else
                     {
-                        MessageBox.Show(string.Format("{0}:\n\n{1}: {2}\n{3}: {4}\n\n{5}", "EuroSound out of Date for Project", "EuroSound Version", euroSoundVersion.ToString(), "Project Version", projectVersion.ToString(), "Must Get Latest EuroSound to Load this project!"), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        //Update title bar
+                        frmMainForm.Text = string.Format("EuroSound - \"{0}\"", GlobalPrefs.ProjectFolder);
                     }
                 }
             }
