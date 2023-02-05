@@ -119,7 +119,10 @@ namespace sb_editor.Panels
                                 TextFiles.WriteDataBaseFile(filePath, databaseFile);
 
                                 // Update the list of databases in the main form
-                                ProjectFileFunctions.UpdateDataBases((sb_editor.MainForm)Parent.Parent.Parent);
+                                ProjectFileFunctions.UpdateDataBases((MainForm)Parent.Parent.Parent);
+
+                                //Keep selection 
+                                lstDataBases.SelectedItem = fileName;
                                 break;
                             }
                         }
