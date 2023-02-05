@@ -22,7 +22,7 @@ namespace ESUtils
     public static class MusXBuild_MusicDetails
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static void BuildMusicDetails(string musicDetailsFilePath, string OutputFilePath, string platform, uint fileHashCode)
+        public static void BuildMusicDetails(string musicDetailsFilePath, string OutputFilePath, string platform)
         {
             //Ensure that the output file path is not null
             if (!string.IsNullOrEmpty(OutputFilePath))
@@ -34,7 +34,7 @@ namespace ESUtils
                     //--magic[magic value]--
                     binWriter.Write(Encoding.ASCII.GetBytes("MUSX"));
                     //--hashc[Hashcode for the current soundbank without the section prefix]--
-                    binWriter.Write(fileHashCode);
+                    binWriter.Write(0x0000A000);
                     //--offst[Constant offset to the next section,]--
                     binWriter.Write(4);
                     //--fulls[Size of the whole file, in bytes. Unused. ]--
@@ -45,7 +45,7 @@ namespace ESUtils
                     DateTime initialDate = new DateTime(2000, 1, 1, 1, 0, 0);
                     binWriter.Write((uint)(DateTime.Now.TimeOfDay - initialDate.TimeOfDay).TotalSeconds);
                     //--Adpcm Encoding
-                    binWriter.Write(0);
+                    binWriter.Write(Convert.ToInt32(!platform.Equals("PS2_")));
                     //--Padding
                     binWriter.Write(0);
 
@@ -56,14 +56,6 @@ namespace ESUtils
                         byte[] markersFileData = File.ReadAllBytes(musicDetailsFilePath);
                         binWriter.Write(markersFileData);
                     }
-
-                    //Get file length
-                    long totalFileLength = binWriter.BaseStream.Position;
-
-                    //--------------------------------------------------[Write Final offsets]--------------------------------------------------
-                    //File Full Size
-                    binWriter.BaseStream.Seek(0xC, SeekOrigin.Begin);
-                    binWriter.Write((uint)totalFileLength);
                 }
             }
         }

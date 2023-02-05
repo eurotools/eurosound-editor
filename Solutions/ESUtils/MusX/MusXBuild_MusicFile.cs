@@ -47,7 +47,7 @@ namespace ESUtils
                     DateTime initialDate = new DateTime(2000, 1, 1, 1, 0, 0);
                     binWriter.Write((uint)(DateTime.Now.TimeOfDay - initialDate.TimeOfDay).TotalSeconds);
                     //--Adpcm Encoding
-                    binWriter.Write(!platform.Equals("PS2_"));
+                    binWriter.Write(Convert.ToInt32(!platform.Equals("PS2_")));
                     //--Padding
                     binWriter.Write(0);
 
