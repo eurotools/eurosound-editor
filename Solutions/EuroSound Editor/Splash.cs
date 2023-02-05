@@ -206,6 +206,11 @@ namespace sb_editor
                     Version euroSoundVersion = new Version(Assembly.GetExecutingAssembly().GetName().Version.Major, Assembly.GetExecutingAssembly().GetName().Version.Minor);
                     if (euroSoundVersion.CompareTo(projectVersion) == 0 || euroSoundVersion.CompareTo(projectVersion) == 1)
                     {
+                        //Update title bar
+                        frmMainForm.Text = string.Format("EuroSound - \"{0}\"", GlobalPrefs.ProjectFolder);
+                    }
+                    else
+                    {
                         //Disable controls
                         frmMainForm.UserControl_Available_SFXs.Enabled = false;
                         frmMainForm.UserControl_DataBasesInSoundBank.Enabled = false;
@@ -218,11 +223,6 @@ namespace sb_editor
                         //Inform user
                         MessageBox.Show(string.Format("{0}:\n\n{1}: {2}\n{3}: {4}\n\n{5}", "EuroSound out of Date for Project", "EuroSound Version", euroSoundVersion.ToString(), "Project Version", projectVersion.ToString(), "Must Get Latest EuroSound to Load this project!"), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         MessageBox.Show(string.Format("Failed to Open Project\n{0}", GlobalPrefs.ProjectFolder), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    else
-                    {
-                        //Update title bar
-                        frmMainForm.Text = string.Format("EuroSound - \"{0}\"", GlobalPrefs.ProjectFolder);
                     }
                 }
             }
