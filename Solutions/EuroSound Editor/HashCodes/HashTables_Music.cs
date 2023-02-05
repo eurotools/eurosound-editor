@@ -107,7 +107,7 @@ namespace sb_editor.HashCodes
                         //Add item to dictionary if not exists
                         if (!itemsData.ContainsKey(musicFileData.HashCode))
                         {
-                            itemsData.Add(musicFileData.HashCode, string.Format("\t{{0x{0:X8},{1}f,{2}, {3} }},", musicFileData.HashCode | 0x1BE00000, strDuration, MusicLoops(markerData).ToString().ToUpper(), musicFileData.UserValue));
+                            itemsData.Add(musicFileData.HashCode, string.Format("\t{{0x{0:X8},{1}f,{2}}},", musicFileData.HashCode | 0x1BE00000, strDuration, MusicLoops(markerData).ToString().ToUpper()));
                         }
                     }
                 }
@@ -123,7 +123,6 @@ namespace sb_editor.HashCodes
                 sw.WriteLine("\tu32      MusicHashCode;");
                 sw.WriteLine("\tfloat    DurationInSeconds;");
                 sw.WriteLine("\tbool     Looping;");
-                sw.WriteLine("\ts32      UserValue;");
                 sw.WriteLine("} MusicDetails;");
                 sw.WriteLine(string.Empty);
                 sw.WriteLine("MusicDetails MusicData[]={");
@@ -132,7 +131,7 @@ namespace sb_editor.HashCodes
                 {
                     while (index != item.Key)
                     {
-                        sw.WriteLine("\t{0,0,0,0},");
+                        sw.WriteLine("\t{0,0,0},");
                         index++;
                     }
                     sw.WriteLine(item.Value);
@@ -141,10 +140,11 @@ namespace sb_editor.HashCodes
                 sw.WriteLine("};");
             }
         }
+
         //-------------------------------------------------------------------------------------------------------------------------------
         private bool MusicLoops(List<MarkerInfo> markerFileData)
         {
-            foreach(MarkerInfo markerData in markerFileData)
+            foreach (MarkerInfo markerData in markerFileData)
             {
                 if (markerData.Type == 6)
                 {
