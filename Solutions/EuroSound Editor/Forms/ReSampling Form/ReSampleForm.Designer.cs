@@ -31,21 +31,21 @@ namespace sb_editor
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReSampleForm));
-            this.MainMenu = new System.Windows.Forms.MainMenu(this.components);
-            this.mnuSample = new System.Windows.Forms.MenuItem();
-            this.mnuSample_Play = new System.Windows.Forms.MenuItem();
-            this.mnuSample_Stop = new System.Windows.Forms.MenuItem();
-            this.mnuSample_Edit = new System.Windows.Forms.MenuItem();
+            this.MainMenu = new System.Windows.Forms.MenuStrip();
+            this.mnuSample = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuSample_Play = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuSample_Stop = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuSample_Edit = new System.Windows.Forms.ToolStripMenuItem();
             this.grbProjectPath = new System.Windows.Forms.GroupBox();
             this.txtMasterFolder = new System.Windows.Forms.TextBox();
             this.grbPreviewSample = new System.Windows.Forms.GroupBox();
             this.btnPreview = new System.Windows.Forms.Button();
             this.btnStopPreview = new System.Windows.Forms.Button();
             this.cboPreviewFormat = new System.Windows.Forms.ComboBox();
-            this.ContextMenu_ListView = new System.Windows.Forms.ContextMenu();
-            this.mnuPlay = new System.Windows.Forms.MenuItem();
-            this.mnuStop = new System.Windows.Forms.MenuItem();
-            this.mnuEdit = new System.Windows.Forms.MenuItem();
+            this.ContextMenu_ListView = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuPlay = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuStop = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.lblSampleCount = new System.Windows.Forms.Label();
             this.btnEditSample = new System.Windows.Forms.Button();
             this.txtBootupTime = new System.Windows.Forms.TextBox();
@@ -74,47 +74,60 @@ namespace sb_editor
             this.Column_ReSmp3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Column_ReSmp2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Column_ReSmp1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.MainMenu.SuspendLayout();
             this.grbProjectPath.SuspendLayout();
             this.grbPreviewSample.SuspendLayout();
+            this.ContextMenu_ListView.SuspendLayout();
             this.grbMoveSamplesToFolder.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainMenu
             // 
-            this.MainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.MainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuSample});
+            this.MainMenu.Location = new System.Drawing.Point(0, 0);
+            this.MainMenu.Name = "MainMenu";
+            this.MainMenu.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.MainMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.MainMenu.Size = new System.Drawing.Size(909, 24);
+            this.MainMenu.TabIndex = 0;
+            this.MainMenu.Text = "Main Menu";
             // 
             // mnuSample
             // 
-            this.mnuSample.Index = 0;
-            this.mnuSample.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.mnuSample.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuSample_Play,
             this.mnuSample_Stop,
             this.mnuSample_Edit});
+            this.mnuSample.Name = "mnuSample";
+            this.mnuSample.Size = new System.Drawing.Size(58, 24);
             this.mnuSample.Text = "Sample";
             // 
             // mnuSample_Play
             // 
-            this.mnuSample_Play.Index = 0;
+            this.mnuSample_Play.Name = "mnuSample_Play";
+            this.mnuSample_Play.Size = new System.Drawing.Size(98, 22);
             this.mnuSample_Play.Text = "Play";
             this.mnuSample_Play.Click += new System.EventHandler(this.MnuSample_Play_Click);
             // 
             // mnuSample_Stop
             // 
-            this.mnuSample_Stop.Index = 1;
+            this.mnuSample_Stop.Name = "mnuSample_Stop";
+            this.mnuSample_Stop.Size = new System.Drawing.Size(98, 22);
             this.mnuSample_Stop.Text = "Stop";
             this.mnuSample_Stop.Click += new System.EventHandler(this.MnuSample_Stop_Click);
             // 
             // mnuSample_Edit
             // 
-            this.mnuSample_Edit.Index = 2;
+            this.mnuSample_Edit.Name = "mnuSample_Edit";
+            this.mnuSample_Edit.Size = new System.Drawing.Size(98, 22);
             this.mnuSample_Edit.Text = "Edit";
             this.mnuSample_Edit.Click += new System.EventHandler(this.MnuSample_Edit_Click);
             // 
             // grbProjectPath
             // 
             this.grbProjectPath.Controls.Add(this.txtMasterFolder);
-            this.grbProjectPath.Location = new System.Drawing.Point(12, 3);
+            this.grbProjectPath.Location = new System.Drawing.Point(12, 27);
             this.grbProjectPath.Name = "grbProjectPath";
             this.grbProjectPath.Size = new System.Drawing.Size(463, 48);
             this.grbProjectPath.TabIndex = 0;
@@ -139,7 +152,7 @@ namespace sb_editor
             this.grbPreviewSample.Controls.Add(this.btnPreview);
             this.grbPreviewSample.Controls.Add(this.btnStopPreview);
             this.grbPreviewSample.Controls.Add(this.cboPreviewFormat);
-            this.grbPreviewSample.Location = new System.Drawing.Point(481, 3);
+            this.grbPreviewSample.Location = new System.Drawing.Point(481, 27);
             this.grbPreviewSample.Name = "grbPreviewSample";
             this.grbPreviewSample.Size = new System.Drawing.Size(416, 48);
             this.grbPreviewSample.TabIndex = 2;
@@ -181,26 +194,35 @@ namespace sb_editor
             // 
             // ContextMenu_ListView
             // 
-            this.ContextMenu_ListView.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.ContextMenu_ListView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuPlay,
             this.mnuStop,
             this.mnuEdit});
+            this.ContextMenu_ListView.Name = "ContextMenu_ListView";
+            this.ContextMenu_ListView.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.ContextMenu_ListView.Size = new System.Drawing.Size(181, 92);
             // 
             // mnuPlay
             // 
-            this.mnuPlay.Index = 0;
+            this.mnuPlay.Name = "mnuPlay";
+            this.mnuPlay.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Space)));
+            this.mnuPlay.Size = new System.Drawing.Size(180, 22);
             this.mnuPlay.Text = "Play";
             this.mnuPlay.Click += new System.EventHandler(this.MnuPlay_Click);
             // 
             // mnuStop
             // 
-            this.mnuStop.Index = 1;
+            this.mnuStop.Name = "mnuStop";
+            this.mnuStop.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Escape)));
+            this.mnuStop.Size = new System.Drawing.Size(180, 22);
             this.mnuStop.Text = "Stop";
             this.mnuStop.Click += new System.EventHandler(this.MnuStop_Click);
             // 
             // mnuEdit
             // 
-            this.mnuEdit.Index = 2;
+            this.mnuEdit.Name = "mnuEdit";
+            this.mnuEdit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Back)));
+            this.mnuEdit.Size = new System.Drawing.Size(180, 22);
             this.mnuEdit.Text = "Edit";
             this.mnuEdit.Click += new System.EventHandler(this.MnuEdit_Click);
             // 
@@ -208,7 +230,7 @@ namespace sb_editor
             // 
             this.lblSampleCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblSampleCount.AutoSize = true;
-            this.lblSampleCount.Location = new System.Drawing.Point(91, 403);
+            this.lblSampleCount.Location = new System.Drawing.Point(91, 437);
             this.lblSampleCount.Name = "lblSampleCount";
             this.lblSampleCount.Size = new System.Drawing.Size(85, 13);
             this.lblSampleCount.TabIndex = 4;
@@ -217,7 +239,7 @@ namespace sb_editor
             // btnEditSample
             // 
             this.btnEditSample.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnEditSample.Location = new System.Drawing.Point(94, 432);
+            this.btnEditSample.Location = new System.Drawing.Point(94, 466);
             this.btnEditSample.Name = "btnEditSample";
             this.btnEditSample.Size = new System.Drawing.Size(75, 23);
             this.btnEditSample.TabIndex = 5;
@@ -229,7 +251,7 @@ namespace sb_editor
             // 
             this.txtBootupTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.txtBootupTime.BackColor = System.Drawing.SystemColors.Window;
-            this.txtBootupTime.Location = new System.Drawing.Point(175, 434);
+            this.txtBootupTime.Location = new System.Drawing.Point(175, 468);
             this.txtBootupTime.Name = "txtBootupTime";
             this.txtBootupTime.ReadOnly = true;
             this.txtBootupTime.Size = new System.Drawing.Size(246, 20);
@@ -240,7 +262,7 @@ namespace sb_editor
             this.grbMoveSamplesToFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.grbMoveSamplesToFolder.Controls.Add(this.btnMoveSelection);
             this.grbMoveSamplesToFolder.Controls.Add(this.txtSelectionFolder);
-            this.grbMoveSamplesToFolder.Location = new System.Drawing.Point(12, 461);
+            this.grbMoveSamplesToFolder.Location = new System.Drawing.Point(12, 495);
             this.grbMoveSamplesToFolder.Name = "grbMoveSamplesToFolder";
             this.grbMoveSamplesToFolder.Size = new System.Drawing.Size(784, 43);
             this.grbMoveSamplesToFolder.TabIndex = 7;
@@ -274,7 +296,7 @@ namespace sb_editor
             // btnMakePurgeList
             // 
             this.btnMakePurgeList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnMakePurgeList.Location = new System.Drawing.Point(12, 510);
+            this.btnMakePurgeList.Location = new System.Drawing.Point(12, 544);
             this.btnMakePurgeList.Name = "btnMakePurgeList";
             this.btnMakePurgeList.Size = new System.Drawing.Size(94, 23);
             this.btnMakePurgeList.TabIndex = 8;
@@ -285,7 +307,7 @@ namespace sb_editor
             // btnViewPurgedLis
             // 
             this.btnViewPurgedLis.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnViewPurgedLis.Location = new System.Drawing.Point(112, 510);
+            this.btnViewPurgedLis.Location = new System.Drawing.Point(112, 544);
             this.btnViewPurgedLis.Name = "btnViewPurgedLis";
             this.btnViewPurgedLis.Size = new System.Drawing.Size(94, 23);
             this.btnViewPurgedLis.TabIndex = 9;
@@ -296,7 +318,7 @@ namespace sb_editor
             // btnPurgeGo
             // 
             this.btnPurgeGo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnPurgeGo.Location = new System.Drawing.Point(212, 510);
+            this.btnPurgeGo.Location = new System.Drawing.Point(212, 544);
             this.btnPurgeGo.Name = "btnPurgeGo";
             this.btnPurgeGo.Size = new System.Drawing.Size(94, 23);
             this.btnPurgeGo.TabIndex = 10;
@@ -308,7 +330,7 @@ namespace sb_editor
             // 
             this.lblResampleRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblResampleRate.AutoSize = true;
-            this.lblResampleRate.Location = new System.Drawing.Point(267, 403);
+            this.lblResampleRate.Location = new System.Drawing.Point(267, 437);
             this.lblResampleRate.Name = "lblResampleRate";
             this.lblResampleRate.Size = new System.Drawing.Size(185, 13);
             this.lblResampleRate.TabIndex = 11;
@@ -319,7 +341,7 @@ namespace sb_editor
             this.cboSampleRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cboSampleRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboSampleRate.FormattingEnabled = true;
-            this.cboSampleRate.Location = new System.Drawing.Point(458, 400);
+            this.cboSampleRate.Location = new System.Drawing.Point(458, 434);
             this.cboSampleRate.Name = "cboSampleRate";
             this.cboSampleRate.Size = new System.Drawing.Size(237, 21);
             this.cboSampleRate.TabIndex = 12;
@@ -328,7 +350,7 @@ namespace sb_editor
             // btnReSampleAll
             // 
             this.btnReSampleAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnReSampleAll.Location = new System.Drawing.Point(701, 403);
+            this.btnReSampleAll.Location = new System.Drawing.Point(701, 437);
             this.btnReSampleAll.Name = "btnReSampleAll";
             this.btnReSampleAll.Size = new System.Drawing.Size(95, 23);
             this.btnReSampleAll.TabIndex = 13;
@@ -339,7 +361,7 @@ namespace sb_editor
             // btnStreamSel
             // 
             this.btnStreamSel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnStreamSel.Location = new System.Drawing.Point(802, 403);
+            this.btnStreamSel.Location = new System.Drawing.Point(802, 437);
             this.btnStreamSel.Name = "btnStreamSel";
             this.btnStreamSel.Size = new System.Drawing.Size(95, 23);
             this.btnStreamSel.TabIndex = 14;
@@ -350,7 +372,7 @@ namespace sb_editor
             // btnSampleSel
             // 
             this.btnSampleSel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSampleSel.Location = new System.Drawing.Point(802, 432);
+            this.btnSampleSel.Location = new System.Drawing.Point(802, 466);
             this.btnSampleSel.Name = "btnSampleSel";
             this.btnSampleSel.Size = new System.Drawing.Size(95, 23);
             this.btnSampleSel.TabIndex = 16;
@@ -361,7 +383,7 @@ namespace sb_editor
             // btnDeReSampleAll
             // 
             this.btnDeReSampleAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDeReSampleAll.Location = new System.Drawing.Point(701, 432);
+            this.btnDeReSampleAll.Location = new System.Drawing.Point(701, 466);
             this.btnDeReSampleAll.Name = "btnDeReSampleAll";
             this.btnDeReSampleAll.Size = new System.Drawing.Size(95, 23);
             this.btnDeReSampleAll.TabIndex = 15;
@@ -373,7 +395,7 @@ namespace sb_editor
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(822, 510);
+            this.btnOK.Location = new System.Drawing.Point(822, 544);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 17;
@@ -400,13 +422,13 @@ namespace sb_editor
             this.Column_ReSmp3,
             this.Column_ReSmp2,
             this.Column_ReSmp1});
-            this.lvwAllSamples.ContextMenu = this.ContextMenu_ListView;
+            this.lvwAllSamples.ContextMenuStrip = this.ContextMenu_ListView;
             this.lvwAllSamples.FullRowSelect = true;
             this.lvwAllSamples.GridLines = true;
             this.lvwAllSamples.HideSelection = false;
-            this.lvwAllSamples.Location = new System.Drawing.Point(12, 57);
+            this.lvwAllSamples.Location = new System.Drawing.Point(12, 81);
             this.lvwAllSamples.Name = "lvwAllSamples";
-            this.lvwAllSamples.Size = new System.Drawing.Size(885, 337);
+            this.lvwAllSamples.Size = new System.Drawing.Size(885, 347);
             this.lvwAllSamples.TabIndex = 3;
             this.lvwAllSamples.UseCompatibleStateImageBehavior = false;
             this.lvwAllSamples.View = System.Windows.Forms.View.Details;
@@ -464,7 +486,8 @@ namespace sb_editor
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(909, 545);
+            this.ClientSize = new System.Drawing.Size(909, 579);
+            this.Controls.Add(this.MainMenu);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnSampleSel);
             this.Controls.Add(this.btnDeReSampleAll);
@@ -484,8 +507,8 @@ namespace sb_editor
             this.Controls.Add(this.grbProjectPath);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.MainMenu;
             this.MaximizeBox = false;
-            this.Menu = this.MainMenu;
             this.MinimizeBox = false;
             this.Name = "ReSampleForm";
             this.ShowInTaskbar = false;
@@ -493,9 +516,12 @@ namespace sb_editor
             this.Text = "Set Re-Sample Rates";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Frm_ReSampleRates_FormClosing);
             this.Load += new System.EventHandler(this.Frm_ReSampleRates_Load);
+            this.MainMenu.ResumeLayout(false);
+            this.MainMenu.PerformLayout();
             this.grbProjectPath.ResumeLayout(false);
             this.grbProjectPath.PerformLayout();
             this.grbPreviewSample.ResumeLayout(false);
+            this.ContextMenu_ListView.ResumeLayout(false);
             this.grbMoveSamplesToFolder.ResumeLayout(false);
             this.grbMoveSamplesToFolder.PerformLayout();
             this.ResumeLayout(false);
@@ -505,11 +531,11 @@ namespace sb_editor
 
         #endregion
 
-        private System.Windows.Forms.MainMenu MainMenu;
-        private System.Windows.Forms.MenuItem mnuSample;
-        private System.Windows.Forms.MenuItem mnuSample_Play;
-        private System.Windows.Forms.MenuItem mnuSample_Stop;
-        private System.Windows.Forms.MenuItem mnuSample_Edit;
+        private System.Windows.Forms.MenuStrip MainMenu;
+        private System.Windows.Forms.ToolStripMenuItem mnuSample;
+        private System.Windows.Forms.ToolStripMenuItem mnuSample_Play;
+        private System.Windows.Forms.ToolStripMenuItem mnuSample_Stop;
+        private System.Windows.Forms.ToolStripMenuItem mnuSample_Edit;
         private System.Windows.Forms.GroupBox grbProjectPath;
         private System.Windows.Forms.TextBox txtMasterFolder;
         private System.Windows.Forms.GroupBox grbPreviewSample;
@@ -541,10 +567,10 @@ namespace sb_editor
         private System.Windows.Forms.Button btnSampleSel;
         private System.Windows.Forms.Button btnDeReSampleAll;
         private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.ContextMenu ContextMenu_ListView;
-        private System.Windows.Forms.MenuItem mnuPlay;
-        private System.Windows.Forms.MenuItem mnuStop;
-        private System.Windows.Forms.MenuItem mnuEdit;
+        private System.Windows.Forms.ContextMenuStrip ContextMenu_ListView;
+        private System.Windows.Forms.ToolStripMenuItem mnuPlay;
+        private System.Windows.Forms.ToolStripMenuItem mnuStop;
+        private System.Windows.Forms.ToolStripMenuItem mnuEdit;
         protected internal System.Windows.Forms.TextBox txtBootupTime;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
         protected internal Panels.ListView_ColumnSortingClick lvwAllSamples;
