@@ -9,6 +9,7 @@
 //-------------------------------------------------------------------------------------------------------------------------------
 // MUSX FUNCTIONS -- FINAL SFX FILES
 //-------------------------------------------------------------------------------------------------------------------------------
+using System;
 using System.IO;
 using System.Text;
 using static ESUtils.BytesFunctions;
@@ -21,7 +22,7 @@ namespace ESUtils
     public static class MusXBuild_Soundbank
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static void BuildSoundbankFile(string sfxFilePath, string sifFilePath, string sbFilePath, string ssFilePath, string OutputFilePath, int fileHashCode, bool bigEndian)
+        public static void BuildSoundbankFile(string sfxFilePath, string sifFilePath, string sbFilePath, string ssFilePath, string OutputFilePath, string platform, int fileHashCode, bool bigEndian)
         {
             //Ensure that the output file path is not null
             if (!string.IsNullOrEmpty(OutputFilePath))
@@ -35,8 +36,17 @@ namespace ESUtils
                     //--hashc[Hashcode for the current soundbank without the section prefix]--
                     binWriter.Write(fileHashCode);
                     //--version[Current version of the MusX file]--
-                    binWriter.Write(201);
-                    //--fulls[Size of the whole file, in bytes.]--
+                    binWriter.Write(4);
+                    //--fulls[Size of the whole file, in bytes. Unused. ]--
+                    binWriter.Write(0);
+                    //--Platform
+                    binWriter.Write(Encoding.ASCII.GetBytes(platform));
+                    //--Timespan
+                    DateTime initialDate = new DateTime(2000, 1, 1, 1, 0, 0);
+                    binWriter.Write((uint)(DateTime.Now.TimeOfDay - initialDate.TimeOfDay).TotalSeconds);
+                    //--Adpcm Encoding
+                    binWriter.Write(Convert.ToInt32(!platform.Equals("PS2_")));
+                    //--Padding
                     binWriter.Write(0);
 
                     //--------------------------------------------------[File Sections]--------------------------------------------------
@@ -71,7 +81,7 @@ namespace ESUtils
                         if (sfxFileData.Length > 0)
                         {
                             SFXLength = FlipUInt32((uint)sfxFileData.Length, bigEndian);
-                            binWriter.Seek((int)positionAligned, SeekOrigin.Begin);
+                            WriteAlignedDecoration(binWriter, positionAligned);
                             binWriter.Write(sfxFileData);
                             positionAligned = AlignNumber((uint)binWriter.BaseStream.Position, 0x800);
                         }
@@ -86,7 +96,7 @@ namespace ESUtils
                         if (sifFileData.Length > 0)
                         {
                             SampleInfoLength = FlipUInt32((uint)sifFileData.Length, bigEndian);
-                            binWriter.Seek((int)positionAligned, SeekOrigin.Begin);
+                            WriteAlignedDecoration(binWriter, positionAligned);
                             binWriter.Write(sifFileData);
                             positionAligned = AlignNumber((uint)binWriter.BaseStream.Position, 0x800);
                         }
@@ -101,7 +111,7 @@ namespace ESUtils
                         if (ssfFileData.Length > 0)
                         {
                             SpecialSampleInfoLength = FlipUInt32((uint)ssfFileData.Length, bigEndian);
-                            binWriter.Seek((int)positionAligned, SeekOrigin.Begin);
+                            WriteAlignedDecoration(binWriter, positionAligned);
                             binWriter.Write(ssfFileData);
                             positionAligned = AlignNumber((uint)binWriter.BaseStream.Position, 0x800);
                         }
@@ -116,7 +126,7 @@ namespace ESUtils
                         if (sbfFileData.Length > 0)
                         {
                             SampleDataLength = FlipUInt32((uint)sbfFileData.Length, bigEndian);
-                            binWriter.Seek((int)positionAligned, SeekOrigin.Begin);
+                            WriteAlignedDecoration(binWriter, positionAligned);
                             binWriter.Write(sbfFileData);
                         }
                     }
@@ -125,6 +135,7 @@ namespace ESUtils
                     uint fileSize = (uint)binWriter.BaseStream.Position;
                     binWriter.BaseStream.Seek(0xC, SeekOrigin.Begin);
                     binWriter.Write(fileSize);
+                    binWriter.BaseStream.Seek(16, SeekOrigin.Current);
                     binWriter.Write(SFXStart);
                     binWriter.Write(SFXLength);
                     binWriter.Write(SampleInfoStart);
@@ -136,6 +147,8 @@ namespace ESUtils
                 }
             }
         }
+
+
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------

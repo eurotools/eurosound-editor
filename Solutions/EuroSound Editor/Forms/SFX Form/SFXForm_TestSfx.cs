@@ -59,7 +59,7 @@ namespace sb_editor.Forms
                             //Build SFX File
                             Dictionary<string, SFX> sbFileData = new Dictionary<string, SFX>() { { "Common", sfxData } };
                             string[] samplesList = sbFunctions.GetSampleList(sbFileData, Enumerations.Language.English);
-                            sbFunctions.UpdateDuckerLength(sbFileData, "PC");
+                            sbFunctions.UpdateDuckerLengthAndGroups(sbFileData, "PC");
 
                             //Write SFX Data
                             WriteSfxFile(HashCodesDict, sbFileData, samplesList, "___SB_TEST_SFX___", sfxWritter, false, sw);
@@ -79,7 +79,7 @@ namespace sb_editor.Forms
                     DirectoryInfo musXFolder = Directory.CreateDirectory(outputFolder);
 
                     //Build File
-                    MusXBuild_Soundbank.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, string.Empty, Path.Combine(musXFolder.FullName, fileName), hashCode, false);
+                    MusXBuild_Soundbank.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, string.Empty, Path.Combine(musXFolder.FullName, fileName), CommonFunctions.GetPlatformLabel("PC"), hashCode, false);
                 }
             }
         }

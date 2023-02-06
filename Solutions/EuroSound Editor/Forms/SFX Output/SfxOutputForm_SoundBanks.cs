@@ -50,7 +50,7 @@ namespace sb_editor.Forms
                         Query.Start();
                         Dictionary<string, SFX> sbFileData = sbFunctions.GetSfxDataDict(sbFunctions.GetSFXs(soundBankData.DataBases), outputPlatform[k], outputLanguage);
                         string[] samplesList = sbFunctions.GetSampleList(sbFileData, outputLanguage).Except(streamSamples).ToArray();
-                        sbFunctions.UpdateDuckerLength(sbFileData, outputPlatform[k]);
+                        sbFunctions.UpdateDuckerLengthAndGroups(sbFileData, outputPlatform[k]);
                         Query.Stop();
 
                         //Get File Paths
@@ -135,7 +135,7 @@ namespace sb_editor.Forms
                                         string sfxTempFile = Path.ChangeExtension(outTmpFilePath, ".sfx");
                                         string sifTempFile = Path.ChangeExtension(outTmpFilePath, ".sif");
                                         string ssfTempFile = Path.ChangeExtension(outTmpFilePath, ".ssf");
-                                        MusXBuild_Soundbank.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, ssfTempFile, Path.Combine(outputPath, fileName), soundBankData.HashCode, isBigEndian);
+                                        MusXBuild_Soundbank.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, ssfTempFile, Path.Combine(outputPath, fileName), CommonFunctions.GetPlatformLabel(outputPlatform[k]), soundBankData.HashCode, isBigEndian);
                                     }
                                 }
                             }

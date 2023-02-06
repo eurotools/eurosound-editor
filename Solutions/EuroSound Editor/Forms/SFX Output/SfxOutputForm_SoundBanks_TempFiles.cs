@@ -24,7 +24,7 @@ namespace sb_editor.Forms
             sfxWritter.Write(BytesFunctions.FlipInt32(fileData.Count, isBigEndian));
             foreach (KeyValuePair<string, SFX> sfxItem in fileData)
             {
-                sfxWritter.Write(BytesFunctions.FlipInt32(sfxItem.Value.HashCode, isBigEndian));
+                sfxWritter.Write(BytesFunctions.FlipInt32(sfxItem.Value.HashCode | 0xF00000, isBigEndian));
                 sfxWritter.Write(0);
             }
 
@@ -46,7 +46,7 @@ namespace sb_editor.Forms
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.Priority);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.Ducker);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.MasterVolume);
-                sfxWritter.Write((((short)sfxData.Value.Parameters.Group & 0xfff) << 0) | ((sfxData.Value.Parameters.GroupMaxChannels & 0xf) << 1));
+                sfxWritter.Write((short)(((sfxData.Value.Parameters.Group & 0xfff) << 0) | ((sfxData.Value.Parameters.GroupMaxChannels & 0xf) << 1)));
                 sfxWritter.Write((ushort)sbFunctions.GetFlags(sfxData.Value));
 
                 //Calculate references

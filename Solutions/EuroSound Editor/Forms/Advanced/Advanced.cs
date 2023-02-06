@@ -439,7 +439,7 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnSetupSfxGroups_Click(object sender, EventArgs e)
         {
-            using(GroupingForm sfxGroups = new GroupingForm())
+            using (GroupingForm sfxGroups = new GroupingForm())
             {
                 sfxGroups.ShowDialog();
             }

@@ -113,15 +113,6 @@ namespace ESUtils
                 }
             }
         }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        private static void WriteAlignedDecoration(BinaryWriter bw, uint PositionAligned)
-        {
-            while (bw.BaseStream.Position != PositionAligned)
-            {
-                bw.Write((byte)171);
-            }
-        }
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------

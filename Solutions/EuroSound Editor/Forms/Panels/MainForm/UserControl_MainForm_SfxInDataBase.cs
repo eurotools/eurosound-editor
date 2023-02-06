@@ -172,6 +172,15 @@ namespace sb_editor.Panels
             RemoveFromDataBase();
         }
 
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void MnuSetupGroups_Click(object sender, System.EventArgs e)
+        {
+            using (GroupingForm sfxGroupingForm = new GroupingForm())
+            {
+                sfxGroupingForm.ShowDialog();
+            }
+        }
+
         //*===============================================================================================
         //* FUNCTIONS
         //*===============================================================================================

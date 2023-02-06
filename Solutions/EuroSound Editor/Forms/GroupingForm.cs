@@ -58,7 +58,7 @@ namespace sb_editor.Forms
                 for (int i = 0; i < availableSfxFiles.Length; i++)
                 {
                     string fileName = Path.GetFileNameWithoutExtension(availableSfxFiles[i]);
-                    if (usedSfx.IndexOf(fileName) == -1)
+                    if (usedSfx.IndexOf(fileName) == -1 && File.Exists(availableSfxFiles[i]))
                     {
                         SFX sfxData = TextFiles.ReadSfxFile(availableSfxFiles[i]);
                         lvwAvailable_SFXs.Items.Add(new ListViewItem(new string[] { fileName, sfxData.Parameters.MaxVoices.ToString(), Convert.ToBoolean(sfxData.Parameters.Action1).ToString() }));
@@ -107,8 +107,12 @@ namespace sb_editor.Forms
                     lvwSFXsInGroup.BeginUpdate();
                     for (int i = 0; i < groupFileData.Dependencies.Length; i++)
                     {
-                        SFX sfxData = TextFiles.ReadSfxFile(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", groupFileData.Dependencies[i] + ".txt"));
-                        lvwSFXsInGroup.Items.Add(new ListViewItem(new string[] { groupFileData.Dependencies[i], sfxData.Parameters.MaxVoices.ToString(), Convert.ToBoolean(sfxData.Parameters.Action1).ToString() }));
+                        string sfxPath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", groupFileData.Dependencies[i] + ".txt");
+                        if (File.Exists(sfxPath))
+                        {
+                            SFX sfxData = TextFiles.ReadSfxFile(sfxPath);
+                            lvwSFXsInGroup.Items.Add(new ListViewItem(new string[] { groupFileData.Dependencies[i], sfxData.Parameters.MaxVoices.ToString(), Convert.ToBoolean(sfxData.Parameters.Action1).ToString() }));
+                        }
                     }
                     lvwSFXsInGroup.EndUpdate();
                     lblSFXsInGroup_Count.Text = string.Format("Total: {0}", lvwSFXsInGroup.Items.Count);
@@ -316,8 +320,19 @@ namespace sb_editor.Forms
                 if (File.Exists(filePath))
                 {
                     File.Delete(filePath);
+
+                    //Remove form listview
+                    foreach (ListViewItem item in lvwGroups.Items)
+                    {
+                        if (item.Text.Equals(lstAvailableGroups.SelectedItem))
+                        {
+                            item.Remove();
+                            break;
+                        }
+                    }
+
+                    //Remove from listbox
                     lstAvailableGroups.Items.RemoveAt(lstAvailableGroups.Items.IndexOf(lstAvailableGroups.SelectedItem));
-                    lvwGroups.SelectedItems[0].Remove();
 
                     //Update counter
                     lblGroupsCount.Text = string.Format("Total: {0}", lstAvailableGroups.Items.Count);

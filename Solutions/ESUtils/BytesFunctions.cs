@@ -10,6 +10,8 @@
 // BYTES FUNCTIONS
 //-------------------------------------------------------------------------------------------------------------------------------
 
+using System.IO;
+
 namespace ESUtils
 {
     //-------------------------------------------------------------------------------------------------------------------------------
@@ -114,6 +116,15 @@ namespace ESUtils
         {
             uint PositionAligned = (valueToAlign + (blockSize - 1)) & ~(blockSize - 1);
             return PositionAligned;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        internal static void WriteAlignedDecoration(BinaryWriter bw, uint PositionAligned)
+        {
+            while (bw.BaseStream.Position != PositionAligned)
+            {
+                bw.Write((byte)0xAB);
+            }
         }
     }
 

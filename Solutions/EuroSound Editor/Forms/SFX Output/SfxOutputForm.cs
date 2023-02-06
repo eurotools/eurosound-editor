@@ -102,18 +102,6 @@ namespace sb_editor.Forms
             if (!fastOutput && !string.IsNullOrEmpty(GlobalPrefs.CurrentProject.HashCodeFileDirectory) && Directory.Exists(GlobalPrefs.CurrentProject.HashCodeFileDirectory))
             {
                 OutputHashCodes(samplesList);
-
-                //Create SFX Data
-                string sfxFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "SFX_Data.h");
-                if (!string.IsNullOrEmpty(GlobalPrefs.CurrentProject.EngineXProjectPath) && Directory.Exists(GlobalPrefs.CurrentProject.EngineXProjectPath) && File.Exists(sfxFilePath))
-                {
-                    for (int i = 0; i < outputPlatform.Length; i++)
-                    {
-                        string outputPath = Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", CommonFunctions.GetEnginexFolder(outputPlatform[i]), "Music");
-                        Directory.CreateDirectory(outputPath);
-                        CommonFunctions.RunConsoleProcess(Path.Combine(Application.StartupPath, "SystemFiles", "SFXStructToBin.exe"), string.Format("\"{0}\" \"{1}\"", sfxFilePath, Path.Combine(outputPath, "SFX_Data.bin")), false);
-                    }
-                }
             }
         }
 

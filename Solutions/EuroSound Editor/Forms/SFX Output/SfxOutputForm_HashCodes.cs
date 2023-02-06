@@ -4,6 +4,7 @@ using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using static ESUtils.Enumerations;
 
 namespace sb_editor.Forms
 {
@@ -38,7 +39,7 @@ namespace sb_editor.Forms
                 backgroundWorker1.ReportProgress((int)progress, string.Format("Creating SFX_Data.h {0}", fileName));
 
                 //Create temp file
-                hashCodes.CreateTempSfxData(Path.Combine(GlobalPrefs.ProjectFolder, "TempSfxData", fileName + ".txt"), sfxFiles[i], samplesList);
+                hashCodes.CreateTempSfxData(fileName, sfxFiles[i], outLanguages, samplesList);
             }
 
             //-------------------------------------------------------------------------------[SFX_Data.h]-------------------------------------------------------------------------------
@@ -46,42 +47,61 @@ namespace sb_editor.Forms
 
             //Read folder files
             SortedDictionary<uint, string> itemsData = new SortedDictionary<uint, string>();
-            string[] availableFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "TempSfxData"), "*.txt", SearchOption.TopDirectoryOnly);
-            for (int i = 0; i < availableFiles.Length; i++)
+            string[] availableFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "TempSfxData"), "*.txt", SearchOption.AllDirectories);
+            for (int i = 0; i < outLanguages.Length; i++)
             {
-                string[] data = File.ReadAllLines(availableFiles[i]);
-                if (data.Length == 2)
+                Language outLang = (Language)Enum.Parse(typeof(Language), outLanguages[i], true);
+                for (int j = 0; j < availableFiles.Length; j++)
                 {
-                    string[] dataSplit = data[1].Split(',', '{');
-                    uint hashCode = Convert.ToUInt32(dataSplit[1].Trim());
-                    if (itemsData.ContainsKey(hashCode))
+                    if (availableFiles[j].IndexOf("Speech", StringComparison.OrdinalIgnoreCase) >= 0 && availableFiles[j].IndexOf(outLang.ToString(), StringComparison.OrdinalIgnoreCase) == -1)
                     {
-                        itemsData[hashCode] = data[1];
+                        continue;
                     }
-                    else
+                    string[] data = File.ReadAllLines(availableFiles[j]);
+                    if (data.Length == 2)
                     {
-                        itemsData.Add(hashCode, data[1]);
+                        string[] dataSplit = data[1].Split(',', '{');
+                        uint hashCode = Convert.ToUInt32(dataSplit[1].Trim());
+                        if (itemsData.ContainsKey(hashCode))
+                        {
+                            itemsData[hashCode] = data[1];
+                        }
+                        else
+                        {
+                            itemsData.Add(hashCode, data[1]);
+                        }
                     }
                 }
-            }
 
-            //Write file data
-            using (StreamWriter sw = new StreamWriter(File.Open(Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "SFX_Data.h"), FileMode.Create, FileAccess.Write, FileShare.Read)))
-            {
-                sw.WriteLine("// typedef struct SFXOutputDetails {s32 HashCode;f32 InnerRadius;f32 OuterRadius;f32 Altertness;f32 Duration;s8 Looping;s8 Tracking3d;s8 SampleStreamed;} SFXOutputDetails;");
-                sw.WriteLine("SFXOutputDetails SFXOutputData[] = {");
-                uint index = 0;
-                foreach (KeyValuePair<uint, string> item in itemsData)
+                //Write file data
+                string sfxDataFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, outLang.ToString() + "_SFX_Data.h");
+                using (StreamWriter sw = new StreamWriter(File.Open(sfxDataFilePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
                 {
-                    while (index != item.Key)
+                    sw.WriteLine("// typedef struct SFXOutputDetails {s32 HashCode;f32 InnerRadius;f32 OuterRadius;f32 Duration;s8 Looping;s8 Tracking3d;s8 SampleStreamed;s8 Is3D;} SFXOutputDetails;");
+                    sw.WriteLine("SFXOutputDetails SFXOutputData[] = {");
+                    uint index = 0;
+                    foreach (KeyValuePair<uint, string> item in itemsData)
                     {
-                        sw.WriteLine("{ 0 , 0 ,  0 , 0 ,  0 , 0 , 0 } ,  // Blank");
+                        while (index != item.Key)
+                        {
+                            sw.WriteLine("{ 0 , 0 ,  0 , 0 ,  0 , 0 , 0 , 0 } ,  // Blank");
+                            index++;
+                        }
+                        sw.WriteLine(item.Value);
                         index++;
                     }
-                    sw.WriteLine(item.Value);
-                    index++;
+                    sw.WriteLine("};\n");
                 }
-                sw.WriteLine("};\n");
+
+                //Convert it to the SFX
+                for (int j = 0; j < outputPlatform.Length; j++)
+                {
+                    string outTmpFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatform[j], "SoundBanks", outLanguages[i], "sfxdetails.bin");
+                    BuildSoundDetailsFile(sfxDataFilePath, outTmpFilePath);
+
+                    string sfxOutputPath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatform[j]), CommonFunctions.GetSfxName(outLang, "sounddetails").ToLower());
+                    MusXBuild_MusicDetails.BuildMusicDetails(outTmpFilePath, sfxOutputPath, CommonFunctions.GetPlatformLabel(outputPlatform[j]));
+                }
             }
 
             //-------------------------------------------------------------------------------[SFX_Defines.h]-------------------------------------------------------------------------------
@@ -107,7 +127,7 @@ namespace sb_editor.Forms
                 sw.WriteLine("// SFX Language defines");
                 sw.WriteLine(hashCodes.WriteHashCode("LanguageHashCodeOffset", 0x10000));
                 sw.WriteLine(string.Empty);
-                foreach (Enumerations.Language language in Enum.GetValues(typeof(Enumerations.Language)))
+                foreach (Language language in Enum.GetValues(typeof(Language)))
                 {
                     sw.WriteLine(hashCodes.WriteNumber("SFXLanguage_" + language, (int)language));
                 }
@@ -201,6 +221,67 @@ namespace sb_editor.Forms
             //-------------------------------------------------------------------------------[Sound.h]-------------------------------------------------------------------------------
             backgroundWorker1.ReportProgress(100, "End");
             hashCodes.BuildSoundHhFile(Path.Combine(GlobalPrefs.CurrentProject.EuroLandHashCodeServerPath, "Sound.h"));
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void BuildSoundDetailsFile(string musicDataTableFile, string musicDetailsPlatform)
+        {
+            //Open hashtable and create binary file
+            using (StreamReader sr = new StreamReader(File.Open(musicDataTableFile, FileMode.Open, FileAccess.Read, FileShare.Read)))
+            {
+                using (BinaryWriter bw = new BinaryWriter(File.Open(musicDetailsPlatform, FileMode.Create, FileAccess.Write, FileShare.Read)))
+                {
+                    int minValue = 0;
+                    int maxValue = 0;
+
+                    //Write placeholders
+                    bw.Write(0);
+                    bw.Write(0);
+
+                    //Read data
+                    while (!sr.EndOfStream)
+                    {
+                        string currentLine = sr.ReadLine().Trim();
+                        //Skip empty or commented lines
+                        if (string.IsNullOrEmpty(currentLine) || currentLine.StartsWith("//"))
+                        {
+                            continue;
+                        }
+
+                        //Header info
+                        if (currentLine.StartsWith("{ "))
+                        {
+                            string[] lineData = currentLine.Split(new char[] { ',', '{', '}' }, StringSplitOptions.RemoveEmptyEntries);
+                            if (lineData.Length == 10)
+                            {
+                                int hashcode = Convert.ToInt32(lineData[0].Trim());
+                                bw.Write((short)StringFloatToDouble(lineData[1]));
+                                bw.Write((short)StringFloatToDouble(lineData[2]));
+                                bw.Write(StringFloatToDouble(lineData[3]));
+                                bw.Write(Convert.ToSByte(lineData[4]));
+                                bw.Write(Convert.ToSByte(lineData[5]));
+                                bw.Write(Convert.ToSByte(lineData[6]));
+                                bw.Write(Convert.ToSByte(lineData[7].Trim().Equals("True", StringComparison.OrdinalIgnoreCase)));
+
+                                minValue = Math.Min(minValue, hashcode);
+                                maxValue = Math.Max(maxValue, hashcode);
+                            }
+                        }
+                    }
+
+                    //Write min and max values
+                    bw.Seek(0, SeekOrigin.Begin);
+                    bw.Write(minValue | 0x1AF00000);
+                    bw.Write(maxValue | 0x1AF00000);
+                }
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private static float StringFloatToDouble(string number)
+        {
+            string num = number.Trim().Replace("f", string.Empty);
+            return float.Parse(num, GlobalPrefs.NumericProvider);
         }
     }
 

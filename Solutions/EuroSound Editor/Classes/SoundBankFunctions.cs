@@ -337,10 +337,11 @@ namespace sb_editor.Classes
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void UpdateDuckerLength(Dictionary<string, SFX> fileData, string outputPlatform)
+        internal void UpdateDuckerLengthAndGroups(Dictionary<string, SFX> fileData, string outputPlatform)
         {
             foreach (KeyValuePair<string, SFX> soundToCheck in fileData)
             {
+                //Update ducker if is On
                 if (soundToCheck.Value.Parameters.Ducker > 0)
                 {
                     int duckerLength = 0;
@@ -384,6 +385,19 @@ namespace sb_editor.Classes
                         duckerLength += Math.Abs(soundToCheck.Value.Parameters.DuckerLength);
                     }
                     soundToCheck.Value.Parameters.DuckerLength = duckerLength;
+                }
+
+                //Update Groups
+                IEnumerable<string> groupFiles = Directory.EnumerateFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Groups"), "*.txt", SearchOption.AllDirectories);
+                foreach (string groupFile in groupFiles)
+                {
+                    GroupFile groupData = TextFiles.ReadGroupsFile(groupFile);
+                    if (Array.FindIndex(groupData.Dependencies, s => s.Equals(soundToCheck.Key, StringComparison.OrdinalIgnoreCase)) >= 0)
+                    {
+                        soundToCheck.Value.Parameters.GroupStealReject = Convert.ToBoolean(groupData.Action1);
+                        soundToCheck.Value.Parameters.GroupMaxChannels = groupData.MaxVoices;
+                        soundToCheck.Value.Parameters.Group = groupData.HashCode;
+                    }
                 }
             }
         }
