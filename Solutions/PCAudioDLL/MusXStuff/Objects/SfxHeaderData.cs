@@ -8,6 +8,9 @@
         public uint FileHashCode;
         public uint FileVersion;
         public uint FileSize;
+        public string Platform;
+        public uint Timespan;
+        public uint UsesAdpcm;
 
         //Soundbanks
         public uint SFXStart;

@@ -44,6 +44,19 @@ namespace PCAudioDLL.MusXStuff
                     //Size of the whole file, in bytes
                     headerData.FileSize = BReader.ReadUInt32();
 
+                    //Fields in the new versions
+                    if (headerData.FileVersion > 3 && headerData.FileVersion < 10)
+                    {
+                        //Platform PS2_ PC__ GC__ XB__
+                        headerData.Platform = Encoding.ASCII.GetString(BReader.ReadBytes(4));
+                        //Seconds from 1/1/2000, 1:00:00 (946684800)
+                        headerData.Timespan = BReader.ReadUInt32();
+                        //Seems that when the data is encoded in adpcm is set to 1.
+                        headerData.UsesAdpcm = BReader.ReadUInt32();
+                        //Padding??
+                        BReader.ReadUInt32();
+                    }
+
                     //Section where soundbanks are stored
                     headerData.SFXStart = BReader.ReadUInt32();
                     //Size of the first section, in bytes
