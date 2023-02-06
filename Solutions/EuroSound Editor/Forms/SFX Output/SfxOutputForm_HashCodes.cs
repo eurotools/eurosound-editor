@@ -117,62 +117,44 @@ namespace sb_editor.Forms
                 //Misc Defines Section
                 backgroundWorker1.ReportProgress(36, "Writing SFX_Defines.h Stage 0");
                 sw.WriteLine("// SFX Misc defines");
-                sw.WriteLine(hashCodes.WriteHashCode("SBIHashCode", 0xFFFFFF));
-                sw.WriteLine(hashCodes.WriteHashCode("EX_SFX_PREFIX", 0x1A000000));
-                sw.WriteLine(hashCodes.WriteHashCode("EX_SONG_PREFIX", 0x1B000000));
-                sw.WriteLine(hashCodes.WriteHashCodeComment("EX_SOUNDBANK_PREFIX", 0x1C000000));
-                sw.WriteLine(string.Empty);
-
-                //Language Defines 
-                sw.WriteLine("// SFX Language defines");
-                sw.WriteLine(hashCodes.WriteHashCode("LanguageHashCodeOffset", 0x10000));
-                sw.WriteLine(string.Empty);
-                foreach (Language language in Enum.GetValues(typeof(Language)))
-                {
-                    sw.WriteLine(hashCodes.WriteNumber("SFXLanguage_" + language, (int)language));
-                }
-                sw.WriteLine(hashCodes.WriteNoAlign("StreamFileHashCode", 0xFFFF));
                 sw.WriteLine(string.Empty);
 
                 //SFX HashCodes
                 backgroundWorker1.ReportProgress(48, "Writing SFX_Defines.h Stage 1");
                 sw.WriteLine("// SFX HashCodes");
-                sw.WriteLine("#define SFX_NIS_MUSIC_TRIGGER 0");
-                sw.WriteLine(string.Empty);
-                int maxSfxHashcodeDefined = 0;
                 hashCodes.GetHashCodesWithLabels(hashCodesDict, null);
                 foreach (KeyValuePair<string, int> sfxItem in hashCodesDict)
                 {
                     if (prefixHashCode)
                     {
-                        sw.WriteLine(hashCodes.WriteHashCode("HT_Sound_" + sfxItem.Key, sfxItem.Value | 0x1A000000));
+                        sw.WriteLine(hashCodes.WriteHashCode("HT_Sound_" + sfxItem.Key, sfxItem.Value | 0x1AF00000));
                     }
                     else
                     {
-                        sw.WriteLine(hashCodes.WriteHashCode(sfxItem.Key, sfxItem.Value | 0x1A000000));
+                        sw.WriteLine(hashCodes.WriteHashCode(sfxItem.Key, sfxItem.Value | 0x1AF00000));
                     }
-                    maxSfxHashcodeDefined = Math.Max(maxSfxHashcodeDefined, sfxItem.Value);
+
                 }
                 backgroundWorker1.ReportProgress(60, "Writing SFX_Defines.h Stage 2");
-                sw.WriteLine(hashCodes.WriteHashCode("SFX_MaximumDefined", hashCodesDict.Count));
-                sw.WriteLine(hashCodes.WriteHashCode("SFX_HashCodeHighest", maxSfxHashcodeDefined));
                 sw.WriteLine(string.Empty);
 
                 //Soundbank HashCodes
-                sw.WriteLine("// SoundBank HashCodes");
+                sw.WriteLine("// SFX SoundBank HashCodes");
                 hashCodes.GetHashCodesWithLabels(null, soundBankDict);
+                int maxSfxHashcodeDefined = 0;
                 foreach (KeyValuePair<string, int> soundbankItem in soundBankDict)
                 {
                     if (prefixHashCode)
                     {
-                        sw.WriteLine(hashCodes.WriteHashCode("HT_Sound_" + soundbankItem.Key, soundbankItem.Value));
+                        sw.WriteLine(hashCodes.WriteHashCode("HT_Sound_" + soundbankItem.Key, soundbankItem.Value | 0x1AE00000));
                     }
                     else
                     {
-                        sw.WriteLine(hashCodes.WriteHashCode(soundbankItem.Key, soundbankItem.Value));
+                        sw.WriteLine(hashCodes.WriteHashCode(soundbankItem.Key, soundbankItem.Value | 0x1AE00000));
                     }
+                    maxSfxHashcodeDefined = Math.Max(maxSfxHashcodeDefined, soundbankItem.Value);
                 }
-                sw.WriteLine(hashCodes.WriteHashCode("SB_MaximumDefined", soundBankDict.Count));
+                sw.WriteLine(hashCodes.WriteHashCode("SB_MaximumDefined", maxSfxHashcodeDefined));
             }
 
             //-------------------------------------------------------------------------------[SFX_Debug.h]-------------------------------------------------------------------------------
@@ -211,10 +193,10 @@ namespace sb_editor.Forms
             Dictionary<string, int> reverbsDict = sbFunctions.GetHashCodesDictionary("Reverbs", "#MiscData");
             using (StreamWriter sw = new StreamWriter(File.Open(reverbsFilePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
-                sw.WriteLine("// Reverb Hashcodes");
+                sw.WriteLine("// Reverb HashCodes");
                 foreach (KeyValuePair<string, int> reverbData in reverbsDict)
                 {
-                    sw.WriteLine(hashCodes.WriteHashCode(reverbData.Key, reverbData.Value));
+                    sw.WriteLine(hashCodes.WriteHashCode(reverbData.Key, reverbData.Value | 0x1C000000));
                 }
             }
 
