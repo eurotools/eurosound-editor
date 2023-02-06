@@ -78,6 +78,28 @@ namespace sb_editor
             cboMemSlotFormat.EndUpdate();
             UpdateMemMapsComboboxes();
 
+            //Soundbanks
+            string soundbanksPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks");
+            if (Directory.Exists(soundbanksPath))
+            {
+                IEnumerable<string> sbFiles = Directory.EnumerateFiles(soundbanksPath, "*.txt", SearchOption.TopDirectoryOnly);
+                foreach (string sbFile in sbFiles)
+                {
+                    SoundBank sbData = TextFiles.ReadSoundbankFile(sbFile);
+                    ListViewItem sbItem = new ListViewItem(new string[] { Path.GetFileNameWithoutExtension(sbFile), sbData.MemoryMap });
+                    lvwSoundBanks.Items.Add(sbItem);
+                }
+            }
+
+            //Default Memory Map
+            cboDefaultMemMap.BeginUpdate();
+            cboDefaultMemMap.Items.AddRange(temporalObj.MemoryMaps.ToArray());
+            if (cboDefaultMemMap.Items.Count > 0)
+            {
+                cboDefaultMemMap.SelectedIndex = temporalObj.DefaultMemMap;
+            }
+            cboDefaultMemMap.EndUpdate();
+
             //Ini File Data
             string systemIniFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini");
             if (File.Exists(systemIniFilePath))
@@ -483,6 +505,12 @@ namespace sb_editor
                 {
                     //Update UI
                     soundBank.SubItems[1].Text = selectedMapSlot;
+
+                    //Update File
+                    string sbPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks", soundBank.Text + ".txt");
+                    SoundBank sbData = TextFiles.ReadSoundbankFile(sbPath);
+                    sbData.MemoryMap = selectedMapSlot;
+                    TextFiles.WriteSoundBankFile(sbPath, sbData);
                 }
             }
         }
@@ -495,6 +523,15 @@ namespace sb_editor
             if (cboDefaultRate.SelectedIndex >= 0)
             {
                 temporalObj.DefaultRate = cboDefaultRate.SelectedIndex;
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void CboDefaultMemMap_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboDefaultMemMap.SelectedIndex >= 0)
+            {
+                temporalObj.DefaultMemMap = cboDefaultMemMap.SelectedIndex;
             }
         }
 

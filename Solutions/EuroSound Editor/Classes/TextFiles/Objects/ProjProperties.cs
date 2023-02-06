@@ -10,6 +10,7 @@ namespace sb_editor.Objects
     {
         //Misc
         public int DefaultRate;
+        public int DefaultMemMap;
         public string SampleFilesFolder;
         public string HashCodeFileDirectory;
         public string EngineXProjectPath;
@@ -31,6 +32,7 @@ namespace sb_editor.Objects
             ProjProperties newObj = new ProjProperties
             {
                 DefaultRate = DefaultRate,
+                DefaultMemMap = DefaultMemMap,
                 CurrentVersion = CurrentVersion,
                 SampleFilesFolder = SampleFilesFolder,
                 EngineXProjectPath = EngineXProjectPath,

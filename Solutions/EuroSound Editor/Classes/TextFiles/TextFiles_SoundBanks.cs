@@ -57,6 +57,18 @@ namespace sb_editor
                         }
                     }
 
+                    //Memory Map Block
+                    if (currentLine.Equals("#MEMORYMAP", StringComparison.OrdinalIgnoreCase))
+                    {
+                        currentLine = sr.ReadLine().Trim();
+                        while (!currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase))
+                        {
+                            string slotName = currentLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)[1];
+                            soundBank.MemoryMap = slotName;
+                            currentLine = sr.ReadLine().Trim();
+                        }
+                    }
+
                     //Check for max bank sizes
                     if (currentLine.Equals("#MaxBankSizes", StringComparison.OrdinalIgnoreCase))
                     {
@@ -123,6 +135,10 @@ namespace sb_editor
                 outputFile.WriteLine(string.Empty);
                 outputFile.WriteLine("#HASHCODE");
                 outputFile.WriteLine(string.Format("HashCodeNumber {0}", soundBankFile.HashCode));
+                outputFile.WriteLine("#END");
+                outputFile.WriteLine(string.Empty);
+                outputFile.WriteLine("#MEMORYMAP");
+                outputFile.WriteLine(string.Format("MapSlot {0}", soundBankFile.MemoryMap));
                 outputFile.WriteLine("#END");
                 outputFile.WriteLine(string.Empty);
                 if (includeMaxSizes)

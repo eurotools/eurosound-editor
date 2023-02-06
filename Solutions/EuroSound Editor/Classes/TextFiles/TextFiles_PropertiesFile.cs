@@ -133,6 +133,9 @@ namespace sb_editor
                                 case "DEFAULTRATE":
                                     projectData.DefaultRate = Convert.ToInt32(lineData[1]);
                                     break;
+                                case "DEFAULTMAP":
+                                    projectData.DefaultMemMap = Convert.ToInt32(lineData[1]);
+                                    break;
                                 case "SAMPLEFILEFOLDER":
                                     projectData.SampleFilesFolder = GetKeyWordValue("SAMPLEFILEFOLDER", currentLine);
                                     break;
@@ -239,6 +242,7 @@ namespace sb_editor
                     }
                     outputFile.WriteLine("#MiscProperites");
                     outputFile.WriteLine("DefaultRate  {0}", projectFile.DefaultRate);
+                    outputFile.WriteLine("DefaultMap  {0}", projectFile.DefaultMemMap);
                     outputFile.WriteLine("SampleFileFolder {0}", projectFile.SampleFilesFolder);
                     outputFile.WriteLine("HashCodeFileFolder {0}", projectFile.HashCodeFileDirectory);
                     outputFile.WriteLine("EngineXFolder {0}", projectFile.EngineXProjectPath);

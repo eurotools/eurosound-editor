@@ -66,6 +66,8 @@ namespace sb_editor
             this.colFormat_Rate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.cboFormat = new System.Windows.Forms.ComboBox();
             this.grbMisc = new System.Windows.Forms.GroupBox();
+            this.cboDefaultMemMap = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.lblXbox_Unit = new System.Windows.Forms.Label();
             this.lblGameCube_Unit = new System.Windows.Forms.Label();
             this.lblPC_Unit = new System.Windows.Forms.Label();
@@ -518,6 +520,8 @@ namespace sb_editor
             // grbMisc
             // 
             this.grbMisc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.grbMisc.Controls.Add(this.cboDefaultMemMap);
+            this.grbMisc.Controls.Add(this.label2);
             this.grbMisc.Controls.Add(this.lblXbox_Unit);
             this.grbMisc.Controls.Add(this.lblGameCube_Unit);
             this.grbMisc.Controls.Add(this.lblPC_Unit);
@@ -548,6 +552,25 @@ namespace sb_editor
             this.grbMisc.TabIndex = 9;
             this.grbMisc.TabStop = false;
             this.grbMisc.Text = "Misc";
+            // 
+            // cboDefaultMemMap
+            // 
+            this.cboDefaultMemMap.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboDefaultMemMap.FormattingEnabled = true;
+            this.cboDefaultMemMap.Location = new System.Drawing.Point(412, 14);
+            this.cboDefaultMemMap.Name = "cboDefaultMemMap";
+            this.cboDefaultMemMap.Size = new System.Drawing.Size(145, 21);
+            this.cboDefaultMemMap.TabIndex = 27;
+            this.cboDefaultMemMap.SelectedIndexChanged += new System.EventHandler(this.CboDefaultMemMap_SelectedIndexChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(298, 17);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(108, 13);
+            this.label2.TabIndex = 26;
+            this.label2.Text = "Default Memory Map:";
             // 
             // lblXbox_Unit
             // 
@@ -762,7 +785,7 @@ namespace sb_editor
             this.cboDefaultRate.FormattingEnabled = true;
             this.cboDefaultRate.Location = new System.Drawing.Point(119, 14);
             this.cboDefaultRate.Name = "cboDefaultRate";
-            this.cboDefaultRate.Size = new System.Drawing.Size(200, 21);
+            this.cboDefaultRate.Size = new System.Drawing.Size(173, 21);
             this.cboDefaultRate.TabIndex = 2;
             this.cboDefaultRate.SelectedIndexChanged += new System.EventHandler(this.CboDefaultRate_SelectedIndexChanged);
             // 
@@ -940,7 +963,7 @@ namespace sb_editor
             // ColSbMemoryMap
             // 
             this.ColSbMemoryMap.Text = "Memory Map";
-            this.ColSbMemoryMap.Width = 180;
+            this.ColSbMemoryMap.Width = 100;
             // 
             // groupBox1
             // 
@@ -1180,5 +1203,7 @@ namespace sb_editor
         private Microsoft.VisualBasic.PowerPacks.ShapeContainer shapeContainer4;
         private Microsoft.VisualBasic.PowerPacks.LineShape lineShape1;
         private Microsoft.VisualBasic.PowerPacks.ShapeContainer shapeContainer1;
+        private System.Windows.Forms.ComboBox cboDefaultMemMap;
+        private System.Windows.Forms.Label label2;
     }
 }

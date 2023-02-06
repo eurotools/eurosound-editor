@@ -168,7 +168,8 @@ namespace sb_editor.Panels
                                 SoundBank soundBankFile = new SoundBank
                                 {
                                     HashCode = GlobalPrefs.SoundBankHashCodeNumber,
-                                    DataBases = new string[0]
+                                    DataBases = new string[0],
+                                    MemoryMap = GlobalPrefs.CurrentProject.MemoryMaps[GlobalPrefs.CurrentProject.DefaultMemMap]
                                 };
                                 TextFiles.WriteSoundBankFile(filePath, soundBankFile);
                                 GlobalPrefs.SoundBankHashCodeNumber++;
