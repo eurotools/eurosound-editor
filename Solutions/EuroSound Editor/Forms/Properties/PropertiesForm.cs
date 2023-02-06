@@ -12,7 +12,6 @@ namespace sb_editor
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class PropertiesForm : Form
     {
-        private bool showWarning = true;
         private int index = 0;
         private ProjProperties temporalObj;
 
@@ -133,7 +132,7 @@ namespace sb_editor
         //-------------------------------------------------------------------------------------------------------------------------------
         private void Frm_ProjectProperties_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (showWarning)
+            if (DialogResult == DialogResult.Cancel || DialogResult == DialogResult.Abort)
             {
                 if (MessageBox.Show("Are you sure you wish to Quit Properties whitout saving?", Application.ProductName, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.Cancel)
                 {
@@ -145,7 +144,7 @@ namespace sb_editor
                     ProjectFileFunctions.UpdateAll((MainForm)Application.OpenForms[nameof(MainForm)]);
                 }
             }
-            else
+            else if (DialogResult == DialogResult.OK)
             {
                 //Update all data
                 ProjectFileFunctions.UpdateAll((MainForm)Application.OpenForms[nameof(MainForm)]);
@@ -538,8 +537,6 @@ namespace sb_editor
         //*===============================================================================================
         private void BtnOK_Click(object sender, EventArgs e)
         {
-            showWarning = false;
-
             //Update variables
             GlobalPrefs.EuroSoundUser = txtUserName.Text;
             GlobalPrefs.CurrentProject = temporalObj.Clone();
@@ -574,12 +571,6 @@ namespace sb_editor
                     frmMainForm.UserControl_Output.cboOutputFormat.Items.Add(availableFormats[i]);
                 }
             }
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        private void BtnCancel_Click(object sender, EventArgs e)
-        {
-            showWarning = true;
         }
 
         //*===============================================================================================
