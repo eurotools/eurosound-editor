@@ -190,7 +190,7 @@ namespace sb_editor.Forms
                     {
                         loopOffset = BytesFunctions.AlignNumber((uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, masterFileData.SampleRate, masterFileData.LoopStart * 2), 2);
                     }
-                    sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, masterFileData, BytesFunctions.AlignNumber((uint)masterFileData.Length, 4), (int)masterFileData.Length, i * 96, loopOffset, isBigEndian);
+                    sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, masterFileData, BytesFunctions.AlignNumber((uint)masterFileData.Length, 4), (int)masterFileData.Length, i * 96, loopOffset, isBigEndian, true);
 
                     //Write Sample Data
                     byte[] filedata = new byte[BytesFunctions.AlignNumber((uint)masterFileData.Length, 4)];

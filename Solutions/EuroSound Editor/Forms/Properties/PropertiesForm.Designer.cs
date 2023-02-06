@@ -92,11 +92,29 @@ namespace sb_editor
             this.lblDefaultSampleRate = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.shapeContainer1 = new Microsoft.VisualBasic.PowerPacks.ShapeContainer();
             this.LineShape_Divider4 = new Microsoft.VisualBasic.PowerPacks.LineShape();
             this.LineShape_Divider3 = new Microsoft.VisualBasic.PowerPacks.LineShape();
             this.FolderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.OpenFileDiag = new System.Windows.Forms.OpenFileDialog();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPageReSampleRates = new System.Windows.Forms.TabPage();
+            this.shapeContainer3 = new Microsoft.VisualBasic.PowerPacks.ShapeContainer();
+            this.tabPageMemoryMaps = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.cboAvailableMemoryMaps = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.lvwSoundBanks = new System.Windows.Forms.ListView();
+            this.colSoundBank = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.ColSbMemoryMap = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cboMemSlotFormat = new System.Windows.Forms.ComboBox();
+            this.ButtonCreateMemSlot = new System.Windows.Forms.Button();
+            this.lvwAvailableMemSlots = new System.Windows.Forms.ListView();
+            this.ColMemSlot = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colMemSlotSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.shapeContainer4 = new Microsoft.VisualBasic.PowerPacks.ShapeContainer();
+            this.lineShape1 = new Microsoft.VisualBasic.PowerPacks.LineShape();
+            this.shapeContainer1 = new Microsoft.VisualBasic.PowerPacks.ShapeContainer();
             this.grbMasterDirectory.SuspendLayout();
             this.grbHashCodeDirectory.SuspendLayout();
             this.grbEngineXPath.SuspendLayout();
@@ -110,6 +128,11 @@ namespace sb_editor
             ((System.ComponentModel.ISupportInitialize)(this.nudGameCubeSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPCSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPlayStationSize)).BeginInit();
+            this.tabControl1.SuspendLayout();
+            this.tabPageReSampleRates.SuspendLayout();
+            this.tabPageMemoryMaps.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // grbMasterDirectory
@@ -403,9 +426,9 @@ namespace sb_editor
             // 
             this.grbAvailableReSample.Controls.Add(this.pnlListView);
             this.grbAvailableReSample.Controls.Add(this.btnAddSampleRate);
-            this.grbAvailableReSample.Location = new System.Drawing.Point(12, 361);
+            this.grbAvailableReSample.Location = new System.Drawing.Point(6, 6);
             this.grbAvailableReSample.Name = "grbAvailableReSample";
-            this.grbAvailableReSample.Size = new System.Drawing.Size(222, 242);
+            this.grbAvailableReSample.Size = new System.Drawing.Size(229, 221);
             this.grbAvailableReSample.TabIndex = 7;
             this.grbAvailableReSample.TabStop = false;
             this.grbAvailableReSample.Text = "Available Re-Sample Rates";
@@ -418,7 +441,7 @@ namespace sb_editor
             this.pnlListView.Controls.Add(this.lstAvailableSampleRates);
             this.pnlListView.Location = new System.Drawing.Point(6, 19);
             this.pnlListView.Name = "pnlListView";
-            this.pnlListView.Size = new System.Drawing.Size(210, 188);
+            this.pnlListView.Size = new System.Drawing.Size(217, 167);
             this.pnlListView.TabIndex = 9;
             // 
             // lstAvailableSampleRates
@@ -427,13 +450,13 @@ namespace sb_editor
             this.lstAvailableSampleRates.FormattingEnabled = true;
             this.lstAvailableSampleRates.Location = new System.Drawing.Point(0, 0);
             this.lstAvailableSampleRates.Name = "lstAvailableSampleRates";
-            this.lstAvailableSampleRates.Size = new System.Drawing.Size(210, 188);
+            this.lstAvailableSampleRates.Size = new System.Drawing.Size(217, 167);
             this.lstAvailableSampleRates.TabIndex = 0;
             // 
             // btnAddSampleRate
             // 
             this.btnAddSampleRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAddSampleRate.Location = new System.Drawing.Point(6, 213);
+            this.btnAddSampleRate.Location = new System.Drawing.Point(6, 192);
             this.btnAddSampleRate.Name = "btnAddSampleRate";
             this.btnAddSampleRate.Size = new System.Drawing.Size(75, 23);
             this.btnAddSampleRate.TabIndex = 8;
@@ -445,9 +468,9 @@ namespace sb_editor
             // 
             this.grbReSampleRatePerFormat.Controls.Add(this.lvwReSampleFormats);
             this.grbReSampleRatePerFormat.Controls.Add(this.cboFormat);
-            this.grbReSampleRatePerFormat.Location = new System.Drawing.Point(323, 361);
+            this.grbReSampleRatePerFormat.Location = new System.Drawing.Point(312, 6);
             this.grbReSampleRatePerFormat.Name = "grbReSampleRatePerFormat";
-            this.grbReSampleRatePerFormat.Size = new System.Drawing.Size(333, 242);
+            this.grbReSampleRatePerFormat.Size = new System.Drawing.Size(318, 221);
             this.grbReSampleRatePerFormat.TabIndex = 8;
             this.grbReSampleRatePerFormat.TabStop = false;
             this.grbReSampleRatePerFormat.Text = "Re-Sample Rate Values per Format";
@@ -466,7 +489,7 @@ namespace sb_editor
             this.lvwReSampleFormats.HideSelection = false;
             this.lvwReSampleFormats.Location = new System.Drawing.Point(6, 47);
             this.lvwReSampleFormats.Name = "lvwReSampleFormats";
-            this.lvwReSampleFormats.Size = new System.Drawing.Size(321, 190);
+            this.lvwReSampleFormats.Size = new System.Drawing.Size(306, 169);
             this.lvwReSampleFormats.TabIndex = 1;
             this.lvwReSampleFormats.UseCompatibleStateImageBehavior = false;
             this.lvwReSampleFormats.View = System.Windows.Forms.View.Details;
@@ -494,8 +517,7 @@ namespace sb_editor
             // 
             // grbMisc
             // 
-            this.grbMisc.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.grbMisc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.grbMisc.Controls.Add(this.lblXbox_Unit);
             this.grbMisc.Controls.Add(this.lblGameCube_Unit);
             this.grbMisc.Controls.Add(this.lblPC_Unit);
@@ -520,7 +542,7 @@ namespace sb_editor
             this.grbMisc.Controls.Add(this.cboDefaultRate);
             this.grbMisc.Controls.Add(this.lblEditWavs);
             this.grbMisc.Controls.Add(this.lblDefaultSampleRate);
-            this.grbMisc.Location = new System.Drawing.Point(12, 609);
+            this.grbMisc.Location = new System.Drawing.Point(12, 626);
             this.grbMisc.Name = "grbMisc";
             this.grbMisc.Size = new System.Drawing.Size(563, 218);
             this.grbMisc.TabIndex = 9;
@@ -766,7 +788,7 @@ namespace sb_editor
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(581, 775);
+            this.btnCancel.Location = new System.Drawing.Point(581, 792);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 10;
@@ -778,7 +800,7 @@ namespace sb_editor
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(581, 804);
+            this.btnOK.Location = new System.Drawing.Point(581, 821);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 11;
@@ -786,41 +808,236 @@ namespace sb_editor
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.BtnOK_Click);
             // 
-            // shapeContainer1
-            // 
-            this.shapeContainer1.Location = new System.Drawing.Point(0, 0);
-            this.shapeContainer1.Margin = new System.Windows.Forms.Padding(0);
-            this.shapeContainer1.Name = "shapeContainer1";
-            this.shapeContainer1.Shapes.AddRange(new Microsoft.VisualBasic.PowerPacks.Shape[] {
-            this.LineShape_Divider4,
-            this.LineShape_Divider3});
-            this.shapeContainer1.Size = new System.Drawing.Size(668, 834);
-            this.shapeContainer1.TabIndex = 12;
-            this.shapeContainer1.TabStop = false;
-            // 
             // LineShape_Divider4
             // 
             this.LineShape_Divider4.AccessibleRole = System.Windows.Forms.AccessibleRole.Default;
             this.LineShape_Divider4.Name = "LineShape_Divider4";
             this.LineShape_Divider4.SelectionColor = System.Drawing.SystemColors.Control;
-            this.LineShape_Divider4.X1 = 279;
-            this.LineShape_Divider4.X2 = 279;
-            this.LineShape_Divider4.Y1 = 357;
-            this.LineShape_Divider4.Y2 = 602;
+            this.LineShape_Divider4.X1 = 270;
+            this.LineShape_Divider4.X2 = 270;
+            this.LineShape_Divider4.Y1 = -4;
+            this.LineShape_Divider4.Y2 = 229;
             // 
             // LineShape_Divider3
             // 
             this.LineShape_Divider3.AccessibleRole = System.Windows.Forms.AccessibleRole.Default;
             this.LineShape_Divider3.Name = "LineShape_Divider3";
             this.LineShape_Divider3.SelectionColor = System.Drawing.SystemColors.Control;
-            this.LineShape_Divider3.X1 = 11;
+            this.LineShape_Divider3.X1 = 12;
             this.LineShape_Divider3.X2 = 655;
-            this.LineShape_Divider3.Y1 = 356;
-            this.LineShape_Divider3.Y2 = 356;
+            this.LineShape_Divider3.Y1 = 357;
+            this.LineShape_Divider3.Y2 = 357;
             // 
             // OpenFileDiag
             // 
             this.OpenFileDiag.Filter = "EXE Files (*.exe)|*.exe";
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPageReSampleRates);
+            this.tabControl1.Controls.Add(this.tabPageMemoryMaps);
+            this.tabControl1.Location = new System.Drawing.Point(12, 361);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(644, 259);
+            this.tabControl1.TabIndex = 13;
+            // 
+            // tabPageReSampleRates
+            // 
+            this.tabPageReSampleRates.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageReSampleRates.Controls.Add(this.grbReSampleRatePerFormat);
+            this.tabPageReSampleRates.Controls.Add(this.grbAvailableReSample);
+            this.tabPageReSampleRates.Controls.Add(this.shapeContainer3);
+            this.tabPageReSampleRates.Location = new System.Drawing.Point(4, 22);
+            this.tabPageReSampleRates.Name = "tabPageReSampleRates";
+            this.tabPageReSampleRates.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageReSampleRates.Size = new System.Drawing.Size(636, 233);
+            this.tabPageReSampleRates.TabIndex = 0;
+            this.tabPageReSampleRates.Text = "Re-Sample Rates";
+            // 
+            // shapeContainer3
+            // 
+            this.shapeContainer3.Location = new System.Drawing.Point(3, 3);
+            this.shapeContainer3.Margin = new System.Windows.Forms.Padding(0);
+            this.shapeContainer3.Name = "shapeContainer3";
+            this.shapeContainer3.Shapes.AddRange(new Microsoft.VisualBasic.PowerPacks.Shape[] {
+            this.LineShape_Divider4});
+            this.shapeContainer3.Size = new System.Drawing.Size(630, 227);
+            this.shapeContainer3.TabIndex = 0;
+            this.shapeContainer3.TabStop = false;
+            // 
+            // tabPageMemoryMaps
+            // 
+            this.tabPageMemoryMaps.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageMemoryMaps.Controls.Add(this.groupBox2);
+            this.tabPageMemoryMaps.Controls.Add(this.groupBox1);
+            this.tabPageMemoryMaps.Controls.Add(this.shapeContainer4);
+            this.tabPageMemoryMaps.Location = new System.Drawing.Point(4, 22);
+            this.tabPageMemoryMaps.Name = "tabPageMemoryMaps";
+            this.tabPageMemoryMaps.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageMemoryMaps.Size = new System.Drawing.Size(636, 233);
+            this.tabPageMemoryMaps.TabIndex = 1;
+            this.tabPageMemoryMaps.Text = "Memory-Maps";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.cboAvailableMemoryMaps);
+            this.groupBox2.Controls.Add(this.label1);
+            this.groupBox2.Controls.Add(this.lvwSoundBanks);
+            this.groupBox2.Location = new System.Drawing.Point(312, 6);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(318, 221);
+            this.groupBox2.TabIndex = 5;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Soundbanks Classification";
+            // 
+            // cboAvailableMemoryMaps
+            // 
+            this.cboAvailableMemoryMaps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboAvailableMemoryMaps.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboAvailableMemoryMaps.FormattingEnabled = true;
+            this.cboAvailableMemoryMaps.Location = new System.Drawing.Point(138, 194);
+            this.cboAvailableMemoryMaps.Name = "cboAvailableMemoryMaps";
+            this.cboAvailableMemoryMaps.Size = new System.Drawing.Size(174, 21);
+            this.cboAvailableMemoryMaps.TabIndex = 5;
+            this.cboAvailableMemoryMaps.SelectedIndexChanged += new System.EventHandler(this.CboAvailableMemoryMaps_SelectedIndexChanged);
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(61, 197);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(71, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Memory-Map:";
+            // 
+            // lvwSoundBanks
+            // 
+            this.lvwSoundBanks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvwSoundBanks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colSoundBank,
+            this.ColSbMemoryMap});
+            this.lvwSoundBanks.FullRowSelect = true;
+            this.lvwSoundBanks.GridLines = true;
+            this.lvwSoundBanks.HideSelection = false;
+            this.lvwSoundBanks.Location = new System.Drawing.Point(6, 19);
+            this.lvwSoundBanks.Name = "lvwSoundBanks";
+            this.lvwSoundBanks.Size = new System.Drawing.Size(306, 169);
+            this.lvwSoundBanks.TabIndex = 3;
+            this.lvwSoundBanks.UseCompatibleStateImageBehavior = false;
+            this.lvwSoundBanks.View = System.Windows.Forms.View.Details;
+            // 
+            // colSoundBank
+            // 
+            this.colSoundBank.Text = "Soundbank";
+            this.colSoundBank.Width = 180;
+            // 
+            // ColSbMemoryMap
+            // 
+            this.ColSbMemoryMap.Text = "Memory Map";
+            this.ColSbMemoryMap.Width = 180;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox1.Controls.Add(this.cboMemSlotFormat);
+            this.groupBox1.Controls.Add(this.ButtonCreateMemSlot);
+            this.groupBox1.Controls.Add(this.lvwAvailableMemSlots);
+            this.groupBox1.Location = new System.Drawing.Point(6, 6);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(229, 221);
+            this.groupBox1.TabIndex = 4;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Memory Maps per Format";
+            // 
+            // cboMemSlotFormat
+            // 
+            this.cboMemSlotFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboMemSlotFormat.FormattingEnabled = true;
+            this.cboMemSlotFormat.Location = new System.Drawing.Point(6, 19);
+            this.cboMemSlotFormat.Name = "cboMemSlotFormat";
+            this.cboMemSlotFormat.Size = new System.Drawing.Size(207, 21);
+            this.cboMemSlotFormat.TabIndex = 2;
+            this.cboMemSlotFormat.SelectedIndexChanged += new System.EventHandler(this.CboMemSlotFormat_SelectedIndexChanged);
+            // 
+            // ButtonCreateMemSlot
+            // 
+            this.ButtonCreateMemSlot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ButtonCreateMemSlot.Location = new System.Drawing.Point(6, 192);
+            this.ButtonCreateMemSlot.Name = "ButtonCreateMemSlot";
+            this.ButtonCreateMemSlot.Size = new System.Drawing.Size(75, 23);
+            this.ButtonCreateMemSlot.TabIndex = 1;
+            this.ButtonCreateMemSlot.Text = "Add";
+            this.ButtonCreateMemSlot.UseVisualStyleBackColor = true;
+            this.ButtonCreateMemSlot.Click += new System.EventHandler(this.ButtonCreateMemSlot_Click);
+            // 
+            // lvwAvailableMemSlots
+            // 
+            this.lvwAvailableMemSlots.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvwAvailableMemSlots.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.ColMemSlot,
+            this.colMemSlotSize});
+            this.lvwAvailableMemSlots.FullRowSelect = true;
+            this.lvwAvailableMemSlots.GridLines = true;
+            this.lvwAvailableMemSlots.HideSelection = false;
+            this.lvwAvailableMemSlots.Location = new System.Drawing.Point(6, 46);
+            this.lvwAvailableMemSlots.Name = "lvwAvailableMemSlots";
+            this.lvwAvailableMemSlots.Size = new System.Drawing.Size(217, 140);
+            this.lvwAvailableMemSlots.TabIndex = 0;
+            this.lvwAvailableMemSlots.UseCompatibleStateImageBehavior = false;
+            this.lvwAvailableMemSlots.View = System.Windows.Forms.View.Details;
+            this.lvwAvailableMemSlots.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LvwAvailableMemSlots_MouseDoubleClick);
+            // 
+            // ColMemSlot
+            // 
+            this.ColMemSlot.Text = "Name";
+            this.ColMemSlot.Width = 100;
+            // 
+            // colMemSlotSize
+            // 
+            this.colMemSlotSize.Text = "Max Size";
+            this.colMemSlotSize.Width = 100;
+            // 
+            // shapeContainer4
+            // 
+            this.shapeContainer4.Location = new System.Drawing.Point(3, 3);
+            this.shapeContainer4.Margin = new System.Windows.Forms.Padding(0);
+            this.shapeContainer4.Name = "shapeContainer4";
+            this.shapeContainer4.Shapes.AddRange(new Microsoft.VisualBasic.PowerPacks.Shape[] {
+            this.lineShape1});
+            this.shapeContainer4.Size = new System.Drawing.Size(630, 227);
+            this.shapeContainer4.TabIndex = 6;
+            this.shapeContainer4.TabStop = false;
+            // 
+            // lineShape1
+            // 
+            this.lineShape1.AccessibleRole = System.Windows.Forms.AccessibleRole.Default;
+            this.lineShape1.Name = "lineShape1";
+            this.lineShape1.SelectionColor = System.Drawing.SystemColors.Control;
+            this.lineShape1.X1 = 270;
+            this.lineShape1.X2 = 270;
+            this.lineShape1.Y1 = -4;
+            this.lineShape1.Y2 = 230;
+            // 
+            // shapeContainer1
+            // 
+            this.shapeContainer1.Location = new System.Drawing.Point(0, 0);
+            this.shapeContainer1.Margin = new System.Windows.Forms.Padding(0);
+            this.shapeContainer1.Name = "shapeContainer1";
+            this.shapeContainer1.Shapes.AddRange(new Microsoft.VisualBasic.PowerPacks.Shape[] {
+            this.LineShape_Divider3});
+            this.shapeContainer1.Size = new System.Drawing.Size(668, 851);
+            this.shapeContainer1.TabIndex = 14;
+            this.shapeContainer1.TabStop = false;
             // 
             // PropertiesForm
             // 
@@ -828,12 +1045,11 @@ namespace sb_editor
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(668, 834);
+            this.ClientSize = new System.Drawing.Size(668, 851);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.grbMisc);
-            this.Controls.Add(this.grbReSampleRatePerFormat);
-            this.Controls.Add(this.grbAvailableReSample);
             this.Controls.Add(this.grbAvailableFormat);
             this.Controls.Add(this.grbEuroLandPath);
             this.Controls.Add(this.grbEngineXPath);
@@ -868,6 +1084,12 @@ namespace sb_editor
             ((System.ComponentModel.ISupportInitialize)(this.nudGameCubeSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPCSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPlayStationSize)).EndInit();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPageReSampleRates.ResumeLayout(false);
+            this.tabPageMemoryMaps.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -936,10 +1158,28 @@ namespace sb_editor
         private Microsoft.VisualBasic.PowerPacks.ShapeContainer shapeContainer2;
         private Microsoft.VisualBasic.PowerPacks.LineShape LineShape_Divider2;
         private Microsoft.VisualBasic.PowerPacks.LineShape LineShape_Divider1;
-        private Microsoft.VisualBasic.PowerPacks.ShapeContainer shapeContainer1;
         private Microsoft.VisualBasic.PowerPacks.LineShape LineShape_Divider4;
         private Microsoft.VisualBasic.PowerPacks.LineShape LineShape_Divider3;
         private System.Windows.Forms.FolderBrowserDialog FolderBrowser;
         private System.Windows.Forms.OpenFileDialog OpenFileDiag;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPageReSampleRates;
+        private Microsoft.VisualBasic.PowerPacks.ShapeContainer shapeContainer3;
+        private System.Windows.Forms.TabPage tabPageMemoryMaps;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.ComboBox cboAvailableMemoryMaps;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ListView lvwSoundBanks;
+        private System.Windows.Forms.ColumnHeader colSoundBank;
+        private System.Windows.Forms.ColumnHeader ColSbMemoryMap;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.ComboBox cboMemSlotFormat;
+        private System.Windows.Forms.Button ButtonCreateMemSlot;
+        private System.Windows.Forms.ListView lvwAvailableMemSlots;
+        private System.Windows.Forms.ColumnHeader ColMemSlot;
+        private System.Windows.Forms.ColumnHeader colMemSlotSize;
+        private Microsoft.VisualBasic.PowerPacks.ShapeContainer shapeContainer4;
+        private Microsoft.VisualBasic.PowerPacks.LineShape lineShape1;
+        private Microsoft.VisualBasic.PowerPacks.ShapeContainer shapeContainer1;
     }
 }

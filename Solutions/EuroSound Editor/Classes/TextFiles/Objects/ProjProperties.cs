@@ -20,6 +20,7 @@ namespace sb_editor.Objects
 
         //Available ReSampleRates 
         public List<string> ResampleRates = new List<string>();
+        public List<string> MemoryMaps = new List<string>();
 
         //Platform Data
         public Dictionary<string, PlatformData> platformData = new Dictionary<string, PlatformData>();
@@ -35,6 +36,7 @@ namespace sb_editor.Objects
                 EngineXProjectPath = EngineXProjectPath,
                 HashCodeFileDirectory = HashCodeFileDirectory,
                 ResampleRates = new List<string>(ResampleRates),
+                MemoryMaps = new List<string>(MemoryMaps),
                 EuroLandHashCodeServerPath = EuroLandHashCodeServerPath,
                 platformData = platformData.ToDictionary(entry => entry.Key, entry => entry.Value.Clone()),
                 CreatedBy = CreatedBy,
@@ -54,6 +56,7 @@ namespace sb_editor.Objects
         public string OutputFolder;
         public bool AutoReSample;
         public List<int> ReSampleRates = new List<int>();
+        public List<int> MemoryMapsSize = new List<int>();
 
         //Clone object
         public PlatformData Clone()
@@ -62,7 +65,8 @@ namespace sb_editor.Objects
             {
                 OutputFolder = OutputFolder,
                 AutoReSample = AutoReSample,
-                ReSampleRates = new List<int>(ReSampleRates)
+                ReSampleRates = new List<int>(ReSampleRates),
+                MemoryMapsSize = new List<int>(MemoryMapsSize)
             };
             return clonedObj;
         }
