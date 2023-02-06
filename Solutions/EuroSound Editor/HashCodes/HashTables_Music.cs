@@ -16,6 +16,16 @@ namespace sb_editor.HashCodes
         //-------------------------------------------------------------------------------------------------------------------------------
         internal void CreateMfxDefines(string filePath)
         {
+            bool prefixHashCode = false;
+
+            //Check Ini File
+            string systemIniFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini");
+            if (File.Exists(systemIniFilePath))
+            {
+                IniFile systemIni = new IniFile(systemIniFilePath);
+                prefixHashCode = systemIni.Read("Prefix_HT_Sound", "PropertiesForm").Equals("1");
+            }
+
             //File Hashcodes
             int maxSfxHashcodeDefined = 0;
             string[] musicFiles = TextFiles.ReadListBlock(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", "MFXFiles.txt"), "#MFXFiles");
@@ -25,10 +35,17 @@ namespace sb_editor.HashCodes
                 for (int i = 0; i < musicFiles.Length; i++)
                 {
                     MusicFile fileData = TextFiles.ReadMusicFile(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", musicFiles[i] + ".txt"));
-                    sw.WriteLine(WriteHashCode("MFX_" + musicFiles[i], fileData.HashCode | 0x1BE00000));
+                    if (prefixHashCode)
+                    {
+                        sw.WriteLine(WriteHashCode("HT_Sound_MFX_" + musicFiles[i], fileData.HashCode | 0x1B000000, "\t\t\t"));
+                    }
+                    else
+                    {
+                        sw.WriteLine(WriteHashCode("MFX_" + musicFiles[i], fileData.HashCode | 0x1B000000, "\t\t\t"));
+                    }
                     maxSfxHashcodeDefined++;
                 }
-                sw.WriteLine("#define MFX_MaximumDefined {0}", maxSfxHashcodeDefined);
+                sw.WriteLine(WriteNumber("MFX_MaximumDefined", maxSfxHashcodeDefined));
             }
 
             //Add Jump Markers
@@ -46,7 +63,14 @@ namespace sb_editor.HashCodes
                         string[] jumpHashcodes = TextFiles.ReadJumpHashCodes(jumpFilePath);
                         for (int j = 0; j < jumpHashcodes.Length; j++)
                         {
-                            sw.WriteLine("#define JMP_{0} 0x{1:X8}", jumpHashcodes[j], ((0x1BE & 0xFFF) << 20) | (((short)j & 0xFF) << 8) | ((fileData.HashCode & 0xFF) << 0));
+                            if (prefixHashCode)
+                            {
+                                sw.WriteLine("#define HT_Sound_JMP_{0} 0x{1:X8}", jumpHashcodes[j], ((0x1B0 & 0xFFF) << 20) | (((short)j & 0xFF) << 8) | ((fileData.HashCode & 0xFF) << 0));
+                            }
+                            else
+                            {
+                                sw.WriteLine("#define JMP_{0} 0x{1:X8}", jumpHashcodes[j], ((0x1B0 & 0xFFF) << 20) | (((short)j & 0xFF) << 8) | ((fileData.HashCode & 0xFF) << 0));
+                            }
                         }
                     }
                 }

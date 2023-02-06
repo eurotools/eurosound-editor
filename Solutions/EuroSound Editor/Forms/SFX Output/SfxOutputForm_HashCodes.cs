@@ -107,9 +107,7 @@ namespace sb_editor.Forms
             //-------------------------------------------------------------------------------[SFX_Defines.h]-------------------------------------------------------------------------------
             string sfxDefinesFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "SFX_Defines.h");
             backgroundWorker1.ReportProgress(24, string.Format("Writing SFX_Defines.h Folder = {0}", Path.GetDirectoryName(sfxDefinesFilePath)));
-
             SortedDictionary<string, int> hashCodesDict = new SortedDictionary<string, int>();
-            SortedDictionary<string, int> soundBankDict = new SortedDictionary<string, int>();
 
             //Write File
             using (StreamWriter sw = new StreamWriter(File.Open(sfxDefinesFilePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
@@ -140,6 +138,7 @@ namespace sb_editor.Forms
 
                 //Soundbank HashCodes
                 sw.WriteLine("// SFX SoundBank HashCodes");
+                SortedDictionary<string, int> soundBankDict = new SortedDictionary<string, int>();
                 hashCodes.GetHashCodesWithLabels(null, soundBankDict);
                 int maxSfxHashcodeDefined = 0;
                 foreach (KeyValuePair<string, int> soundbankItem in soundBankDict)
@@ -154,7 +153,7 @@ namespace sb_editor.Forms
                     }
                     maxSfxHashcodeDefined = Math.Max(maxSfxHashcodeDefined, soundbankItem.Value);
                 }
-                sw.WriteLine(hashCodes.WriteHashCode("SB_MaximumDefined", maxSfxHashcodeDefined));
+                sw.WriteLine(hashCodes.WriteNumber("SB_MaximumDefined", maxSfxHashcodeDefined));
             }
 
             //-------------------------------------------------------------------------------[SFX_Debug.h]-------------------------------------------------------------------------------

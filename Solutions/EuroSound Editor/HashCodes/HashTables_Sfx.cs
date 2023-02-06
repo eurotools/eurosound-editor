@@ -22,7 +22,7 @@ namespace sb_editor.HashCodes
                 float waveDuration = 0.00002267574F;
                 WavInfo waveFileData = new WavInfo();
                 bool quitLoop = false;
-                for(int i = 0; i < outLanguages.Length; i++)
+                for (int i = 0; i < outLanguages.Length; i++)
                 {
                     if (quitLoop)
                     {
