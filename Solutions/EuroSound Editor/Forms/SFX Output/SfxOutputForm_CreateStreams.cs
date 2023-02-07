@@ -66,7 +66,7 @@ namespace sb_editor.Forms
                                         headerSize = 0;
                                         break;
                                     default:
-                                        audioDataFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "XBox_adpcm", streamsList[j]);
+                                        audioDataFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "XBox_adpcm", Path.ChangeExtension(streamsList[j], ".ssp"));
                                         statesFilePath = string.Empty;
                                         headerSize = 48;
                                         break;

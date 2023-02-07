@@ -201,7 +201,7 @@ namespace sb_editor.Forms
                             uint loopOffset = 0;
                             if (masterFileData.HasLoop)
                             {
-                                loopOffset = BytesFunctions.AlignNumber((uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, pcFileData.SampleRate, masterFileData.LoopStart * 2), 2);
+                                loopOffset = BytesFunctions.AlignNumber((uint)decimal.Divide(CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, pcFileData.SampleRate, masterFileData.LoopStart * 2), (decimal)1.1794), 2);
                             }
                             sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, pcFileData, BytesFunctions.AlignNumber((uint)pcFileData.Length, 4), (int)pcFileData.Length, i * 96, loopOffset, isBigEndian);
 
@@ -261,9 +261,11 @@ namespace sb_editor.Forms
                     case "x box":
                     case "xbox":
                         wavFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "X Box", sampleList[i].TrimStart(Path.DirectorySeparatorChar));
+                        string adpcmFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "XBox_adpcm", Path.ChangeExtension(sampleList[i].TrimStart(Path.DirectorySeparatorChar), ".ssp"));
+
                         if (File.Exists(wavFilePath))
                         {
-                            string adpcmFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "XBox_adpcm", Path.ChangeExtension(sampleList[i].TrimStart(Path.DirectorySeparatorChar), ".ssp"));
+                            WavInfo wavFileData = wavFunctions.ReadWaveProperties(wavFilePath);
                             if (File.Exists(adpcmFilePath))
                             {
                                 byte[] adpcmData = File.ReadAllBytes(adpcmFilePath);
@@ -272,7 +274,7 @@ namespace sb_editor.Forms
                                 uint loopOffset = 0;
                                 if (masterFileData.HasLoop)
                                 {
-                                    loopOffset = CalculusLoopOffset.GetXboxAlignedNumber((uint)masterFileData.LoopStart);
+                                    loopOffset = BytesFunctions.AlignNumber((uint)decimal.Divide(CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, wavFileData.SampleRate, masterFileData.LoopStart * 2), (decimal)1.1794), 2);
                                 }
                                 sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, wavFunctions.ReadWaveProperties(wavFilePath), (uint)adpcmData.Length, adpcmData.Length, i * 96, loopOffset, isBigEndian);
 
