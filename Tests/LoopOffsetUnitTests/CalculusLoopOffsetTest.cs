@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using ESUtils;
+using NUnit.Framework;
+using System;
 using static ESUtils.CalculusLoopOffset;
 
 namespace LoopOffsetUnitTests
@@ -107,6 +109,19 @@ namespace LoopOffsetUnitTests
         {
             uint result = GetStreamLoopOffsetXbox(input);
             return result;
+        }
+
+        [TestCase((uint)7304, ExpectedResult = 6184)] //1,1811125
+        [TestCase((uint)3209, ExpectedResult = 2716)] //1,1815169
+        [TestCase((uint)444, ExpectedResult = 376)]   //1,1808510
+        [TestCase((uint)7624, ExpectedResult = 6464)] //1,17945544
+        [TestCase((uint)9748, ExpectedResult = 8244)] //1,18243571
+        [TestCase((uint)9657, ExpectedResult = 8152)] //1,18461727
+        [TestCase((uint)6763, ExpectedResult = 5716)] //1,1831700
+        public uint Test_GetEurocomImaLoopOffset(uint baseLoopOffset)
+        {
+            uint PositionAligned = GetStreamLoopOffsetPCandGC(baseLoopOffset);
+            return (uint)(PositionAligned / 1.82);
         }
     }
 }

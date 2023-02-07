@@ -201,7 +201,7 @@ namespace sb_editor.Forms
                             uint loopOffset = 0;
                             if (masterFileData.HasLoop)
                             {
-                                loopOffset = BytesFunctions.AlignNumber((uint)decimal.Divide(CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, pcFileData.SampleRate, masterFileData.LoopStart * 2), (decimal)1.1794), 2);
+                                loopOffset = BytesFunctions.AlignNumber((uint)decimal.Divide(CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, pcFileData.SampleRate, masterFileData.LoopStart * 2), (decimal)3.456), 2);
                             }
                             sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, pcFileData, BytesFunctions.AlignNumber((uint)pcFileData.Length, 4), (int)pcFileData.Length, i * 96, loopOffset, isBigEndian);
 
@@ -274,7 +274,7 @@ namespace sb_editor.Forms
                                 uint loopOffset = 0;
                                 if (masterFileData.HasLoop)
                                 {
-                                    loopOffset = BytesFunctions.AlignNumber((uint)decimal.Divide(CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, wavFileData.SampleRate, masterFileData.LoopStart * 2), (decimal)1.1794), 2);
+                                    loopOffset = BytesFunctions.AlignNumber((uint)decimal.Divide(CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, wavFileData.SampleRate, masterFileData.LoopStart * 2), (decimal)3.456), 2);
                                 }
                                 sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, wavFunctions.ReadWaveProperties(wavFilePath), (uint)adpcmData.Length, adpcmData.Length, i * 96, loopOffset, isBigEndian);
 
