@@ -65,11 +65,11 @@ namespace sb_editor.HashCodes
                         {
                             if (prefixHashCode)
                             {
-                                sw.WriteLine("#define HT_Sound_JMP_{0} 0x{1:X8}", jumpHashcodes[j], ((0x1B0 & 0xFFF) << 20) | (((short)j & 0xFF) << 8) | ((fileData.HashCode & 0xFF) << 0));
+                                sw.WriteLine("#define HT_Sound_JMP_{0} 0x{1:X8}", jumpHashcodes[j], ((0x1B0 & 0xFFF) << 20) | (((short)j & 0xFF) << 12) | ((fileData.HashCode & 0xFFF) << 0));
                             }
                             else
                             {
-                                sw.WriteLine("#define JMP_{0} 0x{1:X8}", jumpHashcodes[j], ((0x1B0 & 0xFFF) << 20) | (((short)j & 0xFF) << 8) | ((fileData.HashCode & 0xFF) << 0));
+                                sw.WriteLine("#define JMP_{0} 0x{1:X8}", jumpHashcodes[j], ((0x1B0 & 0xFFF) << 20) | (((short)j & 0xFF) << 12) | ((fileData.HashCode & 0xFFF) << 0));
                             }
                         }
                     }

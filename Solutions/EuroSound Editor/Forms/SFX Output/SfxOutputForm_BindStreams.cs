@@ -25,7 +25,7 @@ namespace sb_editor.Forms
             string sfxOutputFolder = string.Empty;
             if (Directory.Exists(GlobalPrefs.CurrentProject.EngineXProjectPath))
             {
-                sfxOutputFolder = Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", CommonFunctions.GetEnginexFolder(Platform), CommonFunctions.GetLanguageFolder(outputLanguage.ToString()));
+                sfxOutputFolder = Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", CommonFunctions.GetEnginexFolder(Platform), "audio");
                 Directory.CreateDirectory(sfxOutputFolder);
             }
 
@@ -94,7 +94,7 @@ namespace sb_editor.Forms
             if (!string.IsNullOrEmpty(sfxOutputFolder) && Directory.Exists(sfxOutputFolder))
             {
                 string fileName = CommonFunctions.GetSfxName(outputLanguage, "streamdata");
-                MusXBuild_StreamFile.BuildStreamFile(binaryFile, lutFile, Path.Combine(sfxOutputFolder, fileName), isBigEndian);
+                MusXBuild_StreamFile.BuildStreamFile(binaryFile, lutFile, Path.Combine(sfxOutputFolder, fileName), 0x0005D000, CommonFunctions.GetPlatformLabel(Platform), isBigEndian);
             }
         }
 

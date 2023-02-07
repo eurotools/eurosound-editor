@@ -193,14 +193,6 @@ namespace sb_editor.Forms
                                     CommonFunctions.ReSampleWithSox(sampleFullPath, waveOutputPath, waveFileData.SampleRate, sampleRate, GlobalPrefs.SoxEffect, false);
                                     File.WriteAllBytes(pcOutputPath, eurocomImaFunction.Encode(wavFunctions.GetWaveSamples(waveOutputPath)));
                                     soxTimer.Stop();
-
-                                    //----------------------------------------------------------Create IMA file if Required
-                                    /* if (sample.Value.StreamMe)
-                                     {
-                                         pcTimer.Start();
-                                         CreateImaAdpcm(platform.Key, sampleFilePath, waveOutputPath);
-                                         pcTimer.Stop();
-                                     }*/
                                     break;
                                 default:
                                     //----------------------------------------------------------ReSample Master File
