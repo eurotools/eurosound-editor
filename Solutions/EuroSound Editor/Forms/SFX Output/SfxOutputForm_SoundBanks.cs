@@ -135,7 +135,7 @@ namespace sb_editor.Forms
                                         string sfxTempFile = Path.ChangeExtension(outTmpFilePath, ".sfx");
                                         string sifTempFile = Path.ChangeExtension(outTmpFilePath, ".sif");
                                         string ssfTempFile = Path.ChangeExtension(outTmpFilePath, ".ssf");
-                                        MusXBuild_Soundbank.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, ssfTempFile, Path.Combine(outputPath, fileName), CommonFunctions.GetPlatformLabel(outputPlatform[k]), soundBankData.HashCode, isBigEndian);
+                                        MusXBuild_Soundbank.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, ssfTempFile, Path.Combine(outputPath, fileName), CommonFunctions.GetPlatformLabel(outputPlatform[k]), CommonFunctions.GetFileHashCode(FileType.SoundBank, outputLanguage, soundBankData.HashCode), isBigEndian);
                                     }
                                 }
                             }

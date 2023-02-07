@@ -108,7 +108,7 @@ namespace sb_editor.Forms
                 OutputProjectDetailsFile(tempFilePath, outputPlatform[i], isBigEndian);
 
                 string sfxFilePath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatform[i]), "_projectdetails.sfx");
-                MusXBuild_ProjectDetails.BuildProjectDetailsFile(tempFilePath, sfxFilePath, CommonFunctions.GetPlatformLabel(outputPlatform[i]), 0x0000C000, isBigEndian);
+                MusXBuild_ProjectDetails.BuildProjectDetailsFile(tempFilePath, sfxFilePath, CommonFunctions.GetPlatformLabel(outputPlatform[i]), CommonFunctions.GetFileHashCode(Enumerations.FileType.ProjectDetails, Enumerations.Language.English, 0), isBigEndian);
             }
 
             //Create HashTables

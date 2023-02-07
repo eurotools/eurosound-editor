@@ -22,7 +22,7 @@ namespace ESUtils
     public static class MusXBuild_ProjectDetails
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static void BuildProjectDetailsFile(string projDataFilePath, string OutputFilePath, string platform, int fileHashCode, bool bigEndian)
+        public static void BuildProjectDetailsFile(string projDataFilePath, string OutputFilePath, string platform, uint fileHashCode, bool bigEndian)
         {
             //Ensure that the output file path is not null
             if (!string.IsNullOrEmpty(OutputFilePath))

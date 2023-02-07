@@ -22,7 +22,7 @@ namespace ESUtils
     public static class MusXBuild_MusicDetails
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static void BuildMusicDetails(string musicDetailsFilePath, string OutputFilePath, string platform)
+        public static void BuildMusicDetails(string musicDetailsFilePath, string OutputFilePath, uint hashCode, string platform)
         {
             //Ensure that the output file path is not null
             if (!string.IsNullOrEmpty(OutputFilePath))
@@ -34,7 +34,7 @@ namespace ESUtils
                     //--magic[magic value]--
                     binWriter.Write(Encoding.ASCII.GetBytes("MUSX"));
                     //--hashc[Hashcode for the current soundbank without the section prefix]--
-                    binWriter.Write(0x0000A000);
+                    binWriter.Write(hashCode);
                     //--offst[Constant offset to the next section,]--
                     binWriter.Write(4);
                     //--fulls[Size of the whole file, in bytes. Unused. ]--

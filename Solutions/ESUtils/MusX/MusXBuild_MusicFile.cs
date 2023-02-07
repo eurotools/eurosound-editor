@@ -36,7 +36,7 @@ namespace ESUtils
                     //--magic[magic value]--
                     binWriter.Write(Encoding.ASCII.GetBytes("MUSX"));
                     //--hashc[Hashcode for the current soundbank without the section prefix]--
-                    binWriter.Write(fileHashCode | 0xE00000);
+                    binWriter.Write(fileHashCode);
                     //--offst[Constant offset to the next section,]--
                     binWriter.Write(4);
                     //--fulls[Size of the whole file, in bytes. Unused. ]--

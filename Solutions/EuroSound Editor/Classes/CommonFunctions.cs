@@ -352,6 +352,13 @@ namespace sb_editor
 
             return platform;
         }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public static uint GetFileHashCode(FileType sfxFileType, Language outputLanguage, int hashcode)
+        {
+            uint fullHashCode = (uint)(((0 & 0xFFF) << 20) | (((int)outputLanguage & 0xF) << 16) | (((int)sfxFileType & 0xF) << 12) | ((hashcode & 0xFFF) << 0));
+            return fullHashCode;
+        }
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------

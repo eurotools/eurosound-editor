@@ -22,7 +22,7 @@ namespace ESUtils
     public static class MusXBuild_StreamFile
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static void BuildStreamFile(string binFilePath, string lutFilePath, string outputFilePath, int fileHashCode, string platform, bool isBigEndian)
+        public static void BuildStreamFile(string binFilePath, string lutFilePath, string outputFilePath, uint fileHashCode, string platform, bool isBigEndian)
         {
             //Ensure that the output file path is not null
             if (!string.IsNullOrEmpty(outputFilePath))

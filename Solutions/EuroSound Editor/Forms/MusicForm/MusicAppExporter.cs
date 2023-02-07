@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using static ESUtils.Enumerations;
 
 namespace sb_editor.Forms
 {
@@ -312,7 +313,7 @@ namespace sb_editor.Forms
                     if (!string.IsNullOrEmpty(sfxOutputFolder) && Directory.Exists(sfxOutputFolder))
                     {
                         string sfxOutputPath = Path.Combine(sfxOutputFolder, string.Format("_mus_mfx_{0}.SFX", filesQueue[i]).ToLower());
-                        MusXBuild_MusicFile.BuildMusicFile(soundMarkerFilePath, soundSampleDataFilePath, sfxOutputPath, CommonFunctions.GetPlatformLabel(outputPlatforms[j]), (uint)musicFileData.HashCode);
+                        MusXBuild_MusicFile.BuildMusicFile(soundMarkerFilePath, soundSampleDataFilePath, sfxOutputPath, CommonFunctions.GetPlatformLabel(outputPlatforms[j]), CommonFunctions.GetFileHashCode(Enumerations.FileType.MusicFile, Enumerations.Language.English, musicFileData.HashCode));
                     }
                 }
 
@@ -354,7 +355,7 @@ namespace sb_editor.Forms
                     BuildMusicDetailsFile(mfxValidListFile, tempOutputFolder);
 
                     string sfxOutputPath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatforms[j]), string.Format("_musicdetails.SFX").ToLower());
-                    MusXBuild_MusicDetails.BuildMusicDetails(tempOutputFolder, sfxOutputPath, CommonFunctions.GetPlatformLabel(outputPlatforms[j]));
+                    MusXBuild_MusicDetails.BuildMusicDetails(tempOutputFolder, sfxOutputPath, CommonFunctions.GetFileHashCode(FileType.MusicDetails, Language.English, 0), CommonFunctions.GetPlatformLabel(outputPlatforms[j]));
                 }
             }
 

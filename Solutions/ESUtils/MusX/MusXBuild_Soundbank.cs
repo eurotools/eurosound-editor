@@ -22,7 +22,7 @@ namespace ESUtils
     public static class MusXBuild_Soundbank
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static void BuildSoundbankFile(string sfxFilePath, string sifFilePath, string sbFilePath, string ssFilePath, string OutputFilePath, string platform, int fileHashCode, bool bigEndian)
+        public static void BuildSoundbankFile(string sfxFilePath, string sifFilePath, string sbFilePath, string ssFilePath, string OutputFilePath, string platform, uint fileHashCode, bool bigEndian)
         {
             //Ensure that the output file path is not null
             if (!string.IsNullOrEmpty(OutputFilePath))

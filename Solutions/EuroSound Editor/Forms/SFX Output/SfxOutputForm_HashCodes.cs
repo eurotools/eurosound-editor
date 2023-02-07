@@ -100,7 +100,7 @@ namespace sb_editor.Forms
                     BuildSoundDetailsFile(sfxDataFilePath, outTmpFilePath);
 
                     string sfxOutputPath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatform[j]), CommonFunctions.GetSfxName(outLang, "sounddetails").ToLower());
-                    MusXBuild_MusicDetails.BuildMusicDetails(outTmpFilePath, sfxOutputPath, CommonFunctions.GetPlatformLabel(outputPlatform[j]));
+                    MusXBuild_MusicDetails.BuildMusicDetails(outTmpFilePath, sfxOutputPath, CommonFunctions.GetFileHashCode(FileType.SoundDetails, outLang, 0) ,CommonFunctions.GetPlatformLabel(outputPlatform[j]));
                 }
             }
 
