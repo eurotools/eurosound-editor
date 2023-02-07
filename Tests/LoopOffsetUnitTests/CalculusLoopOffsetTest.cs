@@ -125,12 +125,9 @@ namespace LoopOffsetUnitTests
         [TestCase((uint)12301, ExpectedResult = 3520)]
         public uint Test_GetEurocomImaLoopOffset(uint baseLoopOffset)
         {
-            /*double result = RoundNumber((double)decimal.Divide(baseLoopOffset, (decimal)3.4568));
-            uint PositionAligned = GetStreamLoopOffsetPCandGC((uint)result);
-            return (((PositionAligned - 28) / 32) + 1) * 32;*/
             double result = RoundNumber((double)decimal.Divide(baseLoopOffset, (decimal)3.4568));
             uint PositionAligned = GetStreamLoopOffsetPCandGC((uint)result);
-            return PositionAligned / 32 * 32;
+            return (((PositionAligned - 28) / 32) + 1) * 32;
         }
     }
 }
