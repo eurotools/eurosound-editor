@@ -257,7 +257,7 @@ namespace sb_editor.Forms
                                 // Build SMD
                                 if (Directory.Exists(outputFolder))
                                 {
-                                    InterleaveAudioChannels(imaLeftChannelData, imaRightChannelData, 1, Path.Combine(outputFolder, "MFX_" + musicFileData.HashCode + ".ssd"));
+                                    InterleaveAudioChannels(imaLeftChannelData, imaRightChannelData, 32, Path.Combine(outputFolder, "MFX_" + musicFileData.HashCode + ".ssd"));
                                 }
                                 break;
                             case "x box":
@@ -288,7 +288,7 @@ namespace sb_editor.Forms
                                 // Build SMD
                                 if (Directory.Exists(outputFolder))
                                 {
-                                    InterleaveAudioChannels(imaLeftChannelData, imaRightChannelData, 1, Path.Combine(outputTempFolder, "MFX_" + musicFileData.HashCode + ".ssd"));
+                                    InterleaveAudioChannels(imaLeftChannelData, imaRightChannelData, 32, Path.Combine(outputTempFolder, "MFX_" + musicFileData.HashCode + ".ssd"));
                                 }
                                 break;
                         }
@@ -511,7 +511,14 @@ namespace sb_editor.Forms
                                 int hashcode = Convert.ToInt32(lineData[0], 16);
                                 bw.Write(hashcode | 0x1B000000);
                                 bw.Write(Convert.ToSingle(lineData[1].TrimEnd('f'), GlobalPrefs.NumericProvider));
-                                bw.Write(Convert.ToInt32(Convert.ToBoolean(lineData[2])));
+                                if (bool.TryParse(lineData[2], out bool musicLoops))
+                                {
+                                    bw.Write(Convert.ToInt32(musicLoops));
+                                }
+                                else
+                                {
+                                    bw.Write(0);
+                                }
                                 bw.Write(Convert.ToInt32(lineData[3]));
 
                                 minValue = Math.Min(minValue, hashcode);
