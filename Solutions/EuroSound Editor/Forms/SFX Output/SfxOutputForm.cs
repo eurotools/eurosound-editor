@@ -1,4 +1,5 @@
-﻿using sb_editor.Audio_Classes;
+﻿using ESUtils;
+using sb_editor.Audio_Classes;
 using sb_editor.Classes;
 using sb_editor.Objects;
 using System;
@@ -97,6 +98,18 @@ namespace sb_editor.Forms
 
             //Output SoundBanks
             OutputSoundBanks(samplesList, HashCodesDict, debugFolder.FullName);
+
+            //Output Project Details
+            for (int i = 0; i < outputPlatform.Length; i++)
+            {
+                bool isBigEndian = outputPlatform[i].Equals("GameCube", StringComparison.OrdinalIgnoreCase);
+
+                string tempFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatform[i], "projInfo.bin");
+                OutputProjectDetailsFile(tempFilePath, outputPlatform[i], isBigEndian);
+
+                string sfxFilePath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatform[i]), "_projectdetails.sfx");
+                MusXBuild_ProjectDetails.BuildProjectDetailsFile(tempFilePath, sfxFilePath, CommonFunctions.GetPlatformLabel(outputPlatform[i]), 0x0000C000, isBigEndian);
+            }
 
             //Create HashTables
             if (!fastOutput && !string.IsNullOrEmpty(GlobalPrefs.CurrentProject.HashCodeFileDirectory) && Directory.Exists(GlobalPrefs.CurrentProject.HashCodeFileDirectory))

@@ -46,6 +46,7 @@
     <Compile Include="ImaCodec.cs" />
     <Compile Include="MusX\MusXBuild_MusicDetails.cs" />
     <Compile Include="MusX\MusXBuild_MusicFile.cs" />
+    <Compile Include="MusX\MusXBuild_ProjectDetails.cs" />
     <Compile Include="MusX\MusXBuild_Soundbank.cs" />
     <Compile Include="MusX\MusXBuild_StreamFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -444,7 +444,7 @@ namespace sb_editor
         //-------------------------------------------------------------------------------------------------------------------------------
         private void LvwAvailableMemSlots_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (lvwAvailableMemSlots.SelectedItems.Count > 0 && temporalObj.platformData.ContainsKey(cboAvailableFormats.SelectedItem.ToString()))
+            if (lvwAvailableMemSlots.SelectedItems.Count > 0 && temporalObj.platformData.ContainsKey(cboMemSlotFormat.SelectedItem.ToString()))
             {
                 //Ask user for a value
                 using (Frm_InputBox inputBox = new Frm_InputBox() { Text = "Memory-Map Max Size" })
@@ -458,7 +458,7 @@ namespace sb_editor
                         {
                             //Update subitem && dictionary
                             lvwAvailableMemSlots.SelectedItems[0].SubItems[1].Text = inputBox.txtInputData.Text;
-                            string formatToUpdate = cboAvailableFormats.SelectedItem.ToString();
+                            string formatToUpdate = cboMemSlotFormat.SelectedItem.ToString();
                             if (temporalObj.platformData.ContainsKey(formatToUpdate))
                             {
                                 temporalObj.platformData[formatToUpdate].MemoryMapsSize[lvwAvailableMemSlots.SelectedItems[0].Index] = mapMaxSize;

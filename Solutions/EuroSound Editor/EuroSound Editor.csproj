@@ -135,6 +135,9 @@
     <Compile Include="Forms\SFX Output\SfxOutputForm_CreateStreams.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\SFX Output\SfxOutputForm_ProjectDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\SFX Output\SfxOutputForm_SoundBanks.cs">
       <SubType>Form</SubType>
     </Compile>
