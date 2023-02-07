@@ -1,9 +1,6 @@
 ﻿using ESUtils;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace sb_editor.Forms
 {
@@ -15,10 +12,10 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void OutputProjectDetailsFile(string outputPath, string outputPlatform, bool isBigEndian)
         {
-            using(BinaryWriter bw = new BinaryWriter(File.Open(outputPath, FileMode.Create, FileAccess.Write, FileShare.Read)))
+            using (BinaryWriter bw = new BinaryWriter(File.Open(outputPath, FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
                 string[] soundBanks = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks"), "*.txt", SearchOption.TopDirectoryOnly);
-                
+
                 //Data Offsets
                 bw.Write(BytesFunctions.FlipInt32(GlobalPrefs.CurrentProject.MemoryMaps.Count, isBigEndian));
                 bw.Write(0);

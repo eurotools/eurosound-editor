@@ -11,7 +11,7 @@ namespace ExMarkers
     public class StreamMarkerFiles
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void CreateMarkerBinFile(string smdFilePath, string markerFilePath, string outputFilePath, string outputPlatform)
+        public void CreateMarkerBinFile(string markerFilePath, string outputFilePath, string outputPlatform)
         {
             //List to store the text file markers
             List<EXStartMarker> startMarkersList = new List<EXStartMarker>();
@@ -21,123 +21,30 @@ namespace ExMarkers
             //Read Markers File
             streamMarkersFunctions.LoadTextMarkerFile(markerFilePath, startMarkersList, markersList);
 
-            //Calculate states -- PC & GameCube Platform
-            if (outputPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("GameCube", StringComparison.OrdinalIgnoreCase))
+            //Start markers
+            foreach (EXStartMarker startMarker in startMarkersList)
             {
-                //Update Markers states
-                foreach (EXMarker marker in markersList)
+                //Calculate offsets
+                if (startMarker.Position > 0)
                 {
-                    if (marker.Position > 0)
-                    {
-                        foreach (EXStartMarker startMarker in startMarkersList)
-                        {
-                            if (startMarker.Index == marker.MarkerCount)
-                            {
-                                uint state = 0;
-                                using (BinaryReader breader = new BinaryReader(File.Open(smdFilePath, FileMode.Open, FileAccess.Read, FileShare.Read)))
-                                {
-                                    long offset = (marker.Position / 256) * 256;
-                                    if (offset <= breader.BaseStream.Length)
-                                    {
-                                        breader.BaseStream.Seek(offset, SeekOrigin.Begin);
-                                        state = breader.ReadUInt32();
-                                    }
-                                    startMarker.State[0] = state;
-                                    startMarker.State[1] = state;
-                                }
-                                break;
-                            }
-                        }
-                    }
+                    startMarker.Position = CalculusLoopOffset.GetStreamLoopOffsetPlayStation2(startMarker.Position);
                 }
-
-                //Start markers
-                foreach (EXStartMarker startMarker in startMarkersList)
+                if (startMarker.LoopStart > 0)
                 {
-                    //Calculate VAG offsets
-                    if (startMarker.Position > 0)
-                    {
-                        startMarker.Position = CalculusLoopOffset.GetStreamLoopOffsetPCandGC(startMarker.Position);
-                    }
-                    if (startMarker.LoopStart > 0)
-                    {
-                        startMarker.LoopStart = CalculusLoopOffset.GetStreamLoopOffsetPCandGC(startMarker.LoopStart);
-                    }
-                }
-
-                //Markers
-                foreach (EXMarker marker in markersList)
-                {
-                    if (marker.Position > 0)
-                    {
-                        marker.Position = CalculusLoopOffset.GetStreamLoopOffsetPCandGC(marker.Position);
-                    }
-                    if (marker.LoopStart > 0)
-                    {
-                        marker.LoopStart = CalculusLoopOffset.GetStreamLoopOffsetPCandGC(marker.LoopStart);
-                    }
+                    startMarker.LoopStart = CalculusLoopOffset.GetStreamLoopOffsetPlayStation2(startMarker.LoopStart);
                 }
             }
 
-            //Update Positions PS2 Platform
-            if (outputPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase))
+            //Markers
+            foreach (EXMarker marker in markersList)
             {
-                //Start markers
-                foreach (EXStartMarker startMarker in startMarkersList)
+                if (marker.Position > 0)
                 {
-                    //Calculate VAG offsets
-                    if (startMarker.Position > 0)
-                    {
-                        startMarker.Position = CalculusLoopOffset.GetStreamLoopOffsetPlayStation2(startMarker.Position);
-                    }
-                    if (startMarker.LoopStart > 0)
-                    {
-                        startMarker.LoopStart = CalculusLoopOffset.GetStreamLoopOffsetPlayStation2(startMarker.LoopStart);
-                    }
+                    marker.Position = CalculusLoopOffset.GetStreamLoopOffsetPlayStation2(marker.Position);
                 }
-
-                //Markers
-                foreach (EXMarker marker in markersList)
+                if (marker.LoopStart > 0)
                 {
-                    if (marker.Position > 0)
-                    {
-                        marker.Position = CalculusLoopOffset.GetStreamLoopOffsetPlayStation2(marker.Position);
-                    }
-                    if (marker.LoopStart > 0)
-                    {
-                        marker.LoopStart = CalculusLoopOffset.GetStreamLoopOffsetPlayStation2(marker.LoopStart);
-                    }
-                }
-            }
-
-            //Update positions for Xbox
-            if (outputPlatform.Equals("Xbox", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("X Box", StringComparison.OrdinalIgnoreCase))
-            {
-                //Start markers
-                foreach (EXStartMarker startMarker in startMarkersList)
-                {
-                    //Calculate VAG offsets
-                    if (startMarker.Position > 0)
-                    {
-                        startMarker.Position = CalculusLoopOffset.GetStreamLoopOffsetXbox(startMarker.Position);
-                    }
-                    if (startMarker.LoopStart > 0)
-                    {
-                        startMarker.LoopStart = CalculusLoopOffset.GetStreamLoopOffsetXbox(startMarker.LoopStart);
-                    }
-                }
-
-                //Markers
-                foreach (EXMarker marker in markersList)
-                {
-                    if (marker.Position > 0)
-                    {
-                        marker.Position = CalculusLoopOffset.GetStreamLoopOffsetXbox(marker.Position);
-                    }
-                    if (marker.LoopStart > 0)
-                    {
-                        marker.LoopStart = CalculusLoopOffset.GetStreamLoopOffsetXbox(marker.LoopStart);
-                    }
+                    marker.LoopStart = CalculusLoopOffset.GetStreamLoopOffsetPlayStation2(marker.LoopStart);
                 }
             }
 

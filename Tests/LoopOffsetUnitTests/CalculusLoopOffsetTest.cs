@@ -111,17 +111,26 @@ namespace LoopOffsetUnitTests
             return result;
         }
 
-        [TestCase((uint)7304, ExpectedResult = 6184)] //1,1811125
-        [TestCase((uint)3209, ExpectedResult = 2716)] //1,1815169
-        [TestCase((uint)444, ExpectedResult = 376)]   //1,1808510
-        [TestCase((uint)7624, ExpectedResult = 6464)] //1,17945544
-        [TestCase((uint)9748, ExpectedResult = 8244)] //1,18243571
-        [TestCase((uint)9657, ExpectedResult = 8152)] //1,18461727
-        [TestCase((uint)6763, ExpectedResult = 5716)] //1,1831700
+        [TestCase((uint)7624, ExpectedResult = 2208)]
+        [TestCase((uint)444, ExpectedResult = 128)]
+        [TestCase((uint)3102, ExpectedResult = 896)]
+        [TestCase((uint)3094, ExpectedResult = 896)]
+        [TestCase((uint)7305, ExpectedResult = 2112)]
+        [TestCase((uint)3209, ExpectedResult = 928)]
+        [TestCase((uint)9657, ExpectedResult = 2784)]
+        [TestCase((uint)9748, ExpectedResult = 2816)]
+        [TestCase((uint)6763, ExpectedResult = 1952)]
+        [TestCase((uint)12445, ExpectedResult = 3584)]
+        [TestCase((uint)5291, ExpectedResult = 1536)]
+        [TestCase((uint)12301, ExpectedResult = 3520)]
         public uint Test_GetEurocomImaLoopOffset(uint baseLoopOffset)
         {
-            uint PositionAligned = GetStreamLoopOffsetPCandGC(baseLoopOffset);
-            return (uint)(PositionAligned / 1.82);
+            /*double result = RoundNumber((double)decimal.Divide(baseLoopOffset, (decimal)3.4568));
+            uint PositionAligned = GetStreamLoopOffsetPCandGC((uint)result);
+            return (((PositionAligned - 28) / 32) + 1) * 32;*/
+            double result = RoundNumber((double)decimal.Divide(baseLoopOffset, (decimal)3.4568));
+            uint PositionAligned = GetStreamLoopOffsetPCandGC((uint)result);
+            return PositionAligned / 32 * 32;
         }
     }
 }

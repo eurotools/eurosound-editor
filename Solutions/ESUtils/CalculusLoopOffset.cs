@@ -96,6 +96,14 @@ namespace ESUtils
             }
             return alignedNumber;
         }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public static uint GetEurocomImaLoopOffset(uint baseLoopOffset)
+        {
+            double result = RoundNumber((double)decimal.Divide(baseLoopOffset, (decimal)3.4568));
+            uint PositionAligned = GetStreamLoopOffsetPCandGC((uint)result);
+            return (((PositionAligned - 28) / 32) + 1) * 32;
+        }
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------
