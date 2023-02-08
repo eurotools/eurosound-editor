@@ -11,18 +11,10 @@ namespace sb_editor.Panels
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class UserControl_MainForm_Output : UserControl
     {
-        private readonly ProjProperties projectSettings;
-
         //-------------------------------------------------------------------------------------------------------------------------------
         public UserControl_MainForm_Output()
         {
             InitializeComponent();
-
-            string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
-            if (File.Exists(projectPropertiesFile))
-            {
-                projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
-            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -65,9 +57,17 @@ namespace sb_editor.Panels
             string[] outputFiles = GetOutputFiles();
             if (outputFiles != null && outputFiles.Length > 0)
             {
-                using (SfxOutputForm outputForm = new SfxOutputForm(outputFiles, CommonFunctions.GetOutputPlatforms(projectSettings), CommonFunctions.GetOutputLanguages(), false, (MainForm)Application.OpenForms[nameof(MainForm)]))
+                //Read project settings
+                string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
+                if (File.Exists(projectPropertiesFile))
                 {
-                    outputForm.ShowDialog();
+                    ProjProperties projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
+
+                    //Show output form
+                    using (SfxOutputForm outputForm = new SfxOutputForm(outputFiles, CommonFunctions.GetOutputPlatforms(projectSettings), CommonFunctions.GetOutputLanguages(), false, (MainForm)Application.OpenForms[nameof(MainForm)]))
+                    {
+                        outputForm.ShowDialog();
+                    }
                 }
             }
         }
@@ -79,9 +79,17 @@ namespace sb_editor.Panels
             string[] outputFiles = GetOutputFiles();
             if (outputFiles != null && outputFiles.Length > 0)
             {
-                using (SfxOutputForm outputForm = new SfxOutputForm(outputFiles, CommonFunctions.GetOutputPlatforms(projectSettings), CommonFunctions.GetOutputLanguages(), true, (MainForm)Application.OpenForms[nameof(MainForm)]))
+                //Read project settings
+                string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
+                if (File.Exists(projectPropertiesFile))
                 {
-                    outputForm.ShowDialog();
+                    ProjProperties projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
+
+                    //Show output form
+                    using (SfxOutputForm outputForm = new SfxOutputForm(outputFiles, CommonFunctions.GetOutputPlatforms(projectSettings), CommonFunctions.GetOutputLanguages(), true, (MainForm)Application.OpenForms[nameof(MainForm)]))
+                    {
+                        outputForm.ShowDialog();
+                    }
                 }
             }
         }
