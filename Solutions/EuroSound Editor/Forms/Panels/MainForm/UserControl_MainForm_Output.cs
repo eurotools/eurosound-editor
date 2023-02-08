@@ -69,6 +69,10 @@ namespace sb_editor.Panels
                         outputForm.ShowDialog();
                     }
                 }
+                else
+                {
+                    MessageBox.Show(string.Format("Project Properties File Not Found {0}", projectPropertiesFile), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -90,6 +94,10 @@ namespace sb_editor.Panels
                     {
                         outputForm.ShowDialog();
                     }
+                }
+                else
+                {
+                    MessageBox.Show(string.Format("Project Properties File Not Found {0}", projectPropertiesFile), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
