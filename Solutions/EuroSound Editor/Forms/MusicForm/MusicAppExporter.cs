@@ -23,6 +23,7 @@ namespace sb_editor.Forms
         private readonly MusicApp parentFormObj;
         private readonly Stopwatch outputTimer = new Stopwatch();
         private MidiFunctions midiClass;
+        private readonly ProjProperties projectSettings;
 
         //-------------------------------------------------------------------------------------------------------------------------------
         public MusicAppExporter(string[] outputFiles, string[] outPlatforms, MusicApp parentForm)
@@ -31,6 +32,11 @@ namespace sb_editor.Forms
             filesQueue = outputFiles;
             parentFormObj = parentForm;
             outputPlatforms = outPlatforms;
+            string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
+            if (File.Exists(projectPropertiesFile))
+            {
+                projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -301,7 +307,7 @@ namespace sb_editor.Forms
                     }
 
                     //Build SFX
-                    string outputPath = CommonFunctions.GetSoundbankOutPath(outputPlatforms[j], string.Empty, true);
+                    string outputPath = CommonFunctions.GetSoundbankOutPath(projectSettings, outputPlatforms[j], string.Empty, true);
                     if (!string.IsNullOrEmpty(outputPath) && Directory.Exists(outputPath))
                     {
                         MusXBuild_MusicFile.BuildMusicFile(soundMarkerFilePath, soundSampleDataFilePath, Path.Combine(outputPath, string.Format("HCE{0:X5}.SFX", musicFileData.HashCode)), (uint)musicFileData.HashCode, outputPlatforms[j].Equals("GameCube", StringComparison.OrdinalIgnoreCase));

@@ -12,7 +12,7 @@ namespace sb_editor.HashCodes
     internal partial class HashTables
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void CreateTempSfxData(string filePath, string sfxFilePath, SamplePool StreamSamplesList)
+        internal void CreateTempSfxData(string filePath, string sfxFilePath, SamplePool StreamSamplesList, ProjProperties projectSettings)
         {
             //Create
             using (StreamWriter sw = new StreamWriter(File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
@@ -23,7 +23,7 @@ namespace sb_editor.HashCodes
                 {
                     float waveDuration = 0.00002267574F;
                     WavInfo waveFileData = new WavInfo();
-                    string samplePath = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", sfxFileData.Samples[0].FilePath.TrimStart(Path.DirectorySeparatorChar));
+                    string samplePath = Path.Combine(projectSettings.SampleFilesFolder, "Master", sfxFileData.Samples[0].FilePath.TrimStart(Path.DirectorySeparatorChar));
                     if (File.Exists(samplePath))
                     {
                         waveFileData = waveFunction.ReadWaveProperties(samplePath);

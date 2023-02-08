@@ -51,7 +51,7 @@ namespace sb_editor.Panels
 
             //Add available formats
             cboFormat.Items.Clear();
-            cboFormat.Items.AddRange(GlobalPrefs.CurrentProject.platformData.Keys.ToArray());
+            cboFormat.Items.AddRange(((SFXForm)Parent.Parent).projectSettings.platformData.Keys.ToArray());
             if (cboFormat.Items.Count > 0)
             {
                 cboFormat.SelectedIndex = 0;
@@ -86,7 +86,7 @@ namespace sb_editor.Panels
                 //Show sample info
                 if (lstSamples.SelectedItems.Count == 1)
                 {
-                    string waveFilePath = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", selectedSample.FilePath.TrimStart('\\'));
+                    string waveFilePath = Path.Combine(((SFXForm)Parent.Parent).projectSettings.SampleFilesFolder, "Master", selectedSample.FilePath.TrimStart('\\'));
                     if (File.Exists(waveFilePath))
                     {
                         WavInfo fileData = waveClass.ReadWaveProperties(waveFilePath);
@@ -498,7 +498,7 @@ namespace sb_editor.Panels
                 mainForm.tmrTabPageBlink.Start();
 
                 // Set the initial directory for the open file dialog to the "Master" folder inside the project's sample files folder
-                OpenFileDiag_Samples.InitialDirectory = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master");
+                OpenFileDiag_Samples.InitialDirectory = Path.Combine(((SFXForm)Parent.Parent).projectSettings.SampleFilesFolder, "Master");
 
                 // Show the open file dialog
                 if (OpenFileDiag_Samples.ShowDialog() == DialogResult.OK)
@@ -582,7 +582,7 @@ namespace sb_editor.Panels
         {
             if (!chkEnableSubSFX.Checked && lstSamples.SelectedItems.Count == 1)
             {
-                string fullFilePath = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", ((SfxSample)lstSamples.SelectedItem).FilePath);
+                string fullFilePath = Path.Combine(((SFXForm)Parent.Parent).projectSettings.SampleFilesFolder, "Master", ((SfxSample)lstSamples.SelectedItem).FilePath);
                 try
                 {
                     Process.Start("explorer.exe", Path.GetDirectoryName(fullFilePath));
@@ -645,7 +645,7 @@ namespace sb_editor.Panels
                                 try
                                 {
                                     //Open the selected audio file in the audio editor
-                                    Process.Start(AudioEditorPath, Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", ((SfxSample)lstSamples.SelectedItems[i]).FilePath));
+                                    Process.Start(AudioEditorPath, Path.Combine(((SFXForm)Parent.Parent).projectSettings.SampleFilesFolder, "Master", ((SfxSample)lstSamples.SelectedItems[i]).FilePath));
                                 }
                                 catch (Exception ex)
                                 {
@@ -680,7 +680,7 @@ namespace sb_editor.Panels
                     string soundRelativePath = ((SfxSample)lstSamples.SelectedItem).FilePath.TrimStart(Path.DirectorySeparatorChar);
 
                     //Create a new SoundPlayer object with the full file path of the selected sample
-                    audioPlayer = new SoundPlayer(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", soundRelativePath));
+                    audioPlayer = new SoundPlayer(Path.Combine(((SFXForm)Parent.Parent).projectSettings.SampleFilesFolder, "Master", soundRelativePath));
                     audioPlayer.Play();
                 }
                 catch (Exception ex)
@@ -713,7 +713,7 @@ namespace sb_editor.Panels
         private void AddItemToSamplePool(string filePath)
         {
             //Check if filePath is inside SampleFilesFolder
-            if (filePath.StartsWith(GlobalPrefs.CurrentProject.SampleFilesFolder))
+            if (filePath.StartsWith(((SFXForm)Parent.Parent).projectSettings.SampleFilesFolder))
             {
                 try
                 {
@@ -771,7 +771,7 @@ namespace sb_editor.Panels
                                 }
 
                                 //Add New Sample
-                                string masterDir = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master");
+                                string masterDir = Path.Combine(((SFXForm)Parent.Parent).projectSettings.SampleFilesFolder, "Master");
                                 SfxSample sfxSample = new SfxSample
                                 {
                                     FilePath = filePath.Substring(masterDir.Length + 1),

@@ -178,7 +178,7 @@ namespace sb_editor.Forms
             sifWritter.Write(BytesFunctions.FlipInt32(sampleList.Length, isBigEndian));
             for (int i = 0; i < sampleList.Length; i++)
             {
-                string masterFile = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", sampleList[i].TrimStart(Path.DirectorySeparatorChar));
+                string masterFile = Path.Combine(projectSettings.SampleFilesFolder, "Master", sampleList[i].TrimStart(Path.DirectorySeparatorChar));
                 if (File.Exists(masterFile))
                 {
                     WavInfo masterFileData = wavFunctions.ReadWaveProperties(masterFile);

@@ -1,4 +1,5 @@
-﻿using sb_editor.Panels;
+﻿using sb_editor.Objects;
+using sb_editor.Panels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -110,14 +111,14 @@ namespace sb_editor
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static string[] GetOutputPlatforms()
+        public static string[] GetOutputPlatforms(ProjProperties projectSettings)
         {
             //Get Output Platforms
             UserControl_MainForm_Output outputControl = ((MainForm)Application.OpenForms[nameof(MainForm)]).UserControl_Output;
             string[] platforms = new string[] { outputControl.cboOutputFormat.SelectedItem.ToString() };
             if (outputControl.rdoAllForAll.Checked)
             {
-                platforms = GlobalPrefs.CurrentProject.platformData.Keys.ToArray();
+                platforms = projectSettings.platformData.Keys.ToArray();
             }
             return platforms;
         }
@@ -248,13 +249,13 @@ namespace sb_editor
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static void CheckForMissingFolders()
+        public static void CheckForMissingFolders(ProjProperties projectSettings)
         {
             // Check if the project folder exists
             if (Directory.Exists(GlobalPrefs.ProjectFolder))
             {
                 // Create the temporal output folders for each platform in the platformData dictionary
-                foreach (KeyValuePair<string, Objects.PlatformData> platformData in GlobalPrefs.CurrentProject.platformData)
+                foreach (KeyValuePair<string, Objects.PlatformData> platformData in projectSettings.platformData)
                 {
                     string temporalOutputFolder = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", platformData.Key, "SoundBanks");
                     Directory.CreateDirectory(temporalOutputFolder);
@@ -300,34 +301,34 @@ namespace sb_editor
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static string GetSoundbankOutPath(string platform, string language, bool musicFolder = false)
+        public static string GetSoundbankOutPath(ProjProperties projectSettings, string platform, string language, bool musicFolder = false)
         {
             // Initialize the output path to an empty string
             string outputPath = string.Empty;
 
             // Check if the EngineX project path is not null and the directory exists
-            if (!string.IsNullOrEmpty(GlobalPrefs.CurrentProject.EngineXProjectPath) && Directory.Exists(GlobalPrefs.CurrentProject.EngineXProjectPath))
+            if (!string.IsNullOrEmpty(projectSettings.EngineXProjectPath) && Directory.Exists(projectSettings.EngineXProjectPath))
             {
                 // If the musicFolder flag is true, set the output path to the "music" folder within the EngineX project path
                 if (musicFolder)
                 {
-                    outputPath = Directory.CreateDirectory(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", GetEnginexFolder(platform), "music")).FullName;
+                    outputPath = Directory.CreateDirectory(Path.Combine(projectSettings.EngineXProjectPath, "Binary", GetEnginexFolder(platform), "music")).FullName;
                 }
                 else
                 {
                     // Create the "Sonix" folder within the EngineX project path
-                    Directory.CreateDirectory(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Sonix"));
+                    Directory.CreateDirectory(Path.Combine(projectSettings.EngineXProjectPath, "Sonix"));
 
                     // Set the output path to the language folder within the EngineX project path
-                    outputPath = Directory.CreateDirectory(Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", GetEnginexFolder(platform), GetLanguageFolder(language))).FullName;
+                    outputPath = Directory.CreateDirectory(Path.Combine(projectSettings.EngineXProjectPath, "Binary", GetEnginexFolder(platform), GetLanguageFolder(language))).FullName;
                 }
             }
 
             // If the output path is still empty, check if the platform is in the platformData dictionary
-            if (string.IsNullOrEmpty(outputPath) && GlobalPrefs.CurrentProject.platformData.ContainsKey(platform))
+            if (string.IsNullOrEmpty(outputPath) && projectSettings.platformData.ContainsKey(platform))
             {
                 // Get the output folder for the platform
-                string outFolder = GlobalPrefs.CurrentProject.platformData[platform].OutputFolder;
+                string outFolder = projectSettings.platformData[platform].OutputFolder;
 
                 // Check if the output folder is not null and taht is a rooted path
                 if (!string.IsNullOrEmpty(outFolder) && Path.IsPathRooted(outFolder))

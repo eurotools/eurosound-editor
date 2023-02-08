@@ -43,49 +43,60 @@ namespace sb_editor.Panels
             // Set cursor as hourglass
             Cursor.Current = Cursors.WaitCursor;
 
-            // Check for new Samples
-            if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "System")) && Directory.Exists(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master")))
+            //Read Project Settings
+            string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
+            if (File.Exists(projectPropertiesFile))
             {
-                //Calculate Execution time
-                Stopwatch watcher = new Stopwatch();
-                watcher.Start();
+                ProjProperties projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
 
-                //Get Samples File Data
-                string samplesFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Samples.txt");
-                SamplePool samples = new SamplePool();
-                if (File.Exists(samplesFilePath))
+                // Check for new Samples
+                if (Directory.Exists(Path.Combine(GlobalPrefs.ProjectFolder, "System")) && Directory.Exists(Path.Combine(projectSettings.SampleFilesFolder, "Master")))
                 {
-                    samples = TextFiles.ReadSamplesFile(samplesFilePath);
-                }
+                    //Calculate Execution time
+                    Stopwatch watcher = new Stopwatch();
+                    watcher.Start();
 
-                //Check For New Samples
-                string[] missingSamples = SampleFiles.GetMissingSamples(samples);
-                if (missingSamples.Length > 0)
-                {
-                    using (MissingSamplesFound newSamplesForm = new MissingSamplesFound(missingSamples, samples))
+                    //Get Samples File Data
+                    string samplesFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Samples.txt");
+                    SamplePool samples = new SamplePool();
+                    if (File.Exists(samplesFilePath))
                     {
-                        newSamplesForm.ShowDialog();
+                        samples = TextFiles.ReadSamplesFile(samplesFilePath);
+                    }
+
+                    //Check For New Samples
+                    string[] missingSamples = SampleFiles.GetMissingSamples(samples, projectSettings);
+                    if (missingSamples.Length > 0)
+                    {
+                        using (MissingSamplesFound newSamplesForm = new MissingSamplesFound(missingSamples, samples))
+                        {
+                            newSamplesForm.ShowDialog();
+                        }
+                    }
+
+                    // Check for missing Samples
+                    string[] newSamples = SampleFiles.GetNewSamples(samples, projectSettings);
+                    if (newSamples.Length > 0)
+                    {
+                        using (NewSamplesFound newSamplesForm = new NewSamplesFound(newSamples, samples))
+                        {
+                            newSamplesForm.ShowDialog();
+                        }
+                    }
+
+                    //Show Form
+                    if (samples.SamplePoolItems.Count > 0)
+                    {
+                        using (ReSampleForm resampleForm = new ReSampleForm(watcher, projectSettings))
+                        {
+                            resampleForm.ShowDialog();
+                        }
                     }
                 }
-
-                // Check for missing Samples
-                string[] newSamples = SampleFiles.GetNewSamples(samples);
-                if (newSamples.Length > 0)
-                {
-                    using (NewSamplesFound newSamplesForm = new NewSamplesFound(newSamples, samples))
-                    {
-                        newSamplesForm.ShowDialog();
-                    }
-                }
-
-                //Show Form
-                if (samples.SamplePoolItems.Count > 0)
-                {
-                    using (ReSampleForm resampleForm = new ReSampleForm(watcher))
-                    {
-                        resampleForm.ShowDialog();
-                    }
-                }
+            }
+            else
+            {
+                MessageBox.Show(string.Format("Project Properties File Not Found {0}", projectPropertiesFile), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             // Set cursor as default arrow

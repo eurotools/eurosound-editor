@@ -11,13 +11,13 @@ namespace sb_editor
     public static class SampleFiles
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static string[] GetNewSamples(SamplePool samples)
+        public static string[] GetNewSamples(SamplePool samples, ProjProperties projectSettings)
         {
             // Create a list to store the missing files
             List<string> missingFiles = new List<string>();
 
             // Get the path to the "Master" folder
-            string masterFolderPath = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master");
+            string masterFolderPath = Path.Combine(projectSettings.SampleFilesFolder, "Master");
 
             // Get the paths to all wave files in the "Master" folder and its subfolders
             string[] waveFilePaths = Directory.GetFiles(masterFolderPath, "*.wav", SearchOption.AllDirectories);
@@ -41,10 +41,10 @@ namespace sb_editor
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static string[] GetMissingSamples(SamplePool samples)
+        public static string[] GetMissingSamples(SamplePool samples, ProjProperties projectSettings)
         {
             // Get the path of the master sample files folder
-            string masterSampleFilesFolder = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master");
+            string masterSampleFilesFolder = Path.Combine(projectSettings.SampleFilesFolder, "Master");
 
             // Get a list of all available sample file paths
             string[] availableSampleFilePaths = Directory.GetFiles(masterSampleFilesFolder, "*.wav", SearchOption.AllDirectories)

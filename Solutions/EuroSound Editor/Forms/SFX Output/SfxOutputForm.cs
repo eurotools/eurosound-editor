@@ -25,6 +25,7 @@ namespace sb_editor.Forms
         private readonly bool fastOutput;
         private bool abortQuickOutput = false;
         private double FullOutputTime = 0;
+        internal readonly ProjProperties projectSettings;
 
         //-------------------------------------------------------------------------------------------------------------------------------
         public SfxOutputForm(string[] outputFiles, string[] outPlatform, string[] languages, bool quickOutput, MainForm parentForm)
@@ -35,6 +36,12 @@ namespace sb_editor.Forms
             outputPlatform = outPlatform;
             fastOutput = quickOutput;
             outLanguages = languages;
+
+            string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
+            if (File.Exists(projectPropertiesFile))
+            {
+                projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -73,7 +80,7 @@ namespace sb_editor.Forms
             if (File.Exists(samplesFilePath))
             {
                 samplesList = TextFiles.ReadSamplesFile(samplesFilePath);
-                samplesList.CheckForUpdates();
+                samplesList.CheckForUpdates(projectSettings);
             }
 
             //Get HashCodes Dictionary
@@ -99,17 +106,17 @@ namespace sb_editor.Forms
             OutputSoundBanks(samplesList, HashCodesDict, debugFolder.FullName);
 
             //Create HashTables
-            if (!fastOutput && !string.IsNullOrEmpty(GlobalPrefs.CurrentProject.HashCodeFileDirectory) && Directory.Exists(GlobalPrefs.CurrentProject.HashCodeFileDirectory))
+            if (!fastOutput && !string.IsNullOrEmpty(projectSettings.HashCodeFileDirectory) && Directory.Exists(projectSettings.HashCodeFileDirectory))
             {
                 OutputHashCodes(samplesList);
 
                 //Create SFX Data
-                string sfxFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "SFX_Data.h");
-                if (!string.IsNullOrEmpty(GlobalPrefs.CurrentProject.EngineXProjectPath) && Directory.Exists(GlobalPrefs.CurrentProject.EngineXProjectPath) && File.Exists(sfxFilePath))
+                string sfxFilePath = Path.Combine(projectSettings.HashCodeFileDirectory, "SFX_Data.h");
+                if (!string.IsNullOrEmpty(projectSettings.EngineXProjectPath) && Directory.Exists(projectSettings.EngineXProjectPath) && File.Exists(sfxFilePath))
                 {
                     for (int i = 0; i < outputPlatform.Length; i++)
                     {
-                        string outputPath = Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", CommonFunctions.GetEnginexFolder(outputPlatform[i]), "Music");
+                        string outputPath = Path.Combine(projectSettings.EngineXProjectPath, "Binary", CommonFunctions.GetEnginexFolder(outputPlatform[i]), "Music");
                         Directory.CreateDirectory(outputPath);
                         CommonFunctions.RunConsoleProcess(Path.Combine(Application.StartupPath, "SystemFiles", "SFXStructToBin.exe"), string.Format("\"{0}\" \"{1}\"", sfxFilePath, Path.Combine(outputPath, "SFX_Data.bin")), false);
                     }
