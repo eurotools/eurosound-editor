@@ -54,7 +54,7 @@ namespace sb_editor.Forms
                     int sfxFlags = sbFunctions.GetFlags(sfxData.Value);
                     for(int i = 0; i < 16; i++)
                     {
-                        sfxWritter.Write(Convert.ToSByte(Convert.ToBoolean((sfxFlags >> i) & 1)));
+                        sfxWritter.Write(Convert.ToSByte((sfxFlags >> i) & 1));
                     }
                 }
                 else
@@ -206,10 +206,11 @@ namespace sb_editor.Forms
                     //-------------------------------------------------------------------------------[ PC ]-------------------------------------------------------------------
                     case "pc":
                         string pcFilepath = Path.Combine(GlobalPrefs.ProjectFolder, "PC", sampleList[i].TrimStart(Path.DirectorySeparatorChar));
+                        string pcImaFilePath = Path.ChangeExtension(Path.Combine(GlobalPrefs.ProjectFolder, "PC_Software_adpcm", sampleList[i].TrimStart(Path.DirectorySeparatorChar)), ".ssp");
                         if (File.Exists(pcFilepath))
                         {
                             WavInfo pcFileData = wavFunctions.ReadWaveProperties(pcFilepath);
-                            byte[] pcmData = wavFunctions.GetByteWaveData(pcFilepath);
+                            byte[] pcmData = File.ReadAllBytes(pcImaFilePath);
 
                             //Write Header Data
                             uint loopOffset = 0;
@@ -221,7 +222,7 @@ namespace sb_editor.Forms
                             sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, pcFileData, BytesFunctions.AlignNumber((uint)pcFileData.Length, 4), (int)pcFileData.Length, i * 96, loopOffset, isBigEndian);
 
                             //Write Sample Data
-                            byte[] filedata = new byte[BytesFunctions.AlignNumber((uint)pcFileData.Length, 4)];
+                            byte[] filedata = new byte[BytesFunctions.AlignNumber((uint)pcmData.Length, 4)];
                             Array.Copy(pcmData, filedata, pcmData.Length);
                             sbfWritter.Write(filedata);
 
