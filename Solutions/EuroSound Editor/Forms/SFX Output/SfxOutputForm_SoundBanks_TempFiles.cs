@@ -46,8 +46,22 @@ namespace sb_editor.Forms
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.Priority);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.Ducker);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.MasterVolume);
-                sfxWritter.Write((short)(((sfxData.Value.Parameters.Group & 0xfff) << 0) | ((sfxData.Value.Parameters.GroupMaxChannels & 0xf) << 1)));
-                sfxWritter.Write((ushort)sbFunctions.GetFlags(sfxData.Value));
+                if (outputPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase))
+                {
+                    sfxWritter.Write((short)sfxData.Value.Parameters.Group);
+                    sfxWritter.Write((sbyte)sfxData.Value.Parameters.GroupMaxChannels);
+                    sfxWritter.Write((sbyte)0);
+                    int sfxFlags = sbFunctions.GetFlags(sfxData.Value);
+                    for(int i = 0; i < 16; i++)
+                    {
+                        sfxWritter.Write(Convert.ToSByte(Convert.ToBoolean((sfxFlags >> i) & 1)));
+                    }
+                }
+                else
+                {
+                    sfxWritter.Write((short)(((sfxData.Value.Parameters.Group & 0xfff) << 0) | ((sfxData.Value.Parameters.GroupMaxChannels & 0xf) << 1)));
+                    sfxWritter.Write((ushort)sbFunctions.GetFlags(sfxData.Value));
+                }
 
                 //Calculate references
                 sfxWritter.Write(BytesFunctions.FlipUShort((ushort)sfxData.Value.Samples.Count, isBigEndian));
