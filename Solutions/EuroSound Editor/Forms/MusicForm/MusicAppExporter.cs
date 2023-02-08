@@ -25,6 +25,7 @@ namespace sb_editor.Forms
         private readonly MusicApp parentFormObj;
         private readonly Stopwatch outputTimer = new Stopwatch();
         private MidiFunctions midiClass;
+        private readonly ProjProperties projectSettings;
 
         //-------------------------------------------------------------------------------------------------------------------------------
         public MusicAppExporter(string[] outputFiles, string[] outPlatforms, MusicApp parentForm)
@@ -33,6 +34,12 @@ namespace sb_editor.Forms
             filesQueue = outputFiles;
             parentFormObj = parentForm;
             outputPlatforms = outPlatforms;
+
+            string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
+            if (File.Exists(projectPropertiesFile))
+            {
+                projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -309,7 +316,7 @@ namespace sb_editor.Forms
                     }
 
                     //Build SFX
-                    string sfxOutputFolder = CommonFunctions.GetSoundbankOutPath(outputPlatforms[j]);
+                    string sfxOutputFolder = CommonFunctions.GetSoundbankOutPath(outputPlatforms[j], projectSettings);
                     if (!string.IsNullOrEmpty(sfxOutputFolder) && Directory.Exists(sfxOutputFolder))
                     {
                         string sfxOutputPath = Path.Combine(sfxOutputFolder, string.Format("_mus_mfx_{0}.SFX", filesQueue[i]).ToLower());
@@ -345,7 +352,7 @@ namespace sb_editor.Forms
 
             //Build Music Details File
             HashTables htHandler = new HashTables();
-            string mfxValidListFile = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Data.h");
+            string mfxValidListFile = Path.Combine(projectSettings.HashCodeFileDirectory, "MFX_Data.h");
             htHandler.CreateMfxData(mfxValidListFile);
             if (File.Exists(mfxValidListFile))
             {
@@ -354,7 +361,7 @@ namespace sb_editor.Forms
                     string tempOutputFolder = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatforms[j], "Music", "mfxdetails.bin");
                     BuildMusicDetailsFile(mfxValidListFile, tempOutputFolder);
 
-                    string sfxOutputPath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatforms[j]), string.Format("_musicdetails.SFX").ToLower());
+                    string sfxOutputPath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatforms[j], projectSettings), string.Format("_musicdetails.SFX").ToLower());
                     MusXBuild_MusicDetails.BuildMusicDetails(tempOutputFolder, sfxOutputPath, CommonFunctions.GetFileHashCode(FileType.MusicDetails, Language.English, 0), CommonFunctions.GetPlatformLabel(outputPlatforms[j]));
                 }
             }

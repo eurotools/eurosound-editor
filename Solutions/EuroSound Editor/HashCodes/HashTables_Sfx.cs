@@ -13,7 +13,7 @@ namespace sb_editor.HashCodes
     internal partial class HashTables
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void CreateTempSfxData(string fileName, string sfxFilePath, string[] outLanguages, SamplePool StreamSamplesList)
+        internal void CreateTempSfxData(string fileName, string sfxFilePath, string[] outLanguages, SamplePool StreamSamplesList, ProjProperties projectSettings)
         {
             WaveFunctions waveFunction = new WaveFunctions();
             SFX sfxFileData = TextFiles.ReadSfxFile(sfxFilePath);
@@ -30,7 +30,7 @@ namespace sb_editor.HashCodes
                     }
                     Language outLang = (Language)Enum.Parse(typeof(Language), outLanguages[i], true);
                     string sampleRelPath = CommonFunctions.GetSampleFromSpeechFolder(sfxFileData.Samples[0].FilePath.TrimStart(Path.DirectorySeparatorChar), outLang);
-                    string sampleFullPath = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", sampleRelPath);
+                    string sampleFullPath = Path.Combine(projectSettings.SampleFilesFolder, "Master", sampleRelPath);
                     if (File.Exists(sampleFullPath))
                     {
                         waveFileData = waveFunction.ReadWaveProperties(sampleFullPath);

@@ -26,6 +26,7 @@ namespace sb_editor.Forms
         private readonly bool fastOutput;
         private bool abortQuickOutput = false;
         private double FullOutputTime = 0;
+        internal readonly ProjProperties projectSettings;
 
         //-------------------------------------------------------------------------------------------------------------------------------
         public SfxOutputForm(string[] outputFiles, string[] outPlatform, string[] languages, bool quickOutput, MainForm parentForm)
@@ -36,6 +37,12 @@ namespace sb_editor.Forms
             outputPlatform = outPlatform;
             fastOutput = quickOutput;
             outLanguages = languages;
+
+            string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
+            if (File.Exists(projectPropertiesFile))
+            {
+                projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -74,7 +81,7 @@ namespace sb_editor.Forms
             if (File.Exists(samplesFilePath))
             {
                 samplesList = TextFiles.ReadSamplesFile(samplesFilePath);
-                samplesList.CheckForUpdates();
+                samplesList.CheckForUpdates(projectSettings);
             }
 
             //Get HashCodes Dictionary
@@ -107,12 +114,12 @@ namespace sb_editor.Forms
                 string tempFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatform[i], "projInfo.bin");
                 OutputProjectDetailsFile(tempFilePath, outputPlatform[i], isBigEndian);
 
-                string sfxFilePath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatform[i]), "_projectdetails.sfx");
+                string sfxFilePath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatform[i], projectSettings), "_projectdetails.sfx");
                 MusXBuild_ProjectDetails.BuildProjectDetailsFile(tempFilePath, sfxFilePath, CommonFunctions.GetPlatformLabel(outputPlatform[i]), CommonFunctions.GetFileHashCode(Enumerations.FileType.ProjectDetails, Enumerations.Language.English, 0), isBigEndian);
             }
 
             //Create HashTables
-            if (!fastOutput && !string.IsNullOrEmpty(GlobalPrefs.CurrentProject.HashCodeFileDirectory) && Directory.Exists(GlobalPrefs.CurrentProject.HashCodeFileDirectory))
+            if (!fastOutput && !string.IsNullOrEmpty(projectSettings.HashCodeFileDirectory) && Directory.Exists(projectSettings.HashCodeFileDirectory))
             {
                 OutputHashCodes(samplesList);
             }

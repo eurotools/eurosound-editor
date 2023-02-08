@@ -39,7 +39,7 @@ namespace sb_editor.Forms
                 backgroundWorker1.ReportProgress((int)progress, string.Format("Creating SFX_Data.h {0}", fileName));
 
                 //Create temp file
-                hashCodes.CreateTempSfxData(fileName, sfxFiles[i], outLanguages, samplesList);
+                hashCodes.CreateTempSfxData(fileName, sfxFiles[i], outLanguages, samplesList, projectSettings);
             }
 
             //-------------------------------------------------------------------------------[SFX_Data.h]-------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ namespace sb_editor.Forms
                 }
 
                 //Write file data
-                string sfxDataFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, outLang.ToString() + "_SFX_Data.h");
+                string sfxDataFilePath = Path.Combine(projectSettings.HashCodeFileDirectory, outLang.ToString() + "_SFX_Data.h");
                 using (StreamWriter sw = new StreamWriter(File.Open(sfxDataFilePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
                 {
                     sw.WriteLine("// typedef struct SFXOutputDetails {s32 HashCode;f32 InnerRadius;f32 OuterRadius;f32 Duration;s8 Looping;s8 Tracking3d;s8 SampleStreamed;s8 Is3D;} SFXOutputDetails;");
@@ -99,13 +99,13 @@ namespace sb_editor.Forms
                     string outTmpFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatform[j], "SoundBanks", outLanguages[i], "sfxdetails.bin");
                     BuildSoundDetailsFile(sfxDataFilePath, outTmpFilePath);
 
-                    string sfxOutputPath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatform[j]), CommonFunctions.GetSfxName(outLang, "sounddetails").ToLower());
+                    string sfxOutputPath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatform[j], projectSettings), CommonFunctions.GetSfxName(outLang, "sounddetails").ToLower());
                     MusXBuild_MusicDetails.BuildMusicDetails(outTmpFilePath, sfxOutputPath, CommonFunctions.GetFileHashCode(FileType.SoundDetails, outLang, 0), CommonFunctions.GetPlatformLabel(outputPlatform[j]));
                 }
             }
 
             //-------------------------------------------------------------------------------[SFX_Defines.h]-------------------------------------------------------------------------------
-            string sfxDefinesFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "SFX_Defines.h");
+            string sfxDefinesFilePath = Path.Combine(projectSettings.HashCodeFileDirectory, "SFX_Defines.h");
             backgroundWorker1.ReportProgress(24, string.Format("Writing SFX_Defines.h Folder = {0}", Path.GetDirectoryName(sfxDefinesFilePath)));
             SortedDictionary<string, int> hashCodesDict = new SortedDictionary<string, int>();
 
@@ -158,7 +158,7 @@ namespace sb_editor.Forms
 
             //-------------------------------------------------------------------------------[SFX_Debug.h]-------------------------------------------------------------------------------
             backgroundWorker1.ReportProgress(72, "Writing SFX_Defines.h Stage 3");
-            using (StreamWriter sw = new StreamWriter(File.Open(Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "SFX_Debug.h"), FileMode.Create, FileAccess.Write, FileShare.Read)))
+            using (StreamWriter sw = new StreamWriter(File.Open(Path.Combine(projectSettings.HashCodeFileDirectory, "SFX_Debug.h"), FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
                 sw.WriteLine("#ifdef SFX_BUILD_DEBUG_TABLES");
                 sw.WriteLine("long NumberToHashCode[] = {");
@@ -188,7 +188,7 @@ namespace sb_editor.Forms
 
             //-------------------------------------------------------------------------------[SFX_Reverbs.h]-------------------------------------------------------------------------------
             backgroundWorker1.ReportProgress(84, "Writing SFX_Defines.h Stage Pre Close");
-            string reverbsFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "SFX_Reverbs.h");
+            string reverbsFilePath = Path.Combine(projectSettings.HashCodeFileDirectory, "SFX_Reverbs.h");
             Dictionary<string, int> reverbsDict = sbFunctions.GetHashCodesDictionary("Reverbs", "#MiscData");
             using (StreamWriter sw = new StreamWriter(File.Open(reverbsFilePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
@@ -201,7 +201,7 @@ namespace sb_editor.Forms
 
             //-------------------------------------------------------------------------------[Sound.h]-------------------------------------------------------------------------------
             backgroundWorker1.ReportProgress(100, "End");
-            hashCodes.BuildSoundHhFile(Path.Combine(GlobalPrefs.CurrentProject.EuroLandHashCodeServerPath, "Sound.h"));
+            hashCodes.BuildSoundHhFile(Path.Combine(projectSettings.EuroLandHashCodeServerPath, "Sound.h"), projectSettings);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------

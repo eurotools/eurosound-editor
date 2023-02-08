@@ -20,6 +20,7 @@ namespace sb_editor.Forms
         private readonly string sfxFileName;
         private Color currentColor = SystemColors.Control;
         private Brush colorText = SystemBrushes.ControlText;
+        internal readonly ProjProperties projectSettings;
 
         //-------------------------------------------------------------------------------------------------------------------------------
         public SFXForm(string fileName, bool setDefaultSettings = false)
@@ -38,6 +39,12 @@ namespace sb_editor.Forms
                 btnDefSettings_Accept.Visible = true;
                 btnDefSettings_Cancel.Visible = true;
                 UserControl_SamplePoolControl.grbSampleProperties.Visible = true;
+            }
+
+            string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
+            if (File.Exists(projectPropertiesFile))
+            {
+                projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
             }
         }
 
@@ -95,7 +102,7 @@ namespace sb_editor.Forms
             }
 
             //Enable ONLY available formats buttons
-            foreach (string formatName in GlobalPrefs.CurrentProject.platformData.Keys)
+            foreach (string formatName in projectSettings.platformData.Keys)
             {
                 ((Button)grbCreateFormat.Controls[string.Join(string.Empty, "btn", formatName.ToUpper().Replace(" ", string.Empty))]).Enabled = true;
             }
@@ -120,7 +127,7 @@ namespace sb_editor.Forms
             }
 
             //Add a tab for each specific format and disable button
-            foreach (string formatName in GlobalPrefs.CurrentProject.platformData.Keys)
+            foreach (string formatName in projectSettings.platformData.Keys)
             {
                 filepath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", formatName, sfxFileName + ".txt");
                 if (File.Exists(filepath))
@@ -310,7 +317,7 @@ namespace sb_editor.Forms
             Stopwatch watch = Stopwatch.StartNew();
 
             //Get output folder & name
-            string outputFilePath = CommonFunctions.GetSoundbankOutPath("PC");
+            string outputFilePath = CommonFunctions.GetSoundbankOutPath("PC", projectSettings);
             string fileName = string.Format("HC{0:X6}.SFX", 0xFFFE);
 
             //Create file
@@ -388,7 +395,7 @@ namespace sb_editor.Forms
                     //Remove previous SFXs
                     string commonFile = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", sfxFileName + ".txt");
                     File.Delete(commonFile);
-                    foreach (string formatName in GlobalPrefs.CurrentProject.platformData.Keys)
+                    foreach (string formatName in projectSettings.platformData.Keys)
                     {
                         commonFile = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", formatName, sfxFileName + ".txt");
                         File.Delete(commonFile);

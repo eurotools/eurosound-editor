@@ -164,18 +164,23 @@ namespace sb_editor.Panels
                             }
                             else
                             {
-                                //Create new soundbank file
-                                SoundBank soundBankFile = new SoundBank
+                                string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
+                                if (File.Exists(projectPropertiesFile))
                                 {
-                                    HashCode = GlobalPrefs.SoundBankHashCodeNumber,
-                                    DataBases = new string[0],
-                                    MemoryMap = GlobalPrefs.CurrentProject.MemoryMaps[GlobalPrefs.CurrentProject.DefaultMemMap]
-                                };
-                                TextFiles.WriteSoundBankFile(filePath, soundBankFile);
-                                GlobalPrefs.SoundBankHashCodeNumber++;
+                                    ProjProperties projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
+                                    //Create new soundbank file
+                                    SoundBank soundBankFile = new SoundBank
+                                    {
+                                        HashCode = GlobalPrefs.SoundBankHashCodeNumber,
+                                        DataBases = new string[0],
+                                        MemoryMap = projectSettings.MemoryMaps[projectSettings.DefaultMemMap]
+                                    };
+                                    TextFiles.WriteSoundBankFile(filePath, soundBankFile);
+                                    GlobalPrefs.SoundBankHashCodeNumber++;
 
-                                //Update UI
-                                ProjectFileFunctions.UpdateSoundBanks((MainForm)Parent);
+                                    //Update UI
+                                    ProjectFileFunctions.UpdateSoundBanks((MainForm)Parent);
+                                }
                                 break;
                             }
                         }

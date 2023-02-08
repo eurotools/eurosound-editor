@@ -17,7 +17,7 @@ namespace sb_editor.Forms
                 string[] soundBanks = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks"), "*.txt", SearchOption.TopDirectoryOnly);
 
                 //Data Offsets
-                bw.Write(BytesFunctions.FlipInt32(GlobalPrefs.CurrentProject.MemoryMaps.Count, isBigEndian));
+                bw.Write(BytesFunctions.FlipInt32(projectSettings.MemoryMaps.Count, isBigEndian));
                 bw.Write(0);
                 bw.Write(BytesFunctions.FlipInt32(soundBanks.Length, isBigEndian));
                 bw.Write(0);
@@ -30,7 +30,7 @@ namespace sb_editor.Forms
                 bw.Write(0);
                 bw.Write(0);
                 bw.Write(0);
-                List<int> memoryMaps = GlobalPrefs.CurrentProject.platformData[outputPlatform].MemoryMapsSize;
+                List<int> memoryMaps = projectSettings.platformData[outputPlatform].MemoryMapsSize;
 
                 //Mem Slots
                 long memSlotsStartPos = bw.BaseStream.Position;
@@ -63,9 +63,9 @@ namespace sb_editor.Forms
         private Dictionary<string, int> GetMemSlotsTable()
         {
             Dictionary<string, int> Data = new Dictionary<string, int>();
-            for (int i = GlobalPrefs.CurrentProject.MemoryMaps.Count - 1; i >= 0; i--)
+            for (int i = projectSettings.MemoryMaps.Count - 1; i >= 0; i--)
             {
-                Data.Add(GlobalPrefs.CurrentProject.MemoryMaps[i], i);
+                Data.Add(projectSettings.MemoryMaps[i], i);
             }
 
             return Data;
