@@ -127,7 +127,7 @@ namespace sb_editor.Forms
                                 else
                                 {
                                     //Get Output Path
-                                    string outputPath = CommonFunctions.GetSoundbankOutPath(outputPlatform[k], outLanguages[i]);
+                                    string outputPath = CommonFunctions.GetSoundbankOutPath(projectSettings, outputPlatform[k], outLanguages[i]);
                                     if (!string.IsNullOrEmpty(outputPath) && Directory.Exists(outputPath))
                                     {
                                         string fileName = string.Format("HC{0:X6}.SFX", CommonFunctions.GetSfxName((int)Enum.Parse(typeof(Enumerations.Language), outLanguages[i], true), soundBankData.HashCode));

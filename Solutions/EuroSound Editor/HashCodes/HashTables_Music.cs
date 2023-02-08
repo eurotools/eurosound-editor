@@ -156,7 +156,7 @@ namespace sb_editor.HashCodes
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal string[] CreateAndValidateMfxDefines()
+        internal string[] CreateAndValidateMfxDefines(ProjProperties projectSettings)
         {
             // Initialize a list to store missing MFX defines
             string[] missingInTempFile = null;
@@ -174,10 +174,10 @@ namespace sb_editor.HashCodes
                 string[] tempFileData = GetHashtableLabels(tempFilePath);
 
                 // Check if the project's hash code directory exists
-                if (!string.IsNullOrEmpty(GlobalPrefs.CurrentProject.HashCodeFileDirectory) && Directory.Exists(GlobalPrefs.CurrentProject.HashCodeFileDirectory))
+                if (!string.IsNullOrEmpty(projectSettings.HashCodeFileDirectory) && Directory.Exists(projectSettings.HashCodeFileDirectory))
                 {
                     // Set file path for MFX defines file
-                    string mfxDefinesFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Defines.h");
+                    string mfxDefinesFilePath = Path.Combine(projectSettings.HashCodeFileDirectory, "MFX_Defines.h");
                     if (File.Exists(mfxDefinesFilePath))
                     {
                         // Read the MFX defines data into memory for faster search
@@ -196,11 +196,11 @@ namespace sb_editor.HashCodes
             }
 
             // Check if the project's hash code directory exists
-            if (!string.IsNullOrEmpty(GlobalPrefs.CurrentProject.HashCodeFileDirectory) && Directory.Exists(GlobalPrefs.CurrentProject.HashCodeFileDirectory))
+            if (!string.IsNullOrEmpty(projectSettings.HashCodeFileDirectory) && Directory.Exists(projectSettings.HashCodeFileDirectory))
             {
-                CreateMfxValidList(Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_ValidList.h"));
-                CreateMfxData(Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Data.h"));
-                BuildSoundHhFile(Path.Combine(GlobalPrefs.CurrentProject.EuroLandHashCodeServerPath, "Sound.h"));
+                CreateMfxValidList(Path.Combine(projectSettings.HashCodeFileDirectory, "MFX_ValidList.h"));
+                CreateMfxData(Path.Combine(projectSettings.HashCodeFileDirectory, "MFX_Data.h"));
+                BuildSoundHhFile(Path.Combine(projectSettings.EuroLandHashCodeServerPath, "Sound.h"), projectSettings);
             }
 
             return missingInTempFile;

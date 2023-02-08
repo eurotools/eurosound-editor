@@ -13,6 +13,7 @@ namespace sb_editor.Forms
     {
         private readonly string[] SamplesArray;
         private readonly SamplePool samplesData;
+        private readonly ProjProperties projectSettings;
 
         //-------------------------------------------------------------------------------------------------------------------------------
         public NewSamplesFound(string[] itemsArray, SamplePool samples)
@@ -20,6 +21,13 @@ namespace sb_editor.Forms
             InitializeComponent();
             SamplesArray = itemsArray;
             samplesData = samples;
+
+            //Read Project Settings
+            string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
+            if (File.Exists(projectPropertiesFile))
+            {
+                projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -27,7 +35,7 @@ namespace sb_editor.Forms
         {
             //Add available sample rates
             cboAvailableRates.BeginUpdate();
-            cboAvailableRates.Items.AddRange(GlobalPrefs.CurrentProject.ResampleRates.ToArray());
+            cboAvailableRates.Items.AddRange(projectSettings.ResampleRates.ToArray());
             if (cboAvailableRates.Items.Count > 0)
             {
                 cboAvailableRates.SelectedIndex = 0;
@@ -48,7 +56,7 @@ namespace sb_editor.Forms
             {
                 if (!samplesData.SamplePoolItems.ContainsKey(SamplesArray[i]))
                 {
-                    string sampleFullPath = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", SamplesArray[i].TrimStart(Path.DirectorySeparatorChar));
+                    string sampleFullPath = Path.Combine(projectSettings.SampleFilesFolder, "Master", SamplesArray[i].TrimStart(Path.DirectorySeparatorChar));
                     SamplePoolItem newSamples = new SamplePoolItem
                     {
                         ReSampleRate = cboAvailableRates.SelectedItem.ToString(),

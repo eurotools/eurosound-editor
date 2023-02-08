@@ -96,45 +96,56 @@ namespace sb_editor
             lstSFXs.EndUpdate();
             lblSFX_Count.Text = string.Format("SFXs: {0}", lstSFXs.Items.Count);
 
-            //Samples
-            lstSamples.BeginUpdate();
-            for (int i = 0; i < samples.Length; i++)
+
+            string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
+            if (File.Exists(projectPropertiesFile))
             {
-                string samplesFolder = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master");
-                lstSamples.Items.Add(string.Join("\\", samplesFolder, samples[i]).ToUpper());
+                ProjProperties projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
+
+                //Samples
+                lstSamples.BeginUpdate();
+                for (int i = 0; i < samples.Length; i++)
+                {
+                    string samplesFolder = Path.Combine(projectSettings.SampleFilesFolder, "Master");
+                    lstSamples.Items.Add(string.Join("\\", samplesFolder, samples[i]).ToUpper());
+                }
+                lstSamples.EndUpdate();
+                lblSoundBankSampleCount.Text = string.Format("Samples: {0}", lstSamples.Items.Count);
+
+                // SoundBank size
+                for (int i = 0; i < projectSettings.platformData.Count; i++)
+                {
+                    string currentFormat = projectSettings.platformData.ElementAt(i).Key;
+                    string temporalFiles = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", currentFormat, "SoundBanks", outputLanguage.ToString(), soundBankData.HashCode + ".sbf");
+                    string fileSize;
+                    if (File.Exists(temporalFiles))
+                    {
+                        fileSize = BytesFunctions.FormatBytes(new FileInfo(temporalFiles).Length);
+                    }
+                    else
+                    {
+                        fileSize = string.Format("{0} - ESTIMATED", BytesFunctions.FormatBytes(sbFunctions.GetEstimatedOutputFileSize(projectSettings, samples, samplePool, currentFormat)));
+                    }
+
+                    //Show value
+                    Control[] formatNameLabels = grbCurrentSoundbank.Controls.Find("lblFormatName" + i.ToString(), false);
+                    if (formatNameLabels.Length > 0)
+                    {
+                        ((Label)formatNameLabels[0]).Visible = true;
+                        ((Label)formatNameLabels[0]).Text = projectSettings.platformData.ElementAt(i).Key;
+                    }
+
+                    Control[] formatValueLabels = grbCurrentSoundbank.Controls.Find("lblFormatInfo" + i.ToString(), false);
+                    if (formatValueLabels.Length > 0)
+                    {
+                        ((Label)formatValueLabels[0]).Visible = true;
+                        ((Label)formatValueLabels[0]).Text = fileSize;
+                    }
+                }
             }
-            lstSamples.EndUpdate();
-            lblSoundBankSampleCount.Text = string.Format("Samples: {0}", lstSamples.Items.Count);
-
-            // SoundBank size
-            for (int i = 0; i < GlobalPrefs.CurrentProject.platformData.Count; i++)
+            else
             {
-                string currentFormat = GlobalPrefs.CurrentProject.platformData.ElementAt(i).Key;
-                string temporalFiles = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", currentFormat, "SoundBanks", outputLanguage.ToString(), soundBankData.HashCode + ".sbf");
-                string fileSize;
-                if (File.Exists(temporalFiles))
-                {
-                    fileSize = BytesFunctions.FormatBytes(new FileInfo(temporalFiles).Length);
-                }
-                else
-                {
-                    fileSize = string.Format("{0} - ESTIMATED", BytesFunctions.FormatBytes(sbFunctions.GetEstimatedOutputFileSize(samples, samplePool, currentFormat)));
-                }
-
-                //Show value
-                Control[] formatNameLabels = grbCurrentSoundbank.Controls.Find("lblFormatName" + i.ToString(), false);
-                if (formatNameLabels.Length > 0)
-                {
-                    ((Label)formatNameLabels[0]).Visible = true;
-                    ((Label)formatNameLabels[0]).Text = GlobalPrefs.CurrentProject.platformData.ElementAt(i).Key;
-                }
-
-                Control[] formatValueLabels = grbCurrentSoundbank.Controls.Find("lblFormatInfo" + i.ToString(), false);
-                if (formatValueLabels.Length > 0)
-                {
-                    ((Label)formatValueLabels[0]).Visible = true;
-                    ((Label)formatValueLabels[0]).Text = fileSize;
-                }
+                MessageBox.Show(string.Format("Project Properties File Not Found {0}", projectPropertiesFile), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             long sampleSize = sbFunctions.GetSampleSize(Path.Combine(GlobalPrefs.ProjectFolder, "Master"), samplePool, samples);

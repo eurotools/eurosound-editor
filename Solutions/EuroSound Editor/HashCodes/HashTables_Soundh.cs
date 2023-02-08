@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using sb_editor.Objects;
+using System.IO;
 
 namespace sb_editor.HashCodes
 {
@@ -8,12 +9,12 @@ namespace sb_editor.HashCodes
     internal partial class HashTables
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void BuildSoundHhFile(string filePath)
+        internal void BuildSoundHhFile(string filePath, ProjProperties projectSettings)
         {
             using (StreamWriter sw = new StreamWriter(File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
                 sw.WriteLine("/* HT_Sound */");
-                string sfxDefinesFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "SFX_Defines.h");
+                string sfxDefinesFilePath = Path.Combine(projectSettings.HashCodeFileDirectory, "SFX_Defines.h");
                 if (File.Exists(sfxDefinesFilePath))
                 {
                     string[] fileData = File.ReadAllLines(sfxDefinesFilePath);
@@ -22,7 +23,7 @@ namespace sb_editor.HashCodes
                         sw.WriteLine(fileData[i]);
                     }
                 }
-                string mfxDefinesFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Defines.h");
+                string mfxDefinesFilePath = Path.Combine(projectSettings.HashCodeFileDirectory, "MFX_Defines.h");
                 if (File.Exists(mfxDefinesFilePath))
                 {
                     sw.WriteLine(string.Empty);
@@ -32,7 +33,7 @@ namespace sb_editor.HashCodes
                         sw.WriteLine(fileData[i]);
                     }
                 }
-                string reverbsFilePath = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "SFX_Reverbs.h");
+                string reverbsFilePath = Path.Combine(projectSettings.HashCodeFileDirectory, "SFX_Reverbs.h");
                 if (File.Exists(reverbsFilePath))
                 {
                     sw.WriteLine(string.Empty);

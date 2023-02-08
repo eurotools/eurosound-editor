@@ -23,9 +23,9 @@ namespace sb_editor.Forms
 
             //MusX Output Path
             string sfxOutputFolder = string.Empty;
-            if (Directory.Exists(GlobalPrefs.CurrentProject.EngineXProjectPath))
+            if (Directory.Exists(projectSettings.EngineXProjectPath))
             {
-                sfxOutputFolder = Path.Combine(GlobalPrefs.CurrentProject.EngineXProjectPath, "Binary", CommonFunctions.GetEnginexFolder(Platform), CommonFunctions.GetLanguageFolder(outputLanguage.ToString()));
+                sfxOutputFolder = Path.Combine(projectSettings.EngineXProjectPath, "Binary", CommonFunctions.GetEnginexFolder(Platform), CommonFunctions.GetLanguageFolder(outputLanguage.ToString()));
                 Directory.CreateDirectory(sfxOutputFolder);
             }
 

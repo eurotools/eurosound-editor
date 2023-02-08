@@ -12,6 +12,7 @@ namespace sb_editor.Forms
     public partial class MultiEditor : Form
     {
         private readonly string[] sfxFiles;
+        private ProjProperties projectSettings;
 
         //-------------------------------------------------------------------------------------------------------------------------------
         public MultiEditor(string[] filesToRead)
@@ -23,6 +24,14 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void MultiEditor_Load(object sender, EventArgs e)
         {
+            //Read Project settings
+            string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
+            if (File.Exists(projectPropertiesFile))
+            {
+                projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
+            }
+
+            //Display selected SFXs
             lvwItems.BeginUpdate();
             for (int i = 0; i < sfxFiles.Length; i++)
             {
@@ -92,7 +101,7 @@ namespace sb_editor.Forms
                 TextFiles.WriteSfxFile(filePath, sfxFileData);
 
                 //Update Other Platforms
-                foreach (string platformToCheck in GlobalPrefs.CurrentProject.platformData.Keys)
+                foreach (string platformToCheck in projectSettings.platformData.Keys)
                 {
                     string platfilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", platformToCheck, sfxFile.Text + ".txt");
                     if (File.Exists(platfilePath))
@@ -120,7 +129,7 @@ namespace sb_editor.Forms
                 TextFiles.WriteSfxFile(filePath, sfxFileData);
 
                 //Update Other Platforms
-                foreach (string platformToCheck in GlobalPrefs.CurrentProject.platformData.Keys)
+                foreach (string platformToCheck in projectSettings.platformData.Keys)
                 {
                     string platfilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", platformToCheck, sfxFile.Text + ".txt");
                     if (File.Exists(platfilePath))
@@ -154,7 +163,7 @@ namespace sb_editor.Forms
                 TextFiles.WriteSfxFile(filePath, sfxFileData);
 
                 //Update Other Platforms
-                foreach (string platformToCheck in GlobalPrefs.CurrentProject.platformData.Keys)
+                foreach (string platformToCheck in projectSettings.platformData.Keys)
                 {
                     string platfilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", platformToCheck, sfxFile.Text + ".txt");
                     if (File.Exists(platfilePath))
@@ -188,7 +197,7 @@ namespace sb_editor.Forms
                 TextFiles.WriteSfxFile(filePath, sfxFileData);
 
                 //Update Other Platforms
-                foreach (string platformToCheck in GlobalPrefs.CurrentProject.platformData.Keys)
+                foreach (string platformToCheck in projectSettings.platformData.Keys)
                 {
                     string platfilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", platformToCheck, sfxFile.Text + ".txt");
                     if (File.Exists(platfilePath))
@@ -216,7 +225,7 @@ namespace sb_editor.Forms
                 TextFiles.WriteSfxFile(filePath, sfxFileData);
 
                 //Update Other Platforms
-                foreach (string platformToCheck in GlobalPrefs.CurrentProject.platformData.Keys)
+                foreach (string platformToCheck in projectSettings.platformData.Keys)
                 {
                     string platfilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", platformToCheck, sfxFile.Text + ".txt");
                     if (File.Exists(platfilePath))
@@ -244,7 +253,7 @@ namespace sb_editor.Forms
                 TextFiles.WriteSfxFile(filePath, sfxFileData);
 
                 //Update Other Platforms
-                foreach (string platformToCheck in GlobalPrefs.CurrentProject.platformData.Keys)
+                foreach (string platformToCheck in projectSettings.platformData.Keys)
                 {
                     string platfilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", platformToCheck, sfxFile.Text + ".txt");
                     if (File.Exists(platfilePath))
@@ -272,7 +281,7 @@ namespace sb_editor.Forms
                 TextFiles.WriteSfxFile(filePath, sfxFileData);
 
                 //Update Other Platforms
-                foreach (string platformToCheck in GlobalPrefs.CurrentProject.platformData.Keys)
+                foreach (string platformToCheck in projectSettings.platformData.Keys)
                 {
                     string platfilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", platformToCheck, sfxFile.Text + ".txt");
                     if (File.Exists(platfilePath))
@@ -300,7 +309,7 @@ namespace sb_editor.Forms
                 TextFiles.WriteSfxFile(filePath, sfxFileData);
 
                 //Update Other Platforms
-                foreach (string platformToCheck in GlobalPrefs.CurrentProject.platformData.Keys)
+                foreach (string platformToCheck in projectSettings.platformData.Keys)
                 {
                     string platfilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", platformToCheck, sfxFile.Text + ".txt");
                     if (File.Exists(platfilePath))
@@ -328,7 +337,7 @@ namespace sb_editor.Forms
                 TextFiles.WriteSfxFile(filePath, sfxFileData);
 
                 //Update Other Platforms
-                foreach (string platformToCheck in GlobalPrefs.CurrentProject.platformData.Keys)
+                foreach (string platformToCheck in projectSettings.platformData.Keys)
                 {
                     string platfilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", platformToCheck, sfxFile.Text + ".txt");
                     if (File.Exists(platfilePath))
@@ -356,7 +365,7 @@ namespace sb_editor.Forms
                 TextFiles.WriteSfxFile(filePath, sfxFileData);
 
                 //Update Other Platforms
-                foreach (string platformToCheck in GlobalPrefs.CurrentProject.platformData.Keys)
+                foreach (string platformToCheck in projectSettings.platformData.Keys)
                 {
                     string platfilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", platformToCheck, sfxFile.Text + ".txt");
                     if (File.Exists(platfilePath))
@@ -384,7 +393,7 @@ namespace sb_editor.Forms
                 TextFiles.WriteSfxFile(filePath, sfxFileData);
 
                 //Update Other Platforms
-                foreach (string platformToCheck in GlobalPrefs.CurrentProject.platformData.Keys)
+                foreach (string platformToCheck in projectSettings.platformData.Keys)
                 {
                     string platfilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", platformToCheck, sfxFile.Text + ".txt");
                     if (File.Exists(platfilePath))
@@ -412,7 +421,7 @@ namespace sb_editor.Forms
                 TextFiles.WriteSfxFile(filePath, sfxFileData);
 
                 //Update Other Platforms
-                foreach (string platformToCheck in GlobalPrefs.CurrentProject.platformData.Keys)
+                foreach (string platformToCheck in projectSettings.platformData.Keys)
                 {
                     string platfilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", platformToCheck, sfxFile.Text + ".txt");
                     if (File.Exists(platfilePath))
@@ -440,7 +449,7 @@ namespace sb_editor.Forms
                 TextFiles.WriteSfxFile(filePath, sfxFileData);
 
                 //Update Other Platforms
-                foreach (string platformToCheck in GlobalPrefs.CurrentProject.platformData.Keys)
+                foreach (string platformToCheck in projectSettings.platformData.Keys)
                 {
                     string platfilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", platformToCheck, sfxFile.Text + ".txt");
                     if (File.Exists(platfilePath))

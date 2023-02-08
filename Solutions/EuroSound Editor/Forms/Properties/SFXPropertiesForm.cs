@@ -69,13 +69,24 @@ namespace sb_editor.Forms
             lstDataBases.EndUpdate();
             lblSfxDependencies.Text = string.Format("DataBase File Dependencies: {0}", lstDataBases.Items.Count);
 
+
             //Print Samples
-            lstSamples.BeginUpdate();
-            for (int i = 0; i < sfxData.Samples.Count; i++)
+            string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
+            if (File.Exists(projectPropertiesFile))
             {
-                lstSamples.Items.Add(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", sfxData.Samples[i].FilePath).ToUpper());
+                ProjProperties projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
+
+                lstSamples.BeginUpdate();
+                for (int i = 0; i < sfxData.Samples.Count; i++)
+                {
+                    lstSamples.Items.Add(Path.Combine(projectSettings.SampleFilesFolder, "Master", sfxData.Samples[i].FilePath).ToUpper());
+                }
+                lstSamples.EndUpdate();
             }
-            lstSamples.EndUpdate();
+            else
+            {
+                MessageBox.Show(string.Format("Project Properties File Not Found {0}", projectPropertiesFile), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             // Set cursor as default arrow
             Cursor.Current = Cursors.Default;

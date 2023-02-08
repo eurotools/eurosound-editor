@@ -26,7 +26,7 @@ namespace sb_editor
         //*===============================================================================================
         private void Frm_ProjectProperties_Load(object sender, EventArgs e)
         {
-            temporalObj = GlobalPrefs.CurrentProject.Clone();
+            temporalObj = TextFiles.ReadPropertiesFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt"));
             CheckResampleRates(temporalObj);
 
             //Comboboxes default values
@@ -405,8 +405,7 @@ namespace sb_editor
         {
             //Update variables
             GlobalPrefs.EuroSoundUser = txtUserName.Text;
-            GlobalPrefs.CurrentProject = temporalObj.Clone();
-            TextFiles.WritePropertiesFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt"), GlobalPrefs.CurrentProject);
+            TextFiles.WritePropertiesFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt"), temporalObj);
 
             //Update INI Files
             IniFile toolIniFile = new IniFile(Path.Combine(Application.StartupPath, "EuroSound.ini"));
@@ -425,11 +424,11 @@ namespace sb_editor
 
             //Enable or disable output buttons
             MainForm frmMainForm = (MainForm)Application.OpenForms[nameof(MainForm)];
-            frmMainForm.UserControl_Output.btnFullOutput.Enabled = GlobalPrefs.CurrentProject.platformData.Count != 0;
-            frmMainForm.UserControl_Output.btnQuickOutput.Enabled = GlobalPrefs.CurrentProject.platformData.Count != 0;
+            frmMainForm.UserControl_Output.btnFullOutput.Enabled = temporalObj.platformData.Count != 0;
+            frmMainForm.UserControl_Output.btnQuickOutput.Enabled = temporalObj.platformData.Count != 0;
 
             //Update Combobox
-            string[] availableFormats = GlobalPrefs.CurrentProject.platformData.Keys.ToArray();
+            string[] availableFormats = temporalObj.platformData.Keys.ToArray();
             for (int i = 0; i < availableFormats.Length; i++)
             {
                 if (frmMainForm.UserControl_Output.cboOutputFormat.FindStringExact(availableFormats[i]) == -1)

@@ -73,8 +73,10 @@ namespace sb_editor
                     string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
                     if (File.Exists(projectPropertiesFile))
                     {
+                        ProjProperties projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
+
                         //Create Temporal Output Folders
-                        CommonFunctions.CheckForMissingFolders();
+                        CommonFunctions.CheckForMissingFolders(projectSettings);
 
                         //Update variables
                         GlobalPrefs.ReSampleStreams = miscFileSettings.ReSampleStreams;
@@ -82,7 +84,6 @@ namespace sb_editor
                         GlobalPrefs.SoundBankHashCodeNumber = miscFileSettings.SoundBankHashCodeNumber;
                         GlobalPrefs.MFXHashCodeNumber = miscFileSettings.MFXHashCodeNumber;
                         GlobalPrefs.ReverbHashCodeNumber = miscFileSettings.ReverbHashCodeNumber;
-                        GlobalPrefs.CurrentProject = TextFiles.ReadPropertiesFile(projectPropertiesFile);
 
                         //Ask for userName if we don't have it
                         if (string.IsNullOrEmpty(GlobalPrefs.EuroSoundUser))
@@ -115,16 +116,16 @@ namespace sb_editor
                         TextFiles.WriteProjectFile(projectFilePath, projectData);
 
                         //Fill comboboxes
-                        frmMainForm.UserControl_Output.cboOutputFormat.Items.AddRange(GlobalPrefs.CurrentProject.platformData.Keys.ToArray());
+                        frmMainForm.UserControl_Output.cboOutputFormat.Items.AddRange(projectSettings.platformData.Keys.ToArray());
                         if (frmMainForm.UserControl_Output.cboOutputFormat.Items.Count > 0)
                         {
                             frmMainForm.UserControl_Output.cboOutputFormat.SelectedIndex = 0;
                         }
 
                         //Check Languages From Speech Folder
-                        if (Directory.Exists(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master")))
+                        if (Directory.Exists(Path.Combine(projectSettings.SampleFilesFolder, "Master")))
                         {
-                            string speechDir = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", "Speech");
+                            string speechDir = Path.Combine(projectSettings.SampleFilesFolder, "Master", "Speech");
                             Directory.CreateDirectory(Path.Combine(speechDir, "English"));
 
                             //Get All Language Directories
@@ -180,7 +181,7 @@ namespace sb_editor
                         }
 
                         //Enable or disable output buttons
-                        if (GlobalPrefs.CurrentProject.platformData.Count == 0)
+                        if (projectSettings.platformData.Count == 0)
                         {
                             frmMainForm.UserControl_Output.btnFullOutput.Enabled = false;
                             frmMainForm.UserControl_Output.btnQuickOutput.Enabled = false;

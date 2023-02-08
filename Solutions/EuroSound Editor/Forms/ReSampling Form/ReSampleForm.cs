@@ -18,14 +18,16 @@ namespace sb_editor
         private readonly Stopwatch watcher;
         private SoundPlayer audioPlayer;
         private SamplePool samples;
+        internal readonly ProjProperties projectSettings;
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public ReSampleForm(Stopwatch methodWatcher)
+        public ReSampleForm(Stopwatch methodWatcher, ProjProperties projSettings)
         {
             InitializeComponent();
             Width = 925;
             Height = 605;
             watcher = methodWatcher;
+            projectSettings = projSettings;
         }
 
         //*===============================================================================================
@@ -34,12 +36,12 @@ namespace sb_editor
         private void Frm_ReSampleRates_Load(object sender, EventArgs e)
         {
             //Add master folder
-            txtMasterFolder.Text = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master");
+            txtMasterFolder.Text = Path.Combine(projectSettings.SampleFilesFolder, "Master");
 
             //Add available formats
             cboPreviewFormat.BeginUpdate();
             cboPreviewFormat.Items.Add("Original (Not Re-sampled)");
-            foreach (string platformData in GlobalPrefs.CurrentProject.platformData.Keys)
+            foreach (string platformData in projectSettings.platformData.Keys)
             {
                 cboPreviewFormat.Items.Add(platformData);
             }
@@ -48,7 +50,7 @@ namespace sb_editor
 
             //Add available ReSample Rates
             cboSampleRate.BeginUpdate();
-            cboSampleRate.Items.AddRange(GlobalPrefs.CurrentProject.ResampleRates.ToArray());
+            cboSampleRate.Items.AddRange(projectSettings.ResampleRates.ToArray());
             if (cboSampleRate.Items.Count > 0)
             {
                 cboSampleRate.SelectedIndex = 0;
@@ -60,7 +62,7 @@ namespace sb_editor
             if (File.Exists(samplesFilePath))
             {
                 samples = TextFiles.ReadSamplesFile(samplesFilePath);
-                samples.CheckForUpdates();
+                samples.CheckForUpdates(projectSettings);
                 SamplePoolToListView(samples);
             }
 
@@ -299,7 +301,7 @@ namespace sb_editor
             }
             else
             {
-                string masterFolder = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master");
+                string masterFolder = Path.Combine(projectSettings.SampleFilesFolder, "Master");
                 if (txtSelectionFolder.Text.Contains(masterFolder))
                 {
                     if (MessageBox.Show("Are You Sure You Want to Move Selection?", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -476,7 +478,7 @@ namespace sb_editor
             //Move Samples
             if (lvwAllSamples.SelectedItems.Count == 1)
             {
-                string filePath = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", lvwAllSamples.SelectedItems[0].Text.TrimStart('\\'));
+                string filePath = Path.Combine(projectSettings.SampleFilesFolder, "Master", lvwAllSamples.SelectedItems[0].Text.TrimStart('\\'));
                 if (File.Exists(filePath))
                 {
                     //Copy Original Sample
@@ -489,7 +491,7 @@ namespace sb_editor
 
                         //Get Sample Rate and ReSample file
                         string selectedFormat = cboPreviewFormat.SelectedItem.ToString();
-                        int destinationSampleRate = GlobalPrefs.CurrentProject.platformData[selectedFormat].ReSampleRates[cboSampleRate.SelectedIndex];
+                        int destinationSampleRate = projectSettings.platformData[selectedFormat].ReSampleRates[cboSampleRate.SelectedIndex];
 
                         //ReSampleFile
                         filePath = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", "preview_resampled.wav");
@@ -534,7 +536,7 @@ namespace sb_editor
                         {
                             try
                             {
-                                Process.Start(AudioEditorPath, Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", lvwAllSamples.SelectedItems[i].Text.TrimStart('\\')));
+                                Process.Start(AudioEditorPath, Path.Combine(projectSettings.SampleFilesFolder, "Master", lvwAllSamples.SelectedItems[i].Text.TrimStart('\\')));
                             }
                             catch (Exception ex)
                             {

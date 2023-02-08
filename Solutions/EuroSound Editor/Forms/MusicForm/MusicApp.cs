@@ -18,6 +18,7 @@ namespace sb_editor.Forms
     public partial class MusicApp : Form
     {
         private readonly HashTables htFunctions = new HashTables();
+        private ProjProperties projectSettings;
 
         //-------------------------------------------------------------------------------------------------------------------------------
         public MusicApp()
@@ -28,11 +29,17 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void Frm_MusicMaker_Load(object sender, EventArgs e)
         {
+            string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
+            if (File.Exists(projectPropertiesFile))
+            {
+                projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
+            }
+
             // Begin updating the combo box so that it doesn't redraw after every item is added
             cboOutputFormat.BeginUpdate();
 
             // Iterate through the keys (platform names) in the platformData dictionary and add them to the combo box as options
-            foreach (string outPlatform in GlobalPrefs.CurrentProject.platformData.Keys)
+            foreach (string outPlatform in projectSettings.platformData.Keys)
             {
                 cboOutputFormat.Items.Add(outPlatform);
             }
@@ -114,7 +121,7 @@ namespace sb_editor.Forms
                     string[] outputPlatform = new string[] { cboOutputFormat.SelectedItem.ToString() };
                     if (cboOutputFormat.SelectedItem.ToString().Equals("All"))
                     {
-                        outputPlatform = GlobalPrefs.CurrentProject.platformData.Keys.ToArray();
+                        outputPlatform = projectSettings.platformData.Keys.ToArray();
                     }
 
                     // Output the music files
@@ -129,11 +136,11 @@ namespace sb_editor.Forms
                             }
 
                             // Create and validate MfxDefines.h file
-                            string finalFile = Path.Combine(GlobalPrefs.CurrentProject.HashCodeFileDirectory, "MFX_Defines.h");
+                            string finalFile = Path.Combine(projectSettings.HashCodeFileDirectory, "MFX_Defines.h");
                             string tempFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Temp_MFX_Defines.h");
 
                             //Create hashtable and get missing HashCodes
-                            string[] missingInTempFile = htFunctions.CreateAndValidateMfxDefines();
+                            string[] missingInTempFile = htFunctions.CreateAndValidateMfxDefines(projectSettings);
                             if (missingInTempFile != null && missingInTempFile.Length > 0)
                             {
                                 // Show a warning message if there are missing defines in the new MfxDefines.h file
@@ -273,7 +280,7 @@ namespace sb_editor.Forms
                 if (lvwMusicFiles.Items.Count > 0)
                 {
                     // Check if there are any missing defines in the temp MFX_Defines.h file
-                    string[] missingInTempFile = htFunctions.CreateAndValidateMfxDefines();
+                    string[] missingInTempFile = htFunctions.CreateAndValidateMfxDefines(projectSettings);
                     if (missingInTempFile != null && missingInTempFile.Length > 0)
                     {
                         // Truncate message if necessary
