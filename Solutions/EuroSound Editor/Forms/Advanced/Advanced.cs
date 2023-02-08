@@ -25,27 +25,36 @@ namespace sb_editor.Forms
             //Update to wait cursor
             Cursor.Current = Cursors.WaitCursor;
 
-            //Create report from the default selected soundbank
-            UserControl_Manform_SoundBanks mainForm = ((MainForm)Application.OpenForms[nameof(MainForm)]).UserControl_SoundBanks;
-            if (mainForm.tvwSoundBanks.Nodes.Count > 0)
+            string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
+            if (File.Exists(projectPropertiesFile))
             {
-                string soundBankName = mainForm.tvwSoundBanks.Nodes[0].Text;
-                string soundBankPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks", soundBankName + ".txt");
-                if (File.Exists(soundBankPath))
-                {
-                    // Create the report folder if it doesn't exist
-                    string reportFolderPath = Path.Combine(GlobalPrefs.ProjectFolder, "Report");
-                    if (!Directory.Exists(reportFolderPath))
-                    {
-                        Directory.CreateDirectory(reportFolderPath);
-                    }
+                ProjProperties projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
 
-                    // Create the report file in the report folder
-                    Language outLang = (Language)Enum.Parse(typeof(Language), CommonFunctions.GetOutputLanguages()[0], true);
-                    CreateReport(Path.Combine(reportFolderPath, soundBankName + ".txt"), soundBankPath, CommonFunctions.GetOutputPlatforms()[0], outLang);
+                //Create report from the default selected soundbank
+                UserControl_Manform_SoundBanks mainForm = ((MainForm)Application.OpenForms[nameof(MainForm)]).UserControl_SoundBanks;
+                if (mainForm.tvwSoundBanks.Nodes.Count > 0)
+                {
+                    string soundBankName = mainForm.tvwSoundBanks.Nodes[0].Text;
+                    string soundBankPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks", soundBankName + ".txt");
+                    if (File.Exists(soundBankPath))
+                    {
+                        // Create the report folder if it doesn't exist
+                        string reportFolderPath = Path.Combine(GlobalPrefs.ProjectFolder, "Report");
+                        if (!Directory.Exists(reportFolderPath))
+                        {
+                            Directory.CreateDirectory(reportFolderPath);
+                        }
+
+                        // Create the report file in the report folder
+                        Language outLang = (Language)Enum.Parse(typeof(Language), CommonFunctions.GetOutputLanguages()[0], true);
+                        CreateReport(Path.Combine(reportFolderPath, soundBankName + ".txt"), soundBankPath, CommonFunctions.GetOutputPlatforms(projectSettings)[0], outLang);
+                    }
                 }
             }
-
+            else
+            {
+                MessageBox.Show(string.Format("Project Properties File Not Found {0}", projectPropertiesFile), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             //Restore default cursor
             Cursor.Current = Cursors.Default;
         }

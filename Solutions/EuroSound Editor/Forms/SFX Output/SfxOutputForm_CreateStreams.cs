@@ -19,7 +19,7 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void OutputStreams(SamplePool samplesList, string[] languages, string debugfileFolder)
         {
-            foreach (KeyValuePair<string, PlatformData> platform in GlobalPrefs.CurrentProject.platformData)
+            foreach (KeyValuePair<string, PlatformData> platform in projectSettings.platformData)
             {
                 for (int i = 0; i < languages.Length; i++)
                 {
@@ -71,7 +71,7 @@ namespace sb_editor.Forms
                                 //Create Stream Sample Data File
                                 if (File.Exists(audioDataFilePath))
                                 {
-                                    string markerFile = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", Path.ChangeExtension(streamsList[j], ".mrk"));
+                                    string markerFile = Path.Combine(projectSettings.SampleFilesFolder, "Master", Path.ChangeExtension(streamsList[j], ".mrk"));
                                     if (File.Exists(markerFile))
                                     {
                                         //Ensure that the output folder exists

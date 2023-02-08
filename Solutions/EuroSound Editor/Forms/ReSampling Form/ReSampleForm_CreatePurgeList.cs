@@ -51,16 +51,16 @@ namespace sb_editor
             HashSet<string> availableSamples = new HashSet<string>();
 
             //Get All Samples
-            var sampleFiles = Directory.EnumerateFiles(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master"), "*.wav", SearchOption.AllDirectories);
+            var sampleFiles = Directory.EnumerateFiles(Path.Combine(parentFormObj.projectSettings.SampleFilesFolder, "Master"), "*.wav", SearchOption.AllDirectories);
             foreach (var samplePath in sampleFiles)
             {
-                int MasterFolderLength = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master").Length;
+                int MasterFolderLength = Path.Combine(parentFormObj.projectSettings.SampleFilesFolder, "Master").Length;
                 availableSamples.Add(samplePath.Substring(MasterFolderLength));
             }
 
             //Get Used Samples from SFX Files
             string[] sfxFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs"), "*.txt", SearchOption.AllDirectories);
-            string[] availableFormats = new string[] { "Common" }.Concat(GlobalPrefs.CurrentProject.platformData.Keys.ToArray()).ToArray();
+            string[] availableFormats = new string[] { "Common" }.Concat(parentFormObj.projectSettings.platformData.Keys.ToArray()).ToArray();
             for (int i = 0; i < availableFormats.Length; i++)
             {
                 string platform = availableFormats[i];

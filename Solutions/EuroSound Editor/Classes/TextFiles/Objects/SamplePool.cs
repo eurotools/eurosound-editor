@@ -12,12 +12,12 @@ namespace sb_editor.Objects
         public Dictionary<string, SamplePoolItem> SamplePoolItems = new Dictionary<string, SamplePoolItem>(StringComparer.OrdinalIgnoreCase);
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void CheckForUpdates()
+        public void CheckForUpdates(ProjProperties projectSettings)
         {
             //Check For Extra ReSample
             foreach (KeyValuePair<string, SamplePoolItem> itemToCheck in SamplePoolItems)
             {
-                string fullpath = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", itemToCheck.Key.TrimStart(Path.DirectorySeparatorChar));
+                string fullpath = Path.Combine(projectSettings.SampleFilesFolder, "Master", itemToCheck.Key.TrimStart(Path.DirectorySeparatorChar));
                 if (File.Exists(fullpath))
                 {
                     string lastDate = CommonFunctions.GetSampleDate(fullpath);

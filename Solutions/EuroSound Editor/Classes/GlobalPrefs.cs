@@ -1,5 +1,4 @@
-﻿using sb_editor.Objects;
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
 
 namespace sb_editor
@@ -9,7 +8,6 @@ namespace sb_editor
     //-------------------------------------------------------------------------------------------------------------------------------
     public static class GlobalPrefs
     {
-        public static ProjProperties CurrentProject = new ProjProperties();
         public static NumberFormatInfo NumericProvider = new NumberFormatInfo() { NumberDecimalSeparator = "." };
 
         public static string ProjectFolder = string.Empty;

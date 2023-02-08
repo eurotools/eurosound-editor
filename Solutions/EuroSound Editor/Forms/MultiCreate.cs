@@ -106,71 +106,80 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnOK_Click(object sender, EventArgs e)
         {
-            string defaultsFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "SFX Defaults.txt");
-            if (File.Exists(defaultsFile))
+            string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
+            if (File.Exists(projectPropertiesFile))
             {
-                string systemIniPath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini");
-                if (File.Exists(systemIniPath))
+                ProjProperties projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
+                string defaultsFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "SFX Defaults.txt");
+                if (File.Exists(defaultsFile))
                 {
-                    //Get default Samples
-                    IniFile systemIni = new IniFile(systemIniPath);
-                    decimal PitchOffset = 0, RandomPitch = 0;
-                    sbyte BaseVolume = 0, RandomVolume = 0, Pan = 0, RandomPan = 0;
-                    if (decimal.TryParse(systemIni.Read("DTextNIndex_0", "SFXForm"), System.Globalization.NumberStyles.Any, GlobalPrefs.NumericProvider, out decimal PitchOffsetParsed))
+                    string systemIniPath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini");
+                    if (File.Exists(systemIniPath))
                     {
-                        PitchOffset = PitchOffsetParsed;
-                    }
-                    if (decimal.TryParse(systemIni.Read("DTextNIndex_1", "SFXForm"), System.Globalization.NumberStyles.Any, GlobalPrefs.NumericProvider, out decimal RandomPitchParsed))
-                    {
-                        RandomPitch = RandomPitchParsed;
-                    }
-                    if (sbyte.TryParse(systemIni.Read("DTextNIndex_2", "SFXForm"), System.Globalization.NumberStyles.Any, GlobalPrefs.NumericProvider, out sbyte BaseVolumeParsed))
-                    {
-                        BaseVolume = BaseVolumeParsed;
-                    }
-                    if (sbyte.TryParse(systemIni.Read("DTextNIndex_3", "SFXForm"), System.Globalization.NumberStyles.Any, GlobalPrefs.NumericProvider, out sbyte RandomVolumeParsed))
-                    {
-                        RandomVolume = RandomVolumeParsed;
-                    }
-                    if (sbyte.TryParse(systemIni.Read("DTextNIndex_4", "SFXForm"), System.Globalization.NumberStyles.Any, GlobalPrefs.NumericProvider, out sbyte PanParsed))
-                    {
-                        Pan = PanParsed;
-                    }
-                    if (sbyte.TryParse(systemIni.Read("DTextNIndex_5", "SFXForm"), System.Globalization.NumberStyles.Any, GlobalPrefs.NumericProvider, out sbyte RandomPanParsed))
-                    {
-                        RandomPan = RandomPanParsed;
-                    }
-
-                    //Create SFXs
-                    foreach (KeyValuePair<string, List<string>> HashCodeToCheck in HashCodesToAdd)
-                    {
-                        SFX fileData = TextFiles.ReadSfxFile(defaultsFile);
-                        fileData.HashCode = GlobalPrefs.SFXHashCodeNumber++;
-                        foreach (string sampleToCheck in HashCodeToCheck.Value)
+                        //Get default Samples
+                        IniFile systemIni = new IniFile(systemIniPath);
+                        decimal PitchOffset = 0, RandomPitch = 0;
+                        sbyte BaseVolume = 0, RandomVolume = 0, Pan = 0, RandomPan = 0;
+                        if (decimal.TryParse(systemIni.Read("DTextNIndex_0", "SFXForm"), System.Globalization.NumberStyles.Any, GlobalPrefs.NumericProvider, out decimal PitchOffsetParsed))
                         {
-                            SfxSample sampleToAdd = new SfxSample
-                            {
-                                FilePath = sampleToCheck.Substring(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master").Length + 1),
-                                PitchOffset = PitchOffset,
-                                RandomPitch = RandomPitch,
-                                BaseVolume = BaseVolume,
-                                RandomVolume = RandomVolume,
-                                Pan = Pan,
-                                RandomPan = RandomPan
-                            };
-                            fileData.Samples.Add(sampleToAdd);
+                            PitchOffset = PitchOffsetParsed;
                         }
-                        TextFiles.WriteSfxFile(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", HashCodeToCheck.Key + ".txt"), fileData);
+                        if (decimal.TryParse(systemIni.Read("DTextNIndex_1", "SFXForm"), System.Globalization.NumberStyles.Any, GlobalPrefs.NumericProvider, out decimal RandomPitchParsed))
+                        {
+                            RandomPitch = RandomPitchParsed;
+                        }
+                        if (sbyte.TryParse(systemIni.Read("DTextNIndex_2", "SFXForm"), System.Globalization.NumberStyles.Any, GlobalPrefs.NumericProvider, out sbyte BaseVolumeParsed))
+                        {
+                            BaseVolume = BaseVolumeParsed;
+                        }
+                        if (sbyte.TryParse(systemIni.Read("DTextNIndex_3", "SFXForm"), System.Globalization.NumberStyles.Any, GlobalPrefs.NumericProvider, out sbyte RandomVolumeParsed))
+                        {
+                            RandomVolume = RandomVolumeParsed;
+                        }
+                        if (sbyte.TryParse(systemIni.Read("DTextNIndex_4", "SFXForm"), System.Globalization.NumberStyles.Any, GlobalPrefs.NumericProvider, out sbyte PanParsed))
+                        {
+                            Pan = PanParsed;
+                        }
+                        if (sbyte.TryParse(systemIni.Read("DTextNIndex_5", "SFXForm"), System.Globalization.NumberStyles.Any, GlobalPrefs.NumericProvider, out sbyte RandomPanParsed))
+                        {
+                            RandomPan = RandomPanParsed;
+                        }
+
+                        //Create SFXs
+                        foreach (KeyValuePair<string, List<string>> HashCodeToCheck in HashCodesToAdd)
+                        {
+                            SFX fileData = TextFiles.ReadSfxFile(defaultsFile);
+                            fileData.HashCode = GlobalPrefs.SFXHashCodeNumber++;
+                            foreach (string sampleToCheck in HashCodeToCheck.Value)
+                            {
+                                SfxSample sampleToAdd = new SfxSample
+                                {
+                                    FilePath = sampleToCheck.Substring(Path.Combine(projectSettings.SampleFilesFolder, "Master").Length + 1),
+                                    PitchOffset = PitchOffset,
+                                    RandomPitch = RandomPitch,
+                                    BaseVolume = BaseVolume,
+                                    RandomVolume = RandomVolume,
+                                    Pan = Pan,
+                                    RandomPan = RandomPan
+                                };
+                                fileData.Samples.Add(sampleToAdd);
+                            }
+                            TextFiles.WriteSfxFile(Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", HashCodeToCheck.Key + ".txt"), fileData);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show(string.Format("File Not Found '{0}'", systemIniPath), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else
                 {
-                    MessageBox.Show(string.Format("File Not Found '{0}'", systemIniPath), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Default SFX file Not Found.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
             {
-                MessageBox.Show("Default SFX file Not Found.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(string.Format("Project Properties File Not Found {0}", projectPropertiesFile), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             Close();
         }

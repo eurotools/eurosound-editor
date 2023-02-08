@@ -185,7 +185,7 @@ namespace sb_editor.Classes
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal long GetEstimatedOutputFileSize(string[] samplesList, SamplePool samplePool, string outputPlatform)
+        internal long GetEstimatedOutputFileSize(ProjProperties projectSettings, string[] samplesList, SamplePool samplePool, string outputPlatform)
         {
             decimal fileSize = 0;
 
@@ -216,8 +216,8 @@ namespace sb_editor.Classes
                     if (samplePool.SamplePoolItems.ContainsKey(keyToCheck))
                     {
                         SamplePoolItem sampleItem = samplePool.SamplePoolItems[keyToCheck];
-                        int sampleRateIndex = GlobalPrefs.CurrentProject.ResampleRates.IndexOf(sampleItem.ReSampleRate);
-                        int formatRate = GlobalPrefs.CurrentProject.platformData[outputPlatform].ReSampleRates[sampleRateIndex];
+                        int sampleRateIndex = projectSettings.ResampleRates.IndexOf(sampleItem.ReSampleRate);
+                        int formatRate = projectSettings.platformData[outputPlatform].ReSampleRates[sampleRateIndex];
                         decimal resampledWaveSize = decimal.Divide(masterWaveSize, decimal.Divide(masterWaveFreq, formatRate));
                         switch (outputPlatform)
                         {

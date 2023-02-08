@@ -23,7 +23,7 @@ namespace sb_editor.Forms
             Stopwatch psTimer = new Stopwatch();
 
             //Check For New Samples
-            string[] missingSamples = SampleFiles.GetMissingSamples(samplesList);
+            string[] missingSamples = SampleFiles.GetMissingSamples(samplesList, projectSettings);
             if (missingSamples.Length > 0)
             {
                 using (MissingSamplesFound newSamplesForm = new MissingSamplesFound(missingSamples, samplesList))
@@ -33,7 +33,7 @@ namespace sb_editor.Forms
             }
 
             // Check for missing Samples
-            string[] newSamples = SampleFiles.GetNewSamples(samplesList);
+            string[] newSamples = SampleFiles.GetNewSamples(samplesList, projectSettings);
             if (newSamples.Length > 0)
             {
                 using (NewSamplesFound newSamplesForm = new NewSamplesFound(newSamples, samplesList))
@@ -43,36 +43,36 @@ namespace sb_editor.Forms
             }
 
             //Clone the master directory for each available format, this way we avoid to check each time if the folder exists.
-            foreach (KeyValuePair<string, PlatformData> platformData in GlobalPrefs.CurrentProject.platformData)
+            foreach (KeyValuePair<string, PlatformData> platformData in projectSettings.platformData)
             {
-                CopyDirectory(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master"), Path.Combine(GlobalPrefs.ProjectFolder, platformData.Key), false, true);
+                CopyDirectory(Path.Combine(projectSettings.SampleFilesFolder, "Master"), Path.Combine(GlobalPrefs.ProjectFolder, platformData.Key), false, true);
                 switch (platformData.Key.ToLower())
                 {
                     case "pc":
-                        CopyDirectory(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master"), Path.Combine(GlobalPrefs.ProjectFolder, platformData.Key + "_Software_adpcm"), false, true);
+                        CopyDirectory(Path.Combine(projectSettings.SampleFilesFolder, "Master"), Path.Combine(GlobalPrefs.ProjectFolder, platformData.Key + "_Software_adpcm"), false, true);
                         break;
                     case "gamecube":
-                        CopyDirectory(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master"), Path.Combine(GlobalPrefs.ProjectFolder, platformData.Key + "_Software_adpcm"), false, true);
-                        CopyDirectory(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master"), Path.Combine(GlobalPrefs.ProjectFolder, platformData.Key + "_dsp_adpcm"), false, true);
+                        CopyDirectory(Path.Combine(projectSettings.SampleFilesFolder, "Master"), Path.Combine(GlobalPrefs.ProjectFolder, platformData.Key + "_Software_adpcm"), false, true);
+                        CopyDirectory(Path.Combine(projectSettings.SampleFilesFolder, "Master"), Path.Combine(GlobalPrefs.ProjectFolder, platformData.Key + "_dsp_adpcm"), false, true);
                         break;
                     case "playstation2":
-                        CopyDirectory(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master"), Path.Combine(GlobalPrefs.ProjectFolder, platformData.Key + "_VAG"), false, true);
+                        CopyDirectory(Path.Combine(projectSettings.SampleFilesFolder, "Master"), Path.Combine(GlobalPrefs.ProjectFolder, platformData.Key + "_VAG"), false, true);
                         break;
                     default:
-                        CopyDirectory(Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master"), Path.Combine(GlobalPrefs.ProjectFolder, "XBox_adpcm"), false, true);
+                        CopyDirectory(Path.Combine(projectSettings.SampleFilesFolder, "Master"), Path.Combine(GlobalPrefs.ProjectFolder, "XBox_adpcm"), false, true);
                         break;
                 }
             }
 
             //Iterate over all available samples
             int index = 0;
-            int total = samplesList.SamplePoolItems.Count * GlobalPrefs.CurrentProject.platformData.Count;
+            int total = samplesList.SamplePoolItems.Count * projectSettings.platformData.Count;
             foreach (KeyValuePair<string, SamplePoolItem> sample in samplesList.SamplePoolItems)
             {
                 if (sample.Value.ReSample)
                 {
                     string sampleFilePath = sample.Key.TrimStart(Path.DirectorySeparatorChar);
-                    string sampleFullPath = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", sampleFilePath);
+                    string sampleFullPath = Path.Combine(projectSettings.SampleFilesFolder, "Master", sampleFilePath);
                     WavInfo waveFileData = wavFunctions.ReadWaveProperties(sampleFullPath);
 
                     //Ensure that this sample is a mono 16 bits Wave
@@ -88,7 +88,7 @@ namespace sb_editor.Forms
                     }
 
                     //Resample for all platforms that has the AutoResample Enabled
-                    foreach (KeyValuePair<string, PlatformData> platform in GlobalPrefs.CurrentProject.platformData)
+                    foreach (KeyValuePair<string, PlatformData> platform in projectSettings.platformData)
                     {
                         //Report Progress
                         double progress = (double)decimal.Divide(index++, total) * 100.0;
@@ -98,8 +98,8 @@ namespace sb_editor.Forms
                         if (platform.Value.AutoReSample)
                         {
                             //Get the sample rate for this sample.
-                            int sampleRateIndex = GlobalPrefs.CurrentProject.ResampleRates.IndexOf(sample.Value.ReSampleRate);
-                            int sampleRate = GlobalPrefs.CurrentProject.platformData[platform.Key].ReSampleRates[sampleRateIndex];
+                            int sampleRateIndex = projectSettings.ResampleRates.IndexOf(sample.Value.ReSampleRate);
+                            int sampleRate = projectSettings.platformData[platform.Key].ReSampleRates[sampleRateIndex];
 
                             //Stream sounds MUST use the default value: 22050Hz
                             if (sample.Value.StreamMe)

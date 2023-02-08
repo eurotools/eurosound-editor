@@ -53,7 +53,7 @@ namespace sb_editor
             string[] filesToDelete = TextFiles.ReadPurgeFiles(reportFilePath);
             for (int i = 0; i < filesToDelete.Length; i++)
             {
-                string fileSource = Path.Combine(GlobalPrefs.CurrentProject.SampleFilesFolder, "Master", filesToDelete[i].TrimStart('\\'));
+                string fileSource = Path.Combine(parentFormObj.projectSettings.SampleFilesFolder, "Master", filesToDelete[i].TrimStart('\\'));
                 string fileDest = Path.Combine(folderPath, filesToDelete[i].TrimStart('\\'));
                 if (File.Exists(fileSource) && !File.Exists(fileDest))
                 {
