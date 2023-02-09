@@ -431,7 +431,7 @@ namespace sb_editor.Forms
                             itemToAdd.SubItems[1].Text = musicFileData.Volume.ToString();
                             itemToAdd.SubItems[2].Text = "NewFile";
                             itemToAdd.SubItems[3].Text = musicFileData.HashCode.ToString();
-                            itemToAdd.SubItems[6].Text = string.Format("HC{0}.SFX", musicFileData.HashCode.ToString("X6"));
+                            itemToAdd.SubItems[6].Text = string.Format("_mus_mfx_{0}.SFX", fileName).ToLower();
                             itemToAdd.SubItems[7].Text = musicFileData.UserValue.ToString();
 
                             // Write the MusicFile data to the .txt file
@@ -549,7 +549,7 @@ namespace sb_editor.Forms
                     listItem.SubItems[5].Text = "Output";
 
                     // Update output filename
-                    listItem.SubItems[6].Text = string.Format("HC{0}.SFX", musicFileData.HashCode.ToString("X6"));
+                    listItem.SubItems[6].Text = string.Format("_mus_mfx_{0}.SFX", listItem.Text).ToLower();
 
                     // Write the updated music file data to the music file
                     TextFiles.WriteMusicFile(musicFileData, musicFilePath);
