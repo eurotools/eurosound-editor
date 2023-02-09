@@ -371,9 +371,14 @@ namespace sb_editor
                                 foreach (KeyValuePair<string, string> fileToMove in RenameDict)
                                 {
                                     //Update Control && Move files
-                                    lvwAllSamples.FindItemWithText(fileToMove.Key).Text = fileToMove.Value;
+                                    ListViewItem itemToModify = lvwAllSamples.FindItemWithText(fileToMove.Key);
+                                    itemToModify.Text = fileToMove.Value;
+                                    itemToModify.SubItems[4].Text = "True";
                                     File.Move(Path.Combine(masterFolder, fileToMove.Key.TrimStart('\\')), Path.Combine(masterFolder, fileToMove.Value.TrimStart('\\')));
                                 }
+
+                                //Save Changes
+                                SaveSamplesFile();
                             }
 
                             // Set cursor as default arrow
