@@ -96,7 +96,7 @@ namespace sb_editor.Forms
                 //Convert it to the SFX
                 for (int j = 0; j < outputPlatform.Length; j++)
                 {
-                    string outTmpFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatform[j], "SoundBanks", outLanguages[i], "sfxdetails.bin");
+                    string outTmpFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatform[j], "SoundBanks", outLanguages[i], "sounddetails.sdf");
                     BuildSoundDetailsFile(sfxDataFilePath, outTmpFilePath);
 
                     string sfxOutputPath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatform[j], projectSettings), CommonFunctions.GetSfxName(outLang, "sounddetails").ToLower());

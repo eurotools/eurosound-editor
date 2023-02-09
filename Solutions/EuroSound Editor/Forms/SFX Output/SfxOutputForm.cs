@@ -111,7 +111,7 @@ namespace sb_editor.Forms
             {
                 bool isBigEndian = outputPlatform[i].Equals("GameCube", StringComparison.OrdinalIgnoreCase);
 
-                string tempFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatform[i], "projInfo.bin");
+                string tempFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatform[i], "projectdetails.pdf");
                 OutputProjectDetailsFile(tempFilePath, outputPlatform[i], isBigEndian);
 
                 string sfxFilePath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatform[i], projectSettings), "_projectdetails.sfx");

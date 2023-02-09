@@ -358,7 +358,7 @@ namespace sb_editor.Forms
             {
                 for (int j = 0; j < outputPlatforms.Length; j++)
                 {
-                    string tempOutputFolder = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatforms[j], "Music", "mfxdetails.bin");
+                    string tempOutputFolder = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatforms[j], "Music", "musicdetails.mdf");
                     BuildMusicDetailsFile(mfxValidListFile, tempOutputFolder);
 
                     string sfxOutputPath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatforms[j], projectSettings), string.Format("_musicdetails.SFX").ToLower());
