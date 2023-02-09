@@ -86,7 +86,7 @@ namespace sb_editor.Forms
                         if (fastOutput)
                         {
                             string samplePath = sampleToCheck.FilePath;
-                            string sampleFolder = "XBox_adpcm";
+                            string sampleFolder = "XBox_Software_adpcm";
                             switch (outputPlatform.Trim().ToLower())
                             {
                                 case "pc":
@@ -277,7 +277,7 @@ namespace sb_editor.Forms
                     case "x box":
                     case "xbox":
                         wavFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "X Box", sampleList[i].TrimStart(Path.DirectorySeparatorChar));
-                        string adpcmFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "XBox_adpcm", Path.ChangeExtension(sampleList[i].TrimStart(Path.DirectorySeparatorChar), ".ssp"));
+                        string adpcmFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "XBox_Software_adpcm", Path.ChangeExtension(sampleList[i].TrimStart(Path.DirectorySeparatorChar), ".ssp"));
 
                         if (File.Exists(wavFilePath))
                         {

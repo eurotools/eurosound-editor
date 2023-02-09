@@ -59,7 +59,7 @@ namespace sb_editor.Forms
                         CopyDirectory(Path.Combine(projectSettings.SampleFilesFolder, "Master"), Path.Combine(GlobalPrefs.ProjectFolder, platformData.Key + "_VAG"), false, true);
                         break;
                     default:
-                        CopyDirectory(Path.Combine(projectSettings.SampleFilesFolder, "Master"), Path.Combine(GlobalPrefs.ProjectFolder, "XBox_adpcm"), false, true);
+                        CopyDirectory(Path.Combine(projectSettings.SampleFilesFolder, "Master"), Path.Combine(GlobalPrefs.ProjectFolder, "XBox_Software_adpcm"), false, true);
                         break;
                 }
             }
@@ -201,7 +201,7 @@ namespace sb_editor.Forms
                                     soxTimer.Stop();
 
                                     //----------------------------------------------------------Run Xbox Encoder
-                                    string xboxOutputPath = Path.Combine(GlobalPrefs.ProjectFolder, "XBox_adpcm", sampleFilePath);
+                                    string xboxOutputPath = Path.Combine(GlobalPrefs.ProjectFolder, "XBox_Software_adpcm", sampleFilePath);
                                     xbTimer.Start();
                                     File.WriteAllBytes(Path.ChangeExtension(xboxOutputPath, ".ssp"), eurocomImaFunction.Encode(wavFunctions.GetWaveSamples(waveOutputPath)));
                                     xbTimer.Stop();
