@@ -51,8 +51,11 @@ namespace sb_editor
                         currentLine = sr.ReadLine().Trim();
                         while (!currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase))
                         {
-                            string hashcodeNumber = currentLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)[1];
-                            soundBank.HashCode = Convert.ToInt32(hashcodeNumber);
+                            string[] splittedData = currentLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                            if (splittedData.Length > 1)
+                            {
+                                soundBank.HashCode = Convert.ToInt32(splittedData[1]);
+                            }
                             currentLine = sr.ReadLine().Trim();
                         }
                     }
@@ -63,8 +66,11 @@ namespace sb_editor
                         currentLine = sr.ReadLine().Trim();
                         while (!currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase))
                         {
-                            string slotName = currentLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)[1];
-                            soundBank.MemoryMap = slotName;
+                            string[] splittedData = currentLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                            if (splittedData.Length > 1)
+                            {
+                                soundBank.MemoryMap = splittedData[1];
+                            }
                             currentLine = sr.ReadLine().Trim();
                         }
                     }
