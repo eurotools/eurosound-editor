@@ -156,6 +156,13 @@ namespace sb_editor
         //*===============================================================================================
         private void TxtSelectionFolder_DoubleClick(object sender, EventArgs e)
         {
+            //Select the last selected directory.
+            if (Directory.Exists(txtSelectionFolder.Text))
+            {
+                folderBrowserDialog.SelectedPath = txtSelectionFolder.Text;
+            }
+
+            //Update textbox with the new path
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 txtSelectionFolder.Text = folderBrowserDialog.SelectedPath;
