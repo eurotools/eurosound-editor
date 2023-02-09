@@ -713,7 +713,7 @@ namespace sb_editor.Panels
         private void AddItemToSamplePool(string filePath)
         {
             //Check if filePath is inside SampleFilesFolder
-            if (filePath.StartsWith(((SFXForm)Parent.Parent).projectSettings.SampleFilesFolder))
+            if (filePath.IndexOf(((SFXForm)Parent.Parent).projectSettings.SampleFilesFolder) >= 0)
             {
                 try
                 {
