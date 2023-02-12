@@ -414,6 +414,12 @@ namespace sb_editor
                         //Update UI
                         UpdateMemMapsComboboxes();
                         CboMemSlotFormat_SelectedIndexChanged(null, null);
+
+                        //Add Memory Map to combobox
+                        if (!cboDefaultMemMap.Items.Contains(inputForm.txtInputData.Text))
+                        {
+                            cboDefaultMemMap.Items.Add(inputForm.txtInputData.Text);
+                        }
                     }
                 }
             }
