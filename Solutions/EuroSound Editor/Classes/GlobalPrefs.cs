@@ -58,6 +58,7 @@ namespace sb_editor
             set { _ReSampleStreams = value; TextFiles.WriteMiscFile(Path.Combine(ProjectFolder, "System", "Misc.txt")); }
         }
 
+        //-------------------------------------------------------------------------------------------------------------------------------
         public static int GroupHashCodeNumber
         {
             get { return _GroupHashCodeNumber; }
