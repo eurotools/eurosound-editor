@@ -246,28 +246,35 @@ namespace sb_editor.Panels
                                     //Rename file
                                     string dataBaseName = lstDataBases.SelectedItem.ToString();
                                     string source = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", dataBaseName + ".txt");
-                                    File.Move(source, newFilePath);
-
-                                    //Update All SoundBanks
-                                    string[] soundBanks = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks"), "*.txt", SearchOption.TopDirectoryOnly);
-                                    for (int i = 0; i < soundBanks.Length; i++)
+                                    if (File.Exists(source))
                                     {
-                                        string[] fileData = File.ReadAllLines(soundBanks[i]);
-                                        int index = Array.IndexOf(fileData, dataBaseName);
-                                        if (index != -1)
+                                        File.Move(source, newFilePath);
+
+                                        //Update All SoundBanks
+                                        string[] soundBanks = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks"), "*.txt", SearchOption.TopDirectoryOnly);
+                                        for (int i = 0; i < soundBanks.Length; i++)
                                         {
-                                            fileData[index] = fileName;
+                                            string[] fileData = File.ReadAllLines(soundBanks[i]);
+                                            int index = Array.IndexOf(fileData, dataBaseName);
+                                            if (index != -1)
+                                            {
+                                                fileData[index] = fileName;
+                                            }
+                                            File.WriteAllLines(soundBanks[i], fileData);
                                         }
-                                        File.WriteAllLines(soundBanks[i], fileData);
+
+                                        //Update Listbox
+                                        lstDataBases.Items[lstDataBases.SelectedIndex] = fileName;
+
+                                        //Reload Soundbanks
+                                        MainForm frmMainForm = (MainForm)Application.OpenForms[nameof(MainForm)];
+                                        frmMainForm.UserControl_SoundBanks_CheckBox.LoadSoundBanks();
+                                        frmMainForm.UserControl_SoundBanks.LoadSoundBanks(frmMainForm.UserControl_SoundBanks_CheckBox.cbllstSoundbanks);
                                     }
-
-                                    //Update Listbox
-                                    lstDataBases.Items[lstDataBases.SelectedIndex] = fileName;
-
-                                    //Reload Soundbanks
-                                    MainForm frmMainForm = (MainForm)Application.OpenForms[nameof(MainForm)];
-                                    frmMainForm.UserControl_SoundBanks_CheckBox.LoadSoundBanks();
-                                    frmMainForm.UserControl_SoundBanks.LoadSoundBanks(frmMainForm.UserControl_SoundBanks_CheckBox.cbllstSoundbanks);
+                                    else
+                                    {
+                                        MessageBox.Show(string.Format("File not found: '{0}'", source), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    }
                                     break;
                                 }
                             }
