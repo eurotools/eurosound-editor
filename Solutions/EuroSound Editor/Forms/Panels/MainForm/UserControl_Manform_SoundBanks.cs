@@ -431,9 +431,21 @@ namespace sb_editor.Panels
             string soundBanksFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Soundbanks");
             if (Directory.Exists(soundBanksFilePath))
             {
-                //Clear soundbanks
+                //Get the name of the expanded node to restore the selection
+                string expandedNodeName = string.Empty;
                 if (tvwSoundBanks.Nodes.Count > 0)
                 {
+                    //Exit at the first match
+                    foreach(TreeNode node in tvwSoundBanks.Nodes)
+                    {
+                        if (node.IsExpanded)
+                        {
+                            expandedNodeName = node.Name;
+                            break;
+                        }
+                    }
+
+                    //Clear all soundbanks
                     tvwSoundBanks.Nodes.Clear();
                 }
 
@@ -445,7 +457,9 @@ namespace sb_editor.Panels
                     if (soundBankCheckedList.GetItemChecked(i))
                     {
                         tvwSoundBanks.SelectedNode = sbNode;
-                        if (Visible)
+
+                        //Restore the expanded node if exists
+                        if (sbNode.Name.Equals(expandedNodeName))
                         {
                             sbNode.Expand();
                         }
