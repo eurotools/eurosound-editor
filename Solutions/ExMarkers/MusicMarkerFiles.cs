@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using static ExMarkers.Enumerations;
 
 namespace ExMarkers
 {
@@ -18,17 +19,23 @@ namespace ExMarkers
             List<MarkerInfo> fileData = streamMarkersFunctions.LoadTextMarkerFile(markerFilePath, null, null, true);
 
             //Write Jump Markers
+            int writedLines = 0;
             using (StreamWriter sw = new StreamWriter(File.Open(outputFilePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
                 sw.WriteLine("#JUMPMARKERS");
-                for (int i = 0; i < fileData.Count - 1; i++)
+                for (int i = 0; i < fileData.Count; i++)
                 {
+                    if (fileData[i].Type == (byte)EXMarkerType.End && fileData[i].Name.Equals("*"))
+                    {
+                        continue;
+                    }
                     sw.WriteLine(fileData[i].Name);
+                    writedLines = i + 1;
                 }
                 sw.WriteLine("#END");
             }
 
-            return fileData.Count - 1;
+            return writedLines;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
