@@ -329,12 +329,18 @@ namespace sb_editor
             {
                 // Get the output folder for the platform
                 string outFolder = projectSettings.platformData[platform].OutputFolder;
-
-                // Check if the output folder is not null and taht is a rooted path
-                if (!string.IsNullOrEmpty(outFolder) && Path.IsPathRooted(outFolder))
+                if (outFolder.Equals("Set Output Folder."))
                 {
-                    // If it is, set the output path to the output folder
-                    outputPath = Directory.CreateDirectory(outFolder).FullName;
+                    throw new DirectoryNotFoundException(string.Format("Please Set Output Folder for this Format: {0}", platform));
+                }
+                else
+                {
+                    // Check if the output folder is not null and taht is a rooted path
+                    if (!string.IsNullOrEmpty(outFolder) && Path.IsPathRooted(outFolder))
+                    {
+                        // If it is, set the output path to the output folder
+                        outputPath = Directory.CreateDirectory(outFolder).FullName;
+                    }
                 }
             }
 
