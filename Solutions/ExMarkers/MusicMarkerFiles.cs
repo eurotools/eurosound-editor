@@ -30,7 +30,7 @@ namespace ExMarkers
                         continue;
                     }
                     sw.WriteLine(fileData[i].Name);
-                    writedLines = i;
+                    writedLines = i + 1;
                 }
                 sw.WriteLine("#END");
             }
