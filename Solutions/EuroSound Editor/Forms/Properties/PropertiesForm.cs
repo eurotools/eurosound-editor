@@ -234,24 +234,32 @@ namespace sb_editor
         //*===============================================================================================
         private void BtnAddFormat_Click(object sender, EventArgs e)
         {
-            string selectedFormat = cboAvailableFormats.SelectedItem.ToString();
-            if (!temporalObj.platformData.ContainsKey(selectedFormat))
+            if (temporalObj.platformData.Count > 30)
             {
-                //Create new platform data
-                PlatformData formatPlatformData = new PlatformData { OutputFolder = "Set Output Folder.", AutoReSample = true };
-                for (int i = 0; i < temporalObj.ResampleRates.Count; i++)
+                MessageBox.Show("Format type count exceeded.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                string selectedFormat = cboAvailableFormats.SelectedItem.ToString();
+                if (!temporalObj.platformData.ContainsKey(selectedFormat))
                 {
-                    formatPlatformData.ReSampleRates.Add(22050);
-                }
 
-                //Add data
-                temporalObj.platformData.Add(selectedFormat, formatPlatformData);
-                lvwAvailableFormats.Items.Add(new ListViewItem(new string[] { selectedFormat, formatPlatformData.OutputFolder, formatPlatformData.AutoReSample ? "On" : "Off" }));
+                    //Create new platform data
+                    PlatformData formatPlatformData = new PlatformData { OutputFolder = "Set Output Folder.", AutoReSample = true };
+                    for (int i = 0; i < temporalObj.ResampleRates.Count; i++)
+                    {
+                        formatPlatformData.ReSampleRates.Add(22050);
+                    }
 
-                //Update Combobox
-                if (!cboFormat.Items.Contains(selectedFormat))
-                {
-                    cboFormat.Items.Add(selectedFormat);
+                    //Add data
+                    temporalObj.platformData.Add(selectedFormat, formatPlatformData);
+                    lvwAvailableFormats.Items.Add(new ListViewItem(new string[] { selectedFormat, formatPlatformData.OutputFolder, formatPlatformData.AutoReSample ? "On" : "Off" }));
+
+                    //Update Combobox
+                    if (!cboFormat.Items.Contains(selectedFormat))
+                    {
+                        cboFormat.Items.Add(selectedFormat);
+                    }
                 }
             }
         }
