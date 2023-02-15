@@ -310,7 +310,14 @@ namespace sb_editor.Forms
                     string outputPath = CommonFunctions.GetSoundbankOutPath(projectSettings, outputPlatforms[j], string.Empty, true);
                     if (!string.IsNullOrEmpty(outputPath) && Directory.Exists(outputPath))
                     {
-                        MusXBuild_MusicFile.BuildMusicFile(soundMarkerFilePath, soundSampleDataFilePath, Path.Combine(outputPath, string.Format("HCE{0:X5}.SFX", musicFileData.HashCode)), (uint)musicFileData.HashCode, outputPlatforms[j].Equals("GameCube", StringComparison.OrdinalIgnoreCase));
+                        if (File.Exists(soundMarkerFilePath) && File.Exists(soundSampleDataFilePath))
+                        {
+                            MusXBuild_MusicFile.BuildMusicFile(soundMarkerFilePath, soundSampleDataFilePath, Path.Combine(outputPath, string.Format("HCE{0:X5}.SFX", musicFileData.HashCode)), (uint)musicFileData.HashCode, outputPlatforms[j].Equals("GameCube", StringComparison.OrdinalIgnoreCase));
+                        }
+                        else
+                        {
+                            Invoke(method: new Action(() => { MessageBox.Show("BindXFile - wot no files!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error); }));
+                        }
                     }
                 }
 
