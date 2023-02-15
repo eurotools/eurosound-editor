@@ -430,7 +430,7 @@ namespace sb_editor.Panels
                 if (tvwSoundBanks.Nodes.Count > 0)
                 {
                     //Exit at the first match
-                    foreach(TreeNode node in tvwSoundBanks.Nodes)
+                    foreach (TreeNode node in tvwSoundBanks.Nodes)
                     {
                         if (node.IsExpanded)
                         {
