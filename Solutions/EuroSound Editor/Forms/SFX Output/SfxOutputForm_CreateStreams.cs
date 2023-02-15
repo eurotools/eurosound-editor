@@ -21,6 +21,9 @@ namespace sb_editor.Forms
         {
             foreach (KeyValuePair<string, PlatformData> platform in projectSettings.platformData)
             {
+                int StreamListEnglishCount = -1;
+                int StreamListCount = 0;
+
                 for (int i = 0; i < languages.Length; i++)
                 {
                     Language outputLanguage = (Language)Enum.Parse(typeof(Language), languages[i], true);
@@ -105,6 +108,16 @@ namespace sb_editor.Forms
                                     Invoke(method: new Action(() => { MessageBox.Show(string.Format("ReSampleStreams. File Not Here: {0}", audioDataFilePath), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error); }));
                                 }
                             }
+                        }
+
+                        //Save English Streams List Count
+                        if (outputLanguage == Language.English)
+                        {
+                            StreamListEnglishCount = itemsToBind.Count;
+                        }
+                        if (StreamListEnglishCount > 0 && StreamListEnglishCount != StreamListCount)
+                        {
+                            Invoke(method: new Action(() => { MessageBox.Show("Not StreamList.ListCount = StreamListEnglish.ListCount", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error); }));
                         }
 
                         //Bind Streams into one single file
