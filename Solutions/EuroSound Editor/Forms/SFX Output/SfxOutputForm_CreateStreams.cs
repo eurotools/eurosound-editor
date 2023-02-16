@@ -115,7 +115,7 @@ namespace sb_editor.Forms
                         }
 
                         //Get count of the current list
-                        StreamListCount = streamsList.Count();
+                        StreamListCount = itemsToBind.Count;
 
                         //Save English Streams List Count
                         if (outputLanguage == Language.English)
