@@ -123,13 +123,14 @@ namespace sb_editor.Forms
                 hashCodes.GetHashCodesWithLabels(hashCodesDict, null);
                 foreach (KeyValuePair<string, int> sfxItem in hashCodesDict)
                 {
+                    string sfxUsage = hashCodes.GetSfxUsage(sfxItem.Key);
                     if (prefixHashCode)
                     {
-                        sw.WriteLine(hashCodes.WriteHashCode("HT_Sound_" + sfxItem.Key, sfxItem.Value | 0x1AF00000));
+                        sw.WriteLine(hashCodes.WriteHashCodeWithUsage("HT_Sound_" + sfxItem.Key, sfxItem.Value | 0x1AF00000, sfxUsage));
                     }
                     else
                     {
-                        sw.WriteLine(hashCodes.WriteHashCode(sfxItem.Key, sfxItem.Value | 0x1AF00000));
+                        sw.WriteLine(hashCodes.WriteHashCodeWithUsage(sfxItem.Key, sfxItem.Value | 0x1AF00000, sfxUsage));
                     }
 
                 }

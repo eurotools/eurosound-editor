@@ -6,6 +6,14 @@
     internal partial class HashTables
     {
         //-------------------------------------------------------------------------------------------------------------------------------
+        internal string WriteHashCodeWithUsage(string hashCodeLabel, int hashCodeNumber, string sfxUsage, string tabs = "\t\t")
+        {
+            string formattedString = string.Format("#define {0}{1}0x{2,8}\t// {3}", hashCodeLabel, tabs, hashCodeNumber.ToString("X8"), sfxUsage);
+
+            return formattedString;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
         internal string WriteHashCode(string hashCodeLabel, int hashCodeNumber, string tabs = "\t\t")
         {
             string formattedString = string.Format("#define {0}{1}0x{2,8}", hashCodeLabel, tabs, hashCodeNumber.ToString("X8"));
