@@ -22,7 +22,7 @@ namespace sb_editor.Forms
             foreach (KeyValuePair<string, PlatformData> platform in projectSettings.platformData)
             {
                 int StreamListEnglishCount = -1;
-                int StreamListCount = 0;
+                int StreamListCount;
 
                 for (int i = 0; i < languages.Length; i++)
                 {
@@ -109,6 +109,9 @@ namespace sb_editor.Forms
                                 }
                             }
                         }
+
+                        //Get count of the current list
+                        StreamListCount = streamsList.Count();
 
                         //Save English Streams List Count
                         if (outputLanguage == Language.English)
