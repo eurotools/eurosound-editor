@@ -31,7 +31,7 @@ namespace sb_editor.Forms
                 ProjProperties projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
 
                 //Create report from the default selected soundbank
-                UserControl_Manform_SoundBanks mainForm = ((MainForm)Application.OpenForms[nameof(MainForm)]).UserControl_SoundBanks;
+                UserControl_Mainform_SoundBanks mainForm = ((MainForm)Application.OpenForms[nameof(MainForm)]).UserControl_SoundBanks;
                 if (mainForm.tvwSoundBanks.Nodes.Count > 0)
                 {
                     string soundBankName = mainForm.tvwSoundBanks.Nodes[0].Text;

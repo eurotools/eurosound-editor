@@ -387,11 +387,11 @@
     <Compile Include="Forms\Panels\MainForm\Unused\UserControl_MainForm_SoundBanks_CheckBox.Designer.cs">
       <DependentUpon>UserControl_MainForm_SoundBanks_CheckBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Panels\MainForm\UserControl_ManForm_SoundBanks.cs">
+    <Compile Include="Forms\Panels\MainForm\UserControl_MainForm_SoundBanks.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\Panels\MainForm\UserControl_ManForm_SoundBanks.Designer.cs">
-      <DependentUpon>UserControl_ManForm_SoundBanks.cs</DependentUpon>
+    <Compile Include="Forms\Panels\MainForm\UserControl_MainForm_SoundBanks.Designer.cs">
+      <DependentUpon>UserControl_MainForm_SoundBanks.cs</DependentUpon>
     </Compile>
     <Compile Include="Splash.cs">
       <SubType>Form</SubType>
@@ -518,8 +518,8 @@
     <EmbeddedResource Include="Forms\Panels\MainForm\UserControl_MainForm_SfxInDataBase.resx">
       <DependentUpon>UserControl_MainForm_SfxInDataBase.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Panels\MainForm\UserControl_ManForm_SoundBanks.resx">
-      <DependentUpon>UserControl_ManForm_SoundBanks.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\Panels\MainForm\UserControl_MainForm_SoundBanks.resx">
+      <DependentUpon>UserControl_MainForm_SoundBanks.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Splash.resx">
       <DependentUpon>Splash.cs</DependentUpon>
