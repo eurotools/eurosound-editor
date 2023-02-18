@@ -1,7 +1,7 @@
 ﻿
 namespace sb_editor.Panels
 {
-    partial class UserControl_Manform_SoundBanks
+    partial class UserControl_Mainform_SoundBanks
     {
         /// <summary> 
         /// Variable del diseñador necesaria.
@@ -30,7 +30,7 @@ namespace sb_editor.Panels
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControl_Manform_SoundBanks));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControl_Mainform_SoundBanks));
             this.grbSoundBanks = new System.Windows.Forms.GroupBox();
             this.lblSoundBanksTutorial = new System.Windows.Forms.Label();
             this.ContextMenu_TreeView = new System.Windows.Forms.ContextMenuStrip(this.components);

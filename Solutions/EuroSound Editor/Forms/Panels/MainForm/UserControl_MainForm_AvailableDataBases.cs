@@ -339,7 +339,7 @@ namespace sb_editor.Panels
         //-------------------------------------------------------------------------------------------------------------------------------
         private void AddDataBases()
         {
-            UserControl_Manform_SoundBanks SoundBanksControl = ((MainForm)Application.OpenForms[nameof(MainForm)]).UserControl_SoundBanks;
+            UserControl_Mainform_SoundBanks SoundBanksControl = ((MainForm)Application.OpenForms[nameof(MainForm)]).UserControl_SoundBanks;
             if (lstDataBases.SelectedItems.Count > 0 && SoundBanksControl.tvwSoundBanks.SelectedNode != null)
             {
                 //Ensure that the selected node is valid!

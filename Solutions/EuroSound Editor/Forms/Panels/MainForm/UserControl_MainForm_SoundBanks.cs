@@ -11,10 +11,10 @@ namespace sb_editor.Panels
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    public partial class UserControl_Manform_SoundBanks : UserControl
+    public partial class UserControl_Mainform_SoundBanks : UserControl
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        public UserControl_Manform_SoundBanks()
+        public UserControl_Mainform_SoundBanks()
         {
             InitializeComponent();
         }
@@ -383,12 +383,21 @@ namespace sb_editor.Panels
 
                 //Display properties form
                 string soundBankpath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks", soundBankName + ".txt");
-                ComboBox outputPlatform = ((MainForm)Application.OpenForms[nameof(MainForm)]).UserControl_Output.cboOutputFormat;
-                ComboBox outputLanguage = ((MainForm)Application.OpenForms[nameof(MainForm)]).UserControl_Output.cboOutputLanguage;
+                ComboBox selectedPlatform = ((MainForm)Application.OpenForms[nameof(MainForm)]).UserControl_Output.cboOutputFormat;
+                ComboBox selectedLanguage = ((MainForm)Application.OpenForms[nameof(MainForm)]).UserControl_Output.cboOutputLanguage;
 
-                if (File.Exists(soundBankpath) && outputPlatform.SelectedItem != null)
+                //Ensure that we selected a platform and that the sb file exists
+                if (File.Exists(soundBankpath) && selectedPlatform.SelectedItem != null)
                 {
-                    using (SoundBankPropertiesForm soundBankProperties = new SoundBankPropertiesForm(soundBankpath, outputPlatform.Text, (Enumerations.Language)Enum.Parse(typeof(Enumerations.Language), outputLanguage.Text, true)))
+                    //Get the output Language
+                    string outputLanguage = "English";
+                    if (!string.IsNullOrEmpty(selectedLanguage.Text))
+                    {
+                        outputLanguage = selectedLanguage.Text;
+                    }
+
+                    //Display Form
+                    using (SoundBankPropertiesForm soundBankProperties = new SoundBankPropertiesForm(soundBankpath, selectedPlatform.Text, (Enumerations.Language)Enum.Parse(typeof(Enumerations.Language), outputLanguage, true)))
                     {
                         soundBankProperties.ShowDialog();
                     }

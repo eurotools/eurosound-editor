@@ -48,7 +48,7 @@ namespace sb_editor
             this.UserControl_SoundBanks_CheckBox = new sb_editor.Panels.UserControl_MainForm_SoundBanks_CheckBox();
             this.UserControl_Misc = new sb_editor.Panels.UserControl_MainForm_Misc();
             this.UserControl_Output = new sb_editor.Panels.UserControl_MainForm_Output();
-            this.UserControl_SoundBanks = new sb_editor.Panels.UserControl_Manform_SoundBanks();
+            this.UserControl_SoundBanks = new sb_editor.Panels.UserControl_Mainform_SoundBanks();
             this.OpenFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.MainMenu.SuspendLayout();
@@ -282,7 +282,7 @@ namespace sb_editor
         private System.Windows.Forms.ToolStripMenuItem mnuFile_Exit;
         private System.Windows.Forms.ToolStripMenuItem mnuHelp;
         private System.Windows.Forms.ToolStripMenuItem mnuHelp_About;
-        protected internal Panels.UserControl_Manform_SoundBanks UserControl_SoundBanks;
+        protected internal Panels.UserControl_Mainform_SoundBanks UserControl_SoundBanks;
         protected internal Panels.UserControl_MainForm_Output UserControl_Output;
         protected internal Panels.UserControl_MainForm_Misc UserControl_Misc;
         protected internal Panels.UserControl_MainForm_AvailableDataBases UserControl_Available_Databases;
