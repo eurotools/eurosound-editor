@@ -314,7 +314,7 @@ namespace sb_editor.Forms
                         {
                             MusXBuild_MusicFile.BuildMusicFile(soundMarkerFilePath, soundSampleDataFilePath, Path.Combine(outputPath, string.Format("HCE{0:X5}.SFX", musicFileData.HashCode)), (uint)musicFileData.HashCode, outputPlatforms[j].Equals("GameCube", StringComparison.OrdinalIgnoreCase));
                         }
-                        else
+                        else if (!File.Exists(soundMarkerFilePath) && !File.Exists(soundSampleDataFilePath))
                         {
                             Invoke(method: new Action(() => { MessageBox.Show("BindXFile - wot no files!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error); }));
                         }
