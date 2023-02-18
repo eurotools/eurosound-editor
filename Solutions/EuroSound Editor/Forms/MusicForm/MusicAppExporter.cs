@@ -368,7 +368,7 @@ namespace sb_editor.Forms
                     string tempOutputFolder = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatforms[j], "Music", "musicdetails.mdf");
                     BuildMusicDetailsFile(mfxValidListFile, tempOutputFolder);
 
-                    string sfxOutputPath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatforms[j], projectSettings), string.Format("_musicdetails.SFX").ToLower());
+                    string sfxOutputPath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatforms[j], projectSettings), string.Format("__musicdetails.SFX").ToLower());
                     MusXBuild_MusicDetails.BuildMusicDetails(tempOutputFolder, sfxOutputPath, CommonFunctions.GetFileHashCode(FileType.MusicDetails, Language.English, 0), CommonFunctions.GetPlatformLabel(outputPlatforms[j]));
                 }
             }

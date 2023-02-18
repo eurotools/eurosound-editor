@@ -114,7 +114,7 @@ namespace sb_editor.Forms
                 string tempFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatform[i], "projectdetails.pdf");
                 OutputProjectDetailsFile(tempFilePath, outputPlatform[i], isBigEndian);
 
-                string sfxFilePath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatform[i], projectSettings), "_projectdetails.sfx");
+                string sfxFilePath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatform[i], projectSettings), "__projectdetails.sfx");
                 MusXBuild_ProjectDetails.BuildProjectDetailsFile(tempFilePath, sfxFilePath, CommonFunctions.GetPlatformLabel(outputPlatform[i]), CommonFunctions.GetFileHashCode(Enumerations.FileType.ProjectDetails, Enumerations.Language.English, 0), isBigEndian);
             }
 

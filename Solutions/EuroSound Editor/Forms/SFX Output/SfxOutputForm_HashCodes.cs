@@ -99,7 +99,7 @@ namespace sb_editor.Forms
                     string outTmpFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatform[j], "SoundBanks", outLanguages[i], "sounddetails.sdf");
                     BuildSoundDetailsFile(sfxDataFilePath, outTmpFilePath);
 
-                    string sfxOutputPath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatform[j], projectSettings), CommonFunctions.GetSfxName(outLang, "sounddetails").ToLower());
+                    string sfxOutputPath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatform[j], projectSettings), CommonFunctions.GetSfxName(outLang, "_sounddetails").ToLower());
                     MusXBuild_MusicDetails.BuildMusicDetails(outTmpFilePath, sfxOutputPath, CommonFunctions.GetFileHashCode(FileType.SoundDetails, outLang, 0), CommonFunctions.GetPlatformLabel(outputPlatform[j]));
                 }
             }
