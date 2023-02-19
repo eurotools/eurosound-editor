@@ -3,6 +3,7 @@ using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using static ESUtils.Enumerations;
 
 namespace sb_editor.HashCodes
@@ -127,7 +128,7 @@ namespace sb_editor.HashCodes
         //-------------------------------------------------------------------------------------------------------------------------------
         internal string GetSfxUsage(string sfxToCheck)
         {
-            List<string> sfxUsage = new List<string>();
+            HashSet<string> sfxUsage = new HashSet<string>();
 
             string[] soundBankFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks"), "*.txt", SearchOption.TopDirectoryOnly);
             string[] dataBaseFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "DataBases"), "*.txt", SearchOption.TopDirectoryOnly);

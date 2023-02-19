@@ -1,6 +1,7 @@
 ﻿using ESUtils;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace sb_editor.Forms
 {
@@ -15,7 +16,7 @@ namespace sb_editor.Forms
             using (BinaryWriter bw = new BinaryWriter(File.Open(outputPath, FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
                 Dictionary<string, int> mapsData = GetMemSlotsTable();
-                SortedDictionary<int, int> soundBanks = GetSoundBankDictionary(mapsData);
+                Dictionary<int, int> soundBanks = GetSoundBankDictionary(mapsData);
 
                 //Data Offsets
                 bw.Write(BytesFunctions.FlipInt32(projectSettings.MemoryMaps.Count, isBigEndian));
@@ -71,9 +72,9 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private SortedDictionary<int, int> GetSoundBankDictionary(Dictionary<string, int> mapsData)
+        private Dictionary<int, int> GetSoundBankDictionary(Dictionary<string, int> mapsData)
         {
-            SortedDictionary<int, int> sbData = new SortedDictionary<int, int>();
+            Dictionary<int, int> sbData = new Dictionary<int, int>();
 
             string[] soundBanks = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks"), "*.txt", SearchOption.TopDirectoryOnly);
             foreach (string sbFile in soundBanks)
@@ -82,7 +83,7 @@ namespace sb_editor.Forms
                 sbData.Add(sbfileData.HashCode, mapsData[sbfileData.MemoryMap]);
             }
 
-            return sbData;
+            return sbData.OrderBy(s => s.Key.ToString("X8")).ToDictionary(x => x.Key, x => x.Value);
         }
     }
 

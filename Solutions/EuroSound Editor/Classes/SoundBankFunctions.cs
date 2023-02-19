@@ -304,11 +304,25 @@ namespace sb_editor.Classes
                     }
                 }
 
+                //Update Groups
+                string sfxLabel = Path.GetFileNameWithoutExtension(filePath);
+                IEnumerable<string> groupFiles = Directory.EnumerateFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Groups"), "*.txt", SearchOption.AllDirectories);
+                foreach (string groupFile in groupFiles)
+                {
+                    GroupFile groupData = TextFiles.ReadGroupsFile(groupFile);
+                    if (Array.FindIndex(groupData.Dependencies, s => s.Equals(sfxLabel, StringComparison.OrdinalIgnoreCase)) >= 0)
+                    {
+                        sfxData.Parameters.GroupStealReject = Convert.ToBoolean(groupData.Action1);
+                        sfxData.Parameters.GroupMaxChannels = groupData.MaxVoices;
+                        sfxData.Parameters.Group = groupData.HashCode;
+                    }
+                }
+
                 // Add the SFX data to the dictionary using the file name as the key
-                sfxFilesData.Add(Path.GetFileNameWithoutExtension(filePath), sfxData);
+                sfxFilesData.Add(sfxLabel, sfxData);
             }
 
-            return sfxFilesData;
+            return sfxFilesData.OrderBy(s => s.Value.HashCode.ToString("X8")).ToDictionary(x => x.Key, x => x.Value);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -337,7 +351,7 @@ namespace sb_editor.Classes
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void UpdateDuckerLengthAndGroups(Dictionary<string, SFX> fileData, string outputPlatform)
+        internal void UpdateDuckerLength(Dictionary<string, SFX> fileData, string outputPlatform)
         {
             foreach (KeyValuePair<string, SFX> soundToCheck in fileData)
             {
@@ -385,19 +399,6 @@ namespace sb_editor.Classes
                         duckerLength += Math.Abs(soundToCheck.Value.Parameters.DuckerLength);
                     }
                     soundToCheck.Value.Parameters.DuckerLength = duckerLength;
-                }
-
-                //Update Groups
-                IEnumerable<string> groupFiles = Directory.EnumerateFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Groups"), "*.txt", SearchOption.AllDirectories);
-                foreach (string groupFile in groupFiles)
-                {
-                    GroupFile groupData = TextFiles.ReadGroupsFile(groupFile);
-                    if (Array.FindIndex(groupData.Dependencies, s => s.Equals(soundToCheck.Key, StringComparison.OrdinalIgnoreCase)) >= 0)
-                    {
-                        soundToCheck.Value.Parameters.GroupStealReject = Convert.ToBoolean(groupData.Action1);
-                        soundToCheck.Value.Parameters.GroupMaxChannels = groupData.MaxVoices;
-                        soundToCheck.Value.Parameters.Group = groupData.HashCode;
-                    }
                 }
             }
         }

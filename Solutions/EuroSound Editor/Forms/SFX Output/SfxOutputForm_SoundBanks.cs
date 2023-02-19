@@ -50,7 +50,7 @@ namespace sb_editor.Forms
                         Query.Start();
                         Dictionary<string, SFX> sbFileData = sbFunctions.GetSfxDataDict(sbFunctions.GetSFXs(soundBankData.DataBases), outputPlatform[k], outputLanguage);
                         string[] samplesList = sbFunctions.GetSampleList(sbFileData, outputLanguage).Except(streamSamples).ToArray();
-                        sbFunctions.UpdateDuckerLengthAndGroups(sbFileData, outputPlatform[k]);
+                        sbFunctions.UpdateDuckerLength(sbFileData, outputPlatform[k]);
                         Query.Stop();
 
                         //Get File Paths
