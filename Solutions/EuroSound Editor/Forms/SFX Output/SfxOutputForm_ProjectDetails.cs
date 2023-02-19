@@ -14,12 +14,13 @@ namespace sb_editor.Forms
         {
             using (BinaryWriter bw = new BinaryWriter(File.Open(outputPath, FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
-                string[] soundBanks = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks"), "*.txt", SearchOption.TopDirectoryOnly);
+                Dictionary<string, int> mapsData = GetMemSlotsTable();
+                SortedDictionary<int, int> soundBanks = GetSoundBankDictionary(mapsData);
 
                 //Data Offsets
                 bw.Write(BytesFunctions.FlipInt32(projectSettings.MemoryMaps.Count, isBigEndian));
                 bw.Write(0);
-                bw.Write(BytesFunctions.FlipInt32(soundBanks.Length, isBigEndian));
+                bw.Write(BytesFunctions.FlipInt32(soundBanks.Count, isBigEndian));
                 bw.Write(0);
 
                 //Padding
@@ -43,12 +44,10 @@ namespace sb_editor.Forms
 
                 //Print 
                 long sbSlotStartPos = bw.BaseStream.Position;
-                Dictionary<string, int> mapsData = GetMemSlotsTable();
-                foreach (string sbFile in soundBanks)
+                foreach (KeyValuePair<int, int> sbFile in soundBanks)
                 {
-                    Objects.SoundBank sbData = TextFiles.ReadSoundbankFile(sbFile);
-                    bw.Write(BytesFunctions.FlipInt32(sbData.HashCode, isBigEndian));
-                    bw.Write(BytesFunctions.FlipInt32(mapsData[sbData.MemoryMap], isBigEndian));
+                    bw.Write(BytesFunctions.FlipInt32(sbFile.Key, isBigEndian));
+                    bw.Write(BytesFunctions.FlipInt32(sbFile.Value, isBigEndian));
                 }
 
                 //Write offsets
@@ -69,6 +68,21 @@ namespace sb_editor.Forms
             }
 
             return Data;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private SortedDictionary<int, int> GetSoundBankDictionary(Dictionary<string, int> mapsData)
+        {
+            SortedDictionary<int, int> sbData = new SortedDictionary<int, int>();
+
+            string[] soundBanks = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks"), "*.txt", SearchOption.TopDirectoryOnly);
+            foreach (string sbFile in soundBanks)
+            {
+                Objects.SoundBank sbfileData = TextFiles.ReadSoundbankFile(sbFile);
+                sbData.Add(sbfileData.HashCode, mapsData[sbfileData.MemoryMap]);
+            }
+
+            return sbData;
         }
     }
 

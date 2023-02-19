@@ -75,7 +75,7 @@ namespace ESUtils
                     uint fileSize = (uint)binWriter.BaseStream.Position;
                     binWriter.BaseStream.Seek(0xC, SeekOrigin.Begin);
                     binWriter.Write(fileSize);
-                    binWriter.BaseStream.Seek(16, SeekOrigin.Current);
+                    binWriter.BaseStream.Seek(0x20, SeekOrigin.Begin);
                     binWriter.Write(projDataStart);
                     binWriter.Write(projDataLength);
                 }

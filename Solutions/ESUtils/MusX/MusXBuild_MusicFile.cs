@@ -103,7 +103,7 @@ namespace ESUtils
                     binWriter.Write((uint)totalFileLength);
 
                     //File length 1
-                    binWriter.BaseStream.Seek(16, SeekOrigin.Current);
+                    binWriter.BaseStream.Seek(0x20, SeekOrigin.Begin);
                     binWriter.Write(FlipUInt32(soundMarkerFileStart, isBigEndian));
                     binWriter.Write(FlipUInt32(soundMarkerFileLength, isBigEndian));
 
