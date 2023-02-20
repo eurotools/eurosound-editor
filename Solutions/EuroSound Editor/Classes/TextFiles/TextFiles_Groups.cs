@@ -122,8 +122,8 @@ namespace sb_editor
                 outputFile.WriteLine("#END");
                 outputFile.WriteLine(string.Empty);
                 outputFile.WriteLine("#SFXParameters");
-                outputFile.WriteLine("MaxVoices {0}", fileData.MaxVoices);
                 outputFile.WriteLine("Action1 {0}", fileData.Action1);
+                outputFile.WriteLine("MaxVoices {0}", fileData.MaxVoices);
                 outputFile.WriteLine("Priority {0}", fileData.Priority);
                 outputFile.WriteLine("UseDistCheck {0}", fileData.UseDistCheck);
                 outputFile.WriteLine("#END");
