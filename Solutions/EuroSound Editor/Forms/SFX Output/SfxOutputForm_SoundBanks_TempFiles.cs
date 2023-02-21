@@ -48,8 +48,8 @@ namespace sb_editor.Forms
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.MasterVolume);
                 if (outputPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase))
                 {
-                    sfxWritter.Write((short)sfxData.Value.Parameters.Group);
                     sfxWritter.Write((sbyte)sfxData.Value.Parameters.GroupMaxChannels);
+                    sfxWritter.Write((short)sfxData.Value.Parameters.Group);
                     sfxWritter.Write((sbyte)0);
                     int sfxFlags = sbFunctions.GetFlags(sfxData.Value);
                     for(int i = 0; i < 16; i++)
@@ -59,7 +59,7 @@ namespace sb_editor.Forms
                 }
                 else
                 {
-                    sfxWritter.Write((short)(((sfxData.Value.Parameters.Group & 0xfff) << 0) | ((sfxData.Value.Parameters.GroupMaxChannels & 0xf) << 1)));
+                    sfxWritter.Write((short)(((sfxData.Value.Parameters.GroupMaxChannels & 0xff) << 8) | ((sfxData.Value.Parameters.Group & 0xff) << 0)));
                     sfxWritter.Write((ushort)sbFunctions.GetFlags(sfxData.Value));
                 }
 

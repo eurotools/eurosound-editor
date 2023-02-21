@@ -273,53 +273,59 @@ namespace sb_editor.Classes
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal Dictionary<string, SFX> GetSfxDataDict(string[] sbSfxs, string platform, Language language)
+        internal Dictionary<string, SFX> GetSfxDataDict(string[] dataBases, string platform, Language language)
         {
             // Dictionary to store the SFX data for each file
             Dictionary<string, SFX> sfxFilesData = new Dictionary<string, SFX>();
+            string[] groupFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Groups"), "*.txt", SearchOption.AllDirectories);
 
             // Iterate over the array of SFX file names
-            for (int i = 0; i < sbSfxs.Length; i++)
+            for (int i = 0; i < dataBases.Length; i++)
             {
-                // Create the full path to the SFX file
-                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", platform, sbSfxs[i].TrimStart(Path.DirectorySeparatorChar) + ".txt");
-
-                // If the file does not exist in the specified platform folder, check the root SFXs folder
-                if (!File.Exists(filePath))
+                DataBase sbSfxs = TextFiles.ReadDataBaseFile(Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", dataBases[i] + ".txt"));
+                for (int j = 0; j < sbSfxs.SFXs.Length; j++)
                 {
-                    filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", sbSfxs[i].TrimStart(Path.DirectorySeparatorChar) + ".txt");
-                }
-
-                // Read the SFX data from the file
-                SFX sfxData = TextFiles.ReadSfxFile(filePath);
-
-                // Iterate over the samples in the SFX data
-                foreach (SfxSample sampleData in sfxData.Samples)
-                {
-                    // Update the file path of the sample to the correct language folder
-                    string samplePath = CommonFunctions.GetSampleFromSpeechFolder(sampleData.FilePath, language);
-                    if (!string.IsNullOrEmpty(filePath))
+                    // Create the full path to the SFX file
+                    string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", platform, sbSfxs.SFXs[j].TrimStart(Path.DirectorySeparatorChar) + ".txt");
+                    string sfxLabel = Path.GetFileNameWithoutExtension(filePath);
+                    if (!sfxFilesData.ContainsKey(sfxLabel))
                     {
-                        sampleData.FilePath = samplePath;
+                        // If the file does not exist in the specified platform folder, check the root SFXs folder
+                        if (!File.Exists(filePath))
+                        {
+                            filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", sbSfxs.SFXs[j].TrimStart(Path.DirectorySeparatorChar) + ".txt");
+                        }
+
+                        // Read the SFX data from the file
+                        SFX sfxData = TextFiles.ReadSfxFile(filePath);
+
+                        // Iterate over the samples in the SFX data
+                        foreach (SfxSample sampleData in sfxData.Samples)
+                        {
+                            // Update the file path of the sample to the correct language folder
+                            string samplePath = CommonFunctions.GetSampleFromSpeechFolder(sampleData.FilePath, language);
+                            if (!string.IsNullOrEmpty(filePath))
+                            {
+                                sampleData.FilePath = samplePath;
+                            }
+                        }
+
+                        //Setup groups
+                        string groupFileName = dataBases[i].Substring(2) + ".txt";
+                        string[] groupFileMatches = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Groups"), "*"+groupFileName);
+                        if (groupFileMatches.Length > 0)
+                        {
+                            string groupFile = Path.Combine(GlobalPrefs.ProjectFolder, "Groups", groupFileMatches[0]);
+                            GroupFile groupData = TextFiles.ReadGroupsFile(groupFile);
+                            sfxData.Parameters.GroupStealReject = Convert.ToBoolean(groupData.Action1);
+                            sfxData.Parameters.GroupMaxChannels = groupData.Priority;
+                            sfxData.Parameters.Group = groupData.HashCode;
+                        }
+
+                        // Add the SFX data to the dictionary using the file name as the key
+                        sfxFilesData.Add(sfxLabel, sfxData);
                     }
                 }
-
-                //Update Groups
-                string sfxLabel = Path.GetFileNameWithoutExtension(filePath);
-                IEnumerable<string> groupFiles = Directory.EnumerateFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Groups"), "*.txt", SearchOption.AllDirectories);
-                foreach (string groupFile in groupFiles)
-                {
-                    GroupFile groupData = TextFiles.ReadGroupsFile(groupFile);
-                    if (Array.FindIndex(groupData.Dependencies, s => s.Equals(sfxLabel, StringComparison.OrdinalIgnoreCase)) >= 0)
-                    {
-                        sfxData.Parameters.GroupStealReject = Convert.ToBoolean(groupData.Action1);
-                        sfxData.Parameters.GroupMaxChannels = groupData.MaxVoices;
-                        sfxData.Parameters.Group = groupData.HashCode;
-                    }
-                }
-
-                // Add the SFX data to the dictionary using the file name as the key
-                sfxFilesData.Add(sfxLabel, sfxData);
             }
 
             return sfxFilesData.OrderBy(s => s.Value.HashCode.ToString("X8")).ToDictionary(x => x.Key, x => x.Value);

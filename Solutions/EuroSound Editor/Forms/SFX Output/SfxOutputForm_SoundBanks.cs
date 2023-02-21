@@ -48,7 +48,7 @@ namespace sb_editor.Forms
 
                         //Get Current SoundBank Data
                         Query.Start();
-                        Dictionary<string, SFX> sbFileData = sbFunctions.GetSfxDataDict(sbFunctions.GetSFXs(soundBankData.DataBases), outputPlatform[k], outputLanguage);
+                        Dictionary<string, SFX> sbFileData = sbFunctions.GetSfxDataDict(soundBankData.DataBases, outputPlatform[k], outputLanguage);
                         string[] samplesList = sbFunctions.GetSampleList(sbFileData, outputLanguage).Except(streamSamples).ToArray();
                         sbFunctions.UpdateDuckerLength(sbFileData, outputPlatform[k]);
                         Query.Stop();
