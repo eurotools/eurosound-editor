@@ -66,15 +66,15 @@ namespace sb_editor.Forms
             this.RadiobtnAction_Reject = new System.Windows.Forms.RadioButton();
             this.RadiobtnAction_Steal = new System.Windows.Forms.RadioButton();
             this.lblGroupsCount = new System.Windows.Forms.Label();
-            this.btnRename = new System.Windows.Forms.Button();
-            this.btnNew = new System.Windows.Forms.Button();
-            this.lstAvailableGroups = new System.Windows.Forms.ListBox();
-            this.Col_SfxGroup_Priority = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lvwGroups = new sb_editor.Panels.ListView_ColumnSortingClick();
             this.Col_Label = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Col_Max = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Col_Priority = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btnRename = new System.Windows.Forms.Button();
+            this.btnNew = new System.Windows.Forms.Button();
+            this.lstAvailableGroups = new System.Windows.Forms.ListBox();
             this.SplitContainerMain = new System.Windows.Forms.SplitContainer();
+            this.Col_SfxGroup_Priority = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             ((System.ComponentModel.ISupportInitialize)(this.SplitContainer1)).BeginInit();
             this.SplitContainer1.Panel1.SuspendLayout();
             this.SplitContainer1.Panel2.SuspendLayout();
@@ -396,7 +396,7 @@ namespace sb_editor.Forms
             this.nudMaxVoices.Name = "nudMaxVoices";
             this.nudMaxVoices.Size = new System.Drawing.Size(86, 20);
             this.nudMaxVoices.TabIndex = 9;
-            this.nudMaxVoices.ValueChanged += new System.EventHandler(this.NudMaxVoices_ValueChanged);
+            this.nudMaxVoices.Click += new System.EventHandler(this.NudMaxVoices_Click);
             // 
             // nudPriority
             // 
@@ -406,7 +406,7 @@ namespace sb_editor.Forms
             this.nudPriority.Name = "nudPriority";
             this.nudPriority.Size = new System.Drawing.Size(86, 20);
             this.nudPriority.TabIndex = 11;
-            this.nudPriority.ValueChanged += new System.EventHandler(this.NudPriority_ValueChanged);
+            this.nudPriority.Click += new System.EventHandler(this.NudPriority_Click);
             // 
             // lblPriority
             // 
@@ -497,42 +497,6 @@ namespace sb_editor.Forms
             this.lblGroupsCount.TabIndex = 5;
             this.lblGroupsCount.Text = "Total: 0";
             // 
-            // btnRename
-            // 
-            this.btnRename.Location = new System.Drawing.Point(100, 19);
-            this.btnRename.Name = "btnRename";
-            this.btnRename.Size = new System.Drawing.Size(80, 23);
-            this.btnRename.TabIndex = 1;
-            this.btnRename.Text = "Rename";
-            this.btnRename.UseVisualStyleBackColor = true;
-            this.btnRename.Click += new System.EventHandler(this.BtnRename_Click);
-            // 
-            // btnNew
-            // 
-            this.btnNew.Location = new System.Drawing.Point(6, 19);
-            this.btnNew.Name = "btnNew";
-            this.btnNew.Size = new System.Drawing.Size(80, 23);
-            this.btnNew.TabIndex = 0;
-            this.btnNew.Text = "New";
-            this.btnNew.UseVisualStyleBackColor = true;
-            this.btnNew.Click += new System.EventHandler(this.BtnNew_Click);
-            // 
-            // lstAvailableGroups
-            // 
-            this.lstAvailableGroups.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lstAvailableGroups.FormattingEnabled = true;
-            this.lstAvailableGroups.Location = new System.Drawing.Point(6, 294);
-            this.lstAvailableGroups.Name = "lstAvailableGroups";
-            this.lstAvailableGroups.Size = new System.Drawing.Size(327, 160);
-            this.lstAvailableGroups.Sorted = true;
-            this.lstAvailableGroups.TabIndex = 4;
-            this.lstAvailableGroups.SelectedIndexChanged += new System.EventHandler(this.LstAvailableGroups_SelectedIndexChanged);
-            // 
-            // Col_SfxGroup_Priority
-            // 
-            this.Col_SfxGroup_Priority.Text = "Priority";
-            // 
             // lvwGroups
             // 
             this.lvwGroups.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -566,6 +530,38 @@ namespace sb_editor.Forms
             this.Col_Priority.Text = "Priority";
             this.Col_Priority.Width = 50;
             // 
+            // btnRename
+            // 
+            this.btnRename.Location = new System.Drawing.Point(100, 19);
+            this.btnRename.Name = "btnRename";
+            this.btnRename.Size = new System.Drawing.Size(80, 23);
+            this.btnRename.TabIndex = 1;
+            this.btnRename.Text = "Rename";
+            this.btnRename.UseVisualStyleBackColor = true;
+            this.btnRename.Click += new System.EventHandler(this.BtnRename_Click);
+            // 
+            // btnNew
+            // 
+            this.btnNew.Location = new System.Drawing.Point(6, 19);
+            this.btnNew.Name = "btnNew";
+            this.btnNew.Size = new System.Drawing.Size(80, 23);
+            this.btnNew.TabIndex = 0;
+            this.btnNew.Text = "New";
+            this.btnNew.UseVisualStyleBackColor = true;
+            this.btnNew.Click += new System.EventHandler(this.BtnNew_Click);
+            // 
+            // lstAvailableGroups
+            // 
+            this.lstAvailableGroups.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lstAvailableGroups.FormattingEnabled = true;
+            this.lstAvailableGroups.Location = new System.Drawing.Point(6, 294);
+            this.lstAvailableGroups.Name = "lstAvailableGroups";
+            this.lstAvailableGroups.Size = new System.Drawing.Size(327, 160);
+            this.lstAvailableGroups.Sorted = true;
+            this.lstAvailableGroups.TabIndex = 4;
+            this.lstAvailableGroups.SelectedIndexChanged += new System.EventHandler(this.LstAvailableGroups_SelectedIndexChanged);
+            // 
             // SplitContainerMain
             // 
             this.SplitContainerMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -584,6 +580,10 @@ namespace sb_editor.Forms
             this.SplitContainerMain.Size = new System.Drawing.Size(1019, 586);
             this.SplitContainerMain.SplitterDistance = 339;
             this.SplitContainerMain.TabIndex = 25;
+            // 
+            // Col_SfxGroup_Priority
+            // 
+            this.Col_SfxGroup_Priority.Text = "Priority";
             // 
             // GroupingForm
             // 
@@ -673,7 +673,7 @@ namespace sb_editor.Forms
         internal System.Windows.Forms.Button btnRename;
         internal System.Windows.Forms.Button btnNew;
         internal System.Windows.Forms.ListBox lstAvailableGroups;
-        private System.Windows.Forms.ColumnHeader Col_SfxGroup_Priority;
         private System.Windows.Forms.SplitContainer SplitContainerMain;
+        private System.Windows.Forms.ColumnHeader Col_SfxGroup_Priority;
     }
 }

@@ -122,11 +122,12 @@ namespace sb_editor.Forms
 
                 //Update Sfx File Path
                 string sfxFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", itemToModify.Text + ".txt");
-                SFX sfxData = TextFiles.ReadSfxFile(sfxFilePath);
-                sfxData.Parameters.MaxVoices = (int)nudMaxChannels_SFXs.Value;
-
-                //Write File Again
-                TextFiles.WriteSfxFile(sfxFilePath, sfxData);
+                if (File.Exists(sfxFilePath))
+                {
+                    SFX sfxData = TextFiles.ReadSfxFile(sfxFilePath);
+                    sfxData.Parameters.MaxVoices = (int)nudMaxChannels_SFXs.Value;
+                    TextFiles.WriteSfxFile(sfxFilePath, sfxData);
+                }
             }
         }
 
@@ -139,11 +140,12 @@ namespace sb_editor.Forms
 
                 //Update Sfx File Path
                 string sfxFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", itemToModify.Text + ".txt");
-                SFX sfxData = TextFiles.ReadSfxFile(sfxFilePath);
-                sfxData.Parameters.Action1 = Convert.ToByte(cboAvailableSFXs_Steal.SelectedIndex == 0);
-
-                //Write File Again
-                TextFiles.WriteSfxFile(sfxFilePath, sfxData);
+                if (File.Exists(sfxFilePath))
+                {
+                    SFX sfxData = TextFiles.ReadSfxFile(sfxFilePath);
+                    sfxData.Parameters.Action1 = Convert.ToByte(cboAvailableSFXs_Steal.SelectedIndex == 0);
+                    TextFiles.WriteSfxFile(sfxFilePath, sfxData);
+                }
             }
         }
 
@@ -337,32 +339,35 @@ namespace sb_editor.Forms
             {
                 //Read File
                 string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "Groups", lstAvailableGroups.SelectedItem + ".txt");
-                GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);
-                HashSet<string> dependencies = new HashSet<string>(groupFileData.Dependencies);
-                foreach (ListViewItem itemToAdd in lvwAvailable_SFXs.SelectedItems)
+                if (File.Exists(filePath))
                 {
-                    dependencies.Add(itemToAdd.Text);
+                    GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);
+                    HashSet<string> dependencies = new HashSet<string>(groupFileData.Dependencies);
+                    foreach (ListViewItem itemToAdd in lvwAvailable_SFXs.SelectedItems)
+                    {
+                        dependencies.Add(itemToAdd.Text);
+                    }
+
+                    //Update File
+                    string[] dependenciesArray = dependencies.ToArray();
+                    Array.Sort(dependenciesArray);
+                    groupFileData.Dependencies = dependenciesArray;
+
+                    //Update Text Files and ListView
+                    lvwSFXsInGroup.Items.Clear();
+                    for (int i = 0; i < dependenciesArray.Length; i++)
+                    {
+                        //Update SFX Data
+                        string sfxFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", dependenciesArray[i] + ".txt");
+                        SFX sfxData = TextFiles.ReadSfxFile(sfxFilePath);
+
+                        //Update UI
+                        lvwSFXsInGroup.Items.Add(new ListViewItem(new string[] { dependenciesArray[i], sfxData.Parameters.MaxVoices.ToString(), Convert.ToBoolean(sfxData.Parameters.Action1).ToString() }));
+                    }
+
+                    //Write File Again
+                    TextFiles.WriteGroupsFile(groupFileData, filePath);
                 }
-
-                //Update File
-                string[] dependenciesArray = dependencies.ToArray();
-                Array.Sort(dependenciesArray);
-                groupFileData.Dependencies = dependenciesArray;
-
-                //Update Text Files and ListView
-                lvwSFXsInGroup.Items.Clear();
-                for (int i = 0; i < dependenciesArray.Length; i++)
-                {
-                    //Update SFX Data
-                    string sfxFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", dependenciesArray[i] + ".txt");
-                    SFX sfxData = TextFiles.ReadSfxFile(sfxFilePath);
-
-                    //Update UI
-                    lvwSFXsInGroup.Items.Add(new ListViewItem(new string[] { dependenciesArray[i], sfxData.Parameters.MaxVoices.ToString(), Convert.ToBoolean(sfxData.Parameters.Action1).ToString() }));
-                }
-
-                //Write File Again
-                TextFiles.WriteGroupsFile(groupFileData, filePath);
 
                 //Update Labels
                 lblSFXsInGroup_Count.Text = string.Format("Total: {0}", lvwSFXsInGroup.Items.Count);
@@ -386,11 +391,12 @@ namespace sb_editor.Forms
 
                 //Read and update file
                 string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "Groups", lstAvailableGroups.SelectedItem + ".txt");
-                GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);
-                groupFileData.Dependencies = dependencies.ToArray();
-
-                //Write File Again
-                TextFiles.WriteGroupsFile(groupFileData, filePath);
+                if (File.Exists(filePath))
+                {
+                    GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);
+                    groupFileData.Dependencies = dependencies.ToArray();
+                    TextFiles.WriteGroupsFile(groupFileData, filePath);
+                }
 
                 //Update Labels
                 lblSFXsInGroup_Count.Text = string.Format("Total: {0}", lvwSFXsInGroup.Items.Count);
@@ -399,18 +405,22 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void NudMaxVoices_ValueChanged(object sender, EventArgs e)
+        private void NudMaxVoices_Click(object sender, EventArgs e)
         {
             if (lstAvailableGroups.SelectedItems.Count == 1)
             {
                 string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "Groups", lstAvailableGroups.SelectedItem + ".txt");
-                GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);
-                groupFileData.MaxVoices = (int)nudMaxVoices.Value;
-                TextFiles.WriteGroupsFile(groupFileData, filePath);
+                if (File.Exists(filePath))
+                {
+                    GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);
+                    groupFileData.MaxVoices = (int)nudMaxVoices.Value;
+                    TextFiles.WriteGroupsFile(groupFileData, filePath);
+                }
 
                 //Update Sfx File Path
                 foreach (ListViewItem listItem in lvwSFXsInGroup.Items)
                 {
+                    listItem.SubItems[1].Text = nudMaxVoices.Value.ToString();
                     string sfxFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", listItem.Text + ".txt");
                     if (File.Exists(sfxFilePath))
                     {
@@ -430,18 +440,22 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void NudPriority_ValueChanged(object sender, EventArgs e)
+        private void NudPriority_Click(object sender, EventArgs e)
         {
             if (lstAvailableGroups.SelectedItems.Count == 1)
             {
                 string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "Groups", lstAvailableGroups.SelectedItem + ".txt");
-                GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);
-                groupFileData.Priority = (int)nudPriority.Value;
-                TextFiles.WriteGroupsFile(groupFileData, filePath);
+                if (File.Exists(filePath))
+                {
+                    GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);
+                    groupFileData.Priority = (int)nudPriority.Value;
+                    TextFiles.WriteGroupsFile(groupFileData, filePath);
+                }
 
                 //Update Sfx File Path
                 foreach (ListViewItem listItem in lvwSFXsInGroup.Items)
                 {
+                    listItem.SubItems[3].Text = nudPriority.Value.ToString();
                     string sfxFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", listItem.Text + ".txt");
                     if (File.Exists(sfxFilePath))
                     {
@@ -466,9 +480,12 @@ namespace sb_editor.Forms
             if (lstAvailableGroups.SelectedItems.Count == 1)
             {
                 string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "Groups", lstAvailableGroups.SelectedItem + ".txt");
-                GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);
-                groupFileData.UseDistCheck = chkDistanceWhenTesting.Checked;
-                TextFiles.WriteGroupsFile(groupFileData, filePath);
+                if (File.Exists(filePath))
+                {
+                    GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);
+                    groupFileData.UseDistCheck = chkDistanceWhenTesting.Checked;
+                    TextFiles.WriteGroupsFile(groupFileData, filePath);
+                }
             }
         }
 
@@ -478,16 +495,19 @@ namespace sb_editor.Forms
             if (lstAvailableGroups.SelectedItems.Count == 1)
             {
                 string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "Groups", lstAvailableGroups.SelectedItem + ".txt");
-                GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);
-                if (RadiobtnAction_Steal.Checked)
+                if (File.Exists(filePath))
                 {
-                    groupFileData.Action1 = 0;
+                    GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);
+                    if (RadiobtnAction_Steal.Checked)
+                    {
+                        groupFileData.Action1 = 0;
+                    }
+                    else
+                    {
+                        groupFileData.Action1 = 1;
+                    }
+                    TextFiles.WriteGroupsFile(groupFileData, filePath);
                 }
-                else
-                {
-                    groupFileData.Action1 = 1;
-                }
-                TextFiles.WriteGroupsFile(groupFileData, filePath);
             }
         }
 
@@ -497,16 +517,19 @@ namespace sb_editor.Forms
             if (lstAvailableGroups.SelectedItems.Count == 1)
             {
                 string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "Groups", lstAvailableGroups.SelectedItem + ".txt");
-                GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);
-                if (RadiobtnAction_Reject.Checked)
+                if (File.Exists(filePath))
                 {
-                    groupFileData.Action1 = 1;
+                    GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);
+                    if (RadiobtnAction_Reject.Checked)
+                    {
+                        groupFileData.Action1 = 1;
+                    }
+                    else
+                    {
+                        groupFileData.Action1 = 0;
+                    }
+                    TextFiles.WriteGroupsFile(groupFileData, filePath);
                 }
-                else
-                {
-                    groupFileData.Action1 = 0;
-                }
-                TextFiles.WriteGroupsFile(groupFileData, filePath);
             }
         }
     }
