@@ -319,8 +319,6 @@ namespace sb_editor.Classes
                             GroupFile groupData = TextFiles.ReadGroupsFile(groupFile);
                             sfxData.Parameters.GroupStealReject = Convert.ToBoolean(groupData.Action1);
                             sfxData.Parameters.Group = Array.IndexOf(groupFiles, groupFile) + 1;
-                            sfxData.Parameters.MaxVoices = groupData.MaxVoices;
-                            sfxData.Parameters.Priority = groupData.Priority;
                             sfxData.Parameters.UseGroupDistCheck = groupData.UseDistCheck;
                         }
 

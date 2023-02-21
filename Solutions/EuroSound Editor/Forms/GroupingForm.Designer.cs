@@ -38,12 +38,12 @@ namespace sb_editor.Forms
             this.lblSFXsInGroup_Steal = new System.Windows.Forms.Label();
             this.lblMaxVoices_Group = new System.Windows.Forms.Label();
             this.lblSFXsInGroup_Count = new System.Windows.Forms.Label();
-            this.lvwSFXsInGroup = new System.Windows.Forms.ListView();
+            this.lvwSFXsInGroup = new sb_editor.Panels.ListView_ColumnSortingClick();
             this.Col_SfxGroup_Hashcode = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Col_SfxGroup_MaxVoices = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Col_SfxGroup_Steal = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.grbAvailableSfx = new System.Windows.Forms.GroupBox();
-            this.lvwAvailable_SFXs = new System.Windows.Forms.ListView();
+            this.lvwAvailable_SFXs = new sb_editor.Panels.ListView_ColumnSortingClick();
             this.Col_AvailableSFXs_HashCode = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Col_AvailableSFXs_MaxVoices = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Col_AvailableSFXs_Steal = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -66,13 +66,15 @@ namespace sb_editor.Forms
             this.RadiobtnAction_Reject = new System.Windows.Forms.RadioButton();
             this.RadiobtnAction_Steal = new System.Windows.Forms.RadioButton();
             this.lblGroupsCount = new System.Windows.Forms.Label();
+            this.btnRename = new System.Windows.Forms.Button();
+            this.btnNew = new System.Windows.Forms.Button();
+            this.lstAvailableGroups = new System.Windows.Forms.ListBox();
+            this.Col_SfxGroup_Priority = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lvwGroups = new sb_editor.Panels.ListView_ColumnSortingClick();
             this.Col_Label = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Col_Max = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Col_Priority = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.btnRename = new System.Windows.Forms.Button();
-            this.btnNew = new System.Windows.Forms.Button();
-            this.lstAvailableGroups = new System.Windows.Forms.ListBox();
+            this.SplitContainerMain = new System.Windows.Forms.SplitContainer();
             ((System.ComponentModel.ISupportInitialize)(this.SplitContainer1)).BeginInit();
             this.SplitContainer1.Panel1.SuspendLayout();
             this.SplitContainer1.Panel2.SuspendLayout();
@@ -85,14 +87,16 @@ namespace sb_editor.Forms
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxVoices)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPriority)).BeginInit();
             this.grbAction.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SplitContainerMain)).BeginInit();
+            this.SplitContainerMain.Panel1.SuspendLayout();
+            this.SplitContainerMain.Panel2.SuspendLayout();
+            this.SplitContainerMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // SplitContainer1
             // 
-            this.SplitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.SplitContainer1.Location = new System.Drawing.Point(295, 12);
+            this.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SplitContainer1.Location = new System.Drawing.Point(0, 0);
             this.SplitContainer1.Name = "SplitContainer1";
             // 
             // SplitContainer1.Panel1
@@ -102,8 +106,8 @@ namespace sb_editor.Forms
             // SplitContainer1.Panel2
             // 
             this.SplitContainer1.Panel2.Controls.Add(this.grbAvailableSfx);
-            this.SplitContainer1.Size = new System.Drawing.Size(667, 572);
-            this.SplitContainer1.SplitterDistance = 332;
+            this.SplitContainer1.Size = new System.Drawing.Size(676, 586);
+            this.SplitContainer1.SplitterDistance = 336;
             this.SplitContainer1.TabIndex = 24;
             // 
             // grbSfxInGroup
@@ -118,7 +122,7 @@ namespace sb_editor.Forms
             this.grbSfxInGroup.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grbSfxInGroup.Location = new System.Drawing.Point(0, 0);
             this.grbSfxInGroup.Name = "grbSfxInGroup";
-            this.grbSfxInGroup.Size = new System.Drawing.Size(332, 572);
+            this.grbSfxInGroup.Size = new System.Drawing.Size(336, 586);
             this.grbSfxInGroup.TabIndex = 1;
             this.grbSfxInGroup.TabStop = false;
             this.grbSfxInGroup.Text = "SFXs in Group";
@@ -127,7 +131,7 @@ namespace sb_editor.Forms
             // 
             this.nudMaxChannels_Group.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.nudMaxChannels_Group.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudMaxChannels_Group.Location = new System.Drawing.Point(148, 516);
+            this.nudMaxChannels_Group.Location = new System.Drawing.Point(152, 530);
             this.nudMaxChannels_Group.Name = "nudMaxChannels_Group";
             this.nudMaxChannels_Group.Size = new System.Drawing.Size(53, 20);
             this.nudMaxChannels_Group.TabIndex = 3;
@@ -137,9 +141,9 @@ namespace sb_editor.Forms
             // 
             this.btnRemoveSFXsFromGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemoveSFXsFromGroup.Location = new System.Drawing.Point(6, 543);
+            this.btnRemoveSFXsFromGroup.Location = new System.Drawing.Point(6, 557);
             this.btnRemoveSFXsFromGroup.Name = "btnRemoveSFXsFromGroup";
-            this.btnRemoveSFXsFromGroup.Size = new System.Drawing.Size(320, 23);
+            this.btnRemoveSFXsFromGroup.Size = new System.Drawing.Size(324, 23);
             this.btnRemoveSFXsFromGroup.TabIndex = 6;
             this.btnRemoveSFXsFromGroup.Text = "Remove SFXs From Group >>>";
             this.btnRemoveSFXsFromGroup.UseVisualStyleBackColor = true;
@@ -153,7 +157,7 @@ namespace sb_editor.Forms
             this.cboSFXsInGroup_Steal.Items.AddRange(new object[] {
             "True",
             "False"});
-            this.cboSFXsInGroup_Steal.Location = new System.Drawing.Point(266, 515);
+            this.cboSFXsInGroup_Steal.Location = new System.Drawing.Point(270, 529);
             this.cboSFXsInGroup_Steal.Name = "cboSFXsInGroup_Steal";
             this.cboSFXsInGroup_Steal.Size = new System.Drawing.Size(60, 21);
             this.cboSFXsInGroup_Steal.TabIndex = 5;
@@ -163,7 +167,7 @@ namespace sb_editor.Forms
             // 
             this.lblSFXsInGroup_Steal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSFXsInGroup_Steal.AutoSize = true;
-            this.lblSFXsInGroup_Steal.Location = new System.Drawing.Point(220, 519);
+            this.lblSFXsInGroup_Steal.Location = new System.Drawing.Point(224, 533);
             this.lblSFXsInGroup_Steal.Name = "lblSFXsInGroup_Steal";
             this.lblSFXsInGroup_Steal.Size = new System.Drawing.Size(40, 13);
             this.lblSFXsInGroup_Steal.TabIndex = 4;
@@ -173,7 +177,7 @@ namespace sb_editor.Forms
             // 
             this.lblMaxVoices_Group.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblMaxVoices_Group.AutoSize = true;
-            this.lblMaxVoices_Group.Location = new System.Drawing.Point(112, 519);
+            this.lblMaxVoices_Group.Location = new System.Drawing.Point(116, 533);
             this.lblMaxVoices_Group.Name = "lblMaxVoices_Group";
             this.lblMaxVoices_Group.Size = new System.Drawing.Size(30, 13);
             this.lblMaxVoices_Group.TabIndex = 2;
@@ -183,7 +187,7 @@ namespace sb_editor.Forms
             // 
             this.lblSFXsInGroup_Count.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblSFXsInGroup_Count.AutoSize = true;
-            this.lblSFXsInGroup_Count.Location = new System.Drawing.Point(6, 519);
+            this.lblSFXsInGroup_Count.Location = new System.Drawing.Point(6, 533);
             this.lblSFXsInGroup_Count.Name = "lblSFXsInGroup_Count";
             this.lblSFXsInGroup_Count.Size = new System.Drawing.Size(43, 13);
             this.lblSFXsInGroup_Count.TabIndex = 1;
@@ -197,13 +201,14 @@ namespace sb_editor.Forms
             this.lvwSFXsInGroup.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Col_SfxGroup_Hashcode,
             this.Col_SfxGroup_MaxVoices,
-            this.Col_SfxGroup_Steal});
+            this.Col_SfxGroup_Steal,
+            this.Col_SfxGroup_Priority});
             this.lvwSFXsInGroup.FullRowSelect = true;
             this.lvwSFXsInGroup.GridLines = true;
             this.lvwSFXsInGroup.HideSelection = false;
             this.lvwSFXsInGroup.Location = new System.Drawing.Point(6, 19);
             this.lvwSFXsInGroup.Name = "lvwSFXsInGroup";
-            this.lvwSFXsInGroup.Size = new System.Drawing.Size(320, 491);
+            this.lvwSFXsInGroup.Size = new System.Drawing.Size(324, 505);
             this.lvwSFXsInGroup.TabIndex = 0;
             this.lvwSFXsInGroup.UseCompatibleStateImageBehavior = false;
             this.lvwSFXsInGroup.View = System.Windows.Forms.View.Details;
@@ -236,7 +241,7 @@ namespace sb_editor.Forms
             this.grbAvailableSfx.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grbAvailableSfx.Location = new System.Drawing.Point(0, 0);
             this.grbAvailableSfx.Name = "grbAvailableSfx";
-            this.grbAvailableSfx.Size = new System.Drawing.Size(331, 572);
+            this.grbAvailableSfx.Size = new System.Drawing.Size(336, 586);
             this.grbAvailableSfx.TabIndex = 19;
             this.grbAvailableSfx.TabStop = false;
             this.grbAvailableSfx.Text = "Available SFXs";
@@ -255,7 +260,7 @@ namespace sb_editor.Forms
             this.lvwAvailable_SFXs.HideSelection = false;
             this.lvwAvailable_SFXs.Location = new System.Drawing.Point(6, 19);
             this.lvwAvailable_SFXs.Name = "lvwAvailable_SFXs";
-            this.lvwAvailable_SFXs.Size = new System.Drawing.Size(319, 491);
+            this.lvwAvailable_SFXs.Size = new System.Drawing.Size(324, 505);
             this.lvwAvailable_SFXs.TabIndex = 7;
             this.lvwAvailable_SFXs.UseCompatibleStateImageBehavior = false;
             this.lvwAvailable_SFXs.View = System.Windows.Forms.View.Details;
@@ -280,7 +285,7 @@ namespace sb_editor.Forms
             // 
             this.nudMaxChannels_SFXs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.nudMaxChannels_SFXs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudMaxChannels_SFXs.Location = new System.Drawing.Point(147, 516);
+            this.nudMaxChannels_SFXs.Location = new System.Drawing.Point(152, 530);
             this.nudMaxChannels_SFXs.Name = "nudMaxChannels_SFXs";
             this.nudMaxChannels_SFXs.Size = new System.Drawing.Size(53, 20);
             this.nudMaxChannels_SFXs.TabIndex = 3;
@@ -290,9 +295,9 @@ namespace sb_editor.Forms
             // 
             this.btnAddSFXsToGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddSFXsToGroup.Location = new System.Drawing.Point(6, 543);
+            this.btnAddSFXsToGroup.Location = new System.Drawing.Point(6, 557);
             this.btnAddSFXsToGroup.Name = "btnAddSFXsToGroup";
-            this.btnAddSFXsToGroup.Size = new System.Drawing.Size(319, 23);
+            this.btnAddSFXsToGroup.Size = new System.Drawing.Size(324, 23);
             this.btnAddSFXsToGroup.TabIndex = 6;
             this.btnAddSFXsToGroup.Text = "<<< Add SFXs to Group";
             this.btnAddSFXsToGroup.UseVisualStyleBackColor = true;
@@ -306,7 +311,7 @@ namespace sb_editor.Forms
             this.cboAvailableSFXs_Steal.Items.AddRange(new object[] {
             "True",
             "False"});
-            this.cboAvailableSFXs_Steal.Location = new System.Drawing.Point(265, 516);
+            this.cboAvailableSFXs_Steal.Location = new System.Drawing.Point(270, 530);
             this.cboAvailableSFXs_Steal.Name = "cboAvailableSFXs_Steal";
             this.cboAvailableSFXs_Steal.Size = new System.Drawing.Size(60, 21);
             this.cboAvailableSFXs_Steal.TabIndex = 5;
@@ -316,7 +321,7 @@ namespace sb_editor.Forms
             // 
             this.lblAvailableSFXs_Steal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblAvailableSFXs_Steal.AutoSize = true;
-            this.lblAvailableSFXs_Steal.Location = new System.Drawing.Point(219, 519);
+            this.lblAvailableSFXs_Steal.Location = new System.Drawing.Point(224, 533);
             this.lblAvailableSFXs_Steal.Name = "lblAvailableSFXs_Steal";
             this.lblAvailableSFXs_Steal.Size = new System.Drawing.Size(40, 13);
             this.lblAvailableSFXs_Steal.TabIndex = 4;
@@ -326,7 +331,7 @@ namespace sb_editor.Forms
             // 
             this.lblMaxVoices_SFX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblMaxVoices_SFX.AutoSize = true;
-            this.lblMaxVoices_SFX.Location = new System.Drawing.Point(111, 519);
+            this.lblMaxVoices_SFX.Location = new System.Drawing.Point(116, 533);
             this.lblMaxVoices_SFX.Name = "lblMaxVoices_SFX";
             this.lblMaxVoices_SFX.Size = new System.Drawing.Size(30, 13);
             this.lblMaxVoices_SFX.TabIndex = 2;
@@ -336,7 +341,7 @@ namespace sb_editor.Forms
             // 
             this.lblTotalSFXs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblTotalSFXs.AutoSize = true;
-            this.lblTotalSFXs.Location = new System.Drawing.Point(6, 519);
+            this.lblTotalSFXs.Location = new System.Drawing.Point(6, 533);
             this.lblTotalSFXs.Name = "lblTotalSFXs";
             this.lblTotalSFXs.Size = new System.Drawing.Size(43, 13);
             this.lblTotalSFXs.TabIndex = 1;
@@ -345,7 +350,7 @@ namespace sb_editor.Forms
             // txtBootupTime
             // 
             this.txtBootupTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.txtBootupTime.Location = new System.Drawing.Point(12, 597);
+            this.txtBootupTime.Location = new System.Drawing.Point(12, 611);
             this.txtBootupTime.Name = "txtBootupTime";
             this.txtBootupTime.Size = new System.Drawing.Size(171, 20);
             this.txtBootupTime.TabIndex = 23;
@@ -354,7 +359,7 @@ namespace sb_editor.Forms
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(867, 590);
+            this.btnOK.Location = new System.Drawing.Point(936, 604);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(95, 33);
             this.btnOK.TabIndex = 22;
@@ -363,8 +368,6 @@ namespace sb_editor.Forms
             // 
             // grbGroups
             // 
-            this.grbGroups.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.grbGroups.Controls.Add(this.nudMaxVoices);
             this.grbGroups.Controls.Add(this.nudPriority);
             this.grbGroups.Controls.Add(this.lblPriority);
@@ -377,9 +380,10 @@ namespace sb_editor.Forms
             this.grbGroups.Controls.Add(this.btnRename);
             this.grbGroups.Controls.Add(this.btnNew);
             this.grbGroups.Controls.Add(this.lstAvailableGroups);
-            this.grbGroups.Location = new System.Drawing.Point(12, 12);
+            this.grbGroups.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grbGroups.Location = new System.Drawing.Point(0, 0);
             this.grbGroups.Name = "grbGroups";
-            this.grbGroups.Size = new System.Drawing.Size(277, 572);
+            this.grbGroups.Size = new System.Drawing.Size(339, 586);
             this.grbGroups.TabIndex = 21;
             this.grbGroups.TabStop = false;
             this.grbGroups.Text = "Groups";
@@ -388,7 +392,7 @@ namespace sb_editor.Forms
             // 
             this.nudMaxVoices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.nudMaxVoices.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudMaxVoices.Location = new System.Drawing.Point(185, 493);
+            this.nudMaxVoices.Location = new System.Drawing.Point(247, 507);
             this.nudMaxVoices.Name = "nudMaxVoices";
             this.nudMaxVoices.Size = new System.Drawing.Size(86, 20);
             this.nudMaxVoices.TabIndex = 9;
@@ -398,7 +402,7 @@ namespace sb_editor.Forms
             // 
             this.nudPriority.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.nudPriority.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudPriority.Location = new System.Drawing.Point(185, 519);
+            this.nudPriority.Location = new System.Drawing.Point(247, 533);
             this.nudPriority.Name = "nudPriority";
             this.nudPriority.Size = new System.Drawing.Size(86, 20);
             this.nudPriority.TabIndex = 11;
@@ -408,7 +412,7 @@ namespace sb_editor.Forms
             // 
             this.lblPriority.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblPriority.AutoSize = true;
-            this.lblPriority.Location = new System.Drawing.Point(114, 521);
+            this.lblPriority.Location = new System.Drawing.Point(176, 535);
             this.lblPriority.Name = "lblPriority";
             this.lblPriority.Size = new System.Drawing.Size(41, 13);
             this.lblPriority.TabIndex = 10;
@@ -418,7 +422,7 @@ namespace sb_editor.Forms
             // 
             this.lblMaxVoices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblMaxVoices.AutoSize = true;
-            this.lblMaxVoices.Location = new System.Drawing.Point(114, 495);
+            this.lblMaxVoices.Location = new System.Drawing.Point(176, 509);
             this.lblMaxVoices.Name = "lblMaxVoices";
             this.lblMaxVoices.Size = new System.Drawing.Size(65, 13);
             this.lblMaxVoices.TabIndex = 8;
@@ -430,7 +434,7 @@ namespace sb_editor.Forms
             this.chkDistanceWhenTesting.AutoSize = true;
             this.chkDistanceWhenTesting.Checked = true;
             this.chkDistanceWhenTesting.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDistanceWhenTesting.Location = new System.Drawing.Point(6, 549);
+            this.chkDistanceWhenTesting.Location = new System.Drawing.Point(6, 563);
             this.chkDistanceWhenTesting.Name = "chkDistanceWhenTesting";
             this.chkDistanceWhenTesting.Size = new System.Drawing.Size(187, 17);
             this.chkDistanceWhenTesting.TabIndex = 7;
@@ -453,7 +457,7 @@ namespace sb_editor.Forms
             this.grbAction.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.grbAction.Controls.Add(this.RadiobtnAction_Reject);
             this.grbAction.Controls.Add(this.RadiobtnAction_Steal);
-            this.grbAction.Location = new System.Drawing.Point(6, 488);
+            this.grbAction.Location = new System.Drawing.Point(6, 502);
             this.grbAction.Name = "grbAction";
             this.grbAction.Size = new System.Drawing.Size(70, 55);
             this.grbAction.TabIndex = 6;
@@ -493,39 +497,6 @@ namespace sb_editor.Forms
             this.lblGroupsCount.TabIndex = 5;
             this.lblGroupsCount.Text = "Total: 0";
             // 
-            // lvwGroups
-            // 
-            this.lvwGroups.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lvwGroups.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.Col_Label,
-            this.Col_Max,
-            this.Col_Priority});
-            this.lvwGroups.FullRowSelect = true;
-            this.lvwGroups.GridLines = true;
-            this.lvwGroups.HideSelection = false;
-            this.lvwGroups.Location = new System.Drawing.Point(6, 48);
-            this.lvwGroups.Name = "lvwGroups";
-            this.lvwGroups.Size = new System.Drawing.Size(265, 240);
-            this.lvwGroups.TabIndex = 3;
-            this.lvwGroups.UseCompatibleStateImageBehavior = false;
-            this.lvwGroups.View = System.Windows.Forms.View.Details;
-            // 
-            // Col_Label
-            // 
-            this.Col_Label.Text = "Label";
-            this.Col_Label.Width = 150;
-            // 
-            // Col_Max
-            // 
-            this.Col_Max.Text = "Max";
-            this.Col_Max.Width = 50;
-            // 
-            // Col_Priority
-            // 
-            this.Col_Priority.Text = "Priority";
-            this.Col_Priority.Width = 50;
-            // 
             // btnRename
             // 
             this.btnRename.Location = new System.Drawing.Point(100, 19);
@@ -553,21 +524,76 @@ namespace sb_editor.Forms
             this.lstAvailableGroups.FormattingEnabled = true;
             this.lstAvailableGroups.Location = new System.Drawing.Point(6, 294);
             this.lstAvailableGroups.Name = "lstAvailableGroups";
-            this.lstAvailableGroups.Size = new System.Drawing.Size(265, 160);
+            this.lstAvailableGroups.Size = new System.Drawing.Size(327, 160);
             this.lstAvailableGroups.Sorted = true;
             this.lstAvailableGroups.TabIndex = 4;
             this.lstAvailableGroups.SelectedIndexChanged += new System.EventHandler(this.LstAvailableGroups_SelectedIndexChanged);
+            // 
+            // Col_SfxGroup_Priority
+            // 
+            this.Col_SfxGroup_Priority.Text = "Priority";
+            // 
+            // lvwGroups
+            // 
+            this.lvwGroups.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvwGroups.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.Col_Label,
+            this.Col_Max,
+            this.Col_Priority});
+            this.lvwGroups.FullRowSelect = true;
+            this.lvwGroups.GridLines = true;
+            this.lvwGroups.HideSelection = false;
+            this.lvwGroups.Location = new System.Drawing.Point(6, 48);
+            this.lvwGroups.Name = "lvwGroups";
+            this.lvwGroups.Size = new System.Drawing.Size(327, 240);
+            this.lvwGroups.TabIndex = 3;
+            this.lvwGroups.UseCompatibleStateImageBehavior = false;
+            this.lvwGroups.View = System.Windows.Forms.View.Details;
+            // 
+            // Col_Label
+            // 
+            this.Col_Label.Text = "Label";
+            this.Col_Label.Width = 150;
+            // 
+            // Col_Max
+            // 
+            this.Col_Max.Text = "Max";
+            this.Col_Max.Width = 50;
+            // 
+            // Col_Priority
+            // 
+            this.Col_Priority.Text = "Priority";
+            this.Col_Priority.Width = 50;
+            // 
+            // SplitContainerMain
+            // 
+            this.SplitContainerMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.SplitContainerMain.Location = new System.Drawing.Point(12, 12);
+            this.SplitContainerMain.Name = "SplitContainerMain";
+            // 
+            // SplitContainerMain.Panel1
+            // 
+            this.SplitContainerMain.Panel1.Controls.Add(this.grbGroups);
+            // 
+            // SplitContainerMain.Panel2
+            // 
+            this.SplitContainerMain.Panel2.Controls.Add(this.SplitContainer1);
+            this.SplitContainerMain.Size = new System.Drawing.Size(1019, 586);
+            this.SplitContainerMain.SplitterDistance = 339;
+            this.SplitContainerMain.TabIndex = 25;
             // 
             // GroupingForm
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(974, 635);
-            this.Controls.Add(this.SplitContainer1);
+            this.ClientSize = new System.Drawing.Size(1043, 649);
+            this.Controls.Add(this.SplitContainerMain);
             this.Controls.Add(this.txtBootupTime);
             this.Controls.Add(this.btnOK);
-            this.Controls.Add(this.grbGroups);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -593,6 +619,10 @@ namespace sb_editor.Forms
             ((System.ComponentModel.ISupportInitialize)(this.nudPriority)).EndInit();
             this.grbAction.ResumeLayout(false);
             this.grbAction.PerformLayout();
+            this.SplitContainerMain.Panel1.ResumeLayout(false);
+            this.SplitContainerMain.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.SplitContainerMain)).EndInit();
+            this.SplitContainerMain.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -608,12 +638,12 @@ namespace sb_editor.Forms
         internal System.Windows.Forms.Label lblSFXsInGroup_Steal;
         internal System.Windows.Forms.Label lblMaxVoices_Group;
         internal System.Windows.Forms.Label lblSFXsInGroup_Count;
-        internal System.Windows.Forms.ListView lvwSFXsInGroup;
+        internal Panels.ListView_ColumnSortingClick lvwSFXsInGroup;
         internal System.Windows.Forms.ColumnHeader Col_SfxGroup_Hashcode;
         internal System.Windows.Forms.ColumnHeader Col_SfxGroup_MaxVoices;
         internal System.Windows.Forms.ColumnHeader Col_SfxGroup_Steal;
         internal System.Windows.Forms.GroupBox grbAvailableSfx;
-        internal System.Windows.Forms.ListView lvwAvailable_SFXs;
+        internal Panels.ListView_ColumnSortingClick lvwAvailable_SFXs;
         internal System.Windows.Forms.ColumnHeader Col_AvailableSFXs_HashCode;
         internal System.Windows.Forms.ColumnHeader Col_AvailableSFXs_MaxVoices;
         internal System.Windows.Forms.ColumnHeader Col_AvailableSFXs_Steal;
@@ -643,5 +673,7 @@ namespace sb_editor.Forms
         internal System.Windows.Forms.Button btnRename;
         internal System.Windows.Forms.Button btnNew;
         internal System.Windows.Forms.ListBox lstAvailableGroups;
+        private System.Windows.Forms.ColumnHeader Col_SfxGroup_Priority;
+        private System.Windows.Forms.SplitContainer SplitContainerMain;
     }
 }

@@ -102,7 +102,7 @@ namespace sb_editor.Forms
                         if (File.Exists(sfxPath))
                         {
                             SFX sfxData = TextFiles.ReadSfxFile(sfxPath);
-                            lvwSFXsInGroup.Items.Add(new ListViewItem(new string[] { groupFileData.Dependencies[i], sfxData.Parameters.MaxVoices.ToString(), Convert.ToBoolean(sfxData.Parameters.Action1).ToString() }));
+                            lvwSFXsInGroup.Items.Add(new ListViewItem(new string[] { groupFileData.Dependencies[i], sfxData.Parameters.MaxVoices.ToString(), Convert.ToBoolean(sfxData.Parameters.Action1).ToString(), sfxData.Parameters.Priority.ToString() }));
                         }
                     }
                     lvwSFXsInGroup.EndUpdate();
