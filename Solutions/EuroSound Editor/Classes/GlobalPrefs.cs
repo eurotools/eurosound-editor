@@ -20,7 +20,7 @@ namespace sb_editor
         public static string DateFormat = "yyyy/dd/MM HH:mm:ss";
 
         //HashCodes counters 
-        private static int _SoundBankHashCodeNumber, _SFXHashCodeNumber, _MFXHashCodeNumber, _ReverbHashCodeNumber, _GroupHashCodeNumber;
+        private static int _SoundBankHashCodeNumber, _SFXHashCodeNumber, _MFXHashCodeNumber, _ReverbHashCodeNumber;
         private static bool _ReSampleStreams;
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -56,13 +56,6 @@ namespace sb_editor
         {
             get { return _ReSampleStreams; }
             set { _ReSampleStreams = value; TextFiles.WriteMiscFile(Path.Combine(ProjectFolder, "System", "Misc.txt")); }
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        public static int GroupHashCodeNumber
-        {
-            get { return _GroupHashCodeNumber; }
-            set { _GroupHashCodeNumber = value; TextFiles.WriteMiscFile(Path.Combine(ProjectFolder, "System", "Misc.txt")); }
         }
     }
 

@@ -132,12 +132,12 @@ namespace sb_editor.HashCodes
 
             string[] soundBankFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks"), "*.txt", SearchOption.TopDirectoryOnly);
             string[] dataBaseFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "DataBases"), "*.txt", SearchOption.TopDirectoryOnly);
-            for(int i = 0; i < dataBaseFiles.Length; i++)
+            for (int i = 0; i < dataBaseFiles.Length; i++)
             {
                 DataBase dataBaseData = TextFiles.ReadDataBaseFile(dataBaseFiles[i]);
                 if (Array.IndexOf(dataBaseData.SFXs, sfxToCheck) >= 0)
                 {
-                    for(int j = 0; j < soundBankFiles.Length; j++)
+                    for (int j = 0; j < soundBankFiles.Length; j++)
                     {
                         SoundBank soundBankData = TextFiles.ReadSoundbankFile(soundBankFiles[j]);
                         if (Array.IndexOf(soundBankData.DataBases, Path.GetFileNameWithoutExtension(dataBaseFiles[j])) >= 0)

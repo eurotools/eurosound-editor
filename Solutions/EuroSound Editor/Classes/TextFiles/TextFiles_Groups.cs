@@ -70,18 +70,6 @@ namespace sb_editor
                             currentLine = sr.ReadLine().Trim();
                         }
                     }
-
-                    //HashCodes Block
-                    if (currentLine.Equals("#HASHCODE", StringComparison.OrdinalIgnoreCase))
-                    {
-                        currentLine = sr.ReadLine().Trim();
-                        while (!currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase))
-                        {
-                            string hashcodeNumber = currentLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)[1];
-                            sfxGroup.HashCode = Convert.ToInt32(hashcodeNumber);
-                            currentLine = sr.ReadLine().Trim();
-                        }
-                    }
                 }
             }
 
@@ -126,10 +114,6 @@ namespace sb_editor
                 outputFile.WriteLine("MaxVoices {0}", fileData.MaxVoices);
                 outputFile.WriteLine("Priority {0}", fileData.Priority);
                 outputFile.WriteLine("UseDistCheck {0}", fileData.UseDistCheck);
-                outputFile.WriteLine("#END");
-                outputFile.WriteLine(string.Empty);
-                outputFile.WriteLine("#HASHCODE");
-                outputFile.WriteLine("HashCodeNumber {0}", fileData.HashCode);
                 outputFile.WriteLine("#END");
                 outputFile.WriteLine(string.Empty);
             }

@@ -326,7 +326,7 @@ namespace sb_editor.Forms
                         }
                         else if (!File.Exists(soundMarkerFilePath) && !File.Exists(soundSampleDataFilePath))
                         {
-                            Invoke(method: new Action(() => { MessageBox.Show("BindXFile - wot no files!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error); }));                            
+                            Invoke(method: new Action(() => { MessageBox.Show("BindXFile - wot no files!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error); }));
                         }
                     }
                 }

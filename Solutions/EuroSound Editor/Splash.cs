@@ -84,7 +84,6 @@ namespace sb_editor
                         GlobalPrefs.SoundBankHashCodeNumber = miscFileSettings.SoundBankHashCodeNumber;
                         GlobalPrefs.MFXHashCodeNumber = miscFileSettings.MFXHashCodeNumber;
                         GlobalPrefs.ReverbHashCodeNumber = miscFileSettings.ReverbHashCodeNumber;
-                        GlobalPrefs.GroupHashCodeNumber = miscFileSettings.SFXGroupNumber;
 
                         //Ask for userName if we don't have it
                         if (string.IsNullOrEmpty(GlobalPrefs.EuroSoundUser))

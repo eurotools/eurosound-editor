@@ -43,7 +43,7 @@ namespace sb_editor.Objects
         public bool KillMeOwnGroup;
         public bool IgnoreMasterVolume;
         public bool GroupStealReject;
-        public int GroupMaxChannels;
+        public bool UseGroupDistCheck;
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------

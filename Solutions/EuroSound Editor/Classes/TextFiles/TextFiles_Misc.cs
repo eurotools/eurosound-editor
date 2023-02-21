@@ -129,10 +129,6 @@ namespace sb_editor
                     {
                         sw.WriteLine("ReverbHashCodeNumber {0}", GlobalPrefs.ReverbHashCodeNumber);
                     }
-                    if (GlobalPrefs.GroupHashCodeNumber > 0)
-                    {
-                        sw.WriteLine("GroupHashCodeNumber {0}", GlobalPrefs.GroupHashCodeNumber);
-                    }
                     sw.WriteLine("#END");
                     sw.WriteLine(string.Empty);
                 }

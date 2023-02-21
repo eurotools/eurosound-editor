@@ -66,7 +66,7 @@ namespace sb_editor.Forms
             this.RadiobtnAction_Reject = new System.Windows.Forms.RadioButton();
             this.RadiobtnAction_Steal = new System.Windows.Forms.RadioButton();
             this.lblGroupsCount = new System.Windows.Forms.Label();
-            this.lvwGroups = new System.Windows.Forms.ListView();
+            this.lvwGroups = new sb_editor.Panels.ListView_ColumnSortingClick();
             this.Col_Label = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Col_Max = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Col_Priority = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -636,7 +636,7 @@ namespace sb_editor.Forms
         internal System.Windows.Forms.RadioButton RadiobtnAction_Reject;
         internal System.Windows.Forms.RadioButton RadiobtnAction_Steal;
         internal System.Windows.Forms.Label lblGroupsCount;
-        internal System.Windows.Forms.ListView lvwGroups;
+        internal Panels.ListView_ColumnSortingClick lvwGroups;
         internal System.Windows.Forms.ColumnHeader Col_Label;
         internal System.Windows.Forms.ColumnHeader Col_Max;
         internal System.Windows.Forms.ColumnHeader Col_Priority;

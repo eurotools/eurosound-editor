@@ -46,20 +46,21 @@ namespace sb_editor.Forms
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.Priority);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.Ducker);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.MasterVolume);
+                int useDistanceCheck = Convert.ToInt32(sfxData.Value.Parameters.UseGroupDistCheck);
                 if (outputPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase))
                 {
-                    sfxWritter.Write((sbyte)sfxData.Value.Parameters.GroupMaxChannels);
+                    sfxWritter.Write((sbyte)useDistanceCheck);
                     sfxWritter.Write((short)sfxData.Value.Parameters.Group);
                     sfxWritter.Write((sbyte)0);
                     int sfxFlags = sbFunctions.GetFlags(sfxData.Value);
-                    for(int i = 0; i < 16; i++)
+                    for (int i = 0; i < 16; i++)
                     {
                         sfxWritter.Write(Convert.ToSByte((sfxFlags >> i) & 1));
                     }
                 }
                 else
                 {
-                    sfxWritter.Write((short)(((sfxData.Value.Parameters.GroupMaxChannels & 0xff) << 8) | ((sfxData.Value.Parameters.Group & 0xff) << 0)));
+                    sfxWritter.Write((short)(((useDistanceCheck & 0xff) << 8) | ((sfxData.Value.Parameters.Group & 0xff) << 0)));
                     sfxWritter.Write((ushort)sbFunctions.GetFlags(sfxData.Value));
                 }
 

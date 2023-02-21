@@ -310,16 +310,18 @@ namespace sb_editor.Classes
                             }
                         }
 
-                        //Setup groups
+                        //Setup Group Settings
                         string groupFileName = dataBases[i].Substring(2) + ".txt";
-                        string[] groupFileMatches = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Groups"), "*"+groupFileName);
+                        string[] groupFileMatches = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Groups"), "*" + groupFileName);
                         if (groupFileMatches.Length > 0)
                         {
                             string groupFile = Path.Combine(GlobalPrefs.ProjectFolder, "Groups", groupFileMatches[0]);
                             GroupFile groupData = TextFiles.ReadGroupsFile(groupFile);
                             sfxData.Parameters.GroupStealReject = Convert.ToBoolean(groupData.Action1);
-                            sfxData.Parameters.GroupMaxChannels = groupData.Priority;
-                            sfxData.Parameters.Group = groupData.HashCode;
+                            sfxData.Parameters.Group = Array.IndexOf(groupFiles, groupFile) + 1;
+                            sfxData.Parameters.MaxVoices = groupData.MaxVoices;
+                            sfxData.Parameters.Priority = groupData.Priority;
+                            sfxData.Parameters.UseGroupDistCheck = groupData.UseDistCheck;
                         }
 
                         // Add the SFX data to the dictionary using the file name as the key
