@@ -81,9 +81,6 @@ namespace sb_editor
                                 case "REVERBHASHCODENUMBER":
                                     MiscFileData.ReverbHashCodeNumber = Convert.ToInt32(lineData[1]);
                                     break;
-                                case "GROUPHASHCODENUMBER":
-                                    MiscFileData.SFXGroupNumber = Convert.ToInt32(lineData[1]);
-                                    break;
                             }
                             currentLine = sr.ReadLine().Trim();
                         }
