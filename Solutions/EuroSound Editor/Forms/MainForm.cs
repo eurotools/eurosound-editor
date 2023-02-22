@@ -24,9 +24,18 @@ namespace sb_editor
         //-------------------------------------------------------------------------------------------------------------------------------
         private void Frm_MainForm_Shown(object sender, System.EventArgs e)
         {
+            //Blink if required
             if (ActiveForm != this)
             {
                 FlashWindow.FlashWindowAPI(Handle);
+            }
+
+            //Remove current item if required
+            string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "Project.txt");
+            if (!File.Exists(filePath))
+            {
+                int numberToRemove = RecentFilesMenu.FindFilenameNumber(GlobalPrefs.ProjectFolder);
+                RecentFilesMenu.RemoveFile(numberToRemove);
             }
         }
 
@@ -57,18 +66,10 @@ namespace sb_editor
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void MenuItemFile_Recent_Click(int fileNumber, string projectFilePath)
+        internal void MenuItemFile_Recent_Click(int fileNumber, string projectFolder)
         {
-            if (Directory.Exists(projectFilePath))
-            {
-                GlobalPrefs.ProjectFolder = projectFilePath;
-                Application.Restart();
-            }
-            else
-            {
-                MessageBox.Show(string.Format("{0} {1}", "Project Not Found", projectFilePath), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                RecentFilesMenu.RemoveFile(fileNumber);
-            }
+            GlobalPrefs.ProjectFolder = projectFolder;
+            Application.Restart();
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------

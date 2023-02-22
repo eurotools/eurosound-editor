@@ -496,9 +496,14 @@ namespace sb_editor.Classes
                 mruStripMutex.WaitOne();
 
                 int i = StartIndex;
-                for (; i < EndIndex; i++)
+                for (; i < Math.Max(EndIndex, 5); i++)
                 {
-                    iniFunctions.Write("Recent" + i, ((MruMenuItem)MenuItems[i]).Filename, "RecentFiles");
+                    string folderName = string.Empty;
+                    if (i < EndIndex)
+                    {
+                        folderName = ((MruMenuItem)MenuItems[i]).Filename;
+                    }
+                    iniFunctions.Write("Recent" + i, folderName, "RecentFiles");
                 }
                 mruStripMutex.ReleaseMutex();
             }
