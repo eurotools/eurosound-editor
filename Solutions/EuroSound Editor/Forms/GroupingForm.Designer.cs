@@ -133,7 +133,7 @@ namespace sb_editor.Forms
             // 
             // btnRemoveSFXsFromGroup
             // 
-            this.btnRemoveSFXsFromGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnRemoveSFXsFromGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRemoveSFXsFromGroup.Location = new System.Drawing.Point(6, 557);
             this.btnRemoveSFXsFromGroup.Name = "btnRemoveSFXsFromGroup";
@@ -189,8 +189,8 @@ namespace sb_editor.Forms
             // 
             // lvwSFXsInGroup
             // 
-            this.lvwSFXsInGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.lvwSFXsInGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvwSFXsInGroup.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Col_SfxGroup_Hashcode,
@@ -246,8 +246,8 @@ namespace sb_editor.Forms
             // 
             // lvwAvailable_SFXs
             // 
-            this.lvwAvailable_SFXs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.lvwAvailable_SFXs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvwAvailable_SFXs.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Col_AvailableSFXs_HashCode,
@@ -291,7 +291,7 @@ namespace sb_editor.Forms
             // 
             // btnAddSFXsToGroup
             // 
-            this.btnAddSFXsToGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnAddSFXsToGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAddSFXsToGroup.Location = new System.Drawing.Point(6, 557);
             this.btnAddSFXsToGroup.Name = "btnAddSFXsToGroup";
@@ -496,7 +496,7 @@ namespace sb_editor.Forms
             // 
             // lvwGroups
             // 
-            this.lvwGroups.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lvwGroups.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvwGroups.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Col_Label,
@@ -549,7 +549,7 @@ namespace sb_editor.Forms
             // 
             // lstAvailableGroups
             // 
-            this.lstAvailableGroups.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lstAvailableGroups.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lstAvailableGroups.FormattingEnabled = true;
             this.lstAvailableGroups.Location = new System.Drawing.Point(6, 294);

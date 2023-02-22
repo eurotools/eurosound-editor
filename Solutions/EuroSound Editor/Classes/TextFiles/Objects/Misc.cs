@@ -11,7 +11,6 @@
         public int SoundBankHashCodeNumber;
         public int MFXHashCodeNumber;
         public int ReverbHashCodeNumber;
-        public int SFXGroupNumber;
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------
