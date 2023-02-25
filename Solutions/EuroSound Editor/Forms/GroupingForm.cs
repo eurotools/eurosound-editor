@@ -53,7 +53,7 @@ namespace sb_editor.Forms
                 {
                     string fileName = Path.GetFileNameWithoutExtension(availableSfxFiles[i]);
                     SFX sfxData = TextFiles.ReadSfxFile(availableSfxFiles[i]);
-                    lvwAvailable_SFXs.Items.Add(new ListViewItem(new string[] { fileName, sfxData.Parameters.MaxVoices.ToString(), Convert.ToBoolean(sfxData.Parameters.Action1).ToString() }));
+                    lvwAvailable_SFXs.Items.Add(new ListViewItem(new string[] { fileName, sfxData.Parameters.MaxVoices.ToString(), Convert.ToBoolean(sfxData.Parameters.Action1).ToString(), sfxData.Parameters.Priority.ToString() }));
                 }
                 lblTotalSFXs.Text = string.Format("Total: {0}", lvwAvailable_SFXs.Items.Count);
             }
@@ -362,7 +362,7 @@ namespace sb_editor.Forms
                         SFX sfxData = TextFiles.ReadSfxFile(sfxFilePath);
 
                         //Update UI
-                        lvwSFXsInGroup.Items.Add(new ListViewItem(new string[] { dependenciesArray[i], sfxData.Parameters.MaxVoices.ToString(), Convert.ToBoolean(sfxData.Parameters.Action1).ToString() }));
+                        lvwSFXsInGroup.Items.Add(new ListViewItem(new string[] { dependenciesArray[i], sfxData.Parameters.MaxVoices.ToString(), Convert.ToBoolean(sfxData.Parameters.Action1).ToString(), sfxData.Parameters.Priority.ToString() }));
                     }
 
                     //Write File Again
