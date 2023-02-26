@@ -977,7 +977,7 @@ namespace sb_editor
             this.groupBox1.Size = new System.Drawing.Size(229, 221);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Memory Maps per Format";
+            this.groupBox1.Text = "Memory-Slots per Format";
             // 
             // cboMemSlotFormat
             // 

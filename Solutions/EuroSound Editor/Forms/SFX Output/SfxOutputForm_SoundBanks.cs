@@ -40,7 +40,7 @@ namespace sb_editor.Forms
                     if (memSlotIndex == -1)
                     {
                         //Inform User
-                        string message = string.Format("Sample Bank Does not have a valid memory slot assigned.\n\nSoundBank: {0}\n\nOutput Aborted.", filesQueue[j]);
+                        string message = string.Format("Sample Bank Does not have a valid Memory-Map assigned.\n\nSoundBank: {0}\n\nOutput Aborted.", filesQueue[j]);
                         throw new IOException(message);
                     }
                     else
@@ -159,7 +159,7 @@ namespace sb_editor.Forms
                                                 File.Delete(sfxFilepath);
 
                                                 //Inform User
-                                                string message = string.Format("Sample Bank Limit Exceeded With:\n\nSoundBank: {0}\nFormat: {1}\nMy Size: {2}K\nMemory Slot Size: {3}K\n\nOutput Aborted and Files Deleted.", filesQueue[j], outputPlatform[k], sampleBankSize, memSlotMaxSize);
+                                                string message = string.Format("Sample Bank Limit Exceeded With:\n\nSoundBank: {0}\nFormat: {1}\nMy Size: {2}K\nMemory-Slot Size: {3}K\n\nOutput Aborted and Files Deleted.", filesQueue[j], outputPlatform[k], sampleBankSize, memSlotMaxSize);
                                                 throw new IOException(message);
                                             }
                                         }
