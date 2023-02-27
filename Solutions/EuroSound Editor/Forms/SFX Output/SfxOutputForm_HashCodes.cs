@@ -140,7 +140,7 @@ namespace sb_editor.Forms
 
                 //Soundbank HashCodes
                 sw.WriteLine("// SFX SoundBank HashCodes");
-                SortedDictionary<string, int> soundBankDict = new SortedDictionary<string, int>();
+                Dictionary<string, int> soundBankDict = new Dictionary<string, int>();
                 hashCodes.GetHashCodesWithLabels(null, soundBankDict);
                 int maxSfxHashcodeDefined = 0;
                 foreach (KeyValuePair<string, int> soundbankItem in soundBankDict)
@@ -197,7 +197,14 @@ namespace sb_editor.Forms
                 sw.WriteLine("// Reverb HashCodes");
                 foreach (KeyValuePair<string, int> reverbData in reverbsDict)
                 {
-                    sw.WriteLine(hashCodes.WriteHashCode(reverbData.Key, reverbData.Value | 0x1C000000));
+                    if (prefixHashCode)
+                    {
+                        sw.WriteLine(hashCodes.WriteHashCode("HT_Sound_" + reverbData.Key, reverbData.Value | 0x1C000000));
+                    }
+                    else
+                    {
+                        sw.WriteLine(hashCodes.WriteHashCode(reverbData.Key, reverbData.Value | 0x1C000000));
+                    }
                 }
             }
 
