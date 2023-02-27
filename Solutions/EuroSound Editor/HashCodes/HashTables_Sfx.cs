@@ -82,7 +82,7 @@ namespace sb_editor.HashCodes
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void GetHashCodesWithLabels(SortedDictionary<string, int> hashCodesDict, Dictionary<string, int> soundBankDict)
+        internal void GetHashCodesWithLabels(Dictionary<string, int> hashCodesDict, Dictionary<string, int> soundBankDict)
         {
             //SFXs
             if (hashCodesDict != null)

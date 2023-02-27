@@ -107,7 +107,7 @@ namespace sb_editor.Forms
             //-------------------------------------------------------------------------------[SFX_Defines.h]-------------------------------------------------------------------------------
             string sfxDefinesFilePath = Path.Combine(projectSettings.HashCodeFileDirectory, "SFX_Defines.h");
             backgroundWorker1.ReportProgress(24, string.Format("Writing SFX_Defines.h Folder = {0}", Path.GetDirectoryName(sfxDefinesFilePath)));
-            SortedDictionary<string, int> hashCodesDict = new SortedDictionary<string, int>();
+            Dictionary<string, int> hashCodesDict = new Dictionary<string, int>();
             Dictionary<string, string[]> usageDictionary = hashCodes.GetSoundBankSFXsDict();
 
             //Write File
