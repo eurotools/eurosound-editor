@@ -96,8 +96,9 @@ namespace sb_editor.Forms
                 //Convert it to the SFX
                 for (int j = 0; j < outputPlatform.Length; j++)
                 {
+                    bool isBigEndian = outputPlatform[j].Equals("GameCube", StringComparison.OrdinalIgnoreCase);
                     string outTmpFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatform[j], "SoundBanks", outLanguages[i], "sounddetails.sdf");
-                    BuildSoundDetailsFile(sfxDataFilePath, outTmpFilePath);
+                    BuildSoundDetailsFile(sfxDataFilePath, outTmpFilePath, isBigEndian);
 
                     string sfxOutputPath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatform[j], projectSettings), CommonFunctions.GetSfxName(outLang, "_sounddetails").ToLower());
                     MusXBuild_MusicDetails.BuildMusicDetails(outTmpFilePath, sfxOutputPath, CommonFunctions.GetFileHashCode(FileType.SoundDetails, outLang, 0), CommonFunctions.GetPlatformLabel(outputPlatform[j]));
@@ -214,7 +215,7 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void BuildSoundDetailsFile(string musicDataTableFile, string musicDetailsPlatform)
+        private void BuildSoundDetailsFile(string musicDataTableFile, string musicDetailsPlatform, bool isBigEndian)
         {
             //Open hashtable and create binary file
             using (StreamReader sr = new StreamReader(File.Open(musicDataTableFile, FileMode.Open, FileAccess.Read, FileShare.Read)))
@@ -245,9 +246,9 @@ namespace sb_editor.Forms
                             if (lineData.Length == 10)
                             {
                                 int hashcode = Convert.ToInt32(lineData[0].Trim());
-                                bw.Write((short)StringFloatToDouble(lineData[1]));
-                                bw.Write((short)StringFloatToDouble(lineData[2]));
-                                bw.Write(StringFloatToDouble(lineData[3]));
+                                bw.Write(BytesFunctions.FlipShort((short)StringFloatToDouble(lineData[1]), isBigEndian));
+                                bw.Write(BytesFunctions.FlipShort((short)StringFloatToDouble(lineData[2]), isBigEndian));
+                                bw.Write(BytesFunctions.FlipFloat(StringFloatToDouble(lineData[3]), isBigEndian));
                                 bw.Write(Convert.ToSByte(lineData[4]));
                                 bw.Write(Convert.ToSByte(lineData[5]));
                                 bw.Write(Convert.ToSByte(lineData[6]));
