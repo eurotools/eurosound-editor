@@ -15,7 +15,7 @@ namespace sb_editor.Forms
     public partial class SfxOutputForm
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void WriteSfxFile(Dictionary<string, int> hashCodesDict, Dictionary<string, SFX> fileData, string[] sampleList, string[] streamsList, string outputPlatform, string outputBank, BinaryWriter sfxWritter, bool isBigEndian, StreamWriter debugFile)
+        private void WriteSfxFile(Dictionary<string, int> hashCodesDict, SortedDictionary<string, SFX> fileData, string[] sampleList, string[] streamsList, string outputPlatform, string outputBank, BinaryWriter sfxWritter, bool isBigEndian, StreamWriter debugFile)
         {
             List<long> sfxLut = new List<long>();
             SoundBankFunctions sbFunctions = new SoundBankFunctions();

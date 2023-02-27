@@ -111,7 +111,7 @@ namespace sb_editor.Classes
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal string[] GetSampleList(Dictionary<string, SFX> fileData, Language outputLanguage)
+        internal string[] GetSampleList(SortedDictionary<string, SFX> fileData, Language outputLanguage)
         {
             // Create a hash set to store the unique sample names
             HashSet<string> samplesList = new HashSet<string>();
@@ -273,10 +273,10 @@ namespace sb_editor.Classes
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal Dictionary<string, SFX> GetSfxDataDict(string[] dataBases, string platform, Language language)
+        internal SortedDictionary<string, SFX> GetSfxDataDict(string[] dataBases, string platform, Language language)
         {
             // Dictionary to store the SFX data for each file
-            Dictionary<string, SFX> sfxFilesData = new Dictionary<string, SFX>();
+            SortedDictionary<string, SFX> sfxFilesData = new SortedDictionary<string, SFX>();
             string[] groupFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Groups"), "*.txt", SearchOption.AllDirectories);
 
             // Iterate over the array of SFX file names
@@ -286,16 +286,20 @@ namespace sb_editor.Classes
                 for (int j = 0; j < sbSfxs.SFXs.Length; j++)
                 {
                     // Create the full path to the SFX file
-                    string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", platform, sbSfxs.SFXs[j].TrimStart(Path.DirectorySeparatorChar) + ".txt");
-                    string sfxLabel = Path.GetFileNameWithoutExtension(filePath);
+                    string sfxName = sbSfxs.SFXs[j].TrimStart(Path.DirectorySeparatorChar) + ".txt";
+                    string sfxLabel = platform + "\\" + sfxName;
+                    string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", sfxLabel);
+                    
+                    // If the file does not exist in the specified platform folder, check the root SFXs folder
+                    if (!File.Exists(filePath))
+                    {
+                        sfxLabel = sfxName;
+                        filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", sfxLabel);
+                    }
+
+                    //Ensure that this SFX has not been readed
                     if (!sfxFilesData.ContainsKey(sfxLabel))
                     {
-                        // If the file does not exist in the specified platform folder, check the root SFXs folder
-                        if (!File.Exists(filePath))
-                        {
-                            filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", sbSfxs.SFXs[j].TrimStart(Path.DirectorySeparatorChar) + ".txt");
-                        }
-
                         // Read the SFX data from the file
                         SFX sfxData = TextFiles.ReadSfxFile(filePath);
 
@@ -328,7 +332,7 @@ namespace sb_editor.Classes
                 }
             }
 
-            return sfxFilesData.OrderBy(s => s.Value.HashCode.ToString("X8")).ToDictionary(x => x.Key, x => x.Value);
+            return sfxFilesData;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -357,7 +361,7 @@ namespace sb_editor.Classes
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void UpdateDuckerLength(Dictionary<string, SFX> fileData, string outputPlatform)
+        internal void UpdateDuckerLength(SortedDictionary<string, SFX> fileData, string outputPlatform)
         {
             foreach (KeyValuePair<string, SFX> soundToCheck in fileData)
             {

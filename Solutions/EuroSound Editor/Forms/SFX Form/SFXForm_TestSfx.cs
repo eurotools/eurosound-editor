@@ -57,7 +57,7 @@ namespace sb_editor.Forms
                             sfxData = ParseSfxSamplePool(sfxData);
 
                             //Build SFX File
-                            Dictionary<string, SFX> sbFileData = new Dictionary<string, SFX>() { { "Common", sfxData } };
+                            SortedDictionary<string, SFX> sbFileData = new SortedDictionary<string, SFX>() { { "Common", sfxData } };
                             string[] samplesList = sbFunctions.GetSampleList(sbFileData, Enumerations.Language.English);
                             sbFunctions.UpdateDuckerLength(sbFileData, "PC");
 
@@ -85,7 +85,7 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void WriteSfxFile(Dictionary<string, int> hashCodesDict, Dictionary<string, SFX> fileData, string[] sampleList, string outputBank, BinaryWriter sfxWritter, bool isBigEndian, StreamWriter debugFile)
+        private void WriteSfxFile(Dictionary<string, int> hashCodesDict, SortedDictionary<string, SFX> fileData, string[] sampleList, string outputBank, BinaryWriter sfxWritter, bool isBigEndian, StreamWriter debugFile)
         {
             List<long> sfxLut = new List<long>();
             SoundBankFunctions sbFunctions = new SoundBankFunctions();
