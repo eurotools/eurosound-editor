@@ -91,7 +91,7 @@ namespace sb_editor.Forms
                             string fullPath = Path.Combine(GlobalPrefs.ProjectFolder, sampleFolder, samplePath.TrimStart(Path.DirectorySeparatorChar));
                             if (!File.Exists(fullPath))
                             {
-                                Invoke(method: new Action(() => { MessageBox.Show(string.Format("Output Error: Sample File Missing\n{0}\n\nIn SFX : {1}\nWithin SoundBank : {2}", fullPath, sfxData.Key, outputBank), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information); }));
+                                Invoke(method: new Action(() => { MessageBox.Show(string.Format("Output Error: Sample File Missing\n{0}\n\nIn SFX : {1}\nWithin SoundBank : {2}", fullPath, Path.GetFileNameWithoutExtension(sfxData.Key), outputBank), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information); }));
                                 abortQuickOutput = true;
                                 break;
                             }

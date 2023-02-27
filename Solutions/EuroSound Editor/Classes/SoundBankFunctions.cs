@@ -282,30 +282,37 @@ namespace sb_editor.Classes
             for (int i = 0; i < sbSfxs.Length; i++)
             {
                 // Create the full path to the SFX file
-                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", platform, sbSfxs[i].TrimStart(Path.DirectorySeparatorChar) + ".txt");
+                string sfxName = sbSfxs[i].TrimStart(Path.DirectorySeparatorChar) + ".txt";
+                string sfxLabel = platform + "\\" + sfxName;
+                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", sfxLabel);
 
                 // If the file does not exist in the specified platform folder, check the root SFXs folder
                 if (!File.Exists(filePath))
                 {
-                    filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", sbSfxs[i].TrimStart(Path.DirectorySeparatorChar) + ".txt");
+                    sfxLabel = sfxName;
+                    filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", sfxLabel);
                 }
 
-                // Read the SFX data from the file
-                SFX sfxData = TextFiles.ReadSfxFile(filePath);
-
-                // Iterate over the samples in the SFX data
-                foreach (SfxSample sampleData in sfxData.Samples)
+                //Ensure that this SFX has not been readed
+                if (!sfxFilesData.ContainsKey(sfxName))
                 {
-                    // Update the file path of the sample to the correct language folder
-                    string samplePath = CommonFunctions.GetSampleFromSpeechFolder(sampleData.FilePath, language);
-                    if (!string.IsNullOrEmpty(filePath))
-                    {
-                        sampleData.FilePath = samplePath;
-                    }
-                }
+                    // Read the SFX data from the file
+                    SFX sfxData = TextFiles.ReadSfxFile(filePath);
 
-                // Add the SFX data to the dictionary using the file name as the key
-                sfxFilesData.Add(Path.GetFileNameWithoutExtension(filePath), sfxData);
+                    // Iterate over the samples in the SFX data
+                    foreach (SfxSample sampleData in sfxData.Samples)
+                    {
+                        // Update the file path of the sample to the correct language folder
+                        string samplePath = CommonFunctions.GetSampleFromSpeechFolder(sampleData.FilePath, language);
+                        if (!string.IsNullOrEmpty(filePath))
+                        {
+                            sampleData.FilePath = samplePath;
+                        }
+                    }
+
+                    // Add the SFX data to the dictionary using the file name as the key
+                    sfxFilesData.Add(sfxName, sfxData);
+                }
             }
 
             return sfxFilesData;
