@@ -108,6 +108,7 @@ namespace sb_editor.Forms
             string sfxDefinesFilePath = Path.Combine(projectSettings.HashCodeFileDirectory, "SFX_Defines.h");
             backgroundWorker1.ReportProgress(24, string.Format("Writing SFX_Defines.h Folder = {0}", Path.GetDirectoryName(sfxDefinesFilePath)));
             SortedDictionary<string, int> hashCodesDict = new SortedDictionary<string, int>();
+            Dictionary<string, string[]> usageDictionary = hashCodes.GetSoundBankSFXsDict();
 
             //Write File
             using (StreamWriter sw = new StreamWriter(File.Open(sfxDefinesFilePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
@@ -123,7 +124,7 @@ namespace sb_editor.Forms
                 hashCodes.GetHashCodesWithLabels(hashCodesDict, null);
                 foreach (KeyValuePair<string, int> sfxItem in hashCodesDict)
                 {
-                    string sfxUsage = hashCodes.GetSfxUsage(sfxItem.Key);
+                    string sfxUsage = hashCodes.GetSfxUsage(sfxItem.Key, usageDictionary);
                     if (prefixHashCode)
                     {
                         sw.WriteLine(hashCodes.WriteHashCodeWithUsage("HT_Sound_" + sfxItem.Key, sfxItem.Value | 0x1AF00000, sfxUsage));

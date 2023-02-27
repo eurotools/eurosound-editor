@@ -126,25 +126,37 @@ namespace sb_editor.HashCodes
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal string GetSfxUsage(string sfxToCheck)
+        internal Dictionary<string, string[]> GetSoundBankSFXsDict()
+        {
+            Dictionary<string, string[]> SoundBankSFXs = new Dictionary<string, string[]>();
+            
+            string[] soundBankFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks"), "*.txt", SearchOption.TopDirectoryOnly);
+            for (int i = 0; i < soundBankFiles.Length; i++)
+            {
+                HashSet<string> sbSFXs = new HashSet<string>();
+                SoundBank sbDataBases = TextFiles.ReadSoundbankFile(soundBankFiles[i]);
+                for(int j = 0; j < sbDataBases.DataBases.Length; j++)
+                {
+                    string dbFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", sbDataBases.DataBases[j] + ".txt");
+                    DataBase dbSfx = TextFiles.ReadDataBaseFile(dbFilePath);
+                    sbSFXs.UnionWith(dbSfx.SFXs);
+
+                }
+                SoundBankSFXs.Add(Path.GetFileNameWithoutExtension(soundBankFiles[i]), sbSFXs.ToArray());
+            }
+            return SoundBankSFXs;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        internal string GetSfxUsage(string sfxToCheck, Dictionary<string, string[]> usageDictioanry)
         {
             HashSet<string> sfxUsage = new HashSet<string>();
 
-            string[] soundBankFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks"), "*.txt", SearchOption.TopDirectoryOnly);
-            string[] dataBaseFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "DataBases"), "*.txt", SearchOption.TopDirectoryOnly);
-            for (int i = 0; i < dataBaseFiles.Length; i++)
+            foreach(KeyValuePair<string, string[]> sbName in usageDictioanry)
             {
-                DataBase dataBaseData = TextFiles.ReadDataBaseFile(dataBaseFiles[i]);
-                if (Array.IndexOf(dataBaseData.SFXs, sfxToCheck) >= 0)
+                if (Array.IndexOf(sbName.Value, sfxToCheck) >= 0)
                 {
-                    for (int j = 0; j < soundBankFiles.Length; j++)
-                    {
-                        SoundBank soundBankData = TextFiles.ReadSoundbankFile(soundBankFiles[j]);
-                        if (Array.IndexOf(soundBankData.DataBases, Path.GetFileNameWithoutExtension(dataBaseFiles[j])) >= 0)
-                        {
-                            sfxUsage.Add(Path.GetFileNameWithoutExtension(soundBankFiles[j]));
-                        }
-                    }
+                    sfxUsage.Add(sbName.Key);
                 }
             }
 
