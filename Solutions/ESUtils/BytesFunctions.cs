@@ -10,6 +10,8 @@
 // BYTES FUNCTIONS
 //-------------------------------------------------------------------------------------------------------------------------------
 
+using System;
+
 namespace ESUtils
 {
     //-------------------------------------------------------------------------------------------------------------------------------
@@ -100,6 +102,25 @@ namespace ESUtils
                 //Flip input value
                 finalData = (ushort)((valueToFlip & 0xFF00) >> (8 * 1) | /* 0x11__ -> 0x__11 */
                                      (valueToFlip & 0x00FF) << (8 * 1)); /* 0x__22 -> 0x22__ */
+            }
+            else
+            {
+                finalData = valueToFlip;
+            }
+
+            return finalData;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public static float FlipFloat(float valueToFlip, bool isBigEndian)
+        {
+            float finalData;
+
+            if (isBigEndian)
+            {
+                byte[] bytes = BitConverter.GetBytes(valueToFlip);
+                Array.Reverse(bytes);
+                finalData = BitConverter.ToSingle(bytes, 0);
             }
             else
             {
