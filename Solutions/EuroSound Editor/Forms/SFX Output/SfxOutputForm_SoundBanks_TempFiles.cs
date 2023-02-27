@@ -15,7 +15,7 @@ namespace sb_editor.Forms
     public partial class SfxOutputForm
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void WriteSfxFile(Dictionary<string, int> hashCodesDict, SortedDictionary<string, SFX> fileData, string[] sampleList, string[] streamsList, string outputPlatform, string outputBank, BinaryWriter sfxWritter, bool isBigEndian, StreamWriter debugFile)
+        private void WriteSfxFile(SortedDictionary<string, SFX> fileData, string[] sampleList, string[] streamsList, string outputPlatform, string outputBank, BinaryWriter sfxWritter, bool isBigEndian, StreamWriter debugFile)
         {
             List<long> sfxLut = new List<long>();
             SoundBankFunctions sbFunctions = new SoundBankFunctions();
@@ -71,10 +71,10 @@ namespace sb_editor.Forms
                     int fileRef = 0;
                     if (sfxData.Value.SamplePool.EnableSubSFX)
                     {
-                        string hashCode = Path.GetFileNameWithoutExtension(sampleToCheck.FilePath);
-                        if (hashCodesDict.ContainsKey(hashCode))
+                        string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", sampleToCheck.FilePath + ".txt");
+                        if (File.Exists(filePath))
                         {
-                            fileRef = (short)hashCodesDict[hashCode];
+                            fileRef = (short)TextFiles.ReadSfxFile(filePath).HashCode;
                         }
                         else
                         {

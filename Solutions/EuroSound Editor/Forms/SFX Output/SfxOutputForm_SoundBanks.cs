@@ -16,7 +16,7 @@ namespace sb_editor.Forms
     public partial class SfxOutputForm
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void OutputSoundBanks(SamplePool samplePoolList, Dictionary<string, int> hashCodesDict, string debugFolder)
+        private void OutputSoundBanks(SamplePool samplePoolList, string debugFolder)
         {
             SoundBankFunctions sbFunctions = new SoundBankFunctions();
 
@@ -92,7 +92,7 @@ namespace sb_editor.Forms
 
                                             //Write SFX Data
                                             SFXData.Start();
-                                            WriteSfxFile(hashCodesDict, sbFileData, samplesList, streamSamples, outputPlatform[k], filesQueue[j], sfxWritter, isBigEndian, sw);
+                                            WriteSfxFile(sbFileData, samplesList, streamSamples, outputPlatform[k], filesQueue[j], sfxWritter, isBigEndian, sw);
                                             SFXData.Stop();
                                             if (!abortQuickOutput)
                                             {

@@ -84,9 +84,6 @@ namespace sb_editor.Forms
                 samplesList.CheckForUpdates(projectSettings);
             }
 
-            //Get HashCodes Dictionary
-            Dictionary<string, int> HashCodesDict = sbFunctions.GetHashCodesDictionary("SFXs", "#HASHCODE");
-
             //Ensure that the debug folder exists
             DirectoryInfo debugFolder = Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "Debug_Report"));
 
@@ -104,7 +101,7 @@ namespace sb_editor.Forms
             }
 
             //Output SoundBanks
-            OutputSoundBanks(samplesList, HashCodesDict, debugFolder.FullName);
+            OutputSoundBanks(samplesList, debugFolder.FullName);
 
             //Output Project Details
             for (int i = 0; i < outputPlatform.Length; i++)
