@@ -294,7 +294,7 @@ namespace sb_editor.Classes
                 }
 
                 //Ensure that this SFX has not been readed
-                if (!sfxFilesData.ContainsKey(sfxName))
+                if (!sfxFilesData.ContainsKey(sfxLabel))
                 {
                     // Read the SFX data from the file
                     SFX sfxData = TextFiles.ReadSfxFile(filePath);
@@ -311,7 +311,7 @@ namespace sb_editor.Classes
                     }
 
                     // Add the SFX data to the dictionary using the file name as the key
-                    sfxFilesData.Add(sfxName, sfxData);
+                    sfxFilesData.Add(sfxLabel, sfxData);
                 }
             }
 
