@@ -150,21 +150,14 @@ namespace sb_editor.HashCodes
         //-------------------------------------------------------------------------------------------------------------------------------
         internal string GetSfxUsage(string sfxToCheck, Dictionary<string, string[]> usageDictioanry)
         {
-            HashSet<string> sfxUsage = new HashSet<string>();
+            string fullString = string.Empty;
 
-            foreach(KeyValuePair<string, string[]> sbName in usageDictioanry)
+            foreach (KeyValuePair<string, string[]> sbName in usageDictioanry)
             {
                 if (Array.IndexOf(sbName.Value, sfxToCheck) >= 0)
                 {
-                    sfxUsage.Add(sbName.Key);
+                    fullString += sbName.Key + ", ";
                 }
-            }
-
-            //Get merged string
-            string fullString = string.Empty;
-            if (sfxUsage.Count > 0)
-            {
-                fullString = string.Join(", ", sfxUsage.ToArray());
             }
 
             return fullString;
