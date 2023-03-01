@@ -298,6 +298,15 @@ namespace sb_editor.Panels
             OpenDataBaseProperties();
         }
 
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void MnuSetupGroups_Click(object sender, EventArgs e)
+        {
+            using (GroupingForm sfxGrouping = new GroupingForm())
+            {
+                sfxGrouping.ShowDialog();
+            }
+        }
+
         //*===============================================================================================
         //* FUNCTIONS
         //*===============================================================================================

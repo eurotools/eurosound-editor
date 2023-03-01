@@ -44,6 +44,7 @@ namespace sb_editor.Panels
             this.lblDataBases_Count = new System.Windows.Forms.Label();
             this.btnAddDataBases = new System.Windows.Forms.Button();
             this.ToolTip_Controls = new System.Windows.Forms.ToolTip(this.components);
+            this.mnuSetupGroups = new System.Windows.Forms.ToolStripMenuItem();
             this.grbAvailableDataBases.SuspendLayout();
             this.pnlListView.SuspendLayout();
             this.ContextMenu_DataBases.SuspendLayout();
@@ -98,10 +99,11 @@ namespace sb_editor.Panels
             this.mnuCopy,
             this.mnuDelete,
             this.mnuRename,
-            this.mnuProperties});
+            this.mnuProperties,
+            this.mnuSetupGroups});
             this.ContextMenu_DataBases.Name = "ContextMenu_DataBases";
             this.ContextMenu_DataBases.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.ContextMenu_DataBases.Size = new System.Drawing.Size(206, 136);
+            this.ContextMenu_DataBases.Size = new System.Drawing.Size(206, 180);
             // 
             // mnuAddDataBaseToSoundBank
             // 
@@ -191,6 +193,13 @@ namespace sb_editor.Panels
             this.btnAddDataBases.UseVisualStyleBackColor = true;
             this.btnAddDataBases.Click += new System.EventHandler(this.BtnAddDataBases_Click);
             // 
+            // mnuSetupGroups
+            // 
+            this.mnuSetupGroups.Name = "mnuSetupGroups";
+            this.mnuSetupGroups.Size = new System.Drawing.Size(205, 22);
+            this.mnuSetupGroups.Text = "Setup SFX Groups";
+            this.mnuSetupGroups.Click += new System.EventHandler(this.MnuSetupGroups_Click);
+            // 
             // UserControl_MainForm_AvailableDataBases
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -222,5 +231,6 @@ namespace sb_editor.Panels
         protected internal System.Windows.Forms.ListBox lstDataBases;
         protected internal System.Windows.Forms.Label lblDataBases_Count;
         private System.Windows.Forms.Label lblDataBaseTutorial;
+        private System.Windows.Forms.ToolStripMenuItem mnuSetupGroups;
     }
 }

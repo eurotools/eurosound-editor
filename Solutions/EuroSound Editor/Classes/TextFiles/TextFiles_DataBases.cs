@@ -48,6 +48,32 @@ namespace sb_editor
                             currentLine = sr.ReadLine().Trim();
                         }
                     }
+
+                    //Read parameters block
+                    if (currentLine.Equals("#SFXParameters", StringComparison.OrdinalIgnoreCase))
+                    {
+                        currentLine = sr.ReadLine().Trim();
+                        while (!currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase))
+                        {
+                            string[] lineData = currentLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                            switch (lineData[0].ToUpper())
+                            {
+                                case "MAXVOICES":
+                                    dataBase.MaxVoices = Convert.ToInt32(lineData[1].Trim());
+                                    break;
+                                case "ACTION1":
+                                    dataBase.Action1 = Convert.ToByte(lineData[1].Trim());
+                                    break;
+                                case "PRIORITY":
+                                    dataBase.Priority = Convert.ToInt32(lineData[1].Trim());
+                                    break;
+                                case "USEDISTCHECK":
+                                    dataBase.UseDistCheck = lineData[1].Trim().Equals("True");
+                                    break;
+                            }
+                            currentLine = sr.ReadLine().Trim();
+                        }
+                    }
                 }
             }
 
@@ -84,6 +110,14 @@ namespace sb_editor
                     }
                 }
                 outputFile.WriteLine("#END");
+                outputFile.WriteLine(string.Empty);
+                outputFile.WriteLine("#SFXParameters");
+                outputFile.WriteLine("Action1 {0}", dataBaseFile.Action1);
+                outputFile.WriteLine("MaxVoices {0}", dataBaseFile.MaxVoices);
+                outputFile.WriteLine("Priority {0}", dataBaseFile.Priority);
+                outputFile.WriteLine("UseDistCheck {0}", dataBaseFile.UseDistCheck);
+                outputFile.WriteLine("#END");
+                outputFile.WriteLine(string.Empty);
             }
 
             //Copy file to the final folder

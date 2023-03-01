@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using static ESUtils.Enumerations;
 
 namespace sb_editor.Classes
@@ -277,12 +278,14 @@ namespace sb_editor.Classes
         {
             // Dictionary to store the SFX data for each file
             SortedDictionary<string, SFX> sfxFilesData = new SortedDictionary<string, SFX>();
-            string[] groupFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Groups"), "*.txt", SearchOption.AllDirectories);
+            string[] dataBaseFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "DataBases"), "*.txt", SearchOption.AllDirectories);
+            Array.Sort(dataBaseFiles);
 
             // Iterate over the array of SFX file names
             for (int i = 0; i < dataBases.Length; i++)
             {
-                DataBase sbSfxs = TextFiles.ReadDataBaseFile(Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", dataBases[i] + ".txt"));
+                string dbFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", dataBases[i] + ".txt");
+                DataBase sbSfxs = TextFiles.ReadDataBaseFile(dbFilePath);
                 for (int j = 0; j < sbSfxs.SFXs.Length; j++)
                 {
                     // Create the full path to the SFX file
@@ -302,6 +305,9 @@ namespace sb_editor.Classes
                     {
                         // Read the SFX data from the file
                         SFX sfxData = TextFiles.ReadSfxFile(filePath);
+                        sfxData.Parameters.Group = Array.IndexOf(dataBaseFiles, dbFilePath) + 1;
+                        sfxData.Parameters.GroupStealReject = Convert.ToBoolean(sbSfxs.Action1);
+                        sfxData.Parameters.UseGroupDistCheck = sbSfxs.UseDistCheck;
 
                         // Iterate over the samples in the SFX data
                         foreach (SfxSample sampleData in sfxData.Samples)
@@ -312,18 +318,6 @@ namespace sb_editor.Classes
                             {
                                 sampleData.FilePath = samplePath;
                             }
-                        }
-
-                        //Setup Group Settings
-                        string groupFileName = dataBases[i].Substring(2) + ".txt";
-                        string[] groupFileMatches = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "Groups"), "*" + groupFileName);
-                        if (groupFileMatches.Length > 0)
-                        {
-                            string groupFile = Path.Combine(GlobalPrefs.ProjectFolder, "Groups", groupFileMatches[0]);
-                            GroupFile groupData = TextFiles.ReadGroupsFile(groupFile);
-                            sfxData.Parameters.GroupStealReject = Convert.ToBoolean(groupData.Action1);
-                            sfxData.Parameters.Group = Array.IndexOf(groupFiles, groupFile) + 1;
-                            sfxData.Parameters.UseGroupDistCheck = groupData.UseDistCheck;
                         }
 
                         // Add the SFX data to the dictionary using the file name as the key

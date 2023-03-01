@@ -49,9 +49,8 @@ namespace sb_editor.Forms
                 int useDistanceCheck = Convert.ToInt32(sfxData.Value.Parameters.UseGroupDistCheck);
                 if (outputPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase))
                 {
-                    sfxWritter.Write((sbyte)useDistanceCheck);
+                    sfxWritter.Write((byte)useDistanceCheck);
                     sfxWritter.Write((short)sfxData.Value.Parameters.Group);
-                    sfxWritter.Write((sbyte)0);
                     int sfxFlags = sbFunctions.GetFlags(sfxData.Value);
                     for (int i = 0; i < 16; i++)
                     {
@@ -60,7 +59,7 @@ namespace sb_editor.Forms
                 }
                 else
                 {
-                    sfxWritter.Write((short)(((useDistanceCheck & 0xff) << 8) | ((sfxData.Value.Parameters.Group & 0xff) << 0)));
+                    sfxWritter.Write((short)(((useDistanceCheck & 0xF) << 12) | ((sfxData.Value.Parameters.Group & 0xFFF) << 0)));
                     sfxWritter.Write((ushort)sbFunctions.GetFlags(sfxData.Value));
                 }
 

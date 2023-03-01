@@ -32,7 +32,7 @@ namespace sb_editor.Forms
             watcher.Start();
 
             //Groups
-            DirectoryInfo groupsDir = Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "Groups"));
+            DirectoryInfo groupsDir = Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "DataBases"));
             if (Directory.Exists(groupsDir.FullName))
             {
                 string[] availableGroups = Directory.GetFiles(groupsDir.FullName, "*.txt", SearchOption.AllDirectories);
@@ -70,6 +70,14 @@ namespace sb_editor.Forms
             txtBootupTime.Text = string.Format("Bootup Time =  {0:0.##############}", watcher.Elapsed.TotalSeconds);
         }
 
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void GroupingForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            MainForm mainForm = ((MainForm)Application.OpenForms[nameof(MainForm)]);
+            ProjectFileFunctions.UpdateDataBases(mainForm);
+            ProjectFileFunctions.UpdateSoundBanks(mainForm);
+        }
+
         //*===============================================================================================
         //* GROUPS SECTION EVENTS
         //*===============================================================================================
@@ -77,7 +85,7 @@ namespace sb_editor.Forms
         {
             if (lstAvailableGroups.SelectedItems.Count == 1)
             {
-                string groupFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Groups", lstAvailableGroups.SelectedItem + ".txt");
+                string groupFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", lstAvailableGroups.SelectedItem + ".txt");
                 if (File.Exists(groupFilePath))
                 {
                     GroupFile groupFileData = TextFiles.ReadGroupsFile(groupFilePath);
@@ -214,10 +222,10 @@ namespace sb_editor.Forms
         {
             using (Frm_InputBox inputDiag = new Frm_InputBox() { Text = "Create New Group" })
             {
-                string folderPath = Path.Combine(GlobalPrefs.ProjectFolder, "Groups");
+                string folderPath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases");
 
                 inputDiag.lblText.Text = "Enter Name";
-                inputDiag.txtInputData.Text = MultipleFilesFunctions.GetNextAvailableFilename(folderPath, "SFX_GROUP_");
+                inputDiag.txtInputData.Text = MultipleFilesFunctions.GetNextAvailableFilename(folderPath, "DB_Label");
                 while (true)
                 {
                     if (inputDiag.ShowDialog() == DialogResult.OK)
@@ -277,7 +285,7 @@ namespace sb_editor.Forms
                             }
                             else
                             {
-                                string newFilePath = Path.Combine(Path.Combine(GlobalPrefs.ProjectFolder, "Groups"), fileName + ".txt");
+                                string newFilePath = Path.Combine(Path.Combine(GlobalPrefs.ProjectFolder, "DataBases"), fileName + ".txt");
                                 if (File.Exists(newFilePath))
                                 {
                                     MessageBox.Show("This HashCode Name is used. Pick another!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -285,7 +293,7 @@ namespace sb_editor.Forms
                                 else
                                 {
                                     //Rename file
-                                    string source = Path.Combine(GlobalPrefs.ProjectFolder, "Groups", lstAvailableGroups.SelectedItem.ToString() + ".txt");
+                                    string source = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", lstAvailableGroups.SelectedItem.ToString() + ".txt");
                                     File.Move(source, newFilePath);
 
                                     //Update Control
@@ -308,7 +316,7 @@ namespace sb_editor.Forms
         {
             if (lstAvailableGroups.SelectedItems.Count == 1)
             {
-                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "Groups", lstAvailableGroups.SelectedItem + ".txt");
+                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", lstAvailableGroups.SelectedItem + ".txt");
                 if (File.Exists(filePath))
                 {
                     File.Delete(filePath);
@@ -338,7 +346,7 @@ namespace sb_editor.Forms
             if (lstAvailableGroups.SelectedItems.Count == 1)
             {
                 //Read File
-                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "Groups", lstAvailableGroups.SelectedItem + ".txt");
+                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", lstAvailableGroups.SelectedItem + ".txt");
                 if (File.Exists(filePath))
                 {
                     GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);
@@ -390,7 +398,7 @@ namespace sb_editor.Forms
                 }
 
                 //Read and update file
-                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "Groups", lstAvailableGroups.SelectedItem + ".txt");
+                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", lstAvailableGroups.SelectedItem + ".txt");
                 if (File.Exists(filePath))
                 {
                     GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);
@@ -409,7 +417,7 @@ namespace sb_editor.Forms
         {
             if (lstAvailableGroups.SelectedItems.Count == 1)
             {
-                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "Groups", lstAvailableGroups.SelectedItem + ".txt");
+                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", lstAvailableGroups.SelectedItem + ".txt");
                 if (File.Exists(filePath))
                 {
                     GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);
@@ -444,7 +452,7 @@ namespace sb_editor.Forms
         {
             if (lstAvailableGroups.SelectedItems.Count == 1)
             {
-                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "Groups", lstAvailableGroups.SelectedItem + ".txt");
+                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", lstAvailableGroups.SelectedItem + ".txt");
                 if (File.Exists(filePath))
                 {
                     GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);
@@ -479,7 +487,7 @@ namespace sb_editor.Forms
         {
             if (lstAvailableGroups.SelectedItems.Count == 1)
             {
-                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "Groups", lstAvailableGroups.SelectedItem + ".txt");
+                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", lstAvailableGroups.SelectedItem + ".txt");
                 if (File.Exists(filePath))
                 {
                     GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);
@@ -494,7 +502,7 @@ namespace sb_editor.Forms
         {
             if (lstAvailableGroups.SelectedItems.Count == 1)
             {
-                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "Groups", lstAvailableGroups.SelectedItem + ".txt");
+                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", lstAvailableGroups.SelectedItem + ".txt");
                 if (File.Exists(filePath))
                 {
                     GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);
@@ -516,7 +524,7 @@ namespace sb_editor.Forms
         {
             if (lstAvailableGroups.SelectedItems.Count == 1)
             {
-                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "Groups", lstAvailableGroups.SelectedItem + ".txt");
+                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", lstAvailableGroups.SelectedItem + ".txt");
                 if (File.Exists(filePath))
                 {
                     GroupFile groupFileData = TextFiles.ReadGroupsFile(filePath);

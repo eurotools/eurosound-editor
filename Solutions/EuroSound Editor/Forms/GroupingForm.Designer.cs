@@ -48,6 +48,7 @@ namespace sb_editor.Forms
             this.Col_AvailableSFXs_HashCode = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Col_AvailableSFXs_MaxVoices = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Col_AvailableSFXs_Steal = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Col_AvailableSFXs_Priority = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.nudMaxChannels_SFXs = new System.Windows.Forms.NumericUpDown();
             this.btnAddSFXsToGroup = new System.Windows.Forms.Button();
             this.cboAvailableSFXs_Steal = new System.Windows.Forms.ComboBox();
@@ -74,7 +75,6 @@ namespace sb_editor.Forms
             this.btnRename = new System.Windows.Forms.Button();
             this.btnNew = new System.Windows.Forms.Button();
             this.lstAvailableGroups = new System.Windows.Forms.ListBox();
-            this.Col_AvailableSFXs_Priority = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             ((System.ComponentModel.ISupportInitialize)(this.SplitContainer1)).BeginInit();
             this.SplitContainer1.Panel1.SuspendLayout();
             this.SplitContainer1.Panel2.SuspendLayout();
@@ -280,6 +280,10 @@ namespace sb_editor.Forms
             // 
             this.Col_AvailableSFXs_Steal.Text = "Steal?";
             this.Col_AvailableSFXs_Steal.Width = 50;
+            // 
+            // Col_AvailableSFXs_Priority
+            // 
+            this.Col_AvailableSFXs_Priority.Text = "Priority";
             // 
             // nudMaxChannels_SFXs
             // 
@@ -561,10 +565,6 @@ namespace sb_editor.Forms
             this.lstAvailableGroups.TabIndex = 4;
             this.lstAvailableGroups.SelectedIndexChanged += new System.EventHandler(this.LstAvailableGroups_SelectedIndexChanged);
             // 
-            // Col_AvailableSFXs_Priority
-            // 
-            this.Col_AvailableSFXs_Priority.Text = "Priority";
-            // 
             // GroupingForm
             // 
             this.AcceptButton = this.btnOK;
@@ -583,6 +583,7 @@ namespace sb_editor.Forms
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Setup SFX Groups";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GroupingForm_FormClosing);
             this.Load += new System.EventHandler(this.GroupingForm_Load);
             this.SplitContainer1.Panel1.ResumeLayout(false);
             this.SplitContainer1.Panel2.ResumeLayout(false);
