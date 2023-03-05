@@ -26,7 +26,7 @@ namespace PCAudioDLL.Audio_Stuff
                     SampleData sampleData = sfxStoredData[sampleInfo.FileRef];
                     WaveFormat waveFormat = new WaveFormat(audioMaths.SemitonesToFreq(sampleData.Frequency, audioMaths.GetPitch(sampleInfo)), 16, 1);
 
-                    if (LoopFlag)
+                    if (LoopFlag && sampleData.Flags == 0)
                     {
                         //Set data to the audio buffer
                         BufferedWaveProvider soundToPlay = new BufferedWaveProvider(waveFormat)
@@ -94,8 +94,7 @@ namespace PCAudioDLL.Audio_Stuff
                             EnableLooping = sampleData.Flags == 1,
                             Position = numSilenceSamples
                         };
-                        PanningSampleProvider panProvider = new PanningSampleProvider(loop.ToSampleProvider()) { Pan = audioMaths.GetPan(sampleInfo) };
-                        VolumeSampleProvider volumeProvider = new VolumeSampleProvider(panProvider) { Volume = audioMaths.GetVolume(sampleInfo) };
+                        VolumeSampleProvider volumeProvider = new VolumeSampleProvider(loop.ToSampleProvider()) { Volume = audioMaths.GetVolume(sampleInfo) };
 
                         //Init new voice
                         int vIndex = PCAudioDll.pcOutVoices.RequestVoice(sampleData.Flags == 1, PCAudioDll.outputConsole);
