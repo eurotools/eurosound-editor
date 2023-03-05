@@ -139,67 +139,74 @@ namespace PCAudioDLL.Audio_Stuff
                     Dictionary<int, BufferedWaveProvider> indexBuff = new Dictionary<int, BufferedWaveProvider>();
                     foreach (SampleInfo sampleInfo in sfxSample.samplesList)
                     {
-                        Random random = new Random();
-                        SampleData sampleData = sfxStoredData[sampleInfo.FileRef];
-                        WaveFormat waveFormat = new WaveFormat(audioMaths.SemitonesToFreq(sampleData.Frequency, audioMaths.GetPitch(sampleInfo)), 16, 1);
-
-                        //Set data to the audio buffer
-                        BufferedWaveProvider soundToPlay = new BufferedWaveProvider(waveFormat)
+                        if (PCAudioDll.StopSfx)
                         {
-                            BufferLength = sampleData.EncodedData.Length
-                        };
-
-                        //Check Inter-Sample Delay - Positive
-                        if (sfxSample.MinDelay >= 0 && sfxSample.MaxDelay > 0)
-                        {
-                            float delay = random.Next(sfxSample.MinDelay, sfxSample.MaxDelay) / 1000.0f;
-                            if (delay > 0)
-                            {
-                                int numSilenceSamples = (int)(waveFormat.SampleRate * delay);
-                                byte[] silenceBytes = new byte[numSilenceSamples * 2];
-
-                                //Add silence samples to the buffer
-                                soundToPlay.BufferLength = sampleData.EncodedData.Length + silenceBytes.Length;
-                                soundToPlay.AddSamples(silenceBytes, 0, silenceBytes.Length);
-                            }
+                            break;
                         }
-
-                        int exitAt = 0;
-                        //Check Inter-Sample Delay - Negative
-                        if (sfxSample.MinDelay <= 0 && sfxSample.MaxDelay < 0)
+                        else
                         {
-                            float delay = random.Next(Math.Abs(sfxSample.MinDelay), Math.Abs(sfxSample.MaxDelay)) / 1000.0f;
-                            if (delay > 0)
+                            Random random = new Random();
+                            SampleData sampleData = sfxStoredData[sampleInfo.FileRef];
+                            WaveFormat waveFormat = new WaveFormat(audioMaths.SemitonesToFreq(sampleData.Frequency, audioMaths.GetPitch(sampleInfo)), 16, 1);
+
+                            //Set data to the audio buffer
+                            BufferedWaveProvider soundToPlay = new BufferedWaveProvider(waveFormat)
                             {
-                                int numSilenceSamples = (int)(waveFormat.SampleRate * delay);
-                                exitAt = numSilenceSamples * 2;
-                            }
-                        }
+                                BufferLength = sampleData.EncodedData.Length
+                            };
 
-                        //Add SFX samples to the buffer
-                        soundToPlay.AddSamples(sampleData.EncodedData, 0, sampleData.EncodedData.Length);
-
-                        //Init new voice
-                        int vIndex = PCAudioDll.pcOutVoices.RequestVoice(sampleData.Flags == 1, PCAudioDll.outputConsole);
-
-                        //Play Sample
-                        indexBuff.Add(vIndex, soundToPlay);
-                        _waveOut.Init(soundToPlay);
-                        _waveOut.Play();
-                        _waveOut.Volume = audioMaths.GetVolume(sampleInfo);
-                        if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Polyphonic) & 1) == 0)
-                        {
-                            while (soundToPlay.BufferedBytes > exitAt && !PCAudioDll.StopSfx)
+                            //Check Inter-Sample Delay - Positive
+                            if (sfxSample.MinDelay >= 0 && sfxSample.MaxDelay > 0)
                             {
+                                float delay = random.Next(sfxSample.MinDelay, sfxSample.MaxDelay) / 1000.0f;
+                                if (delay > 0)
+                                {
+                                    int numSilenceSamples = (int)(waveFormat.SampleRate * delay);
+                                    byte[] silenceBytes = new byte[numSilenceSamples * 2];
+
+                                    //Add silence samples to the buffer
+                                    soundToPlay.BufferLength = sampleData.EncodedData.Length + silenceBytes.Length;
+                                    soundToPlay.AddSamples(silenceBytes, 0, silenceBytes.Length);
+                                }
                             }
-                            soundToPlay.ClearBuffer();
 
-                            //Stop and remove
-                            _waveOut.Stop();
+                            int exitAt = 0;
+                            //Check Inter-Sample Delay - Negative
+                            if (sfxSample.MinDelay <= 0 && sfxSample.MaxDelay < 0)
+                            {
+                                float delay = random.Next(Math.Abs(sfxSample.MinDelay), Math.Abs(sfxSample.MaxDelay)) / 1000.0f;
+                                if (delay > 0)
+                                {
+                                    int numSilenceSamples = (int)(waveFormat.SampleRate * delay);
+                                    exitAt = numSilenceSamples * 2;
+                                }
+                            }
 
-                            //Close Voice
-                            PCAudioDll.pcOutVoices.PreCloseVoice(vIndex, PCAudioDll.outputConsole);
-                            PCAudioDll.pcOutVoices.CloseVoice(vIndex);
+                            //Add SFX samples to the buffer
+                            soundToPlay.AddSamples(sampleData.EncodedData, 0, sampleData.EncodedData.Length);
+
+                            //Init new voice
+                            int vIndex = PCAudioDll.pcOutVoices.RequestVoice(sampleData.Flags == 1, PCAudioDll.outputConsole);
+
+                            //Play Sample
+                            indexBuff.Add(vIndex, soundToPlay);
+                            _waveOut.Init(soundToPlay);
+                            _waveOut.Play();
+                            _waveOut.Volume = audioMaths.GetVolume(sampleInfo);
+                            if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Polyphonic) & 1) == 0)
+                            {
+                                while (soundToPlay.BufferedBytes > exitAt && !PCAudioDll.StopSfx)
+                                {
+                                }
+                                soundToPlay.ClearBuffer();
+
+                                //Stop and remove
+                                _waveOut.Stop();
+
+                                //Close Voice
+                                PCAudioDll.pcOutVoices.PreCloseVoice(vIndex, PCAudioDll.outputConsole);
+                                PCAudioDll.pcOutVoices.CloseVoice(vIndex);
+                            }
                         }
                     }
 
