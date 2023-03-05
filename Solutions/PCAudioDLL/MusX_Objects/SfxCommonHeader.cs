@@ -1,18 +1,18 @@
-﻿namespace PCAudioDLL.AudioClasses
+﻿namespace PCAudioDLL.MusX_Objects
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    public class ExWaveOut
+    public class SfxCommonHeader
     {
-        public bool Active { get; set; }
-        public bool Played { get; set; }
-        public bool Playing { get; set; }
-        public bool Looping { get; set; }
-        public bool Reverb { get; set; }
-        public bool Stop_ { get; set; }
-        public bool Stopped { get; set; }
-        public bool Locked { get; set; }
+        public bool IsBigEndian;
+        public uint FileHashCode;
+        public int FileVersion;
+        public uint FileSize;
+        public string Platform;
+        public uint Timespan;
+        public uint UsesAdpcm;
+        public long EndOffset;
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------
