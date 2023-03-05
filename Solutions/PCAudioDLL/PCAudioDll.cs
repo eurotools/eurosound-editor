@@ -72,8 +72,14 @@ namespace PCAudioDLL
         public static void UnloadSoundbank()
         {
             StopSfxTest();
-            sfxSamples.Clear();
-            sfxStoredData.Clear();
+            if (sfxSamples != null)
+            {
+                sfxSamples.Clear();
+            }
+            if (sfxStoredData != null)
+            {
+                sfxStoredData.Clear();
+            }
 
             sbHashCode = -1;
             outputConsole.WriteLine("ES-> ES_UnLoadSoundBankReleaseFinished End");
@@ -120,7 +126,10 @@ namespace PCAudioDLL
         public static void StopSfxTest()
         {
             StopSfx = true;
-            _waveOut.Stop();
+            if (_waveOut != null)
+            {
+                _waveOut.Stop();
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
