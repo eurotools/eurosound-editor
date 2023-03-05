@@ -51,6 +51,7 @@ namespace sb_editor.Forms
                 {
                     sfxWritter.Write((byte)useDistanceCheck);
                     sfxWritter.Write((short)sfxData.Value.Parameters.Group);
+                    sfxWritter.Write((byte)0);
                     int sfxFlags = sbFunctions.GetFlags(sfxData.Value);
                     for (int i = 0; i < 16; i++)
                     {

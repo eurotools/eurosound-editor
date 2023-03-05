@@ -492,7 +492,7 @@ namespace sb_editor.Classes
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void WriteSampleInfo(BinaryWriter sifWritter, BinaryWriter sbfWritter, WavInfo masterFileData, WavInfo wavFileData, uint lengthAligned, int formatLength, int psiSampleHeader, uint loopOffset, bool isBigEndian, bool testSfx = false)
+        internal void WriteSampleInfo(BinaryWriter sifWritter, BinaryWriter sbfWritter, WavInfo masterFileData, WavInfo wavFileData, uint lengthAligned, int formatLength, int psiSampleHeader, uint loopOffset, bool isBigEndian)
         {
             //Write Header Data
             sifWritter.Write(BytesFunctions.FlipInt32(Convert.ToInt32(masterFileData.HasLoop), isBigEndian));
@@ -500,11 +500,6 @@ namespace sb_editor.Classes
             sifWritter.Write(BytesFunctions.FlipUInt32(lengthAligned, isBigEndian));
             sifWritter.Write(BytesFunctions.FlipInt32(wavFileData.SampleRate, isBigEndian));
             sifWritter.Write(BytesFunctions.FlipInt32(formatLength, isBigEndian));
-            if (testSfx)
-            {
-                sifWritter.Write(BytesFunctions.FlipInt32(wavFileData.Channels, isBigEndian));
-                sifWritter.Write(BytesFunctions.FlipInt32(4, isBigEndian));
-            }
             sifWritter.Write(BytesFunctions.FlipInt32(psiSampleHeader, isBigEndian));
             sifWritter.Write(BytesFunctions.FlipUInt32(loopOffset, isBigEndian));
             sifWritter.Write(BytesFunctions.FlipUInt32((uint)masterFileData.TotalTime.TotalMilliseconds, isBigEndian));
