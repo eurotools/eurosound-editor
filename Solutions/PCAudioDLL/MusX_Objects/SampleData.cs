@@ -1,17 +1,23 @@
-﻿namespace PCAudioDLL.MusXStuff.Objects
+﻿namespace PCAudioDLL.MusX_Objects
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    public class SampleInfo
+    public class SampleData
     {
-        public short FileRef;
-        public float Pitch;
-        public float PitchOffset;
-        public float Volume;
-        public float VolumeOffset;
-        public float Pan;
-        public float PanOffset;
+        public int Flags;
+        public int Address;
+        public int MemorySize;
+        public int Frequency;
+        public int SampleSize;
+        public int PsiSampleHeader;
+        public int Channels;
+        public int Bits;
+        public int LoopStartOffset;
+        public int TotalSamples;
+        public int Duration;
+        public byte[] EncodedData;
+        public short[] DspCoeffs;
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------

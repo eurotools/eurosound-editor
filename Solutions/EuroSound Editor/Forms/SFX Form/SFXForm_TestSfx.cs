@@ -109,7 +109,7 @@ namespace sb_editor.Forms
                 sfxWritter.Write(BytesFunctions.FlipShort((short)sfxData.Value.Parameters.InnerRadius, isBigEndian));
                 sfxWritter.Write(BytesFunctions.FlipShort((short)sfxData.Value.Parameters.OuterRadius, isBigEndian));
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.ReverbSend);
-                sfxWritter.Write((sbyte)0);
+                sfxWritter.Write((sbyte)sfxData.Value.Parameters.TrackingType);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.MaxVoices);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.Priority);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.Ducker);

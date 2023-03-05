@@ -44,21 +44,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioClasses\AudioMaths.cs" />
-    <Compile Include="AudioClasses\AudioMixer.cs" />
-    <Compile Include="AudioClasses\AudioPlayer.cs" />
-    <Compile Include="AudioClasses\LoopStream.cs" />
-    <Compile Include="AudioClasses\Objects\ExWaveOut.cs" />
-    <Compile Include="AudioClasses\PCVoices.cs" />
-    <Compile Include="DebugConsole.cs" />
-    <Compile Include="MusXStuff\Objects\Sample.cs" />
-    <Compile Include="MusXStuff\Objects\SampleData.cs" />
-    <Compile Include="MusXStuff\Objects\SampleInfo.cs" />
-    <Compile Include="MusXStuff\Objects\SfxHeaderData.cs" />
-    <Compile Include="MusXStuff\SoundBanksReader.cs" />
+    <Compile Include="Audio_Stuff\AudioMaths.cs" />
+    <Compile Include="Audio_Stuff\AudioPlayer.cs" />
+    <Compile Include="Audio_Stuff\LoopStream.cs" />
+    <Compile Include="MusX_Objects\Sample.cs" />
+    <Compile Include="MusX_Objects\SampleData.cs" />
+    <Compile Include="MusX_Objects\SampleInfo.cs" />
+    <Compile Include="MusX_Objects\SfxCommonHeader.cs" />
+    <Compile Include="MusX_Objects\SoundbankHeader.cs" />
+    <Compile Include="MusX_Readers\BinaryFunctions.cs" />
+    <Compile Include="MusX_Readers\SfxFunctions.cs" />
+    <Compile Include="MusX_Readers\SoundBankReaderNew.cs" />
+    <Compile Include="MusX_Readers\SoundBankReaderOld.cs" />
+    <Compile Include="MusX_Readers\SoundBanksReader.cs" />
+    <Compile Include="Others\DebugConsole.cs" />
+    <Compile Include="Others\ExWaveOut.cs" />
+    <Compile Include="Others\PCVoices.cs" />
     <Compile Include="PCAudioDll.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="Audio_Stuff\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

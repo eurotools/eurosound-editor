@@ -10,6 +10,9 @@
 // BYTES FUNCTIONS
 //-------------------------------------------------------------------------------------------------------------------------------
 
+using System;
+using System.IO;
+
 namespace ESUtils
 {
     //-------------------------------------------------------------------------------------------------------------------------------
@@ -110,10 +113,38 @@ namespace ESUtils
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
+        public static float FlipFloat(float valueToFlip, bool isBigEndian)
+        {
+            float finalData;
+
+            if (isBigEndian)
+            {
+                byte[] bytes = BitConverter.GetBytes(valueToFlip);
+                Array.Reverse(bytes);
+                finalData = BitConverter.ToSingle(bytes, 0);
+            }
+            else
+            {
+                finalData = valueToFlip;
+            }
+
+            return finalData;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
         public static uint AlignNumber(uint valueToAlign, uint blockSize)
         {
             uint PositionAligned = (valueToAlign + (blockSize - 1)) & ~(blockSize - 1);
             return PositionAligned;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        internal static void WriteAlignedDecoration(BinaryWriter bw, uint PositionAligned)
+        {
+            while (bw.BaseStream.Position != PositionAligned)
+            {
+                bw.Write((byte)0xAB);
+            }
         }
     }
 

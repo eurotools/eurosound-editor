@@ -1,4 +1,4 @@
-﻿using PCAudioDLL.AudioClasses;
+﻿using PCAudioDLL;
 using System;
 using System.Drawing;
 using System.Threading;
@@ -11,8 +11,6 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class PCDllVoicesForm : Form
     {
-        private readonly PCAudioDLL.PCAudioDLL audioTool = ((MainForm)Application.OpenForms[nameof(MainForm)]).audioTool;
-
         //-------------------------------------------------------------------------------------------------------------------------------
         public PCDllVoicesForm()
         {
@@ -23,7 +21,7 @@ namespace sb_editor.Forms
         private void PCDllVoicesForm_Load(object sender, EventArgs e)
         {
             //Print items
-            for (int i = 0; i < audioTool.pcOutVoices.VoicesArray.Length; i++)
+            for (int i = 0; i < PCAudioDll.pcOutVoices.VoicesArray.Length; i++)
             {
                 dataGridView1.Rows.Add(new string[] { i.ToString(), "", "", "", "", "", "", "", "" });
             }
@@ -44,9 +42,9 @@ namespace sb_editor.Forms
         {
             while (!Disposing)
             {
-                for (int i = 0; i < audioTool.pcOutVoices.VoicesArray.Length; i++)
+                for (int i = 0; i < PCAudioDll.pcOutVoices.VoicesArray.Length; i++)
                 {
-                    ExWaveOut currentVoice = audioTool.pcOutVoices.VoicesArray[i];
+                    ExWaveOut currentVoice = PCAudioDll.pcOutVoices.VoicesArray[i];
                     try
                     {
                         dataGridView1.Invoke((MethodInvoker)delegate

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PCAudioDLL;
+using System;
 using System.Windows.Forms;
 
 namespace sb_editor.Forms
@@ -8,8 +9,6 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class PCDllDebugForm : Form
     {
-        private readonly PCAudioDLL.PCAudioDLL audioTool = ((MainForm)Application.OpenForms[nameof(MainForm)]).audioTool;
-
         //-------------------------------------------------------------------------------------------------------------------------------
         public PCDllDebugForm()
         {
@@ -19,19 +18,19 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void Frm_TestSfxDebug_Shown(object sender, EventArgs e)
         {
-            audioTool.InitializeConsole(txtDebugData);
+            PCAudioDll.InitializeConsole(txtDebugData);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void ChkPauseDebug_Click(object sender, EventArgs e)
         {
-            audioTool.outputConsole.PauseOutput = chkPauseDebug.Checked;
+            PCAudioDll.outputConsole.PauseOutput = chkPauseDebug.Checked;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void PCDllDebugForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            audioTool.outputConsole.TxtConsole = null;
+            PCAudioDll.outputConsole.TxtConsole = null;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------

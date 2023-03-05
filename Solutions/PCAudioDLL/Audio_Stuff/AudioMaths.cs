@@ -1,7 +1,7 @@
-﻿using PCAudioDLL.MusXStuff.Objects;
+﻿using PCAudioDLL.MusX_Objects;
 using System;
 
-namespace PCAudioDLL.AudioClasses
+namespace PCAudioDLL.Audio_Stuff
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
@@ -23,7 +23,8 @@ namespace PCAudioDLL.AudioClasses
         //-------------------------------------------------------------------------------------------------------------------------------
         internal float GetPitch(SampleInfo sampleInfo)
         {
-            switch (Utils.random.Next(0, 3))
+            Random random = new Random();
+            switch (random.Next(0, 3))
             {
                 case 0:
                     return sampleInfo.Pitch + sampleInfo.PitchOffset;
@@ -37,7 +38,8 @@ namespace PCAudioDLL.AudioClasses
         //-------------------------------------------------------------------------------------------------------------------------------
         internal float GetPan(SampleInfo sampleInfo)
         {
-            switch (Utils.random.Next(0, 3))
+            Random random = new Random();
+            switch (random.Next(0, 3))
             {
                 case 0:
                     return sampleInfo.Pan + sampleInfo.PanOffset;
@@ -51,7 +53,8 @@ namespace PCAudioDLL.AudioClasses
         //-------------------------------------------------------------------------------------------------------------------------------
         internal float GetVolume(SampleInfo sampleInfo)
         {
-            switch (Utils.random.Next(0, 3))
+            Random random = new Random();
+            switch (random.Next(0, 3))
             {
                 case 0:
                     return sampleInfo.Volume + sampleInfo.VolumeOffset;
