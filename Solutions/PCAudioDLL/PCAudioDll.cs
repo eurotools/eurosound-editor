@@ -1,10 +1,9 @@
 ﻿using NAudio.Wave;
-using PCAudioDLL.AudioClasses;
-using PCAudioDLL.MusXStuff;
-using PCAudioDLL.MusXStuff.Objects;
+using PCAudioDLL.Audio_Stuff;
+using PCAudioDLL.MusX_Objects;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace PCAudioDLL
@@ -12,24 +11,22 @@ namespace PCAudioDLL
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    public class PCAudioDLL
+    public static class PCAudioDll
     {
-        //Local variables and classes
-        private int sbHashCode = -1;
-        private WaveOut _waveOut;
-
-        //Sb Data
-        private Sample sfxSample;
-        private SampleData[] sfxStoredData;
-
-        //Main Thread
-        public readonly PCVoices pcOutVoices = new PCVoices();
-        public DebugConsole outputConsole = new DebugConsole();
-        private Thread _thread;
+        public static SoundbankHeader soundBankHeaderData = new SoundbankHeader();
+        public static SortedDictionary<uint, Sample> sfxSamples;
+        public static List<SampleData> sfxStoredData;
+        public static DebugConsole outputConsole = new DebugConsole();
+        public static readonly PCVoices pcOutVoices = new PCVoices();
+        private static readonly WaveOut _waveOut = new WaveOut();
+        private static int sbHashCode = -1;
+        internal static bool StopSfx = false;
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public PCAudioDLL()
+        public static double LoadSoundBank(string soundBankPath)
         {
+            Stopwatch watch = Stopwatch.StartNew();
+
             //Initialize game reserved voices
             for (int i = 0; i < pcOutVoices.VoicesArray.Length; i++)
             {
@@ -47,12 +44,6 @@ namespace PCAudioDLL
                     pcOutVoices.VoicesArray[i] = new ExWaveOut();
                 }
             }
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        public double LoadSoundBank(string soundBankPath)
-        {
-            Stopwatch watch = Stopwatch.StartNew();
 
             //Add Debug Text
             outputConsole.WriteLine("");
@@ -62,12 +53,14 @@ namespace PCAudioDLL
             outputConsole.WriteLine("");
             outputConsole.WriteLine("CMD_SFXLOADSOUNDBANK");
 
-            //Call reader
-            SoundBanksReader reader = new SoundBanksReader();
-
             //Read SoundBank
-            SfxHeaderData soundBankHeaderData = reader.ReadSfxHeader(soundBankPath);
-            sfxSample = reader.ReadSoundbank(soundBankPath, soundBankHeaderData, ref sfxStoredData);
+            SoundBankReader reader = new SoundBankReader();
+            sfxSamples = new SortedDictionary<uint, Sample>();
+            sfxStoredData = new List<SampleData>();
+
+            //Load data
+            soundBankHeaderData = reader.ReadSfxHeader(soundBankPath, "PC");
+            reader.ReadSoundBank(soundBankPath, soundBankHeaderData, sfxSamples, sfxStoredData, null);
 
             //Update global var.
             sbHashCode = (int)soundBankHeaderData.FileHashCode;
@@ -76,16 +69,11 @@ namespace PCAudioDLL
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public bool IsSoundBankLoaded(int hashcode)
+        public static void UnloadSoundbank()
         {
-            return sbHashCode == hashcode;
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        public void UnloadSoundbank()
-        {
-            sfxSample = null;
-            sfxStoredData = null;
+            StopSfxTest();
+            sfxSamples.Clear();
+            sfxStoredData.Clear();
 
             sbHashCode = -1;
             outputConsole.WriteLine("ES-> ES_UnLoadSoundBankReleaseFinished End");
@@ -93,84 +81,50 @@ namespace PCAudioDLL
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void PlaySound()
+        public static bool IsSoundBankLoaded(int hashcode)
         {
-            if (sfxSample != null && sfxStoredData != null)
-            {
-                if (_thread == null || !_thread.IsAlive)
-                {
-                    _thread = new Thread(PlayHashCode)
-                    {
-                        IsBackground = true
-                    };
-                    _thread.Start();
-                }
-            }
+            return sbHashCode == hashcode;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void PlayHashCode()
+        public static void PlaySfx(uint hashCode)
         {
-            AudioPlayer audioPlayer = new AudioPlayer();
-            _waveOut = new WaveOut();
-
-            if (((sfxSample.Flags >> (int)SoundBanksReader.Flags.HasSubSfx) & 1) == 0 && sfxSample.samplesList.Count > 0)
+            StopSfx = false;
+            if (_waveOut.PlaybackState != PlaybackState.Playing)
             {
-                //If false it will pick and play randomly one of the samples in the list. 
-                if (((sfxSample.Flags >> (int)SoundBanksReader.Flags.MultiSample) & 1) == 0 || sfxStoredData[0].Flags == 1)
+                AudioPlayer audioPlayer = new AudioPlayer();
+                if (sfxSamples.ContainsKey(hashCode))
                 {
-                    audioPlayer.PlaySingleSfx(outputConsole, _waveOut, pcOutVoices, sfxSample, sfxStoredData);
-                }
-                else
-                {
-
-                    //It will interpret the list of samples
-                    if (((sfxSample.Flags >> (int)SoundBanksReader.Flags.MultiSample) & 1) == 1)
+                    Sample sfxSample = sfxSamples[hashCode];
+                    if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.HasSubSfx) & 1) == 0 && sfxSample.samplesList.Count > 0)
                     {
-                        if (((sfxSample.Flags >> (int)SoundBanksReader.Flags.Polyphonic) & 1) == 1)
+                        //If false it will pick and play randomly one of the samples in the list. 
+                        if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.MultiSample) & 1) == 0)
                         {
-                            audioPlayer.PlayPolyphonic(outputConsole, _waveOut, pcOutVoices, sfxSample, sfxStoredData);
+                            audioPlayer.PlaySingleSfx(_waveOut, sfxSample, sfxStoredData);
                         }
                         else
                         {
-                            bool shuffled = ((sfxSample.Flags >> (int)SoundBanksReader.Flags.Shuffled) & 1) == 1;
-                            audioPlayer.PlayList(outputConsole, _waveOut, shuffled, pcOutVoices, sfxSample, sfxStoredData);
+                            audioPlayer.PlayMultiSampleSFX(_waveOut, sfxSample, sfxStoredData);
                         }
+                    }
+                    else
+                    {
+                        outputConsole.WriteLine("Sub SFXs not supported!");
                     }
                 }
             }
-            else
-            {
-                outputConsole.WriteLine("Sub SFXs not supported!");
-            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void StopSounds()
+        public static void StopSfxTest()
         {
-            //Stop Output Player
-            if (_waveOut != null)
-            {
-                _waveOut.Stop();
-                _waveOut.Dispose();
-            }
-
-            //Close Thread
-            if (_thread != null)
-            {
-                _thread.Abort();
-            }
-
-            //Unload All
-            sfxSample = null;
-            sfxStoredData = null;
-
-            //Stop all voices
-            pcOutVoices.CloseAllVoices(outputConsole);
+            StopSfx = true;
+            _waveOut.Stop();
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void InitializeConsole(TextBox outputControl)
+        public static void InitializeConsole(TextBox outputControl)
         {
             outputConsole.TxtConsole = outputControl;
             outputConsole.WriteLine("Debug Console Initialised!");

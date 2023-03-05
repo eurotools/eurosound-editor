@@ -1,21 +1,18 @@
-﻿namespace PCAudioDLL.MusXStuff.Objects
+﻿namespace PCAudioDLL
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    public class SampleData
+    public class ExWaveOut
     {
-        public int Flags;
-        public int Address;
-        public int MemorySize;
-        public int Frequency;
-        public int SampleSize;
-        public int PsiSampleHeader;
-        public int Channels;
-        public int Bits;
-        public int LoopStartOffset;
-        public int Duration;
-        public byte[] EncodedData;
+        public bool Active { get; set; }
+        public bool Played { get; set; }
+        public bool Playing { get; set; }
+        public bool Looping { get; set; }
+        public bool Reverb { get; set; }
+        public bool Stop_ { get; set; }
+        public bool Stopped { get; set; }
+        public bool Locked { get; set; }
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------

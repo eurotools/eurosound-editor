@@ -13,7 +13,6 @@ namespace sb_editor
     public partial class MainForm : Form
     {
         internal MostRecentFilesMenu RecentFilesMenu;
-        internal readonly PCAudioDLL.PCAudioDLL audioTool = new PCAudioDLL.PCAudioDLL();
 
         //-------------------------------------------------------------------------------------------------------------------------------
         public MainForm()

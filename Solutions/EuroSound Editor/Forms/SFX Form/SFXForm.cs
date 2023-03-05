@@ -1,4 +1,5 @@
 ﻿using ESUtils;
+using PCAudioDLL;
 using sb_editor.Objects;
 using sb_editor.Panels;
 using System;
@@ -16,7 +17,6 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class SFXForm : Form
     {
-        private readonly PCAudioDLL.PCAudioDLL audioTool = ((MainForm)Application.OpenForms[nameof(MainForm)]).audioTool;
         private readonly bool sfxDefaults;
         private readonly string sfxFileName;
         private Color currentColor = SystemColors.Control;
@@ -169,7 +169,7 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void Frm_SFX_Form_FormClosing(object sender, FormClosingEventArgs e)
         {
-            audioTool.StopSounds();
+            PCAudioDll.UnloadSoundbank();
 
             //Stop any audio that could be playing
             if (UserControl_SamplePool.audioPlayer != null)
@@ -332,21 +332,21 @@ namespace sb_editor.Forms
             string filePath = Path.Combine(outputFilePath, fileName);
             if (File.Exists(filePath))
             {
-                if (audioTool.IsSoundBankLoaded(0xFFFE))
+                if (PCAudioDll.IsSoundBankLoaded(0xFFFE))
                 {
-                    audioTool.UnloadSoundbank();
+                    PCAudioDll.UnloadSoundbank();
                 }
-                txtDllTime.Text = string.Format("DLL Time {0:0.###}", audioTool.LoadSoundBank(filePath));
-                audioTool.PlaySound();
+                txtDllTime.Text = string.Format("DLL Time {0:0.###}", PCAudioDll.LoadSoundBank(filePath));
+                PCAudioDll.PlaySfx(0);
             }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnStopSFX_Click(object sender, System.EventArgs e)
         {
-            if (audioTool.IsSoundBankLoaded(0xFFFE))
+            if (PCAudioDll.IsSoundBankLoaded(0xFFFE))
             {
-                audioTool.StopSounds();
+                PCAudioDll.UnloadSoundbank();
             }
         }
 
