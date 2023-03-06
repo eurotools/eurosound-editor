@@ -194,8 +194,6 @@ namespace PCAudioDLL.Audio_Stuff
                             soundToPlay.AddSamples(sampleData.EncodedData, 0, sampleData.EncodedData.Length);
                             VolumeSampleProvider volumeProvider = new VolumeSampleProvider(soundToPlay.ToSampleProvider()) { Volume = audioMaths.GetVolume(sampleInfo) };
 
-                            VolumeSampleProvider volumeProvider = new VolumeSampleProvider(soundToPlay.ToSampleProvider()) { Volume = audioMaths.GetVolume(sampleInfo) };
-
                             //Init new voice
                             int vIndex = PCAudioDll.pcOutVoices.RequestVoice(sampleData.Flags == 1, PCAudioDll.outputConsole);
 
