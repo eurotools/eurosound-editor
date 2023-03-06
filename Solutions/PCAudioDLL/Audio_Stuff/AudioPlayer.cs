@@ -31,7 +31,8 @@ namespace PCAudioDLL.Audio_Stuff
                         //Set data to the audio buffer
                         BufferedWaveProvider soundToPlay = new BufferedWaveProvider(waveFormat)
                         {
-                            BufferLength = sampleData.EncodedData.Length
+                            BufferLength = sampleData.EncodedData.Length,
+                            DiscardOnBufferOverflow = true
                         };
 
                         //Check Inter-Sample Delay
@@ -51,21 +52,22 @@ namespace PCAudioDLL.Audio_Stuff
 
                         //Add SFX samples to the buffer
                         soundToPlay.AddSamples(sampleData.EncodedData, 0, sampleData.EncodedData.Length);
+                        VolumeSampleProvider volumeProvider = new VolumeSampleProvider(soundToPlay.ToSampleProvider()) { Volume = audioMaths.GetVolume(sampleInfo) };
 
                         //Init new voice
                         int vIndex = PCAudioDll.pcOutVoices.RequestVoice(sampleData.Flags == 1, PCAudioDll.outputConsole);
 
                         //Play Sample
-                        _waveOut.Init(soundToPlay);
+                        _waveOut.Init(volumeProvider);
                         _waveOut.Play();
-                        _waveOut.Volume = audioMaths.GetVolume(sampleInfo);
+                        _waveOut.Volume = sfxSample.MasterVolume;
                         while (soundToPlay.BufferedBytes > 0 && !PCAudioDll.StopSfx)
                         {
+                            Thread.Sleep(1);
                         }
-                        soundToPlay.ClearBuffer();
 
                         //Stop and remove
-                        _waveOut.Stop();
+                        soundToPlay.ClearBuffer();
 
                         //Close Voice
                         PCAudioDll.pcOutVoices.PreCloseVoice(vIndex, PCAudioDll.outputConsole);
@@ -100,15 +102,17 @@ namespace PCAudioDLL.Audio_Stuff
                         int vIndex = PCAudioDll.pcOutVoices.RequestVoice(sampleData.Flags == 1, PCAudioDll.outputConsole);
 
                         //Play Sample
-                        _waveOut.Init(volumeProvider.ToWaveProvider());
+                        _waveOut.Init(volumeProvider);
                         _waveOut.Play();
+                        _waveOut.Volume = sfxSample.MasterVolume;
                         while (_waveOut.PlaybackState == PlaybackState.Playing && !PCAudioDll.StopSfx)
                         {
-
-                        };
+                            Thread.Sleep(1);
+                        }
 
                         //Stop and remove
                         _waveOut.Stop();
+                        provider.Close();
 
                         //Close Voice
                         PCAudioDll.pcOutVoices.PreCloseVoice(vIndex, PCAudioDll.outputConsole);
@@ -151,7 +155,8 @@ namespace PCAudioDLL.Audio_Stuff
                             //Set data to the audio buffer
                             BufferedWaveProvider soundToPlay = new BufferedWaveProvider(waveFormat)
                             {
-                                BufferLength = sampleData.EncodedData.Length
+                                BufferLength = sampleData.EncodedData.Length,
+                                DiscardOnBufferOverflow = true
                             };
 
                             //Check Inter-Sample Delay - Positive
@@ -164,7 +169,11 @@ namespace PCAudioDLL.Audio_Stuff
                                     byte[] silenceBytes = new byte[numSilenceSamples * 2];
 
                                     //Add silence samples to the buffer
-                                    soundToPlay.BufferLength = sampleData.EncodedData.Length + silenceBytes.Length;
+                                    soundToPlay = new BufferedWaveProvider(waveFormat)
+                                    {
+                                        BufferLength = sampleData.EncodedData.Length + silenceBytes.Length,
+                                        DiscardOnBufferOverflow = true
+                                    };
                                     soundToPlay.AddSamples(silenceBytes, 0, silenceBytes.Length);
                                 }
                             }
@@ -183,24 +192,25 @@ namespace PCAudioDLL.Audio_Stuff
 
                             //Add SFX samples to the buffer
                             soundToPlay.AddSamples(sampleData.EncodedData, 0, sampleData.EncodedData.Length);
+                            VolumeSampleProvider volumeProvider = new VolumeSampleProvider(soundToPlay.ToSampleProvider()) { Volume = audioMaths.GetVolume(sampleInfo) };
 
                             //Init new voice
                             int vIndex = PCAudioDll.pcOutVoices.RequestVoice(sampleData.Flags == 1, PCAudioDll.outputConsole);
 
                             //Play Sample
                             indexBuff.Add(vIndex, soundToPlay);
-                            _waveOut.Init(soundToPlay);
+                            _waveOut.Init(volumeProvider);
                             _waveOut.Play();
-                            _waveOut.Volume = audioMaths.GetVolume(sampleInfo);
+                            _waveOut.Volume = sfxSample.MasterVolume;
                             if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Polyphonic) & 1) == 0)
                             {
                                 while (soundToPlay.BufferedBytes > exitAt && !PCAudioDll.StopSfx)
                                 {
+                                    Thread.Sleep(1);
                                 }
-                                soundToPlay.ClearBuffer();
 
                                 //Stop and remove
-                                _waveOut.Stop();
+                                soundToPlay.ClearBuffer();
 
                                 //Close Voice
                                 PCAudioDll.pcOutVoices.PreCloseVoice(vIndex, PCAudioDll.outputConsole);
@@ -224,6 +234,7 @@ namespace PCAudioDLL.Audio_Stuff
                                     //Close Voice
                                     PCAudioDll.pcOutVoices.PreCloseVoice(outVoice.Key, PCAudioDll.outputConsole);
                                     PCAudioDll.pcOutVoices.CloseVoice(outVoice.Key);
+                                    outVoice.Value.ClearBuffer();
                                 }
                                 else
                                 {

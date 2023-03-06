@@ -16,7 +16,7 @@ namespace PCAudioDLL.MusX_Objects
         public sbyte MaxVoices;
         public sbyte Priority;
         public sbyte Ducker;
-        public sbyte MasterVolume;
+        public float MasterVolume;
         public short GroupHashCode;
         public sbyte GroupMaxChannels;
         public sbyte DopplerValue;
