@@ -192,6 +192,7 @@ namespace PCAudioDLL.Audio_Stuff
 
                             //Add SFX samples to the buffer
                             soundToPlay.AddSamples(sampleData.EncodedData, 0, sampleData.EncodedData.Length);
+                            VolumeSampleProvider volumeProvider = new VolumeSampleProvider(soundToPlay.ToSampleProvider()) { Volume = audioMaths.GetVolume(sampleInfo) };
 
                             VolumeSampleProvider volumeProvider = new VolumeSampleProvider(soundToPlay.ToSampleProvider()) { Volume = audioMaths.GetVolume(sampleInfo) };
 
