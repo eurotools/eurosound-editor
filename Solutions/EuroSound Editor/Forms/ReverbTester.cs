@@ -46,6 +46,24 @@ namespace sb_editor.Forms
             }
         }
 
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void ReverbTester_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //Check the way the form is closing
+            if (DialogResult == DialogResult.OK)
+            {
+                SaveReverbData();
+            }
+            else
+            {
+                //Ask user what wants to do
+                if (MessageBox.Show(string.Format("Save Changes to : '{0}' ?", currentReverbFile.TextFileName), Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    TextFiles.WriteReverbFile(currentReverbFile, Path.Combine(GlobalPrefs.ProjectFolder, "Reverbs", currentReverbFile.TextFileName + ".txt"));
+                }
+            }
+        }
+
         //*===============================================================================================
         //* ListBox
         //*===============================================================================================
@@ -293,6 +311,12 @@ namespace sb_editor.Forms
                 PCAudioDll.LoadSoundBank(filePath);
                 PCAudioDll.PlaySfx(0, cutoff_frequency);
             }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void BtnOK_Click(object sender, EventArgs e)
+        {
+            Close();
         }
 
         //*===============================================================================================
