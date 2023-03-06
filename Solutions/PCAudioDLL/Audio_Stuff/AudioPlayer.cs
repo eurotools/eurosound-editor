@@ -193,12 +193,14 @@ namespace PCAudioDLL.Audio_Stuff
                             //Add SFX samples to the buffer
                             soundToPlay.AddSamples(sampleData.EncodedData, 0, sampleData.EncodedData.Length);
 
+                            VolumeSampleProvider volumeProvider = new VolumeSampleProvider(soundToPlay.ToSampleProvider()) { Volume = audioMaths.GetVolume(sampleInfo) };
+
                             //Init new voice
                             int vIndex = PCAudioDll.pcOutVoices.RequestVoice(sampleData.Flags == 1, PCAudioDll.outputConsole);
 
                             //Play Sample
                             indexBuff.Add(vIndex, soundToPlay);
-                            _waveOut.Init(soundToPlay);
+                            _waveOut.Init(volumeProvider);
                             _waveOut.Play();
                             _waveOut.Volume = sfxSample.MasterVolume;
                             if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Polyphonic) & 1) == 0)
