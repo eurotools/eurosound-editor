@@ -1,4 +1,6 @@
-﻿using sb_editor.Objects;
+﻿using ESUtils;
+using PCAudioDLL;
+using sb_editor.Objects;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -10,6 +12,7 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class ReverbTester : Form
     {
+        internal readonly ProjProperties projectSettings;
         private ReverbFile currentReverbFile;
         private bool askSaveChanges = false;
 
@@ -17,6 +20,12 @@ namespace sb_editor.Forms
         public ReverbTester()
         {
             InitializeComponent();
+
+            string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
+            if (File.Exists(projectPropertiesFile))
+            {
+                projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -260,6 +269,25 @@ namespace sb_editor.Forms
                         break;
                     }
                 }
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void btnPlayTest_Click(object sender, EventArgs e)
+        {
+            //Get output folder & name
+            string outputFilePath = CommonFunctions.GetSoundbankOutPath(projectSettings, "PC", "English");
+            string fileName = string.Format("HC{0:X6}.SFX", CommonFunctions.GetSfxName((int)Enumerations.Language.English, 0xFFFE));
+
+            //Call DLL
+            string filePath = Path.Combine(outputFilePath, fileName);
+            if (File.Exists(filePath))
+            {
+                if (PCAudioDll.IsSoundBankLoaded(0xFFFE))
+                {
+                    PCAudioDll.UnloadSoundbank();
+                }
+                PCAudioDll.PlaySfx(0);
             }
         }
 
