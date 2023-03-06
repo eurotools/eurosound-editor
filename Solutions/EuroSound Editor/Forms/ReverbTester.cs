@@ -279,6 +279,9 @@ namespace sb_editor.Forms
             string outputFilePath = CommonFunctions.GetSoundbankOutPath(projectSettings, "PC", "English");
             string fileName = string.Format("HC{0:X6}.SFX", CommonFunctions.GetSfxName((int)Enumerations.Language.English, 0xFFFE));
 
+            //Calculate Effect values
+            int cutoff_frequency = (int)(300 + (22050 - 300) * decimal.Divide(trkBarLowPassFilter.Value, trkBarLowPassFilter.Maximum));
+
             //Call DLL
             string filePath = Path.Combine(outputFilePath, fileName);
             if (File.Exists(filePath))
@@ -288,7 +291,7 @@ namespace sb_editor.Forms
                     PCAudioDll.UnloadSoundbank();
                 }
                 PCAudioDll.LoadSoundBank(filePath);
-                PCAudioDll.PlaySfx(0);
+                PCAudioDll.PlaySfx(0, cutoff_frequency);
             }
         }
 

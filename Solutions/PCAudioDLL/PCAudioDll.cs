@@ -93,7 +93,7 @@ namespace PCAudioDLL
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static void PlaySfx(uint hashCode)
+        public static void PlaySfx(uint hashCode, int lowPassFilter = -1)
         {
             StopSfx = false;
             if (_waveOut.PlaybackState != PlaybackState.Playing)
@@ -107,11 +107,11 @@ namespace PCAudioDLL
                         //If false it will pick and play randomly one of the samples in the list. 
                         if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.MultiSample) & 1) == 0)
                         {
-                            audioPlayer.PlaySingleSfx(_waveOut, sfxSample, sfxStoredData);
+                            audioPlayer.PlaySingleSfx(_waveOut, sfxSample, sfxStoredData, lowPassFilter);
                         }
                         else
                         {
-                            audioPlayer.PlayMultiSampleSFX(_waveOut, sfxSample, sfxStoredData);
+                            audioPlayer.PlayMultiSampleSFX(_waveOut, sfxSample, sfxStoredData, lowPassFilter);
                         }
                     }
                     else
