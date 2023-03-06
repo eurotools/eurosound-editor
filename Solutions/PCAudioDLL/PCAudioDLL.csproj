@@ -47,6 +47,7 @@
     <Compile Include="Audio_Stuff\AudioMaths.cs" />
     <Compile Include="Audio_Stuff\AudioPlayer.cs" />
     <Compile Include="Audio_Stuff\LoopStream.cs" />
+    <Compile Include="Audio_Stuff\LowPassWaveProvider.cs" />
     <Compile Include="MusX_Objects\Sample.cs" />
     <Compile Include="MusX_Objects\SampleData.cs" />
     <Compile Include="MusX_Objects\SampleInfo.cs" />

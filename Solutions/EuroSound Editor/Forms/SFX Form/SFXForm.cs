@@ -365,10 +365,7 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnReverbTester_Click(object sender, EventArgs e)
         {
-            using (ReverbTester reverbForm = new ReverbTester())
-            {
-                reverbForm.ShowDialog();
-            }
+            OpenReverbTesterForm(DesktopLocation);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -675,6 +672,26 @@ namespace sb_editor.Forms
                     DesktopLocation = desktopLoc
                 };
                 hashCodesSelector.Show();
+            }
+            else
+            {
+                debuggerForm.Focus();
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        internal void OpenReverbTesterForm(Point desktopLoc)
+        {
+            Form debuggerForm = Application.OpenForms[nameof(ReverbTester)];
+            if (debuggerForm == null)
+            {
+                desktopLoc.X += 415;
+                desktopLoc.Y += 125;
+                ReverbTester reverbTesterForm = new ReverbTester()
+                {
+                    DesktopLocation = desktopLoc
+                };
+                reverbTesterForm.Show();
             }
             else
             {

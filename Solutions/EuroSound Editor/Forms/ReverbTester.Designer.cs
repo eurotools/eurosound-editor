@@ -148,6 +148,7 @@ namespace sb_editor.Forms
             this.btnPlayTest.TabIndex = 12;
             this.btnPlayTest.Text = "Play Test";
             this.btnPlayTest.UseVisualStyleBackColor = true;
+            this.btnPlayTest.Click += new System.EventHandler(this.BtnPlayTest_Click);
             // 
             // lblFilter2
             // 
@@ -408,7 +409,7 @@ namespace sb_editor.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ReverbTester";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Reverb Tester";
             this.Load += new System.EventHandler(this.ReverbTester_Load);
             this.tabCtrl.ResumeLayout(false);

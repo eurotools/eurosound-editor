@@ -11,7 +11,7 @@ namespace PCAudioDLL.Audio_Stuff
     public class AudioPlayer
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void PlaySingleSfx(WaveOut _waveOut, Sample sfxSample, List<SampleData> sfxStoredData)
+        internal void PlaySingleSfx(WaveOut _waveOut, Sample sfxSample, List<SampleData> sfxStoredData, int lowPassFilter)
         {
             AudioMaths audioMaths = new AudioMaths();
 
@@ -53,12 +53,20 @@ namespace PCAudioDLL.Audio_Stuff
                         //Add SFX samples to the buffer
                         soundToPlay.AddSamples(sampleData.EncodedData, 0, sampleData.EncodedData.Length);
                         VolumeSampleProvider volumeProvider = new VolumeSampleProvider(soundToPlay.ToSampleProvider()) { Volume = audioMaths.GetVolume(sampleInfo) };
+                        IWaveProvider wavProv = volumeProvider.ToWaveProvider();
+
+                        //Apply LowPass Filter If Required
+                        if (lowPassFilter > 0)
+                        {
+                            LowPassWaveProvider filter = new LowPassWaveProvider(volumeProvider, lowPassFilter);
+                            wavProv = filter.ToWaveProvider();
+                        }
 
                         //Init new voice
                         int vIndex = PCAudioDll.pcOutVoices.RequestVoice(sampleData.Flags == 1, PCAudioDll.outputConsole);
 
                         //Play Sample
-                        _waveOut.Init(volumeProvider);
+                        _waveOut.Init(wavProv);
                         _waveOut.Play();
                         _waveOut.Volume = sfxSample.MasterVolume;
                         while (soundToPlay.BufferedBytes > 0 && !PCAudioDll.StopSfx)
@@ -97,12 +105,20 @@ namespace PCAudioDLL.Audio_Stuff
                             Position = numSilenceSamples
                         };
                         VolumeSampleProvider volumeProvider = new VolumeSampleProvider(loop.ToSampleProvider()) { Volume = audioMaths.GetVolume(sampleInfo) };
+                        IWaveProvider wavProv = volumeProvider.ToWaveProvider();
+
+                        //Apply LowPass Filter If Required
+                        if (lowPassFilter > 0)
+                        {
+                            LowPassWaveProvider filter = new LowPassWaveProvider(volumeProvider, lowPassFilter);
+                            wavProv = filter.ToWaveProvider();
+                        }
 
                         //Init new voice
                         int vIndex = PCAudioDll.pcOutVoices.RequestVoice(sampleData.Flags == 1, PCAudioDll.outputConsole);
 
                         //Play Sample
-                        _waveOut.Init(volumeProvider);
+                        _waveOut.Init(wavProv);
                         _waveOut.Play();
                         _waveOut.Volume = sfxSample.MasterVolume;
                         while (_waveOut.PlaybackState == PlaybackState.Playing && !PCAudioDll.StopSfx)
@@ -126,7 +142,7 @@ namespace PCAudioDLL.Audio_Stuff
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void PlayMultiSampleSFX(WaveOut _waveOut, Sample sfxSample, List<SampleData> sfxStoredData)
+        internal void PlayMultiSampleSFX(WaveOut _waveOut, Sample sfxSample, List<SampleData> sfxStoredData, int lowPassFilter)
         {
             AudioMaths audioMaths = new AudioMaths();
             new Thread(() =>
@@ -193,13 +209,21 @@ namespace PCAudioDLL.Audio_Stuff
                             //Add SFX samples to the buffer
                             soundToPlay.AddSamples(sampleData.EncodedData, 0, sampleData.EncodedData.Length);
                             VolumeSampleProvider volumeProvider = new VolumeSampleProvider(soundToPlay.ToSampleProvider()) { Volume = audioMaths.GetVolume(sampleInfo) };
+                            IWaveProvider wavProv = volumeProvider.ToWaveProvider();
+
+                            //Apply LowPass Filter If Required
+                            if (lowPassFilter > 0)
+                            {
+                                LowPassWaveProvider filter = new LowPassWaveProvider(volumeProvider, lowPassFilter);
+                                wavProv = filter.ToWaveProvider();
+                            }
 
                             //Init new voice
                             int vIndex = PCAudioDll.pcOutVoices.RequestVoice(sampleData.Flags == 1, PCAudioDll.outputConsole);
 
                             //Play Sample
                             indexBuff.Add(vIndex, soundToPlay);
-                            _waveOut.Init(volumeProvider);
+                            _waveOut.Init(wavProv);
                             _waveOut.Play();
                             _waveOut.Volume = sfxSample.MasterVolume;
                             if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Polyphonic) & 1) == 0)
