@@ -37,7 +37,7 @@ namespace PCAudioDLL
                         MaxVoices = BReader.ReadSByte(),
                         Priority = BReader.ReadSByte(),
                         Ducker = BReader.ReadSByte(),
-                        MasterVolume = BReader.ReadSByte()
+                        MasterVolume = BReader.ReadSByte() / 100.0f
                     };
 
                     //Read flags and sample pool
