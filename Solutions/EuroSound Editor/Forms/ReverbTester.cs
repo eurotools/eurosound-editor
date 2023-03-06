@@ -273,7 +273,7 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void btnPlayTest_Click(object sender, EventArgs e)
+        private void BtnPlayTest_Click(object sender, EventArgs e)
         {
             //Get output folder & name
             string outputFilePath = CommonFunctions.GetSoundbankOutPath(projectSettings, "PC", "English");
@@ -287,6 +287,7 @@ namespace sb_editor.Forms
                 {
                     PCAudioDll.UnloadSoundbank();
                 }
+                PCAudioDll.LoadSoundBank(filePath);
                 PCAudioDll.PlaySfx(0);
             }
         }

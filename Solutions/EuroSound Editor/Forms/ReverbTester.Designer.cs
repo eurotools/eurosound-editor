@@ -148,7 +148,7 @@ namespace sb_editor.Forms
             this.btnPlayTest.TabIndex = 12;
             this.btnPlayTest.Text = "Play Test";
             this.btnPlayTest.UseVisualStyleBackColor = true;
-            this.btnPlayTest.Click += new System.EventHandler(this.btnPlayTest_Click);
+            this.btnPlayTest.Click += new System.EventHandler(this.BtnPlayTest_Click);
             // 
             // lblFilter2
             // 
