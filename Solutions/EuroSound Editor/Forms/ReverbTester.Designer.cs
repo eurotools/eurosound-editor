@@ -383,6 +383,7 @@ namespace sb_editor.Forms
             this.btnOK.TabIndex = 3;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
+            this.btnOK.Click += new System.EventHandler(this.BtnOK_Click);
             // 
             // lblHashCode
             // 
@@ -411,6 +412,7 @@ namespace sb_editor.Forms
             this.Name = "ReverbTester";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Reverb Tester";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ReverbTester_FormClosing);
             this.Load += new System.EventHandler(this.ReverbTester_Load);
             this.tabCtrl.ResumeLayout(false);
             this.grbMain.ResumeLayout(false);
