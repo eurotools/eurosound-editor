@@ -97,7 +97,7 @@ namespace PCAudioDLL
         public static void PlaySfx(uint hashCode, int lowPassFilter = -1)
         {
             StopSfx = false;
-            if (_waveOut.PlaybackState != PlaybackState.Playing)
+            if (_waveOut.PlaybackState != PlaybackState.Playing && PolyPhonicVoices.Count == 0)
             {
                 AudioPlayer audioPlayer = new AudioPlayer();
                 if (sfxSamples.ContainsKey(hashCode))
