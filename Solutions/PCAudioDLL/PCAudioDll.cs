@@ -13,6 +13,7 @@ namespace PCAudioDLL
     //-------------------------------------------------------------------------------------------------------------------------------
     public static class PCAudioDll
     {
+        internal static Dictionary<int, WaveOut> PolyPhonicVoices = new Dictionary<int, WaveOut>();
         public static SoundbankHeader soundBankHeaderData = new SoundbankHeader();
         public static SortedDictionary<uint, Sample> sfxSamples;
         public static List<SampleData> sfxStoredData;
@@ -111,7 +112,14 @@ namespace PCAudioDLL
                         }
                         else
                         {
-                            audioPlayer.PlayMultiSampleSFX(_waveOut, sfxSample, sfxStoredData, lowPassFilter);
+                            if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Polyphonic) & 1) == 1)
+                            {
+                                audioPlayer.PlayPolyPhonicSound(sfxSample, sfxStoredData, lowPassFilter);
+                            }
+                            else
+                            {
+                                audioPlayer.PlayMultiSampleSFX(_waveOut, sfxSample, sfxStoredData, lowPassFilter);
+                            }
                         }
                     }
                     else
@@ -138,6 +146,23 @@ namespace PCAudioDLL
             outputConsole.TxtConsole = outputControl;
             outputConsole.WriteLine("Debug Console Initialised!");
             outputConsole.WriteLine("5.1 Mixer Initialise");
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        internal static void StopPolyPhonicAndClear()
+        {
+            //Stop All and clear
+            if (PolyPhonicVoices.Count > 0)
+            {
+                foreach (KeyValuePair<int, WaveOut> outVoice in PolyPhonicVoices)
+                {
+                    outVoice.Value.Stop();
+                    outVoice.Value.Dispose();
+                    pcOutVoices.PreCloseVoice(outVoice.Key, outputConsole);
+                    pcOutVoices.CloseVoice(outVoice.Key);
+                }
+                PolyPhonicVoices.Clear();
+            }
         }
     }
 

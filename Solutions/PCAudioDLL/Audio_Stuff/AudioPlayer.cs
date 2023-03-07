@@ -67,8 +67,8 @@ namespace PCAudioDLL.Audio_Stuff
 
                         //Play Sample
                         _waveOut.Init(wavProv);
-                        _waveOut.Play();
                         _waveOut.Volume = sfxSample.MasterVolume;
+                        _waveOut.Play();
                         while (soundToPlay.BufferedBytes > 0 && !PCAudioDll.StopSfx)
                         {
                             Thread.Sleep(1);
@@ -119,8 +119,8 @@ namespace PCAudioDLL.Audio_Stuff
 
                         //Play Sample
                         _waveOut.Init(wavProv);
-                        _waveOut.Play();
                         _waveOut.Volume = sfxSample.MasterVolume;
+                        _waveOut.Play();
                         while (_waveOut.PlaybackState == PlaybackState.Playing && !PCAudioDll.StopSfx)
                         {
                             Thread.Sleep(1);
@@ -224,55 +224,126 @@ namespace PCAudioDLL.Audio_Stuff
                             //Play Sample
                             indexBuff.Add(vIndex, soundToPlay);
                             _waveOut.Init(wavProv);
-                            _waveOut.Play();
                             _waveOut.Volume = sfxSample.MasterVolume;
-                            if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Polyphonic) & 1) == 0)
+                            _waveOut.Play();
+                            while (soundToPlay.BufferedBytes > exitAt && !PCAudioDll.StopSfx)
                             {
-                                while (soundToPlay.BufferedBytes > exitAt && !PCAudioDll.StopSfx)
-                                {
-                                    Thread.Sleep(1);
-                                }
-
-                                //Stop and remove
-                                soundToPlay.ClearBuffer();
-
-                                //Close Voice
-                                PCAudioDll.pcOutVoices.PreCloseVoice(vIndex, PCAudioDll.outputConsole);
-                                PCAudioDll.pcOutVoices.CloseVoice(vIndex);
+                                Thread.Sleep(1);
                             }
+
+                            //Stop and remove
+                            soundToPlay.ClearBuffer();
+
+                            //Close Voice
+                            PCAudioDll.pcOutVoices.PreCloseVoice(vIndex, PCAudioDll.outputConsole);
+                            PCAudioDll.pcOutVoices.CloseVoice(vIndex);
+                        }
+                    }
+                } while (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Loop) & 1) == 1 && !PCAudioDll.StopSfx);
+            })
+            {
+                IsBackground = true
+            }.Start();
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        internal void PlayPolyPhonicSound(Sample sfxSample, List<SampleData> sfxStoredData, int lowPassFilter)
+        {
+            Random random = new Random();
+            AudioMaths audioMaths = new AudioMaths();
+            new Thread(() =>
+            {
+                do
+                {
+                    //Randomize list
+                    if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Shuffled) & 1) == 1)
+                    {
+                        sfxSample.samplesList.Shuffle();
+                    }
+
+                    foreach (SampleInfo sampleInfo in sfxSample.samplesList)
+                    {
+                        if (PCAudioDll.StopSfx)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            SampleData sampleData = sfxStoredData[sampleInfo.FileRef];
+                            WaveFormat waveFormat = new WaveFormat(audioMaths.SemitonesToFreq(sampleData.Frequency, audioMaths.GetPitch(sampleInfo)), 16, 1);
+
+                            //Check Inter-Sample Delay
+                            int numSilenceSamples = 0;
+                            if (sfxSample.MinDelay >= 0 && sfxSample.MaxDelay > 0)
+                            {
+                                float delay = random.Next(sfxSample.MinDelay, sfxSample.MaxDelay) / 1000.0f;
+                                if (delay > 0)
+                                {
+                                    numSilenceSamples = (int)(waveFormat.SampleRate * delay) * 2;
+                                    byte[] pcmData = new byte[sampleData.EncodedData.Length + numSilenceSamples];
+                                    Buffer.BlockCopy(sampleData.EncodedData, 0, pcmData, numSilenceSamples, sampleData.EncodedData.Length);
+                                    sampleData.EncodedData = pcmData;
+                                }
+                            }
+
+                            //Create Provider
+                            RawSourceWaveStream provider = new RawSourceWaveStream(new MemoryStream(sampleData.EncodedData), waveFormat);
+                            LoopStream loop = new LoopStream(provider, sampleData.LoopStartOffset)
+                            {
+                                EnableLooping = sampleData.Flags == 1,
+                                Position = numSilenceSamples
+                            };
+                            VolumeSampleProvider volumeProvider = new VolumeSampleProvider(loop.ToSampleProvider()) { Volume = audioMaths.GetVolume(sampleInfo) };
+                            IWaveProvider wavProv = volumeProvider.ToWaveProvider();
+
+                            //Apply LowPass Filter If Required
+                            if (lowPassFilter > 0)
+                            {
+                                LowPassWaveProvider filter = new LowPassWaveProvider(volumeProvider, lowPassFilter);
+                                wavProv = filter.ToWaveProvider();
+                            }
+
+                            //Init new voice
+                            int vIndex = PCAudioDll.pcOutVoices.RequestVoice(sampleData.Flags == 1, PCAudioDll.outputConsole);
+
+                            //Play Sample
+                            WaveOut _PolyWaveOut = new WaveOut();
+                            _PolyWaveOut.Init(wavProv);
+                            _PolyWaveOut.Volume = sfxSample.MasterVolume;
+                            PCAudioDll.PolyPhonicVoices.Add(vIndex, _PolyWaveOut);
                         }
                     }
 
-                    //Check if there are playing
-                    if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Polyphonic) & 1) == 1)
+                    //Play all together
+                    foreach(KeyValuePair<int, WaveOut> audio in PCAudioDll.PolyPhonicVoices)
                     {
-                        bool voicesArePlaying = true;
-                        while (voicesArePlaying && !PCAudioDll.StopSfx)
-                        {
-                            foreach (KeyValuePair<int, BufferedWaveProvider> outVoice in indexBuff)
-                            {
-                                if (outVoice.Value.BufferedBytes == 0)
-                                {
-                                    voicesArePlaying = false;
-
-                                    //Close Voice
-                                    PCAudioDll.pcOutVoices.PreCloseVoice(outVoice.Key, PCAudioDll.outputConsole);
-                                    PCAudioDll.pcOutVoices.CloseVoice(outVoice.Key);
-                                    outVoice.Value.ClearBuffer();
-                                }
-                                else
-                                {
-                                    voicesArePlaying = true;
-                                    break;
-                                }
-                            }
-                        };
-
-                        //Stop and remove
-                        _waveOut.Stop();
-                        indexBuff.Clear();
+                        audio.Value.Play();
                     }
 
+                    //Check if there are playing
+                    bool voicesArePlaying = true;
+                    while (voicesArePlaying && !PCAudioDll.StopSfx)
+                    {
+                        foreach (KeyValuePair<int, WaveOut> outVoice in PCAudioDll.PolyPhonicVoices)
+                        {
+                            if (outVoice.Value.PlaybackState == PlaybackState.Stopped)
+                            {
+                                voicesArePlaying = false;
+
+                                //Close Voice
+                                PCAudioDll.pcOutVoices.PreCloseVoice(outVoice.Key, PCAudioDll.outputConsole);
+                                PCAudioDll.pcOutVoices.CloseVoice(outVoice.Key);
+                            }
+                            else
+                            {
+                                voicesArePlaying = true;
+                                break;
+                            }
+                        }
+                    };
+
+                    //Stop all and clear
+                    PCAudioDll.StopPolyPhonicAndClear();
                 } while (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Loop) & 1) == 1 && !PCAudioDll.StopSfx);
             })
             {
