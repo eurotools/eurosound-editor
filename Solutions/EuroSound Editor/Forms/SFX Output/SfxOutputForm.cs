@@ -3,7 +3,6 @@ using sb_editor.Audio_Classes;
 using sb_editor.Classes;
 using sb_editor.Objects;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;

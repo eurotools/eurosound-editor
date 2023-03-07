@@ -407,27 +407,40 @@ namespace sb_editor
                 // show the input form and check if the user clicked OK
                 if (inputForm.ShowDialog() == DialogResult.OK)
                 {
-                    // ensure is not duplicated
-                    if (temporalObj.MemoryMaps.IndexOf(inputForm.txtInputData.Text) == -1)
+                    //Check if we exceed the limit of memory maps
+                    if (temporalObj.MemoryMaps.Count < 8)
                     {
-                        lvwAvailableMemSlots.Items.Add(new ListViewItem(new string[] { inputForm.txtInputData.Text, "0" }));
-                        temporalObj.MemoryMaps.Add(inputForm.txtInputData.Text);
-
-                        //Add the new value to all platforms
-                        foreach (KeyValuePair<string, PlatformData> platformData in temporalObj.platformData)
+                        // ensure is not duplicated
+                        if (temporalObj.MemoryMaps.IndexOf(inputForm.txtInputData.Text) == -1)
                         {
-                            platformData.Value.MemoryMapsSize.Add(1024);
+
+                            lvwAvailableMemSlots.Items.Add(new ListViewItem(new string[] { inputForm.txtInputData.Text, "0" }));
+                            temporalObj.MemoryMaps.Add(inputForm.txtInputData.Text);
+
+                            //Add the new value to all platforms
+                            foreach (KeyValuePair<string, PlatformData> platformData in temporalObj.platformData)
+                            {
+                                platformData.Value.MemoryMapsSize.Add(1024);
+                            }
+
+                            //Update UI
+                            UpdateMemMapsComboboxes();
+                            CboMemSlotFormat_SelectedIndexChanged(null, null);
+
+                            //Add Memory Map to combobox
+                            if (!cboDefaultMemMap.Items.Contains(inputForm.txtInputData.Text))
+                            {
+                                cboDefaultMemMap.Items.Add(inputForm.txtInputData.Text);
+                            }
                         }
-
-                        //Update UI
-                        UpdateMemMapsComboboxes();
-                        CboMemSlotFormat_SelectedIndexChanged(null, null);
-
-                        //Add Memory Map to combobox
-                        if (!cboDefaultMemMap.Items.Contains(inputForm.txtInputData.Text))
+                        else
                         {
-                            cboDefaultMemMap.Items.Add(inputForm.txtInputData.Text);
+                            MessageBox.Show("This Memory-Slot Name is used. Pick another!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Limit of 8 Memory-Slots reached.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
                 }
             }

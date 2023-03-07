@@ -129,13 +129,13 @@ namespace sb_editor.HashCodes
         internal Dictionary<string, string[]> GetSoundBankSFXsDict()
         {
             Dictionary<string, string[]> SoundBankSFXs = new Dictionary<string, string[]>();
-            
+
             string[] soundBankFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks"), "*.txt", SearchOption.TopDirectoryOnly);
             for (int i = 0; i < soundBankFiles.Length; i++)
             {
                 HashSet<string> sbSFXs = new HashSet<string>();
                 SoundBank sbDataBases = TextFiles.ReadSoundbankFile(soundBankFiles[i]);
-                for(int j = 0; j < sbDataBases.DataBases.Length; j++)
+                for (int j = 0; j < sbDataBases.DataBases.Length; j++)
                 {
                     string dbFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", sbDataBases.DataBases[j] + ".txt");
                     DataBase dbSfx = TextFiles.ReadDataBaseFile(dbFilePath);

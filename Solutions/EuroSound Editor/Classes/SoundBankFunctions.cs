@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using static ESUtils.Enumerations;
 
 namespace sb_editor.Classes
@@ -292,7 +291,7 @@ namespace sb_editor.Classes
                     string sfxName = sbSfxs.SFXs[j].TrimStart(Path.DirectorySeparatorChar) + ".txt";
                     string sfxLabel = platform + "\\" + sfxName;
                     string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", sfxLabel);
-                    
+
                     // If the file does not exist in the specified platform folder, check the root SFXs folder
                     if (!File.Exists(filePath))
                     {
