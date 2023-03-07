@@ -54,7 +54,7 @@ namespace sb_editor.Forms
             {
                 SaveReverbData();
             }
-            else
+            else if (currentReverbFile != null)
             {
                 //Ask user what wants to do
                 if (MessageBox.Show(string.Format("Save Changes to : '{0}' ?", currentReverbFile.TextFileName), Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
