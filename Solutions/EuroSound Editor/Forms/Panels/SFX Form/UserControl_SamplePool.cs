@@ -534,9 +534,10 @@ namespace sb_editor.Panels
                 int selectedIndex = lstSamples.SelectedIndex;
 
                 // Remove all the selected items from the list
-                while (lstSamples.SelectedItems.Count > 0)
+                for (int i = lstSamples.SelectedIndices.Count - 1; i >= 0; i--)
                 {
-                    lstSamples.Items.Remove(lstSamples.SelectedItems[0]);
+                    int idx = lstSamples.SelectedIndices[i];
+                    lstSamples.Items.RemoveAt(idx);
                 }
 
                 // If the index of the previously selected item is still within the range of the list, set it as the currently selected item again
