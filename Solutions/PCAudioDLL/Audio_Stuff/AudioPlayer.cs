@@ -23,7 +23,7 @@ namespace PCAudioDLL.Audio_Stuff
                 {
                     Random random = new Random();
                     SampleInfo sampleInfo = sfxSample.samplesList[random.Next(sfxSample.samplesList.Count)];
-                    if (sampleInfo.FileRef <= sfxStoredData.Count)
+                    if (sampleInfo.FileRef < sfxStoredData.Count)
                     {
                         SampleData sampleData = sfxStoredData[sampleInfo.FileRef];
                         WaveFormat waveFormat = new WaveFormat(audioMaths.SemitonesToFreq(sampleData.Frequency, audioMaths.GetPitch(sampleInfo)), 16, 1);
