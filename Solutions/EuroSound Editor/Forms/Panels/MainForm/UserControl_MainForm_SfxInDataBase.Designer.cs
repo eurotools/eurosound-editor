@@ -159,6 +159,7 @@ namespace sb_editor.Panels
             this.mnuMultiEditor.Name = "mnuMultiEditor";
             this.mnuMultiEditor.Size = new System.Drawing.Size(180, 22);
             this.mnuMultiEditor.Text = "Multi Editor";
+            this.mnuMultiEditor.Click += new System.EventHandler(this.MnuMultiEditor_Click);
             // 
             // lblSfxCount
             // 
