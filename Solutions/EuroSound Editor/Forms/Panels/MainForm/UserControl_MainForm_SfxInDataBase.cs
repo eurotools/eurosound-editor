@@ -172,6 +172,15 @@ namespace sb_editor.Panels
             RemoveFromDataBase();
         }
 
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void MnuMultiEditor_Click(object sender, System.EventArgs e)
+        {
+            using (MultiEditor multiEdit = new MultiEditor(lstSfxInDataBase.SelectedItems.OfType<string>().ToArray()))
+            {
+                multiEdit.ShowDialog();
+            }
+        }
+
         //*===============================================================================================
         //* FUNCTIONS
         //*===============================================================================================
