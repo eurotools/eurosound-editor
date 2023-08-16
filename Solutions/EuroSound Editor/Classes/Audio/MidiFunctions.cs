@@ -76,7 +76,7 @@ namespace sb_editor.Audio_Classes
             string[] fileData = File.ReadAllLines(midiTextFilePath);
             for (int i = 0; i < fileData.Length; i++)
             {
-                if (fileData[i].Contains(";") && !fileData[i].Contains("ms */ +c4"))
+                if (fileData[i].Contains("ms */ +") && !fileData[i].Contains("ms */ +c4"))
                 {
                     NotesArray.Add(fileData[i]);
                 }
@@ -93,7 +93,7 @@ namespace sb_editor.Audio_Classes
             string[] fileData = File.ReadAllLines(midiTextFilePath);
             for (int i = 0; i < fileData.Length; i++)
             {
-                if (fileData[i].Trim().StartsWith("/*"))
+                if (fileData[i].Contains("*/   text \""))
                 {
                     TextsArray.Add(fileData[i]);
                 }
