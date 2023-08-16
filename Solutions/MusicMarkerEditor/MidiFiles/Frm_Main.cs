@@ -27,7 +27,8 @@ namespace MarkersEditor
         //-------------------------------------------------------------------------------------------------------------------------------
         private void Form1_Load(object sender, EventArgs e)
         {
-            tempoMap = midiFile.GetTempoMap();
+            tempoMap = TempoMap.Create(Tempo.FromBeatsPerMinute(110), new TimeSignature(1, 4));
+            midiFile.ReplaceTempoMap(tempoMap);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
