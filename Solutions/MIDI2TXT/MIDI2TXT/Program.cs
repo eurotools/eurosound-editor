@@ -45,7 +45,7 @@ namespace MIDI2TXT
                         midiFileData.HeaderLength = BinaryFunctions.FlipInt32(reader.ReadInt32(), true);
                         midiFileData.FormatType = BinaryFunctions.FlipShort(reader.ReadInt16(), true);
                         midiFileData.NumTracks = BinaryFunctions.FlipShort(reader.ReadInt16(), true);
-                        midiFileData.Division = BinaryFunctions.FlipShort(reader.ReadInt16(), true);
+                        midiFileData.PulsesPerQuarterNote = BinaryFunctions.FlipShort(reader.ReadInt16(), true);
 
                         // Variable para llevar el tiempo acumulado en milisegundos
                         float eventTimeMs = 0;
@@ -100,7 +100,7 @@ namespace MIDI2TXT
                                     else if (eventType == 0x90) // Note On event
                                     {
                                         // Calcula los milisegundos para el evento actual
-                                        eventTimeMs = (float)Math.Round(deltaTime * (60000.0f / (midiFileData.BPM * midiFileData.Division)));
+                                        eventTimeMs = (float)Math.Round(DeltaToMilliseconds(deltaTime, midiFileData.PulsesPerQuarterNote, midiFileData.TempoPerQuarterNote));
                                         accumulatedTimeMs = eventTimeMs;
 
                                         //Leer tipo de nota y número
@@ -120,7 +120,8 @@ namespace MIDI2TXT
                                     else if (eventType == 0x80) // Note Off event
                                     {
                                         // Calcula los milisegundos para el evento actual
-                                        eventTimeMs = (float)Math.Round(accumulatedTimeMs + (deltaTime * (60000.0f / (midiFileData.BPM * midiFileData.Division))));
+                                        eventTimeMs = (float)Math.Round(DeltaToMilliseconds(deltaTime, midiFileData.PulsesPerQuarterNote, midiFileData.TempoPerQuarterNote));
+
 
                                         //Leer tipo de nota y número
                                         byte channelAndType = reader.ReadByte();
@@ -155,7 +156,7 @@ namespace MIDI2TXT
                         writter.WriteLine("  version {0} // {1}", midiFileData.FormatType, "pattern multichanneltrack");
                     }
                     writter.WriteLine("  // {0} track", 1);
-                    writter.WriteLine("  unit {0} // is {1}/{2}", midiFileData.Division, midiFileData.TimeSignature.Numerator, midiFileData.TimeSignature.Denominator);
+                    writter.WriteLine("  unit {0} // is {1}/{2}", midiFileData.PulsesPerQuarterNote, midiFileData.TimeSignature.Numerator, midiFileData.TimeSignature.Denominator);
                     writter.WriteLine("end mthd");
                     writter.WriteLine(string.Empty);
                     writter.WriteLine("mtrk(1)  // track 1");
@@ -184,6 +185,16 @@ namespace MIDI2TXT
             } while ((currentByte & 0x80) != 0);
 
             return value;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private static float DeltaToMilliseconds(int deltaTime, int Division, uint TempoPerQuarterNote)
+        {
+            float microSeconds_per_tick = TempoPerQuarterNote / Division;
+            float seconds_per_tick = microSeconds_per_tick / 1000000.0f;
+            float milliseconds = (deltaTime * seconds_per_tick) * 1000.0f;
+
+            return milliseconds;
         }
     }
 
