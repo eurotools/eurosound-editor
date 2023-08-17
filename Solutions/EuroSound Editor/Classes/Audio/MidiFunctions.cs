@@ -76,7 +76,7 @@ namespace sb_editor.Audio_Classes
             string[] fileData = File.ReadAllLines(midiTextFilePath);
             for (int i = 0; i < fileData.Length; i++)
             {
-                if (fileData[i].Contains("ms */ +") && !fileData[i].Contains("ms */ +c4"))
+                if (Regex.IsMatch(fileData[i], @"ms\s*[*\/].*[+]") && fileData[i].IndexOf("+c4", StringComparison.OrdinalIgnoreCase) < 0)
                 {
                     NotesArray.Add(fileData[i]);
                 }
@@ -93,7 +93,7 @@ namespace sb_editor.Audio_Classes
             string[] fileData = File.ReadAllLines(midiTextFilePath);
             for (int i = 0; i < fileData.Length; i++)
             {
-                if (fileData[i].Contains("*/   text \""))
+                if (Regex.IsMatch(fileData[i], @"ms\s*[*\/].*text"))
                 {
                     TextsArray.Add(fileData[i]);
                 }
@@ -378,9 +378,10 @@ namespace sb_editor.Audio_Classes
         {
             //Try get milliseconds
             int start = lineToInspect.IndexOf("+") + 1;
+            int end = lineToInspect.IndexOf("$") - start;
 
             //Try to get the milliseconds value
-            string data = lineToInspect.Substring(start).Trim();
+            string data = lineToInspect.Substring(start, end).Trim();
             return data;
         }
     }
