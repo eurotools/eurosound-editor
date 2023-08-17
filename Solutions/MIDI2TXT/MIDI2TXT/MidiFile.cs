@@ -10,7 +10,7 @@ namespace MIDI2TXT
         internal int HeaderLength;
         internal int FormatType;
         internal int NumTracks;
-        internal int Division;
+        internal int PulsesPerQuarterNote;
         internal uint TempoPerQuarterNote;
         internal float BPM;
         internal TimeSignatureEvent TimeSignature = new TimeSignatureEvent();
