@@ -57,7 +57,6 @@ namespace sb_editor.Panels
                 RadiobtnReject.Checked = true;
             }
             nudPriority.Value = Math.Min(Math.Max(nudPriority.Minimum, sfxFile.Parameters.Priority), nudPriority.Maximum);
-            nudAlertness.Value = Math.Min(Math.Max(nudAlertness.Minimum, sfxFile.Parameters.Alertness), nudAlertness.Maximum);
             chkStealOnLouder.Checked = sfxFile.Parameters.StealOnAge;
             nudDucker.Value = Math.Min(Math.Max(nudDucker.Minimum, sfxFile.Parameters.Ducker), nudDucker.Maximum);
             nudDuckerLength.Value = Math.Min(Math.Max(nudDuckerLength.Minimum, sfxFile.Parameters.DuckerLength), nudDuckerLength.Maximum);
@@ -65,7 +64,6 @@ namespace sb_editor.Panels
             chkPauseInstant.Checked = sfxFile.Parameters.PauseInstant;
             chkUnPausable.Checked = sfxFile.Parameters.UnPausable;
             chkMusicType.Checked = sfxFile.Parameters.MusicType;
-            chkDoppler.Checked = sfxFile.Parameters.Doppler;
             chkOneInstancePerFrame.Checked = sfxFile.Parameters.OneInstancePerFrame;
             chkKillMeOwnGroup.Checked = sfxFile.Parameters.KillMeOwnGroup;
             chkIgnoreMasterVolume.Checked = sfxFile.Parameters.IgnoreMasterVolume;

@@ -34,7 +34,7 @@ namespace sb_editor.Forms
                 tabCtrl.Visible = false;
                 UserControl_SamplePool.Visible = false;
                 pnlOptions.Visible = false;
-                Height = 406;
+                Height = 426;
                 StartPosition = FormStartPosition.CenterParent;
                 btnDefSettings_Accept.Visible = true;
                 btnDefSettings_Cancel.Visible = true;
@@ -567,7 +567,6 @@ namespace sb_editor.Forms
                 sfxFileData.Parameters.Action1 = 1;
             }
             sfxFileData.Parameters.Priority = (int)UserControl_SFX_Parameters.nudPriority.Value;
-            sfxFileData.Parameters.Alertness = (int)UserControl_SFX_Parameters.nudAlertness.Value;
             sfxFileData.Parameters.StealOnAge = UserControl_SFX_Parameters.chkStealOnLouder.Checked;
             sfxFileData.Parameters.Ducker = (int)UserControl_SFX_Parameters.nudDucker.Value;
             sfxFileData.Parameters.DuckerLength = (int)UserControl_SFX_Parameters.nudDuckerLength.Value;
@@ -576,7 +575,6 @@ namespace sb_editor.Forms
             sfxFileData.Parameters.UnPausable = UserControl_SFX_Parameters.chkUnPausable.Checked;
             sfxFileData.Parameters.IgnoreMasterVolume = UserControl_SFX_Parameters.chkIgnoreMasterVolume.Checked;
             sfxFileData.Parameters.MusicType = UserControl_SFX_Parameters.chkMusicType.Checked;
-            sfxFileData.Parameters.Doppler = UserControl_SFX_Parameters.chkDoppler.Checked;
             sfxFileData.Parameters.OneInstancePerFrame = UserControl_SFX_Parameters.chkOneInstancePerFrame.Checked;
             sfxFileData.Parameters.KillMeOwnGroup = UserControl_SFX_Parameters.chkKillMeOwnGroup.Checked;
             return sfxFileData;
