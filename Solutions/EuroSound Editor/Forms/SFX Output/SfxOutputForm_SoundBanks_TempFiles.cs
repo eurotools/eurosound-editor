@@ -57,11 +57,23 @@ namespace sb_editor.Forms
                     {
                         sfxWritter.Write(Convert.ToSByte((sfxFlags >> i) & 1));
                     }
+
+                    //UserFlags
+                    for (int i = 0; i < 16; i++)
+                    {
+                        sfxWritter.Write(Convert.ToSByte((sfxData.Value.Parameters.UserFlags >> i) & 1));
+                    }
+
+                    sfxWritter.Write(sfxData.Value.Parameters.DopplerValue);
+                    sfxWritter.Write(sfxData.Value.Parameters.UserValue);
                 }
                 else
                 {
                     sfxWritter.Write((short)(((useDistanceCheck & 0xF) << 12) | ((sfxData.Value.Parameters.Group & 0xFFF) << 0)));
                     sfxWritter.Write((ushort)sbFunctions.GetFlags(sfxData.Value));
+                    sfxWritter.Write(sfxData.Value.Parameters.UserFlags);
+                    sfxWritter.Write(sfxData.Value.Parameters.DopplerValue);
+                    sfxWritter.Write(sfxData.Value.Parameters.UserValue);
                 }
 
                 //Calculate references
