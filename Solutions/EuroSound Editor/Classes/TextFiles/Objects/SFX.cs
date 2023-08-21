@@ -44,6 +44,11 @@ namespace sb_editor.Objects
         public bool IgnoreMasterVolume;
         public bool GroupStealReject;
         public bool UseGroupDistCheck;
+
+        //MusX V5
+        public sbyte DopplerValue;
+        public sbyte UserValue;
+        public ushort UserFlags;
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------

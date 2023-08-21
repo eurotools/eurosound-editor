@@ -36,7 +36,7 @@ namespace ESUtils
                     //--hashc[Hashcode for the current soundbank without the section prefix]--
                     binWriter.Write(fileHashCode);
                     //--version[Current version of the MusX file]--
-                    binWriter.Write(4);
+                    binWriter.Write(5);
                     //--fulls[Size of the whole file, in bytes. Unused. ]--
                     binWriter.Write(0);
                     //--Platform

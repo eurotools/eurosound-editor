@@ -38,7 +38,7 @@ namespace ESUtils
                     //--hashc[Hashcode for the current soundbank without the section prefix]--
                     binWriter.Write(fileHashCode);
                     //--offst[Constant offset to the next section,]--
-                    binWriter.Write(4);
+                    binWriter.Write(5);
                     //--fulls[Size of the whole file, in bytes. Unused. ]--
                     binWriter.Write(0);
                     //--Platform
