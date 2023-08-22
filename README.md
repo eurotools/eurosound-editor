@@ -13,3 +13,6 @@ Each version of EuroSound is compatible with some Eurocom games, these are the c
 
 ### EuroSound 3.60 ###
 - [x] Spyro: A Hero's Tail (SFX v4)
+
+### EuroSound 3.70 ###
+- [x] Robots 2005 (SFX v5)
