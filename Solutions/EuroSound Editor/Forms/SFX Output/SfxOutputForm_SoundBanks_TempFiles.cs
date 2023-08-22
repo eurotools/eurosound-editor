@@ -65,7 +65,7 @@ namespace sb_editor.Forms
                     }
 
                     sfxWritter.Write(sfxData.Value.Parameters.DopplerValue);
-                    sfxWritter.Write(sfxData.Value.Parameters.UserValue);
+                    sfxWritter.Write(sfxData.Value.Parameters.Alertness);
                 }
                 else
                 {
@@ -73,7 +73,7 @@ namespace sb_editor.Forms
                     sfxWritter.Write((ushort)sbFunctions.GetFlags(sfxData.Value));
                     sfxWritter.Write(sfxData.Value.Parameters.UserFlags);
                     sfxWritter.Write(sfxData.Value.Parameters.DopplerValue);
-                    sfxWritter.Write(sfxData.Value.Parameters.UserValue);
+                    sfxWritter.Write(sfxData.Value.Parameters.Alertness);
                 }
 
                 //Calculate references

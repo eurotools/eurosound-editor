@@ -47,7 +47,6 @@ namespace sb_editor.Objects
 
         //MusX V5
         public sbyte DopplerValue;
-        public sbyte UserValue;
         public ushort UserFlags;
     }
 
