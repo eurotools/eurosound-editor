@@ -577,6 +577,8 @@ namespace sb_editor.Forms
             sfxFileData.Parameters.MusicType = UserControl_SFX_Parameters.chkMusicType.Checked;
             sfxFileData.Parameters.OneInstancePerFrame = UserControl_SFX_Parameters.chkOneInstancePerFrame.Checked;
             sfxFileData.Parameters.KillMeOwnGroup = UserControl_SFX_Parameters.chkKillMeOwnGroup.Checked;
+            sfxFileData.Parameters.DopplerValue = (sbyte)UserControl_SFX_Parameters.nudDoppler.Value;
+            sfxFileData.Parameters.UserFlags = ushort.Parse(UserControl_SFX_Parameters.txtUserFlags.Text);
             return sfxFileData;
         }
 

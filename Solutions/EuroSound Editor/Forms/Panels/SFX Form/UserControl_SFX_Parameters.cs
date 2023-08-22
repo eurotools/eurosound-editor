@@ -1,4 +1,5 @@
 ﻿using sb_editor.Forms;
+using sb_editor.Forms.SFX_Form;
 using sb_editor.Objects;
 using System;
 using System.Media;
@@ -60,6 +61,8 @@ namespace sb_editor.Panels
             chkStealOnLouder.Checked = sfxFile.Parameters.StealOnAge;
             nudDucker.Value = Math.Min(Math.Max(nudDucker.Minimum, sfxFile.Parameters.Ducker), nudDucker.Maximum);
             nudDuckerLength.Value = Math.Min(Math.Max(nudDuckerLength.Minimum, sfxFile.Parameters.DuckerLength), nudDuckerLength.Maximum);
+            nudDoppler.Value = sfxFile.Parameters.DopplerValue;
+            txtUserFlags.Text = sfxFile.Parameters.UserFlags.ToString();
             chkUnderWater.Checked = sfxFile.Parameters.Outdoors;
             chkPauseInstant.Checked = sfxFile.Parameters.PauseInstant;
             chkUnPausable.Checked = sfxFile.Parameters.UnPausable;
@@ -161,6 +164,25 @@ namespace sb_editor.Panels
                 {
                     MessageBox.Show("Steal On Louder & Random Volume NOT allowed.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     chkStealOnLouder.Checked = false;
+                }
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void TxtUserFlags_Click(object sender, EventArgs e)
+        {
+            using(CustomFlags userFlagsForm = new CustomFlags())
+            {
+                //Set previous flags
+                if (int.TryParse(txtUserFlags.Text, out int flags))
+                {
+                    userFlagsForm.SetFlags(flags);
+                }
+
+                //Show form to user
+                if (userFlagsForm.ShowDialog() == DialogResult.OK)
+                {
+                    txtUserFlags.Text = userFlagsForm.GetFlags().ToString();
                 }
             }
         }

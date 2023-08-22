@@ -118,6 +118,12 @@ namespace sb_editor
                                 case "GROUPSTEALREJECT":
                                     sfxData.Parameters.GroupStealReject = Convert.ToBoolean(byte.Parse(lineData[1].Trim()));
                                     break;
+                                case "DOPPLERVALUE":
+                                    sfxData.Parameters.DopplerValue = Convert.ToSByte(lineData[1].Trim());
+                                    break;
+                                case "USERFLAGS":
+                                    sfxData.Parameters.UserFlags = Convert.ToUInt16(lineData[1].Trim());
+                                    break;
                             }
                             currentLine = sr.ReadLine().Trim();
                         }
@@ -285,6 +291,8 @@ namespace sb_editor
                 outputFile.WriteLine("KillMeOwnGroup  {0}", Convert.ToByte(sfxFile.Parameters.KillMeOwnGroup));
                 outputFile.WriteLine("IgnoreMasterVolume  {0}", Convert.ToByte(sfxFile.Parameters.IgnoreMasterVolume));
                 outputFile.WriteLine("GroupStealReject  {0}", Convert.ToByte(sfxFile.Parameters.GroupStealReject));
+                outputFile.WriteLine("DopplerValue  {0}", sfxFile.Parameters.DopplerValue);
+                outputFile.WriteLine("UserFlags  {0}", sfxFile.Parameters.UserFlags);
                 outputFile.WriteLine("#END");
                 outputFile.WriteLine(string.Empty);
                 if (!defaultsFile)
