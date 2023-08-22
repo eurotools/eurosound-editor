@@ -171,7 +171,7 @@ namespace sb_editor.Panels
         //-------------------------------------------------------------------------------------------------------------------------------
         private void TxtUserFlags_Click(object sender, EventArgs e)
         {
-            using(CustomFlags userFlagsForm = new CustomFlags())
+            using (CustomFlags userFlagsForm = new CustomFlags())
             {
                 //Set previous flags
                 if (int.TryParse(txtUserFlags.Text, out int flags))

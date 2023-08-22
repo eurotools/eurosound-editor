@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace sb_editor.Forms.SFX_Form
@@ -40,7 +34,7 @@ namespace sb_editor.Forms.SFX_Form
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnSearchList_Click(object sender, EventArgs e)
         {
-            if(openFileDialog.ShowDialog() == DialogResult.OK)
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 txtLabelsPath.Text = openFileDialog.FileName;
                 ReadLabelsList(openFileDialog.FileName);
