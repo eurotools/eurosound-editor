@@ -25,7 +25,7 @@ namespace sb_editor
         {
             if (DialogResult == DialogResult.OK && !string.IsNullOrEmpty(txtInputData.Text))
             {
-                Match match = Regex.Match(txtInputData.Text, "^[a-zA-Z0-9_]*$");
+                Match match = Regex.Match(txtInputData.Text, "^[a-zA-Z0-9_()]*$");
                 if (!match.Success)
                 {
                     e.Cancel = true;
