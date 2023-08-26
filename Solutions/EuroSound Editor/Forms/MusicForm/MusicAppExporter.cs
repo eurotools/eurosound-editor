@@ -319,7 +319,7 @@ namespace sb_editor.Forms
                     string sfxOutputFolder = CommonFunctions.GetSoundbankOutPath(outputPlatforms[j], projectSettings);
                     if (!string.IsNullOrEmpty(sfxOutputFolder) && Directory.Exists(sfxOutputFolder))
                     {
-                        string sfxOutputPath = Path.Combine(sfxOutputFolder, string.Format("_mus_mfx_{0}.SFX", filesQueue[i]).ToLower());
+                        string sfxOutputPath = Path.Combine(sfxOutputFolder, string.Format("_mus_mfx_mus_{0}.SFX", filesQueue[i]).ToLower());
                         if (File.Exists(soundMarkerFilePath) && File.Exists(soundSampleDataFilePath))
                         {
                             MusXBuild_MusicFile.BuildMusicFile(soundMarkerFilePath, soundSampleDataFilePath, sfxOutputPath, CommonFunctions.GetPlatformLabel(outputPlatforms[j]), CommonFunctions.GetFileHashCode(Enumerations.FileType.MusicFile, Enumerations.Language.English, musicFileData.HashCode));
