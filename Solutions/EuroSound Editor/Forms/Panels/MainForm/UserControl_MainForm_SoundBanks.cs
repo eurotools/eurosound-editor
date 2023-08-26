@@ -168,18 +168,27 @@ namespace sb_editor.Panels
                                 if (File.Exists(projectPropertiesFile))
                                 {
                                     ProjProperties projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
-                                    //Create new soundbank file
-                                    SoundBank soundBankFile = new SoundBank
-                                    {
-                                        HashCode = GlobalPrefs.SoundBankHashCodeNumber,
-                                        DataBases = new string[0],
-                                        MemoryMap = projectSettings.MemoryMaps[projectSettings.DefaultMemMap]
-                                    };
-                                    TextFiles.WriteSoundBankFile(filePath, soundBankFile);
-                                    GlobalPrefs.SoundBankHashCodeNumber++;
 
-                                    //Update UI
-                                    ProjectFileFunctions.UpdateSoundBanks((MainForm)Parent);
+                                    //Check if we have memory maps
+                                    if (projectSettings.MemoryMaps.Count > 0)
+                                    {
+                                        //Create new soundbank file
+                                        SoundBank soundBankFile = new SoundBank
+                                        {
+                                            HashCode = GlobalPrefs.SoundBankHashCodeNumber,
+                                            DataBases = new string[0],
+                                            MemoryMap = projectSettings.MemoryMaps[projectSettings.DefaultMemMap]
+                                        };
+                                        TextFiles.WriteSoundBankFile(filePath, soundBankFile);
+                                        GlobalPrefs.SoundBankHashCodeNumber++;
+
+                                        //Update UI
+                                        ProjectFileFunctions.UpdateSoundBanks((MainForm)Parent);
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Must Setup Memory Maps first!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    }
                                 }
                                 break;
                             }
