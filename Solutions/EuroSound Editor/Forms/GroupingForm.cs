@@ -89,17 +89,6 @@ namespace sb_editor.Forms
                 if (File.Exists(groupFilePath))
                 {
                     GroupFile groupFileData = TextFiles.ReadGroupsFile(groupFilePath);
-                    nudMaxVoices.Value = Math.Min(Math.Max(nudMaxVoices.Minimum, groupFileData.MaxVoices), nudMaxVoices.Maximum);
-                    nudPriority.Value = groupFileData.Priority;
-                    chkDistanceWhenTesting.Checked = groupFileData.UseDistCheck;
-                    if (groupFileData.Action1 == 0)
-                    {
-                        RadiobtnAction_Steal.Checked = true;
-                    }
-                    else
-                    {
-                        RadiobtnAction_Reject.Checked = true;
-                    }
 
                     //Add dependencies
                     lvwSFXsInGroup.Items.Clear();
@@ -115,6 +104,25 @@ namespace sb_editor.Forms
                     }
                     lvwSFXsInGroup.EndUpdate();
                     lblSFXsInGroup_Count.Text = string.Format("Total: {0}", lvwSFXsInGroup.Items.Count);
+
+                    //Update Controls
+                    nudMaxVoices.ValueChanged -= NudMaxVoices_ValueChanged;
+                    nudMaxVoices.Value = Math.Min(Math.Max(nudMaxVoices.Minimum, groupFileData.MaxVoices), nudMaxVoices.Maximum);
+                    nudMaxVoices.ValueChanged += NudMaxVoices_ValueChanged;
+
+                    nudPriority.ValueChanged -= NudPriority_ValueChanged;
+                    nudPriority.Value = groupFileData.Priority;
+                    nudPriority.ValueChanged += NudPriority_ValueChanged;
+
+                    chkDistanceWhenTesting.Checked = groupFileData.UseDistCheck;
+                    if (groupFileData.Action1 == 0)
+                    {
+                        RadiobtnAction_Steal.Checked = true;
+                    }
+                    else
+                    {
+                        RadiobtnAction_Reject.Checked = true;
+                    }
                 }
             }
         }
@@ -122,7 +130,7 @@ namespace sb_editor.Forms
         //*===============================================================================================
         //* AVAILABLE SFXs SECTION
         //*===============================================================================================
-        private void NudMaxChannels_SFXs_Click(object sender, EventArgs e)
+        private void NudMaxChannels_SFXs_ValueChanged(object sender, EventArgs e)
         {
             foreach (ListViewItem itemToModify in lvwAvailable_SFXs.SelectedItems)
             {
@@ -162,7 +170,10 @@ namespace sb_editor.Forms
         {
             if (lvwAvailable_SFXs.SelectedItems.Count > 0)
             {
+                nudMaxChannels_SFXs.ValueChanged -= NudMaxChannels_SFXs_ValueChanged;
                 nudMaxChannels_SFXs.Value = int.Parse(lvwAvailable_SFXs.SelectedItems[0].SubItems[1].Text);
+                nudMaxChannels_SFXs.ValueChanged += NudMaxChannels_SFXs_ValueChanged;
+
                 cboAvailableSFXs_Steal.SelectedItem = lvwAvailable_SFXs.SelectedItems[0].SubItems[2].Text;
             }
         }
@@ -170,7 +181,7 @@ namespace sb_editor.Forms
         //*===============================================================================================
         //* SFXs IN GROUP
         //*===============================================================================================
-        private void NudMaxChannels_Group_Click(object sender, EventArgs e)
+        private void NudMaxChannels_Group_ValueChanged(object sender, EventArgs e)
         {
             foreach (ListViewItem itemToModify in lvwSFXsInGroup.SelectedItems)
             {
@@ -210,7 +221,10 @@ namespace sb_editor.Forms
         {
             if (lvwSFXsInGroup.SelectedItems.Count > 0)
             {
+                nudMaxChannels_Group.ValueChanged -= NudMaxChannels_Group_ValueChanged;
                 nudMaxChannels_Group.Value = int.Parse(lvwSFXsInGroup.SelectedItems[0].SubItems[1].Text);
+                nudMaxChannels_Group.ValueChanged += NudMaxChannels_Group_ValueChanged;
+
                 cboSFXsInGroup_Steal.SelectedItem = lvwSFXsInGroup.SelectedItems[0].SubItems[2].Text;
             }
         }
@@ -413,7 +427,7 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void NudMaxVoices_Click(object sender, EventArgs e)
+        private void NudMaxVoices_ValueChanged(object sender, EventArgs e)
         {
             if (lstAvailableGroups.SelectedItems.Count == 1)
             {
@@ -448,7 +462,7 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void NudPriority_Click(object sender, EventArgs e)
+        private void NudPriority_ValueChanged(object sender, EventArgs e)
         {
             if (lstAvailableGroups.SelectedItems.Count == 1)
             {
