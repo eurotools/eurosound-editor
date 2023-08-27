@@ -130,11 +130,11 @@ namespace sb_editor.Forms
             this.nudMaxChannels_Group.Name = "nudMaxChannels_Group";
             this.nudMaxChannels_Group.Size = new System.Drawing.Size(53, 20);
             this.nudMaxChannels_Group.TabIndex = 3;
-            this.nudMaxChannels_Group.Click += new System.EventHandler(this.NudMaxChannels_Group_Click);
+            this.nudMaxChannels_Group.ValueChanged += new System.EventHandler(this.NudMaxChannels_Group_ValueChanged);
             // 
             // btnRemoveSFXsFromGroup
             // 
-            this.btnRemoveSFXsFromGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnRemoveSFXsFromGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRemoveSFXsFromGroup.Location = new System.Drawing.Point(6, 557);
             this.btnRemoveSFXsFromGroup.Name = "btnRemoveSFXsFromGroup";
@@ -190,8 +190,8 @@ namespace sb_editor.Forms
             // 
             // lvwSFXsInGroup
             // 
-            this.lvwSFXsInGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.lvwSFXsInGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvwSFXsInGroup.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Col_SfxGroup_Hashcode,
@@ -247,8 +247,8 @@ namespace sb_editor.Forms
             // 
             // lvwAvailable_SFXs
             // 
-            this.lvwAvailable_SFXs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.lvwAvailable_SFXs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvwAvailable_SFXs.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Col_AvailableSFXs_HashCode,
@@ -293,11 +293,11 @@ namespace sb_editor.Forms
             this.nudMaxChannels_SFXs.Name = "nudMaxChannels_SFXs";
             this.nudMaxChannels_SFXs.Size = new System.Drawing.Size(53, 20);
             this.nudMaxChannels_SFXs.TabIndex = 3;
-            this.nudMaxChannels_SFXs.Click += new System.EventHandler(this.NudMaxChannels_SFXs_Click);
+            this.nudMaxChannels_SFXs.ValueChanged += new System.EventHandler(this.NudMaxChannels_SFXs_ValueChanged);
             // 
             // btnAddSFXsToGroup
             // 
-            this.btnAddSFXsToGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnAddSFXsToGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAddSFXsToGroup.Location = new System.Drawing.Point(6, 557);
             this.btnAddSFXsToGroup.Name = "btnAddSFXsToGroup";
@@ -399,7 +399,7 @@ namespace sb_editor.Forms
             this.nudMaxVoices.Name = "nudMaxVoices";
             this.nudMaxVoices.Size = new System.Drawing.Size(86, 20);
             this.nudMaxVoices.TabIndex = 9;
-            this.nudMaxVoices.Click += new System.EventHandler(this.NudMaxVoices_Click);
+            this.nudMaxVoices.ValueChanged += new System.EventHandler(this.NudMaxVoices_ValueChanged);
             // 
             // nudPriority
             // 
@@ -409,7 +409,7 @@ namespace sb_editor.Forms
             this.nudPriority.Name = "nudPriority";
             this.nudPriority.Size = new System.Drawing.Size(86, 20);
             this.nudPriority.TabIndex = 11;
-            this.nudPriority.Click += new System.EventHandler(this.NudPriority_Click);
+            this.nudPriority.ValueChanged += new System.EventHandler(this.NudPriority_ValueChanged);
             // 
             // lblPriority
             // 
@@ -502,7 +502,7 @@ namespace sb_editor.Forms
             // 
             // lvwGroups
             // 
-            this.lvwGroups.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lvwGroups.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvwGroups.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Col_Label,
@@ -555,7 +555,7 @@ namespace sb_editor.Forms
             // 
             // lstAvailableGroups
             // 
-            this.lstAvailableGroups.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lstAvailableGroups.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lstAvailableGroups.FormattingEnabled = true;
             this.lstAvailableGroups.Location = new System.Drawing.Point(6, 294);
