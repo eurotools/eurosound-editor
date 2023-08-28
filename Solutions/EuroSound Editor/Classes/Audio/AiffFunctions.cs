@@ -34,11 +34,12 @@ namespace sb_editor.Audio_Classes
         //-------------------------------------------------------------------------------------------------------------------------------
         internal void AddLoopPoints(string filePath, int startPos, long endPos, int midiNote)
         {
-            long fileLength;
-
             //Append Chunck at the end of file
-            using (BinaryWriter binWriter = new BinaryWriter(File.Open(filePath, FileMode.Append, FileAccess.Write, FileShare.Read)))
+            using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Write, FileShare.Read))
+            using (BinaryWriter binWriter = new BinaryWriter(fileStream))
             {
+                binWriter.Seek(0, SeekOrigin.End);
+
                 //Add Instrument chunk
                 binWriter.Write(Encoding.ASCII.GetBytes("INST"));
                 binWriter.Write(BytesFunctions.FlipInt32(20, true));
@@ -75,18 +76,12 @@ namespace sb_editor.Audio_Classes
                 binWriter.Write(Encoding.ASCII.GetBytes("end loop"));
                 binWriter.Write((byte)(0));
 
-                //Get file length
-                fileLength = binWriter.BaseStream.Position - 8;
-
                 //Add some padding bytes
                 binWriter.Write(new byte[18]);
-            }
 
-            //Update Form Chunk size
-            using (BinaryWriter binWriter = new BinaryWriter(File.Open(filePath, FileMode.Open, FileAccess.Write, FileShare.Read)))
-            {
+                //Update header
                 binWriter.BaseStream.Seek(4, SeekOrigin.Begin);
-                binWriter.Write(BytesFunctions.FlipUInt32((uint)fileLength, true));
+                binWriter.Write(BytesFunctions.FlipUInt32((uint)fileStream.Length - 26, true));
             }
         }
     }
