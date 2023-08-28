@@ -205,7 +205,9 @@ namespace PCAudioDLL.Audio_Stuff
                             //Check Inter-Sample Delay - Negative
                             if (sfxSample.MinDelay <= 0 && sfxSample.MaxDelay < 0)
                             {
-                                float delay = random.Next(Math.Abs(sfxSample.MinDelay), Math.Abs(sfxSample.MaxDelay)) / 1000.0f;
+                                short minDelay = Math.Min(Math.Abs(sfxSample.MinDelay), Math.Abs(sfxSample.MaxDelay));
+                                short maxDelay = Math.Max(Math.Abs(sfxSample.MinDelay), Math.Abs(sfxSample.MaxDelay));
+                                float delay = random.Next(minDelay, maxDelay) / 1000.0f;
                                 if (delay > 0)
                                 {
                                     int numSilenceSamples = (int)(waveFormat.SampleRate * delay);
@@ -322,7 +324,7 @@ namespace PCAudioDLL.Audio_Stuff
                     }
 
                     //Play all together
-                    foreach(KeyValuePair<int, WaveOut> audio in PCAudioDll.PolyPhonicVoices)
+                    foreach (KeyValuePair<int, WaveOut> audio in PCAudioDll.PolyPhonicVoices)
                     {
                         audio.Value.Play();
                     }
