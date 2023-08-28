@@ -74,6 +74,7 @@ namespace sb_editor
             this.Column_ReSmp3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Column_ReSmp2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Column_ReSmp1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.mnuLoopSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.MainMenu.SuspendLayout();
             this.grbProjectPath.SuspendLayout();
             this.grbPreviewSample.SuspendLayout();
@@ -197,16 +198,17 @@ namespace sb_editor
             this.ContextMenu_ListView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuPlay,
             this.mnuStop,
-            this.mnuEdit});
+            this.mnuEdit,
+            this.mnuLoopSettings});
             this.ContextMenu_ListView.Name = "ContextMenu_ListView";
             this.ContextMenu_ListView.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.ContextMenu_ListView.Size = new System.Drawing.Size(181, 92);
+            this.ContextMenu_ListView.Size = new System.Drawing.Size(188, 114);
             // 
             // mnuPlay
             // 
             this.mnuPlay.Name = "mnuPlay";
             this.mnuPlay.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Space)));
-            this.mnuPlay.Size = new System.Drawing.Size(180, 22);
+            this.mnuPlay.Size = new System.Drawing.Size(187, 22);
             this.mnuPlay.Text = "Play";
             this.mnuPlay.Click += new System.EventHandler(this.MnuPlay_Click);
             // 
@@ -214,7 +216,7 @@ namespace sb_editor
             // 
             this.mnuStop.Name = "mnuStop";
             this.mnuStop.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Escape)));
-            this.mnuStop.Size = new System.Drawing.Size(180, 22);
+            this.mnuStop.Size = new System.Drawing.Size(187, 22);
             this.mnuStop.Text = "Stop";
             this.mnuStop.Click += new System.EventHandler(this.MnuStop_Click);
             // 
@@ -222,7 +224,7 @@ namespace sb_editor
             // 
             this.mnuEdit.Name = "mnuEdit";
             this.mnuEdit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Back)));
-            this.mnuEdit.Size = new System.Drawing.Size(180, 22);
+            this.mnuEdit.Size = new System.Drawing.Size(187, 22);
             this.mnuEdit.Text = "Edit";
             this.mnuEdit.Click += new System.EventHandler(this.MnuEdit_Click);
             // 
@@ -481,6 +483,14 @@ namespace sb_editor
             // 
             this.Column_ReSmp1.Text = "ReSmp4";
             // 
+            // mnuLoopSettings
+            // 
+            this.mnuLoopSettings.Name = "mnuLoopSettings";
+            this.mnuLoopSettings.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            this.mnuLoopSettings.Size = new System.Drawing.Size(187, 22);
+            this.mnuLoopSettings.Text = "Loop Settings";
+            this.mnuLoopSettings.Click += new System.EventHandler(this.MnuLoopSettings_Click);
+            // 
             // ReSampleForm
             // 
             this.AcceptButton = this.btnOK;
@@ -574,5 +584,6 @@ namespace sb_editor
         protected internal System.Windows.Forms.TextBox txtBootupTime;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
         protected internal Panels.ListView_ColumnSortingClick lvwAllSamples;
+        private System.Windows.Forms.ToolStripMenuItem mnuLoopSettings;
     }
 }

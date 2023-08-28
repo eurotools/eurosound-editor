@@ -35,7 +35,7 @@ namespace sb_editor.Audio_Classes
                     int numberOfSamples = BitConverter.ToInt32(chunkData, 28);
                     int offset = 36;
 
-                    for (int n = 0, loopTo = numberOfSamples - 1; n <= loopTo; n++)
+                    for (int n = 0; n < numberOfSamples; n++)
                     {
                         // Read Chunck info
                         int cuePointId = BitConverter.ToInt32(chunkData, offset);
