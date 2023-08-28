@@ -1,5 +1,6 @@
 ﻿using NAudio.Wave;
 using sb_editor.Custom_Controls;
+using sb_editor.Forms;
 using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
@@ -207,6 +208,20 @@ namespace sb_editor
         private void MnuSample_Edit_Click(object sender, EventArgs e)
         {
             EditSample();
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void MnuLoopSettings_Click(object sender, EventArgs e)
+        {
+            if (lvwAllSamples.SelectedItems.Count == 1)
+            {
+                string filePath = Path.Combine(projectSettings.SampleFilesFolder, "Master", lvwAllSamples.SelectedItems[0].Text.TrimStart('\\'));
+                if (File.Exists(filePath))
+                {
+                    FrmWaveLoops loopSettings = new FrmWaveLoops(filePath);
+                    loopSettings.ShowDialog();
+                }
+            }
         }
 
         //*===============================================================================================
