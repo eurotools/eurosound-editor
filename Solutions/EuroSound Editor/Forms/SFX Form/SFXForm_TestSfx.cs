@@ -126,7 +126,7 @@ namespace sb_editor.Forms
                 }
 
                 sfxWritter.Write(sfxData.Value.Parameters.DopplerValue);
-                sfxWritter.Write(sfxData.Value.Parameters.Alertness);
+                sfxWritter.Write((sbyte)sfxData.Value.Parameters.Alertness);
 
                 //Calculate references
                 sfxWritter.Write(BytesFunctions.FlipUShort((ushort)sfxData.Value.Samples.Count, isBigEndian));
