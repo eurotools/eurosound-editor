@@ -149,7 +149,7 @@ namespace sb_editor.Forms
                                             //Check that this SFX Doesn't exceed the memmory slot size
                                             int memSlotMaxSize = projectSettings.platformData[outputPlatform[k]].MemoryMapsSize[memSlotIndex];
                                             sampleBankSize = new FileInfo(sfxFilepath).Length / 1024;
-                                            if ((sampleBankSize - 20) > memSlotMaxSize)
+                                            if ((sampleBankSize - 16) > memSlotMaxSize)
                                             {
                                                 //Delete Files
                                                 File.Delete(Path.ChangeExtension(outTmpFilePath, ".sbf"));
