@@ -119,6 +119,15 @@ namespace sb_editor.Forms
                     sfxWritter.Write(Convert.ToSByte((sfxFlags >> i) & 1));
                 }
 
+                //UserFlags
+                for (int i = 0; i < 16; i++)
+                {
+                    sfxWritter.Write(Convert.ToSByte((sfxData.Value.Parameters.UserFlags >> i) & 1));
+                }
+
+                sfxWritter.Write(sfxData.Value.Parameters.DopplerValue);
+                sfxWritter.Write(sfxData.Value.Parameters.Alertness);
+
                 //Calculate references
                 sfxWritter.Write(BytesFunctions.FlipUShort((ushort)sfxData.Value.Samples.Count, isBigEndian));
                 foreach (SfxSample sampleToCheck in sfxData.Value.Samples)
