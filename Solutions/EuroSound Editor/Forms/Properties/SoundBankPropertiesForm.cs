@@ -4,6 +4,7 @@ using sb_editor.Objects;
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using static ESUtils.Enumerations;
 
@@ -38,6 +39,11 @@ namespace sb_editor
 
             // Set cursor as default arrow
             Cursor.Current = Cursors.Default;
+#if DEBUG
+            btn_SaveSFXs.Visible = true;
+#else
+        btn_SaveSFXs.Visible = false;
+#endif
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -150,6 +156,22 @@ namespace sb_editor
 
             long sampleSize = sbFunctions.GetSampleSize(Path.Combine(GlobalPrefs.ProjectFolder, "Master"), samplePool, samples);
             lblTotalSampleSize_Value.Text = BytesFunctions.FormatBytes(sampleSize);
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void btn_SaveSFXs_Click(object sender, EventArgs e)
+        {
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                //Create text file
+                using (StreamWriter writer = new StreamWriter(File.Open(saveFileDialog.FileName, FileMode.Create, FileAccess.Write, FileShare.Read), Encoding.UTF8))
+                {
+                    for(int i = 0; i < lstSFXs.Items.Count; i++)
+                    {
+                        writer.WriteLine(lstSFXs.Items[i]);
+                    }
+                }
+            }
         }
     }
 
