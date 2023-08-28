@@ -64,6 +64,8 @@ namespace sb_editor
             this.lstSFXs = new System.Windows.Forms.ListBox();
             this.lblSoundBankSampleCount = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
+            this.btn_SaveSFXs = new System.Windows.Forms.Button();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.grbCurrentSoundbank.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -418,12 +420,28 @@ namespace sb_editor
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             // 
+            // btn_SaveSFXs
+            // 
+            this.btn_SaveSFXs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btn_SaveSFXs.Location = new System.Drawing.Point(12, 683);
+            this.btn_SaveSFXs.Name = "btn_SaveSFXs";
+            this.btn_SaveSFXs.Size = new System.Drawing.Size(75, 23);
+            this.btn_SaveSFXs.TabIndex = 2;
+            this.btn_SaveSFXs.Text = "Save";
+            this.btn_SaveSFXs.UseVisualStyleBackColor = true;
+            this.btn_SaveSFXs.Click += new System.EventHandler(this.btn_SaveSFXs_Click);
+            // 
+            // saveFileDialog
+            // 
+            this.saveFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+            // 
             // SoundBankPropertiesForm
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(749, 718);
+            this.Controls.Add(this.btn_SaveSFXs);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.grbCurrentSoundbank);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -478,5 +496,7 @@ namespace sb_editor
         private System.Windows.Forms.Label lblOutputFileName;
         private System.Windows.Forms.Label lblTotalSampleSize_Value;
         private System.Windows.Forms.Label lblTotalSampleSize;
+        private System.Windows.Forms.Button btn_SaveSFXs;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
     }
 }
