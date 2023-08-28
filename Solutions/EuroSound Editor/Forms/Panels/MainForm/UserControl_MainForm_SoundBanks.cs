@@ -365,7 +365,7 @@ namespace sb_editor.Panels
                                 else
                                 {
                                     //Rename file
-                                    string source = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks", tvwSoundBanks.SelectedNode.Text);
+                                    string source = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks", tvwSoundBanks.SelectedNode.Text + ".txt");
                                     File.Move(source, newFilePath);
                                     break;
                                 }
