@@ -58,11 +58,20 @@ namespace sb_editor.Forms
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.Ducker);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.MasterVolume);
                 int useDistanceCheck = Convert.ToInt32(sfxData.Value.Parameters.UseGroupDistCheck);
-                if (outputPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase))
+                if (outputPlatform.Equals("playstation2", StringComparison.OrdinalIgnoreCase))
                 {
-                    sfxWritter.Write((byte)useDistanceCheck);
+                    sfxWritter.Write((short)(((useDistanceCheck & 0xF) << 12) | ((sfxData.Value.Parameters.Group & 0xFFF) << 0)));
+                    sfxWritter.Write((ushort)sbFunctions.GetFlags(sfxData.Value));
+                    sfxWritter.Write(sfxData.Value.Parameters.UserFlags);
+                    sfxWritter.Write(sfxData.Value.Parameters.DopplerValue);
+                    sfxWritter.Write((sbyte)sfxData.Value.Parameters.Alertness);
+                }
+                else
+                {
                     sfxWritter.Write((short)sfxData.Value.Parameters.Group);
-                    sfxWritter.Write((byte)0);
+                    sfxWritter.Write((short)useDistanceCheck);
+
+                    //Flags
                     int sfxFlags = sbFunctions.GetFlags(sfxData.Value);
                     for (int i = 0; i < 16; i++)
                     {
@@ -75,14 +84,6 @@ namespace sb_editor.Forms
                         sfxWritter.Write(Convert.ToSByte((sfxData.Value.Parameters.UserFlags >> i) & 1));
                     }
 
-                    sfxWritter.Write(sfxData.Value.Parameters.DopplerValue);
-                    sfxWritter.Write((sbyte)sfxData.Value.Parameters.Alertness);
-                }
-                else
-                {
-                    sfxWritter.Write((short)(((useDistanceCheck & 0xF) << 12) | ((sfxData.Value.Parameters.Group & 0xFFF) << 0)));
-                    sfxWritter.Write((ushort)sbFunctions.GetFlags(sfxData.Value));
-                    sfxWritter.Write(sfxData.Value.Parameters.UserFlags);
                     sfxWritter.Write(sfxData.Value.Parameters.DopplerValue);
                     sfxWritter.Write((sbyte)sfxData.Value.Parameters.Alertness);
                 }
