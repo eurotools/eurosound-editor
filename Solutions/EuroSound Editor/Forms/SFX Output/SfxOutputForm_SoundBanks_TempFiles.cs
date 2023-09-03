@@ -222,24 +222,31 @@ namespace sb_editor.Forms
                         if (File.Exists(pcFilepath))
                         {
                             WavInfo pcFileData = wavFunctions.ReadWaveProperties(pcFilepath);
-                            byte[] pcmData = File.ReadAllBytes(pcImaFilePath);
-
-                            //Write Header Data
-                            uint loopOffset = 0;
-                            if (masterFileData.HasLoop)
+                            if (File.Exists(pcImaFilePath))
                             {
-                                uint waveLoopOffset = (uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, pcFileData.SampleRate, masterFileData.LoopStart * 2);
-                                loopOffset = CalculusLoopOffset.GetEurocomImaLoopOffset(waveLoopOffset);
+                                byte[] pcmData = File.ReadAllBytes(pcImaFilePath);
+
+                                //Write Header Data
+                                uint loopOffset = 0;
+                                if (masterFileData.HasLoop)
+                                {
+                                    uint waveLoopOffset = (uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, pcFileData.SampleRate, masterFileData.LoopStart * 2);
+                                    loopOffset = CalculusLoopOffset.GetEurocomImaLoopOffset(waveLoopOffset);
+                                }
+                                sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, pcFileData, BytesFunctions.AlignNumber((uint)pcFileData.Length, 4), (int)pcFileData.Length, i * 96, loopOffset, isBigEndian);
+
+                                //Write Sample Data
+                                byte[] filedata = new byte[BytesFunctions.AlignNumber((uint)pcmData.Length, 4)];
+                                Array.Copy(pcmData, filedata, pcmData.Length);
+                                sbfWritter.Write(filedata);
+
+                                //Update value
+                                sampleBankSize += pcmData.Length;
                             }
-                            sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, pcFileData, BytesFunctions.AlignNumber((uint)pcFileData.Length, 4), (int)pcFileData.Length, i * 96, loopOffset, isBigEndian);
-
-                            //Write Sample Data
-                            byte[] filedata = new byte[BytesFunctions.AlignNumber((uint)pcmData.Length, 4)];
-                            Array.Copy(pcmData, filedata, pcmData.Length);
-                            sbfWritter.Write(filedata);
-
-                            //Update value
-                            sampleBankSize += pcmData.Length;
+                            else
+                            {
+                                throw new IOException(string.Format("Output Error: Sample File Missing: UNKNOWN SFX & BANK\n{0}", pcImaFilePath));
+                            }
                         }
                         else if (!fastOutput)
                         {
