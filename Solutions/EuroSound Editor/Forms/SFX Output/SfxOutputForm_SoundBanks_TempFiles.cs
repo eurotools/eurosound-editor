@@ -224,7 +224,7 @@ namespace sb_editor.Forms
                             WavInfo pcFileData = wavFunctions.ReadWaveProperties(pcFilepath);
                             if (File.Exists(pcImaFilePath))
                             {
-                                byte[] pcmData = File.ReadAllBytes(pcImaFilePath);
+                                byte[] adpcmData = File.ReadAllBytes(pcImaFilePath);
 
                                 //Write Header Data
                                 uint loopOffset = 0;
@@ -233,15 +233,13 @@ namespace sb_editor.Forms
                                     uint waveLoopOffset = (uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, pcFileData.SampleRate, masterFileData.LoopStart * 2);
                                     loopOffset = CalculusLoopOffset.GetEurocomImaLoopOffset(waveLoopOffset);
                                 }
-                                sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, pcFileData, BytesFunctions.AlignNumber((uint)pcFileData.Length, 4), (int)pcFileData.Length, i * 96, loopOffset, isBigEndian);
+                                sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, pcFileData, (uint)adpcmData.Length, adpcmData.Length, i * 96, loopOffset, isBigEndian);
 
                                 //Write Sample Data
-                                byte[] filedata = new byte[BytesFunctions.AlignNumber((uint)pcmData.Length, 4)];
-                                Array.Copy(pcmData, filedata, pcmData.Length);
-                                sbfWritter.Write(filedata);
+                                sbfWritter.Write(adpcmData);
 
                                 //Update value
-                                sampleBankSize += pcmData.Length;
+                                sampleBankSize += adpcmData.Length;
                             }
                             else
                             {
@@ -312,7 +310,7 @@ namespace sb_editor.Forms
                                     uint waveLoopOffset = (uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, wavFileData.SampleRate, masterFileData.LoopStart * 2);
                                     loopOffset = CalculusLoopOffset.GetEurocomImaLoopOffset(waveLoopOffset);
                                 }
-                                sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, wavFunctions.ReadWaveProperties(wavFilePath), (uint)adpcmData.Length, adpcmData.Length, i * 96, loopOffset, isBigEndian);
+                                sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, wavFileData, (uint)adpcmData.Length, adpcmData.Length, i * 96, loopOffset, isBigEndian);
 
                                 //Write Sample Data
                                 sbfWritter.Write(adpcmData);
