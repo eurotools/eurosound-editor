@@ -10,6 +10,7 @@
 // SFX Form Output Bind Streams
 //-------------------------------------------------------------------------------------------------------------------------------
 using ESUtils;
+using MusX.Writers;
 using System;
 using System.IO;
 using static ESUtils.Enumerations;
@@ -105,7 +106,7 @@ namespace sb_editor.Forms
             if (!string.IsNullOrEmpty(sfxOutputFolder) && Directory.Exists(sfxOutputFolder))
             {
                 string fileName = string.Format("HC{0:X6}.SFX", CommonFunctions.GetSfxName((int)outputLanguage, 0xFFFF));
-                MusXBuild_StreamFile.BuildStreamFile(binaryFile, lutFile, Path.Combine(sfxOutputFolder, fileName), isBigEndian);
+                MusXBuild_StreamFileOld.BuildStreamFile(binaryFile, lutFile, Path.Combine(sfxOutputFolder, fileName), isBigEndian);
             }
         }
 

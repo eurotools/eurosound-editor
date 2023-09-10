@@ -10,6 +10,7 @@
 // SFX Form Test SFX
 //-------------------------------------------------------------------------------------------------------------------------------
 using ESUtils;
+using MusX.Writers;
 using sb_editor.Audio_Classes;
 using sb_editor.Classes;
 using sb_editor.Objects;
@@ -90,7 +91,7 @@ namespace sb_editor.Forms
                     DirectoryInfo musXFolder = Directory.CreateDirectory(outputFolder);
 
                     //Build File
-                    MusXBuild_Soundbank.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, string.Empty, Path.Combine(musXFolder.FullName, fileName), hashCode, false);
+                    MusXBuild_SoundbankOld.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, string.Empty, Path.Combine(musXFolder.FullName, fileName), hashCode, false);
                 }
             }
         }

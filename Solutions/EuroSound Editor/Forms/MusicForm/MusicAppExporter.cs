@@ -11,6 +11,7 @@
 //-------------------------------------------------------------------------------------------------------------------------------
 using ESUtils;
 using ExMarkers;
+using MusX.Writers;
 using sb_editor.Audio_Classes;
 using sb_editor.Classes;
 using sb_editor.Objects;
@@ -323,7 +324,7 @@ namespace sb_editor.Forms
                     {
                         if (File.Exists(soundMarkerFilePath) && File.Exists(soundSampleDataFilePath))
                         {
-                            MusXBuild_MusicFile.BuildMusicFile(soundMarkerFilePath, soundSampleDataFilePath, Path.Combine(outputPath, string.Format("HCE{0:X5}.SFX", musicFileData.HashCode)), (uint)musicFileData.HashCode, outputPlatforms[j].Equals("GameCube", StringComparison.OrdinalIgnoreCase));
+                            MusXBuild_MusicFileOld.BuildMusicFile(soundMarkerFilePath, soundSampleDataFilePath, Path.Combine(outputPath, string.Format("HCE{0:X5}.SFX", musicFileData.HashCode)), (uint)musicFileData.HashCode, outputPlatforms[j].Equals("GameCube", StringComparison.OrdinalIgnoreCase));
                         }
                         else if (!File.Exists(soundMarkerFilePath) && !File.Exists(soundSampleDataFilePath))
                         {

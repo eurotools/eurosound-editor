@@ -10,6 +10,7 @@
 // SFX Form Output SoundBanks
 //-------------------------------------------------------------------------------------------------------------------------------
 using ESUtils;
+using MusX.Writers;
 using sb_editor.Classes;
 using sb_editor.Objects;
 using System;
@@ -146,7 +147,7 @@ namespace sb_editor.Forms
                                         string sfxTempFile = Path.ChangeExtension(outTmpFilePath, ".sfx");
                                         string sifTempFile = Path.ChangeExtension(outTmpFilePath, ".sif");
                                         string ssfTempFile = Path.ChangeExtension(outTmpFilePath, ".ssf");
-                                        MusXBuild_Soundbank.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, ssfTempFile, Path.Combine(outputPath, fileName), soundBankData.HashCode, isBigEndian);
+                                        MusXBuild_SoundbankOld.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, ssfTempFile, Path.Combine(outputPath, fileName), soundBankData.HashCode, isBigEndian);
                                     }
                                 }
                             }
