@@ -561,6 +561,10 @@
     <None Include="Resources\arrow_left.cur" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\MusX\MusX.csproj">
+      <Project>{f176f5ac-1b44-436f-add6-bf12399e8c18}</Project>
+      <Name>MusX</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ESUtils\ESUtils.csproj">
       <Project>{a4e66469-32bb-42a3-acf8-4609d72921c1}</Project>
       <Name>ESUtils</Name>
