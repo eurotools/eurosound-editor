@@ -10,6 +10,7 @@
 // SFX Form Output HashCodes
 //-------------------------------------------------------------------------------------------------------------------------------
 using ESUtils;
+using MusX.Writers;
 using sb_editor.HashCodes;
 using sb_editor.Objects;
 using System;

@@ -11,6 +11,7 @@
 //-------------------------------------------------------------------------------------------------------------------------------
 using ESUtils;
 using ExMarkers;
+using MusX.Writers;
 using sb_editor.Audio_Classes;
 using sb_editor.Classes;
 using sb_editor.HashCodes;

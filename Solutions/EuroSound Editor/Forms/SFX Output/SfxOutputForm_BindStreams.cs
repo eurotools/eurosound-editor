@@ -10,6 +10,7 @@
 // SFX Form Output Bind Streams
 //-------------------------------------------------------------------------------------------------------------------------------
 using ESUtils;
+using MusX.Writers;
 using System;
 using System.IO;
 using static ESUtils.Enumerations;
