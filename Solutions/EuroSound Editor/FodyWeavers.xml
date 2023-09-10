@@ -5,6 +5,7 @@
 		ESUtils
 		ExMarkers
 		PCAudioDLL
+		MusX
 		Microsoft.VisualBasic.PowerPacks
 		Microsoft.VisualBasic.PowerPacks.resources
 	  </IncludeAssemblies>
