@@ -10,6 +10,7 @@
 // SFX Form Test SFX
 //-------------------------------------------------------------------------------------------------------------------------------
 using ESUtils;
+using MusX.Writers;
 using sb_editor.Audio_Classes;
 using sb_editor.Classes;
 using sb_editor.Objects;

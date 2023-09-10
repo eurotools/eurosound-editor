@@ -10,6 +10,7 @@
 // SFX Form Output SoundBanks
 //-------------------------------------------------------------------------------------------------------------------------------
 using ESUtils;
+using MusX.Writers;
 using sb_editor.Classes;
 using sb_editor.Objects;
 using System;
