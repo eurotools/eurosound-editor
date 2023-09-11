@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9B6C594F-8E3E-4EF4-B1C2-18772719BCAF}</ProjectGuid>
+    <ProjectGuid>{96DF7155-4935-45A3-AB5B-9BD2C621440D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PCAudioDLL</RootNamespace>
@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,18 +22,20 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\Output\bin\Release\SystemFiles\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
+      <HintPath>..\SFXPlayer\packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,29 +47,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Audio_Stuff\AudioMaths.cs" />
-    <Compile Include="Audio_Stuff\AudioPlayer.cs" />
-    <Compile Include="Audio_Stuff\LoopStream.cs" />
-    <Compile Include="Audio_Stuff\LowPassWaveProvider.cs" />
-    <Compile Include="MusX_Objects\Sample.cs" />
-    <Compile Include="MusX_Objects\SampleData.cs" />
-    <Compile Include="MusX_Objects\SampleInfo.cs" />
-    <Compile Include="MusX_Objects\SfxCommonHeader.cs" />
-    <Compile Include="MusX_Objects\SoundbankHeader.cs" />
-    <Compile Include="MusX_Readers\BinaryFunctions.cs" />
-    <Compile Include="MusX_Readers\SfxFunctions.cs" />
-    <Compile Include="MusX_Readers\SoundBankReaderNew.cs" />
-    <Compile Include="MusX_Readers\SoundBankReaderOld.cs" />
-    <Compile Include="MusX_Readers\SoundBanksReader.cs" />
-    <Compile Include="Others\DebugConsole.cs" />
-    <Compile Include="Others\ExWaveOut.cs" />
-    <Compile Include="Others\PCVoices.cs" />
-    <Compile Include="PCAudioDll.cs" />
+    <Compile Include="Audio Player\AudioMaths.cs" />
+    <Compile Include="Audio Player\AudioMixer.cs" />
+    <Compile Include="Audio Player\Effects\AudioLowPassFilter.cs" />
+    <Compile Include="Audio Player\Effects\AudioReverb.cs" />
+    <Compile Include="Audio Player\Effects\AudioLoop.cs" />
+    <Compile Include="Audio Player\AudioVoices.cs" />
+    <Compile Include="DebugConsole.cs" />
+    <Compile Include="MusX Objects\SoundBank.cs" />
+    <Compile Include="Audio Player\Objects\ExAudioSample.cs" />
+    <Compile Include="Audio Player\Objects\ExVoice.cs" />
+    <Compile Include="Audio Player\AudioPlayer.cs" />
+    <Compile Include="PCAudio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Audio_Stuff\Utils.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="F:\Repositories\EuroTools\Development\Tools\MusX\MusX.csproj">
+      <Project>{f176f5ac-1b44-436f-add6-bf12399e8c18}</Project>
+      <Name>MusX</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

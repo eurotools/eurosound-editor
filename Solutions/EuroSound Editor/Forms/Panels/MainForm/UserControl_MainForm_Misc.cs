@@ -152,13 +152,9 @@ namespace sb_editor.Panels
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnMisc_MarkersEditor_Click(object sender, System.EventArgs e)
         {
-            try
+            using (ConsoleApp testerApp = new ConsoleApp())
             {
-                Process.Start(Path.Combine(Application.StartupPath, "SystemFiles", "MarkersEditor.exe"));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                testerApp.ShowDialog();
             }
         }
 
