@@ -53,7 +53,7 @@ namespace PCAudioDLL
                     if (sampleInfo.FileRef < soundBank.sfxStoredData.Count)
                     {
                         //Get all data
-                        ExAudioSample sampleAudio = audioPlayer.GetAudioSample(soundBank, sfxSample.HashCode, sfxSample, sampleInfo);
+                        ExAudioSample sampleAudio = audioPlayer.GetAudioSample(soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo);
 
                         //Get a voice
                         if (audioPosition == null)
@@ -124,7 +124,7 @@ namespace PCAudioDLL
                         else
                         {
                             //Get all data
-                            ExAudioSample sampleAudio = audioPlayer.GetAudioSample(soundBank, sfxSample.HashCode, sfxSample, sampleInfo);
+                            ExAudioSample sampleAudio = audioPlayer.GetAudioSample(soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo);
 
                             //Get a voice
                             if (audioPosition == null)
@@ -198,7 +198,7 @@ namespace PCAudioDLL
                         else
                         {
                             //Get all data
-                            ExAudioSample sampleAudio = audioPlayer.GetAudioSample(soundBank, sfxSample.HashCode, sfxSample, sampleInfo);
+                            ExAudioSample sampleAudio = audioPlayer.GetAudioSample(soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo);
 
                             //Get a voice
                             if (audioPosition == null)

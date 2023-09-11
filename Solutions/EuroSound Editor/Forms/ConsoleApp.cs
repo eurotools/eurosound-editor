@@ -97,6 +97,8 @@ namespace sb_editor.Forms
                 if (File.Exists(sfxPath))
                 {
                     Objects.SFX sfxData = TextFiles.ReadSfxFile(sfxPath);
+                    nudInnerRadius.Value = sfxData.Parameters.InnerRadius;
+                    nudOuterRadius.Value = sfxData.Parameters.OuterRadius;
                     nudHashCode.Value = 0x1A000000 + sfxData.HashCode;
                 }
             }
