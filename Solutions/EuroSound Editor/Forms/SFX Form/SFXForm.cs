@@ -179,7 +179,7 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void Frm_SFX_Form_FormClosing(object sender, FormClosingEventArgs e)
         {
-            PCAudioDll.UnloadSoundbank();
+            //PCAudioDll.UnloadSoundbank();
 
             //Stop any audio that could be playing
             if (UserControl_SamplePool.audioPlayer != null)
@@ -342,22 +342,22 @@ namespace sb_editor.Forms
             string filePath = Path.Combine(outputFilePath, fileName);
             if (File.Exists(filePath))
             {
-                if (PCAudioDll.IsSoundBankLoaded(0xFFFE))
+               /* if (PCAudioDll.IsSoundBankLoaded(0xFFFE))
                 {
                     PCAudioDll.UnloadSoundbank();
                 }
                 txtDllTime.Text = string.Format("DLL Time {0:0.###}", PCAudioDll.LoadSoundBank(filePath));
-                PCAudioDll.PlaySfx(0);
+                PCAudioDll.PlaySfx(0);*/
             }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnStopSFX_Click(object sender, System.EventArgs e)
         {
-            if (PCAudioDll.IsSoundBankLoaded(0xFFFE))
+            /*if (PCAudioDll.IsSoundBankLoaded(0xFFFE))
             {
                 PCAudioDll.UnloadSoundbank();
-            }
+            }*/
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------

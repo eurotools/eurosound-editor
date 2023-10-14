@@ -32,7 +32,7 @@ namespace sb_editor.Panels
             this.components = new System.ComponentModel.Container();
             this.grbMisc = new System.Windows.Forms.GroupBox();
             this.txtMisc_Debug = new System.Windows.Forms.TextBox();
-            this.btnMisc_MarkersEditor = new System.Windows.Forms.Button();
+            this.btnConsoleApp = new System.Windows.Forms.Button();
             this.btnMisc_Advanced = new System.Windows.Forms.Button();
             this.Music_Misc_SfxDefault = new System.Windows.Forms.Button();
             this.btnMisc_MusicMaker = new System.Windows.Forms.Button();
@@ -45,7 +45,7 @@ namespace sb_editor.Panels
             // grbMisc
             // 
             this.grbMisc.Controls.Add(this.txtMisc_Debug);
-            this.grbMisc.Controls.Add(this.btnMisc_MarkersEditor);
+            this.grbMisc.Controls.Add(this.btnConsoleApp);
             this.grbMisc.Controls.Add(this.btnMisc_Advanced);
             this.grbMisc.Controls.Add(this.Music_Misc_SfxDefault);
             this.grbMisc.Controls.Add(this.btnMisc_MusicMaker);
@@ -69,17 +69,17 @@ namespace sb_editor.Panels
             this.txtMisc_Debug.TabIndex = 6;
             this.txtMisc_Debug.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TxtMisc_Debug_MouseDoubleClick);
             // 
-            // btnMisc_MarkersEditor
+            // btnConsoleApp
             // 
-            this.btnMisc_MarkersEditor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnConsoleApp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnMisc_MarkersEditor.Location = new System.Drawing.Point(6, 164);
-            this.btnMisc_MarkersEditor.Name = "btnMisc_MarkersEditor";
-            this.btnMisc_MarkersEditor.Size = new System.Drawing.Size(160, 23);
-            this.btnMisc_MarkersEditor.TabIndex = 5;
-            this.btnMisc_MarkersEditor.Text = "Markers Editor";
-            this.btnMisc_MarkersEditor.UseVisualStyleBackColor = true;
-            this.btnMisc_MarkersEditor.Click += new System.EventHandler(this.BtnMisc_MarkersEditor_Click);
+            this.btnConsoleApp.Location = new System.Drawing.Point(6, 164);
+            this.btnConsoleApp.Name = "btnConsoleApp";
+            this.btnConsoleApp.Size = new System.Drawing.Size(160, 23);
+            this.btnConsoleApp.TabIndex = 5;
+            this.btnConsoleApp.Text = "Console App";
+            this.btnConsoleApp.UseVisualStyleBackColor = true;
+            this.btnConsoleApp.Click += new System.EventHandler(this.BtnMisc_MarkersEditor_Click);
             // 
             // btnMisc_Advanced
             // 
@@ -159,7 +159,7 @@ namespace sb_editor.Panels
         #endregion
 
         private System.Windows.Forms.GroupBox grbMisc;
-        private System.Windows.Forms.Button btnMisc_MarkersEditor;
+        private System.Windows.Forms.Button btnConsoleApp;
         private System.Windows.Forms.Button btnMisc_Advanced;
         private System.Windows.Forms.Button Music_Misc_SfxDefault;
         private System.Windows.Forms.Button btnMisc_MusicMaker;
