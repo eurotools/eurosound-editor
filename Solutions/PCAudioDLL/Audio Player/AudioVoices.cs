@@ -7,53 +7,71 @@
 // |______|\__,_|_|  \___/|___/\___/ \__,_|_| |_|\__,_|
 //
 //-------------------------------------------------------------------------------------------------------------------------------
-// PCDLL Debug Form
+// Base Audio Voice
 //-------------------------------------------------------------------------------------------------------------------------------
-using PCAudioDLL;
-using System;
-using System.Windows.Forms;
+using NAudio.Wave;
+using PCAudioDLL.Objects;
 
-namespace sb_editor.Forms
+namespace PCAudioDLL
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    public partial class PCDllDebugForm : Form
+    public class AudioVoices
     {
+        internal bool ExitSound = false;
+        internal const int MAX_TOTAL_VOICES = 60;
+        internal const int MAX_TOTAL_STREAMS = 10;
+        internal byte MixerTableIndex = 0;
+        internal ExVoice[] MixerTable = new ExVoice[MAX_TOTAL_VOICES];
+
         //-------------------------------------------------------------------------------------------------------------------------------
-        public PCDllDebugForm()
+        public void InitializeTable()
         {
-            InitializeComponent();
+            for (int i = 0; i < MixerTable.Length; i++)
+            {
+                MixerTable[i] = new ExVoice();
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void Frm_TestSfxDebug_Shown(object sender, EventArgs e)
+        internal int RequestVoice(ExAudioSample audioSample)
         {
-            //PCAudioDll.InitializeConsole(txtDebugData);
+            if (MixerTableIndex >= (MixerTable.Length - 1))
+            {
+                MixerTableIndex = 0;
+            }
+
+            int index = MixerTableIndex++;
+            MixerTable[index] = new ExVoice
+            {
+                BaseVoice = new WaveOut(),
+                HashCode = (int)audioSample.HashCode
+            };
+
+            //Inform user
+            DebugConsole.WriteLine(string.Format("ES-> ES_RequestVoiceHandle() = {0}", index));
+
+            return index;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void ChkPauseDebug_Click(object sender, EventArgs e)
+        internal bool CanPlay()
         {
-            //PCAudioDll.outputConsole.PauseOutput = chkPauseDebug.Checked;
-        }
+            bool audioCanPlay = true;
+            for (int i = 0; i < MixerTable.Length; i++)
+            {
+                if (MixerTable[i] != null && MixerTable[i].BaseVoice != null)
+                {
+                    if (MixerTable[i].BaseVoice.PlaybackState == PlaybackState.Playing)
+                    {
+                        audioCanPlay = false;
+                        break;
+                    }
+                }
+            }
 
-        //-------------------------------------------------------------------------------------------------------------------------------
-        private void PCDllDebugForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            //PCAudioDll.outputConsole.TxtConsole = null;
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        private void BtnClear_Click(object sender, EventArgs e)
-        {
-            txtDebugData.Clear();
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        private void BtnOK_Click(object sender, EventArgs e)
-        {
-            Close();
+            return audioCanPlay;
         }
     }
 

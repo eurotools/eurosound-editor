@@ -7,53 +7,66 @@
 // |______|\__,_|_|  \___/|___/\___/ \__,_|_| |_|\__,_|
 //
 //-------------------------------------------------------------------------------------------------------------------------------
-// PCDLL Debug Form
+// Low Pass Filter
 //-------------------------------------------------------------------------------------------------------------------------------
-using PCAudioDLL;
-using System;
-using System.Windows.Forms;
+using NAudio.Dsp;
+using NAudio.Wave;
 
-namespace sb_editor.Forms
+namespace PCAudioDLL.Audio_Player.Effects
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    public partial class PCDllDebugForm : Form
+    internal class AudioLowPassFilter : ISampleProvider
     {
+        private readonly ISampleProvider sourceProvider;
+        private readonly float cutOffFreq;
+        private readonly int channels;
+        private readonly int sampleRate;
+        private readonly BiQuadFilter[] filters;
+
         //-------------------------------------------------------------------------------------------------------------------------------
-        public PCDllDebugForm()
+        internal AudioLowPassFilter(ISampleProvider sourceProvider, int cutOffFreq)
         {
-            InitializeComponent();
+            this.sourceProvider = sourceProvider;
+            this.cutOffFreq = cutOffFreq;
+
+            sampleRate = sourceProvider.WaveFormat.SampleRate;
+            channels = sourceProvider.WaveFormat.Channels;
+            filters = new BiQuadFilter[channels];
+            CreateFilters();
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void Frm_TestSfxDebug_Shown(object sender, EventArgs e)
+        private void CreateFilters()
         {
-            //PCAudioDll.InitializeConsole(txtDebugData);
+            for (int n = 0; n < channels; n++)
+            {
+                if (filters[n] == null)
+                {
+                    filters[n] = BiQuadFilter.LowPassFilter(sampleRate, cutOffFreq, 1);
+                }
+                else
+                {
+                    filters[n].SetLowPassFilter(sampleRate, cutOffFreq, 1);
+                }
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void ChkPauseDebug_Click(object sender, EventArgs e)
-        {
-            //PCAudioDll.outputConsole.PauseOutput = chkPauseDebug.Checked;
-        }
+        public WaveFormat WaveFormat { get { return sourceProvider.WaveFormat; } }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void PCDllDebugForm_FormClosing(object sender, FormClosingEventArgs e)
+        public int Read(float[] buffer, int offset, int count)
         {
-            //PCAudioDll.outputConsole.TxtConsole = null;
-        }
+            int samplesRead = sourceProvider.Read(buffer, offset, count);
 
-        //-------------------------------------------------------------------------------------------------------------------------------
-        private void BtnClear_Click(object sender, EventArgs e)
-        {
-            txtDebugData.Clear();
-        }
+            for (int i = 0; i < samplesRead; i++)
+            {
+                buffer[offset + i] = filters[(i % channels)].Transform(buffer[offset + i]);
+            }
 
-        //-------------------------------------------------------------------------------------------------------------------------------
-        private void BtnOK_Click(object sender, EventArgs e)
-        {
-            Close();
+            return samplesRead;
         }
     }
 

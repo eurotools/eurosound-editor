@@ -6,13 +6,13 @@ namespace PCAudioDLL
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    public class DebugConsole
+    public static class DebugConsole
     {
-        public TextBox TxtConsole { get; set; }
-        public bool PauseOutput { get; set; }
+        public static TextBox TxtConsole { get; set; }
+        public static bool PauseOutput { get; set; }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void WriteLine(string message)
+        internal static void WriteLine(string message)
         {
             if (!PauseOutput && TxtConsole != null)
             {
