@@ -19,7 +19,6 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class ConsoleApp : Form
     {
-        private const string projectFolder = @"F:\Repositories\sphinxmod\Eurosound_Data\Sphinx\ES";
         private readonly PCAudio pcDll = new PCAudio();
         private ProjProperties projectSettings;
         private SoundPlayer audioPlayer;
@@ -34,7 +33,7 @@ namespace sb_editor.Forms
         private void Form1_Load(object sender, EventArgs e)
         {
             //Add available SoundBanks
-            string[] dirFiles = Directory.GetFiles(Path.Combine(projectFolder, "SoundBanks"), "*.txt", SearchOption.AllDirectories);
+            string[] dirFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks"), "*.txt", SearchOption.AllDirectories);
             for (int i = 0; i < dirFiles.Length; i++)
             {
                 lstbAvailableSoundBanks.Items.Add(Path.GetFileNameWithoutExtension(dirFiles[i]));
@@ -136,7 +135,7 @@ namespace sb_editor.Forms
         {
             if (lstBox_SFXs.SelectedItems.Count > 0)
             {
-                string sfxPath = Path.Combine(projectFolder, "SFXs", lstBox_SFXs.SelectedItems[0].ToString() + ".txt");
+                string sfxPath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", lstBox_SFXs.SelectedItems[0].ToString() + ".txt");
                 if (File.Exists(sfxPath))
                 {
                     Objects.SFX sfxData = TextFiles.ReadSfxFile(sfxPath);
@@ -173,7 +172,7 @@ namespace sb_editor.Forms
                     lstbLoadedSoundBanks.Items.Add(lstbAvailableSoundBanks.SelectedItems[i]);
 
                     //Load SoundBank Text File
-                    string sbPath = Path.Combine(projectFolder, "SoundBanks", lstbAvailableSoundBanks.SelectedItems[i].ToString() + ".txt");
+                    string sbPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks", lstbAvailableSoundBanks.SelectedItems[i].ToString() + ".txt");
                     SoundBank soundBankData = TextFiles.ReadSoundbankFile(sbPath);
 
                     //Get SFXs
