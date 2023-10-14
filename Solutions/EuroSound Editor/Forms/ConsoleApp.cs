@@ -69,7 +69,7 @@ namespace sb_editor.Forms
             string fileName = string.Format("HC{0:X6}.SFX", CommonFunctions.GetSfxName((int)Language.English, 0xFFFF));
 
             //Load SoundBank
-            string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(fileName, ".SFX"));
+            string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, fileName, ".SFX"));
             if (File.Exists(sfxFilePath))
             {
                 pcDll.LoadSoundBank(sfxFilePath, true);
