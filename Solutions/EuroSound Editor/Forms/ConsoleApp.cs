@@ -11,6 +11,7 @@ using System.Linq;
 using System.Media;
 using System.Text;
 using System.Windows.Forms;
+using static ESUtils.Enumerations;
 
 namespace sb_editor.Forms
 {
@@ -65,8 +66,12 @@ namespace sb_editor.Forms
         private void chkStreamingTest_CheckedChanged(object sender, EventArgs e)
         {
             //Load SFX File
-            string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, "HC00FFFF", ".SFX"));
-            pcDll.LoadSoundBank(sfxFilePath, true);
+            string fileName = CommonFunctions.GetSfxName(Language.English, "_streamdata");
+            string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, fileName, ".SFX"));
+            if (File.Exists(sfxFilePath))
+            {
+                pcDll.LoadSoundBank(sfxFilePath, true);
+            }
         }
 
         //-------------------------------------------------------------------------------------------
