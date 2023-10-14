@@ -1,5 +1,6 @@
 ﻿using PCAudioDLL;
 using sb_editor.Classes;
+using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,6 +8,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Windows.Forms;
 
@@ -19,6 +21,8 @@ namespace sb_editor.Forms
     {
         private const string projectFolder = @"F:\Repositories\sphinxmod\Eurosound_Data\Sphinx\ES";
         private readonly PCAudio pcDll = new PCAudio();
+        private ProjProperties projectSettings;
+        private SoundPlayer audioPlayer;
 
         //-------------------------------------------------------------------------------------------------------------------------------
         public ConsoleApp()
@@ -35,6 +39,13 @@ namespace sb_editor.Forms
             {
                 lstbAvailableSoundBanks.Items.Add(Path.GetFileNameWithoutExtension(dirFiles[i]));
             }
+
+            //Load project properties
+            string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
+            if (File.Exists(projectPropertiesFile))
+            {
+                projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -44,18 +55,41 @@ namespace sb_editor.Forms
             DrawGrid(picBox_XY, 50, false, true);
         }
 
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void ConsoleApp_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            pcDll.StopPlayer();
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void chkStreamingTest_CheckedChanged(object sender, EventArgs e)
+        {
+            //Load SFX File
+            string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, "HC00FFFF", ".SFX"));
+            pcDll.LoadSoundBank(sfxFilePath, true);
+        }
+
         //-------------------------------------------------------------------------------------------
         //  Random Tests
         //-------------------------------------------------------------------------------------------
         private void BtnStartRandomTest_Click(object sender, EventArgs e)
         {
+            //Ensure that we have a soundbank loaded
+            if (lstbLoadedSoundBanks.Items.Count == 1)
+            {
+                //Choose a random item
+                Random random = new Random();
+                lstBox_SFXs.SelectedIndex = random.Next(0, lstBox_SFXs.Items.Count);
 
+                //Play
+                BtnStart3dSound_Click(sender, e);
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnStopRandomTest_Click(object sender, EventArgs e)
         {
-
+            pcDll.StopPlayer();
         }
 
         //-------------------------------------------------------------------------------------------
@@ -69,7 +103,7 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnStart3dSound_Click(object sender, EventArgs e)
         {
-            pcDll.StartSound3D((uint)nudHashCode.Value, new float[] { (float)nudX.Value, (float)nudY.Value, (float)nudZ.Value });
+            pcDll.StartSound3D((uint)nudHashCode.Value, new float[] { (float)nudX.Value, (float)nudY.Value, (float)nudZ.Value }, false, chxTestPan.Checked, trckBarMasterVolume.Value);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -83,13 +117,22 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------
         private void BtnPlaySample_Click(object sender, EventArgs e)
         {
-
+            if (lstbSamples.SelectedItem != null)
+            {
+                string samplePath = Path.Combine(projectSettings.SampleFilesFolder, "Master", lstbSamples.SelectedItem.ToString().TrimStart('\\'));
+                if (File.Exists(samplePath))
+                {
+                    //Create a new SoundPlayer object with the full file path of the selected sample
+                    audioPlayer = new SoundPlayer(samplePath);
+                    audioPlayer.Play();
+                }
+            }
         }
 
         //-------------------------------------------------------------------------------------------
         //  Play SFX
         //-------------------------------------------------------------------------------------------
-        private void lstBox_SFXs_SelectedIndexChanged(object sender, EventArgs e)
+        private void LstBox_SFXs_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lstBox_SFXs.SelectedItems.Count > 0)
             {
@@ -97,6 +140,17 @@ namespace sb_editor.Forms
                 if (File.Exists(sfxPath))
                 {
                     Objects.SFX sfxData = TextFiles.ReadSfxFile(sfxPath);
+
+                    //Set Samples
+                    lstbSamples.BeginUpdate();
+                    lstbSamples.Items.Clear();
+                    foreach(SfxSample sfxSample in sfxData.Samples)
+                    {
+                        lstbSamples.Items.Add(sfxSample.FilePath);
+                    }
+                    lstbSamples.EndUpdate();
+
+                    //Set SFX data for being played
                     nudInnerRadius.Value = sfxData.Parameters.InnerRadius;
                     nudOuterRadius.Value = sfxData.Parameters.OuterRadius;
                     nudHashCode.Value = 0x1A000000 + sfxData.HashCode;
@@ -107,7 +161,7 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------
         //  SoundBanks Control
         //-------------------------------------------------------------------------------------------
-        private void btnLoadSoundbanks_Click(object sender, EventArgs e)
+        private void BtnLoadSoundbanks_Click(object sender, EventArgs e)
         {
             SoundBankFunctions sbFunctions = new SoundBankFunctions();
 
@@ -120,7 +174,7 @@ namespace sb_editor.Forms
 
                     //Load SoundBank Text File
                     string sbPath = Path.Combine(projectFolder, "SoundBanks", lstbAvailableSoundBanks.SelectedItems[i].ToString() + ".txt");
-                    var soundBankData = TextFiles.ReadSoundbankFile(sbPath);
+                    SoundBank soundBankData = TextFiles.ReadSoundbankFile(sbPath);
 
                     //Get SFXs
                     string[] SFXs = sbFunctions.GetSFXs(soundBankData.DataBases, "PC");
@@ -137,7 +191,7 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void btnDeLoadSoundBanks_Click(object sender, EventArgs e)
+        private void BtnDeLoadSoundBanks_Click(object sender, EventArgs e)
         {
             int selectedIndex = lstbLoadedSoundBanks.SelectedIndex;
 
@@ -155,7 +209,7 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void btnResetPos_Click(object sender, EventArgs e)
+        private void BtnResetPos_Click(object sender, EventArgs e)
         {
             nudX.Value = 0;
             nudY.Value = 0;
@@ -195,6 +249,25 @@ namespace sb_editor.Forms
             DrawEllipse(picBox_XY, new Pen(Color.Green, 2), innerRadius / 3, !chxDrawCircle.Checked);
             DrawEllipse(picBox_XY, new Pen(Color.Red, 2), outerRadius / 3, !chxDrawCircle.Checked);
             DrawListener(picBox_XY, (int)nudX.Value / 3, (int)nudY.Value);
+        }
+
+        //-------------------------------------------------------------------------------------------
+        //  Misc Module Commands
+        //-------------------------------------------------------------------------------------------
+        private void BtnStopAllSFXs_Click(object sender, EventArgs e)
+        {
+            pcDll.StopPlayer();
+            if (audioPlayer != null)
+            {
+                audioPlayer.Stop();
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void BtnSfxReset_Click(object sender, EventArgs e)
+        {
+            BtnLoadSoundbanks_Click(sender, e);
+            pcDll.LoadSoundBank(string.Empty);
         }
 
         //-------------------------------------------------------------------------------------------

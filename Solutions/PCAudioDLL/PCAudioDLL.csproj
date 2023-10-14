@@ -53,6 +53,8 @@
     <Compile Include="Audio Player\Effects\AudioReverb.cs" />
     <Compile Include="Audio Player\Effects\AudioLoop.cs" />
     <Compile Include="Audio Player\AudioVoices.cs" />
+    <Compile Include="Codecs\Eurocom_ImaAdpcm.cs" />
+    <Compile Include="Codecs\ImaAdpcm.cs" />
     <Compile Include="DebugConsole.cs" />
     <Compile Include="MusX Objects\SoundBank.cs" />
     <Compile Include="Audio Player\Objects\ExAudioSample.cs" />

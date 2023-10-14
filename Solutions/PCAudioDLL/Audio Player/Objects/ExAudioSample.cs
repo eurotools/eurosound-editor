@@ -20,6 +20,8 @@ namespace PCAudioDLL.Objects
         public byte[] PCMData;
         public bool isLooped;
         public int LoopStart;
+        public int LoopEnd;
+        public int StartPos;
         public int Frequency;
         public float Pitch;
         public float RandomPitch;

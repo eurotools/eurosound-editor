@@ -29,15 +29,21 @@ namespace PCAudioDLL
         private readonly AudioMixer audioPlayer = new AudioMixer();
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void PlaySingleSfx(Sample sfxSample, SoundBank soundBank, AudioVoices pcVoices, float[] audioPosition = null)
+        internal void PlaySingleSfx(List<StreamSample> streamedFile, Sample sfxSample, SoundBank soundBank, AudioVoices pcVoices, float[] audioPosition = null, bool enablePanning = false, int fixedVolume = -1)
         {
             pcVoices.ExitSound = false;
             bool LoopFlag = ((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Loop) & 1) == 1;
 
-            //Calculate volume & panning
+            //Calculate volume
             float volume = sfxSample.MasterVolume / 100.0f;
+            if (fixedVolume != -1)
+            {
+                volume = fixedVolume / 100.0f;
+            }
+
+            //Calculate Panning
             float panning = 0;
-            if (audioPosition != null)
+            if (audioPosition != null && enablePanning)
             {
                 float dist = audioMaths.CalcDistFromListener(null, audioPosition);
                 panning = audioMaths.CalcPanFromPos(dist, audioPosition);
@@ -53,7 +59,15 @@ namespace PCAudioDLL
                     if (sampleInfo.FileRef < soundBank.sfxStoredData.Count)
                     {
                         //Get all data
-                        ExAudioSample sampleAudio = audioPlayer.GetAudioSample(soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo);
+                        ExAudioSample sampleAudio = null;
+                        if (sampleInfo.FileRef >= 0)
+                        {
+                            sampleAudio = audioPlayer.GetAudioSample(soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo);
+                        }
+                        else
+                        {
+                            sampleAudio = audioPlayer.GetStreamAudioSample(streamedFile, sfxSample.HashCodeNumber, sfxSample, sampleInfo);
+                        }
 
                         //Get a voice
                         if (audioPosition == null)
@@ -89,15 +103,21 @@ namespace PCAudioDLL
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void PlayShuffledSfx(Sample sfxSample, SoundBank soundBank, AudioVoices pcVoices, float[] audioPosition = null)
+        internal void PlayShuffledSfx(List<StreamSample> streamedFile, Sample sfxSample, SoundBank soundBank, AudioVoices pcVoices, float[] audioPosition = null, bool enablePanning = false, int fixedVolume = -1)
         {
             pcVoices.ExitSound = false;
             bool LoopFlag = ((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Loop) & 1) == 1;
 
-            //Calculate volume & panning
+            //Calculate volume
             float volume = sfxSample.MasterVolume / 100.0f;
+            if (fixedVolume != -1)
+            {
+                volume = fixedVolume / 100.0f;
+            }
+
+            //Calculate Panning
             float panning = 0;
-            if (audioPosition != null)
+            if (audioPosition != null && enablePanning)
             {
                 float dist = audioMaths.CalcDistFromListener(null, audioPosition);
                 panning = audioMaths.CalcPanFromPos(dist, audioPosition);
@@ -124,7 +144,15 @@ namespace PCAudioDLL
                         else
                         {
                             //Get all data
-                            ExAudioSample sampleAudio = audioPlayer.GetAudioSample(soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo);
+                            ExAudioSample sampleAudio = null;
+                            if (sampleInfo.FileRef >= 0)
+                            {
+                                sampleAudio = audioPlayer.GetAudioSample(soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo);
+                            }
+                            else
+                            {
+                                sampleAudio = audioPlayer.GetStreamAudioSample(streamedFile, sfxSample.HashCodeNumber, sfxSample, sampleInfo);
+                            }
 
                             //Get a voice
                             if (audioPosition == null)
@@ -161,15 +189,21 @@ namespace PCAudioDLL
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void PlayPolyphonicSfx(Sample sfxSample, SoundBank soundBank, AudioVoices pcVoices, float[] audioPosition = null)
+        internal void PlayPolyphonicSfx(List<StreamSample> streamedFile, Sample sfxSample, SoundBank soundBank, AudioVoices pcVoices, float[] audioPosition = null, bool enablePanning = false, int fixedVolume = -1)
         {
             pcVoices.ExitSound = false;
             bool LoopFlag = ((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Loop) & 1) == 1;
 
-            //Calculate volume & panning
+            //Calculate volume
             float volume = sfxSample.MasterVolume / 100.0f;
+            if (fixedVolume != -1)
+            {
+                volume = fixedVolume / 100.0f;
+            }
+
+            //Calculate Panning
             float panning = 0;
-            if (audioPosition != null)
+            if (audioPosition != null && enablePanning)
             {
                 float dist = audioMaths.CalcDistFromListener(null, audioPosition);
                 panning = audioMaths.CalcPanFromPos(dist, audioPosition);
@@ -198,7 +232,15 @@ namespace PCAudioDLL
                         else
                         {
                             //Get all data
-                            ExAudioSample sampleAudio = audioPlayer.GetAudioSample(soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo);
+                            ExAudioSample sampleAudio = null;
+                            if (sampleInfo.FileRef >= 0)
+                            {
+                                sampleAudio = audioPlayer.GetAudioSample(soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo);
+                            }
+                            else
+                            {
+                                sampleAudio = audioPlayer.GetStreamAudioSample(streamedFile, sfxSample.HashCodeNumber, sfxSample, sampleInfo);
+                            }
 
                             //Get a voice
                             if (audioPosition == null)
