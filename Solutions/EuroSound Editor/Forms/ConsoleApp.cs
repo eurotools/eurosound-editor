@@ -58,7 +58,7 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void ConsoleApp_FormClosing(object sender, FormClosingEventArgs e)
         {
-            pcDll.StopPlayer();
+            BtnStopAllSFXs_Click(sender, e);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
