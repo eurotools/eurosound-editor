@@ -7,53 +7,71 @@
 // |______|\__,_|_|  \___/|___/\___/ \__,_|_| |_|\__,_|
 //
 //-------------------------------------------------------------------------------------------------------------------------------
-// PCDLL Debug Form
+// Loop Stream
 //-------------------------------------------------------------------------------------------------------------------------------
-using PCAudioDLL;
-using System;
-using System.Windows.Forms;
+using NAudio.Wave;
 
-namespace sb_editor.Forms
+namespace PCAudioDLL.Audio_Player
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    public partial class PCDllDebugForm : Form
+    internal class AudioLoop : WaveStream
     {
+        private readonly int _start;
+        private readonly WaveStream sourceStream;
+
         //-------------------------------------------------------------------------------------------------------------------------------
-        public PCDllDebugForm()
+        public AudioLoop(WaveStream sourceStream, long start, bool enableLooping)
         {
-            InitializeComponent();
+            this.sourceStream = sourceStream;
+            this.EnableLooping = enableLooping;
+            _start = (int)(start & -2);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void Frm_TestSfxDebug_Shown(object sender, EventArgs e)
+        public bool EnableLooping { get; set; }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public override WaveFormat WaveFormat
         {
-            //PCAudioDll.InitializeConsole(txtDebugData);
+            get { return sourceStream.WaveFormat; }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void ChkPauseDebug_Click(object sender, EventArgs e)
+        public override long Length
         {
-            //PCAudioDll.outputConsole.PauseOutput = chkPauseDebug.Checked;
+            get { return sourceStream.Length; }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void PCDllDebugForm_FormClosing(object sender, FormClosingEventArgs e)
+        public override long Position
         {
-            //PCAudioDll.outputConsole.TxtConsole = null;
+            get { return sourceStream.Position; }
+            set { sourceStream.Position = value; }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void BtnClear_Click(object sender, EventArgs e)
+        public override int Read(byte[] buffer, int offset, int count)
         {
-            txtDebugData.Clear();
-        }
+            int totalBytesRead = 0;
 
-        //-------------------------------------------------------------------------------------------------------------------------------
-        private void BtnOK_Click(object sender, EventArgs e)
-        {
-            Close();
+            while (totalBytesRead < count)
+            {
+                int bytesRead = sourceStream.Read(buffer, offset + totalBytesRead, count - totalBytesRead);
+                if (bytesRead == 0)
+                {
+                    if (sourceStream.Position == 0 || !EnableLooping)
+                    {
+                        // something wrong with the source stream
+                        break;
+                    }
+                    // loop
+                    sourceStream.Position = _start;
+                }
+                totalBytesRead += bytesRead;
+            }
+            return totalBytesRead;
         }
     }
 

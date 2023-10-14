@@ -314,12 +314,12 @@ namespace sb_editor.Forms
             string filePath = Path.Combine(outputFilePath, fileName);
             if (File.Exists(filePath))
             {
-                if (PCAudioDll.IsSoundBankLoaded(0xFFFE))
+               /* if (PCAudioDll.IsSoundBankLoaded(0xFFFE))
                 {
                     PCAudioDll.UnloadSoundbank();
                 }
                 PCAudioDll.LoadSoundBank(filePath);
-                PCAudioDll.PlaySfx(0, cutoff_frequency);
+                PCAudioDll.PlaySfx(0, cutoff_frequency);*/
             }
         }
 

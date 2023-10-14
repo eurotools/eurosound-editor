@@ -32,10 +32,10 @@ namespace sb_editor.Forms
         private void PCDllVoicesForm_Load(object sender, EventArgs e)
         {
             //Print items
-            for (int i = 0; i < PCAudioDll.pcOutVoices.VoicesArray.Length; i++)
+          /*  for (int i = 0; i < PCAudioDll.pcOutVoices.VoicesArray.Length; i++)
             {
                 dataGridView1.Rows.Add(new string[] { i.ToString(), "", "", "", "", "", "", "", "" });
-            }
+            }*/
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -53,7 +53,7 @@ namespace sb_editor.Forms
         {
             while (!Disposing)
             {
-                for (int i = 0; i < PCAudioDll.pcOutVoices.VoicesArray.Length; i++)
+                /*for (int i = 0; i < PCAudio.audioVoices.VoicesArray.Length; i++)
                 {
                     ExWaveOut currentVoice = PCAudioDll.pcOutVoices.VoicesArray[i];
                     try
@@ -89,7 +89,7 @@ namespace sb_editor.Forms
                     {
 
                     }
-                }
+                }*/
                 Thread.Sleep(10);
             }
         }

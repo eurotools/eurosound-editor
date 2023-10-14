@@ -72,6 +72,12 @@
     <Compile Include="Forms\Advanced\Advanced_Report.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\ConsoleApp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ConsoleApp.Designer.cs">
+      <DependentUpon>ConsoleApp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\DebugForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -416,6 +422,9 @@
     <EmbeddedResource Include="Forms\Advanced\Advanced.resx">
       <DependentUpon>Advanced.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ConsoleApp.resx">
+      <DependentUpon>ConsoleApp.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\DebugForm.resx">
       <DependentUpon>DebugForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -587,9 +596,8 @@
       <Name>ExMarkers</Name>
     </ProjectReference>
     <ProjectReference Include="..\PCAudioDLL\PCAudioDLL.csproj">
-      <Project>{9b6c594f-8e3e-4ef4-b1c2-18772719bcaf}</Project>
+      <Project>{96df7155-4935-45a3-ab5b-9bd2c621440d}</Project>
       <Name>PCAudioDLL</Name>
-      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
