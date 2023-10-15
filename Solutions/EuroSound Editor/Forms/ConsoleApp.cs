@@ -70,6 +70,12 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
+        private void btnOkey_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
         private void ChkStreamingTest_CheckedChanged(object sender, EventArgs e)
         {
             //Load SFX File
@@ -165,7 +171,7 @@ namespace sb_editor.Forms
                     //Set SFX data for being played
                     nudInnerRadius.Value = sfxData.Parameters.InnerRadius;
                     nudOuterRadius.Value = sfxData.Parameters.OuterRadius;
-                    nudHashCode.Value = 0x1A000000 + sfxData.HashCode;
+                    nudHashCode.Value = 0x1AF00000 + sfxData.HashCode;
                 }
             }
         }
@@ -196,7 +202,7 @@ namespace sb_editor.Forms
                     lstBox_SFXs.EndUpdate();
 
                     //Load SFX File
-                    string sfxFilePath = Path.Combine(txtSoundBankFile.Text, CommonFunctions.GetSfxName(Language.English, lstbAvailableSoundBanks.SelectedItems[i].ToString()), ".SFX");
+                    string sfxFilePath = Path.Combine(txtSoundBankFile.Text, CommonFunctions.GetSfxName(Language.English, lstbAvailableSoundBanks.SelectedItems[i].ToString()));
                     if (File.Exists(sfxFilePath))
                     {
                         pcDll.LoadSoundBank(sfxFilePath);
