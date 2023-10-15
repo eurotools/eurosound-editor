@@ -46,6 +46,14 @@ namespace sb_editor.Forms
             {
                 projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
             }
+
+            //Reload SFXs folder
+            string systemIniFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini");
+            if (File.Exists(systemIniFilePath))
+            {
+                IniFile iniFile = new IniFile(systemIniFilePath);
+                txtSoundBankFile.Text = iniFile.Read("OutputPath", "ConsoleApp");
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -289,6 +297,10 @@ namespace sb_editor.Forms
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 txtSoundBankFile.Text = folderBrowserDialog.SelectedPath;
+
+                //Save State
+                IniFile iniFile = new IniFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini"));
+                iniFile.Write("OutputPath", txtSoundBankFile.Text, "ConsoleApp");
             }
         }
 
