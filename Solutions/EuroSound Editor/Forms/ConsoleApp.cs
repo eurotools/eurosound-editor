@@ -188,8 +188,15 @@ namespace sb_editor.Forms
                     lstBox_SFXs.EndUpdate();
 
                     //Load SFX File
-                    string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, "HC", soundBankData.HashCode.ToString("X6"), ".SFX"));
-                    pcDll.LoadSoundBank(sfxFilePath);
+                    string sfxFilePath = Path.Combine(txtSoundBankFile.Text, CommonFunctions.GetSfxName(Language.English, lstbAvailableSoundBanks.SelectedItems[i].ToString()), ".SFX");
+                    if (File.Exists(sfxFilePath))
+                    {
+                        pcDll.LoadSoundBank(sfxFilePath);
+                    }
+                    else
+                    {
+                        MessageBox.Show(string.Format("{0} was not found.", sfxFilePath), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                 }
             }
         }
