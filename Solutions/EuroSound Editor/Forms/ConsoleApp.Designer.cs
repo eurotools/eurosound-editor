@@ -72,16 +72,16 @@ namespace sb_editor.Forms
             this.btnOkey = new System.Windows.Forms.Button();
             this.grbxSFXsFolderPath = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.grbxTestingGroup = new System.Windows.Forms.GroupBox();
+            this.rbtn_Xbox = new System.Windows.Forms.RadioButton();
+            this.rbtn_GameCube = new System.Windows.Forms.RadioButton();
+            this.rbtn_PS2 = new System.Windows.Forms.RadioButton();
+            this.rbtn_PC = new System.Windows.Forms.RadioButton();
             this.btnSfxReset = new System.Windows.Forms.Button();
             this.btnStopAllSFXs = new System.Windows.Forms.Button();
             this.trckBarMasterVolume = new System.Windows.Forms.TrackBar();
             this.label2 = new System.Windows.Forms.Label();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.grbxTestingGroup = new System.Windows.Forms.GroupBox();
-            this.rbtn_PC = new System.Windows.Forms.RadioButton();
-            this.rbtn_PS2 = new System.Windows.Forms.RadioButton();
-            this.rbtn_GameCube = new System.Windows.Forms.RadioButton();
-            this.rbtn_Xbox = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.nudHashCode)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudZ)).BeginInit();
@@ -101,8 +101,8 @@ namespace sb_editor.Forms
             ((System.ComponentModel.ISupportInitialize)(this.picBox_ZX)).BeginInit();
             this.grbxSFXsFolderPath.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trckBarMasterVolume)).BeginInit();
             this.grbxTestingGroup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trckBarMasterVolume)).BeginInit();
             this.SuspendLayout();
             // 
             // txtSoundBankFile
@@ -657,6 +657,70 @@ namespace sb_editor.Forms
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Misc SFX Module Commands";
             // 
+            // grbxTestingGroup
+            // 
+            this.grbxTestingGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.grbxTestingGroup.Controls.Add(this.rbtn_Xbox);
+            this.grbxTestingGroup.Controls.Add(this.rbtn_GameCube);
+            this.grbxTestingGroup.Controls.Add(this.rbtn_PS2);
+            this.grbxTestingGroup.Controls.Add(this.rbtn_PC);
+            this.grbxTestingGroup.Location = new System.Drawing.Point(6, 48);
+            this.grbxTestingGroup.Name = "grbxTestingGroup";
+            this.grbxTestingGroup.Size = new System.Drawing.Size(292, 47);
+            this.grbxTestingGroup.TabIndex = 4;
+            this.grbxTestingGroup.TabStop = false;
+            this.grbxTestingGroup.Text = "Platform Type:";
+            // 
+            // rbtn_Xbox
+            // 
+            this.rbtn_Xbox.AutoSize = true;
+            this.rbtn_Xbox.Location = new System.Drawing.Point(231, 22);
+            this.rbtn_Xbox.Name = "rbtn_Xbox";
+            this.rbtn_Xbox.Size = new System.Drawing.Size(49, 17);
+            this.rbtn_Xbox.TabIndex = 3;
+            this.rbtn_Xbox.TabStop = true;
+            this.rbtn_Xbox.Text = "Xbox";
+            this.rbtn_Xbox.UseVisualStyleBackColor = true;
+            this.rbtn_Xbox.CheckedChanged += new System.EventHandler(this.Rbtn_Xbox_CheckedChanged);
+            // 
+            // rbtn_GameCube
+            // 
+            this.rbtn_GameCube.AutoSize = true;
+            this.rbtn_GameCube.Location = new System.Drawing.Point(144, 22);
+            this.rbtn_GameCube.Name = "rbtn_GameCube";
+            this.rbtn_GameCube.Size = new System.Drawing.Size(81, 17);
+            this.rbtn_GameCube.TabIndex = 2;
+            this.rbtn_GameCube.TabStop = true;
+            this.rbtn_GameCube.Text = "Game Cube";
+            this.rbtn_GameCube.UseVisualStyleBackColor = true;
+            this.rbtn_GameCube.CheckedChanged += new System.EventHandler(this.Rbtn_GameCube_CheckedChanged);
+            // 
+            // rbtn_PS2
+            // 
+            this.rbtn_PS2.AutoSize = true;
+            this.rbtn_PS2.Location = new System.Drawing.Point(51, 22);
+            this.rbtn_PS2.Name = "rbtn_PS2";
+            this.rbtn_PS2.Size = new System.Drawing.Size(87, 17);
+            this.rbtn_PS2.TabIndex = 1;
+            this.rbtn_PS2.TabStop = true;
+            this.rbtn_PS2.Text = "PlayStation 2";
+            this.rbtn_PS2.UseVisualStyleBackColor = true;
+            this.rbtn_PS2.CheckedChanged += new System.EventHandler(this.Rbtn_PS2_CheckedChanged);
+            // 
+            // rbtn_PC
+            // 
+            this.rbtn_PC.AutoSize = true;
+            this.rbtn_PC.Location = new System.Drawing.Point(6, 22);
+            this.rbtn_PC.Name = "rbtn_PC";
+            this.rbtn_PC.Size = new System.Drawing.Size(39, 17);
+            this.rbtn_PC.TabIndex = 0;
+            this.rbtn_PC.TabStop = true;
+            this.rbtn_PC.Text = "PC";
+            this.rbtn_PC.UseVisualStyleBackColor = true;
+            this.rbtn_PC.CheckedChanged += new System.EventHandler(this.Rbtn_PC_CheckedChanged);
+            // 
             // btnSfxReset
             // 
             this.btnSfxReset.Location = new System.Drawing.Point(304, 48);
@@ -695,66 +759,6 @@ namespace sb_editor.Forms
             this.label2.Size = new System.Drawing.Size(45, 13);
             this.label2.TabIndex = 0;
             this.label2.Text = "Volume:";
-            // 
-            // grbxTestingGroup
-            // 
-            this.grbxTestingGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.grbxTestingGroup.Controls.Add(this.rbtn_Xbox);
-            this.grbxTestingGroup.Controls.Add(this.rbtn_GameCube);
-            this.grbxTestingGroup.Controls.Add(this.rbtn_PS2);
-            this.grbxTestingGroup.Controls.Add(this.rbtn_PC);
-            this.grbxTestingGroup.Location = new System.Drawing.Point(6, 48);
-            this.grbxTestingGroup.Name = "grbxTestingGroup";
-            this.grbxTestingGroup.Size = new System.Drawing.Size(292, 47);
-            this.grbxTestingGroup.TabIndex = 4;
-            this.grbxTestingGroup.TabStop = false;
-            this.grbxTestingGroup.Text = "Platform Type:";
-            // 
-            // rbtn_PC
-            // 
-            this.rbtn_PC.AutoSize = true;
-            this.rbtn_PC.Location = new System.Drawing.Point(6, 22);
-            this.rbtn_PC.Name = "rbtn_PC";
-            this.rbtn_PC.Size = new System.Drawing.Size(39, 17);
-            this.rbtn_PC.TabIndex = 0;
-            this.rbtn_PC.TabStop = true;
-            this.rbtn_PC.Text = "PC";
-            this.rbtn_PC.UseVisualStyleBackColor = true;
-            // 
-            // rbtn_PS2
-            // 
-            this.rbtn_PS2.AutoSize = true;
-            this.rbtn_PS2.Location = new System.Drawing.Point(51, 22);
-            this.rbtn_PS2.Name = "rbtn_PS2";
-            this.rbtn_PS2.Size = new System.Drawing.Size(87, 17);
-            this.rbtn_PS2.TabIndex = 1;
-            this.rbtn_PS2.TabStop = true;
-            this.rbtn_PS2.Text = "PlayStation 2";
-            this.rbtn_PS2.UseVisualStyleBackColor = true;
-            // 
-            // rbtn_GameCube
-            // 
-            this.rbtn_GameCube.AutoSize = true;
-            this.rbtn_GameCube.Location = new System.Drawing.Point(144, 22);
-            this.rbtn_GameCube.Name = "rbtn_GameCube";
-            this.rbtn_GameCube.Size = new System.Drawing.Size(81, 17);
-            this.rbtn_GameCube.TabIndex = 2;
-            this.rbtn_GameCube.TabStop = true;
-            this.rbtn_GameCube.Text = "Game Cube";
-            this.rbtn_GameCube.UseVisualStyleBackColor = true;
-            // 
-            // rbtn_Xbox
-            // 
-            this.rbtn_Xbox.AutoSize = true;
-            this.rbtn_Xbox.Location = new System.Drawing.Point(231, 22);
-            this.rbtn_Xbox.Name = "rbtn_Xbox";
-            this.rbtn_Xbox.Size = new System.Drawing.Size(49, 17);
-            this.rbtn_Xbox.TabIndex = 3;
-            this.rbtn_Xbox.TabStop = true;
-            this.rbtn_Xbox.Text = "Xbox";
-            this.rbtn_Xbox.UseVisualStyleBackColor = true;
             // 
             // ConsoleApp
             // 
@@ -801,9 +805,9 @@ namespace sb_editor.Forms
             this.grbxSFXsFolderPath.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trckBarMasterVolume)).EndInit();
             this.grbxTestingGroup.ResumeLayout(false);
             this.grbxTestingGroup.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trckBarMasterVolume)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
