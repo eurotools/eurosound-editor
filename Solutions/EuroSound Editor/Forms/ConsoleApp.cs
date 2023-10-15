@@ -95,6 +95,9 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------
         private void BtnStartRandomTest_Click(object sender, EventArgs e)
         {
+            //Stop any previous test that could be running
+            BtnStopRandomTest_Click(sender, e);
+
             //Ensure that we have a soundbank loaded
             if (lstbLoadedSoundBanks.Items.Count == 1)
             {
