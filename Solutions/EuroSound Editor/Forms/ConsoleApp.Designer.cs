@@ -625,6 +625,7 @@ namespace sb_editor.Forms
             this.btnOkey.TabIndex = 13;
             this.btnOkey.Text = "OK";
             this.btnOkey.UseVisualStyleBackColor = true;
+            this.btnOkey.Click += new System.EventHandler(this.btnOkey_Click);
             // 
             // grbxSFXsFolderPath
             // 
