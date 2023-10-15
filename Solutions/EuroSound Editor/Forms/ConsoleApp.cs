@@ -11,7 +11,6 @@ using System.Linq;
 using System.Media;
 using System.Text;
 using System.Windows.Forms;
-using static ESUtils.Enumerations;
 
 namespace sb_editor.Forms
 {
@@ -70,7 +69,7 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void btnOkey_Click(object sender, EventArgs e)
+        private void BtnOkey_Click(object sender, EventArgs e)
         {
             Close();
         }
@@ -79,12 +78,8 @@ namespace sb_editor.Forms
         private void ChkStreamingTest_CheckedChanged(object sender, EventArgs e)
         {
             //Load SFX File
-            string fileName = CommonFunctions.GetSfxName(Language.English, "_streamdata");
-            string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, fileName, ".SFX"));
-            if (File.Exists(sfxFilePath))
-            {
-                pcDll.LoadSoundBank(GetTestingPlatform(), sfxFilePath, true);
-            }
+            string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, "HC00FFFF", ".SFX"));
+            pcDll.LoadSoundBank(GetTestingPlatform(), sfxFilePath, true);
         }
 
         //-------------------------------------------------------------------------------------------
@@ -169,9 +164,9 @@ namespace sb_editor.Forms
                     lstbSamples.EndUpdate();
 
                     //Set SFX data for being played
-                    nudInnerRadius.Value = sfxData.Parameters.InnerRadius;
-                    nudOuterRadius.Value = sfxData.Parameters.OuterRadius;
-                    nudHashCode.Value = 0x1AF00000 + sfxData.HashCode;
+                    nudInnerRadius.Value = Math.Min(Math.Max(sfxData.Parameters.InnerRadius, 0), 500);
+                    nudOuterRadius.Value = Math.Min(Math.Max(sfxData.Parameters.OuterRadius, 0), 500);
+                    nudHashCode.Value = 0x1A000000 + sfxData.HashCode;
                 }
             }
         }
@@ -202,7 +197,7 @@ namespace sb_editor.Forms
                     lstBox_SFXs.EndUpdate();
 
                     //Load SFX File
-                    string sfxFilePath = Path.Combine(txtSoundBankFile.Text, CommonFunctions.GetSfxName(Language.English, lstbAvailableSoundBanks.SelectedItems[i].ToString()));
+                    string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, "HC", soundBankData.HashCode.ToString("X6"), ".SFX"));
                     if (File.Exists(sfxFilePath))
                     {
                         pcDll.LoadSoundBank(GetTestingPlatform(), sfxFilePath);
@@ -230,7 +225,7 @@ namespace sb_editor.Forms
                 SoundBank soundBankData = TextFiles.ReadSoundbankFile(sbPath);
 
                 //Unload SoundBank
-                pcDll.UnloadSoundbank(0xE000 + soundBankData.HashCode);
+                pcDll.UnloadSoundbank(soundBankData.HashCode);
             }
 
             //Select next item
