@@ -52,6 +52,10 @@ namespace sb_editor.Forms
             {
                 IniFile iniFile = new IniFile(systemIniFilePath);
                 txtSoundBankFile.Text = iniFile.Read("OutputPath", "ConsoleApp");
+                rbtn_PC.Checked = iniFile.Read("PlatformTypePC", "ConsoleApp").Equals("1");
+                rbtn_PS2.Checked = iniFile.Read("PlatformTypePS2", "ConsoleApp").Equals("1");
+                rbtn_GameCube.Checked = iniFile.Read("PlatformTypeGC", "ConsoleApp").Equals("1");
+                rbtn_Xbox.Checked = iniFile.Read("PlatformTypeXB", "ConsoleApp").Equals("1");
             }
         }
 
@@ -276,6 +280,36 @@ namespace sb_editor.Forms
             DrawEllipse(picBox_XY, new Pen(Color.Green, 2), innerRadius / 3, !chxDrawCircle.Checked);
             DrawEllipse(picBox_XY, new Pen(Color.Red, 2), outerRadius / 3, !chxDrawCircle.Checked);
             DrawListener(picBox_XY, (int)nudX.Value / 3, (int)nudY.Value);
+        }
+
+        //-------------------------------------------------------------------------------------------
+        //  Platform Type
+        //-------------------------------------------------------------------------------------------
+        private void Rbtn_PC_CheckedChanged(object sender, EventArgs e)
+        {
+            IniFile iniFile = new IniFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini"));
+            iniFile.Write("PlatformTypePC", rbtn_PC.Checked ? "1" : "0", "ConsoleApp");
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void Rbtn_PS2_CheckedChanged(object sender, EventArgs e)
+        {
+            IniFile iniFile = new IniFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini"));
+            iniFile.Write("PlatformTypePS2", rbtn_PS2.Checked ? "1" : "0", "ConsoleApp");
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void Rbtn_GameCube_CheckedChanged(object sender, EventArgs e)
+        {
+            IniFile iniFile = new IniFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini"));
+            iniFile.Write("PlatformTypeGC", rbtn_GameCube.Checked ? "1" : "0", "ConsoleApp");
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void Rbtn_Xbox_CheckedChanged(object sender, EventArgs e)
+        {
+            IniFile iniFile = new IniFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini"));
+            iniFile.Write("PlatformTypeXB", rbtn_Xbox.Checked ? "1" : "0", "ConsoleApp");
         }
 
         //-------------------------------------------------------------------------------------------
