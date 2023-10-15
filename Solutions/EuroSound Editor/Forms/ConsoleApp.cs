@@ -194,7 +194,7 @@ namespace sb_editor.Forms
                     SoundBank soundBankData = TextFiles.ReadSoundbankFile(sbPath);
 
                     //Get SFXs
-                    string[] SFXs = sbFunctions.GetSFXs(soundBankData.DataBases, "PC");
+                    string[] SFXs = sbFunctions.GetSFXs(soundBankData.DataBases, GetTestingPlatform());
                     lstBox_SFXs.BeginUpdate();
                     lstBox_SFXs.Items.Clear();
                     lstBox_SFXs.Items.AddRange(SFXs);
@@ -209,6 +209,13 @@ namespace sb_editor.Forms
                     else
                     {
                         MessageBox.Show(string.Format("{0} was not found.", sfxFilePath), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+
+                    //Load SoundDetails file
+                    string soundDetails = Path.Combine(txtSoundBankFile.Text, CommonFunctions.GetSfxName(Language.English, "_sounddetails"));
+                    if (File.Exists(soundDetails))
+                    {
+                       pcDll.LoadSoundDetails(GetTestingPlatform(), soundDetails);
                     }
                 }
             }

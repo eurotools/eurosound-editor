@@ -25,10 +25,22 @@ namespace PCAudioDLL
     //-------------------------------------------------------------------------------------------------------------------------------
     public class PCAudio
     {
+        internal Dictionary<uint, SoundBank> LoadedSoundBanks = new Dictionary<uint, SoundBank>();
+        private SoundDetails soundDetails;
         public readonly AudioVoices audioVoices = new AudioVoices();
         private readonly List<StreamSample> streamedFile = new List<StreamSample>();
         private string sbOutputPlatform;
-        internal Dictionary<uint, SoundBank> LoadedSoundBanks = new Dictionary<uint, SoundBank>();
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public void LoadSoundDetails(string soundBankPlatform, string soundBankPath)
+        {
+            if (File.Exists(soundBankPath))
+            {
+                SoundDetailsReader soundDetailsReader = new SoundDetailsReader();
+                SfxCommonHeader soundDetailsHeaderData = soundDetailsReader.ReadCommonHeader(soundBankPath, soundBankPlatform);
+                soundDetails = soundDetailsReader.ReadSoundDetailsFile(soundBankPath, soundDetailsHeaderData);
+            }
+        }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         public double LoadSoundBank(string soundBankPlatform, string soundBankPath, bool isStream = false)
@@ -108,6 +120,18 @@ namespace PCAudioDLL
                     if (soundBank.Value.sfxSamples.ContainsKey(SoundHashcode))
                     {
                         Sample sfxSample = soundBank.Value.sfxSamples[SoundHashcode];
+
+                        //Update inner and outer radius
+                        foreach(var sfxItem in soundDetails.sfxItems)
+                        {
+                            if (sfxItem.HashCode == SoundHashcode)
+                            {
+                                sfxSample.InnerRadius = (short)sfxItem.InnerRadius;
+                                sfxSample.OuterRadius = (short)sfxItem.OuterRadius;
+                            }
+                        }
+                        
+                        //Ensure that is valid
                         if ((ContainStreams(sfxSample) && streamedFile.Count > 0)|| !ContainStreams(sfxSample))
                         {
                             //Play SFX depending on the sound type
@@ -158,6 +182,18 @@ namespace PCAudioDLL
                     if (soundBank.Value.sfxSamples.ContainsKey(SoundHashcode))
                     {
                         Sample sfxSample = soundBank.Value.sfxSamples[SoundHashcode];
+
+                        //Update inner and outer radius
+                        foreach (var sfxItem in soundDetails.sfxItems)
+                        {
+                            if (sfxItem.HashCode == SoundHashcode)
+                            {
+                                sfxSample.InnerRadius = (short)sfxItem.InnerRadius;
+                                sfxSample.OuterRadius = (short)sfxItem.OuterRadius;
+                            }
+                        }
+
+                        //Ensure that is valid
                         if ((ContainStreams(sfxSample) && streamedFile.Count > 0) || !ContainStreams(sfxSample))
                         {
                             //Play SFX depending on the sound type
