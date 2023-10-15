@@ -61,7 +61,7 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void chkStreamingTest_CheckedChanged(object sender, EventArgs e)
+        private void ChkStreamingTest_CheckedChanged(object sender, EventArgs e)
         {
             //Load SFX File
             string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, "HC00FFFF", ".SFX"));
@@ -184,7 +184,14 @@ namespace sb_editor.Forms
 
                     //Load SFX File
                     string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, "HC", soundBankData.HashCode.ToString("X6"), ".SFX"));
-                    pcDll.LoadSoundBank(sfxFilePath);
+                    if (File.Exists(sfxFilePath))
+                    {
+                        pcDll.LoadSoundBank(sfxFilePath);
+                    }
+                    else
+                    {
+                        MessageBox.Show(string.Format("{0} was not found.", sfxFilePath), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                 }
             }
         }
@@ -267,6 +274,17 @@ namespace sb_editor.Forms
         {
             BtnLoadSoundbanks_Click(sender, e);
             pcDll.LoadSoundBank(string.Empty);
+        }
+
+        //-------------------------------------------------------------------------------------------
+        //  Platform Output
+        //-------------------------------------------------------------------------------------------
+        private void TxtSoundBankFile_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            {
+                txtSoundBankFile.Text = folderBrowserDialog.SelectedPath;
+            }
         }
 
         //-------------------------------------------------------------------------------------------
