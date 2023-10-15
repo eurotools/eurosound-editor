@@ -76,6 +76,7 @@ namespace sb_editor.Forms
             this.btnStopAllSFXs = new System.Windows.Forms.Button();
             this.trckBarMasterVolume = new System.Windows.Forms.TrackBar();
             this.label2 = new System.Windows.Forms.Label();
+            this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             ((System.ComponentModel.ISupportInitialize)(this.nudHashCode)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudZ)).BeginInit();
@@ -102,12 +103,15 @@ namespace sb_editor.Forms
             // 
             this.txtSoundBankFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSoundBankFile.BackColor = System.Drawing.SystemColors.Window;
             this.txtSoundBankFile.Location = new System.Drawing.Point(6, 19);
             this.txtSoundBankFile.Name = "txtSoundBankFile";
+            this.txtSoundBankFile.ReadOnly = true;
             this.txtSoundBankFile.Size = new System.Drawing.Size(378, 20);
             this.txtSoundBankFile.TabIndex = 0;
             this.txtSoundBankFile.Text = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Sphinx and the Cursed Mummy\\_bin_PC" +
     "\\_Eng";
+            this.txtSoundBankFile.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TxtSoundBankFile_MouseDoubleClick);
             // 
             // btnStartSFX
             // 
@@ -303,7 +307,7 @@ namespace sb_editor.Forms
             this.chkStreamingTest.TabIndex = 8;
             this.chkStreamingTest.Text = "Streaming Tests";
             this.chkStreamingTest.UseVisualStyleBackColor = true;
-            this.chkStreamingTest.CheckedChanged += new System.EventHandler(this.chkStreamingTest_CheckedChanged);
+            this.chkStreamingTest.CheckedChanged += new System.EventHandler(this.ChkStreamingTest_CheckedChanged);
             // 
             // groupBox4
             // 
@@ -785,5 +789,6 @@ namespace sb_editor.Forms
         private System.Windows.Forms.Button btnStopAllSFXs;
         private System.Windows.Forms.TrackBar trckBarMasterVolume;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
     }
 }
