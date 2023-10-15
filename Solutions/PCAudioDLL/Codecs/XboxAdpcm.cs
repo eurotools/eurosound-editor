@@ -8,7 +8,7 @@ namespace PCAudioDLL
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    public class Eurocom_ImaAdpcm
+    public class XboxAdpcm
     {
         //-------------------------------------------------------------------------------------------------------------------------------
         private class ImaAdpcmState
@@ -39,7 +39,7 @@ namespace PCAudioDLL
         //-------------------------------------------------------------------------------------------------------------------------------
         public short[] Decode(byte[] adpcmData)
         {
-            int numSamples = adpcmData.Length * 56 / 32;
+            int numSamples = adpcmData.Length * 64 / 36;
             short[] outBuff = new short[numSamples];
             int inp;           		/* Input buffer pointer */
             int outIndex = 0;   	/* Output buffer pointer */
@@ -55,7 +55,6 @@ namespace PCAudioDLL
 
             ImaAdpcmState state = new ImaAdpcmState();
             inp = 0;
-            inputbuffer = 0;
 
             valpred = state.valprev;
             index = state.index;
@@ -68,7 +67,7 @@ namespace PCAudioDLL
             {
                 if (--remainingSamples <= 0)
                 {
-                    remainingSamples = 56;
+                    remainingSamples = 64;
                     valpred = (short)(adpcmData[inp++] | (sbyte)adpcmData[inp++] << 8);
                     index = adpcmData[inp]; inp += 2;
 
@@ -76,15 +75,16 @@ namespace PCAudioDLL
                         index = 0;
                 }
 
+                inputbuffer = adpcmData[inp];
                 /* Step 1 - get the delta value */
                 if (bufferstep)
                 {
-                    delta = inputbuffer & 0xf;
+                    inp++;
+                    delta = (inputbuffer >> 4) & 0xf;
                 }
                 else
                 {
-                    inputbuffer = adpcmData[inp++];
-                    delta = (inputbuffer >> 4) & 0xf;
+                    delta = inputbuffer & 0xf;
                 }
                 bufferstep = !bufferstep;
 

@@ -11,7 +11,6 @@ using System.Linq;
 using System.Media;
 using System.Text;
 using System.Windows.Forms;
-using static ESUtils.Enumerations;
 
 namespace sb_editor.Forms
 {
@@ -70,7 +69,7 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void btnOkey_Click(object sender, EventArgs e)
+        private void BtnOkey_Click(object sender, EventArgs e)
         {
             Close();
         }
@@ -78,15 +77,9 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void ChkStreamingTest_CheckedChanged(object sender, EventArgs e)
         {
-            //Get File Path
-            string fileName = string.Format("HC{0:X6}.SFX", CommonFunctions.GetSfxName((int)Language.English, 0xFFFF));
-
-            //Load SoundBank
-            string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, fileName, ".SFX"));
-            if (File.Exists(sfxFilePath))
-            {
-                pcDll.LoadSoundBank(sfxFilePath, true);
-            }
+            //Load SFX File
+            string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, "HC00FFFF", ".SFX"));
+            pcDll.LoadSoundBank(GetTestingPlatform(), sfxFilePath, true);
         }
 
         //-------------------------------------------------------------------------------------------
@@ -207,7 +200,7 @@ namespace sb_editor.Forms
                     string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, "HC", soundBankData.HashCode.ToString("X6"), ".SFX"));
                     if (File.Exists(sfxFilePath))
                     {
-                        pcDll.LoadSoundBank(sfxFilePath);
+                        pcDll.LoadSoundBank(GetTestingPlatform(), sfxFilePath);
                     }
                     else
                     {
@@ -294,7 +287,7 @@ namespace sb_editor.Forms
         private void BtnSfxReset_Click(object sender, EventArgs e)
         {
             BtnLoadSoundbanks_Click(sender, e);
-            pcDll.LoadSoundBank(string.Empty);
+            pcDll.LoadSoundBank(GetTestingPlatform(), string.Empty);
         }
 
         //-------------------------------------------------------------------------------------------
@@ -302,6 +295,13 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------
         private void TxtSoundBankFile_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            //Restore selected path
+            if (Directory.Exists(txtSoundBankFile.Text))
+            {
+                folderBrowserDialog.SelectedPath = txtSoundBankFile.Text;
+            }
+
+            //Open folder browser
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 txtSoundBankFile.Text = folderBrowserDialog.SelectedPath;
@@ -408,5 +408,28 @@ namespace sb_editor.Forms
                 g.DrawEllipse(new Pen(Color.Lime, 2), x, y, 20, 20);
             }
         }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private string GetTestingPlatform()
+        {
+            string selPlatform = "PC";
+
+            if (rbtn_GameCube.Checked)
+            {
+                selPlatform = "GC";
+            }
+            if (rbtn_PS2.Checked)
+            {
+                selPlatform = "PS2";
+            }
+            if (rbtn_Xbox.Checked)
+            {
+                selPlatform = "XB";
+            }
+
+            return selPlatform;
+        }
     }
+
+    //-------------------------------------------------------------------------------------------------------------------------------
 }
