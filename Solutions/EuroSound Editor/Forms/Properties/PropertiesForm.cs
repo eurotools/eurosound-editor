@@ -276,6 +276,17 @@ namespace sb_editor
                     {
                         cboFormat.Items.Add(selectedFormat);
                     }
+
+                    //Update Combobox Memory Slots
+                    cboMemSlotFormat.BeginUpdate();
+                    cboMemSlotFormat.Items.Clear();
+                    if (temporalObj.platformData.Keys.Count > 0)
+                    {
+                        cboMemSlotFormat.Items.AddRange(temporalObj.platformData.Keys.ToArray());
+                        cboMemSlotFormat.SelectedIndex = 0;
+                    }
+                    cboMemSlotFormat.EndUpdate();
+                    UpdateMemMapsComboboxes();
                 }
             }
         }
