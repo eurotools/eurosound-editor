@@ -101,7 +101,7 @@ namespace sb_editor.Forms
             // 
             // txtSoundBankFile
             // 
-            this.txtSoundBankFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txtSoundBankFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSoundBankFile.BackColor = System.Drawing.SystemColors.Window;
             this.txtSoundBankFile.Location = new System.Drawing.Point(6, 19);
@@ -288,7 +288,7 @@ namespace sb_editor.Forms
             // 
             // grbxSamplePlay
             // 
-            this.grbxSamplePlay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.grbxSamplePlay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grbxSamplePlay.Controls.Add(this.btnPlaySample);
             this.grbxSamplePlay.Location = new System.Drawing.Point(278, 527);
@@ -311,7 +311,7 @@ namespace sb_editor.Forms
             // 
             // groupBox4
             // 
-            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox4.Controls.Add(this.nudOuterRadius);
             this.groupBox4.Controls.Add(this.nudInnerRadius);
@@ -360,8 +360,8 @@ namespace sb_editor.Forms
             // 
             // lstbSamples
             // 
-            this.lstbSamples.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.lstbSamples.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lstbSamples.FormattingEnabled = true;
             this.lstbSamples.HorizontalScrollbar = true;
@@ -404,7 +404,7 @@ namespace sb_editor.Forms
             // 
             // lstBox_SFXs
             // 
-            this.lstBox_SFXs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lstBox_SFXs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.lstBox_SFXs.FormattingEnabled = true;
             this.lstBox_SFXs.HorizontalScrollbar = true;
@@ -428,7 +428,7 @@ namespace sb_editor.Forms
             // 
             // btnLoadSoundbanks
             // 
-            this.btnLoadSoundbanks.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnLoadSoundbanks.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLoadSoundbanks.Location = new System.Drawing.Point(6, 223);
             this.btnLoadSoundbanks.Name = "btnLoadSoundbanks";
@@ -440,8 +440,8 @@ namespace sb_editor.Forms
             // 
             // lstbAvailableSoundBanks
             // 
-            this.lstbAvailableSoundBanks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.lstbAvailableSoundBanks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lstbAvailableSoundBanks.FormattingEnabled = true;
             this.lstbAvailableSoundBanks.HorizontalScrollbar = true;
@@ -465,7 +465,7 @@ namespace sb_editor.Forms
             // 
             // btnDeLoadSoundBanks
             // 
-            this.btnDeLoadSoundBanks.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnDeLoadSoundBanks.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDeLoadSoundBanks.Location = new System.Drawing.Point(6, 223);
             this.btnDeLoadSoundBanks.Name = "btnDeLoadSoundBanks";
@@ -477,8 +477,8 @@ namespace sb_editor.Forms
             // 
             // lstbLoadedSoundBanks
             // 
-            this.lstbLoadedSoundBanks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.lstbLoadedSoundBanks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lstbLoadedSoundBanks.FormattingEnabled = true;
             this.lstbLoadedSoundBanks.HorizontalScrollbar = true;
@@ -490,7 +490,7 @@ namespace sb_editor.Forms
             // 
             // grbxTestPostVel
             // 
-            this.grbxTestPostVel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.grbxTestPostVel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grbxTestPostVel.Controls.Add(this.nudScale);
             this.grbxTestPostVel.Controls.Add(this.label1);
@@ -594,7 +594,7 @@ namespace sb_editor.Forms
             // 
             // picBox_XY
             // 
-            this.picBox_XY.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.picBox_XY.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.picBox_XY.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(255)))), ((int)(((byte)(224)))));
             this.picBox_XY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -606,7 +606,7 @@ namespace sb_editor.Forms
             // 
             // picBox_ZX
             // 
-            this.picBox_ZX.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.picBox_ZX.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.picBox_ZX.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(255)))), ((int)(((byte)(224)))));
             this.picBox_ZX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;

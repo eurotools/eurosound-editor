@@ -46,6 +46,14 @@ namespace sb_editor.Forms
             {
                 projectSettings = TextFiles.ReadPropertiesFile(projectPropertiesFile);
             }
+
+            //Reload SFXs folder
+            string systemIniFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini");
+            if (File.Exists(systemIniFilePath))
+            {
+                IniFile iniFile = new IniFile(systemIniFilePath);
+                txtSoundBankFile.Text = iniFile.Read("OutputPath", "ConsoleApp");
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -62,7 +70,7 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void chkStreamingTest_CheckedChanged(object sender, EventArgs e)
+        private void ChkStreamingTest_CheckedChanged(object sender, EventArgs e)
         {
             //Load SFX File
             string fileName = CommonFunctions.GetSfxName(Language.English, "_streamdata");
@@ -148,7 +156,7 @@ namespace sb_editor.Forms
                     //Set Samples
                     lstbSamples.BeginUpdate();
                     lstbSamples.Items.Clear();
-                    foreach(SfxSample sfxSample in sfxData.Samples)
+                    foreach (SfxSample sfxSample in sfxData.Samples)
                     {
                         lstbSamples.Items.Add(sfxSample.FilePath);
                     }
@@ -279,6 +287,21 @@ namespace sb_editor.Forms
         {
             BtnLoadSoundbanks_Click(sender, e);
             pcDll.LoadSoundBank(string.Empty);
+        }
+
+        //-------------------------------------------------------------------------------------------
+        //  Platform Output
+        //-------------------------------------------------------------------------------------------
+        private void TxtSoundBankFile_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            {
+                txtSoundBankFile.Text = folderBrowserDialog.SelectedPath;
+
+                //Save State
+                IniFile iniFile = new IniFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini"));
+                iniFile.Write("OutputPath", txtSoundBankFile.Text, "ConsoleApp");
+            }
         }
 
         //-------------------------------------------------------------------------------------------
