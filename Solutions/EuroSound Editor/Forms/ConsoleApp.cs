@@ -83,7 +83,7 @@ namespace sb_editor.Forms
             string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, fileName, ".SFX"));
             if (File.Exists(sfxFilePath))
             {
-                pcDll.LoadSoundBank(sfxFilePath, true);
+                pcDll.LoadSoundBank(GetTestingPlatform(), sfxFilePath, true);
             }
         }
 
@@ -205,7 +205,7 @@ namespace sb_editor.Forms
                     string sfxFilePath = Path.Combine(txtSoundBankFile.Text, CommonFunctions.GetSfxName(Language.English, lstbAvailableSoundBanks.SelectedItems[i].ToString()));
                     if (File.Exists(sfxFilePath))
                     {
-                        pcDll.LoadSoundBank(sfxFilePath);
+                        pcDll.LoadSoundBank(GetTestingPlatform(), sfxFilePath);
                     }
                     else
                     {
@@ -292,7 +292,7 @@ namespace sb_editor.Forms
         private void BtnSfxReset_Click(object sender, EventArgs e)
         {
             BtnLoadSoundbanks_Click(sender, e);
-            pcDll.LoadSoundBank(string.Empty);
+            pcDll.LoadSoundBank(GetTestingPlatform(), string.Empty);
         }
 
         //-------------------------------------------------------------------------------------------
@@ -300,6 +300,13 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------
         private void TxtSoundBankFile_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            //Restore selected path
+            if (Directory.Exists(txtSoundBankFile.Text))
+            {
+                folderBrowserDialog.SelectedPath = txtSoundBankFile.Text;
+            }
+
+            //Open folder browser
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 txtSoundBankFile.Text = folderBrowserDialog.SelectedPath;
@@ -406,5 +413,28 @@ namespace sb_editor.Forms
                 g.DrawEllipse(new Pen(Color.Lime, 2), x, y, 20, 20);
             }
         }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private string GetTestingPlatform()
+        {
+            string selPlatform = "PC";
+
+            if (rbtn_GameCube.Checked)
+            {
+                selPlatform = "GC";
+            }
+            if (rbtn_PS2.Checked)
+            {
+                selPlatform = "PS2";
+            }
+            if (rbtn_Xbox.Checked)
+            {
+                selPlatform = "XB";
+            }
+
+            return selPlatform;
+        }
     }
+
+    //-------------------------------------------------------------------------------------------------------------------------------
 }
