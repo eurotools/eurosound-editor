@@ -166,7 +166,7 @@ namespace sb_editor.Forms
                     //Set SFX data for being played
                     nudInnerRadius.Value = Math.Min(Math.Max(sfxData.Parameters.InnerRadius, 0), 500);
                     nudOuterRadius.Value = Math.Min(Math.Max(sfxData.Parameters.OuterRadius, 0), 500);
-                    nudHashCode.Value = 0x1A000000 + sfxData.HashCode;
+                    nudHashCode.Value = 0x1AF00000 + sfxData.HashCode;
                 }
             }
         }
