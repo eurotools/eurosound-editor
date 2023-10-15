@@ -262,6 +262,12 @@ namespace sb_editor
                         formatPlatformData.ReSampleRates.Add(22050);
                     }
 
+                    //Add Memory Maps
+                    for (int i = 0; i < temporalObj.MemoryMaps.Count; i++)
+                    {
+                        formatPlatformData.MemoryMapsSize.Add(0);
+                    }
+
                     //Add data
                     temporalObj.platformData.Add(selectedFormat, formatPlatformData);
                     lvwAvailableFormats.Items.Add(new ListViewItem(new string[] { selectedFormat, formatPlatformData.OutputFolder, formatPlatformData.AutoReSample ? "On" : "Off" }));
