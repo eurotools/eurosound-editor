@@ -39,6 +39,15 @@ namespace sb_editor.Forms
             this.nudVolume = new System.Windows.Forms.NumericUpDown();
             this.btnOutput = new System.Windows.Forms.Button();
             this.btnUpdateFiles = new System.Windows.Forms.Button();
+            this.lvwMusicFiles = new sb_editor.Panels.ListView_ColumnSortingClick();
+            this.Col_Musics_FileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Col_Musics_Volume = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Col_Musics_ErrorStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Col_Musics_HashCode = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Col_Musics_Marker = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Col_Musics_Wav = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Col_Musics_OutputFileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Col_Musics_UserValue = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.grbOutputFile = new System.Windows.Forms.GroupBox();
             this.cboOutputFormat = new System.Windows.Forms.ComboBox();
             this.chkOutputOnlyMarkerFile = new System.Windows.Forms.CheckBox();
@@ -57,15 +66,6 @@ namespace sb_editor.Forms
             this.btnJump = new System.Windows.Forms.Button();
             this.btnPause = new System.Windows.Forms.Button();
             this.btnPlay = new System.Windows.Forms.Button();
-            this.lvwMusicFiles = new sb_editor.Panels.ListView_ColumnSortingClick();
-            this.Col_Musics_FileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Col_Musics_Volume = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Col_Musics_ErrorStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Col_Musics_HashCode = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Col_Musics_Marker = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Col_Musics_Wav = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Col_Musics_OutputFileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Col_Musics_UserValue = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.grbAvailableMusicFiles.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudUserValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudVolume)).BeginInit();
@@ -79,7 +79,7 @@ namespace sb_editor.Forms
             // 
             // grbAvailableMusicFiles
             // 
-            this.grbAvailableMusicFiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.grbAvailableMusicFiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grbAvailableMusicFiles.Controls.Add(this.nudUserValue);
             this.grbAvailableMusicFiles.Controls.Add(this.btnVerifyHashCodes);
@@ -181,6 +181,71 @@ namespace sb_editor.Forms
             this.btnUpdateFiles.UseVisualStyleBackColor = true;
             this.btnUpdateFiles.Click += new System.EventHandler(this.BtnUpdateFiles_Click);
             // 
+            // lvwMusicFiles
+            // 
+            this.lvwMusicFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvwMusicFiles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.Col_Musics_FileName,
+            this.Col_Musics_Volume,
+            this.Col_Musics_ErrorStatus,
+            this.Col_Musics_HashCode,
+            this.Col_Musics_Marker,
+            this.Col_Musics_Wav,
+            this.Col_Musics_OutputFileName,
+            this.Col_Musics_UserValue});
+            this.lvwMusicFiles.FullRowSelect = true;
+            this.lvwMusicFiles.GridLines = true;
+            this.lvwMusicFiles.HideSelection = false;
+            this.lvwMusicFiles.Location = new System.Drawing.Point(6, 19);
+            this.lvwMusicFiles.Name = "lvwMusicFiles";
+            this.lvwMusicFiles.Size = new System.Drawing.Size(754, 224);
+            this.lvwMusicFiles.TabIndex = 0;
+            this.lvwMusicFiles.UseCompatibleStateImageBehavior = false;
+            this.lvwMusicFiles.View = System.Windows.Forms.View.Details;
+            this.lvwMusicFiles.SelectedIndexChanged += new System.EventHandler(this.LvwMusicFiles_SelectedIndexChanged);
+            // 
+            // Col_Musics_FileName
+            // 
+            this.Col_Musics_FileName.Text = "File Name";
+            this.Col_Musics_FileName.Width = 160;
+            // 
+            // Col_Musics_Volume
+            // 
+            this.Col_Musics_Volume.Text = "Volume";
+            this.Col_Musics_Volume.Width = 55;
+            // 
+            // Col_Musics_ErrorStatus
+            // 
+            this.Col_Musics_ErrorStatus.Text = "Error Status";
+            this.Col_Musics_ErrorStatus.Width = 105;
+            // 
+            // Col_Musics_HashCode
+            // 
+            this.Col_Musics_HashCode.Text = "HashCode";
+            this.Col_Musics_HashCode.Width = 70;
+            // 
+            // Col_Musics_Marker
+            // 
+            this.Col_Musics_Marker.Text = "Marker";
+            this.Col_Musics_Marker.Width = 80;
+            // 
+            // Col_Musics_Wav
+            // 
+            this.Col_Musics_Wav.Text = "Wav";
+            this.Col_Musics_Wav.Width = 80;
+            // 
+            // Col_Musics_OutputFileName
+            // 
+            this.Col_Musics_OutputFileName.Text = "Output Filename";
+            this.Col_Musics_OutputFileName.Width = 100;
+            // 
+            // Col_Musics_UserValue
+            // 
+            this.Col_Musics_UserValue.Text = "User Value";
+            this.Col_Musics_UserValue.Width = 80;
+            // 
             // grbOutputFile
             // 
             this.grbOutputFile.Controls.Add(this.cboOutputFormat);
@@ -193,7 +258,7 @@ namespace sb_editor.Forms
             // 
             // cboOutputFormat
             // 
-            this.cboOutputFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.cboOutputFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cboOutputFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboOutputFormat.FormattingEnabled = true;
@@ -245,17 +310,17 @@ namespace sb_editor.Forms
             this.grbxJumpMarkers.Controls.Add(this.lstbx_JumpMakers);
             this.grbxJumpMarkers.Location = new System.Drawing.Point(12, 364);
             this.grbxJumpMarkers.Name = "grbxJumpMarkers";
-            this.grbxJumpMarkers.Size = new System.Drawing.Size(261, 254);
+            this.grbxJumpMarkers.Size = new System.Drawing.Size(261, 264);
             this.grbxJumpMarkers.TabIndex = 6;
             this.grbxJumpMarkers.TabStop = false;
-            this.grbxJumpMarkers.Text = "Test Vars";
+            this.grbxJumpMarkers.Text = "Jump Markers";
             // 
             // lstbx_JumpMakers
             // 
             this.lstbx_JumpMakers.FormattingEnabled = true;
             this.lstbx_JumpMakers.Location = new System.Drawing.Point(6, 19);
             this.lstbx_JumpMakers.Name = "lstbx_JumpMakers";
-            this.lstbx_JumpMakers.Size = new System.Drawing.Size(249, 225);
+            this.lstbx_JumpMakers.Size = new System.Drawing.Size(249, 238);
             this.lstbx_JumpMakers.TabIndex = 0;
             // 
             // grbxConsoleControl
@@ -264,16 +329,16 @@ namespace sb_editor.Forms
             this.grbxConsoleControl.Controls.Add(this.btnResetTarget);
             this.grbxConsoleControl.Location = new System.Drawing.Point(279, 364);
             this.grbxConsoleControl.Name = "grbxConsoleControl";
-            this.grbxConsoleControl.Size = new System.Drawing.Size(190, 53);
+            this.grbxConsoleControl.Size = new System.Drawing.Size(188, 53);
             this.grbxConsoleControl.TabIndex = 7;
             this.grbxConsoleControl.TabStop = false;
             this.grbxConsoleControl.Text = "Console Control";
             // 
             // btnRunTarget
             // 
-            this.btnRunTarget.Location = new System.Drawing.Point(109, 19);
+            this.btnRunTarget.Location = new System.Drawing.Point(97, 19);
             this.btnRunTarget.Name = "btnRunTarget";
-            this.btnRunTarget.Size = new System.Drawing.Size(75, 23);
+            this.btnRunTarget.Size = new System.Drawing.Size(85, 23);
             this.btnRunTarget.TabIndex = 1;
             this.btnRunTarget.Text = "Run Target";
             this.btnRunTarget.UseVisualStyleBackColor = true;
@@ -282,7 +347,7 @@ namespace sb_editor.Forms
             // 
             this.btnResetTarget.Location = new System.Drawing.Point(6, 19);
             this.btnResetTarget.Name = "btnResetTarget";
-            this.btnResetTarget.Size = new System.Drawing.Size(80, 23);
+            this.btnResetTarget.Size = new System.Drawing.Size(85, 23);
             this.btnResetTarget.TabIndex = 0;
             this.btnResetTarget.Text = "Reset Target";
             this.btnResetTarget.UseVisualStyleBackColor = true;
@@ -354,77 +419,12 @@ namespace sb_editor.Forms
             this.btnPlay.Text = "Play";
             this.btnPlay.UseVisualStyleBackColor = true;
             // 
-            // lvwMusicFiles
-            // 
-            this.lvwMusicFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lvwMusicFiles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.Col_Musics_FileName,
-            this.Col_Musics_Volume,
-            this.Col_Musics_ErrorStatus,
-            this.Col_Musics_HashCode,
-            this.Col_Musics_Marker,
-            this.Col_Musics_Wav,
-            this.Col_Musics_OutputFileName,
-            this.Col_Musics_UserValue});
-            this.lvwMusicFiles.FullRowSelect = true;
-            this.lvwMusicFiles.GridLines = true;
-            this.lvwMusicFiles.HideSelection = false;
-            this.lvwMusicFiles.Location = new System.Drawing.Point(6, 19);
-            this.lvwMusicFiles.Name = "lvwMusicFiles";
-            this.lvwMusicFiles.Size = new System.Drawing.Size(754, 224);
-            this.lvwMusicFiles.TabIndex = 0;
-            this.lvwMusicFiles.UseCompatibleStateImageBehavior = false;
-            this.lvwMusicFiles.View = System.Windows.Forms.View.Details;
-            this.lvwMusicFiles.SelectedIndexChanged += new System.EventHandler(this.LvwMusicFiles_SelectedIndexChanged);
-            // 
-            // Col_Musics_FileName
-            // 
-            this.Col_Musics_FileName.Text = "File Name";
-            this.Col_Musics_FileName.Width = 160;
-            // 
-            // Col_Musics_Volume
-            // 
-            this.Col_Musics_Volume.Text = "Volume";
-            this.Col_Musics_Volume.Width = 55;
-            // 
-            // Col_Musics_ErrorStatus
-            // 
-            this.Col_Musics_ErrorStatus.Text = "Error Status";
-            this.Col_Musics_ErrorStatus.Width = 105;
-            // 
-            // Col_Musics_HashCode
-            // 
-            this.Col_Musics_HashCode.Text = "HashCode";
-            this.Col_Musics_HashCode.Width = 70;
-            // 
-            // Col_Musics_Marker
-            // 
-            this.Col_Musics_Marker.Text = "Marker";
-            this.Col_Musics_Marker.Width = 80;
-            // 
-            // Col_Musics_Wav
-            // 
-            this.Col_Musics_Wav.Text = "Wav";
-            this.Col_Musics_Wav.Width = 80;
-            // 
-            // Col_Musics_OutputFileName
-            // 
-            this.Col_Musics_OutputFileName.Text = "Output Filename";
-            this.Col_Musics_OutputFileName.Width = 100;
-            // 
-            // Col_Musics_UserValue
-            // 
-            this.Col_Musics_UserValue.Text = "User Value";
-            this.Col_Musics_UserValue.Width = 80;
-            // 
             // MusicApp
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(790, 630);
+            this.ClientSize = new System.Drawing.Size(790, 640);
             this.Controls.Add(this.grbx_TestOptions);
             this.Controls.Add(this.grbxConsoleControl);
             this.Controls.Add(this.grbxJumpMarkers);
