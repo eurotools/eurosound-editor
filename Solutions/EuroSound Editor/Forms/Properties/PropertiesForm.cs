@@ -254,12 +254,17 @@ namespace sb_editor
                 string selectedFormat = cboAvailableFormats.SelectedItem.ToString();
                 if (!temporalObj.platformData.ContainsKey(selectedFormat))
                 {
-
                     //Create new platform data
                     PlatformData formatPlatformData = new PlatformData { OutputFolder = "Set Output Folder.", AutoReSample = true };
                     for (int i = 0; i < temporalObj.ResampleRates.Count; i++)
                     {
                         formatPlatformData.ReSampleRates.Add(22050);
+                    }
+
+                    //Add Memory Maps
+                    for (int i = 0; i < temporalObj.MemoryMaps.Count; i++)
+                    {
+                        formatPlatformData.MemoryMapsSize.Add(0);
                     }
 
                     //Add data

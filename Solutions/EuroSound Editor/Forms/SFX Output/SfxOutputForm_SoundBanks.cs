@@ -159,19 +159,28 @@ namespace sb_editor.Forms
                                             MusXBuild_Soundbank.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, ssfTempFile, sfxFilepath, CommonFunctions.GetPlatformLabel(outputPlatform[k]), CommonFunctions.GetFileHashCode(FileType.SoundBank, outputLanguage, soundBankData.HashCode), isBigEndian);
 
                                             //Check that this SFX Doesn't exceed the memmory slot size
-                                            int memSlotMaxSize = projectSettings.platformData[outputPlatform[k]].MemoryMapsSize[memSlotIndex];
-                                            sampleBankSize = new FileInfo(sfxFilepath).Length / 1024;
-                                            if (sampleBankSize > memSlotMaxSize)
+                                            if (projectSettings.platformData[outputPlatform[k]].MemoryMapsSize.Count < memSlotIndex)
                                             {
-                                                //Delete Files
-                                                File.Delete(Path.ChangeExtension(outTmpFilePath, ".sbf"));
-                                                File.Delete(Path.ChangeExtension(outTmpFilePath, ".sfx"));
-                                                File.Delete(Path.ChangeExtension(outTmpFilePath, ".sif"));
-                                                File.Delete(Path.ChangeExtension(outTmpFilePath, ".ssf"));
-                                                File.Delete(sfxFilepath);
+                                                int memSlotMaxSize = projectSettings.platformData[outputPlatform[k]].MemoryMapsSize[memSlotIndex];
+                                                sampleBankSize = new FileInfo(sfxFilepath).Length / 1024;
+                                                if (sampleBankSize > memSlotMaxSize)
+                                                {
+                                                    //Delete Files
+                                                    File.Delete(Path.ChangeExtension(outTmpFilePath, ".sbf"));
+                                                    File.Delete(Path.ChangeExtension(outTmpFilePath, ".sfx"));
+                                                    File.Delete(Path.ChangeExtension(outTmpFilePath, ".sif"));
+                                                    File.Delete(Path.ChangeExtension(outTmpFilePath, ".ssf"));
+                                                    File.Delete(sfxFilepath);
 
+                                                    //Inform User
+                                                    string message = string.Format("Sample Bank Limit Exceeded With:\n\nSoundBank: {0}\nFormat: {1}\nMy Size: {2}K\nMemory-Slot Size: {3}K\n\nOutput Aborted and Files Deleted.", filesQueue[j], outputPlatform[k], sampleBankSize, memSlotMaxSize);
+                                                    throw new IOException(message);
+                                                }
+                                            }
+                                            else
+                                            {
                                                 //Inform User
-                                                string message = string.Format("Sample Bank Limit Exceeded With:\n\nSoundBank: {0}\nFormat: {1}\nMy Size: {2}K\nMemory-Slot Size: {3}K\n\nOutput Aborted and Files Deleted.", filesQueue[j], outputPlatform[k], sampleBankSize, memSlotMaxSize);
+                                                string message = string.Format("Sample Bank Limit Not Defined\n\nOutput Aborted and Files Deleted.");
                                                 throw new IOException(message);
                                             }
                                         }
