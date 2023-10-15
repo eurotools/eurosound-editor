@@ -134,7 +134,12 @@ namespace PCAudioDLL
                             {
                                 foreach (SampleInfo sample in sfxSample.samplesList)
                                 {
-                                    StartSound((uint)(0x1A000000 + sample.FileRef), true);
+                                    uint hashCode = (uint)(0x1A000000 + sample.FileRef);
+                                    if (hashCode == SoundHashcode)
+                                    {
+                                        break;
+                                    }
+                                    StartSound(hashCode, true);
                                 }
                             }
                         }
@@ -183,7 +188,12 @@ namespace PCAudioDLL
                             {
                                 foreach (SampleInfo sample in sfxSample.samplesList)
                                 {
-                                    StartSound3D((uint)(0x1A000000 + sample.FileRef), audioPosition, true, enablePanning, volume);
+                                    uint hashCode = (uint)(0x1A000000 + sample.FileRef);
+                                    if (hashCode == SoundHashcode)
+                                    {
+                                        break;
+                                    }
+                                    StartSound3D(hashCode, audioPosition, true, enablePanning, volume);
                                 }
                             }
                         }
