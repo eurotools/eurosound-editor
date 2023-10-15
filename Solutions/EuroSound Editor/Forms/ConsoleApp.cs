@@ -79,8 +79,7 @@ namespace sb_editor.Forms
         private void ChkStreamingTest_CheckedChanged(object sender, EventArgs e)
         {
             //Load SFX File
-            string fileName = CommonFunctions.GetSfxName(Language.English, "_streamdata");
-            string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, fileName, ".SFX"));
+            string sfxFilePath = Path.Combine(txtSoundBankFile.Text, CommonFunctions.GetSfxName(Language.English, "_streamdata"));
             if (File.Exists(sfxFilePath))
             {
                 pcDll.LoadSoundBank(GetTestingPlatform(), sfxFilePath, true);
