@@ -134,7 +134,7 @@ namespace PCAudioDLL
                             {
                                 foreach (SampleInfo sample in sfxSample.samplesList)
                                 {
-                                    StartSound((uint)(0x1A000000 + sample.FileRef), true);
+                                    StartSound((uint)(0x1AF00000 + sample.FileRef), true);
                                 }
                             }
                         }
@@ -183,7 +183,7 @@ namespace PCAudioDLL
                             {
                                 foreach (SampleInfo sample in sfxSample.samplesList)
                                 {
-                                    StartSound3D((uint)(0x1A000000 + sample.FileRef), audioPosition, true, enablePanning, volume);
+                                    StartSound3D((uint)(0x1AF00000 + sample.FileRef), audioPosition, true, enablePanning, volume);
                                 }
                             }
                         }
