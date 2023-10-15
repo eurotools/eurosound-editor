@@ -190,7 +190,7 @@ namespace sb_editor.Forms
                     SoundBank soundBankData = TextFiles.ReadSoundbankFile(sbPath);
 
                     //Get SFXs
-                    string[] SFXs = sbFunctions.GetSFXs(soundBankData.DataBases, "PC");
+                    string[] SFXs = sbFunctions.GetSFXs(soundBankData.DataBases, GetTestingPlatform());
                     lstBox_SFXs.BeginUpdate();
                     lstBox_SFXs.Items.Clear();
                     lstBox_SFXs.Items.AddRange(SFXs);
@@ -294,7 +294,6 @@ namespace sb_editor.Forms
         private void BtnSfxReset_Click(object sender, EventArgs e)
         {
             BtnLoadSoundbanks_Click(sender, e);
-            pcDll.LoadSoundBank(GetTestingPlatform(), string.Empty);
         }
 
         //-------------------------------------------------------------------------------------------
