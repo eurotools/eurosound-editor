@@ -305,7 +305,6 @@ namespace sb_editor.Forms
         private void BtnSfxReset_Click(object sender, EventArgs e)
         {
             BtnLoadSoundbanks_Click(sender, e);
-            pcDll.LoadSoundBank(GetTestingPlatform(), string.Empty);
         }
 
         //-------------------------------------------------------------------------------------------
