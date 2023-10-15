@@ -472,6 +472,15 @@ namespace sb_editor.Forms
 
             return selPlatform;
         }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void btn_musicApp_Click(object sender, EventArgs e)
+        {
+            using (MusicApp musApp = new MusicApp())
+            {
+                musApp.ShowDialog();
+            }
+        }
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------
