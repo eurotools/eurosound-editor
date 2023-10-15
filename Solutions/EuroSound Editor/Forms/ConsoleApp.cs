@@ -164,8 +164,8 @@ namespace sb_editor.Forms
                     lstbSamples.EndUpdate();
 
                     //Set SFX data for being played
-                    nudInnerRadius.Value = sfxData.Parameters.InnerRadius;
-                    nudOuterRadius.Value = sfxData.Parameters.OuterRadius;
+                    nudInnerRadius.Value = Math.Min(Math.Max(sfxData.Parameters.InnerRadius, 0), 500);
+                    nudOuterRadius.Value = Math.Min(Math.Max(sfxData.Parameters.OuterRadius, 0), 500);
                     nudHashCode.Value = 0x1A000000 + sfxData.HashCode;
                 }
             }
