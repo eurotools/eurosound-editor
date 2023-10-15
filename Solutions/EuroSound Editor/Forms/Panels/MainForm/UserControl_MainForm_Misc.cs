@@ -122,6 +122,8 @@ namespace sb_editor.Panels
             {
                 using (MusicApp makerForm = new MusicApp())
                 {
+                    makerForm.Width = 806;
+                    makerForm.Height = 392;
                     makerForm.ShowDialog();
                 }
             }
