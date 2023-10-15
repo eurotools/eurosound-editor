@@ -159,7 +159,7 @@ namespace sb_editor.Forms
                                             MusXBuild_Soundbank.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, ssfTempFile, sfxFilepath, CommonFunctions.GetPlatformLabel(outputPlatform[k]), CommonFunctions.GetFileHashCode(FileType.SoundBank, outputLanguage, soundBankData.HashCode), isBigEndian);
 
                                             //Check that this SFX Doesn't exceed the memmory slot size
-                                            if (projectSettings.platformData[outputPlatform[k]].MemoryMapsSize.Count < memSlotIndex)
+                                            if (memSlotIndex < projectSettings.platformData[outputPlatform[k]].MemoryMapsSize.Count)
                                             {
                                                 //Check that this SFX Doesn't exceed the memmory slot size
                                                 int memSlotMaxSize = projectSettings.platformData[outputPlatform[k]].MemoryMapsSize[memSlotIndex];
