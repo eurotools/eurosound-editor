@@ -230,7 +230,7 @@ namespace sb_editor.Forms
                 SoundBank soundBankData = TextFiles.ReadSoundbankFile(sbPath);
 
                 //Unload SoundBank
-                pcDll.UnloadSoundbank(soundBankData.HashCode);
+                pcDll.UnloadSoundbank(0xE000 + soundBankData.HashCode);
             }
 
             //Select next item
