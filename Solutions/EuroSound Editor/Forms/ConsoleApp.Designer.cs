@@ -789,6 +789,7 @@ namespace sb_editor.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ConsoleApp";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "EuroSound Tester App";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ConsoleApp_FormClosing);
