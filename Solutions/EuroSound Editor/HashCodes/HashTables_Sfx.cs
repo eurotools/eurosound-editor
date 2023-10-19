@@ -3,6 +3,8 @@ using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using static ESUtils.Enumerations;
 
 namespace sb_editor.HashCodes
 {
@@ -12,21 +14,27 @@ namespace sb_editor.HashCodes
     internal partial class HashTables
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void CreateTempSfxData(string filePath, string sfxFilePath, SamplePool StreamSamplesList, ProjProperties projectSettings)
+        internal void CreateTempSfxData(string fileName, string sfxFilePath, string[] outLanguages, SamplePool StreamSamplesList, ProjProperties projectSettings)
         {
-            //Create
-            using (StreamWriter sw = new StreamWriter(File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
+            WaveFunctions waveFunction = new WaveFunctions();
+            SFX sfxFileData = TextFiles.ReadSfxFile(sfxFilePath);
+            if (sfxFileData.Samples.Count > 0)
             {
-                WaveFunctions waveFunction = new WaveFunctions();
-                SFX sfxFileData = TextFiles.ReadSfxFile(sfxFilePath);
-                if (sfxFileData.Samples.Count > 0)
+                float waveDuration = 0.00002267574F;
+                WavInfo waveFileData = new WavInfo();
+                bool quitLoop = false;
+                for (int i = 0; i < outLanguages.Length; i++)
                 {
-                    float waveDuration = 0.00002267574F;
-                    WavInfo waveFileData = new WavInfo();
-                    string samplePath = Path.Combine(projectSettings.SampleFilesFolder, "Master", sfxFileData.Samples[0].FilePath.TrimStart(Path.DirectorySeparatorChar));
-                    if (File.Exists(samplePath))
+                    if (quitLoop)
                     {
-                        waveFileData = waveFunction.ReadWaveProperties(samplePath);
+                        break;
+                    }
+                    Language outLang = (Language)Enum.Parse(typeof(Language), outLanguages[i], true);
+                    string sampleRelPath = CommonFunctions.GetSampleFromSpeechFolder(sfxFileData.Samples[0].FilePath.TrimStart(Path.DirectorySeparatorChar), outLang);
+                    string sampleFullPath = Path.Combine(projectSettings.SampleFilesFolder, "Master", sampleRelPath);
+                    if (File.Exists(sampleFullPath))
+                    {
+                        waveFileData = waveFunction.ReadWaveProperties(sampleFullPath);
                         waveDuration = (float)decimal.Divide(waveFileData.Length, waveFileData.AverageBytesPerSecond);
                     }
                     else
@@ -42,15 +50,39 @@ namespace sb_editor.HashCodes
                         streamed = StreamSamplesList.SamplePoolItems[sampleName].StreamMe;
                     }
 
+                    //Get File Path
+                    string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "TempSfxData", fileName + ".txt");
+                    if (sampleRelPath.IndexOf("Speech", StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        string outputFolder = Directory.CreateDirectory(Path.Combine(GlobalPrefs.ProjectFolder, "TempSfxData", outLang.ToString())).FullName;
+                        filePath = Path.Combine(outputFolder, fileName + ".txt");
+                    }
+                    else
+                    {
+                        quitLoop = true;
+                    }
+
                     //Write data
-                    sw.WriteLine(samplePath);
-                    sw.WriteLine(string.Format("{{ {0} ,  {1}f ,  {2}f ,  {3}f ,  {4}f , {5}, {6}, {7} }} ,  // {8}", sfxFileData.HashCode, sfxFileData.Parameters.InnerRadius.ToString("0.0", GlobalPrefs.NumericProvider), sfxFileData.Parameters.OuterRadius.ToString("0.0", GlobalPrefs.NumericProvider), sfxFileData.Parameters.Alertness.ToString("0.0", GlobalPrefs.NumericProvider), GetWaveDurationFormatted(waveDuration), Math.Max(Convert.ToByte(waveFileData.HasLoop), Convert.ToByte(sfxFileData.SamplePool.isLooped)), sfxFileData.Parameters.TrackingType, Convert.ToByte(streamed), Path.GetFileNameWithoutExtension(sfxFilePath)));
+                    using (StreamWriter sw = new StreamWriter(File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
+                    {
+                        sw.WriteLine(sampleFullPath);
+                        sw.WriteLine(string.Format("{{ {0} ,  {1} ,  {2} ,  {3}f ,  {4} ,  {5} , {6}, {7} }} ,  // {8}",
+                            sfxFileData.HashCode,
+                            sfxFileData.Parameters.InnerRadius.ToString("0.0", GlobalPrefs.NumericProvider),
+                            sfxFileData.Parameters.OuterRadius.ToString("0.0", GlobalPrefs.NumericProvider),
+                            GetWaveDurationFormatted(waveDuration),
+                            Math.Max(Convert.ToByte(waveFileData.HasLoop), Convert.ToByte(sfxFileData.SamplePool.isLooped)),
+                            sfxFileData.Parameters.TrackingType,
+                            Convert.ToByte(streamed),
+                            sfxFileData.Parameters.TrackingType == 2,
+                            Path.GetFileNameWithoutExtension(sfxFilePath)));
+                    }
                 }
             }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void GetHashCodesWithLabels(SortedDictionary<string, int> hashCodesDict, SortedDictionary<string, int> soundBankDict)
+        internal void GetHashCodesWithLabels(Dictionary<string, int> hashCodesDict, Dictionary<string, int> soundBankDict)
         {
             //SFXs
             if (hashCodesDict != null)
@@ -91,6 +123,44 @@ namespace sb_editor.HashCodes
                 duration = waveDuration.ToString("0.######E+00", GlobalPrefs.NumericProvider);
             }
             return duration;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        internal Dictionary<string, string[]> GetSoundBankSFXsDict()
+        {
+            Dictionary<string, string[]> SoundBankSFXs = new Dictionary<string, string[]>();
+
+            string[] soundBankFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks"), "*.txt", SearchOption.TopDirectoryOnly);
+            for (int i = 0; i < soundBankFiles.Length; i++)
+            {
+                HashSet<string> sbSFXs = new HashSet<string>();
+                SoundBank sbDataBases = TextFiles.ReadSoundbankFile(soundBankFiles[i]);
+                for (int j = 0; j < sbDataBases.DataBases.Length; j++)
+                {
+                    string dbFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", sbDataBases.DataBases[j] + ".txt");
+                    DataBase dbSfx = TextFiles.ReadDataBaseFile(dbFilePath);
+                    sbSFXs.UnionWith(dbSfx.SFXs);
+
+                }
+                SoundBankSFXs.Add(Path.GetFileNameWithoutExtension(soundBankFiles[i]), sbSFXs.ToArray());
+            }
+            return SoundBankSFXs;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        internal string GetSfxUsage(string sfxToCheck, Dictionary<string, string[]> usageDictioanry)
+        {
+            string fullString = string.Empty;
+
+            foreach (KeyValuePair<string, string[]> sbName in usageDictioanry)
+            {
+                if (Array.IndexOf(sbName.Value, sfxToCheck) >= 0)
+                {
+                    fullString += sbName.Key + ", ";
+                }
+            }
+
+            return fullString;
         }
     }
 

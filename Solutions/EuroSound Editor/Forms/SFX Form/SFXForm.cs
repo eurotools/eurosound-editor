@@ -9,7 +9,6 @@
 //-------------------------------------------------------------------------------------------------------------------------------
 // SFX Settings Form
 //-------------------------------------------------------------------------------------------------------------------------------
-using ESUtils;
 using PCAudioDLL;
 using sb_editor.Objects;
 using sb_editor.Panels;
@@ -46,7 +45,7 @@ namespace sb_editor.Forms
                 tabCtrl.Visible = false;
                 UserControl_SamplePool.Visible = false;
                 pnlOptions.Visible = false;
-                Height = 406;
+                Height = 426;
                 StartPosition = FormStartPosition.CenterParent;
                 btnDefSettings_Accept.Visible = true;
                 btnDefSettings_Cancel.Visible = true;
@@ -329,8 +328,8 @@ namespace sb_editor.Forms
             Stopwatch watch = Stopwatch.StartNew();
 
             //Get output folder & name
-            string outputFilePath = CommonFunctions.GetSoundbankOutPath(projectSettings, "PC", "English");
-            string fileName = string.Format("HC{0:X6}.SFX", CommonFunctions.GetSfxName((int)Enumerations.Language.English, 0xFFFE));
+            string outputFilePath = CommonFunctions.GetSoundbankOutPath("PC", projectSettings);
+            string fileName = string.Format("HC{0:X6}.SFX", 0xFFFE);
 
             //Create file
             CreateTestSfx(outputFilePath, fileName);
@@ -579,16 +578,18 @@ namespace sb_editor.Forms
                 sfxFileData.Parameters.Action1 = 1;
             }
             sfxFileData.Parameters.Priority = (int)UserControl_SFX_Parameters.nudPriority.Value;
-            sfxFileData.Parameters.Alertness = (int)UserControl_SFX_Parameters.nudAlertness.Value;
             sfxFileData.Parameters.StealOnAge = UserControl_SFX_Parameters.chkStealOnLouder.Checked;
             sfxFileData.Parameters.Ducker = (int)UserControl_SFX_Parameters.nudDucker.Value;
             sfxFileData.Parameters.DuckerLength = (int)UserControl_SFX_Parameters.nudDuckerLength.Value;
             sfxFileData.Parameters.Outdoors = UserControl_SFX_Parameters.chkUnderWater.Checked;
-            sfxFileData.Parameters.PauseInNis = UserControl_SFX_Parameters.chkPauseInNis.Checked;
-            sfxFileData.Parameters.IgnoreAge = UserControl_SFX_Parameters.chkIgnoreAge.Checked;
+            sfxFileData.Parameters.PauseInstant = UserControl_SFX_Parameters.chkPauseInstant.Checked;
+            sfxFileData.Parameters.UnPausable = UserControl_SFX_Parameters.chkUnPausable.Checked;
+            sfxFileData.Parameters.IgnoreMasterVolume = UserControl_SFX_Parameters.chkIgnoreMasterVolume.Checked;
             sfxFileData.Parameters.MusicType = UserControl_SFX_Parameters.chkMusicType.Checked;
-            sfxFileData.Parameters.Doppler = UserControl_SFX_Parameters.chkDoppler.Checked;
-
+            sfxFileData.Parameters.OneInstancePerFrame = UserControl_SFX_Parameters.chkOneInstancePerFrame.Checked;
+            sfxFileData.Parameters.KillMeOwnGroup = UserControl_SFX_Parameters.chkKillMeOwnGroup.Checked;
+            sfxFileData.Parameters.DopplerValue = (sbyte)UserControl_SFX_Parameters.nudDoppler.Value;
+            sfxFileData.Parameters.UserFlags = ushort.Parse(UserControl_SFX_Parameters.txtUserFlags.Text);
             return sfxFileData;
         }
 

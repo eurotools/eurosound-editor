@@ -9,6 +9,8 @@
 //-------------------------------------------------------------------------------------------------------------------------------
 // SFX Form Output
 //-------------------------------------------------------------------------------------------------------------------------------
+using ESUtils;
+using MusX.Writers;
 using sb_editor.Audio_Classes;
 using sb_editor.Classes;
 using sb_editor.Objects;
@@ -26,7 +28,7 @@ namespace sb_editor.Forms
     {
         private readonly MainForm parentFormObj;
         private readonly WaveFunctions wavFunctions = new WaveFunctions();
-        private readonly ImaFunctions imaFunctions = new ImaFunctions();
+        private readonly EurocomImaFunctions eurocomImaFunction = new EurocomImaFunctions();
         private readonly AiffFunctions aiffFunctions = new AiffFunctions();
         private readonly SoundBankFunctions sbFunctions = new SoundBankFunctions();
         private readonly string[] filesQueue;
@@ -112,22 +114,22 @@ namespace sb_editor.Forms
             //Output SoundBanks
             OutputSoundBanks(samplesList, debugFolder.FullName);
 
+            //Output Project Details
+            for (int i = 0; i < outputPlatform.Length; i++)
+            {
+                bool isBigEndian = outputPlatform[i].Equals("GameCube", StringComparison.OrdinalIgnoreCase);
+
+                string tempFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatform[i], "projectdetails.pdf");
+                OutputProjectDetailsFile(tempFilePath, outputPlatform[i], isBigEndian);
+
+                string sfxFilePath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatform[i], projectSettings), "__projectdetails.sfx");
+                MusXBuild_ProjectDetails.BuildProjectDetailsFile(tempFilePath, sfxFilePath, CommonFunctions.GetPlatformLabel(outputPlatform[i]), CommonFunctions.GetFileHashCode(Enumerations.FileType.ProjectDetails, Enumerations.Language.English, 0), isBigEndian);
+            }
+
             //Create HashTables
             if (!fastOutput && !string.IsNullOrEmpty(projectSettings.HashCodeFileDirectory) && Directory.Exists(projectSettings.HashCodeFileDirectory))
             {
                 OutputHashCodes(samplesList);
-
-                //Create SFX Data
-                string sfxFilePath = Path.Combine(projectSettings.HashCodeFileDirectory, "SFX_Data.h");
-                if (!string.IsNullOrEmpty(projectSettings.EngineXProjectPath) && Directory.Exists(projectSettings.EngineXProjectPath) && File.Exists(sfxFilePath))
-                {
-                    for (int i = 0; i < outputPlatform.Length; i++)
-                    {
-                        string outputPath = Path.Combine(projectSettings.EngineXProjectPath, "Binary", CommonFunctions.GetEnginexFolder(outputPlatform[i]), "Music");
-                        Directory.CreateDirectory(outputPath);
-                        CommonFunctions.RunConsoleProcess(Path.Combine(Application.StartupPath, "SystemFiles", "SFXStructToBin.exe"), string.Format("\"{0}\" \"{1}\"", sfxFilePath, Path.Combine(outputPath, "SFX_Data.bin")), false);
-                    }
-                }
             }
         }
 

@@ -122,14 +122,14 @@ namespace sb_editor
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static string[] GetOutputPlatforms(ProjProperties projectSettings)
+        public static string[] GetOutputPlatforms(ProjProperties projData)
         {
             //Get Output Platforms
             UserControl_MainForm_Output outputControl = ((MainForm)Application.OpenForms[nameof(MainForm)]).UserControl_Output;
             string[] platforms = new string[] { outputControl.cboOutputFormat.SelectedItem.ToString() };
             if (outputControl.rdoAllForAll.Checked)
             {
-                platforms = projectSettings.platformData.Keys.ToArray();
+                platforms = projData.platformData.Keys.ToArray();
             }
             return platforms;
         }
@@ -158,13 +158,10 @@ namespace sb_editor
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static int GetSfxName(int language, int fileHashCode)
+        public static string GetSfxName(Language language, string fileName)
         {
-            // Get the language index by taking the maximum of the language and 0
-            int languageIndex = Math.Max(language, 0);
-
-            // Shift the language index left by 16 bits and OR it with the file hash code shifted left by 0 bits
-            return ((languageIndex & 0xF) << 16) | ((fileHashCode & 0xFFFF) << 0);
+            string lang = language.ToString();
+            return string.Format("{0}_{1}.SFX", lang.Substring(0, Math.Min(3, lang.Length)), fileName).ToLower();
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -260,13 +257,13 @@ namespace sb_editor
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static void CheckForMissingFolders(ProjProperties projectSettings)
+        public static void CheckForMissingFolders(ProjProperties projData)
         {
             // Check if the project folder exists
             if (Directory.Exists(GlobalPrefs.ProjectFolder))
             {
                 // Create the temporal output folders for each platform in the platformData dictionary
-                foreach (KeyValuePair<string, Objects.PlatformData> platformData in projectSettings.platformData)
+                foreach (KeyValuePair<string, Objects.PlatformData> platformData in projData.platformData)
                 {
                     string temporalOutputFolder = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", platformData.Key, "SoundBanks");
                     Directory.CreateDirectory(temporalOutputFolder);
@@ -312,34 +309,26 @@ namespace sb_editor
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public static string GetSoundbankOutPath(ProjProperties projectSettings, string platform, string language, bool musicFolder = false)
+        public static string GetSoundbankOutPath(string platform, ProjProperties projData)
         {
             // Initialize the output path to an empty string
             string outputPath = string.Empty;
 
             // Check if the EngineX project path is not null and the directory exists
-            if (!string.IsNullOrEmpty(projectSettings.EngineXProjectPath) && Directory.Exists(projectSettings.EngineXProjectPath))
+            if (!string.IsNullOrEmpty(projData.EngineXProjectPath) && Directory.Exists(projData.EngineXProjectPath))
             {
-                // If the musicFolder flag is true, set the output path to the "music" folder within the EngineX project path
-                if (musicFolder)
-                {
-                    outputPath = Directory.CreateDirectory(Path.Combine(projectSettings.EngineXProjectPath, "Binary", GetEnginexFolder(platform), "music")).FullName;
-                }
-                else
-                {
-                    // Create the "Sonix" folder within the EngineX project path
-                    Directory.CreateDirectory(Path.Combine(projectSettings.EngineXProjectPath, "Sonix"));
+                // Create the "Sonix" folder within the EngineX project path
+                Directory.CreateDirectory(Path.Combine(projData.EngineXProjectPath, "Sonix"));
 
-                    // Set the output path to the language folder within the EngineX project path
-                    outputPath = Directory.CreateDirectory(Path.Combine(projectSettings.EngineXProjectPath, "Binary", GetEnginexFolder(platform), GetLanguageFolder(language))).FullName;
-                }
+                // Set the output path to the language folder within the EngineX project path
+                outputPath = Directory.CreateDirectory(Path.Combine(projData.EngineXProjectPath, "Binary", GetEnginexFolder(platform), "audio")).FullName;
             }
 
             // If the output path is still empty, check if the platform is in the platformData dictionary
-            if (string.IsNullOrEmpty(outputPath) && projectSettings.platformData.ContainsKey(platform))
+            if (string.IsNullOrEmpty(outputPath) && projData.platformData.ContainsKey(platform))
             {
                 // Get the output folder for the platform
-                string outFolder = projectSettings.platformData[platform].OutputFolder;
+                string outFolder = projData.platformData[platform].OutputFolder;
                 if (outFolder.Equals("Set Output Folder."))
                 {
                     throw new DirectoryNotFoundException(string.Format("Please Set Output Folder for this Format: {0}", platform));
@@ -356,6 +345,37 @@ namespace sb_editor
             }
 
             return outputPath;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public static string GetPlatformLabel(string outPlatform)
+        {
+            string platform = "____";
+            if (outPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase))
+            {
+                platform = "PS2_";
+            }
+            else if (outPlatform.Equals("GameCube", StringComparison.OrdinalIgnoreCase))
+            {
+                platform = "GC__";
+            }
+            else if (outPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase))
+            {
+                platform = "PC__";
+            }
+            else if (outPlatform.Equals("X Box", StringComparison.OrdinalIgnoreCase) || outPlatform.Equals("Xbox", StringComparison.OrdinalIgnoreCase))
+            {
+                platform = "XB__";
+            }
+
+            return platform;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public static uint GetFileHashCode(FileType sfxFileType, Language outputLanguage, int hashcode)
+        {
+            uint fullHashCode = (uint)(((0 & 0xFFF) << 20) | (((int)outputLanguage & 0xF) << 16) | (((int)sfxFileType & 0xF) << 12) | ((hashcode & 0xFFF) << 0));
+            return fullHashCode;
         }
     }
 

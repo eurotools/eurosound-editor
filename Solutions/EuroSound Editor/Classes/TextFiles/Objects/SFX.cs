@@ -35,6 +35,19 @@ namespace sb_editor.Objects
         public bool StealOnAge;
         public bool MusicType;
         public bool Doppler;
+
+        //MusX V4
+        public bool PauseInstant;
+        public bool UnPausable;
+        public bool OneInstancePerFrame;
+        public bool KillMeOwnGroup;
+        public bool IgnoreMasterVolume;
+        public bool GroupStealReject;
+        public bool UseGroupDistCheck;
+
+        //MusX V5
+        public sbyte DopplerValue;
+        public ushort UserFlags;
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------

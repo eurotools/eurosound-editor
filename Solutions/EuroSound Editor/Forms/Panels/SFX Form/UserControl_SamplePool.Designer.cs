@@ -114,7 +114,7 @@ namespace sb_editor.Panels
             this.grbSamplePool.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grbSamplePool.Location = new System.Drawing.Point(0, 0);
             this.grbSamplePool.Name = "grbSamplePool";
-            this.grbSamplePool.Size = new System.Drawing.Size(777, 349);
+            this.grbSamplePool.Size = new System.Drawing.Size(777, 326);
             this.grbSamplePool.TabIndex = 0;
             this.grbSamplePool.TabStop = false;
             this.grbSamplePool.Text = "Sample Pool";
@@ -313,7 +313,7 @@ namespace sb_editor.Panels
             // chkEnableStereo
             // 
             this.chkEnableStereo.AutoSize = true;
-            this.chkEnableStereo.Location = new System.Drawing.Point(211, 43);
+            this.chkEnableStereo.Location = new System.Drawing.Point(211, 23);
             this.chkEnableStereo.Name = "chkEnableStereo";
             this.chkEnableStereo.Size = new System.Drawing.Size(124, 17);
             this.chkEnableStereo.TabIndex = 1;
@@ -448,7 +448,7 @@ namespace sb_editor.Panels
             // btnMoveDown
             // 
             this.btnMoveDown.Image = ((System.Drawing.Image)(resources.GetObject("btnMoveDown.Image")));
-            this.btnMoveDown.Location = new System.Drawing.Point(483, 107);
+            this.btnMoveDown.Location = new System.Drawing.Point(483, 87);
             this.btnMoveDown.Name = "btnMoveDown";
             this.btnMoveDown.Size = new System.Drawing.Size(20, 20);
             this.btnMoveDown.TabIndex = 12;
@@ -458,7 +458,7 @@ namespace sb_editor.Panels
             // btnMoveUp
             // 
             this.btnMoveUp.Image = ((System.Drawing.Image)(resources.GetObject("btnMoveUp.Image")));
-            this.btnMoveUp.Location = new System.Drawing.Point(483, 87);
+            this.btnMoveUp.Location = new System.Drawing.Point(483, 67);
             this.btnMoveUp.Name = "btnMoveUp";
             this.btnMoveUp.Size = new System.Drawing.Size(20, 20);
             this.btnMoveUp.TabIndex = 11;
@@ -468,7 +468,7 @@ namespace sb_editor.Panels
             // lblMove
             // 
             this.lblMove.AutoSize = true;
-            this.lblMove.Location = new System.Drawing.Point(480, 60);
+            this.lblMove.Location = new System.Drawing.Point(480, 40);
             this.lblMove.Name = "lblMove";
             this.lblMove.Size = new System.Drawing.Size(34, 13);
             this.lblMove.TabIndex = 10;
@@ -476,7 +476,7 @@ namespace sb_editor.Panels
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(437, 320);
+            this.btnStop.Location = new System.Drawing.Point(437, 300);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(40, 23);
             this.btnStop.TabIndex = 9;
@@ -486,7 +486,7 @@ namespace sb_editor.Panels
             // 
             // btnPlay
             // 
-            this.btnPlay.Location = new System.Drawing.Point(398, 320);
+            this.btnPlay.Location = new System.Drawing.Point(398, 300);
             this.btnPlay.Name = "btnPlay";
             this.btnPlay.Size = new System.Drawing.Size(40, 23);
             this.btnPlay.TabIndex = 8;
@@ -496,7 +496,7 @@ namespace sb_editor.Panels
             // 
             // btnEdit
             // 
-            this.btnEdit.Location = new System.Drawing.Point(297, 320);
+            this.btnEdit.Location = new System.Drawing.Point(297, 300);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(55, 23);
             this.btnEdit.TabIndex = 7;
@@ -506,7 +506,7 @@ namespace sb_editor.Panels
             // 
             // btnOpen
             // 
-            this.btnOpen.Location = new System.Drawing.Point(199, 320);
+            this.btnOpen.Location = new System.Drawing.Point(199, 300);
             this.btnOpen.Name = "btnOpen";
             this.btnOpen.Size = new System.Drawing.Size(55, 23);
             this.btnOpen.TabIndex = 6;
@@ -516,7 +516,7 @@ namespace sb_editor.Panels
             // 
             // btnCopy
             // 
-            this.btnCopy.Location = new System.Drawing.Point(138, 320);
+            this.btnCopy.Location = new System.Drawing.Point(138, 300);
             this.btnCopy.Name = "btnCopy";
             this.btnCopy.Size = new System.Drawing.Size(55, 23);
             this.btnCopy.TabIndex = 5;
@@ -526,7 +526,7 @@ namespace sb_editor.Panels
             // 
             // btnRemove
             // 
-            this.btnRemove.Location = new System.Drawing.Point(77, 320);
+            this.btnRemove.Location = new System.Drawing.Point(77, 300);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(55, 23);
             this.btnRemove.TabIndex = 4;
@@ -536,7 +536,7 @@ namespace sb_editor.Panels
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(16, 320);
+            this.btnAdd.Location = new System.Drawing.Point(16, 300);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(55, 23);
             this.btnAdd.TabIndex = 3;
@@ -550,7 +550,7 @@ namespace sb_editor.Panels
             this.lstSamples.ContextMenuStrip = this.ContextMenu_Listbox;
             this.lstSamples.DisplayMember = "FilePath";
             this.lstSamples.FormattingEnabled = true;
-            this.lstSamples.Location = new System.Drawing.Point(16, 76);
+            this.lstSamples.Location = new System.Drawing.Point(16, 56);
             this.lstSamples.Name = "lstSamples";
             this.lstSamples.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.lstSamples.Size = new System.Drawing.Size(461, 238);
@@ -634,7 +634,7 @@ namespace sb_editor.Panels
             // chkEnableSubSFX
             // 
             this.chkEnableSubSFX.AutoSize = true;
-            this.chkEnableSubSFX.Location = new System.Drawing.Point(16, 43);
+            this.chkEnableSubSFX.Location = new System.Drawing.Point(16, 23);
             this.chkEnableSubSFX.Name = "chkEnableSubSFX";
             this.chkEnableSubSFX.Size = new System.Drawing.Size(109, 17);
             this.chkEnableSubSFX.TabIndex = 0;
@@ -655,7 +655,7 @@ namespace sb_editor.Panels
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.grbSamplePool);
             this.Name = "UserControl_SamplePool";
-            this.Size = new System.Drawing.Size(777, 349);
+            this.Size = new System.Drawing.Size(777, 326);
             this.grbSamplePool.ResumeLayout(false);
             this.grbSamplePool.PerformLayout();
             this.grbSampleProperties.ResumeLayout(false);

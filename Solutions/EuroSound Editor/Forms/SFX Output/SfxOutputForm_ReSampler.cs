@@ -70,7 +70,7 @@ namespace sb_editor.Forms
                         CopyDirectory(Path.Combine(projectSettings.SampleFilesFolder, "Master"), Path.Combine(GlobalPrefs.ProjectFolder, platformData.Key + "_VAG"), false, true);
                         break;
                     default:
-                        CopyDirectory(Path.Combine(projectSettings.SampleFilesFolder, "Master"), Path.Combine(GlobalPrefs.ProjectFolder, "XBox_adpcm"), false, true);
+                        CopyDirectory(Path.Combine(projectSettings.SampleFilesFolder, "Master"), Path.Combine(GlobalPrefs.ProjectFolder, "XBox_Software_adpcm"), false, true);
                         break;
                 }
             }
@@ -199,17 +199,11 @@ namespace sb_editor.Forms
                                     break;
                                 case "pc":
                                     //----------------------------------------------------------ReSample Master File
+                                    string pcOutputPath = Path.Combine(GlobalPrefs.ProjectFolder, "PC_Software_adpcm", Path.ChangeExtension(sampleFilePath, ".ssp"));
                                     soxTimer.Start();
                                     CommonFunctions.ReSampleWithSox(sampleFullPath, waveOutputPath, waveFileData.SampleRate, sampleRate, GlobalPrefs.SoxEffect, false);
+                                    File.WriteAllBytes(pcOutputPath, eurocomImaFunction.Encode(wavFunctions.GetWaveSamples(waveOutputPath)));
                                     soxTimer.Stop();
-
-                                    //----------------------------------------------------------Create IMA file if Required
-                                    if (sample.Value.StreamMe)
-                                    {
-                                        pcTimer.Start();
-                                        CreateImaAdpcm(platform.Key, sampleFilePath, waveOutputPath);
-                                        pcTimer.Stop();
-                                    }
                                     break;
                                 default:
                                     //----------------------------------------------------------ReSample Master File
@@ -218,9 +212,9 @@ namespace sb_editor.Forms
                                     soxTimer.Stop();
 
                                     //----------------------------------------------------------Run Xbox Encoder
-                                    string xboxOutputPath = Path.Combine(GlobalPrefs.ProjectFolder, "XBox_adpcm", sampleFilePath);
+                                    string xboxOutputPath = Path.Combine(GlobalPrefs.ProjectFolder, "XBox_Software_adpcm", sampleFilePath);
                                     xbTimer.Start();
-                                    CommonFunctions.RunConsoleProcess(Path.Combine(Application.StartupPath, "SystemFiles", "xbadpcmencode.exe"), string.Format("\"{0}\" \"{1}\"", waveOutputPath, xboxOutputPath), false);
+                                    File.WriteAllBytes(Path.ChangeExtension(xboxOutputPath, ".ssp"), eurocomImaFunction.Encode(wavFunctions.GetWaveSamples(waveOutputPath)));
                                     xbTimer.Stop();
                                     break;
                             }
@@ -269,12 +263,8 @@ namespace sb_editor.Forms
             string ImaOutputFilePath = Path.Combine(GlobalPrefs.ProjectFolder, currentPlatform + "_Software_adpcm", sampleRelativePath);
 
             //Wave to IMA Adpcm
-            byte[] imaData = imaFunctions.Encode(wavFunctions.GetWaveSamples(waveInputFile));
+            byte[] imaData = eurocomImaFunction.Encode(wavFunctions.GetWaveSamples(waveInputFile));
             File.WriteAllBytes(Path.ChangeExtension(ImaOutputFilePath, ".ssp"), imaData);
-
-            //Wave to IMA Adpcm
-            byte[] imaStates = imaFunctions.DecodeStatesIma(imaData, (imaData.Length * 2) - 1);
-            File.WriteAllBytes(Path.ChangeExtension(ImaOutputFilePath, ".smd"), imaStates);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------

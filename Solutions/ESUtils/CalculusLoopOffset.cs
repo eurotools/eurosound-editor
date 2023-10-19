@@ -37,7 +37,7 @@ namespace ESUtils
         //-------------------------------------------------------------------------------------------------------------------------------
         public static uint GetMusicLoopOffsetXbox(uint loopOffset)
         {
-            double division = loopOffset / 0.88888887;
+            double division = loopOffset / 0.875;
             return (uint)Math.Floor(division);
         }
 
@@ -95,6 +95,14 @@ namespace ESUtils
                 alignedNumber = (((inputValue - 32) / 64) + 1) * 36;
             }
             return alignedNumber;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public static uint GetEurocomImaLoopOffset(uint baseLoopOffset)
+        {
+            double result = RoundNumber((double)decimal.Divide(baseLoopOffset, (decimal)3.4568));
+            uint PositionAligned = GetStreamLoopOffsetPCandGC((uint)result);
+            return (((PositionAligned - 28) / 32) + 1) * 32;
         }
     }
 

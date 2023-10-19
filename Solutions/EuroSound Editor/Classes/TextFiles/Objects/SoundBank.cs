@@ -11,6 +11,7 @@
         public uint PCSize;
         public uint XboxSize;
         public uint GameCubeSize;
+        public string MemoryMap;
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------

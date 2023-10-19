@@ -184,6 +184,15 @@ namespace sb_editor.Panels
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
+        private void MnuSetupGroups_Click(object sender, System.EventArgs e)
+        {
+            using (GroupingForm sfxGroupingForm = new GroupingForm())
+            {
+                sfxGroupingForm.ShowDialog();
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
         private void MnuMultiEditor_Click(object sender, System.EventArgs e)
         {
             using (MultiEditor multiEdit = new MultiEditor(lstSfxInDataBase.SelectedItems.OfType<string>().ToArray()))

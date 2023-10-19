@@ -105,6 +105,31 @@ namespace sb_editor
                         }
                     }
 
+                    //Read Available Memory Maps
+                    if (currentLine.Equals("#AvailableMemoryMaps", StringComparison.OrdinalIgnoreCase))
+                    {
+                        currentLine = sr.ReadLine().Trim();
+                        while (!currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase))
+                        {
+                            projectData.MemoryMaps.Add(currentLine);
+                            currentLine = sr.ReadLine().Trim();
+                        }
+                    }
+
+                    //Memory Maps for Format
+                    if (currentLine.Contains("#MemoryMaps"))
+                    {
+                        int index = Convert.ToInt32(currentLine.Substring(currentLine.Length - 1));
+                        PlatformData formatObj = projectData.platformData.ElementAt(index).Value;
+
+                        currentLine = sr.ReadLine().Trim();
+                        while (!currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase))
+                        {
+                            formatObj.MemoryMapsSize.Add(Convert.ToInt32(currentLine));
+                            currentLine = sr.ReadLine().Trim();
+                        }
+                    }
+
                     //Misc properties block
                     if (currentLine.Equals("#MiscProperites", StringComparison.OrdinalIgnoreCase))
                     {
@@ -118,6 +143,9 @@ namespace sb_editor
                             {
                                 case "DEFAULTRATE":
                                     projectData.DefaultRate = Convert.ToInt32(lineData[1]);
+                                    break;
+                                case "DEFAULTMAP":
+                                    projectData.DefaultMemMap = Convert.ToInt32(lineData[1]);
                                     break;
                                 case "SAMPLEFILEFOLDER":
                                     projectData.SampleFilesFolder = GetKeyWordValue("SAMPLEFILEFOLDER", currentLine);
@@ -204,8 +232,28 @@ namespace sb_editor
                         outputFile.WriteLine("#END");
                         outputFile.WriteLine(string.Empty);
                     }
+                    outputFile.WriteLine("#AvailableMemoryMaps");
+                    for (int i = 0; i < projectFile.MemoryMaps.Count; i++)
+                    {
+                        outputFile.WriteLine(projectFile.MemoryMaps[i]);
+                    }
+                    outputFile.WriteLine("#END");
+                    outputFile.WriteLine(string.Empty);
+                    platformIndex = 0;
+                    foreach (KeyValuePair<string, PlatformData> formatData in projectFile.platformData)
+                    {
+                        outputFile.WriteLine("// Memory Maps for Format {0}", formatData.Key);
+                        outputFile.WriteLine("#MemoryMaps{0}", platformIndex++);
+                        for (int i = 0; i < formatData.Value.MemoryMapsSize.Count; i++)
+                        {
+                            outputFile.WriteLine(formatData.Value.MemoryMapsSize[i]);
+                        }
+                        outputFile.WriteLine("#END");
+                        outputFile.WriteLine(string.Empty);
+                    }
                     outputFile.WriteLine("#MiscProperites");
                     outputFile.WriteLine("DefaultRate  {0}", projectFile.DefaultRate);
+                    outputFile.WriteLine("DefaultMap  {0}", projectFile.DefaultMemMap);
                     outputFile.WriteLine("SampleFileFolder {0}", projectFile.SampleFilesFolder);
                     outputFile.WriteLine("HashCodeFileFolder {0}", projectFile.HashCodeFileDirectory);
                     outputFile.WriteLine("EngineXFolder {0}", projectFile.EngineXProjectPath);

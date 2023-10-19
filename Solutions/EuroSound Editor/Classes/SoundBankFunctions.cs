@@ -122,7 +122,7 @@ namespace sb_editor.Classes
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal string[] GetSampleList(Dictionary<string, SFX> fileData, Language outputLanguage)
+        internal string[] GetSampleList(SortedDictionary<string, SFX> fileData, Language outputLanguage)
         {
             // Create a hash set to store the unique sample names
             HashSet<string> samplesList = new HashSet<string>();
@@ -284,45 +284,55 @@ namespace sb_editor.Classes
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal Dictionary<string, SFX> GetSfxDataDict(string[] sbSfxs, string platform, Language language)
+        internal SortedDictionary<string, SFX> GetSfxDataDict(string[] dataBases, string platform, Language language)
         {
             // Dictionary to store the SFX data for each file
-            Dictionary<string, SFX> sfxFilesData = new Dictionary<string, SFX>();
+            SortedDictionary<string, SFX> sfxFilesData = new SortedDictionary<string, SFX>();
+            string[] dataBaseFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "DataBases"), "*.txt", SearchOption.AllDirectories);
+            Array.Sort(dataBaseFiles);
 
             // Iterate over the array of SFX file names
-            for (int i = 0; i < sbSfxs.Length; i++)
+            for (int i = 0; i < dataBases.Length; i++)
             {
-                // Create the full path to the SFX file
-                string sfxName = sbSfxs[i].TrimStart(Path.DirectorySeparatorChar) + ".txt";
-                string sfxLabel = platform + "\\" + sfxName;
-                string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", sfxLabel);
-
-                // If the file does not exist in the specified platform folder, check the root SFXs folder
-                if (!File.Exists(filePath))
+                string dbFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "DataBases", dataBases[i] + ".txt");
+                DataBase sbSfxs = TextFiles.ReadDataBaseFile(dbFilePath);
+                for (int j = 0; j < sbSfxs.SFXs.Length; j++)
                 {
-                    sfxLabel = sfxName;
-                    filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", sfxLabel);
-                }
+                    // Create the full path to the SFX file
+                    string sfxName = sbSfxs.SFXs[j].TrimStart(Path.DirectorySeparatorChar) + ".txt";
+                    string sfxLabel = platform + "\\" + sfxName;
+                    string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", sfxLabel);
 
-                //Ensure that this SFX has not been readed
-                if (!sfxFilesData.ContainsKey(sfxName))
-                {
-                    // Read the SFX data from the file
-                    SFX sfxData = TextFiles.ReadSfxFile(filePath);
-
-                    // Iterate over the samples in the SFX data
-                    foreach (SfxSample sampleData in sfxData.Samples)
+                    // If the file does not exist in the specified platform folder, check the root SFXs folder
+                    if (!File.Exists(filePath))
                     {
-                        // Update the file path of the sample to the correct language folder
-                        string samplePath = CommonFunctions.GetSampleFromSpeechFolder(sampleData.FilePath, language);
-                        if (!string.IsNullOrEmpty(filePath))
-                        {
-                            sampleData.FilePath = samplePath;
-                        }
+                        sfxLabel = sfxName;
+                        filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", sfxLabel);
                     }
 
-                    // Add the SFX data to the dictionary using the file name as the key
-                    sfxFilesData.Add(sfxName, sfxData);
+                    //Ensure that this SFX has not been readed
+                    if (!sfxFilesData.ContainsKey(sfxLabel))
+                    {
+                        // Read the SFX data from the file
+                        SFX sfxData = TextFiles.ReadSfxFile(filePath);
+                        sfxData.Parameters.Group = Array.IndexOf(dataBaseFiles, dbFilePath) + 1;
+                        sfxData.Parameters.GroupStealReject = Convert.ToBoolean(sbSfxs.Action1);
+                        sfxData.Parameters.UseGroupDistCheck = sbSfxs.UseDistCheck;
+
+                        // Iterate over the samples in the SFX data
+                        foreach (SfxSample sampleData in sfxData.Samples)
+                        {
+                            // Update the file path of the sample to the correct language folder
+                            string samplePath = CommonFunctions.GetSampleFromSpeechFolder(sampleData.FilePath, language);
+                            if (!string.IsNullOrEmpty(filePath))
+                            {
+                                sampleData.FilePath = samplePath;
+                            }
+                        }
+
+                        // Add the SFX data to the dictionary using the file name as the key
+                        sfxFilesData.Add(sfxLabel, sfxData);
+                    }
                 }
             }
 
@@ -355,10 +365,11 @@ namespace sb_editor.Classes
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void UpdateDuckerLength(Dictionary<string, SFX> fileData, string outputPlatform)
+        internal void UpdateDuckerLength(SortedDictionary<string, SFX> fileData, string outputPlatform)
         {
             foreach (KeyValuePair<string, SFX> soundToCheck in fileData)
             {
+                //Update ducker if is On
                 if (soundToCheck.Value.Parameters.Ducker > 0)
                 {
                     int duckerLength = 0;
@@ -414,11 +425,11 @@ namespace sb_editor.Classes
             {
                 flags |= 1 << 0;
             }
-            if (sfxFile.Parameters.Doppler)
+            if (sfxFile.Parameters.UnPausable)
             {
                 flags |= 1 << 1;
             }
-            if (sfxFile.Parameters.IgnoreAge)
+            if (sfxFile.Parameters.IgnoreMasterVolume)
             {
                 flags |= 1 << 2;
             }
@@ -446,7 +457,7 @@ namespace sb_editor.Classes
             {
                 flags |= 1 << 8;
             }
-            if (sfxFile.Parameters.PauseInNis)
+            if (sfxFile.Parameters.PauseInstant)
             {
                 flags |= 1 << 9;
             }
@@ -461,6 +472,18 @@ namespace sb_editor.Classes
             if (sfxFile.Parameters.MusicType)
             {
                 flags |= 1 << 12;
+            }
+            if (sfxFile.Parameters.KillMeOwnGroup)
+            {
+                flags |= 1 << 13;
+            }
+            if (sfxFile.Parameters.GroupStealReject)
+            {
+                flags |= 1 << 14;
+            }
+            if (sfxFile.Parameters.OneInstancePerFrame)
+            {
+                flags |= 1 << 15;
             }
             return flags;
         }
@@ -487,11 +510,9 @@ namespace sb_editor.Classes
             sifWritter.Write(BytesFunctions.FlipUInt32(lengthAligned, isBigEndian));
             sifWritter.Write(BytesFunctions.FlipInt32(wavFileData.SampleRate, isBigEndian));
             sifWritter.Write(BytesFunctions.FlipInt32(formatLength, isBigEndian));
-            sifWritter.Write(BytesFunctions.FlipInt32(wavFileData.Channels, isBigEndian));
-            sifWritter.Write(BytesFunctions.FlipInt32(4, isBigEndian));
             sifWritter.Write(BytesFunctions.FlipInt32(psiSampleHeader, isBigEndian));
             sifWritter.Write(BytesFunctions.FlipUInt32(loopOffset, isBigEndian));
-            sifWritter.Write((uint)masterFileData.TotalTime.TotalMilliseconds);
+            sifWritter.Write(BytesFunctions.FlipUInt32((uint)masterFileData.TotalTime.TotalMilliseconds, isBigEndian));
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------

@@ -62,8 +62,26 @@ namespace sb_editor
                         currentLine = sr.ReadLine().Trim();
                         while (!currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase))
                         {
-                            string hashcodeNumber = currentLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)[1];
-                            soundBank.HashCode = Convert.ToInt32(hashcodeNumber);
+                            string[] splittedData = currentLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                            if (splittedData.Length > 1)
+                            {
+                                soundBank.HashCode = Convert.ToInt32(splittedData[1]);
+                            }
+                            currentLine = sr.ReadLine().Trim();
+                        }
+                    }
+
+                    //Memory Map Block
+                    if (currentLine.Equals("#MEMORYMAP", StringComparison.OrdinalIgnoreCase))
+                    {
+                        currentLine = sr.ReadLine().Trim();
+                        while (!currentLine.Equals("#END", StringComparison.OrdinalIgnoreCase))
+                        {
+                            string[] splittedData = currentLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                            if (splittedData.Length > 1)
+                            {
+                                soundBank.MemoryMap = splittedData[1];
+                            }
                             currentLine = sr.ReadLine().Trim();
                         }
                     }
@@ -134,6 +152,10 @@ namespace sb_editor
                 outputFile.WriteLine(string.Empty);
                 outputFile.WriteLine("#HASHCODE");
                 outputFile.WriteLine(string.Format("HashCodeNumber {0}", soundBankFile.HashCode));
+                outputFile.WriteLine("#END");
+                outputFile.WriteLine(string.Empty);
+                outputFile.WriteLine("#MEMORYMAP");
+                outputFile.WriteLine(string.Format("MapSlot {0}", soundBankFile.MemoryMap));
                 outputFile.WriteLine("#END");
                 outputFile.WriteLine(string.Empty);
                 if (includeMaxSizes)

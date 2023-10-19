@@ -23,21 +23,21 @@ namespace sb_editor.HashCodes
                         sw.WriteLine(fileData[i]);
                     }
                 }
-                string mfxDefinesFilePath = Path.Combine(projectSettings.HashCodeFileDirectory, "MFX_Defines.h");
-                if (File.Exists(mfxDefinesFilePath))
-                {
-                    sw.WriteLine(string.Empty);
-                    string[] fileData = File.ReadAllLines(mfxDefinesFilePath);
-                    for (int i = 0; i < fileData.Length; i++)
-                    {
-                        sw.WriteLine(fileData[i]);
-                    }
-                }
                 string reverbsFilePath = Path.Combine(projectSettings.HashCodeFileDirectory, "SFX_Reverbs.h");
                 if (File.Exists(reverbsFilePath))
                 {
                     sw.WriteLine(string.Empty);
                     string[] fileData = File.ReadAllLines(reverbsFilePath);
+                    for (int i = 0; i < fileData.Length; i++)
+                    {
+                        sw.WriteLine(fileData[i]);
+                    }
+                }
+                string mfxDefinesFilePath = Path.Combine(projectSettings.HashCodeFileDirectory, "MFX_Defines.h");
+                if (File.Exists(mfxDefinesFilePath))
+                {
+                    sw.WriteLine(string.Empty);
+                    string[] fileData = File.ReadAllLines(mfxDefinesFilePath);
                     for (int i = 0; i < fileData.Length; i++)
                     {
                         sw.WriteLine(fileData[i]);

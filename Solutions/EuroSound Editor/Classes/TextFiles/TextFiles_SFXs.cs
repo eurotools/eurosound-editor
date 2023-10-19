@@ -111,6 +111,30 @@ namespace sb_editor
                                 case "DOPPLER":
                                     sfxData.Parameters.Doppler = Convert.ToBoolean(byte.Parse(lineData[1].Trim()));
                                     break;
+                                case "PAUSEINSTANT":
+                                    sfxData.Parameters.PauseInstant = Convert.ToBoolean(byte.Parse(lineData[1].Trim()));
+                                    break;
+                                case "UNPAUSABLE":
+                                    sfxData.Parameters.UnPausable = Convert.ToBoolean(byte.Parse(lineData[1].Trim()));
+                                    break;
+                                case "ONEINSTANCEPERFRAME":
+                                    sfxData.Parameters.OneInstancePerFrame = Convert.ToBoolean(byte.Parse(lineData[1].Trim()));
+                                    break;
+                                case "KILLMEOWNGROUP":
+                                    sfxData.Parameters.KillMeOwnGroup = Convert.ToBoolean(byte.Parse(lineData[1].Trim()));
+                                    break;
+                                case "IGNOREMASTERVOLUME":
+                                    sfxData.Parameters.IgnoreMasterVolume = Convert.ToBoolean(byte.Parse(lineData[1].Trim()));
+                                    break;
+                                case "GROUPSTEALREJECT":
+                                    sfxData.Parameters.GroupStealReject = Convert.ToBoolean(byte.Parse(lineData[1].Trim()));
+                                    break;
+                                case "DOPPLERVALUE":
+                                    sfxData.Parameters.DopplerValue = Convert.ToSByte(lineData[1].Trim());
+                                    break;
+                                case "USERFLAGS":
+                                    sfxData.Parameters.UserFlags = Convert.ToUInt16(lineData[1].Trim());
+                                    break;
                             }
                             currentLine = sr.ReadLine().Trim();
                         }
@@ -272,6 +296,14 @@ namespace sb_editor
                 outputFile.WriteLine("StealOnAge  {0}", Convert.ToByte(sfxFile.Parameters.StealOnAge));
                 outputFile.WriteLine("MusicType  {0}", Convert.ToByte(sfxFile.Parameters.MusicType));
                 outputFile.WriteLine("Doppler  {0}", Convert.ToByte(sfxFile.Parameters.Doppler));
+                outputFile.WriteLine("PauseInstant  {0}", Convert.ToByte(sfxFile.Parameters.PauseInstant));
+                outputFile.WriteLine("UnPausable  {0}", Convert.ToByte(sfxFile.Parameters.UnPausable));
+                outputFile.WriteLine("OneInstancePerFrame  {0}", Convert.ToByte(sfxFile.Parameters.OneInstancePerFrame));
+                outputFile.WriteLine("KillMeOwnGroup  {0}", Convert.ToByte(sfxFile.Parameters.KillMeOwnGroup));
+                outputFile.WriteLine("IgnoreMasterVolume  {0}", Convert.ToByte(sfxFile.Parameters.IgnoreMasterVolume));
+                outputFile.WriteLine("GroupStealReject  {0}", Convert.ToByte(sfxFile.Parameters.GroupStealReject));
+                outputFile.WriteLine("DopplerValue  {0}", sfxFile.Parameters.DopplerValue);
+                outputFile.WriteLine("UserFlags  {0}", sfxFile.Parameters.UserFlags);
                 outputFile.WriteLine("#END");
                 outputFile.WriteLine(string.Empty);
                 if (!defaultsFile)

@@ -70,7 +70,7 @@ namespace sb_editor
             }
             cboDefaultRate.EndUpdate();
 
-            //Combobox
+            //Combobox ReSample Rates
             cboFormat.BeginUpdate();
             cboFormat.Items.AddRange(temporalObj.platformData.Keys.ToArray());
             if (cboFormat.Items.Count > 0)
@@ -78,6 +78,38 @@ namespace sb_editor
                 cboFormat.SelectedIndex = 0;
             }
             cboFormat.EndUpdate();
+
+            //Combobox Memory Slots
+            cboMemSlotFormat.BeginUpdate();
+            cboMemSlotFormat.Items.AddRange(temporalObj.platformData.Keys.ToArray());
+            if (cboMemSlotFormat.Items.Count > 0)
+            {
+                cboMemSlotFormat.SelectedIndex = 0;
+            }
+            cboMemSlotFormat.EndUpdate();
+            UpdateMemMapsComboboxes();
+
+            //Soundbanks
+            string soundbanksPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks");
+            if (Directory.Exists(soundbanksPath))
+            {
+                IEnumerable<string> sbFiles = Directory.EnumerateFiles(soundbanksPath, "*.txt", SearchOption.TopDirectoryOnly);
+                foreach (string sbFile in sbFiles)
+                {
+                    SoundBank sbData = TextFiles.ReadSoundbankFile(sbFile);
+                    ListViewItem sbItem = new ListViewItem(new string[] { Path.GetFileNameWithoutExtension(sbFile), sbData.MemoryMap });
+                    lvwSoundBanks.Items.Add(sbItem);
+                }
+            }
+
+            //Default Memory Map
+            cboDefaultMemMap.BeginUpdate();
+            cboDefaultMemMap.Items.AddRange(temporalObj.MemoryMaps.ToArray());
+            if (cboDefaultMemMap.Items.Count > 0)
+            {
+                cboDefaultMemMap.SelectedIndex = temporalObj.DefaultMemMap;
+            }
+            cboDefaultMemMap.EndUpdate();
 
             //Ini File Data
             string systemIniFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini");
@@ -230,6 +262,12 @@ namespace sb_editor
                         formatPlatformData.ReSampleRates.Add(22050);
                     }
 
+                    //Add Memory Maps
+                    for (int i = 0; i < temporalObj.MemoryMaps.Count; i++)
+                    {
+                        formatPlatformData.MemoryMapsSize.Add(0);
+                    }
+
                     //Add data
                     temporalObj.platformData.Add(selectedFormat, formatPlatformData);
                     lvwAvailableFormats.Items.Add(new ListViewItem(new string[] { selectedFormat, formatPlatformData.OutputFolder, formatPlatformData.AutoReSample ? "On" : "Off" }));
@@ -239,6 +277,17 @@ namespace sb_editor
                     {
                         cboFormat.Items.Add(selectedFormat);
                     }
+
+                    //Update Combobox Memory Slots
+                    cboMemSlotFormat.BeginUpdate();
+                    cboMemSlotFormat.Items.Clear();
+                    if (temporalObj.platformData.Keys.Count > 0)
+                    {
+                        cboMemSlotFormat.Items.AddRange(temporalObj.platformData.Keys.ToArray());
+                        cboMemSlotFormat.SelectedIndex = 0;
+                    }
+                    cboMemSlotFormat.EndUpdate();
+                    UpdateMemMapsComboboxes();
                 }
             }
         }
@@ -373,6 +422,155 @@ namespace sb_editor
         }
 
         //*===============================================================================================
+        //* Memory Maps
+        //*===============================================================================================
+        private void ButtonCreateMemSlot_Click(object sender, EventArgs e)
+        {
+            // create an input form to get the new re-sample rate name
+            using (Frm_InputBox inputForm = new Frm_InputBox() { Text = "New Memory-Map" })
+            {
+                // set the label text and default value for the input form
+                inputForm.lblText.Text = "Enter New Memory Map Name";
+
+                // show the input form and check if the user clicked OK
+                if (inputForm.ShowDialog() == DialogResult.OK)
+                {
+                    //Check if we exceed the limit of memory maps
+                    if (temporalObj.MemoryMaps.Count < 8)
+                    {
+                        // ensure is not duplicated
+                        if (temporalObj.MemoryMaps.IndexOf(inputForm.txtInputData.Text) == -1)
+                        {
+
+                            lvwAvailableMemSlots.Items.Add(new ListViewItem(new string[] { inputForm.txtInputData.Text, "0" }));
+                            temporalObj.MemoryMaps.Add(inputForm.txtInputData.Text);
+
+                            //Add the new value to all platforms
+                            foreach (KeyValuePair<string, PlatformData> platformData in temporalObj.platformData)
+                            {
+                                platformData.Value.MemoryMapsSize.Add(1024);
+                            }
+
+                            //Update UI
+                            UpdateMemMapsComboboxes();
+                            CboMemSlotFormat_SelectedIndexChanged(null, null);
+
+                            //Add Memory Map to combobox
+                            if (!cboDefaultMemMap.Items.Contains(inputForm.txtInputData.Text))
+                            {
+                                cboDefaultMemMap.Items.Add(inputForm.txtInputData.Text);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("This Memory-Slot Name is used. Pick another!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Limit of 8 Memory-Slots reached.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                }
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void CboMemSlotFormat_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedPlatform = cboMemSlotFormat.SelectedItem.ToString();
+            if (temporalObj.platformData.ContainsKey(selectedPlatform))
+            {
+                lvwAvailableMemSlots.BeginUpdate();
+                lvwAvailableMemSlots.Items.Clear();
+
+                // Add format labels to the listview
+                int[] platformResampleRates = temporalObj.platformData[selectedPlatform].MemoryMapsSize.ToArray();
+                for (int i = 0; i < platformResampleRates.Length; i++)
+                {
+                    ListViewItem lvItem = new ListViewItem(new string[] { temporalObj.MemoryMaps[i], platformResampleRates[i].ToString() });
+                    lvwAvailableMemSlots.Items.Add(lvItem);
+                }
+
+                //Draw listview again
+                lvwAvailableMemSlots.EndUpdate();
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void LvwAvailableMemSlots_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (lvwAvailableMemSlots.SelectedItems.Count > 0 && temporalObj.platformData.ContainsKey(cboMemSlotFormat.SelectedItem.ToString()))
+            {
+                //Ask user for a value
+                using (Frm_InputBox inputBox = new Frm_InputBox() { Text = "Memory-Map Max Size" })
+                {
+                    inputBox.lblText.Text = "Enter New Memory-Map Max Size";
+                    inputBox.txtInputData.Text = lvwAvailableMemSlots.SelectedItems[0].SubItems[1].Text;
+                    if (inputBox.ShowDialog() == DialogResult.OK)
+                    {
+                        //Ensure that the input value is valid
+                        if (inputBox.txtInputData.Text.All(char.IsNumber) && int.TryParse(inputBox.txtInputData.Text, out int mapMaxSize))
+                        {
+                            //Update subitem && dictionary
+                            lvwAvailableMemSlots.SelectedItems[0].SubItems[1].Text = inputBox.txtInputData.Text;
+                            string formatToUpdate = cboMemSlotFormat.SelectedItem.ToString();
+                            if (temporalObj.platformData.ContainsKey(formatToUpdate))
+                            {
+                                temporalObj.platformData[formatToUpdate].MemoryMapsSize[lvwAvailableMemSlots.SelectedItems[0].Index] = mapMaxSize;
+                            }
+                        }
+                        else
+                        {
+                            //Inform user
+                            MessageBox.Show("Invalid max size value", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void UpdateMemMapsComboboxes()
+        {
+            int resamplePrevIndex = 0;
+
+            //Clear items if required
+            if (cboAvailableMemoryMaps.Items.Count > 0)
+            {
+                resamplePrevIndex = cboAvailableMemoryMaps.SelectedIndex;
+                cboAvailableMemoryMaps.Items.Clear();
+            }
+
+            //Add available formats and select the first item
+            if (temporalObj.MemoryMaps.Count > 0)
+            {
+                cboAvailableMemoryMaps.Items.AddRange(temporalObj.MemoryMaps.ToArray());
+                cboAvailableMemoryMaps.SelectedIndex = resamplePrevIndex;
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void CboAvailableMemoryMaps_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboAvailableMemoryMaps.SelectedItem != null)
+            {
+                //Read project
+                string selectedMapSlot = cboAvailableMemoryMaps.SelectedItem.ToString();
+                foreach (ListViewItem soundBank in lvwSoundBanks.SelectedItems)
+                {
+                    //Update UI
+                    soundBank.SubItems[1].Text = selectedMapSlot;
+
+                    //Update File
+                    string sbPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks", soundBank.Text + ".txt");
+                    SoundBank sbData = TextFiles.ReadSoundbankFile(sbPath);
+                    sbData.MemoryMap = selectedMapSlot;
+                    TextFiles.WriteSoundBankFile(sbPath, sbData);
+                }
+            }
+        }
+
+        //*===============================================================================================
         //* MISC
         //*===============================================================================================
         private void CboDefaultRate_SelectedIndexChanged(object sender, EventArgs e)
@@ -380,6 +578,15 @@ namespace sb_editor
             if (cboDefaultRate.SelectedIndex >= 0)
             {
                 temporalObj.DefaultRate = cboDefaultRate.SelectedIndex;
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void CboDefaultMemMap_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboDefaultMemMap.SelectedIndex >= 0)
+            {
+                temporalObj.DefaultMemMap = cboDefaultMemMap.SelectedIndex;
             }
         }
 

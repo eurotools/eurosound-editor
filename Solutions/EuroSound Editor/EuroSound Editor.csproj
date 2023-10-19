@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Audio\AiffFunctions.cs" />
+    <Compile Include="Classes\Audio\EurocomImaFunctions.cs" />
     <Compile Include="Classes\Audio\ImaFunctions.cs" />
     <Compile Include="Classes\Audio\MidiFunctions.cs" />
     <Compile Include="Classes\MultipleFilesFunctions.cs" />
@@ -131,6 +132,12 @@
     <Compile Include="Forms\SetMaxBankSizeForm.Designer.cs">
       <DependentUpon>SetMaxBankSizeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SFX Form\CustomFlags.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SFX Form\CustomFlags.Designer.cs">
+      <DependentUpon>CustomFlags.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SFX Form\PCDllVoicesForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -144,6 +151,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\SFX Output\SfxOutputForm_CreateStreams.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SFX Output\SfxOutputForm_ProjectDetails.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\SFX Output\SfxOutputForm_SoundBanks.cs">
@@ -444,6 +454,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SetMaxBankSizeForm.resx">
       <DependentUpon>SetMaxBankSizeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SFX Form\CustomFlags.resx">
+      <DependentUpon>CustomFlags.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SFX Form\PCDllVoicesForm.resx">
       <DependentUpon>PCDllVoicesForm.cs</DependentUpon>

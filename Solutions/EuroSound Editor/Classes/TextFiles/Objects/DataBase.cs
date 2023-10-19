@@ -6,6 +6,10 @@
     public class DataBase : FileHeader
     {
         public string[] SFXs;
+        public byte Action1;
+        public int MaxVoices;
+        public int Priority;
+        public bool UseDistCheck;
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------

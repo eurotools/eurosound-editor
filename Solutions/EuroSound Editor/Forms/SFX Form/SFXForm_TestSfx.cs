@@ -60,21 +60,18 @@ namespace sb_editor.Forms
                     {
                         using (BinaryWriter sifWritter = new BinaryWriter(File.Open(Path.ChangeExtension(outputTempFilePath, ".sif"), FileMode.Create, FileAccess.Write, FileShare.Read)))
                         {
-                            //Get HashCodes Dictionary
-                            Dictionary<string, int> HashCodesDict = sbFunctions.GetHashCodesDictionary("SFXs", "#HASHCODE");
-
                             //Get Data
                             SFX sfxData = new SFX();
                             sfxData = ParseSfxCommonData(sfxData);
                             sfxData = ParseSfxSamplePool(sfxData);
 
                             //Build SFX File
-                            Dictionary<string, SFX> sbFileData = new Dictionary<string, SFX>() { { "Common", sfxData } };
+                            SortedDictionary<string, SFX> sbFileData = new SortedDictionary<string, SFX>() { { "Common", sfxData } };
                             string[] samplesList = sbFunctions.GetSampleList(sbFileData, Enumerations.Language.English);
                             sbFunctions.UpdateDuckerLength(sbFileData, "PC");
 
                             //Write SFX Data
-                            WriteSfxFile(HashCodesDict, sbFileData, samplesList, "___SB_TEST_SFX___", sfxWritter, false, sw);
+                            WriteSfxFile(sbFileData, samplesList, "___SB_TEST_SFX___", sfxWritter, false, sw);
                             WriteSifFile(sifWritter, sbfWritter, samplesList, false);
                         }
                     }
@@ -91,13 +88,13 @@ namespace sb_editor.Forms
                     DirectoryInfo musXFolder = Directory.CreateDirectory(outputFolder);
 
                     //Build File
-                    MusXBuild_SoundbankOld.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, string.Empty, Path.Combine(musXFolder.FullName, fileName), hashCode, false);
+                    MusXBuild_Soundbank.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, string.Empty, Path.Combine(musXFolder.FullName, fileName), CommonFunctions.GetPlatformLabel("PC"), (uint)hashCode, false);
                 }
             }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void WriteSfxFile(Dictionary<string, int> hashCodesDict, Dictionary<string, SFX> fileData, string[] sampleList, string outputBank, BinaryWriter sfxWritter, bool isBigEndian, StreamWriter debugFile)
+        private void WriteSfxFile(SortedDictionary<string, SFX> fileData, string[] sampleList, string outputBank, BinaryWriter sfxWritter, bool isBigEndian, StreamWriter debugFile)
         {
             List<long> sfxLut = new List<long>();
             SoundBankFunctions sbFunctions = new SoundBankFunctions();
@@ -118,15 +115,30 @@ namespace sb_editor.Forms
                 sfxWritter.Write(BytesFunctions.FlipShort((short)sfxData.Value.Parameters.DuckerLength, isBigEndian));
                 sfxWritter.Write(BytesFunctions.FlipShort((short)sfxData.Value.SamplePool.MinDelay, isBigEndian));
                 sfxWritter.Write(BytesFunctions.FlipShort((short)sfxData.Value.SamplePool.MaxDelay, isBigEndian));
-                sfxWritter.Write(BytesFunctions.FlipShort((short)sfxData.Value.Parameters.InnerRadius, isBigEndian));
-                sfxWritter.Write(BytesFunctions.FlipShort((short)sfxData.Value.Parameters.OuterRadius, isBigEndian));
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.ReverbSend);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.TrackingType);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.MaxVoices);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.Priority);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.Ducker);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.MasterVolume);
-                sfxWritter.Write((ushort)sbFunctions.GetFlags(sfxData.Value));
+                int useDistanceCheck = Convert.ToInt32(sfxData.Value.Parameters.UseGroupDistCheck);
+                sfxWritter.Write((byte)useDistanceCheck);
+                sfxWritter.Write((short)sfxData.Value.Parameters.Group);
+                sfxWritter.Write((byte)0);
+                int sfxFlags = sbFunctions.GetFlags(sfxData.Value);
+                for (int i = 0; i < 16; i++)
+                {
+                    sfxWritter.Write(Convert.ToSByte((sfxFlags >> i) & 1));
+                }
+
+                //UserFlags
+                for (int i = 0; i < 16; i++)
+                {
+                    sfxWritter.Write(Convert.ToSByte((sfxData.Value.Parameters.UserFlags >> i) & 1));
+                }
+
+                sfxWritter.Write(sfxData.Value.Parameters.DopplerValue);
+                sfxWritter.Write((sbyte)sfxData.Value.Parameters.Alertness);
 
                 //Calculate references
                 sfxWritter.Write(BytesFunctions.FlipUShort((ushort)sfxData.Value.Samples.Count, isBigEndian));
@@ -135,10 +147,10 @@ namespace sb_editor.Forms
                     int fileRef = 0;
                     if (sfxData.Value.SamplePool.EnableSubSFX)
                     {
-                        string hashCode = Path.GetFileNameWithoutExtension(sampleToCheck.FilePath);
-                        if (hashCodesDict.ContainsKey(hashCode))
+                        string filePath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", sampleToCheck.FilePath + ".txt");
+                        if (File.Exists(filePath))
                         {
-                            fileRef = (short)hashCodesDict[hashCode];
+                            fileRef = (short)TextFiles.ReadSfxFile(filePath).HashCode;
                         }
                         else
                         {
@@ -159,14 +171,12 @@ namespace sb_editor.Forms
                         fileRef = (short)Array.FindIndex(sampleList, s => s.Equals(sampleToCheck.FilePath, StringComparison.OrdinalIgnoreCase));
                     }
                     sfxWritter.Write(BytesFunctions.FlipShort((short)fileRef, isBigEndian));
-                    sfxWritter.Write(BytesFunctions.FlipShort((short)Math.Round(sampleToCheck.PitchOffset * 1024), isBigEndian));
-                    sfxWritter.Write(BytesFunctions.FlipShort((short)Math.Round(sampleToCheck.RandomPitch * 1024), isBigEndian));
+                    sfxWritter.Write((sbyte)decimal.Divide(sampleToCheck.PitchOffset, (decimal)0.2));
+                    sfxWritter.Write((sbyte)decimal.Divide(sampleToCheck.RandomPitch, (decimal)0.1));
                     sfxWritter.Write(sampleToCheck.BaseVolume);
                     sfxWritter.Write(sampleToCheck.RandomVolume);
                     sfxWritter.Write(sampleToCheck.Pan);
                     sfxWritter.Write(sampleToCheck.RandomPan);
-                    sfxWritter.Write((byte)0);
-                    sfxWritter.Write((byte)0);
                 }
             }
             debugFile.WriteLine("StreamFileRefCheckSum = {0}", streamFileCheckSum * -1);

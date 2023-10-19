@@ -57,6 +57,7 @@ namespace sb_editor.Panels
             this.btnAddSFXs = new System.Windows.Forms.Button();
             this.lvwImageList = new System.Windows.Forms.ImageList(this.components);
             this.ToolTip_Controls = new System.Windows.Forms.ToolTip(this.components);
+            this.mnuSetupGroups = new System.Windows.Forms.ToolStripMenuItem();
             this.grbAvailableSFXs.SuspendLayout();
             this.pnlListView.SuspendLayout();
             this.ContextMenu_ListView.SuspendLayout();
@@ -141,15 +142,16 @@ namespace sb_editor.Panels
             this.mnuDelete,
             this.mnuRename,
             this.mnuNewMultiple,
-            this.mnuMultiEditor});
+            this.mnuMultiEditor,
+            this.mnuSetupGroups});
             this.ContextMenu_ListView.Name = "ContextMenu_ListView";
             this.ContextMenu_ListView.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.ContextMenu_ListView.Size = new System.Drawing.Size(169, 246);
+            this.ContextMenu_ListView.Size = new System.Drawing.Size(181, 290);
             // 
             // mnuAddToDB
             // 
             this.mnuAddToDB.Name = "mnuAddToDB";
-            this.mnuAddToDB.Size = new System.Drawing.Size(168, 22);
+            this.mnuAddToDB.Size = new System.Drawing.Size(180, 22);
             this.mnuAddToDB.Text = "Add To DB";
             this.mnuAddToDB.Click += new System.EventHandler(this.MnuAddToDB_Click);
             // 
@@ -158,7 +160,7 @@ namespace sb_editor.Panels
             this.mnuPlay.Enabled = false;
             this.mnuPlay.Name = "mnuPlay";
             this.mnuPlay.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Space)));
-            this.mnuPlay.Size = new System.Drawing.Size(168, 22);
+            this.mnuPlay.Size = new System.Drawing.Size(180, 22);
             this.mnuPlay.Text = "Play";
             // 
             // mnuStop
@@ -166,14 +168,14 @@ namespace sb_editor.Panels
             this.mnuStop.Enabled = false;
             this.mnuStop.Name = "mnuStop";
             this.mnuStop.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Escape)));
-            this.mnuStop.Size = new System.Drawing.Size(168, 22);
+            this.mnuStop.Size = new System.Drawing.Size(180, 22);
             this.mnuStop.Text = "Stop";
             // 
             // mnuProperties
             // 
             this.mnuProperties.Name = "mnuProperties";
             this.mnuProperties.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.mnuProperties.Size = new System.Drawing.Size(168, 22);
+            this.mnuProperties.Size = new System.Drawing.Size(180, 22);
             this.mnuProperties.Text = "Properties";
             this.mnuProperties.Click += new System.EventHandler(this.MnuProperties_Click);
             // 
@@ -181,7 +183,7 @@ namespace sb_editor.Panels
             // 
             this.mnuEdit.Name = "mnuEdit";
             this.mnuEdit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Back)));
-            this.mnuEdit.Size = new System.Drawing.Size(168, 22);
+            this.mnuEdit.Size = new System.Drawing.Size(180, 22);
             this.mnuEdit.Text = "Edit";
             this.mnuEdit.Click += new System.EventHandler(this.MnuEdit_Click);
             // 
@@ -189,7 +191,7 @@ namespace sb_editor.Panels
             // 
             this.mnuNew.Name = "mnuNew";
             this.mnuNew.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.mnuNew.Size = new System.Drawing.Size(168, 22);
+            this.mnuNew.Size = new System.Drawing.Size(180, 22);
             this.mnuNew.Text = "New";
             this.mnuNew.Click += new System.EventHandler(this.MnuNew_Click);
             // 
@@ -197,7 +199,7 @@ namespace sb_editor.Panels
             // 
             this.mnuCopy.Name = "mnuCopy";
             this.mnuCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.mnuCopy.Size = new System.Drawing.Size(168, 22);
+            this.mnuCopy.Size = new System.Drawing.Size(180, 22);
             this.mnuCopy.Text = "Copy";
             this.mnuCopy.Click += new System.EventHandler(this.MnuCopy_Click);
             // 
@@ -205,7 +207,7 @@ namespace sb_editor.Panels
             // 
             this.mnuDelete.Name = "mnuDelete";
             this.mnuDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            this.mnuDelete.Size = new System.Drawing.Size(168, 22);
+            this.mnuDelete.Size = new System.Drawing.Size(180, 22);
             this.mnuDelete.Text = "Delete";
             this.mnuDelete.Click += new System.EventHandler(this.MnuDelete_Click);
             // 
@@ -213,21 +215,21 @@ namespace sb_editor.Panels
             // 
             this.mnuRename.Name = "mnuRename";
             this.mnuRename.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            this.mnuRename.Size = new System.Drawing.Size(168, 22);
+            this.mnuRename.Size = new System.Drawing.Size(180, 22);
             this.mnuRename.Text = "Rename";
             this.mnuRename.Click += new System.EventHandler(this.MnuRename_Click);
             // 
             // mnuNewMultiple
             // 
             this.mnuNewMultiple.Name = "mnuNewMultiple";
-            this.mnuNewMultiple.Size = new System.Drawing.Size(168, 22);
+            this.mnuNewMultiple.Size = new System.Drawing.Size(180, 22);
             this.mnuNewMultiple.Text = "New Multiple";
             this.mnuNewMultiple.Click += new System.EventHandler(this.MnuNewMultiple_Click);
             // 
             // mnuMultiEditor
             // 
             this.mnuMultiEditor.Name = "mnuMultiEditor";
-            this.mnuMultiEditor.Size = new System.Drawing.Size(168, 22);
+            this.mnuMultiEditor.Size = new System.Drawing.Size(180, 22);
             this.mnuMultiEditor.Text = "Multi Editor";
             this.mnuMultiEditor.Click += new System.EventHandler(this.MnuMultiEditor_Click);
             // 
@@ -336,6 +338,13 @@ namespace sb_editor.Panels
             this.lvwImageList.Images.SetKeyName(1, "SubSFX.png");
             this.lvwImageList.Images.SetKeyName(2, "SubSFX2.png");
             // 
+            // mnuSetupGroups
+            // 
+            this.mnuSetupGroups.Name = "mnuSetupGroups";
+            this.mnuSetupGroups.Size = new System.Drawing.Size(180, 22);
+            this.mnuSetupGroups.Text = "Setup SFX Groups";
+            this.mnuSetupGroups.Click += new System.EventHandler(this.MnuSetupGroups_Click);
+            // 
             // UserControl_MainForm_AvailableSFX
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -381,5 +390,6 @@ namespace sb_editor.Panels
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_HashCodeLabel;
         protected internal System.Windows.Forms.DataGridView DataGrid_SFXs;
         private System.Windows.Forms.Label lblSFXsTutorial;
+        private System.Windows.Forms.ToolStripMenuItem mnuSetupGroups;
     }
 }

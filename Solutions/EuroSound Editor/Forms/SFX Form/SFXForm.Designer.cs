@@ -33,6 +33,7 @@ namespace sb_editor.Forms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SFXForm));
             this.tabCtrl = new System.Windows.Forms.TabControl();
             this.pnlSFXParameters = new System.Windows.Forms.Panel();
+            this.ButtonDllVoices = new System.Windows.Forms.Button();
             this.btnSfxTestDebug = new System.Windows.Forms.Button();
             this.pnlAlert = new System.Windows.Forms.Panel();
             this.lblAlert = new System.Windows.Forms.Label();
@@ -63,7 +64,6 @@ namespace sb_editor.Forms
             this.btnOK = new System.Windows.Forms.Button();
             this.lblCurrentSFX = new System.Windows.Forms.Label();
             this.tmrTabPageBlink = new System.Windows.Forms.Timer(this.components);
-            this.ButtonDllVoices = new System.Windows.Forms.Button();
             this.pnlSFXParameters.SuspendLayout();
             this.pnlAlert.SuspendLayout();
             this.pnlOptions.SuspendLayout();
@@ -107,12 +107,22 @@ namespace sb_editor.Forms
             this.pnlSFXParameters.Controls.Add(this.UserControl_SamplePoolControl);
             this.pnlSFXParameters.Location = new System.Drawing.Point(12, 28);
             this.pnlSFXParameters.Name = "pnlSFXParameters";
-            this.pnlSFXParameters.Size = new System.Drawing.Size(881, 666);
+            this.pnlSFXParameters.Size = new System.Drawing.Size(881, 680);
             this.pnlSFXParameters.TabIndex = 1;
+            // 
+            // ButtonDllVoices
+            // 
+            this.ButtonDllVoices.Location = new System.Drawing.Point(786, 539);
+            this.ButtonDllVoices.Name = "ButtonDllVoices";
+            this.ButtonDllVoices.Size = new System.Drawing.Size(88, 23);
+            this.ButtonDllVoices.TabIndex = 11;
+            this.ButtonDllVoices.Text = "PC DLL Voices";
+            this.ButtonDllVoices.UseVisualStyleBackColor = true;
+            this.ButtonDllVoices.Click += new System.EventHandler(this.ButtonDllVoices_Click);
             // 
             // btnSfxTestDebug
             // 
-            this.btnSfxTestDebug.Location = new System.Drawing.Point(787, 438);
+            this.btnSfxTestDebug.Location = new System.Drawing.Point(786, 481);
             this.btnSfxTestDebug.Name = "btnSfxTestDebug";
             this.btnSfxTestDebug.Size = new System.Drawing.Size(88, 23);
             this.btnSfxTestDebug.TabIndex = 9;
@@ -147,7 +157,7 @@ namespace sb_editor.Forms
             // btnDefSettings_Cancel
             // 
             this.btnDefSettings_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnDefSettings_Cancel.Location = new System.Drawing.Point(693, 299);
+            this.btnDefSettings_Cancel.Location = new System.Drawing.Point(692, 342);
             this.btnDefSettings_Cancel.Name = "btnDefSettings_Cancel";
             this.btnDefSettings_Cancel.Size = new System.Drawing.Size(88, 23);
             this.btnDefSettings_Cancel.TabIndex = 3;
@@ -159,7 +169,7 @@ namespace sb_editor.Forms
             // btnDefSettings_Accept
             // 
             this.btnDefSettings_Accept.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnDefSettings_Accept.Location = new System.Drawing.Point(787, 299);
+            this.btnDefSettings_Accept.Location = new System.Drawing.Point(786, 342);
             this.btnDefSettings_Accept.Name = "btnDefSettings_Accept";
             this.btnDefSettings_Accept.Size = new System.Drawing.Size(88, 23);
             this.btnDefSettings_Accept.TabIndex = 4;
@@ -171,7 +181,7 @@ namespace sb_editor.Forms
             // lblHashCode
             // 
             this.lblHashCode.AutoSize = true;
-            this.lblHashCode.Location = new System.Drawing.Point(801, 522);
+            this.lblHashCode.Location = new System.Drawing.Point(800, 565);
             this.lblHashCode.Name = "lblHashCode";
             this.lblHashCode.Size = new System.Drawing.Size(60, 13);
             this.lblHashCode.TabIndex = 12;
@@ -180,7 +190,7 @@ namespace sb_editor.Forms
             // txtHashCode
             // 
             this.txtHashCode.BackColor = System.Drawing.SystemColors.Window;
-            this.txtHashCode.Location = new System.Drawing.Point(787, 538);
+            this.txtHashCode.Location = new System.Drawing.Point(786, 581);
             this.txtHashCode.Name = "txtHashCode";
             this.txtHashCode.ReadOnly = true;
             this.txtHashCode.Size = new System.Drawing.Size(88, 20);
@@ -188,7 +198,7 @@ namespace sb_editor.Forms
             // 
             // btnReverbTester
             // 
-            this.btnReverbTester.Location = new System.Drawing.Point(787, 467);
+            this.btnReverbTester.Location = new System.Drawing.Point(786, 510);
             this.btnReverbTester.Name = "btnReverbTester";
             this.btnReverbTester.Size = new System.Drawing.Size(88, 23);
             this.btnReverbTester.TabIndex = 10;
@@ -198,7 +208,7 @@ namespace sb_editor.Forms
             // 
             // btnStopSFX
             // 
-            this.btnStopSFX.Location = new System.Drawing.Point(787, 409);
+            this.btnStopSFX.Location = new System.Drawing.Point(786, 452);
             this.btnStopSFX.Name = "btnStopSFX";
             this.btnStopSFX.Size = new System.Drawing.Size(88, 23);
             this.btnStopSFX.TabIndex = 8;
@@ -208,7 +218,7 @@ namespace sb_editor.Forms
             // 
             // btnTestSFX
             // 
-            this.btnTestSFX.Location = new System.Drawing.Point(787, 380);
+            this.btnTestSFX.Location = new System.Drawing.Point(786, 423);
             this.btnTestSFX.Name = "btnTestSFX";
             this.btnTestSFX.Size = new System.Drawing.Size(88, 23);
             this.btnTestSFX.TabIndex = 7;
@@ -219,7 +229,7 @@ namespace sb_editor.Forms
             // txtDllTime
             // 
             this.txtDllTime.BackColor = System.Drawing.SystemColors.Window;
-            this.txtDllTime.Location = new System.Drawing.Point(787, 354);
+            this.txtDllTime.Location = new System.Drawing.Point(786, 397);
             this.txtDllTime.Name = "txtDllTime";
             this.txtDllTime.ReadOnly = true;
             this.txtDllTime.Size = new System.Drawing.Size(88, 20);
@@ -228,7 +238,7 @@ namespace sb_editor.Forms
             // txtEsTime
             // 
             this.txtEsTime.BackColor = System.Drawing.SystemColors.Window;
-            this.txtEsTime.Location = new System.Drawing.Point(787, 328);
+            this.txtEsTime.Location = new System.Drawing.Point(786, 371);
             this.txtEsTime.Name = "txtEsTime";
             this.txtEsTime.ReadOnly = true;
             this.txtEsTime.Size = new System.Drawing.Size(88, 20);
@@ -236,23 +246,23 @@ namespace sb_editor.Forms
             // 
             // UserControl_SamplePool
             // 
-            this.UserControl_SamplePool.Location = new System.Drawing.Point(3, 299);
+            this.UserControl_SamplePool.Location = new System.Drawing.Point(3, 342);
             this.UserControl_SamplePool.Name = "UserControl_SamplePool";
-            this.UserControl_SamplePool.Size = new System.Drawing.Size(777, 360);
+            this.UserControl_SamplePool.Size = new System.Drawing.Size(777, 331);
             this.UserControl_SamplePool.TabIndex = 2;
             // 
             // UserControl_SFX_Parameters
             // 
             this.UserControl_SFX_Parameters.Location = new System.Drawing.Point(3, 5);
             this.UserControl_SFX_Parameters.Name = "UserControl_SFX_Parameters";
-            this.UserControl_SFX_Parameters.Size = new System.Drawing.Size(492, 288);
+            this.UserControl_SFX_Parameters.Size = new System.Drawing.Size(492, 331);
             this.UserControl_SFX_Parameters.TabIndex = 0;
             // 
             // UserControl_SamplePoolControl
             // 
             this.UserControl_SamplePoolControl.Location = new System.Drawing.Point(501, 5);
             this.UserControl_SamplePoolControl.Name = "UserControl_SamplePoolControl";
-            this.UserControl_SamplePoolControl.Size = new System.Drawing.Size(373, 288);
+            this.UserControl_SamplePoolControl.Size = new System.Drawing.Size(373, 331);
             this.UserControl_SamplePoolControl.TabIndex = 1;
             // 
             // pnlOptions
@@ -261,7 +271,7 @@ namespace sb_editor.Forms
             this.pnlOptions.Controls.Add(this.grbDeleteFormat);
             this.pnlOptions.Controls.Add(this.grbClipboard);
             this.pnlOptions.Controls.Add(this.grbCreateFormat);
-            this.pnlOptions.Location = new System.Drawing.Point(12, 700);
+            this.pnlOptions.Location = new System.Drawing.Point(12, 714);
             this.pnlOptions.Name = "pnlOptions";
             this.pnlOptions.Size = new System.Drawing.Size(881, 57);
             this.pnlOptions.TabIndex = 2;
@@ -377,7 +387,7 @@ namespace sb_editor.Forms
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(737, 763);
+            this.btnCancel.Location = new System.Drawing.Point(737, 777);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 25);
             this.btnCancel.TabIndex = 4;
@@ -388,7 +398,7 @@ namespace sb_editor.Forms
             // btnOK
             // 
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(818, 763);
+            this.btnOK.Location = new System.Drawing.Point(818, 777);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 25);
             this.btnOK.TabIndex = 5;
@@ -399,7 +409,7 @@ namespace sb_editor.Forms
             // lblCurrentSFX
             // 
             this.lblCurrentSFX.AutoSize = true;
-            this.lblCurrentSFX.Location = new System.Drawing.Point(12, 769);
+            this.lblCurrentSFX.Location = new System.Drawing.Point(12, 783);
             this.lblCurrentSFX.Name = "lblCurrentSFX";
             this.lblCurrentSFX.Size = new System.Drawing.Size(47, 13);
             this.lblCurrentSFX.TabIndex = 3;
@@ -410,23 +420,13 @@ namespace sb_editor.Forms
             this.tmrTabPageBlink.Interval = 500;
             this.tmrTabPageBlink.Tick += new System.EventHandler(this.TmrTabPageBlink_Tick);
             // 
-            // ButtonDllVoices
-            // 
-            this.ButtonDllVoices.Location = new System.Drawing.Point(787, 496);
-            this.ButtonDllVoices.Name = "ButtonDllVoices";
-            this.ButtonDllVoices.Size = new System.Drawing.Size(88, 23);
-            this.ButtonDllVoices.TabIndex = 11;
-            this.ButtonDllVoices.Text = "PC DLL Voices";
-            this.ButtonDllVoices.UseVisualStyleBackColor = true;
-            this.ButtonDllVoices.Click += new System.EventHandler(this.ButtonDllVoices_Click);
-            // 
             // SFXForm
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(905, 800);
+            this.ClientSize = new System.Drawing.Size(905, 814);
             this.Controls.Add(this.lblCurrentSFX);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnCancel);

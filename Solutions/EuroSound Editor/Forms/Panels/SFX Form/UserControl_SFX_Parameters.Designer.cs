@@ -32,10 +32,17 @@ namespace sb_editor.Panels
             this.components = new System.ComponentModel.Container();
             this.grbSFX_Parameters = new System.Windows.Forms.GroupBox();
             this.grbLockedOnAllFormats = new System.Windows.Forms.GroupBox();
-            this.chkDoppler = new System.Windows.Forms.CheckBox();
+            this.txtUserFlags = new System.Windows.Forms.TextBox();
+            this.lblUserFlags = new System.Windows.Forms.Label();
+            this.nudDoppler = new System.Windows.Forms.NumericUpDown();
+            this.lblDoppler = new System.Windows.Forms.Label();
+            this.lblMasterVolume = new System.Windows.Forms.Label();
+            this.chkKillMeOwnGroup = new System.Windows.Forms.CheckBox();
+            this.chkIgnoreMasterVolume = new System.Windows.Forms.CheckBox();
+            this.chkOneInstancePerFrame = new System.Windows.Forms.CheckBox();
             this.chkMusicType = new System.Windows.Forms.CheckBox();
-            this.chkIgnoreAge = new System.Windows.Forms.CheckBox();
-            this.chkPauseInNis = new System.Windows.Forms.CheckBox();
+            this.chkUnPausable = new System.Windows.Forms.CheckBox();
+            this.chkPauseInstant = new System.Windows.Forms.CheckBox();
             this.chkUnderWater = new System.Windows.Forms.CheckBox();
             this.nudDuckerLength = new System.Windows.Forms.NumericUpDown();
             this.lblDuckerLength = new System.Windows.Forms.Label();
@@ -65,7 +72,6 @@ namespace sb_editor.Panels
             this.shapeContainer1 = new Microsoft.VisualBasic.PowerPacks.ShapeContainer();
             this.LineShape_Divider2 = new Microsoft.VisualBasic.PowerPacks.LineShape();
             this.LineShape_Divider1 = new Microsoft.VisualBasic.PowerPacks.LineShape();
-            this.lblMasterVolume = new System.Windows.Forms.Label();
             this.txtReverbSend = new System.Windows.Forms.TextBox();
             this.TrackBar_ReverbSend = new System.Windows.Forms.TrackBar();
             this.lblReverbSend = new System.Windows.Forms.Label();
@@ -83,6 +89,7 @@ namespace sb_editor.Panels
             this.ToolTip_Help = new System.Windows.Forms.ToolTip(this.components);
             this.grbSFX_Parameters.SuspendLayout();
             this.grbLockedOnAllFormats.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDoppler)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDuckerLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDucker)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAlertness)).BeginInit();
@@ -108,7 +115,7 @@ namespace sb_editor.Panels
             this.grbSFX_Parameters.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grbSFX_Parameters.Location = new System.Drawing.Point(0, 0);
             this.grbSFX_Parameters.Name = "grbSFX_Parameters";
-            this.grbSFX_Parameters.Size = new System.Drawing.Size(493, 288);
+            this.grbSFX_Parameters.Size = new System.Drawing.Size(493, 330);
             this.grbSFX_Parameters.TabIndex = 0;
             this.grbSFX_Parameters.TabStop = false;
             this.grbSFX_Parameters.Text = "SFX Parameters";
@@ -118,10 +125,17 @@ namespace sb_editor.Panels
             this.grbLockedOnAllFormats.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.grbLockedOnAllFormats.Controls.Add(this.chkDoppler);
+            this.grbLockedOnAllFormats.Controls.Add(this.txtUserFlags);
+            this.grbLockedOnAllFormats.Controls.Add(this.lblUserFlags);
+            this.grbLockedOnAllFormats.Controls.Add(this.nudDoppler);
+            this.grbLockedOnAllFormats.Controls.Add(this.lblDoppler);
+            this.grbLockedOnAllFormats.Controls.Add(this.lblMasterVolume);
+            this.grbLockedOnAllFormats.Controls.Add(this.chkKillMeOwnGroup);
+            this.grbLockedOnAllFormats.Controls.Add(this.chkIgnoreMasterVolume);
+            this.grbLockedOnAllFormats.Controls.Add(this.chkOneInstancePerFrame);
             this.grbLockedOnAllFormats.Controls.Add(this.chkMusicType);
-            this.grbLockedOnAllFormats.Controls.Add(this.chkIgnoreAge);
-            this.grbLockedOnAllFormats.Controls.Add(this.chkPauseInNis);
+            this.grbLockedOnAllFormats.Controls.Add(this.chkUnPausable);
+            this.grbLockedOnAllFormats.Controls.Add(this.chkPauseInstant);
             this.grbLockedOnAllFormats.Controls.Add(this.chkUnderWater);
             this.grbLockedOnAllFormats.Controls.Add(this.nudDuckerLength);
             this.grbLockedOnAllFormats.Controls.Add(this.lblDuckerLength);
@@ -143,7 +157,6 @@ namespace sb_editor.Panels
             this.grbLockedOnAllFormats.Controls.Add(this.txtInnerRadius);
             this.grbLockedOnAllFormats.Controls.Add(this.lblInnerRadius);
             this.grbLockedOnAllFormats.Controls.Add(this.grbTrackingType);
-            this.grbLockedOnAllFormats.Controls.Add(this.lblMasterVolume);
             this.grbLockedOnAllFormats.Controls.Add(this.txtReverbSend);
             this.grbLockedOnAllFormats.Controls.Add(this.TrackBar_ReverbSend);
             this.grbLockedOnAllFormats.Controls.Add(this.lblReverbSend);
@@ -153,60 +166,132 @@ namespace sb_editor.Panels
             this.grbLockedOnAllFormats.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grbLockedOnAllFormats.Location = new System.Drawing.Point(6, 68);
             this.grbLockedOnAllFormats.Name = "grbLockedOnAllFormats";
-            this.grbLockedOnAllFormats.Size = new System.Drawing.Size(481, 214);
+            this.grbLockedOnAllFormats.Size = new System.Drawing.Size(481, 256);
             this.grbLockedOnAllFormats.TabIndex = 6;
             this.grbLockedOnAllFormats.TabStop = false;
             this.grbLockedOnAllFormats.Text = "Locked On All Formats";
             // 
-            // chkDoppler
+            // txtUserFlags
             // 
-            this.chkDoppler.AutoSize = true;
-            this.chkDoppler.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkDoppler.Location = new System.Drawing.Point(371, 189);
-            this.chkDoppler.Name = "chkDoppler";
-            this.chkDoppler.Size = new System.Drawing.Size(63, 17);
-            this.chkDoppler.TabIndex = 30;
-            this.chkDoppler.Text = "Doppler";
-            this.chkDoppler.UseVisualStyleBackColor = true;
+            this.txtUserFlags.BackColor = System.Drawing.SystemColors.Window;
+            this.txtUserFlags.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtUserFlags.Location = new System.Drawing.Point(182, 188);
+            this.txtUserFlags.Name = "txtUserFlags";
+            this.txtUserFlags.ReadOnly = true;
+            this.txtUserFlags.Size = new System.Drawing.Size(39, 20);
+            this.txtUserFlags.TabIndex = 39;
+            this.txtUserFlags.Text = "0";
+            this.txtUserFlags.Click += new System.EventHandler(this.TxtUserFlags_Click);
+            // 
+            // lblUserFlags
+            // 
+            this.lblUserFlags.AutoSize = true;
+            this.lblUserFlags.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUserFlags.Location = new System.Drawing.Point(114, 190);
+            this.lblUserFlags.Name = "lblUserFlags";
+            this.lblUserFlags.Size = new System.Drawing.Size(60, 13);
+            this.lblUserFlags.TabIndex = 38;
+            this.lblUserFlags.Text = "User Flags:";
+            // 
+            // nudDoppler
+            // 
+            this.nudDoppler.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nudDoppler.Location = new System.Drawing.Point(59, 188);
+            this.nudDoppler.Name = "nudDoppler";
+            this.nudDoppler.Size = new System.Drawing.Size(49, 20);
+            this.nudDoppler.TabIndex = 35;
+            // 
+            // lblDoppler
+            // 
+            this.lblDoppler.AutoSize = true;
+            this.lblDoppler.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDoppler.Location = new System.Drawing.Point(6, 190);
+            this.lblDoppler.Name = "lblDoppler";
+            this.lblDoppler.Size = new System.Drawing.Size(47, 13);
+            this.lblDoppler.TabIndex = 34;
+            this.lblDoppler.Text = "Doppler:";
+            // 
+            // lblMasterVolume
+            // 
+            this.lblMasterVolume.AutoSize = true;
+            this.lblMasterVolume.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMasterVolume.Location = new System.Drawing.Point(336, 25);
+            this.lblMasterVolume.Name = "lblMasterVolume";
+            this.lblMasterVolume.Size = new System.Drawing.Size(80, 13);
+            this.lblMasterVolume.TabIndex = 3;
+            this.lblMasterVolume.Text = "Master Volume:";
+            // 
+            // chkKillMeOwnGroup
+            // 
+            this.chkKillMeOwnGroup.AutoSize = true;
+            this.chkKillMeOwnGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkKillMeOwnGroup.Location = new System.Drawing.Point(320, 191);
+            this.chkKillMeOwnGroup.Name = "chkKillMeOwnGroup";
+            this.chkKillMeOwnGroup.Size = new System.Drawing.Size(114, 17);
+            this.chkKillMeOwnGroup.TabIndex = 32;
+            this.chkKillMeOwnGroup.Text = "Kill Me Own Group";
+            this.chkKillMeOwnGroup.UseVisualStyleBackColor = true;
+            // 
+            // chkIgnoreMasterVolume
+            // 
+            this.chkIgnoreMasterVolume.AutoSize = true;
+            this.chkIgnoreMasterVolume.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.chkIgnoreMasterVolume.Location = new System.Drawing.Point(307, 213);
+            this.chkIgnoreMasterVolume.Name = "chkIgnoreMasterVolume";
+            this.chkIgnoreMasterVolume.Size = new System.Drawing.Size(129, 17);
+            this.chkIgnoreMasterVolume.TabIndex = 33;
+            this.chkIgnoreMasterVolume.Text = "Ignore Master Volume";
+            this.chkIgnoreMasterVolume.UseVisualStyleBackColor = true;
+            // 
+            // chkOneInstancePerFrame
+            // 
+            this.chkOneInstancePerFrame.AutoSize = true;
+            this.chkOneInstancePerFrame.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkOneInstancePerFrame.Location = new System.Drawing.Point(5, 236);
+            this.chkOneInstancePerFrame.Name = "chkOneInstancePerFrame";
+            this.chkOneInstancePerFrame.Size = new System.Drawing.Size(141, 17);
+            this.chkOneInstancePerFrame.TabIndex = 31;
+            this.chkOneInstancePerFrame.Text = "One Instance Per Frame";
+            this.chkOneInstancePerFrame.UseVisualStyleBackColor = true;
             // 
             // chkMusicType
             // 
             this.chkMusicType.AutoSize = true;
             this.chkMusicType.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkMusicType.Location = new System.Drawing.Point(284, 189);
+            this.chkMusicType.Location = new System.Drawing.Point(193, 213);
             this.chkMusicType.Name = "chkMusicType";
-            this.chkMusicType.Size = new System.Drawing.Size(81, 17);
+            this.chkMusicType.Size = new System.Drawing.Size(111, 17);
             this.chkMusicType.TabIndex = 29;
-            this.chkMusicType.Text = "Music Type";
+            this.chkMusicType.Text = "Threat Like Music";
             this.chkMusicType.UseVisualStyleBackColor = true;
             // 
-            // chkIgnoreAge
+            // chkUnPausable
             // 
-            this.chkIgnoreAge.AutoSize = true;
-            this.chkIgnoreAge.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkIgnoreAge.Location = new System.Drawing.Point(200, 189);
-            this.chkIgnoreAge.Name = "chkIgnoreAge";
-            this.chkIgnoreAge.Size = new System.Drawing.Size(78, 17);
-            this.chkIgnoreAge.TabIndex = 28;
-            this.chkIgnoreAge.Text = "Ignore Age";
-            this.chkIgnoreAge.UseVisualStyleBackColor = true;
+            this.chkUnPausable.AutoSize = true;
+            this.chkUnPausable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkUnPausable.Location = new System.Drawing.Point(103, 213);
+            this.chkUnPausable.Name = "chkUnPausable";
+            this.chkUnPausable.Size = new System.Drawing.Size(84, 17);
+            this.chkUnPausable.TabIndex = 28;
+            this.chkUnPausable.Text = "UnPausable";
+            this.chkUnPausable.UseVisualStyleBackColor = true;
             // 
-            // chkPauseInNis
+            // chkPauseInstant
             // 
-            this.chkPauseInNis.AutoSize = true;
-            this.chkPauseInNis.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkPauseInNis.Location = new System.Drawing.Point(99, 189);
-            this.chkPauseInNis.Name = "chkPauseInNis";
-            this.chkPauseInNis.Size = new System.Drawing.Size(95, 17);
-            this.chkPauseInNis.TabIndex = 27;
-            this.chkPauseInNis.Text = "Pause In NIS?";
-            this.chkPauseInNis.UseVisualStyleBackColor = true;
+            this.chkPauseInstant.AutoSize = true;
+            this.chkPauseInstant.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkPauseInstant.Location = new System.Drawing.Point(6, 213);
+            this.chkPauseInstant.Name = "chkPauseInstant";
+            this.chkPauseInstant.Size = new System.Drawing.Size(91, 17);
+            this.chkPauseInstant.TabIndex = 27;
+            this.chkPauseInstant.Text = "Pause Instant";
+            this.chkPauseInstant.UseVisualStyleBackColor = true;
             // 
             // chkUnderWater
             // 
             this.chkUnderWater.AutoSize = true;
             this.chkUnderWater.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkUnderWater.Location = new System.Drawing.Point(6, 189);
+            this.chkUnderWater.Location = new System.Drawing.Point(227, 191);
             this.chkUnderWater.Name = "chkUnderWater";
             this.chkUnderWater.Size = new System.Drawing.Size(87, 17);
             this.chkUnderWater.TabIndex = 26;
@@ -515,16 +600,6 @@ namespace sb_editor.Panels
             this.LineShape_Divider1.Y1 = -7;
             this.LineShape_Divider1.Y2 = 16;
             // 
-            // lblMasterVolume
-            // 
-            this.lblMasterVolume.AutoSize = true;
-            this.lblMasterVolume.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMasterVolume.Location = new System.Drawing.Point(336, 25);
-            this.lblMasterVolume.Name = "lblMasterVolume";
-            this.lblMasterVolume.Size = new System.Drawing.Size(80, 13);
-            this.lblMasterVolume.TabIndex = 3;
-            this.lblMasterVolume.Text = "Master Volume:";
-            // 
             // txtReverbSend
             // 
             this.txtReverbSend.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -561,7 +636,7 @@ namespace sb_editor.Panels
             this.shapeContainer2.Name = "shapeContainer2";
             this.shapeContainer2.Shapes.AddRange(new Microsoft.VisualBasic.PowerPacks.Shape[] {
             this.Highlighted});
-            this.shapeContainer2.Size = new System.Drawing.Size(475, 195);
+            this.shapeContainer2.Size = new System.Drawing.Size(475, 237);
             this.shapeContainer2.TabIndex = 12;
             this.shapeContainer2.TabStop = false;
             // 
@@ -602,7 +677,7 @@ namespace sb_editor.Panels
             this.lblSubSFX.AutoSize = true;
             this.lblSubSFX.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.lblSubSFX.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSubSFX.Location = new System.Drawing.Point(6, 269);
+            this.lblSubSFX.Location = new System.Drawing.Point(6, 310);
             this.lblSubSFX.Name = "lblSubSFX";
             this.lblSubSFX.Size = new System.Drawing.Size(158, 13);
             this.lblSubSFX.TabIndex = 7;
@@ -671,11 +746,12 @@ namespace sb_editor.Panels
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.grbSFX_Parameters);
             this.Name = "UserControl_SFX_Parameters";
-            this.Size = new System.Drawing.Size(493, 288);
+            this.Size = new System.Drawing.Size(493, 330);
             this.grbSFX_Parameters.ResumeLayout(false);
             this.grbSFX_Parameters.PerformLayout();
             this.grbLockedOnAllFormats.ResumeLayout(false);
             this.grbLockedOnAllFormats.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDoppler)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDuckerLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDucker)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAlertness)).EndInit();
@@ -698,7 +774,6 @@ namespace sb_editor.Panels
         private Microsoft.VisualBasic.PowerPacks.ShapeContainer shapeContainer1;
         private Microsoft.VisualBasic.PowerPacks.LineShape LineShape_Divider2;
         private Microsoft.VisualBasic.PowerPacks.LineShape LineShape_Divider1;
-        private System.Windows.Forms.Label lblMasterVolume;
         private System.Windows.Forms.Label lblReverbSend;
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.ComboBox cboGameVariable;
@@ -732,10 +807,10 @@ namespace sb_editor.Panels
         protected internal System.Windows.Forms.TextBox txtOuterRadius;
         protected internal System.Windows.Forms.TextBox txtInnerRadius;
         protected internal System.Windows.Forms.TrackBar Trackbar_InnerRadius;
-        protected internal System.Windows.Forms.CheckBox chkDoppler;
+        protected internal System.Windows.Forms.CheckBox chkOneInstancePerFrame;
         protected internal System.Windows.Forms.CheckBox chkMusicType;
-        protected internal System.Windows.Forms.CheckBox chkIgnoreAge;
-        protected internal System.Windows.Forms.CheckBox chkPauseInNis;
+        protected internal System.Windows.Forms.CheckBox chkUnPausable;
+        protected internal System.Windows.Forms.CheckBox chkPauseInstant;
         protected internal System.Windows.Forms.CheckBox chkUnderWater;
         protected internal System.Windows.Forms.NumericUpDown nudDuckerLength;
         protected internal System.Windows.Forms.NumericUpDown nudDucker;
@@ -744,5 +819,12 @@ namespace sb_editor.Panels
         private System.Windows.Forms.Label lblSubSFX;
         protected internal System.Windows.Forms.GroupBox grbLockedOnAllFormats;
         private System.Windows.Forms.ToolTip ToolTip_Help;
+        private System.Windows.Forms.Label lblMasterVolume;
+        protected internal System.Windows.Forms.CheckBox chkKillMeOwnGroup;
+        protected internal System.Windows.Forms.CheckBox chkIgnoreMasterVolume;
+        protected internal System.Windows.Forms.NumericUpDown nudDoppler;
+        private System.Windows.Forms.Label lblDoppler;
+        protected internal System.Windows.Forms.TextBox txtUserFlags;
+        private System.Windows.Forms.Label lblUserFlags;
     }
 }

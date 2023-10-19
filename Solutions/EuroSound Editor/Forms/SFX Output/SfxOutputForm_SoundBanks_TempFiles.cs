@@ -26,7 +26,7 @@ namespace sb_editor.Forms
     public partial class SfxOutputForm
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void WriteSfxFile(Dictionary<string, SFX> fileData, string[] sampleList, string[] streamsList, string outputPlatform, string outputBank, BinaryWriter sfxWritter, bool isBigEndian, StreamWriter debugFile)
+        private void WriteSfxFile(SortedDictionary<string, SFX> fileData, string[] sampleList, string[] streamsList, string outputPlatform, string outputBank, BinaryWriter sfxWritter, bool isBigEndian, StreamWriter debugFile)
         {
             List<long> sfxLut = new List<long>();
             SoundBankFunctions sbFunctions = new SoundBankFunctions();
@@ -35,7 +35,7 @@ namespace sb_editor.Forms
             sfxWritter.Write(BytesFunctions.FlipInt32(fileData.Count, isBigEndian));
             foreach (KeyValuePair<string, SFX> sfxItem in fileData)
             {
-                sfxWritter.Write(BytesFunctions.FlipInt32(sfxItem.Value.HashCode, isBigEndian));
+                sfxWritter.Write(BytesFunctions.FlipInt32(sfxItem.Value.HashCode | 0xF00000, isBigEndian));
                 sfxWritter.Write(0);
             }
 
@@ -51,15 +51,42 @@ namespace sb_editor.Forms
                 sfxWritter.Write(BytesFunctions.FlipShort((short)sfxData.Value.Parameters.DuckerLength, isBigEndian));
                 sfxWritter.Write(BytesFunctions.FlipShort((short)sfxData.Value.SamplePool.MinDelay, isBigEndian));
                 sfxWritter.Write(BytesFunctions.FlipShort((short)sfxData.Value.SamplePool.MaxDelay, isBigEndian));
-                sfxWritter.Write(BytesFunctions.FlipShort((short)sfxData.Value.Parameters.InnerRadius, isBigEndian));
-                sfxWritter.Write(BytesFunctions.FlipShort((short)sfxData.Value.Parameters.OuterRadius, isBigEndian));
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.ReverbSend);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.TrackingType);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.MaxVoices);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.Priority);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.Ducker);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.MasterVolume);
-                sfxWritter.Write((ushort)sbFunctions.GetFlags(sfxData.Value));
+                int useDistanceCheck = Convert.ToInt32(sfxData.Value.Parameters.UseGroupDistCheck);
+                if (outputPlatform.Equals("playstation2", StringComparison.OrdinalIgnoreCase))
+                {
+                    sfxWritter.Write((short)(((useDistanceCheck & 0xF) << 12) | ((sfxData.Value.Parameters.Group & 0xFFF) << 0)));
+                    sfxWritter.Write((ushort)sbFunctions.GetFlags(sfxData.Value));
+                    sfxWritter.Write(sfxData.Value.Parameters.UserFlags);
+                    sfxWritter.Write(sfxData.Value.Parameters.DopplerValue);
+                    sfxWritter.Write((sbyte)sfxData.Value.Parameters.Alertness);
+                }
+                else
+                {
+                    sfxWritter.Write((short)sfxData.Value.Parameters.Group);
+                    sfxWritter.Write((short)useDistanceCheck);
+
+                    //Flags
+                    int sfxFlags = sbFunctions.GetFlags(sfxData.Value);
+                    for (int i = 0; i < 16; i++)
+                    {
+                        sfxWritter.Write(Convert.ToSByte((sfxFlags >> i) & 1));
+                    }
+
+                    //UserFlags
+                    for (int i = 0; i < 16; i++)
+                    {
+                        sfxWritter.Write(Convert.ToSByte((sfxData.Value.Parameters.UserFlags >> i) & 1));
+                    }
+
+                    sfxWritter.Write(sfxData.Value.Parameters.DopplerValue);
+                    sfxWritter.Write((sbyte)sfxData.Value.Parameters.Alertness);
+                }
 
                 //Calculate references
                 sfxWritter.Write(BytesFunctions.FlipUShort((ushort)sfxData.Value.Samples.Count, isBigEndian));
@@ -84,7 +111,7 @@ namespace sb_editor.Forms
                         if (fastOutput)
                         {
                             string samplePath = sampleToCheck.FilePath;
-                            string sampleFolder = "XBox_adpcm";
+                            string sampleFolder = "XBox_Software_adpcm";
                             switch (outputPlatform.Trim().ToLower())
                             {
                                 case "pc":
@@ -128,14 +155,12 @@ namespace sb_editor.Forms
                         }
                     }
                     sfxWritter.Write(BytesFunctions.FlipShort((short)fileRef, isBigEndian));
-                    sfxWritter.Write(BytesFunctions.FlipShort((short)Math.Round(sampleToCheck.PitchOffset * 1024), isBigEndian));
-                    sfxWritter.Write(BytesFunctions.FlipShort((short)Math.Round(sampleToCheck.RandomPitch * 1024), isBigEndian));
+                    sfxWritter.Write((sbyte)decimal.Divide(sampleToCheck.PitchOffset, (decimal)0.2));
+                    sfxWritter.Write((sbyte)decimal.Divide(sampleToCheck.RandomPitch, (decimal)0.1));
                     sfxWritter.Write(sampleToCheck.BaseVolume);
                     sfxWritter.Write(sampleToCheck.RandomVolume);
                     sfxWritter.Write(sampleToCheck.Pan);
                     sfxWritter.Write(sampleToCheck.RandomPan);
-                    sfxWritter.Write((byte)0);
-                    sfxWritter.Write((byte)0);
                 }
             }
             debugFile.WriteLine("StreamFileRefCheckSum = {0}", streamFileCheckSum * -1);
@@ -183,12 +208,7 @@ namespace sb_editor.Forms
                                 byte[] vagData = CommonFunctions.RemoveFileHeader(vagFilePath, 48);
 
                                 //Write Header Data
-                                uint loopOffset = 0;
-                                if (masterFileData.HasLoop)
-                                {
-                                    loopOffset = (uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, aifFileData.SampleRate, masterFileData.LoopStart * 2);
-                                }
-                                sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, aifFileData, BytesFunctions.AlignNumber((uint)vagData.Length, 64), vagData.Length, i * 96, loopOffset, isBigEndian);
+                                sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, aifFileData, BytesFunctions.AlignNumber((uint)vagData.Length, 64), vagData.Length, i * 96, 0, isBigEndian);
 
                                 //Write Sample Data
                                 byte[] filedata = new byte[BytesFunctions.AlignNumber((uint)vagData.Length, 64)];
@@ -211,26 +231,33 @@ namespace sb_editor.Forms
                     //-------------------------------------------------------------------------------[ PC ]-------------------------------------------------------------------
                     case "pc":
                         string pcFilepath = Path.Combine(GlobalPrefs.ProjectFolder, "PC", sampleList[i].TrimStart(Path.DirectorySeparatorChar));
+                        string pcImaFilePath = Path.ChangeExtension(Path.Combine(GlobalPrefs.ProjectFolder, "PC_Software_adpcm", sampleList[i].TrimStart(Path.DirectorySeparatorChar)), ".ssp");
                         if (File.Exists(pcFilepath))
                         {
                             WavInfo pcFileData = wavFunctions.ReadWaveProperties(pcFilepath);
-                            byte[] pcmData = wavFunctions.GetByteWaveData(pcFilepath);
-
-                            //Write Header Data
-                            uint loopOffset = 0;
-                            if (masterFileData.HasLoop)
+                            if (File.Exists(pcImaFilePath))
                             {
-                                loopOffset = BytesFunctions.AlignNumber((uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, pcFileData.SampleRate, masterFileData.LoopStart * 2), 2);
+                                byte[] adpcmData = File.ReadAllBytes(pcImaFilePath);
+
+                                //Write Header Data
+                                uint loopOffset = 0;
+                                if (masterFileData.HasLoop)
+                                {
+                                    uint waveLoopOffset = (uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, pcFileData.SampleRate, masterFileData.LoopStart * 2);
+                                    loopOffset = CalculusLoopOffset.GetEurocomImaLoopOffset(waveLoopOffset);
+                                }
+                                sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, pcFileData, (uint)adpcmData.Length, adpcmData.Length, i * 96, loopOffset, isBigEndian);
+
+                                //Write Sample Data
+                                sbfWritter.Write(adpcmData);
+
+                                //Update value
+                                sampleBankSize += adpcmData.Length;
                             }
-                            sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, pcFileData, BytesFunctions.AlignNumber((uint)pcFileData.Length, 4), (int)pcFileData.Length, i * 96, loopOffset, isBigEndian);
-
-                            //Write Sample Data
-                            byte[] filedata = new byte[BytesFunctions.AlignNumber((uint)pcFileData.Length, 4)];
-                            Array.Copy(pcmData, filedata, pcmData.Length);
-                            sbfWritter.Write(filedata);
-
-                            //Update value
-                            sampleBankSize += pcmData.Length;
+                            else
+                            {
+                                throw new IOException(string.Format("Output Error: Sample File Missing: UNKNOWN SFX & BANK\n{0}", pcImaFilePath));
+                            }
                         }
                         else if (!fastOutput)
                         {
@@ -280,20 +307,23 @@ namespace sb_editor.Forms
                     case "x box":
                     case "xbox":
                         wavFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "X Box", sampleList[i].TrimStart(Path.DirectorySeparatorChar));
+                        string adpcmFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "XBox_Software_adpcm", Path.ChangeExtension(sampleList[i].TrimStart(Path.DirectorySeparatorChar), ".ssp"));
+
                         if (File.Exists(wavFilePath))
                         {
-                            string adpcmFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "XBox_adpcm", sampleList[i].TrimStart(Path.DirectorySeparatorChar));
+                            WavInfo wavFileData = wavFunctions.ReadWaveProperties(wavFilePath);
                             if (File.Exists(adpcmFilePath))
                             {
-                                byte[] adpcmData = CommonFunctions.RemoveFileHeader(adpcmFilePath, 48);
+                                byte[] adpcmData = File.ReadAllBytes(adpcmFilePath);
 
                                 //Write Header Data
                                 uint loopOffset = 0;
                                 if (masterFileData.HasLoop)
                                 {
-                                    loopOffset = CalculusLoopOffset.GetXboxAlignedNumber((uint)masterFileData.LoopStart);
+                                    uint waveLoopOffset = (uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, wavFileData.SampleRate, masterFileData.LoopStart * 2);
+                                    loopOffset = CalculusLoopOffset.GetEurocomImaLoopOffset(waveLoopOffset);
                                 }
-                                sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, wavFunctions.ReadWaveProperties(wavFilePath), (uint)adpcmData.Length, adpcmData.Length, i * 96, loopOffset, isBigEndian);
+                                sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, wavFileData, (uint)adpcmData.Length, adpcmData.Length, i * 96, loopOffset, isBigEndian);
 
                                 //Write Sample Data
                                 sbfWritter.Write(adpcmData);

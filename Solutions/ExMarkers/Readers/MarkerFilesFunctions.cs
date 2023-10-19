@@ -188,16 +188,9 @@ namespace ExMarkers
                     BWriter.Write(BytesFunctions.FlipInt32(StartMarkers[i].Index, isBigEndian));
                     BWriter.Write(BytesFunctions.FlipUInt32(StartMarkers[i].Position, isBigEndian));
                     BWriter.Write(BytesFunctions.FlipInt32(StartMarkers[i].Type, isBigEndian));
-                    BWriter.Write(BytesFunctions.FlipInt32(StartMarkers[i].Flags, isBigEndian));
-                    BWriter.Write(BytesFunctions.FlipInt32(StartMarkers[i].Extra, isBigEndian));
                     BWriter.Write(BytesFunctions.FlipUInt32(StartMarkers[i].LoopStart, isBigEndian));
-                    BWriter.Write(BytesFunctions.FlipInt32(StartMarkers[i].MarkerCount, isBigEndian));
                     BWriter.Write(BytesFunctions.FlipInt32(StartMarkers[i].LoopMarkerIndex, isBigEndian));
                     BWriter.Write(BytesFunctions.FlipInt32(StartMarkers[i].MarkerPosition, isBigEndian));
-                    BWriter.Write(BytesFunctions.FlipInt32(Convert.ToInt32(StartMarkers[i].IsInstant), isBigEndian));
-                    BWriter.Write(BytesFunctions.FlipInt32(Convert.ToInt32(StartMarkers[i].InstantBuffer), isBigEndian));
-                    BWriter.Write(BytesFunctions.FlipUInt32(StartMarkers[i].State[0], isBigEndian));
-                    BWriter.Write(BytesFunctions.FlipUInt32(StartMarkers[i].State[1], isBigEndian));
                 }
 
                 //Markers
@@ -207,10 +200,7 @@ namespace ExMarkers
                     BWriter.Write(BytesFunctions.FlipInt32(Markers[j].Index, isBigEndian));
                     BWriter.Write(BytesFunctions.FlipUInt32(Markers[j].Position, isBigEndian));
                     BWriter.Write(BytesFunctions.FlipInt32(Markers[j].Type, isBigEndian));
-                    BWriter.Write(BytesFunctions.FlipInt32(Markers[j].Flags, isBigEndian));
-                    BWriter.Write(BytesFunctions.FlipInt32(Markers[j].Extra, isBigEndian));
                     BWriter.Write(BytesFunctions.FlipUInt32(Markers[j].LoopStart, isBigEndian));
-                    BWriter.Write(BytesFunctions.FlipInt32(Markers[j].MarkerCount, isBigEndian));
                     BWriter.Write(BytesFunctions.FlipInt32(Markers[j].LoopMarkerIndex, isBigEndian));
                 }
 

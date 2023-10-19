@@ -44,6 +44,7 @@ namespace sb_editor.Panels
             this.lblSfxCount = new System.Windows.Forms.Label();
             this.btnRemoveSfx = new System.Windows.Forms.Button();
             this.ToolTip_Controls = new System.Windows.Forms.ToolTip(this.components);
+            this.mnuSetupGroups = new System.Windows.Forms.ToolStripMenuItem();
             this.grbAvailableDataBases.SuspendLayout();
             this.pnlListView.SuspendLayout();
             this.ContextMenu_ListBox.SuspendLayout();
@@ -101,10 +102,11 @@ namespace sb_editor.Panels
             this.mnuProperties,
             this.mnuEdit,
             this.mnuSelectSFX,
-            this.mnuMultiEditor});
+            this.mnuMultiEditor,
+            this.mnuSetupGroups});
             this.ContextMenu_ListBox.Name = "ContextMenu_ListBox";
             this.ContextMenu_ListBox.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.ContextMenu_ListBox.Size = new System.Drawing.Size(181, 180);
+            this.ContextMenu_ListBox.Size = new System.Drawing.Size(181, 202);
             // 
             // mnuRemoveSFX
             // 
@@ -185,6 +187,13 @@ namespace sb_editor.Panels
             this.btnRemoveSfx.UseVisualStyleBackColor = true;
             this.btnRemoveSfx.Click += new System.EventHandler(this.BtnRemoveSfx_Click);
             // 
+            // mnuSetupGroups
+            // 
+            this.mnuSetupGroups.Name = "mnuSetupGroups";
+            this.mnuSetupGroups.Size = new System.Drawing.Size(180, 22);
+            this.mnuSetupGroups.Text = "Setup SFX Groups";
+            this.mnuSetupGroups.Click += new System.EventHandler(this.MnuSetupGroups_Click);
+            // 
             // UserControl_MainForm_SfxInDataBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -216,5 +225,6 @@ namespace sb_editor.Panels
         protected internal MultiSelListBox lstSfxInDataBase;
         protected internal System.Windows.Forms.Label lblSfxCount;
         protected internal System.Windows.Forms.Button btnRemoveSfx;
+        private System.Windows.Forms.ToolStripMenuItem mnuSetupGroups;
     }
 }

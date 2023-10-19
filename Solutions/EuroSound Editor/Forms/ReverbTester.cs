@@ -9,7 +9,6 @@
 //-------------------------------------------------------------------------------------------------------------------------------
 // SFXs Reverb Tester
 //-------------------------------------------------------------------------------------------------------------------------------
-using ESUtils;
 using PCAudioDLL;
 using sb_editor.Objects;
 using System;
@@ -305,8 +304,8 @@ namespace sb_editor.Forms
         private void BtnPlayTest_Click(object sender, EventArgs e)
         {
             //Get output folder & name
-            string outputFilePath = CommonFunctions.GetSoundbankOutPath(projectSettings, "PC", "English");
-            string fileName = string.Format("HC{0:X6}.SFX", CommonFunctions.GetSfxName((int)Enumerations.Language.English, 0xFFFE));
+            string outputFilePath = CommonFunctions.GetSoundbankOutPath("PC", projectSettings);
+            string fileName = string.Format("HC{0:X6}.SFX", 0xFFFE);
 
             //Calculate Effect values
             int cutoff_frequency = (int)(300 + (22050 - 300) * decimal.Divide(trkBarLowPassFilter.Value, trkBarLowPassFilter.Maximum));
