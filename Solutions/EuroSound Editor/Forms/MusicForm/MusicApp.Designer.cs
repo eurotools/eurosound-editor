@@ -342,6 +342,7 @@ namespace sb_editor.Forms
             this.btnRunTarget.TabIndex = 1;
             this.btnRunTarget.Text = "Run Target";
             this.btnRunTarget.UseVisualStyleBackColor = true;
+            this.btnRunTarget.Click += new System.EventHandler(this.BtnRunTarget_Click);
             // 
             // btnResetTarget
             // 
@@ -379,9 +380,11 @@ namespace sb_editor.Forms
             // trackBar1
             // 
             this.trackBar1.Location = new System.Drawing.Point(6, 16);
+            this.trackBar1.Maximum = 100;
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(176, 45);
             this.trackBar1.TabIndex = 4;
+            this.trackBar1.TickFrequency = 10;
             // 
             // btnStop
             // 
@@ -391,6 +394,7 @@ namespace sb_editor.Forms
             this.btnStop.TabIndex = 3;
             this.btnStop.Text = "Stop";
             this.btnStop.UseVisualStyleBackColor = true;
+            this.btnStop.Click += new System.EventHandler(this.BtnStop_Click);
             // 
             // btnJump
             // 
@@ -400,6 +404,7 @@ namespace sb_editor.Forms
             this.btnJump.TabIndex = 2;
             this.btnJump.Text = "Jump";
             this.btnJump.UseVisualStyleBackColor = true;
+            this.btnJump.Click += new System.EventHandler(this.BtnJump_Click);
             // 
             // btnPause
             // 
@@ -409,6 +414,7 @@ namespace sb_editor.Forms
             this.btnPause.TabIndex = 1;
             this.btnPause.Text = "Pause";
             this.btnPause.UseVisualStyleBackColor = true;
+            this.btnPause.Click += new System.EventHandler(this.BtnPause_Click);
             // 
             // btnPlay
             // 
@@ -418,7 +424,7 @@ namespace sb_editor.Forms
             this.btnPlay.TabIndex = 0;
             this.btnPlay.Text = "Play";
             this.btnPlay.UseVisualStyleBackColor = true;
-            this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
+            this.btnPlay.Click += new System.EventHandler(this.BtnPlay_Click);
             // 
             // MusicApp
             // 
@@ -443,6 +449,7 @@ namespace sb_editor.Forms
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Music Maker";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MusicApp_FormClosing);
             this.Load += new System.EventHandler(this.Frm_MusicMaker_Load);
             this.grbAvailableMusicFiles.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.nudUserValue)).EndInit();

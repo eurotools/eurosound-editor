@@ -13,7 +13,10 @@ using MusX;
 using MusX.Objects;
 using MusX.Readers;
 using NAudio.Wave;
+using PCAudioDLL.Audio_Player;
+using PCAudioDLL.Codecs;
 using PCAudioDLL.MusX_Objects;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -26,10 +29,17 @@ namespace PCAudioDLL
     //-------------------------------------------------------------------------------------------------------------------------------
     public class PCAudio
     {
-        public readonly AudioVoices audioVoices = new AudioVoices();
+        //Sb Data
         private readonly List<StreamSample> streamedFile = new List<StreamSample>();
         private string sbOutputPlatform;
+        public readonly AudioVoices audioVoices = new AudioVoices();
         internal Dictionary<uint, SoundBank> LoadedSoundBanks = new Dictionary<uint, SoundBank>();
+
+        //Music
+        internal MusicSample musicData;
+        internal StreambankHeader musicBankHeaderData;
+        private WaveOut musicPlayer = new WaveOut();
+        private RawSourceWaveStream providerLeft, providerRight;
 
         //-------------------------------------------------------------------------------------------------------------------------------
         public double LoadSoundBank(string soundBankPlatform, string soundBankPath, bool isStream = false)
@@ -260,6 +270,133 @@ namespace PCAudioDLL
             PCAudioDebugConsole.TxtConsole = outputControl;
             PCAudioDebugConsole.WriteLine("Debug Console Initialised!");
             PCAudioDebugConsole.WriteLine("5.1 Mixer Initialise");
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public void LoadMusicBank(string sfxFilePath, string Platform)
+        {
+            if (musicPlayer.PlaybackState != PlaybackState.Playing)
+            {
+                MusicBankReader reader = new MusicBankReader();
+
+                musicBankHeaderData = reader.ReadMusicHeader(sfxFilePath, Platform);
+                musicData = reader.ReadMusicBank(sfxFilePath, musicBankHeaderData);
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public void PlayMusicBank()
+        {
+            if (musicPlayer != null)
+            {
+                if (musicPlayer.PlaybackState == PlaybackState.Paused)
+                {
+                    musicPlayer.Play();
+                }
+                else if (musicPlayer.PlaybackState == PlaybackState.Stopped)
+                {
+                    AudioMixer aMixer = new AudioMixer();
+                    AudioMaths aMaths = new AudioMaths();
+
+                    byte[] decodedDataL = null;
+                    byte[] decodedDataR = null;
+                    int frequency = 32000;
+
+                    if (musicBankHeaderData.FileVersion == 201 || musicBankHeaderData.FileVersion == 1)
+                    {
+                        if (musicBankHeaderData.Platform.Equals("PC") || musicBankHeaderData.Platform.Contains("GC") || musicBankHeaderData.Platform.Contains("GameCube"))
+                        {
+                            ImaAdpcm imaDecoder = new ImaAdpcm();
+                            decodedDataL = aMaths.ShortArrayToByteArray(imaDecoder.Decode(musicData.EncodedData[0], musicData.EncodedData[0].Length * 2));
+                            decodedDataR = aMaths.ShortArrayToByteArray(imaDecoder.Decode(musicData.EncodedData[1], musicData.EncodedData[1].Length * 2));
+                        }
+                        else if (musicBankHeaderData.Platform.Equals("PS2"))
+                        {
+                            int test = 0;
+                            SonyAdpcm vagDecoder = new SonyAdpcm();
+                            decodedDataL = vagDecoder.Decode(musicData.EncodedData[0], ref test);
+                            decodedDataR = vagDecoder.Decode(musicData.EncodedData[1], ref test);
+                        }
+                        else if (musicBankHeaderData.Platform.Equals("XB") || musicBankHeaderData.Platform.Equals("Xbox"))
+                        {
+                            frequency = 44100;
+                            XboxAdpcm xboxDecoder = new XboxAdpcm();
+                            decodedDataL = aMaths.ShortArrayToByteArray(xboxDecoder.Decode(musicData.EncodedData[0]));
+                            decodedDataR = aMaths.ShortArrayToByteArray(xboxDecoder.Decode(musicData.EncodedData[1]));
+                        }
+                    }
+                    else
+                    {
+                        if (musicBankHeaderData.Platform.Equals("PC__") || musicBankHeaderData.Platform.Contains("GC__"))
+                        {
+                            Eurocom_ImaAdpcm eurocomDAT = new Eurocom_ImaAdpcm();
+                            decodedDataL = aMaths.ShortArrayToByteArray(eurocomDAT.Decode(musicData.EncodedData[0]));
+                            decodedDataR = aMaths.ShortArrayToByteArray(eurocomDAT.Decode(musicData.EncodedData[1]));
+                        }
+                        else if (musicBankHeaderData.Platform.Equals("PS2_"))
+                        {
+                            int test = 0;
+                            SonyAdpcm vagDecoder = new SonyAdpcm();
+                            decodedDataL = vagDecoder.Decode(musicData.EncodedData[0], ref test);
+                            decodedDataR = vagDecoder.Decode(musicData.EncodedData[1], ref test);
+                        }
+                        else if (musicBankHeaderData.Platform.Equals("XB__") || musicBankHeaderData.Platform.Equals("XB1_"))
+                        {
+                            frequency = 44100;
+                            Eurocom_ImaAdpcm xboxDecoder = new Eurocom_ImaAdpcm();
+                            decodedDataL = aMaths.ShortArrayToByteArray(xboxDecoder.Decode(musicData.EncodedData[0]));
+                            decodedDataR = aMaths.ShortArrayToByteArray(xboxDecoder.Decode(musicData.EncodedData[1]));
+                        }
+                    }
+
+                    MusicBank soundToPlay = new MusicBank
+                    {
+                        PcmData = new byte[2][] { decodedDataL, decodedDataR },
+                        volume = musicData.BaseVolume / 100.0f,
+                        sampleRate = frequency,
+                        channels = 2,
+                        isLooped = true,
+                        startPos = (int)aMixer.GetStartPosition(musicData.Markers),
+                        loopStartPoint = (int)aMixer.GetStartLoopPos(musicData.Markers),
+                        loopEndPoint = (int)aMixer.GetEndLoopPos(musicData.Markers),
+                    };
+
+                    IWaveProvider audioData = aMixer.CreateStereoLoopWav(ref providerLeft, ref providerRight, soundToPlay.PcmData, soundToPlay);
+                    musicPlayer = new WaveOut();
+                    musicPlayer.Init(audioData);
+                    musicPlayer.Play();
+                }
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public void StopMusicPlayer()
+        {
+            if (musicPlayer != null)
+            {
+                musicPlayer.Stop();
+                musicPlayer.Dispose();
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public void PauseMusicPlayer()
+        {
+            if (musicPlayer != null)
+            {
+                musicPlayer.Pause();
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public void JumpToMarker(uint samples, int samplerate)
+        {
+            if (musicPlayer != null && musicPlayer.PlaybackState == PlaybackState.Playing)
+            {
+                TimeSpan streamPos = TimeSpan.FromMilliseconds((double)decimal.Divide(samples, (samplerate / 1000)));
+                providerRight.CurrentTime = streamPos;
+                providerLeft.CurrentTime = streamPos;
+            }
         }
     }
 

@@ -166,7 +166,7 @@ namespace PCAudioDLL.Audio_Player
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal IWaveProvider CreateStereoLoopWav(byte[][] _pcmData, MusicBank _soundToPlay)
+        internal IWaveProvider CreateStereoLoopWav(ref RawSourceWaveStream providerLeft, ref RawSourceWaveStream providerRight, byte[][] _pcmData, MusicBank _soundToPlay)
         {
             if (_soundToPlay.loopEndPoint > 0)
             {
@@ -174,9 +174,9 @@ namespace PCAudioDLL.Audio_Player
                 Array.Resize(ref _pcmData[1], Math.Min(_soundToPlay.loopEndPoint * 4, _pcmData[0].Length));
             }
 
-            RawSourceWaveStream providerLeft = new RawSourceWaveStream(new MemoryStream(_pcmData[0]), new WaveFormat(_soundToPlay.sampleRate, 16, 1));
+            providerLeft = new RawSourceWaveStream(new MemoryStream(_pcmData[0]), new WaveFormat(_soundToPlay.sampleRate, 16, 1));
             AudioLoop loopLeft = new AudioLoop(providerLeft, _soundToPlay.loopStartPoint * 4, _soundToPlay.isLooped) { Position = _soundToPlay.startPos };
-            RawSourceWaveStream providerRight = new RawSourceWaveStream(new MemoryStream(_pcmData[1]), new WaveFormat(_soundToPlay.sampleRate, 16, 1));
+            providerRight = new RawSourceWaveStream(new MemoryStream(_pcmData[1]), new WaveFormat(_soundToPlay.sampleRate, 16, 1));
             AudioLoop loopRight = new AudioLoop(providerRight, _soundToPlay.loopStartPoint * 4, _soundToPlay.isLooped) { Position = _soundToPlay.startPos };
             MultiplexingWaveProvider waveProvider = new MultiplexingWaveProvider(new IWaveProvider[] { loopLeft, loopRight }, 2);
             VolumeSampleProvider volumeProvider = new VolumeSampleProvider(waveProvider.ToSampleProvider()) { Volume =  _soundToPlay.volume };
@@ -185,7 +185,7 @@ namespace PCAudioDLL.Audio_Player
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private uint GetStartLoopPos(Marker[] startMarkers)
+        internal uint GetStartLoopPos(Marker[] startMarkers)
         {
             uint startPosition = 0;
             for (int i = 0; i < startMarkers.Length; i++)
@@ -201,7 +201,7 @@ namespace PCAudioDLL.Audio_Player
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private uint GetEndLoopPos(Marker[] startMarkers)
+        internal uint GetEndLoopPos(Marker[] startMarkers)
         {
             uint startPosition = 0;
             for (int i = 0; i < startMarkers.Length; i++)
@@ -217,7 +217,7 @@ namespace PCAudioDLL.Audio_Player
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private bool SoundIsLooped(Marker[] startMarkers)
+        internal bool SoundIsLooped(Marker[] startMarkers)
         {
             bool isLooped = true;
             for (int i = 0; i < startMarkers.Length; i++)
@@ -233,7 +233,7 @@ namespace PCAudioDLL.Audio_Player
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private uint GetStartPosition(Marker[] startMarkers)
+        internal uint GetStartPosition(Marker[] startMarkers)
         {
             uint startPosition = 0;
             for (int i = 0; i < startMarkers.Length; i++)

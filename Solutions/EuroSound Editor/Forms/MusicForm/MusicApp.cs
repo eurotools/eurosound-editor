@@ -9,6 +9,7 @@
 //-------------------------------------------------------------------------------------------------------------------------------
 // Music App
 //-------------------------------------------------------------------------------------------------------------------------------
+using PCAudioDLL;
 using sb_editor.Audio_Classes;
 using sb_editor.HashCodes;
 using sb_editor.Objects;
@@ -28,6 +29,7 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class MusicApp : Form
     {
+        private readonly PCAudio pcDll = new PCAudio();
         private readonly HashTables htFunctions = new HashTables();
         private ProjProperties projectSettings;
 
@@ -63,12 +65,27 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
+        private void MusicApp_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            pcDll.StopMusicPlayer();
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
         private void LvwMusicFiles_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lvwMusicFiles.SelectedItems.Count > 0)
             {
                 nudVolume.Value = int.Parse(lvwMusicFiles.SelectedItems[0].SubItems[1].Text);
                 nudUserValue.Value = int.Parse(lvwMusicFiles.SelectedItems[0].SubItems[7].Text);
+
+                //Add jump markers for testing
+                string jumpMarkers = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESWork", lvwMusicFiles.SelectedItems[0].Text + ".jmp");
+                if (File.Exists(jumpMarkers))
+                {
+                    lstbx_JumpMakers.Items.Clear();
+                    lstbx_JumpMakers.Items.AddRange(TextFiles.ReadJumpHashCodes(jumpMarkers));
+                    trackBar1.Value = (int)nudVolume.Value;
+                }
             }
         }
 
