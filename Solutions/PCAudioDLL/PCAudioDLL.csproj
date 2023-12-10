@@ -58,11 +58,12 @@
     <Compile Include="Codecs\ImaAdpcm.cs" />
     <Compile Include="Codecs\SonyAdpcm.cs" />
     <Compile Include="Codecs\XboxAdpcm.cs" />
-    <Compile Include="DebugConsole.cs" />
+    <Compile Include="PCAudioDebugConsole.cs" />
     <Compile Include="MusX Objects\SoundBank.cs" />
     <Compile Include="Audio Player\Objects\ExAudioSample.cs" />
     <Compile Include="Audio Player\Objects\ExVoice.cs" />
     <Compile Include="Audio Player\AudioPlayer.cs" />
+    <Compile Include="MusX Objects\MusicBank.cs" />
     <Compile Include="PCAudio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils.cs" />

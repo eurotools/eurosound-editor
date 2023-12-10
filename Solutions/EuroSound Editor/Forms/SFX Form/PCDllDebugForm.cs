@@ -20,28 +20,31 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class PCDllDebugForm : Form
     {
+        private readonly PCAudio pcDllTester;
+
         //-------------------------------------------------------------------------------------------------------------------------------
-        public PCDllDebugForm()
+        public PCDllDebugForm(PCAudio pcDll)
         {
             InitializeComponent();
+            pcDllTester = pcDll;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void Frm_TestSfxDebug_Shown(object sender, EventArgs e)
         {
-            //PCAudioDll.InitializeConsole(txtDebugData);
+            pcDllTester.InitializeConsole(txtDebugData);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void ChkPauseDebug_Click(object sender, EventArgs e)
         {
-            //PCAudioDll.outputConsole.PauseOutput = chkPauseDebug.Checked;
+            PCAudioDebugConsole.PauseOutput = chkPauseDebug.Checked;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void PCDllDebugForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //PCAudioDll.outputConsole.TxtConsole = null;
+            PCAudioDebugConsole.TxtConsole = null;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------

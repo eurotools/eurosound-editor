@@ -28,6 +28,7 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class SFXForm : Form
     {
+        private readonly PCAudio pcDll = new PCAudio();
         private readonly bool sfxDefaults;
         private readonly string sfxFileName;
         private Color currentColor = SystemColors.Control;
@@ -180,7 +181,8 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void Frm_SFX_Form_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //PCAudioDll.UnloadSoundbank();
+            pcDll.StopPlayer();
+            pcDll.UnloadSoundbank();
 
             //Stop any audio that could be playing
             if (UserControl_SamplePool.audioPlayer != null)
@@ -343,22 +345,22 @@ namespace sb_editor.Forms
             string filePath = Path.Combine(outputFilePath, fileName);
             if (File.Exists(filePath))
             {
-               /* if (PCAudioDll.IsSoundBankLoaded(0xFFFE))
+                if (!pcDll.IsSoundBankLoaded(0xFFFE))
                 {
-                    PCAudioDll.UnloadSoundbank();
+                    pcDll.LoadSoundBank("PC", filePath, false);
                 }
-                txtDllTime.Text = string.Format("DLL Time {0:0.###}", PCAudioDll.LoadSoundBank(filePath));
-                PCAudioDll.PlaySfx(0);*/
+                txtDllTime.Text = string.Format("DLL Time {0:0.###}", pcDll.LoadSoundBank("PC", filePath, false));
+                pcDll.StartSound(0x1A000000);
             }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnStopSFX_Click(object sender, System.EventArgs e)
         {
-            /*if (PCAudioDll.IsSoundBankLoaded(0xFFFE))
+            if (pcDll.IsSoundBankLoaded(0xFFFE))
             {
-                PCAudioDll.UnloadSoundbank();
-            }*/
+                pcDll.StopHashCode(0x1A000000);
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -658,7 +660,7 @@ namespace sb_editor.Forms
             if (debuggerForm == null)
             {
                 desktopLoc.X += 915;
-                PCDllDebugForm hashCodesSelector = new PCDllDebugForm()
+                PCDllDebugForm hashCodesSelector = new PCDllDebugForm(pcDll)
                 {
                     DesktopLocation = desktopLoc
                 };
@@ -677,7 +679,7 @@ namespace sb_editor.Forms
             if (debuggerForm == null)
             {
                 desktopLoc.X += 915;
-                PCDllVoicesForm hashCodesSelector = new PCDllVoicesForm
+                PCDllVoicesForm hashCodesSelector = new PCDllVoicesForm(pcDll)
                 {
                     DesktopLocation = desktopLoc
                 };
