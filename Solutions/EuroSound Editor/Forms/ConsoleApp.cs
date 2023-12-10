@@ -121,13 +121,13 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------
         private void BtnStartSFX_Click(object sender, EventArgs e)
         {
-            pcDll.StartSound((uint)nudHashCode.Value);
+            pcDll.StartSound((uint)nudHashCode.Value, false);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnStart3dSound_Click(object sender, EventArgs e)
         {
-            pcDll.StartSound3D((uint)nudHashCode.Value, new float[] { (float)nudX.Value, (float)nudY.Value, (float)nudZ.Value }, false, chxTestPan.Checked, trckBarMasterVolume.Value);
+            pcDll.StartSound3D((uint)nudHashCode.Value, new float[] { (float)nudX.Value, (float)nudY.Value, (float)nudZ.Value }, false, false, chxTestPan.Checked, trckBarMasterVolume.Value);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------

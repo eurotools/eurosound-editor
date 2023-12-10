@@ -111,7 +111,7 @@ namespace PCAudioDLL
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void StartSound(uint SoundHashcode, bool isSubSFX = false, short defInnerRadius = 100, short defOutRadius = 200)
+        public void StartSound(uint SoundHashcode, bool TestingMode, bool isSubSFX = false, short defInnerRadius = 100, short defOutRadius = 200)
         {
             AudioPlayer audioPlayer = new AudioPlayer();
 
@@ -151,15 +151,15 @@ namespace PCAudioDLL
                             {
                                 if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Polyphonic) & 1) == 1)
                                 {
-                                    audioPlayer.PlayPolyphonicSfx(sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices);
+                                    audioPlayer.PlayPolyphonicSfx(sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, TestingMode);
                                 }
                                 else if(((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Shuffled) & 1) == 1)
                                 {
-                                    audioPlayer.PlayShuffledSfx(sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices);
+                                    audioPlayer.PlayShuffledSfx(sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, TestingMode);
                                 }
                                 else
                                 {
-                                    audioPlayer.PlaySingleSfx(sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices);
+                                    audioPlayer.PlaySingleSfx(sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, TestingMode);
                                 }
                             }
                             else
@@ -181,7 +181,7 @@ namespace PCAudioDLL
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void StartSound3D(uint SoundHashcode, float[] audioPosition, bool isSubSFX = false, bool enablePanning = false, int volume = -1)
+        public void StartSound3D(uint SoundHashcode, float[] audioPosition, bool TestingMode, bool isSubSFX = false, bool enablePanning = false, int volume = -1)
         {
             AudioPlayer audioPlayer = new AudioPlayer();
 
@@ -213,15 +213,15 @@ namespace PCAudioDLL
                             {
                                 if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Polyphonic) & 1) == 1)
                                 {
-                                    audioPlayer.PlayPolyphonicSfx(sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, audioPosition, enablePanning, volume);
+                                    audioPlayer.PlayPolyphonicSfx(sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, TestingMode, audioPosition, enablePanning, volume);
                                 }
                                 else if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Shuffled) & 1) == 1)
                                 {
-                                    audioPlayer.PlayShuffledSfx(sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, audioPosition, enablePanning, volume);
+                                    audioPlayer.PlayShuffledSfx(sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, TestingMode, audioPosition, enablePanning, volume);
                                 }
                                 else
                                 {
-                                    audioPlayer.PlaySingleSfx(sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, audioPosition, enablePanning, volume);
+                                    audioPlayer.PlaySingleSfx(sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, TestingMode, audioPosition, enablePanning, volume);
                                 }
                             }
                             else
@@ -233,7 +233,7 @@ namespace PCAudioDLL
                                     {
                                         break;
                                     }
-                                    StartSound3D(hashCode, audioPosition, true, enablePanning, volume);
+                                    StartSound3D(hashCode, audioPosition, true, enablePanning, TestingMode, volume);
                                 }
                             }
                         }

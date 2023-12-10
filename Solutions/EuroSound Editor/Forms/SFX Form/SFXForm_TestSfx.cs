@@ -186,8 +186,7 @@ namespace sb_editor.Forms
         {
             SoundBankFunctions sbFunctions = new SoundBankFunctions();
             WaveFunctions wavFunctions = new WaveFunctions();
-            EurocomImaFunctions eurocomImaFunction = new EurocomImaFunctions();
-            
+
             long sampleBankSize = 0;
             sifWritter.Write(BytesFunctions.FlipInt32(sampleList.Length, isBigEndian));
             for (int i = 0; i < sampleList.Length; i++)
@@ -196,19 +195,20 @@ namespace sb_editor.Forms
                 if (File.Exists(masterFile))
                 {
                     WavInfo masterFileData = wavFunctions.ReadWaveProperties(masterFile);
-                    byte[] pcmData = eurocomImaFunction.Encode(wavFunctions.GetWaveSamples(masterFile));
+                    byte[] pcmData = wavFunctions.GetByteWaveData(masterFile);
 
                     //Write Header Data
                     uint loopOffset = 0;
                     if (masterFileData.HasLoop)
                     {
-                        uint waveLoopOffset = (uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, masterFileData.SampleRate, masterFileData.LoopStart * 2);
-                        loopOffset = CalculusLoopOffset.GetEurocomImaLoopOffset(waveLoopOffset);
+                        loopOffset = BytesFunctions.AlignNumber((uint)CalculusLoopOffset.RuleOfThreeLoopOffset(masterFileData.SampleRate, masterFileData.SampleRate, masterFileData.LoopStart * 2), 2);
                     }
                     sbFunctions.WriteSampleInfo(sifWritter, sbfWritter, masterFileData, masterFileData, BytesFunctions.AlignNumber((uint)masterFileData.Length, 4), (int)masterFileData.Length, i * 96, loopOffset, isBigEndian);
 
                     //Write Sample Data
-                    sbfWritter.Write(pcmData);
+                    byte[] filedata = new byte[BytesFunctions.AlignNumber((uint)masterFileData.Length, 4)];
+                    Array.Copy(pcmData, filedata, pcmData.Length);
+                    sbfWritter.Write(filedata);
 
                     //Update value
                     sampleBankSize += pcmData.Length;
