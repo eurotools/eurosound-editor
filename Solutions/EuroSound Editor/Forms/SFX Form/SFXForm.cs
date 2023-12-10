@@ -349,7 +349,7 @@ namespace sb_editor.Forms
                     pcDll.LoadSoundBank("PC", filePath, false);
                 }
                 txtDllTime.Text = string.Format("DLL Time {0:0.###}", pcDll.LoadSoundBank("PC", filePath, false));
-                pcDll.StartSound(0x1A000000);
+                pcDll.StartSound(0x1AF00000);
             }
         }
 
@@ -358,7 +358,7 @@ namespace sb_editor.Forms
         {
             if (pcDll.IsSoundBankLoaded(0xFFFE))
             {
-                pcDll.StopHashCode(0x1A000000);
+                pcDll.StopHashCode(0x1AF00000);
             }
         }
 

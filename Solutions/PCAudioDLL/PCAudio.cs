@@ -111,7 +111,7 @@ namespace PCAudioDLL
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void StartSound(uint SoundHashcode, bool isSubSFX = false)
+        public void StartSound(uint SoundHashcode, bool isSubSFX = false, short defInnerRadius = 100, short defOutRadius = 200)
         {
             AudioPlayer audioPlayer = new AudioPlayer();
 
@@ -125,14 +125,22 @@ namespace PCAudioDLL
                     {
                         Sample sfxSample = soundBank.Value.sfxSamples[SoundHashcode];
 
-                        //Update inner and outer radius
-                        foreach(var sfxItem in soundDetails.sfxItems)
+                        //Update inner and outer radius if required
+                        if (defInnerRadius != 100 || defOutRadius != 200)
                         {
-                            if (sfxItem.HashCode == SoundHashcode)
+                            foreach (SoundDetailsData sfxItem in soundDetails.sfxItems)
                             {
-                                sfxSample.InnerRadius = (short)sfxItem.InnerRadius;
-                                sfxSample.OuterRadius = (short)sfxItem.OuterRadius;
+                                if (sfxItem.HashCode == SoundHashcode)
+                                {
+                                    sfxSample.InnerRadius = (short)sfxItem.InnerRadius;
+                                    sfxSample.OuterRadius = (short)sfxItem.OuterRadius;
+                                }
                             }
+                        }
+                        else
+                        {
+                            sfxSample.InnerRadius = defInnerRadius;
+                            sfxSample.OuterRadius = defOutRadius;
                         }
                         
                         //Ensure that is valid
