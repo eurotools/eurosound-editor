@@ -287,7 +287,7 @@ namespace PCAudioDLL
         //-------------------------------------------------------------------------------------------------------------------------------
         public void PlayMusicBank()
         {
-            if (musicPlayer != null)
+            if (musicPlayer != null && musicData != null)
             {
                 if (musicPlayer.PlaybackState == PlaybackState.Paused)
                 {
@@ -356,9 +356,9 @@ namespace PCAudioDLL
                         sampleRate = frequency,
                         channels = 2,
                         isLooped = true,
-                        startPos = (int)aMixer.GetStartPosition(musicData.Markers),
-                        loopStartPoint = (int)aMixer.GetStartLoopPos(musicData.Markers),
-                        loopEndPoint = (int)aMixer.GetEndLoopPos(musicData.Markers),
+                        startPos = (int)aMixer.GetStartPosition(musicData.Markers) / 2,
+                        loopStartPoint = (int)aMixer.GetStartLoopPos(musicData.Markers) / 2,
+                        loopEndPoint = (int)aMixer.GetEndLoopPos(musicData.Markers) / 2,
                     };
 
                     IWaveProvider audioData = aMixer.CreateStereoLoopWav(ref providerLeft, ref providerRight, soundToPlay.PcmData, soundToPlay);

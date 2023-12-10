@@ -28,8 +28,14 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnRunTarget_Click(object sender, EventArgs e)
         {
-            //Get file path
+            //Get target
             string outputPlatform = cboOutputFormat.SelectedItem.ToString();
+            if (outputPlatform.Equals("X Box", StringComparison.OrdinalIgnoreCase))
+            {
+                outputPlatform = "Xbox";
+            }
+
+            //Start reading
             if (outputPlatform.Equals("ALL", StringComparison.OrdinalIgnoreCase))
             {
                 MessageBox.Show("Select a valid output target.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -43,6 +49,10 @@ namespace sb_editor.Forms
                 if (File.Exists(outputPath))
                 {
                     pcDll.LoadMusicBank(outputPath, outputPlatform);
+                }
+                else
+                {
+                    MessageBox.Show(string.Format("Music File Not Found {0}", outputPath), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -70,13 +80,27 @@ namespace sb_editor.Forms
         {
             MarkerFilesFunctions mkFunctions = new MarkerFilesFunctions();
 
-            //Read Markers File
-            string jumpMarkers = Path.Combine(GlobalPrefs.ProjectFolder, "Music", lvwMusicFiles.SelectedItems[0].Text + ".mrk");
-            List<MarkerInfo> markersData = mkFunctions.LoadTextMarkerFile(jumpMarkers, null, null, true);
+            //Get marker files path
+            string jumpMarkersFile = Path.Combine(GlobalPrefs.ProjectFolder, "Music", lvwMusicFiles.SelectedItems[0].Text + ".mrk");
+            if (File.Exists(jumpMarkersFile))
+            {
+                //Read file data
+                List<MarkerInfo> markersData = mkFunctions.LoadTextMarkerFile(jumpMarkersFile, null, null, true);
 
-            //Call DLL
-            decimal position = CalculusLoopOffset.RuleOfThreeLoopOffset(44100, 32000, (int)markersData[lstbx_JumpMakers.SelectedIndex].Position);
-            pcDll.JumpToMarker((uint)position, 32000);
+                //Calculate pos
+                decimal position = CalculusLoopOffset.RuleOfThreeLoopOffset(44100, 32000, (int)markersData[lstbx_JumpMakers.SelectedIndex].Position);
+
+                //Call DLL
+                int freq = 32000;
+                string outputPlatform = cboOutputFormat.SelectedItem.ToString();
+                if (outputPlatform.Equals("X box", StringComparison.OrdinalIgnoreCase))
+                {
+                    position = (decimal)(markersData[lstbx_JumpMakers.SelectedIndex].Position / 0.98888887);
+                    freq = 44100;
+                }
+
+                pcDll.JumpToMarker((uint)position, freq);
+            }
         }
     }
 
