@@ -22,20 +22,23 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class PCDllVoicesForm : Form
     {
+        private readonly PCAudio pcDllTester;
+
         //-------------------------------------------------------------------------------------------------------------------------------
-        public PCDllVoicesForm()
+        public PCDllVoicesForm(PCAudio pcDll)
         {
             InitializeComponent();
+            pcDllTester = pcDll;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void PCDllVoicesForm_Load(object sender, EventArgs e)
         {
             //Print items
-          /*  for (int i = 0; i < PCAudioDll.pcOutVoices.VoicesArray.Length; i++)
+            for (int i = 0; i < pcDllTester.audioVoices.MixerTable.Length; i++)
             {
                 dataGridView1.Rows.Add(new string[] { i.ToString(), "", "", "", "", "", "", "", "" });
-            }*/
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -53,15 +56,26 @@ namespace sb_editor.Forms
         {
             while (!Disposing)
             {
-                /*for (int i = 0; i < PCAudio.audioVoices.VoicesArray.Length; i++)
+                for (int i = 0; i < pcDllTester.audioVoices.MixerTable.Length; i++)
                 {
-                    ExWaveOut currentVoice = PCAudioDll.pcOutVoices.VoicesArray[i];
+                    ExVoice currentVoice = pcDllTester.audioVoices.MixerTable[i];
                     try
                     {
                         dataGridView1.Invoke((MethodInvoker)delegate
                         {
                             DataGridViewRow itemToModify = dataGridView1.Rows[i];
-                            if (currentVoice == null)
+                            if (currentVoice != null)
+                            {
+                                    SetItemState(itemToModify, currentVoice.Active, 1);
+                                    SetItemState(itemToModify, currentVoice.Played, 2);
+                                    SetItemState(itemToModify, currentVoice.Playing, 3);
+                                    SetItemState(itemToModify, currentVoice.Looping, 4);
+                                    SetItemState(itemToModify, currentVoice.Reverb, 5);
+                                    SetItemState(itemToModify, currentVoice.Stop_, 6);
+                                    SetItemState(itemToModify, currentVoice.Stopped, 7);
+                                    SetItemState(itemToModify, currentVoice.Locked, 8);
+                            }
+                            else
                             {
                                 for (int j = 0; j < itemToModify.Cells.Count; j++)
                                 {
@@ -72,24 +86,13 @@ namespace sb_editor.Forms
                                     itemToModify.Cells[j].Style = style;
                                 }
                             }
-                            else
-                            {
-                                SetItemState(itemToModify, currentVoice.Active, 1);
-                                SetItemState(itemToModify, currentVoice.Played, 2);
-                                SetItemState(itemToModify, currentVoice.Playing, 3);
-                                SetItemState(itemToModify, currentVoice.Looping, 4);
-                                SetItemState(itemToModify, currentVoice.Reverb, 5);
-                                SetItemState(itemToModify, currentVoice.Stop_, 6);
-                                SetItemState(itemToModify, currentVoice.Stopped, 7);
-                                SetItemState(itemToModify, currentVoice.Locked, 8);
-                            }
                         });
                     }
                     catch
                     {
 
                     }
-                }*/
+                }
                 Thread.Sleep(10);
             }
         }

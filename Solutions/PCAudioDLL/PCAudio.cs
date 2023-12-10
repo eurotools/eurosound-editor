@@ -17,6 +17,7 @@ using PCAudioDLL.MusX_Objects;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Windows.Forms;
 
 namespace PCAudioDLL
 {
@@ -37,12 +38,12 @@ namespace PCAudioDLL
             Stopwatch watch = Stopwatch.StartNew();
 
             //Add Debug Text
-            DebugConsole.WriteLine("");
-            DebugConsole.WriteLine(string.Format("CMD_SFX_INITIALISE : {0}", Path.GetDirectoryName(soundBankPath)));
-            DebugConsole.WriteLine(string.Format("CMD_SFX_INITIALISE2 : {0}", Path.GetFileName(soundBankPath)));
-            DebugConsole.WriteLine(string.Format("AsyncOpenFile : {0}", soundBankPath));
-            DebugConsole.WriteLine("");
-            DebugConsole.WriteLine("CMD_SFXLOADSOUNDBANK");
+            PCAudioDebugConsole.WriteLine("");
+            PCAudioDebugConsole.WriteLine(string.Format("CMD_SFX_INITIALISE : {0}", Path.GetDirectoryName(soundBankPath)));
+            PCAudioDebugConsole.WriteLine(string.Format("CMD_SFX_INITIALISE2 : {0}", Path.GetFileName(soundBankPath)));
+            PCAudioDebugConsole.WriteLine(string.Format("AsyncOpenFile : {0}", soundBankPath));
+            PCAudioDebugConsole.WriteLine("");
+            PCAudioDebugConsole.WriteLine("CMD_SFXLOADSOUNDBANK");
 
             //Load data
             if (isStream)
@@ -65,7 +66,10 @@ namespace PCAudioDLL
                 SoundBankReader reader = new SoundBankReader();
                 SoundbankHeader soundBankHeaderData = reader.ReadSfxHeader(soundBankPath, soundBankPlatform);
                 reader.ReadSoundBank(soundBankPath, soundBankHeaderData, sbData.sfxSamples, sbData.sfxStoredData, null);
-                LoadedSoundBanks.Add(soundBankHeaderData.FileHashCode, sbData);
+                if (!LoadedSoundBanks.ContainsKey(soundBankHeaderData.FileHashCode))
+                {
+                    LoadedSoundBanks.Add(soundBankHeaderData.FileHashCode, sbData);
+                }
             }
 
             return watch.Elapsed.TotalMilliseconds;
@@ -77,14 +81,14 @@ namespace PCAudioDLL
             if (sbHashCode == -1)
             {
                 LoadedSoundBanks.Clear();
-                DebugConsole.WriteLine("ES-> ES_UnLoadAllSoundBanksReleaseFinished End");
-                DebugConsole.WriteLine("pih");
+                PCAudioDebugConsole.WriteLine("ES-> ES_UnLoadAllSoundBanksReleaseFinished End");
+                PCAudioDebugConsole.WriteLine("pih");
             }
             else if (LoadedSoundBanks.ContainsKey((uint)sbHashCode))
             {
                 LoadedSoundBanks.Remove((uint)sbHashCode);
-                DebugConsole.WriteLine("ES-> ES_UnLoadSoundBankReleaseFinished End");
-                DebugConsole.WriteLine("pih");
+                PCAudioDebugConsole.WriteLine("ES-> ES_UnLoadSoundBankReleaseFinished End");
+                PCAudioDebugConsole.WriteLine("pih");
             }
         }
 
@@ -216,18 +220,8 @@ namespace PCAudioDLL
                         audioVoices.MixerTable[i].BaseVoice.Dispose();
 
                         //Update Object
-                        audioVoices.MixerTable[i].Active = false;
-                        audioVoices.MixerTable[i].Played = false;
-                        audioVoices.MixerTable[i].Playing = false;
-                        audioVoices.MixerTable[i].Looping = false;
-                        audioVoices.MixerTable[i].Reverb = false;
-                        audioVoices.MixerTable[i].Stop_ = false;
-                        audioVoices.MixerTable[i].Stopped = false;
-                        audioVoices.MixerTable[i].Locked = false;
-
-                        //Inform User
-                        DebugConsole.WriteLine(string.Format("ES-> ES_AudioHasEnded() = {0} Ok.", i));
-                        DebugConsole.WriteLine(string.Format("ES-> ES_UnLockVoiceHandle() = {0}", i));
+                        audioVoices.StopVoice(i);
+                        audioVoices.CloseVoice(i);
                     }
                 }
             }
@@ -247,18 +241,8 @@ namespace PCAudioDLL
                         audioVoices.MixerTable[i].BaseVoice.Dispose();
 
                         //Update Object
-                        audioVoices.MixerTable[i].Active = false;
-                        audioVoices.MixerTable[i].Played = false;
-                        audioVoices.MixerTable[i].Playing = false;
-                        audioVoices.MixerTable[i].Looping = false;
-                        audioVoices.MixerTable[i].Reverb = false;
-                        audioVoices.MixerTable[i].Stop_ = false;
-                        audioVoices.MixerTable[i].Stopped = false;
-                        audioVoices.MixerTable[i].Locked = false;
-
-                        //Inform User
-                        DebugConsole.WriteLine(string.Format("ES-> ES_AudioHasEnded() = {0} Ok.", i));
-                        DebugConsole.WriteLine(string.Format("ES-> ES_UnLockVoiceHandle() = {0}", i));
+                        audioVoices.StopVoice(i);
+                        audioVoices.CloseVoice(i);
                     }
                 }
             }
@@ -278,6 +262,14 @@ namespace PCAudioDLL
             }
 
             return containStreams;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public void InitializeConsole(TextBox outputControl)
+        {
+            PCAudioDebugConsole.TxtConsole = outputControl;
+            PCAudioDebugConsole.WriteLine("Debug Console Initialised!");
+            PCAudioDebugConsole.WriteLine("5.1 Mixer Initialise");
         }
     }
 
