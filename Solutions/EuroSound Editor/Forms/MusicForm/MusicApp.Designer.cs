@@ -79,7 +79,7 @@ namespace sb_editor.Forms
             // 
             // grbAvailableMusicFiles
             // 
-            this.grbAvailableMusicFiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.grbAvailableMusicFiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grbAvailableMusicFiles.Controls.Add(this.nudUserValue);
             this.grbAvailableMusicFiles.Controls.Add(this.btnVerifyHashCodes);
@@ -183,8 +183,8 @@ namespace sb_editor.Forms
             // 
             // lvwMusicFiles
             // 
-            this.lvwMusicFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.lvwMusicFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvwMusicFiles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Col_Musics_FileName,
@@ -258,7 +258,7 @@ namespace sb_editor.Forms
             // 
             // cboOutputFormat
             // 
-            this.cboOutputFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.cboOutputFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cboOutputFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboOutputFormat.FormattingEnabled = true;
@@ -418,6 +418,7 @@ namespace sb_editor.Forms
             this.btnPlay.TabIndex = 0;
             this.btnPlay.Text = "Play";
             this.btnPlay.UseVisualStyleBackColor = true;
+            this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
             // 
             // MusicApp
             // 

@@ -22,15 +22,18 @@ namespace PCAudioDLL
         internal bool ExitSound = false;
         internal const int MAX_TOTAL_VOICES = 60;
         internal const int MAX_TOTAL_STREAMS = 10;
-        internal byte MixerTableIndex = 0;
-        internal ExVoice[] MixerTable = new ExVoice[MAX_TOTAL_VOICES];
+        internal byte MixerTableIndex = MAX_TOTAL_STREAMS;
+        public ExVoice[] MixerTable = new ExVoice[MAX_TOTAL_VOICES];
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void InitializeTable()
+        public AudioVoices()
         {
-            for (int i = 0; i < MixerTable.Length; i++)
+            for(int i = 0; i < MAX_TOTAL_STREAMS; i++)
             {
                 MixerTable[i] = new ExVoice();
+                MixerTable[i].Active = true;
+                MixerTable[i].Looping = true;
+                MixerTable[i].Locked = true;
             }
         }
 
@@ -39,7 +42,7 @@ namespace PCAudioDLL
         {
             if (MixerTableIndex >= (MixerTable.Length - 1))
             {
-                MixerTableIndex = 0;
+                MixerTableIndex = MAX_TOTAL_STREAMS;
             }
 
             int index = MixerTableIndex++;
@@ -49,8 +52,7 @@ namespace PCAudioDLL
                 HashCode = (int)audioSample.HashCode
             };
 
-            //Inform user
-            DebugConsole.WriteLine(string.Format("ES-> ES_RequestVoiceHandle() = {0}", index));
+            PCAudioDebugConsole.WriteLine(string.Format("ES-> ES_RequestVoiceHandle() = {0}", index));
 
             return index;
         }
@@ -72,6 +74,52 @@ namespace PCAudioDLL
             }
 
             return audioCanPlay;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        internal void InitialiseVoice(int index, float volume, bool LoopFlag, IWaveProvider audioSample)
+        {
+            MixerTable[index].BaseVoice.Init(audioSample);
+            MixerTable[index].BaseVoice.Volume = volume;
+            MixerTable[index].Active = true;
+            MixerTable[index].Playing = false;
+            MixerTable[index].Looping = LoopFlag;
+            MixerTable[index].Locked = true;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        internal void PlayVoice(int index)
+        {
+            MixerTable[index].BaseVoice.Play();
+            MixerTable[index].Played = true;
+            MixerTable[index].Playing = true;
+            MixerTable[index].Reverb = true;
+            PCAudioDebugConsole.WriteLine("Voice::Play");
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        internal void StopVoice(int index)
+        {
+            MixerTable[index].Active = false;
+            MixerTable[index].Playing = false;
+            MixerTable[index].Played = true;
+            MixerTable[index].Reverb = false;
+            MixerTable[index].Looping = false;
+            MixerTable[index].Stopped = true;
+            PCAudioDebugConsole.WriteLine(string.Format("ES-> ES_AudioHasEnded() = {0} Ok.", index));
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        internal void CloseVoice(int index)
+        {
+            MixerTable[index].Active = false;
+            MixerTable[index].Playing = false;
+            MixerTable[index].Played = false;
+            MixerTable[index].Reverb = false;
+            MixerTable[index].Looping = false;
+            MixerTable[index].Stopped = false;
+            MixerTable[index].Locked = false;
+            PCAudioDebugConsole.WriteLine(string.Format("ES-> ES_UnLockVoiceHandle() = {0}", index));
         }
     }
 

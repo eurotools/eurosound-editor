@@ -79,10 +79,8 @@ namespace PCAudioDLL
 
                         //Request voice and play
                         int index = pcVoices.RequestVoice(sampleAudio);
-                        pcVoices.MixerTable[index].BaseVoice.Init(audioSample);
-                        pcVoices.MixerTable[index].BaseVoice.Volume = volume;
-                        pcVoices.MixerTable[index].BaseVoice.Play();
-                        DebugConsole.WriteLine("Voice::Play");
+                        pcVoices.InitialiseVoice(index, volume, sampleAudio.isLooped, audioSample);
+                        pcVoices.PlayVoice(index);
 
                         //InterSample delay
                         int exitAt = audioMaths.CalculateInterSample(sampleAudio.MinDelay, sampleAudio.MaxDelay, sampleAudio.Frequency, true);
@@ -94,6 +92,10 @@ namespace PCAudioDLL
                             }
                             Thread.Sleep(1);
                         }
+
+                        //Stop Voice
+                        pcVoices.StopVoice(index);
+                        pcVoices.CloseVoice(index);
                     }
                 } while (LoopFlag && !pcVoices.ExitSound);
             })
@@ -164,10 +166,8 @@ namespace PCAudioDLL
 
                             //Request voice and play
                             int index = pcVoices.RequestVoice(sampleAudio);
-                            pcVoices.MixerTable[index].BaseVoice.Init(audioSample);
-                            pcVoices.MixerTable[index].BaseVoice.Volume = volume;
-                            pcVoices.MixerTable[index].BaseVoice.Play();
-                            DebugConsole.WriteLine("Voice::Play");
+                            pcVoices.InitialiseVoice(index, volume, sampleAudio.isLooped, audioSample);
+                            pcVoices.PlayVoice(index);
 
                             //InterSample delay
                             int exitAt = audioMaths.CalculateInterSample(sampleAudio.MinDelay, sampleAudio.MaxDelay, sampleAudio.Frequency, true);
@@ -179,6 +179,10 @@ namespace PCAudioDLL
                                 }
                                 Thread.Sleep(1);
                             }
+
+                            //Stop Voice
+                            pcVoices.StopVoice(index);
+                            pcVoices.CloseVoice(index);
                         }
                     }
                 } while (LoopFlag && !pcVoices.ExitSound);
@@ -252,8 +256,7 @@ namespace PCAudioDLL
 
                             //Request voice and play
                             int index = pcVoices.RequestVoice(sampleAudio);
-                            pcVoices.MixerTable[index].BaseVoice.Init(audioSample);
-                            pcVoices.MixerTable[index].BaseVoice.Volume = volume;
+                            pcVoices.InitialiseVoice(index, volume, sampleAudio.isLooped, audioSample);
                             PolyphonicAudios.Add(index);
                         }
                     }
@@ -261,8 +264,7 @@ namespace PCAudioDLL
                     //Play all together
                     for (int i = 0; i < PolyphonicAudios.Count; i++)
                     {
-                        pcVoices.MixerTable[PolyphonicAudios[i]].BaseVoice.Play();
-                        DebugConsole.WriteLine("Voice::Play");
+                        pcVoices.PlayVoice(PolyphonicAudios[i]);
                     }
 
                     //Check if there are playing
@@ -282,6 +284,13 @@ namespace PCAudioDLL
                             }
                         }
                     };
+
+                    //Stop Voice
+                    for (int i = 0; i < PolyphonicAudios.Count; i++)
+                    {
+                        pcVoices.StopVoice(PolyphonicAudios[i]);
+                        pcVoices.CloseVoice(PolyphonicAudios[i]);
+                    }
                 } while (LoopFlag && !pcVoices.ExitSound);
             })
             {
