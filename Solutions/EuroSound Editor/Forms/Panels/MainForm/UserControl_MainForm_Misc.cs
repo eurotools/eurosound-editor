@@ -11,7 +11,6 @@
 //-------------------------------------------------------------------------------------------------------------------------------
 using sb_editor.Forms;
 using sb_editor.Objects;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;

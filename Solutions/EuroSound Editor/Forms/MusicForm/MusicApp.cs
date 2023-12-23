@@ -63,12 +63,40 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
+        private void MusicApp_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (musicPlayer != null)
+            {
+                musicPlayer.Stop();
+                musicPlayer.Dispose();
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
         private void LvwMusicFiles_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lvwMusicFiles.SelectedItems.Count > 0)
             {
                 nudVolume.Value = int.Parse(lvwMusicFiles.SelectedItems[0].SubItems[1].Text);
                 nudUserValue.Value = int.Parse(lvwMusicFiles.SelectedItems[0].SubItems[7].Text);
+
+                //Add jump markers for testing
+                string jumpMarkers = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESWork", lvwMusicFiles.SelectedItems[0].Text + ".jmp");
+                if (File.Exists(jumpMarkers))
+                {
+                    markerData = TextFiles.ReadMarkerFile(Path.Combine(GlobalPrefs.ProjectFolder, "Music", lvwMusicFiles.SelectedItems[0].Text + ".mrk"));
+
+                    //Add marker names to list
+                    lstbx_JumpMakers.Items.Clear();
+                    for (int i = 0; i < markerData.Length; i++)
+                    {
+                        if (!markerData[i].Name.Equals("*"))
+                        {
+                            lstbx_JumpMakers.Items.Add(markerData[i]);
+                        }
+                    }
+                    trackBar1.Value = (int)nudVolume.Value;
+                }
             }
         }
 

@@ -769,7 +769,7 @@ namespace sb_editor.Forms
             this.btn_musicApp.TabIndex = 7;
             this.btn_musicApp.Text = "Interactive Music App";
             this.btn_musicApp.UseVisualStyleBackColor = true;
-            this.btn_musicApp.Click += new System.EventHandler(this.btn_musicApp_Click);
+            this.btn_musicApp.Click += new System.EventHandler(this.Btn_musicApp_Click);
             // 
             // ConsoleApp
             // 

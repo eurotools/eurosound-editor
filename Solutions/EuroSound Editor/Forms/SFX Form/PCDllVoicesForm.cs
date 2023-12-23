@@ -66,14 +66,14 @@ namespace sb_editor.Forms
                             DataGridViewRow itemToModify = dataGridView1.Rows[i];
                             if (currentVoice != null)
                             {
-                                    SetItemState(itemToModify, currentVoice.Active, 1);
-                                    SetItemState(itemToModify, currentVoice.Played, 2);
-                                    SetItemState(itemToModify, currentVoice.Playing, 3);
-                                    SetItemState(itemToModify, currentVoice.Looping, 4);
-                                    SetItemState(itemToModify, currentVoice.Reverb, 5);
-                                    SetItemState(itemToModify, currentVoice.Stop_, 6);
-                                    SetItemState(itemToModify, currentVoice.Stopped, 7);
-                                    SetItemState(itemToModify, currentVoice.Locked, 8);
+                                SetItemState(itemToModify, currentVoice.Active, 1);
+                                SetItemState(itemToModify, currentVoice.Played, 2);
+                                SetItemState(itemToModify, currentVoice.Playing, 3);
+                                SetItemState(itemToModify, currentVoice.Looping, 4);
+                                SetItemState(itemToModify, currentVoice.Reverb, 5);
+                                SetItemState(itemToModify, currentVoice.Stop_, 6);
+                                SetItemState(itemToModify, currentVoice.Stopped, 7);
+                                SetItemState(itemToModify, currentVoice.Locked, 8);
                             }
                             else
                             {

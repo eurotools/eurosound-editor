@@ -2,14 +2,9 @@
 using sb_editor.Classes;
 using sb_editor.Objects;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Media;
-using System.Text;
 using System.Windows.Forms;
 using static ESUtils.Enumerations;
 
@@ -34,10 +29,14 @@ namespace sb_editor.Forms
         private void Form1_Load(object sender, EventArgs e)
         {
             //Add available SoundBanks
-            string[] dirFiles = Directory.GetFiles(Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks"), "*.txt", SearchOption.AllDirectories);
-            for (int i = 0; i < dirFiles.Length; i++)
+            string soundbanksPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks");
+            if (Directory.Exists(soundbanksPath))
             {
-                lstbAvailableSoundBanks.Items.Add(Path.GetFileNameWithoutExtension(dirFiles[i]));
+                string[] dirFiles = Directory.GetFiles(soundbanksPath, "*.txt", SearchOption.AllDirectories);
+                for (int i = 0; i < dirFiles.Length; i++)
+                {
+                    lstbAvailableSoundBanks.Items.Add(Path.GetFileNameWithoutExtension(dirFiles[i]));
+                }
             }
 
             //Load project properties
@@ -168,7 +167,7 @@ namespace sb_editor.Forms
                     //Set Samples
                     lstbSamples.BeginUpdate();
                     lstbSamples.Items.Clear();
-                    foreach(SfxSample sfxSample in sfxData.Samples)
+                    foreach (SfxSample sfxSample in sfxData.Samples)
                     {
                         lstbSamples.Items.Add(sfxSample.FilePath);
                     }
@@ -485,7 +484,7 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void btn_musicApp_Click(object sender, EventArgs e)
+        private void Btn_musicApp_Click(object sender, EventArgs e)
         {
             using (MusicApp musApp = new MusicApp())
             {
