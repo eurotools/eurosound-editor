@@ -55,15 +55,24 @@ namespace sb_editor.Forms
                     musicPlayer = new WaveOut();
                     wReader = new WaveFileReader(waveFile);
 
-                    //Cut audio to loop end
-                    byte[] pcmData = new byte[loopEnd];
-                    wReader.Read(pcmData, 0, pcmData.Length);
-                    wReader = new RawSourceWaveStream(new MemoryStream(pcmData), wReader.WaveFormat);
+                    //Check if is looped or not
+                    if (loopStart != 0 && loopEnd != 0)
+                    {
+                        //Cut audio to loop end
+                        byte[] pcmData = new byte[loopEnd];
+                        wReader.Read(pcmData, 0, pcmData.Length);
+                        wReader = new RawSourceWaveStream(new MemoryStream(pcmData), wReader.WaveFormat);
 
-                    //build object
-                    AudioLoop musicLooped = new AudioLoop(wReader, loopStart) { Position = startPos, EnableLooping = true };
-                    VolumeSampleProvider musicProvider = new VolumeSampleProvider(musicLooped.ToSampleProvider()) { Volume = trackBar1.Value / 100.0f };
-                    musicPlayer.Init(musicProvider);
+                        //Build provider
+                        AudioLoop musicLooped = new AudioLoop(wReader, loopStart) { Position = startPos, EnableLooping = true };
+                        VolumeSampleProvider musicProvider = new VolumeSampleProvider(musicLooped.ToSampleProvider()) { Volume = trackBar1.Value / 100.0f };
+                        musicPlayer.Init(musicProvider);
+                    }
+                    else
+                    {
+                        VolumeSampleProvider musicProvider = new VolumeSampleProvider(wReader.ToSampleProvider()) { Volume = trackBar1.Value / 100.0f };
+                        musicPlayer.Init(musicProvider);
+                    }
                     musicPlayer.Play();
                 }
             }
