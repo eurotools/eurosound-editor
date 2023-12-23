@@ -84,7 +84,7 @@ namespace PCAudioDLL.Audio_Player
             {
                 SonyAdpcm vagDecoder = new SonyAdpcm();
                 decodedData = vagDecoder.Decode(soundBank.sfxStoredData[sampleInfo.FileRef].EncodedData, ref soundBank.sfxStoredData[sampleInfo.FileRef].LoopStartOffset);
-                sampleData.OriginalLoopOffset /= 2;
+                sampleData.LoopStartOffset /= 2;
             }
             else if (outputPlatform.IndexOf("GC", StringComparison.OrdinalIgnoreCase) >= 0)
             {
@@ -103,7 +103,7 @@ namespace PCAudioDLL.Audio_Player
                 HashCode = hashcode,
                 PCMData = decodedData,
                 isLooped = sampleData.Flags == 1,
-                LoopStart = sampleData.OriginalLoopOffset,
+                LoopStart = sampleData.LoopStartOffset,
                 Frequency = audioMaths.SemitonesToFreq(sampleData.Frequency, audioMaths.GetEffectValue(sampleInfo.Pitch, sampleInfo.PitchOffset)),
                 Pitch = sampleInfo.Pitch,
                 RandomPitch = sampleInfo.PitchOffset,
