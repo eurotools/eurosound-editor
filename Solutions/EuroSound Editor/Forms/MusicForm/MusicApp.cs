@@ -9,7 +9,6 @@
 //-------------------------------------------------------------------------------------------------------------------------------
 // Music App
 //-------------------------------------------------------------------------------------------------------------------------------
-using PCAudioDLL;
 using sb_editor.Audio_Classes;
 using sb_editor.HashCodes;
 using sb_editor.Objects;
@@ -29,7 +28,6 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class MusicApp : Form
     {
-        private readonly PCAudio pcDll = new PCAudio();
         private readonly HashTables htFunctions = new HashTables();
         private ProjProperties projectSettings;
 
@@ -67,7 +65,11 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void MusicApp_FormClosing(object sender, FormClosingEventArgs e)
         {
-            pcDll.StopMusicPlayer();
+            if (musicPlayer != null)
+            {
+                musicPlayer.Stop();
+                musicPlayer.Dispose();
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -82,8 +84,17 @@ namespace sb_editor.Forms
                 string jumpMarkers = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESWork", lvwMusicFiles.SelectedItems[0].Text + ".jmp");
                 if (File.Exists(jumpMarkers))
                 {
+                    markerData = TextFiles.ReadMarkerFile(Path.Combine(GlobalPrefs.ProjectFolder, "Music", lvwMusicFiles.SelectedItems[0].Text + ".mrk"));
+
+                    //Add marker names to list
                     lstbx_JumpMakers.Items.Clear();
-                    lstbx_JumpMakers.Items.AddRange(TextFiles.ReadJumpHashCodes(jumpMarkers));
+                    for (int i = 0; i < markerData.Length; i++)
+                    {
+                        if (!markerData[i].Name.Equals("*"))
+                        {
+                            lstbx_JumpMakers.Items.Add(markerData[i]);
+                        }
+                    }
                     trackBar1.Value = (int)nudVolume.Value;
                 }
             }

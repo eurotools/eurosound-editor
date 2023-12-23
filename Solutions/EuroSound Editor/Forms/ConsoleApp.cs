@@ -2,14 +2,9 @@
 using sb_editor.Classes;
 using sb_editor.Objects;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Media;
-using System.Text;
 using System.Windows.Forms;
 
 namespace sb_editor.Forms
@@ -168,7 +163,7 @@ namespace sb_editor.Forms
                     //Set Samples
                     lstbSamples.BeginUpdate();
                     lstbSamples.Items.Clear();
-                    foreach(SfxSample sfxSample in sfxData.Samples)
+                    foreach (SfxSample sfxSample in sfxData.Samples)
                     {
                         lstbSamples.Items.Add(sfxSample.FilePath);
                     }

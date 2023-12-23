@@ -317,6 +317,7 @@ namespace sb_editor.Forms
             // 
             // lstbx_JumpMakers
             // 
+            this.lstbx_JumpMakers.DisplayMember = "Name";
             this.lstbx_JumpMakers.FormattingEnabled = true;
             this.lstbx_JumpMakers.Location = new System.Drawing.Point(6, 19);
             this.lstbx_JumpMakers.Name = "lstbx_JumpMakers";

@@ -177,7 +177,7 @@ namespace sb_editor
                 //Create text file
                 using (StreamWriter writer = new StreamWriter(File.Open(saveFileDialog.FileName, FileMode.Create, FileAccess.Write, FileShare.Read), Encoding.UTF8))
                 {
-                    for(int i = 0; i < lstSFXs.Items.Count; i++)
+                    for (int i = 0; i < lstSFXs.Items.Count; i++)
                     {
                         writer.WriteLine(lstSFXs.Items[i]);
                     }

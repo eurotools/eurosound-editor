@@ -9,13 +9,12 @@
 //-------------------------------------------------------------------------------------------------------------------------------
 // Music Tester APP
 //-------------------------------------------------------------------------------------------------------------------------------
-using ESUtils;
-using ExMarkers;
+using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
+using PCAudioDLL.Audio_Player;
+using sb_editor.Objects;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace sb_editor.Forms
@@ -25,82 +24,139 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class MusicApp : Form
     {
+        private WaveOut musicPlayer = new WaveOut();
+        private MarkerTextFile[] markerData;
+        private WaveStream wReader;
+
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnRunTarget_Click(object sender, EventArgs e)
         {
-            //Get target
-            string outputPlatform = cboOutputFormat.SelectedItem.ToString();
-            if (outputPlatform.Equals("X Box", StringComparison.OrdinalIgnoreCase))
-            {
-                outputPlatform = "Xbox";
-            }
 
-            //Start reading
-            if (outputPlatform.Equals("ALL", StringComparison.OrdinalIgnoreCase))
-            {
-                MessageBox.Show("Select a valid output target.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-            else
-            {
-                string outputFolder = CommonFunctions.GetSoundbankOutPath(projectSettings, outputPlatform, string.Empty, true);
-                string fileName = string.Format("HCE{0:X5}.SFX", int.Parse(lvwMusicFiles.SelectedItems[0].SubItems[3].Text));
-                string outputPath = Path.Combine(outputFolder, fileName);
-
-                if (File.Exists(outputPath))
-                {
-                    pcDll.LoadMusicBank(outputPath, outputPlatform);
-                }
-                else
-                {
-                    MessageBox.Show(string.Format("Music File Not Found {0}", outputPath), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnPlay_Click(object sender, EventArgs e)
         {
-            pcDll.PlayMusicBank();
+            if (musicPlayer.PlaybackState == PlaybackState.Paused)
+            {
+                musicPlayer.Play();
+            }
+            else if (musicPlayer.PlaybackState == PlaybackState.Stopped)
+            {
+                string waveFile = Path.Combine(GlobalPrefs.ProjectFolder, "Music", lvwMusicFiles.SelectedItems[0].Text + ".wav");
+
+                if (File.Exists(waveFile))
+                {
+                    int startPos = GetStartPosition(markerData) * 4;
+                    int loopStart = GetStartLoopPos(markerData) * 4;
+                    int loopEnd = GetEndLoopPos(markerData) * 4;
+
+                    //Read data
+                    musicPlayer = new WaveOut();
+                    wReader = new WaveFileReader(waveFile);
+
+                    //Cut audio to loop end
+                    byte[] pcmData = new byte[loopEnd];
+                    wReader.Read(pcmData, 0, pcmData.Length);
+                    wReader = new RawSourceWaveStream(new MemoryStream(pcmData), wReader.WaveFormat);
+
+                    //build object
+                    AudioLoop musicLooped = new AudioLoop(wReader, loopStart) { Position = startPos, EnableLooping = true };
+                    VolumeSampleProvider musicProvider = new VolumeSampleProvider(musicLooped.ToSampleProvider()) { Volume = trackBar1.Value / 100.0f };
+                    musicPlayer.Init(musicProvider);
+                    musicPlayer.Play();
+                }
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnStop_Click(object sender, EventArgs e)
         {
-            pcDll.StopMusicPlayer();
+            if (musicPlayer != null)
+            {
+                musicPlayer.Stop();
+                musicPlayer.Dispose();
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnPause_Click(object sender, EventArgs e)
         {
-            pcDll.PauseMusicPlayer();
+            if (musicPlayer != null)
+            {
+                musicPlayer.Pause();
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnJump_Click(object sender, EventArgs e)
         {
-            MarkerFilesFunctions mkFunctions = new MarkerFilesFunctions();
-
-            //Get marker files path
-            string jumpMarkersFile = Path.Combine(GlobalPrefs.ProjectFolder, "Music", lvwMusicFiles.SelectedItems[0].Text + ".mrk");
-            if (File.Exists(jumpMarkersFile))
+            if (musicPlayer != null && musicPlayer.PlaybackState == PlaybackState.Playing)
             {
-                //Read file data
-                List<MarkerInfo> markersData = mkFunctions.LoadTextMarkerFile(jumpMarkersFile, null, null, true);
-
-                //Calculate pos
-                decimal position = CalculusLoopOffset.RuleOfThreeLoopOffset(44100, 32000, (int)markersData[lstbx_JumpMakers.SelectedIndex].Position);
-
-                //Call DLL
-                int freq = 32000;
-                string outputPlatform = cboOutputFormat.SelectedItem.ToString();
-                if (outputPlatform.Equals("X box", StringComparison.OrdinalIgnoreCase))
-                {
-                    position = (decimal)(markersData[lstbx_JumpMakers.SelectedIndex].Position / 0.98888887);
-                    freq = 44100;
-                }
-
-                pcDll.JumpToMarker((uint)position, freq);
+                int samples = markerData[lstbx_JumpMakers.SelectedIndex].Position;
+                TimeSpan streamPos = TimeSpan.FromMilliseconds((double)decimal.Divide(samples, (wReader.WaveFormat.SampleRate / 1000)));
+                wReader.CurrentTime = streamPos;
             }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        internal int GetStartLoopPos(MarkerTextFile[] startMarkers)
+        {
+            int startPosition = 0;
+            for (int i = 0; i < startMarkers.Length; i++)
+            {
+                if (startMarkers[i].Type == 6)
+                {
+                    startPosition = startMarkers[i].Position;
+                    break;
+                }
+                if (startMarkers[i].Type == 7)
+                {
+                    string nameMarker = startMarkers[i].Name.Replace("GOTO_", "");
+                    for (int j = 0; j < startMarkers.Length; j++)
+                    {
+                        if (startMarkers[j].Name.Equals(nameMarker))
+                        {
+                            startPosition = startMarkers[j].Position;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return startPosition;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        internal int GetEndLoopPos(MarkerTextFile[] startMarkers)
+        {
+            int startPosition = 0;
+            for (int i = 0; i < startMarkers.Length; i++)
+            {
+                if (startMarkers[i].Type == 7 || startMarkers[i].Type == 6)
+                {
+                    startPosition = startMarkers[i].Position;
+                    break;
+                }
+            }
+
+            return startPosition;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        internal int GetStartPosition(MarkerTextFile[] startMarkers)
+        {
+            int startPosition = 0;
+            for (int i = 0; i < startMarkers.Length; i++)
+            {
+                if (startMarkers[i].Type == 10)
+                {
+                    startPosition = startMarkers[i].Position;
+                    break;
+                }
+            }
+
+            return startPosition;
         }
     }
 

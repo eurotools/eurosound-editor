@@ -62,7 +62,7 @@ namespace PCAudioDLL.Audio_Player
         internal IWaveProvider PlayAudioSample(RawSourceWaveStream waveStream, ExAudioSample audioSample, float panning)
         {
             //Set wave data
-            AudioLoop loop = new AudioLoop(waveStream, audioSample.LoopStart, audioSample.isLooped) { Position = audioSample.StartPos };
+            AudioLoop loop = new AudioLoop(waveStream, audioSample.LoopStart) { Position = audioSample.StartPos, EnableLooping = audioSample.isLooped };
             PanningSampleProvider panProvider = new PanningSampleProvider(loop.ToSampleProvider()) { Pan = panning };
             VolumeSampleProvider volumeProvider = new VolumeSampleProvider(panProvider) { Volume = audioMaths.GetEffectValue(audioSample.Volume, audioSample.RandomVolume) / 100.0f };
 
@@ -175,9 +175,9 @@ namespace PCAudioDLL.Audio_Player
             }
 
             providerLeft = new RawSourceWaveStream(new MemoryStream(_pcmData[0]), new WaveFormat(_soundToPlay.sampleRate, 16, 1));
-            AudioLoop loopLeft = new AudioLoop(providerLeft, _soundToPlay.loopStartPoint * 4, _soundToPlay.isLooped) { Position = _soundToPlay.startPos };
+            AudioLoop loopLeft = new AudioLoop(providerLeft, _soundToPlay.loopStartPoint * 4) { Position = _soundToPlay.startPos, EnableLooping = _soundToPlay.isLooped };
             providerRight = new RawSourceWaveStream(new MemoryStream(_pcmData[1]), new WaveFormat(_soundToPlay.sampleRate, 16, 1));
-            AudioLoop loopRight = new AudioLoop(providerRight, _soundToPlay.loopStartPoint * 4, _soundToPlay.isLooped) { Position = _soundToPlay.startPos };
+            AudioLoop loopRight = new AudioLoop(providerRight, _soundToPlay.loopStartPoint * 4) { Position = _soundToPlay.startPos, EnableLooping = _soundToPlay.isLooped };
             MultiplexingWaveProvider waveProvider = new MultiplexingWaveProvider(new IWaveProvider[] { loopLeft, loopRight }, 2);
             VolumeSampleProvider volumeProvider = new VolumeSampleProvider(waveProvider.ToSampleProvider()) { Volume =  _soundToPlay.volume };
 
