@@ -12,8 +12,6 @@
 using sb_editor.Audio_Classes;
 using System;
 using System.IO;
-using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
 
 namespace sb_editor.Forms

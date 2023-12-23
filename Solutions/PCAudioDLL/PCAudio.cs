@@ -13,7 +13,10 @@ using MusX;
 using MusX.Objects;
 using MusX.Readers;
 using NAudio.Wave;
+using PCAudioDLL.Audio_Player;
+using PCAudioDLL.Codecs;
 using PCAudioDLL.MusX_Objects;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -26,9 +29,10 @@ namespace PCAudioDLL
     //-------------------------------------------------------------------------------------------------------------------------------
     public class PCAudio
     {
-        public readonly AudioVoices audioVoices = new AudioVoices();
+        //Sb Data
         private readonly List<StreamSample> streamedFile = new List<StreamSample>();
         private string sbOutputPlatform;
+        public readonly AudioVoices audioVoices = new AudioVoices();
         internal Dictionary<uint, SoundBank> LoadedSoundBanks = new Dictionary<uint, SoundBank>();
 
         //-------------------------------------------------------------------------------------------------------------------------------

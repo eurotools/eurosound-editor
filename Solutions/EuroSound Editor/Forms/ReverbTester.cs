@@ -10,7 +10,6 @@
 // SFXs Reverb Tester
 //-------------------------------------------------------------------------------------------------------------------------------
 using ESUtils;
-using PCAudioDLL;
 using sb_editor.Objects;
 using System;
 using System.IO;
@@ -315,12 +314,12 @@ namespace sb_editor.Forms
             string filePath = Path.Combine(outputFilePath, fileName);
             if (File.Exists(filePath))
             {
-               /* if (PCAudioDll.IsSoundBankLoaded(0xFFFE))
-                {
-                    PCAudioDll.UnloadSoundbank();
-                }
-                PCAudioDll.LoadSoundBank(filePath);
-                PCAudioDll.PlaySfx(0, cutoff_frequency);*/
+                /* if (PCAudioDll.IsSoundBankLoaded(0xFFFE))
+                 {
+                     PCAudioDll.UnloadSoundbank();
+                 }
+                 PCAudioDll.LoadSoundBank(filePath);
+                 PCAudioDll.PlaySfx(0, cutoff_frequency);*/
             }
         }
 
