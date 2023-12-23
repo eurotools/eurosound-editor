@@ -29,7 +29,7 @@ namespace PCAudioDLL
         private readonly AudioMixer audioPlayer = new AudioMixer();
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void PlaySingleSfx(string sbPlatform, List<StreamSample> streamedFile, Sample sfxSample, SoundBank soundBank, AudioVoices pcVoices, float[] audioPosition = null, bool enablePanning = false, int fixedVolume = -1)
+        internal void PlaySingleSfx(string sbPlatform, List<StreamSample> streamedFile, Sample sfxSample, SoundBank soundBank, AudioVoices pcVoices, bool TestingMode, float[] audioPosition = null, bool enablePanning = false, int fixedVolume = -1)
         {
             pcVoices.ExitSound = false;
             bool LoopFlag = ((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Loop) & 1) == 1;
@@ -62,7 +62,7 @@ namespace PCAudioDLL
                         ExAudioSample sampleAudio = null;
                         if (sampleInfo.FileRef >= 0)
                         {
-                            sampleAudio = audioPlayer.GetAudioSample(sbPlatform, soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo);
+                            sampleAudio = audioPlayer.GetAudioSample(sbPlatform, soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo, TestingMode);
                         }
                         else
                         {
@@ -105,7 +105,7 @@ namespace PCAudioDLL
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void PlayShuffledSfx(string sbPlatform, List<StreamSample> streamedFile, Sample sfxSample, SoundBank soundBank, AudioVoices pcVoices, float[] audioPosition = null, bool enablePanning = false, int fixedVolume = -1)
+        internal void PlayShuffledSfx(string sbPlatform, List<StreamSample> streamedFile, Sample sfxSample, SoundBank soundBank, AudioVoices pcVoices, bool TestingMode, float[] audioPosition = null, bool enablePanning = false, int fixedVolume = -1)
         {
             pcVoices.ExitSound = false;
             bool LoopFlag = ((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Loop) & 1) == 1;
@@ -149,7 +149,7 @@ namespace PCAudioDLL
                             ExAudioSample sampleAudio = null;
                             if (sampleInfo.FileRef >= 0)
                             {
-                                sampleAudio = audioPlayer.GetAudioSample(sbPlatform, soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo);
+                                sampleAudio = audioPlayer.GetAudioSample(sbPlatform, soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo, TestingMode);
                             }
                             else
                             {
@@ -193,7 +193,7 @@ namespace PCAudioDLL
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void PlayPolyphonicSfx(string sbPlatform, List<StreamSample> streamedFile, Sample sfxSample, SoundBank soundBank, AudioVoices pcVoices, float[] audioPosition = null, bool enablePanning = false, int fixedVolume = -1)
+        internal void PlayPolyphonicSfx(string sbPlatform, List<StreamSample> streamedFile, Sample sfxSample, SoundBank soundBank, AudioVoices pcVoices, bool TestingMode, float[] audioPosition = null, bool enablePanning = false, int fixedVolume = -1)
         {
             pcVoices.ExitSound = false;
             bool LoopFlag = ((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Loop) & 1) == 1;
@@ -239,7 +239,7 @@ namespace PCAudioDLL
                             ExAudioSample sampleAudio = null;
                             if (sampleInfo.FileRef >= 0)
                             {
-                                sampleAudio = audioPlayer.GetAudioSample(sbPlatform, soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo);
+                                sampleAudio = audioPlayer.GetAudioSample(sbPlatform, soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo, TestingMode);
                             }
                             else
                             {
