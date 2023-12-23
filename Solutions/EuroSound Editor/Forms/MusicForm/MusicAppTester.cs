@@ -133,7 +133,7 @@ namespace sb_editor.Forms
             int startPosition = 0;
             for (int i = 0; i < startMarkers.Length; i++)
             {
-                if (startMarkers[i].Type == 7 || startMarkers[i].Type == 6)
+                if (startMarkers[i].Type == 7 || startMarkers[i].Name.ToLower().Contains("loopend"))
                 {
                     startPosition = startMarkers[i].Position;
                     break;
