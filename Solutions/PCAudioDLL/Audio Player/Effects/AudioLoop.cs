@@ -16,21 +16,18 @@ namespace PCAudioDLL.Audio_Player
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
-    internal class AudioLoop : WaveStream
+    public class AudioLoop : WaveStream
     {
         private readonly int _start;
         private readonly WaveStream sourceStream;
+        public bool EnableLooping { get; set; }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public AudioLoop(WaveStream sourceStream, long start, bool enableLooping)
+        public AudioLoop(WaveStream sourceStream, long start)
         {
             this.sourceStream = sourceStream;
-            this.EnableLooping = enableLooping;
             _start = (int)(start & -2);
         }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        public bool EnableLooping { get; set; }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         public override WaveFormat WaveFormat
