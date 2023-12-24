@@ -38,26 +38,61 @@ namespace ExMarkers
                 long startMarkersOffset = BWriter.BaseStream.Position;
                 for (int i = 0; i < MarkersData.Length; i++)
                 {
-                    startMarkersCount++;
-                    BWriter.Write(BytesFunctions.FlipInt32(i, isBigEndian)); //Name
-                    BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[i].Position, isBigEndian)); //Position
-                    BWriter.Write(BytesFunctions.FlipInt32((int)EXMarkerType.Start, isBigEndian)); //Type
-                    BWriter.Write(BytesFunctions.FlipInt32(MarkersData[i].Flags, isBigEndian)); //Flags
-                    BWriter.Write(BytesFunctions.FlipInt32(MarkersData[i].Extra, isBigEndian)); //Extra
-                    BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Loop Start
-                    BWriter.Write(BytesFunctions.FlipInt32(i, isBigEndian)); //Marker Count
-                    BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Loop Marker Count
-                    BWriter.Write(BytesFunctions.FlipInt32(MarkerPosition, isBigEndian)); //Marker Position
-                    BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Is Instant
-                    BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Instant Buffer
-                    BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[i].ImaStateA, isBigEndian)); //State A
-                    BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[i].ImaStateB, isBigEndian)); //State B
-
-                    //Update counter var
-                    MarkerPosition++;
-                    if (MarkersData[i].Type == (int)EXMarkerType.Loop)
+                    if (MarkersData[i].Type == (int)EXMarkerType.End)
                     {
+                        break;
+                    }
+                    else
+                    {
+                        startMarkersCount++;
+                        BWriter.Write(BytesFunctions.FlipInt32(i, isBigEndian)); //Name
+                        BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[i].Position, isBigEndian)); //Position
+                        if (MarkersData[i].Type == (int)EXMarkerType.Goto)
+                        {
+                            BWriter.Write(BytesFunctions.FlipInt32((int)EXMarkerType.Goto, isBigEndian)); //Type
+                        }
+                        else
+                        {
+                            BWriter.Write(BytesFunctions.FlipInt32((int)EXMarkerType.Start, isBigEndian)); //Type
+                        }
+                        BWriter.Write(BytesFunctions.FlipInt32(MarkersData[i].Flags, isBigEndian)); //Flags
+                        BWriter.Write(BytesFunctions.FlipInt32(MarkersData[i].Extra, isBigEndian)); //Extra
+                        if (MarkersData[i].Type == (int)EXMarkerType.Goto)
+                        {
+                            for (int j = 0; j < MarkersData.Length; j++)
+                            {
+                                if (MarkersData[j].Name.Equals(MarkersData[i].Name.Replace("GOTO_", ""), System.StringComparison.OrdinalIgnoreCase))
+                                {
+                                    BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[j].Position, isBigEndian)); //Loop Start
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Loop Start
+                        }
+                        BWriter.Write(BytesFunctions.FlipInt32(i, isBigEndian)); //Marker Count
+                        if (MarkersData[i].Type == (int)EXMarkerType.Goto)
+                        {
+                            BWriter.Write(BytesFunctions.FlipInt32(1, isBigEndian)); //Loop Marker Count
+                        }
+                        else
+                        {
+                            BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Loop Marker Count
+                        }
+                        BWriter.Write(BytesFunctions.FlipInt32(MarkerPosition, isBigEndian)); //Marker Position
+                        BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Is Instant
+                        BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Instant Buffer
+                        BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[i].ImaStateA, isBigEndian)); //State A
+                        BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[i].ImaStateB, isBigEndian)); //State B
+
+                        //Update counter var
                         MarkerPosition++;
+                        if (MarkersData[i].Type == (int)EXMarkerType.Loop)
+                        {
+                            MarkerPosition++;
+                        }
                     }
                 }
 
@@ -108,7 +143,14 @@ namespace ExMarkers
                         BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Loop Start
                     }
                     BWriter.Write(BytesFunctions.FlipInt32(i, isBigEndian)); //Marker Count
-                    BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Loop Marker Count
+                    if (MarkersData[i].Type == (int)EXMarkerType.Goto)
+                    {
+                        BWriter.Write(BytesFunctions.FlipInt32(1, isBigEndian)); //Loop Marker Count
+                    }
+                    else
+                    {
+                        BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Loop Marker Count
+                    }
 
                     //Add extra marker
                     if (MarkersData[i].Type == (int)EXMarkerType.Loop)
