@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
+using static ExMarkers.Enumerations;
 
 namespace ExMarkers
 {
@@ -11,138 +13,239 @@ namespace ExMarkers
     public class StreamMarkerFiles
     {
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void CreateMarkerBinFile(string smdFilePath, string markerFilePath, string outputFilePath, string outputPlatform)
+        public void BuildBinaryFile(MarkerTextFile[] MarkersData, uint baseVolume, string outputFilePath, bool isBigEndian)
         {
-            //List to store the text file markers
-            List<EXStartMarker> startMarkersList = new List<EXStartMarker>();
-            List<EXMarker> markersList = new List<EXMarker>();
-            MarkerFilesFunctions streamMarkersFunctions = new MarkerFilesFunctions();
-
-            //Read Markers File
-            streamMarkersFunctions.LoadTextMarkerFile(markerFilePath, startMarkersList, markersList);
-
-            //Calculate states -- PC & GameCube Platform
-            if (outputPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("GameCube", StringComparison.OrdinalIgnoreCase))
+            //Write binary file
+            using (BinaryWriter BWriter = new BinaryWriter(File.Open(outputFilePath, FileMode.Create, FileAccess.ReadWrite), Encoding.ASCII))
             {
-                //Update Markers states
-                foreach (EXMarker marker in markersList)
+                //Start marker count
+                BWriter.Write(0);
+                //Marker count
+                BWriter.Write(0);
+                //Start marker offset
+                BWriter.Write(0);
+                //Marker offset
+                BWriter.Write(0);
+                //Base volume
+                BWriter.Write(BytesFunctions.FlipUInt32(baseVolume, isBigEndian));
+
+                //Local vars
+                int startMarkersCount = 0;
+                int markersCount = 0;
+
+                //Start Markers Data
+                int MarkerPosition = 0;
+                long startMarkersOffset = BWriter.BaseStream.Position;
+                for (int i = 0; i < MarkersData.Length; i++)
                 {
-                    if (marker.Position > 0)
+                    BWriter.Write(BytesFunctions.FlipInt32(i, isBigEndian)); //Name
+                    BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[i].Position, isBigEndian)); //Position
+                    BWriter.Write(BytesFunctions.FlipInt32((int)EXMarkerType.Start, isBigEndian)); //Type
+                    BWriter.Write(BytesFunctions.FlipInt32(MarkersData[i].Flags, isBigEndian)); //Flags
+                    BWriter.Write(BytesFunctions.FlipInt32(MarkersData[i].Extra, isBigEndian)); //Extra
+                    BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Loop Start
+                    BWriter.Write(BytesFunctions.FlipInt32(i, isBigEndian)); //Marker Count
+                    BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Loop Marker Count
+                    BWriter.Write(BytesFunctions.FlipInt32(MarkerPosition, isBigEndian)); //Marker Position
+                    BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Is Instant
+                    BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Instant Buffer
+                    BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[i].ImaStateA, isBigEndian)); //State A
+                    BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[i].ImaStateB, isBigEndian)); //State B
+
+                    //Update counter var
+                    startMarkersCount = i;
+                    MarkerPosition++;
+                    if (MarkersData[i].Type == (int)EXMarkerType.Loop)
                     {
-                        foreach (EXStartMarker startMarker in startMarkersList)
+                        MarkerPosition++;
+                    }
+                }
+
+                //Markers Data
+                long markersOffset = BWriter.BaseStream.Position;
+                for (int i = 0; i < MarkersData.Length; i++)
+                {
+                    markersCount++;
+                    if (MarkersData[i].Type == (int)EXMarkerType.End)
+                    {
+                        if (MarkersData[i].Name.Equals("*"))
                         {
-                            if (startMarker.Index == marker.MarkerCount)
+                            BWriter.Write(BytesFunctions.FlipInt32(i - 1, isBigEndian)); //Name
+                        }
+                        else
+                        {
+                            BWriter.Write(BytesFunctions.FlipInt32(-1, isBigEndian)); //Name
+                        }
+                    }
+                    else
+                    {
+                        BWriter.Write(BytesFunctions.FlipInt32(i, isBigEndian)); //Name
+                    }
+                    BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[i].Position, isBigEndian)); //Position
+                    if (MarkersData[i].Type == (int)EXMarkerType.Loop)
+                    {
+                        BWriter.Write(BytesFunctions.FlipInt32(10, isBigEndian)); //Type
+                    }
+                    else
+                    {
+                        BWriter.Write(BytesFunctions.FlipInt32(MarkersData[i].Type, isBigEndian)); //Type
+                    }
+                    BWriter.Write(BytesFunctions.FlipInt32(MarkersData[i].Flags, isBigEndian)); //Flags
+                    BWriter.Write(BytesFunctions.FlipInt32(MarkersData[i].Extra, isBigEndian)); //Extra
+                    if (MarkersData[i].Type == (int)EXMarkerType.Goto)
+                    {
+                        for (int j = 0; j < MarkersData.Length; j++)
+                        {
+                            if (MarkersData[j].Name.Equals(MarkersData[i].Name.Replace("GOTO_", ""), System.StringComparison.OrdinalIgnoreCase))
                             {
-                                uint state = 0;
-                                using (BinaryReader breader = new BinaryReader(File.Open(smdFilePath, FileMode.Open, FileAccess.Read, FileShare.Read)))
-                                {
-                                    long offset = (marker.Position / 256) * 256;
-                                    if (offset <= breader.BaseStream.Length)
-                                    {
-                                        breader.BaseStream.Seek(offset, SeekOrigin.Begin);
-                                        state = breader.ReadUInt32();
-                                    }
-                                    startMarker.State[0] = state;
-                                    startMarker.State[1] = state;
-                                }
+                                BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[j].Position, isBigEndian)); //Loop Start
                                 break;
                             }
                         }
                     }
+                    else
+                    {
+                        BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Loop Start
+                    }
+                    BWriter.Write(BytesFunctions.FlipInt32(i, isBigEndian)); //Marker Count
+                    BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Loop Marker Count
+
+                    //Add extra marker
+                    if (MarkersData[i].Type == (int)EXMarkerType.Loop)
+                    {
+                        markersCount++;
+                        BWriter.Write(BytesFunctions.FlipInt32(i, isBigEndian)); //Name
+                        BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[i + 1].Position, isBigEndian)); //Position
+                        BWriter.Write(BytesFunctions.FlipInt32(MarkersData[i].Type, isBigEndian)); //Type
+                        BWriter.Write(BytesFunctions.FlipInt32(MarkersData[i].Flags, isBigEndian)); //Flags
+                        BWriter.Write(BytesFunctions.FlipInt32(MarkersData[i].Extra, isBigEndian)); //Extra
+                        BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[i].Position, isBigEndian)); //Loop Start
+                        BWriter.Write(BytesFunctions.FlipInt32(i + 1, isBigEndian)); //Marker Count
+                        BWriter.Write(BytesFunctions.FlipInt32(1, isBigEndian)); //Loop Marker Count
+                    }
                 }
 
-                //Start markers
-                foreach (EXStartMarker startMarker in startMarkersList)
-                {
-                    //Calculate VAG offsets
-                    if (startMarker.Position > 0)
-                    {
-                        startMarker.Position = CalculusLoopOffset.GetStreamLoopOffsetPCandGC(startMarker.Position);
-                    }
-                    if (startMarker.LoopStart > 0)
-                    {
-                        startMarker.LoopStart = CalculusLoopOffset.GetStreamLoopOffsetPCandGC(startMarker.LoopStart);
-                    }
-                }
+                //Write start offsets
+                BWriter.BaseStream.Seek(0, SeekOrigin.Begin);
+                BWriter.Write(BytesFunctions.FlipUInt32((uint)startMarkersCount, isBigEndian));
+                BWriter.Write(BytesFunctions.FlipUInt32((uint)markersCount, isBigEndian));
+                BWriter.Write(BytesFunctions.FlipUInt32((uint)startMarkersOffset, isBigEndian));
+                BWriter.Write(BytesFunctions.FlipUInt32((uint)markersOffset, isBigEndian));
 
-                //Markers
-                foreach (EXMarker marker in markersList)
-                {
-                    if (marker.Position > 0)
-                    {
-                        marker.Position = CalculusLoopOffset.GetStreamLoopOffsetPCandGC(marker.Position);
-                    }
-                    if (marker.LoopStart > 0)
-                    {
-                        marker.LoopStart = CalculusLoopOffset.GetStreamLoopOffsetPCandGC(marker.LoopStart);
-                    }
-                }
+                //Close file
+                BWriter.Close();
             }
+        }
 
-            //Update Positions PS2 Platform
-            if (outputPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase))
+        //-------------------------------------------------------------------------------------------------------------------------------
+        public void BuildNewBinaryFile(MarkerTextFile[] MarkersData, uint baseVolume, string outputFilePath, bool isBigEndian)
+        {
+            using (BinaryWriter BWriter = new BinaryWriter(File.Open(outputFilePath, FileMode.Create, FileAccess.ReadWrite), Encoding.ASCII))
             {
-                //Start markers
-                foreach (EXStartMarker startMarker in startMarkersList)
+                //Start marker count
+                BWriter.Write(0);
+                //Marker count
+                BWriter.Write(0);
+                //Start marker offset
+                BWriter.Write(0);
+                //Marker offset
+                BWriter.Write(0);
+                //Base volume
+                BWriter.Write(BytesFunctions.FlipUInt32(baseVolume, isBigEndian));
+
+                //Local vars
+                int startMarkersCount = 0;
+                int markersCount = 0;
+
+                //Start Markers Data
+                int MarkerPosition = 0;
+                long startMarkersOffset = BWriter.BaseStream.Position;
+                for (int i = 0; i < MarkersData.Length; i++)
                 {
-                    //Calculate VAG offsets
-                    if (startMarker.Position > 0)
+                    BWriter.Write(BytesFunctions.FlipInt32(i, isBigEndian)); //Name
+                    BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[i].Position, isBigEndian)); //Position
+                    BWriter.Write(BytesFunctions.FlipInt32((int)EXMarkerType.Start, isBigEndian)); //Type
+                    BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Loop Start
+                    BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Loop Marker Count
+                    BWriter.Write(BytesFunctions.FlipInt32(MarkerPosition, isBigEndian)); //Marker Position
+
+                    //Update counter var
+                    startMarkersCount = i;
+                    MarkerPosition++;
+                    if (MarkersData[i].Type == (int)EXMarkerType.Loop)
                     {
-                        startMarker.Position = CalculusLoopOffset.GetStreamLoopOffsetPlayStation2(startMarker.Position);
-                    }
-                    if (startMarker.LoopStart > 0)
-                    {
-                        startMarker.LoopStart = CalculusLoopOffset.GetStreamLoopOffsetPlayStation2(startMarker.LoopStart);
+                        MarkerPosition++;
                     }
                 }
 
-                //Markers
-                foreach (EXMarker marker in markersList)
+                //Markers Data
+                long markersOffset = BWriter.BaseStream.Position;
+                for (int i = 0; i < MarkersData.Length; i++)
                 {
-                    if (marker.Position > 0)
+                    markersCount++;
+                    if (MarkersData[i].Type == (int)EXMarkerType.End)
                     {
-                        marker.Position = CalculusLoopOffset.GetStreamLoopOffsetPlayStation2(marker.Position);
+                        if (MarkersData[i].Name.Equals("*"))
+                        {
+                            BWriter.Write(BytesFunctions.FlipInt32(i - 1, isBigEndian)); //Name
+                        }
+                        else
+                        {
+                            BWriter.Write(BytesFunctions.FlipInt32(-1, isBigEndian)); //Name
+                        }
                     }
-                    if (marker.LoopStart > 0)
+                    else
                     {
-                        marker.LoopStart = CalculusLoopOffset.GetStreamLoopOffsetPlayStation2(marker.LoopStart);
+                        BWriter.Write(BytesFunctions.FlipInt32(i, isBigEndian)); //Name
+                    }
+                    BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[i].Position, isBigEndian)); //Position
+                    if (MarkersData[i].Type == (int)EXMarkerType.Loop)
+                    {
+                        BWriter.Write(BytesFunctions.FlipInt32(10, isBigEndian)); //Type
+                    }
+                    else
+                    {
+                        BWriter.Write(BytesFunctions.FlipInt32(MarkersData[i].Type, isBigEndian)); //Type
+                    }
+                    if (MarkersData[i].Type == (int)EXMarkerType.Goto)
+                    {
+                        for (int j = 0; j < MarkersData.Length; j++)
+                        {
+                            if (MarkersData[j].Name.Equals(MarkersData[i].Name.Replace("GOTO_", ""), System.StringComparison.OrdinalIgnoreCase))
+                            {
+                                BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[j].Position, isBigEndian)); //Loop Start
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Loop Start
+                    }
+                    BWriter.Write(BytesFunctions.FlipInt32(0, isBigEndian)); //Loop Marker Count
+
+                    //Add extra marker
+                    if (MarkersData[i].Type == (int)EXMarkerType.Loop)
+                    {
+                        markersCount++;
+                        BWriter.Write(BytesFunctions.FlipInt32(i, isBigEndian)); //Name
+                        BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[i + 1].Position, isBigEndian)); //Position
+                        BWriter.Write(BytesFunctions.FlipInt32(MarkersData[i].Type, isBigEndian)); //Type
+                        BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[i].Position, isBigEndian)); //Loop Start
+                        BWriter.Write(BytesFunctions.FlipInt32(1, isBigEndian)); //Loop Marker Count
                     }
                 }
+
+                //Write start offsets
+                BWriter.BaseStream.Seek(0, SeekOrigin.Begin);
+                BWriter.Write(BytesFunctions.FlipUInt32((uint)startMarkersCount, isBigEndian));
+                BWriter.Write(BytesFunctions.FlipUInt32((uint)markersCount, isBigEndian));
+                BWriter.Write(BytesFunctions.FlipUInt32((uint)startMarkersOffset, isBigEndian));
+                BWriter.Write(BytesFunctions.FlipUInt32((uint)markersOffset, isBigEndian));
+
+                //Close file
+                BWriter.Close();
             }
-
-            //Update positions for Xbox
-            if (outputPlatform.Equals("Xbox", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("X Box", StringComparison.OrdinalIgnoreCase))
-            {
-                //Start markers
-                foreach (EXStartMarker startMarker in startMarkersList)
-                {
-                    //Calculate VAG offsets
-                    if (startMarker.Position > 0)
-                    {
-                        startMarker.Position = CalculusLoopOffset.GetStreamLoopOffsetXbox(startMarker.Position);
-                    }
-                    if (startMarker.LoopStart > 0)
-                    {
-                        startMarker.LoopStart = CalculusLoopOffset.GetStreamLoopOffsetXbox(startMarker.LoopStart);
-                    }
-                }
-
-                //Markers
-                foreach (EXMarker marker in markersList)
-                {
-                    if (marker.Position > 0)
-                    {
-                        marker.Position = CalculusLoopOffset.GetStreamLoopOffsetXbox(marker.Position);
-                    }
-                    if (marker.LoopStart > 0)
-                    {
-                        marker.LoopStart = CalculusLoopOffset.GetStreamLoopOffsetXbox(marker.LoopStart);
-                    }
-                }
-            }
-
-            //Write Sound Marker File
-            streamMarkersFunctions.WriteBinaryMarkerFile(outputFilePath, startMarkersList, markersList, 100, outputPlatform.Equals("GameCube", StringComparison.OrdinalIgnoreCase));
         }
     }
 

@@ -68,7 +68,6 @@
     <Compile Include="Classes\ProjectFileFunctions.cs" />
     <Compile Include="Classes\SampleFiles.cs" />
     <Compile Include="Classes\TaskbarProgress.cs" />
-    <Compile Include="Classes\TextFiles\Objects\MarkerTextFile.cs" />
     <Compile Include="Classes\TextFiles\TextFiles_MarkersFile.cs" />
     <Compile Include="Forms\Advanced\Advanced_Report.cs">
       <SubType>Form</SubType>

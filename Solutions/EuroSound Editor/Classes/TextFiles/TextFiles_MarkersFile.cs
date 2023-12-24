@@ -1,4 +1,5 @@
-﻿using sb_editor.Objects;
+﻿using ExMarkers;
+using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -65,7 +66,7 @@ namespace sb_editor
                         markerData.Name = lineData[1].Trim();
                         break;
                     case "POS":
-                        markerData.Position = int.Parse(lineData[1].Trim());
+                        markerData.Position = uint.Parse(lineData[1].Trim());
                         break;
                     case "TYPE":
                         markerData.Type = int.Parse(lineData[1].Trim());

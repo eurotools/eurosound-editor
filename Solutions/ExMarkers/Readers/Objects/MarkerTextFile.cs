@@ -1,4 +1,4 @@
-﻿namespace sb_editor.Objects
+﻿namespace ExMarkers
 {
     //-------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------------
@@ -6,10 +6,12 @@
     public class MarkerTextFile
     {
         public string Name { get; set; }
-        public int Position;
+        public uint Position;
         public int Type;
         public int Flags;
         public int Extra;
+        public uint ImaStateA;
+        public uint ImaStateB;
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------
