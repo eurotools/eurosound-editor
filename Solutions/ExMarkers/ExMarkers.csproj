@@ -45,7 +45,6 @@
     <Compile Include="Readers\EXMarkersFunctions.cs" />
     <Compile Include="Readers\Objects\EXStartMarker.cs" />
     <Compile Include="Readers\MarkerFilesFunctions.cs" />
-    <Compile Include="MusicMarkerFiles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Readers\Objects\MarkerTextFile.cs" />
     <Compile Include="StreamMarkerFiles.cs" />

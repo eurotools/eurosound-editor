@@ -9,6 +9,7 @@
 //-------------------------------------------------------------------------------------------------------------------------------
 // Music SFXs Exporter
 //-------------------------------------------------------------------------------------------------------------------------------
+using ESUtils;
 using ExMarkers;
 using MusX.Writers;
 using sb_editor.Audio_Classes;
@@ -152,7 +153,7 @@ namespace sb_editor.Forms
             string SoxPath = Path.Combine(Application.StartupPath, "SystemFiles", "SOX.EXE");
 
             // Create objects for handling audio markers and various audio data formats
-            MusicMarkerFiles markerFiles = new MusicMarkerFiles();
+            StreamMarkerFiles streamMarkers = new StreamMarkerFiles();
             ImaFunctions imaClass = new ImaFunctions();
             WaveFunctions waveData = new WaveFunctions();
 
@@ -310,8 +311,12 @@ namespace sb_editor.Forms
                         backgroundWorker1.ReportProgress(0, string.Format("Making Marker File: {0}", filesQueue[i]));
                         musicFileData.MidiFileLastOutput = new FileInfo(markerFile).LastWriteTime.ToString("dd/MM/yyyy HH:mm:ss");
 
-                        // Create the marker file for the current output platform and save it to the output folder
-                        markerFiles.CreateMarkerFile(string.Empty, string.Empty, markerFile, musicFileData.Volume, outputPlatforms[j], soundMarkerFilePath);
+                        //Read Marker File
+                        MarkerTextFile[] markersData = TextFiles.ReadMarkerFile(markerFile);
+                        UpdateMarkerPositions(outputPlatforms[j], markersData, string.Empty, string.Empty);
+
+                        //Write Marker File
+                        streamMarkers.BuildBinaryFile(markersData, musicFileData.Volume, soundMarkerFilePath, outputPlatforms[j].Equals("GameCube"));
 
                         // Report progress after the marker file has been created
                         backgroundWorker1.ReportProgress(100, string.Format("Making Marker File: {0}", filesQueue[i]));
@@ -337,7 +342,7 @@ namespace sb_editor.Forms
 
                 //Save file changes
                 mfxList.Add(musicFileData.HashCode);
-                mfxList.Add(markerFiles.CreateJumpMarker(markerFile, Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESWork", filesQueue[i] + ".jmp")));
+                mfxList.Add(TextFiles.CreateJumpMarker(markerFile, Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESWork", filesQueue[i] + ".jmp")));
                 TextFiles.WriteMusicFile(musicFileData, Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", filesQueue[i] + ".txt"));
 
                 //Update UI
@@ -370,6 +375,102 @@ namespace sb_editor.Forms
                     else
                     {
                         sw.WriteLine(" {0} ", mfxList[i] - 1);
+                    }
+                }
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void UpdateMarkerPositions(string outputPlatform, MarkerTextFile[] markersList, string imaFileLeft, string imaFileRight)
+        {
+            //Calculate states -- PC & GameCube Platform
+            if (outputPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("GameCube", StringComparison.OrdinalIgnoreCase))
+            {
+                //Update positions Start Markers
+                foreach (MarkerTextFile marker in markersList)
+                {
+                    //Calculate offsets for IMA Adpcm
+                    if (marker.Position > 0)
+                    {
+                        marker.Position = CalculusLoopOffset.GetMusicLoopOffsetPCandGC(marker.Position);
+                    }
+                }
+
+
+                //Update STATES
+                if (File.Exists(imaFileLeft) && File.Exists(imaFileRight))
+                {
+                    List<string> stl = new List<string>();
+                    List<string> str = new List<string>();
+
+                    //Update Markers states
+                    foreach (MarkerTextFile marker in markersList)
+                    {
+                        if (marker.Position > 0)
+                        {
+
+                            uint state = 0;
+                            using (BinaryReader breader = new BinaryReader(File.Open(imaFileLeft, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                            {
+                                long offset = ((marker.Position / 256) * 256) / 2;
+                                if (offset <= breader.BaseStream.Length)
+                                {
+                                    breader.BaseStream.Seek(offset, SeekOrigin.Begin);
+                                    state = breader.ReadUInt32();
+                                }
+                                marker.ImaStateA = state;
+
+                                //Add items to list
+                                stl.Add(state.ToString());
+                                stl.Add(marker.Position.ToString());
+                            }
+                            using (BinaryReader breader = new BinaryReader(File.Open(imaFileRight, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                            {
+                                long offset = ((marker.Position / 256) * 256) / 2;
+                                if (offset <= breader.BaseStream.Length)
+                                {
+                                    breader.BaseStream.Seek(offset, SeekOrigin.Begin);
+                                    state = breader.ReadUInt32();
+                                }
+                                marker.ImaStateB = state;
+
+                                //Add items to list
+                                str.Add(state.ToString());
+                                str.Add(marker.Position.ToString());
+                            }
+                        }
+                    }
+
+                    //Write file
+                    File.WriteAllLines(Path.Combine(Path.ChangeExtension(imaFileLeft, ".str")), str);
+                    File.WriteAllLines(Path.Combine(Path.ChangeExtension(imaFileLeft, ".stl")), stl);
+                }
+            }
+
+            //Update Positions PS2 Platform
+            if (outputPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase))
+            {
+                //Start markers
+                foreach (MarkerTextFile marker in markersList)
+                {
+                    //Calculate VAG offsets
+                    if (marker.Position > 0)
+                    {
+                        marker.Position = CalculusLoopOffset.GetMusicLoopOffsetPlayStation2(marker.Position);
+                    }
+                }
+            }
+
+            //Update positions for Xbox
+            if (outputPlatform.Equals("Xbox", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("X Box", StringComparison.OrdinalIgnoreCase))
+            {
+                //Start markers
+                foreach (MarkerTextFile marker in markersList)
+                {
+                    //Calculate Xbox Adpcm offsets
+                    if (marker.Position > 0)
+                    {
+                        marker.Position = CalculusLoopOffset.GetMusicLoopOffsetXbox(marker.Position);
                     }
                 }
             }
