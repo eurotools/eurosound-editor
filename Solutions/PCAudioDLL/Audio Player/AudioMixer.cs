@@ -62,7 +62,7 @@ namespace PCAudioDLL.Audio_Player
         internal IWaveProvider PlayAudioSample(RawSourceWaveStream waveStream, ExAudioSample audioSample, float panning)
         {
             //Set wave data
-            AudioLoop loop = new AudioLoop(waveStream, audioSample.LoopStart) { Position = audioSample.StartPos, EnableLooping = audioSample.isLooped };
+            AudioLoop loop = new AudioLoop(waveStream, audioSample.LoopStart * 2) { Position = audioSample.StartPos, EnableLooping = audioSample.isLooped };
             PanningSampleProvider panProvider = new PanningSampleProvider(loop.ToSampleProvider()) { Pan = panning };
             VolumeSampleProvider volumeProvider = new VolumeSampleProvider(panProvider) { Volume = audioMaths.GetEffectValue(audioSample.Volume, audioSample.RandomVolume) / 100.0f };
 
