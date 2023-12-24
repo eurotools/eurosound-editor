@@ -176,65 +176,13 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void UpdateMarkerPositions(string outputPlatform, MarkerTextFile[] markersList, string smdFilePath)
         {
-            //Calculate states -- PC & GameCube Platform
-            if (outputPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("GameCube", StringComparison.OrdinalIgnoreCase))
+            //Start markers
+            foreach (MarkerTextFile marker in markersList)
             {
-                //Update Markers states
-                foreach (MarkerTextFile marker in markersList)
+                //Calculate VAG offsets
+                if (marker.Position > 0)
                 {
-                    if (marker.Position > 0)
-                    {
-                        uint state = 0;
-                        using (BinaryReader breader = new BinaryReader(File.Open(smdFilePath, FileMode.Open, FileAccess.Read, FileShare.Read)))
-                        {
-                            long offset = (marker.Position / 256) * 256;
-                            if (offset <= breader.BaseStream.Length)
-                            {
-                                breader.BaseStream.Seek(offset, SeekOrigin.Begin);
-                                state = breader.ReadUInt32();
-                            }
-                            marker.ImaStateA = state;
-                            marker.ImaStateB = state;
-                        }
-                    }
-                }
-
-                //Start markers
-                foreach (MarkerTextFile marker in markersList)
-                {
-                    //Calculate VAG offsets
-                    if (marker.Position > 0)
-                    {
-                        marker.Position = CalculusLoopOffset.GetStreamLoopOffsetPCandGC(marker.Position);
-                    }
-                }
-            }
-
-            //Update Positions PS2 Platform
-            if (outputPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase))
-            {
-                //Start markers
-                foreach (MarkerTextFile marker in markersList)
-                {
-                    //Calculate VAG offsets
-                    if (marker.Position > 0)
-                    {
-                        marker.Position = CalculusLoopOffset.GetStreamLoopOffsetPlayStation2(marker.Position);
-                    }
-                }
-            }
-
-            //Update positions for Xbox
-            if (outputPlatform.Equals("Xbox", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("X Box", StringComparison.OrdinalIgnoreCase))
-            {
-                //Start markers
-                foreach (MarkerTextFile marker in markersList)
-                {
-                    //Calculate VAG offsets
-                    if (marker.Position > 0)
-                    {
-                        marker.Position = CalculusLoopOffset.GetStreamLoopOffsetXbox(marker.Position);
-                    }
+                    marker.Position = CalculusLoopOffset.GetEurocomImaLoopOffset(marker.Position);
                 }
             }
         }
