@@ -62,7 +62,7 @@ namespace PCAudioDLL
                         ExAudioSample sampleAudio = null;
                         if (sampleInfo.FileRef >= 0)
                         {
-                            sampleAudio = audioPlayer.GetAudioSample(sbPlatform, soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo, TestingMode);
+                            sampleAudio = audioPlayer.GetAudioSample(sbPlatform, soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo);
                         }
                         else
                         {
@@ -149,7 +149,7 @@ namespace PCAudioDLL
                             ExAudioSample sampleAudio = null;
                             if (sampleInfo.FileRef >= 0)
                             {
-                                sampleAudio = audioPlayer.GetAudioSample(sbPlatform, soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo, TestingMode);
+                                sampleAudio = audioPlayer.GetAudioSample(sbPlatform, soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo);
                             }
                             else
                             {
@@ -239,7 +239,7 @@ namespace PCAudioDLL
                             ExAudioSample sampleAudio = null;
                             if (sampleInfo.FileRef >= 0)
                             {
-                                sampleAudio = audioPlayer.GetAudioSample(sbPlatform, soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo, TestingMode);
+                                sampleAudio = audioPlayer.GetAudioSample(sbPlatform, soundBank, sfxSample.HashCodeNumber, sfxSample, sampleInfo);
                             }
                             else
                             {
