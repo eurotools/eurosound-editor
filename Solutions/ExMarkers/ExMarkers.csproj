@@ -42,7 +42,6 @@
   <ItemGroup>
     <Compile Include="Readers\Enumerations.cs" />
     <Compile Include="Readers\Objects\EXMarker.cs" />
-    <Compile Include="Readers\EXMarkersFunctions.cs" />
     <Compile Include="Readers\Objects\EXStartMarker.cs" />
     <Compile Include="Readers\MarkerFilesFunctions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
