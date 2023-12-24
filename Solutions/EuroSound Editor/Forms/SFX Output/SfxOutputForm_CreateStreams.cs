@@ -196,7 +196,6 @@ namespace sb_editor.Forms
                             marker.ImaStateA = state;
                             marker.ImaStateB = state;
                         }
-                        break;
                     }
                 }
 

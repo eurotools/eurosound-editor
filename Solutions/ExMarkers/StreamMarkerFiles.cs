@@ -38,6 +38,7 @@ namespace ExMarkers
                 long startMarkersOffset = BWriter.BaseStream.Position;
                 for (int i = 0; i < MarkersData.Length; i++)
                 {
+                    startMarkersCount++;
                     BWriter.Write(BytesFunctions.FlipInt32(i, isBigEndian)); //Name
                     BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[i].Position, isBigEndian)); //Position
                     BWriter.Write(BytesFunctions.FlipInt32((int)EXMarkerType.Start, isBigEndian)); //Type
@@ -53,7 +54,6 @@ namespace ExMarkers
                     BWriter.Write(BytesFunctions.FlipUInt32(MarkersData[i].ImaStateB, isBigEndian)); //State B
 
                     //Update counter var
-                    startMarkersCount = i;
                     MarkerPosition++;
                     if (MarkersData[i].Type == (int)EXMarkerType.Loop)
                     {
