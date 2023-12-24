@@ -62,7 +62,7 @@ namespace PCAudioDLL.Audio_Player
         internal IWaveProvider PlayAudioSample(RawSourceWaveStream waveStream, ExAudioSample audioSample, float panning)
         {
             //Set wave data
-            AudioLoop loop = new AudioLoop(waveStream, audioSample.LoopStart) { Position = audioSample.StartPos, EnableLooping = audioSample.isLooped };
+            AudioLoop loop = new AudioLoop(waveStream, audioSample.LoopStart * 2) { Position = audioSample.StartPos, EnableLooping = audioSample.isLooped };
             PanningSampleProvider panProvider = new PanningSampleProvider(loop.ToSampleProvider()) { Pan = panning };
             VolumeSampleProvider volumeProvider = new VolumeSampleProvider(panProvider) { Volume = audioMaths.GetEffectValue(audioSample.Volume, audioSample.RandomVolume) / 100.0f };
 
@@ -70,34 +70,31 @@ namespace PCAudioDLL.Audio_Player
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal ExAudioSample GetAudioSample(string outputPlatform, SoundBank soundBank, uint hashcode, Sample sfxSample, SampleInfo sampleInfo, bool test = false)
+        internal ExAudioSample GetAudioSample(string outputPlatform, SoundBank soundBank, uint hashcode, Sample sfxSample, SampleInfo sampleInfo)
         {
             SampleData sampleData = soundBank.sfxStoredData[sampleInfo.FileRef];
+
+            //Decode 
             byte[] decodedData = null;
-            
-            if (test)
+            if (outputPlatform.IndexOf("PC", StringComparison.OrdinalIgnoreCase) >= 0)
             {
                 decodedData = soundBank.sfxStoredData[sampleInfo.FileRef].EncodedData;
             }
-            else
+            else if (outputPlatform.IndexOf("PS2", StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                //Decode 
-                if (outputPlatform.IndexOf("PC", StringComparison.OrdinalIgnoreCase) >= 0 || outputPlatform.IndexOf("XB", StringComparison.OrdinalIgnoreCase) >= 0 || outputPlatform.IndexOf("XB1", StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    Eurocom_ImaAdpcm xboxDecoder = new Eurocom_ImaAdpcm();
-                    decodedData = Utils.ShortArrayToByteArray(xboxDecoder.Decode(soundBank.sfxStoredData[sampleInfo.FileRef].EncodedData));
-                }
-                else if (outputPlatform.IndexOf("PS2", StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    SonyAdpcm vagDecoder = new SonyAdpcm();
-                    decodedData = vagDecoder.Decode(soundBank.sfxStoredData[sampleInfo.FileRef].EncodedData, ref soundBank.sfxStoredData[sampleInfo.FileRef].LoopStartOffset);
-                    sampleData.OriginalLoopOffset /= 2;
-                }
-                else if (outputPlatform.IndexOf("GC", StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    DspAdpcm gcDecoder = new DspAdpcm();
-                    decodedData = Utils.ShortArrayToByteArray(gcDecoder.Decode(soundBank.sfxStoredData[sampleInfo.FileRef].EncodedData, soundBank.sfxStoredData[sampleInfo.FileRef].DspCoeffs));
-                }
+                SonyAdpcm vagDecoder = new SonyAdpcm();
+                decodedData = vagDecoder.Decode(soundBank.sfxStoredData[sampleInfo.FileRef].EncodedData, ref soundBank.sfxStoredData[sampleInfo.FileRef].LoopStartOffset);
+                sampleData.LoopStartOffset /= 2;
+            }
+            else if (outputPlatform.IndexOf("GC", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                DspAdpcm gcDecoder = new DspAdpcm();
+                decodedData = Utils.ShortArrayToByteArray(gcDecoder.Decode(soundBank.sfxStoredData[sampleInfo.FileRef].EncodedData, soundBank.sfxStoredData[sampleInfo.FileRef].DspCoeffs));
+            }
+            else if (outputPlatform.IndexOf("XB", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                XboxAdpcm xboxDecoder = new XboxAdpcm();
+                decodedData = Utils.ShortArrayToByteArray(xboxDecoder.Decode(soundBank.sfxStoredData[sampleInfo.FileRef].EncodedData));
             }
 
             //Set settings
@@ -106,7 +103,7 @@ namespace PCAudioDLL.Audio_Player
                 HashCode = hashcode,
                 PCMData = decodedData,
                 isLooped = sampleData.Flags == 1,
-                LoopStart = sampleData.OriginalLoopOffset,
+                LoopStart = sampleData.LoopStartOffset,
                 Frequency = audioMaths.SemitonesToFreq(sampleData.Frequency, audioMaths.GetEffectValue(sampleInfo.Pitch, sampleInfo.PitchOffset)),
                 Pitch = sampleInfo.Pitch,
                 RandomPitch = sampleInfo.PitchOffset,
@@ -128,16 +125,21 @@ namespace PCAudioDLL.Audio_Player
 
             //Decode Data
             byte[] decodedData = null;
-            if (outputPlatform.IndexOf("PC", StringComparison.OrdinalIgnoreCase) >= 0 || outputPlatform.IndexOf("XB", StringComparison.OrdinalIgnoreCase) >= 0 || outputPlatform.IndexOf("GC", StringComparison.OrdinalIgnoreCase) >= 0)
+            if (outputPlatform.IndexOf("PC", StringComparison.OrdinalIgnoreCase) >= 0 || outputPlatform.IndexOf("GC", StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                Eurocom_ImaAdpcm decoder = new Eurocom_ImaAdpcm();
-                decodedData = Utils.ShortArrayToByteArray(decoder.Decode(streamedFile[streamIndex].EncodedData));
+                ImaAdpcm decoder = new ImaAdpcm();
+                decodedData = Utils.ShortArrayToByteArray(decoder.Decode(streamedFile[streamIndex].EncodedData, streamedFile[streamIndex].EncodedData.Length * 2));
             }
             else if (outputPlatform.IndexOf("PS2", StringComparison.OrdinalIgnoreCase) >= 0)
             {
                 int test = 0;
                 SonyAdpcm vagDecoder = new SonyAdpcm();
                 decodedData = vagDecoder.Decode(streamedFile[streamIndex].EncodedData, ref test);
+            }
+            else if (outputPlatform.IndexOf("XB", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                XboxAdpcm xboxDecoder = new XboxAdpcm();
+                decodedData = Utils.ShortArrayToByteArray(xboxDecoder.Decode(streamedFile[streamIndex].EncodedData));
             }
 
             //Set settings

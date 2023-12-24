@@ -106,8 +106,6 @@ namespace sb_editor.HashCodes
         //-------------------------------------------------------------------------------------------------------------------------------
         internal void CreateMfxData(string filePath)
         {
-            MarkerFilesFunctions streamMarkersFunctions = new MarkerFilesFunctions();
-
             //Get music data and sort it ascending by hashcode
             SortedDictionary<int, string> itemsData = new SortedDictionary<int, string>();
             string[] musicFiles = TextFiles.ReadListBlock(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", "MFXFiles.txt"), "#MFXFiles");
@@ -120,7 +118,7 @@ namespace sb_editor.HashCodes
                     using (WaveFileReader wReader = new WaveFileReader(waveFilePath))
                     {
                         MusicFile musicFileData = TextFiles.ReadMusicFile(Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", musicFiles[i] + ".txt"));
-                        List<MarkerInfo> markerData = streamMarkersFunctions.LoadTextMarkerFile(markerFilePath, null, null, true);
+                        MarkerTextFile[] markerData = TextFiles.ReadMarkerFile(markerFilePath);
                         float duration = (float)decimal.Divide(wReader.Length, wReader.WaveFormat.AverageBytesPerSecond);
                         string strDuration = duration.ToString("G7", GlobalPrefs.NumericProvider);
                         if (duration % 1 == 0)
@@ -167,9 +165,9 @@ namespace sb_editor.HashCodes
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private bool MusicLoops(List<MarkerInfo> markerFileData)
+        private bool MusicLoops(MarkerTextFile[] markerFileData)
         {
-            foreach (MarkerInfo markerData in markerFileData)
+            foreach (MarkerTextFile markerData in markerFileData)
             {
                 if (markerData.Type == 6)
                 {
