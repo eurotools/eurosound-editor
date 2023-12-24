@@ -313,7 +313,7 @@ namespace sb_editor.Forms
 
                         //Read Marker File
                         MarkerTextFile[] markersData = TextFiles.ReadMarkerFile(markerFile);
-                        UpdateMarkerPositions(outputPlatforms[j], markersData, string.Empty, string.Empty);
+                        UpdateMarkerPositions( markersData);
 
                         //Write Marker File
                         streamMarkers.BuildBinaryFile(markersData, musicFileData.Volume, soundMarkerFilePath, outputPlatforms[j].Equals("GameCube"));
@@ -323,7 +323,7 @@ namespace sb_editor.Forms
                     }
 
                     //Build SFX
-                    string outputPath = CommonFunctions.GetSoundbankOutPath(projectSettings, outputPlatforms[j], string.Empty, true);
+                    string outputPath = CommonFunctions.GetSoundbankOutPath(outputPlatforms[j], projectSettings);
                     if (!string.IsNullOrEmpty(outputPath) && Directory.Exists(outputPath))
                     {
                         if (File.Exists(soundMarkerFilePath) && File.Exists(soundSampleDataFilePath))
@@ -381,97 +381,15 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void UpdateMarkerPositions(string outputPlatform, MarkerTextFile[] markersList, string imaFileLeft, string imaFileRight)
+        private void UpdateMarkerPositions(MarkerTextFile[] markersList)
         {
-            //Calculate states -- PC & GameCube Platform
-            if (outputPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("GameCube", StringComparison.OrdinalIgnoreCase))
+            //Update positions Start Markers
+            foreach (MarkerTextFile marker in markersList)
             {
-                //Update positions Start Markers
-                foreach (MarkerTextFile marker in markersList)
+                //Calculate offsets for IMA Adpcm
+                if (marker.Position > 0)
                 {
-                    //Calculate offsets for IMA Adpcm
-                    if (marker.Position > 0)
-                    {
-                        marker.Position = CalculusLoopOffset.GetMusicLoopOffsetPCandGC(marker.Position);
-                    }
-                }
-
-
-                //Update STATES
-                if (File.Exists(imaFileLeft) && File.Exists(imaFileRight))
-                {
-                    List<string> stl = new List<string>();
-                    List<string> str = new List<string>();
-
-                    //Update Markers states
-                    foreach (MarkerTextFile marker in markersList)
-                    {
-                        if (marker.Position > 0)
-                        {
-
-                            uint state = 0;
-                            using (BinaryReader breader = new BinaryReader(File.Open(imaFileLeft, FileMode.Open, FileAccess.Read, FileShare.Read)))
-                            {
-                                long offset = ((marker.Position / 256) * 256) / 2;
-                                if (offset <= breader.BaseStream.Length)
-                                {
-                                    breader.BaseStream.Seek(offset, SeekOrigin.Begin);
-                                    state = breader.ReadUInt32();
-                                }
-                                marker.ImaStateA = state;
-
-                                //Add items to list
-                                stl.Add(state.ToString());
-                                stl.Add(marker.Position.ToString());
-                            }
-                            using (BinaryReader breader = new BinaryReader(File.Open(imaFileRight, FileMode.Open, FileAccess.Read, FileShare.Read)))
-                            {
-                                long offset = ((marker.Position / 256) * 256) / 2;
-                                if (offset <= breader.BaseStream.Length)
-                                {
-                                    breader.BaseStream.Seek(offset, SeekOrigin.Begin);
-                                    state = breader.ReadUInt32();
-                                }
-                                marker.ImaStateB = state;
-
-                                //Add items to list
-                                str.Add(state.ToString());
-                                str.Add(marker.Position.ToString());
-                            }
-                        }
-                    }
-
-                    //Write file
-                    File.WriteAllLines(Path.Combine(Path.ChangeExtension(imaFileLeft, ".str")), str);
-                    File.WriteAllLines(Path.Combine(Path.ChangeExtension(imaFileLeft, ".stl")), stl);
-                }
-            }
-
-            //Update Positions PS2 Platform
-            if (outputPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase))
-            {
-                //Start markers
-                foreach (MarkerTextFile marker in markersList)
-                {
-                    //Calculate VAG offsets
-                    if (marker.Position > 0)
-                    {
-                        marker.Position = CalculusLoopOffset.GetMusicLoopOffsetPlayStation2(marker.Position);
-                    }
-                }
-            }
-
-            //Update positions for Xbox
-            if (outputPlatform.Equals("Xbox", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("X Box", StringComparison.OrdinalIgnoreCase))
-            {
-                //Start markers
-                foreach (MarkerTextFile marker in markersList)
-                {
-                    //Calculate Xbox Adpcm offsets
-                    if (marker.Position > 0)
-                    {
-                        marker.Position = CalculusLoopOffset.GetMusicLoopOffsetXbox(marker.Position);
-                    }
+                    marker.Position = CalculusLoopOffset.GetEurocomImaLoopOffset(marker.Position);
                 }
             }
         }
