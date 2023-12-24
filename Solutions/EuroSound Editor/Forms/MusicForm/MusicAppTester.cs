@@ -9,6 +9,7 @@
 //-------------------------------------------------------------------------------------------------------------------------------
 // Music Tester APP
 //-------------------------------------------------------------------------------------------------------------------------------
+using ExMarkers;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using PCAudioDLL.Audio_Player;
@@ -47,9 +48,9 @@ namespace sb_editor.Forms
 
                 if (File.Exists(waveFile))
                 {
-                    int startPos = GetStartPosition(markerData) * 4;
-                    int loopStart = GetStartLoopPos(markerData) * 4;
-                    int loopEnd = GetEndLoopPos(markerData) * 4;
+                    uint startPos = GetStartPosition(markerData) * 4;
+                    uint loopStart = GetStartLoopPos(markerData) * 4;
+                    uint loopEnd = GetEndLoopPos(markerData) * 4;
 
                     //Read data
                     musicPlayer = new WaveOut();
@@ -102,16 +103,16 @@ namespace sb_editor.Forms
         {
             if (musicPlayer != null && musicPlayer.PlaybackState == PlaybackState.Playing)
             {
-                int samples = markerData[lstbx_JumpMakers.SelectedIndex].Position;
+                uint samples = markerData[lstbx_JumpMakers.SelectedIndex].Position;
                 TimeSpan streamPos = TimeSpan.FromMilliseconds((double)decimal.Divide(samples, (wReader.WaveFormat.SampleRate / 1000)));
                 wReader.CurrentTime = streamPos;
             }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal int GetStartLoopPos(MarkerTextFile[] startMarkers)
+        internal uint GetStartLoopPos(MarkerTextFile[] startMarkers)
         {
-            int startPosition = 0;
+            uint startPosition = 0;
             for (int i = 0; i < startMarkers.Length; i++)
             {
                 if (startMarkers[i].Type == 6)
@@ -137,9 +138,9 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal int GetEndLoopPos(MarkerTextFile[] startMarkers)
+        internal uint GetEndLoopPos(MarkerTextFile[] startMarkers)
         {
-            int startPosition = 0;
+            uint startPosition = 0;
             for (int i = 0; i < startMarkers.Length; i++)
             {
                 if (startMarkers[i].Type == 7 || startMarkers[i].Name.ToLower().Contains("loopend"))
@@ -153,9 +154,9 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal int GetStartPosition(MarkerTextFile[] startMarkers)
+        internal uint GetStartPosition(MarkerTextFile[] startMarkers)
         {
-            int startPosition = 0;
+            uint startPosition = 0;
             for (int i = 0; i < startMarkers.Length; i++)
             {
                 if (startMarkers[i].Type == 10)
