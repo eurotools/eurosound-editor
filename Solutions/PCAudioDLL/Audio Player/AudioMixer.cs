@@ -79,6 +79,7 @@ namespace PCAudioDLL.Audio_Player
             if (testing)
             {
                 decodedData = soundBank.sfxStoredData[sampleInfo.FileRef].EncodedData;
+                sampleData.LoopStartOffset = sampleData.OriginalLoopOffset / 2;
             }
             else if (outputPlatform.IndexOf("XB", StringComparison.OrdinalIgnoreCase) >= 0 || outputPlatform.IndexOf("PC", StringComparison.OrdinalIgnoreCase) >= 0)
             {
