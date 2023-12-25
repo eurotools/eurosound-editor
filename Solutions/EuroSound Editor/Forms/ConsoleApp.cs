@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Media;
 using System.Windows.Forms;
+using static ESUtils.Enumerations;
 
 namespace sb_editor.Forms
 {
@@ -81,8 +82,11 @@ namespace sb_editor.Forms
         private void ChkStreamingTest_CheckedChanged(object sender, EventArgs e)
         {
             //Load SFX File
-            string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, "HC00FFFF", ".SFX"));
-            pcDll.LoadSoundBank(GetTestingPlatform(), sfxFilePath, true);
+            string sfxFilePath = Path.Combine(txtSoundBankFile.Text, CommonFunctions.GetSfxName(Language.English, "_streamdata"));
+            if (File.Exists(sfxFilePath))
+            {
+                pcDll.LoadSoundBank(GetTestingPlatform(), sfxFilePath, true);
+            }
         }
 
         //-------------------------------------------------------------------------------------------
@@ -116,13 +120,13 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------
         private void BtnStartSFX_Click(object sender, EventArgs e)
         {
-            pcDll.StartSound((uint)nudHashCode.Value);
+            pcDll.StartSound((uint)nudHashCode.Value, false);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnStart3dSound_Click(object sender, EventArgs e)
         {
-            pcDll.StartSound3D((uint)nudHashCode.Value, new float[] { (float)nudX.Value, (float)nudY.Value, (float)nudZ.Value }, false, chxTestPan.Checked, trckBarMasterVolume.Value);
+            pcDll.StartSound3D((uint)nudHashCode.Value, new float[] { (float)nudX.Value, (float)nudY.Value, (float)nudZ.Value }, false, false, chxTestPan.Checked, trckBarMasterVolume.Value);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -172,7 +176,7 @@ namespace sb_editor.Forms
                     //Set SFX data for being played
                     nudInnerRadius.Value = Math.Min(Math.Max(sfxData.Parameters.InnerRadius, 0), 500);
                     nudOuterRadius.Value = Math.Min(Math.Max(sfxData.Parameters.OuterRadius, 0), 500);
-                    nudHashCode.Value = 0x1A000000 + sfxData.HashCode;
+                    nudHashCode.Value = 0x1AF00000 + sfxData.HashCode;
                 }
             }
         }
@@ -203,7 +207,7 @@ namespace sb_editor.Forms
                     lstBox_SFXs.EndUpdate();
 
                     //Load SFX File
-                    string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, "HC", soundBankData.HashCode.ToString("X6"), ".SFX"));
+                    string sfxFilePath = Path.Combine(txtSoundBankFile.Text, CommonFunctions.GetSfxName(Language.English, lstbAvailableSoundBanks.SelectedItems[i].ToString()));
                     if (File.Exists(sfxFilePath))
                     {
                         pcDll.LoadSoundBank(GetTestingPlatform(), sfxFilePath);
@@ -211,6 +215,13 @@ namespace sb_editor.Forms
                     else
                     {
                         MessageBox.Show(string.Format("{0} was not found.", sfxFilePath), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+
+                    //Load SoundDetails file
+                    string soundDetails = Path.Combine(txtSoundBankFile.Text, CommonFunctions.GetSfxName(Language.English, "_sounddetails"));
+                    if (File.Exists(soundDetails))
+                    {
+                        pcDll.LoadSoundDetails(GetTestingPlatform(), soundDetails);
                     }
                 }
             }
@@ -229,8 +240,8 @@ namespace sb_editor.Forms
                 SoundBank soundBankData = TextFiles.ReadSoundbankFile(sbPath);
 
                 //Unload SoundBank
-                pcDll.UnloadSoundbank(soundBankData.HashCode);
-                
+                pcDll.UnloadSoundbank(0xE000 + soundBankData.HashCode);
+
                 //Remove item from list
                 lstbLoadedSoundBanks.Items.Remove(lstbLoadedSoundBanks.SelectedItems[i]);
             }
