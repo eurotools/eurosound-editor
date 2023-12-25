@@ -122,8 +122,8 @@ namespace sb_editor.Panels
             // 
             // grbLockedOnAllFormats
             // 
-            this.grbLockedOnAllFormats.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.grbLockedOnAllFormats.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grbLockedOnAllFormats.Controls.Add(this.txtUserFlags);
             this.grbLockedOnAllFormats.Controls.Add(this.lblUserFlags);
@@ -490,7 +490,7 @@ namespace sb_editor.Panels
             // 
             // grbTrackingType
             // 
-            this.grbTrackingType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.grbTrackingType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grbTrackingType.Controls.Add(this.RadiobtnTrackingType_Amb);
             this.grbTrackingType.Controls.Add(this.RadiobtnTrackingType_3DRndPos);
@@ -722,7 +722,7 @@ namespace sb_editor.Panels
             // 
             // txtSFX_Name
             // 
-            this.txtSFX_Name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txtSFX_Name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSFX_Name.BackColor = System.Drawing.SystemColors.Window;
             this.txtSFX_Name.Location = new System.Drawing.Point(73, 19);

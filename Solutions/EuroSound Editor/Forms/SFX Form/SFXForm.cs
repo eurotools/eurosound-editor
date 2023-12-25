@@ -7,7 +7,7 @@
 // |______|\__,_|_|  \___/|___/\___/ \__,_|_| |_|\__,_|
 //
 //-------------------------------------------------------------------------------------------------------------------------------
-// SFX Settings Form
+// SFX Form
 //-------------------------------------------------------------------------------------------------------------------------------
 using PCAudioDLL;
 using sb_editor.Objects;
@@ -46,7 +46,7 @@ namespace sb_editor.Forms
                 tabCtrl.Visible = false;
                 UserControl_SamplePool.Visible = false;
                 pnlOptions.Visible = false;
-                Height = 426;
+                Height = 406;
                 StartPosition = FormStartPosition.CenterParent;
                 btnDefSettings_Accept.Visible = true;
                 btnDefSettings_Cancel.Visible = true;
@@ -349,7 +349,7 @@ namespace sb_editor.Forms
                     pcDll.LoadSoundBank("PC", filePath, false);
                 }
                 txtDllTime.Text = string.Format("DLL Time {0:0.###}", pcDll.LoadSoundBank("PC", filePath, false));
-                pcDll.StartSound(0x1A000000);
+                pcDll.StartSound(0x1AF00000, true);
             }
         }
 
@@ -358,7 +358,7 @@ namespace sb_editor.Forms
         {
             if (pcDll.IsSoundBankLoaded(0xFFFE))
             {
-                pcDll.StopHashCode(0x1A000000);
+                pcDll.StopHashCode(0x1AF00000);
             }
         }
 
