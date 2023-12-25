@@ -156,7 +156,7 @@ namespace sb_editor.Forms
                                             string sifTempFile = Path.ChangeExtension(outTmpFilePath, ".sif");
                                             string ssfTempFile = Path.ChangeExtension(outTmpFilePath, ".ssf");
                                             string sfxFilepath = Path.Combine(outputPath, fileName);
-                                            MusXBuild_Soundbank.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, ssfTempFile, sfxFilepath, CommonFunctions.GetPlatformLabel(outputPlatform[k]), CommonFunctions.GetFileHashCode(FileType.SoundBank, outputLanguage, soundBankData.HashCode), isBigEndian);
+                                            MusXBuild_Soundbank.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, ssfTempFile, sfxFilepath, CommonFunctions.GetPlatformLabel(outputPlatform[k]), CommonFunctions.GetFileHashCode(FileType.SoundBank, outputLanguage, soundBankData.HashCode), isBigEndian, 5);
 
                                             //Check that this SFX Doesn't exceed the memmory slot size
                                             if (memSlotIndex < projectSettings.platformData[outputPlatform[k]].MemoryMapsSize.Count)

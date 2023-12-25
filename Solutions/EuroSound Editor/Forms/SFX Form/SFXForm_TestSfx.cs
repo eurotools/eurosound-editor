@@ -88,7 +88,7 @@ namespace sb_editor.Forms
                     DirectoryInfo musXFolder = Directory.CreateDirectory(outputFolder);
 
                     //Build File
-                    MusXBuild_Soundbank.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, string.Empty, Path.Combine(musXFolder.FullName, fileName), CommonFunctions.GetPlatformLabel("PC"), (uint)hashCode, false);
+                    MusXBuild_Soundbank.BuildSoundbankFile(sfxTempFile, sifTempFile, sbfTempFile, string.Empty, Path.Combine(musXFolder.FullName, fileName), CommonFunctions.GetPlatformLabel("PC"), (uint)hashCode, false, 5);
                 }
             }
         }
