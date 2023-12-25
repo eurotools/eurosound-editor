@@ -224,14 +224,15 @@ namespace sb_editor.Forms
             //Remove selected items
             for (int i = lstbLoadedSoundBanks.SelectedItems.Count - 1; i >= 0; i--)
             {
-                lstbLoadedSoundBanks.Items.Remove(lstbLoadedSoundBanks.SelectedItems[i]);
-
                 //Load SoundBank Text File
                 string sbPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks", lstbAvailableSoundBanks.SelectedItems[i].ToString() + ".txt");
                 SoundBank soundBankData = TextFiles.ReadSoundbankFile(sbPath);
 
                 //Unload SoundBank
                 pcDll.UnloadSoundbank(soundBankData.HashCode);
+                
+                //Remove item from list
+                lstbLoadedSoundBanks.Items.Remove(lstbLoadedSoundBanks.SelectedItems[i]);
             }
 
             //Select next item
