@@ -320,8 +320,8 @@ namespace sb_editor.Classes
             if (filename == null)
                 throw new ArgumentNullException("filename");
 
-            if (filename.Length == 0)
-                throw new ArgumentException("filename");
+            /*if (filename.Length == 0)
+                throw new ArgumentException("filename");*/
 
             if (numEntries > 0)
             {
