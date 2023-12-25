@@ -323,12 +323,13 @@ namespace sb_editor.Forms
                     }
 
                     //Build SFX
-                    string outputPath = CommonFunctions.GetSoundbankOutPath(outputPlatforms[j], projectSettings);
-                    if (!string.IsNullOrEmpty(outputPath) && Directory.Exists(outputPath))
+                    string sfxOutputFolder = CommonFunctions.GetSoundbankOutPath(outputPlatforms[j], projectSettings);
+                    if (!string.IsNullOrEmpty(sfxOutputFolder) && Directory.Exists(sfxOutputFolder))
                     {
+                        string sfxOutputPath = Path.Combine(sfxOutputFolder, string.Format("_mus_mfx_{0}.SFX", filesQueue[i]).ToLower());
                         if (File.Exists(soundMarkerFilePath) && File.Exists(soundSampleDataFilePath))
                         {
-                            MusXBuild_MusicFileOld.BuildMusicFile(soundMarkerFilePath, soundSampleDataFilePath, Path.Combine(outputPath, string.Format("HCE{0:X5}.SFX", musicFileData.HashCode)), (uint)musicFileData.HashCode, outputPlatforms[j].Equals("GameCube", StringComparison.OrdinalIgnoreCase));
+                            MusXBuild_MusicFile.BuildMusicFile(soundMarkerFilePath, soundSampleDataFilePath, sfxOutputPath, CommonFunctions.GetPlatformLabel(outputPlatforms[j]), CommonFunctions.GetFileHashCode(Enumerations.FileType.MusicFile, Enumerations.Language.English, musicFileData.HashCode));
                         }
                         else if (!File.Exists(soundMarkerFilePath) && !File.Exists(soundSampleDataFilePath))
                         {
