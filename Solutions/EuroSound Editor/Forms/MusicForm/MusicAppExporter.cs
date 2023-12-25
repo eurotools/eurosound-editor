@@ -9,11 +9,11 @@
 //-------------------------------------------------------------------------------------------------------------------------------
 // Music SFXs Exporter
 //-------------------------------------------------------------------------------------------------------------------------------
+using ESUtils;
 using ExMarkers;
 using MusX.Writers;
 using sb_editor.Audio_Classes;
 using sb_editor.Classes;
-using sb_editor.HashCodes;
 using sb_editor.Objects;
 using System;
 using System.Collections.Generic;
@@ -22,7 +22,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using static ESUtils.Enumerations;
 
 namespace sb_editor.Forms
 {
@@ -45,7 +44,6 @@ namespace sb_editor.Forms
             filesQueue = outputFiles;
             parentFormObj = parentForm;
             outputPlatforms = outPlatforms;
-
             string projectPropertiesFile = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Properties.txt");
             if (File.Exists(projectPropertiesFile))
             {
@@ -155,9 +153,9 @@ namespace sb_editor.Forms
             string SoxPath = Path.Combine(Application.StartupPath, "SystemFiles", "SOX.EXE");
 
             // Create objects for handling audio markers and various audio data formats
-            MusicMarkerFiles markerFiles = new MusicMarkerFiles();
+            StreamMarkerFiles streamMarkers = new StreamMarkerFiles();
+            ImaFunctions imaClass = new ImaFunctions();
             WaveFunctions waveData = new WaveFunctions();
-            EurocomImaFunctions eurocomIma = new EurocomImaFunctions();
 
             // Iterate through the list of audio files to be processed
             for (int i = 0; i < filesQueue.Length; i++)
@@ -183,6 +181,8 @@ namespace sb_editor.Forms
                 // Declare paths for the marker file and wave file for the current music file
                 string markerFile = Path.Combine(GlobalPrefs.ProjectFolder, "Music", filesQueue[i] + ".mrk");
                 string wavePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", filesQueue[i] + ".wav");
+                string aslFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESWork", filesQueue[i] + ".asl");
+                string asrFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESWork", filesQueue[i] + ".asr");
 
                 // Initialize arrays for storing left and right audio data in IMA format
                 byte[] imaLeftChannelData = null;
@@ -262,12 +262,16 @@ namespace sb_editor.Forms
                                     CommonFunctions.RunConsoleProcess(SoxPath, string.Format("\"{0}\" -c 1 -r 32000 \"{1}\" resample -qs 0.97 avg -r", wavePath, wavRightChannelData), false);
 
                                     // Convert the split wave files to Ima ADPCM
-                                    imaLeftChannelData = eurocomIma.Encode(waveData.GetWaveSamples(wavLeftChannelData));
-                                    imaRightChannelData = eurocomIma.Encode(waveData.GetWaveSamples(wavRightChannelData));
+                                    imaLeftChannelData = imaClass.Encode(waveData.GetWaveSamples(wavLeftChannelData));
+                                    imaRightChannelData = imaClass.Encode(waveData.GetWaveSamples(wavRightChannelData));
 
                                     //Update flag to false
                                     outputImaData = false;
                                 }
+
+                                // Create ASL/ASR files
+                                File.WriteAllBytes(aslFilePath, imaClass.DecodeStatesIma(imaLeftChannelData, imaLeftChannelData.Length * 2));
+                                File.WriteAllBytes(asrFilePath, imaClass.DecodeStatesIma(imaRightChannelData, imaLeftChannelData.Length * 2));
 
                                 //Update UI with the current progress
                                 backgroundWorker1.ReportProgress(100, string.Format("Making Music Stream: {0} for {1}", filesQueue[i], outputPlatforms[j]));
@@ -275,7 +279,7 @@ namespace sb_editor.Forms
                                 // Build SMD
                                 if (Directory.Exists(outputFolder))
                                 {
-                                    InterleaveAudioChannels(imaLeftChannelData, imaRightChannelData, 32, Path.Combine(outputFolder, "MFX_" + musicFileData.HashCode + ".ssd"));
+                                    InterleaveAudioChannels(imaLeftChannelData, imaRightChannelData, 1, Path.Combine(outputFolder, "MFX_" + musicFileData.HashCode + ".ssd"));
                                 }
                                 break;
                             case "x box":
@@ -286,27 +290,15 @@ namespace sb_editor.Forms
                                 string outputTempFolder = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", "X Box", "Music", "MFX_" + folderIndex);
                                 Directory.CreateDirectory(outputTempFolder);
 
-                                // Define the paths for the left and right channel WAV files
-                                wavLeftChannelData = Path.Combine(GlobalPrefs.ProjectFolder, "System", "TempWave.wav");
-                                wavRightChannelData = Path.Combine(GlobalPrefs.ProjectFolder, "System", "TempWave2.wav");
-
-                                // Split the wave file into left and right channels and re-sample the waves file to 32000 Hz
-                                backgroundWorker1.ReportProgress(0, string.Format("Making Music Stream: {0} for {1}", filesQueue[i], outputPlatforms[j]));
-                                CommonFunctions.RunConsoleProcess(SoxPath, string.Format("\"{0}\" -c 1 \"{1}\" avg -l", wavePath, wavLeftChannelData), false);
-                                backgroundWorker1.ReportProgress(99, string.Format("Making Music Stream: {0} for {1}", filesQueue[i], outputPlatforms[j]));
-                                CommonFunctions.RunConsoleProcess(SoxPath, string.Format("\"{0}\" -c 1 \"{1}\" avg -r", wavePath, wavRightChannelData), false);
-
-                                // Convert the split wave files to Ima ADPCM
-                                imaLeftChannelData = eurocomIma.Encode(waveData.GetWaveSamples(wavLeftChannelData));
-                                imaRightChannelData = eurocomIma.Encode(waveData.GetWaveSamples(wavRightChannelData));
-
-                                //Update UI with the current progress
+                                // Convert the wave file to the Xbox Adpcm format
+                                string soundSampleDataFile = Path.Combine(outputTempFolder, "MFX_" + musicFileData.HashCode + ".ssd");
                                 backgroundWorker1.ReportProgress(100, string.Format("Making Music Stream: {0} for {1}", filesQueue[i], outputPlatforms[j]));
+                                CommonFunctions.RunConsoleProcess(Path.Combine(Application.StartupPath, "SystemFiles", "xbadpcmencode.EXE"), string.Format("\"{0}\" \"{1}\"", wavePath, soundSampleDataFile), false);
 
-                                // Build SMD
-                                if (Directory.Exists(outputFolder))
+                                //Remove Header Data and build SMD file
+                                if (File.Exists(soundSampleDataFile))
                                 {
-                                    InterleaveAudioChannels(imaLeftChannelData, imaRightChannelData, 32, Path.Combine(outputTempFolder, "MFX_" + musicFileData.HashCode + ".ssd"));
+                                    File.WriteAllBytes(soundSampleDataFile, CommonFunctions.RemoveFileHeader(soundSampleDataFile, 48));
                                 }
                                 break;
                         }
@@ -319,21 +311,24 @@ namespace sb_editor.Forms
                         backgroundWorker1.ReportProgress(0, string.Format("Making Marker File: {0}", filesQueue[i]));
                         musicFileData.MidiFileLastOutput = new FileInfo(markerFile).LastWriteTime.ToString("dd/MM/yyyy HH:mm:ss");
 
-                        // Create the marker file for the current output platform and save it to the output folder
-                        markerFiles.CreateMarkerFile(markerFile, musicFileData.Volume, outputPlatforms[j], soundMarkerFilePath);
+                        //Read Marker File
+                        MarkerTextFile[] markersData = TextFiles.ReadMarkerFile(markerFile);
+                        UpdateMarkerPositions(outputPlatforms[j], markersData, string.Empty, string.Empty);
+
+                        //Write Marker File
+                        streamMarkers.BuildBinaryFile(markersData, musicFileData.Volume, soundMarkerFilePath, outputPlatforms[j].Equals("GameCube"));
 
                         // Report progress after the marker file has been created
                         backgroundWorker1.ReportProgress(100, string.Format("Making Marker File: {0}", filesQueue[i]));
                     }
 
                     //Build SFX
-                    string sfxOutputFolder = CommonFunctions.GetSoundbankOutPath(outputPlatforms[j], projectSettings);
-                    if (!string.IsNullOrEmpty(sfxOutputFolder) && Directory.Exists(sfxOutputFolder))
+                    string outputPath = CommonFunctions.GetSoundbankOutPath(projectSettings, outputPlatforms[j], string.Empty, true);
+                    if (!string.IsNullOrEmpty(outputPath) && Directory.Exists(outputPath))
                     {
-                        string sfxOutputPath = Path.Combine(sfxOutputFolder, string.Format("_mus_mfx_mus_{0}.SFX", filesQueue[i]).ToLower());
                         if (File.Exists(soundMarkerFilePath) && File.Exists(soundSampleDataFilePath))
                         {
-                            MusXBuild_MusicFile.BuildMusicFile(soundMarkerFilePath, soundSampleDataFilePath, sfxOutputPath, CommonFunctions.GetPlatformLabel(outputPlatforms[j]), CommonFunctions.GetFileHashCode(Enumerations.FileType.MusicFile, Enumerations.Language.English, musicFileData.HashCode));
+                            MusXBuild_MusicFileOld.BuildMusicFile(soundMarkerFilePath, soundSampleDataFilePath, Path.Combine(outputPath, string.Format("HCE{0:X5}.SFX", musicFileData.HashCode)), (uint)musicFileData.HashCode, outputPlatforms[j].Equals("GameCube", StringComparison.OrdinalIgnoreCase));
                         }
                         else if (!File.Exists(soundMarkerFilePath) && !File.Exists(soundSampleDataFilePath))
                         {
@@ -347,7 +342,7 @@ namespace sb_editor.Forms
 
                 //Save file changes
                 mfxList.Add(musicFileData.HashCode);
-                mfxList.Add(markerFiles.CreateJumpMarker(markerFile, Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESWork", filesQueue[i] + ".jmp")));
+                mfxList.Add(TextFiles.CreateJumpMarker(markerFile, Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESWork", filesQueue[i] + ".jmp")));
                 TextFiles.WriteMusicFile(musicFileData, Path.Combine(GlobalPrefs.ProjectFolder, "Music", "ESData", filesQueue[i] + ".txt"));
 
                 //Update UI
@@ -368,22 +363,6 @@ namespace sb_editor.Forms
                 });
             }
 
-            //Build Music Details File
-            HashTables htHandler = new HashTables();
-            string mfxValidListFile = Path.Combine(projectSettings.HashCodeFileDirectory, "MFX_Data.h");
-            htHandler.CreateMfxData(mfxValidListFile);
-            if (File.Exists(mfxValidListFile))
-            {
-                for (int j = 0; j < outputPlatforms.Length; j++)
-                {
-                    string tempOutputFolder = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", outputPlatforms[j], "Music", "musicdetails.mdf");
-                    BuildMusicDetailsFile(mfxValidListFile, tempOutputFolder);
-
-                    string sfxOutputPath = Path.Combine(CommonFunctions.GetSoundbankOutPath(outputPlatforms[j], projectSettings), string.Format("__musicdetails.SFX").ToLower());
-                    MusXBuild_MusicDetails.BuildMusicDetails(tempOutputFolder, sfxOutputPath, CommonFunctions.GetFileHashCode(FileType.MusicDetails, Language.English, 0), CommonFunctions.GetPlatformLabel(outputPlatforms[j]));
-                }
-            }
-
             //Write MFX Valid List
             using (StreamWriter sw = new StreamWriter(File.Open(Path.Combine(GlobalPrefs.ProjectFolder, "System", "Valid_MFX_List.txt"), FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
@@ -396,6 +375,102 @@ namespace sb_editor.Forms
                     else
                     {
                         sw.WriteLine(" {0} ", mfxList[i] - 1);
+                    }
+                }
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void UpdateMarkerPositions(string outputPlatform, MarkerTextFile[] markersList, string imaFileLeft, string imaFileRight)
+        {
+            //Calculate states -- PC & GameCube Platform
+            if (outputPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("GameCube", StringComparison.OrdinalIgnoreCase))
+            {
+                //Update positions Start Markers
+                foreach (MarkerTextFile marker in markersList)
+                {
+                    //Calculate offsets for IMA Adpcm
+                    if (marker.Position > 0)
+                    {
+                        marker.Position = CalculusLoopOffset.GetMusicLoopOffsetPCandGC(marker.Position);
+                    }
+                }
+
+
+                //Update STATES
+                if (File.Exists(imaFileLeft) && File.Exists(imaFileRight))
+                {
+                    List<string> stl = new List<string>();
+                    List<string> str = new List<string>();
+
+                    //Update Markers states
+                    foreach (MarkerTextFile marker in markersList)
+                    {
+                        if (marker.Position > 0)
+                        {
+
+                            uint state = 0;
+                            using (BinaryReader breader = new BinaryReader(File.Open(imaFileLeft, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                            {
+                                long offset = ((marker.Position / 256) * 256) / 2;
+                                if (offset <= breader.BaseStream.Length)
+                                {
+                                    breader.BaseStream.Seek(offset, SeekOrigin.Begin);
+                                    state = breader.ReadUInt32();
+                                }
+                                marker.ImaStateA = state;
+
+                                //Add items to list
+                                stl.Add(state.ToString());
+                                stl.Add(marker.Position.ToString());
+                            }
+                            using (BinaryReader breader = new BinaryReader(File.Open(imaFileRight, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                            {
+                                long offset = ((marker.Position / 256) * 256) / 2;
+                                if (offset <= breader.BaseStream.Length)
+                                {
+                                    breader.BaseStream.Seek(offset, SeekOrigin.Begin);
+                                    state = breader.ReadUInt32();
+                                }
+                                marker.ImaStateB = state;
+
+                                //Add items to list
+                                str.Add(state.ToString());
+                                str.Add(marker.Position.ToString());
+                            }
+                        }
+                    }
+
+                    //Write file
+                    File.WriteAllLines(Path.Combine(Path.ChangeExtension(imaFileLeft, ".str")), str);
+                    File.WriteAllLines(Path.Combine(Path.ChangeExtension(imaFileLeft, ".stl")), stl);
+                }
+            }
+
+            //Update Positions PS2 Platform
+            if (outputPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase))
+            {
+                //Start markers
+                foreach (MarkerTextFile marker in markersList)
+                {
+                    //Calculate VAG offsets
+                    if (marker.Position > 0)
+                    {
+                        marker.Position = CalculusLoopOffset.GetMusicLoopOffsetPlayStation2(marker.Position);
+                    }
+                }
+            }
+
+            //Update positions for Xbox
+            if (outputPlatform.Equals("Xbox", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("X Box", StringComparison.OrdinalIgnoreCase))
+            {
+                //Start markers
+                foreach (MarkerTextFile marker in markersList)
+                {
+                    //Calculate Xbox Adpcm offsets
+                    if (marker.Position > 0)
+                    {
+                        marker.Position = CalculusLoopOffset.GetMusicLoopOffsetXbox(marker.Position);
                     }
                 }
             }
@@ -500,64 +575,6 @@ namespace sb_editor.Forms
             }
 
             File.WriteAllBytes(outputFilePath, interleavedData);
-        }
-
-        //-------------------------------------------------------------------------------------------------------------------------------
-        private void BuildMusicDetailsFile(string musicDataTableFile, string musicDetailsPlatform)
-        {
-            //Open hashtable and create binary file
-            using (StreamReader sr = new StreamReader(File.Open(musicDataTableFile, FileMode.Open, FileAccess.Read, FileShare.Read)))
-            {
-                using (BinaryWriter bw = new BinaryWriter(File.Open(musicDetailsPlatform, FileMode.Create, FileAccess.Write, FileShare.Read)))
-                {
-                    int minValue = 0;
-                    int maxValue = 0;
-
-                    //Write placeholders
-                    bw.Write(0);
-                    bw.Write(0);
-
-                    //Read data
-                    while (!sr.EndOfStream)
-                    {
-                        string currentLine = sr.ReadLine().Trim();
-                        //Skip empty or commented lines
-                        if (string.IsNullOrEmpty(currentLine) || currentLine.StartsWith("//"))
-                        {
-                            continue;
-                        }
-
-                        //Header info
-                        if (currentLine.StartsWith("{0"))
-                        {
-                            string[] lineData = currentLine.Split(new char[] { ',', '{', '}' }, StringSplitOptions.RemoveEmptyEntries);
-                            if (lineData.Length == 4)
-                            {
-                                int hashcode = Convert.ToInt32(lineData[0], 16);
-                                bw.Write(hashcode | 0x1B000000);
-                                bw.Write(Convert.ToSingle(lineData[1].TrimEnd('f'), GlobalPrefs.NumericProvider));
-                                if (bool.TryParse(lineData[2], out bool musicLoops))
-                                {
-                                    bw.Write(Convert.ToInt32(musicLoops));
-                                }
-                                else
-                                {
-                                    bw.Write(0);
-                                }
-                                bw.Write(Convert.ToInt32(lineData[3]));
-
-                                minValue = Math.Min(minValue, hashcode);
-                                maxValue = Math.Max(maxValue, hashcode);
-                            }
-                        }
-                    }
-
-                    //Write min and max values
-                    bw.Seek(0, SeekOrigin.Begin);
-                    bw.Write(minValue | 0x1B000000);
-                    bw.Write(maxValue | 0x1B000000);
-                }
-            }
         }
     }
 

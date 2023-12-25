@@ -9,6 +9,7 @@
 //-------------------------------------------------------------------------------------------------------------------------------
 // SFX Form Output Create Streams
 //-------------------------------------------------------------------------------------------------------------------------------
+using ESUtils;
 using ExMarkers;
 using sb_editor.Objects;
 using System;
@@ -60,25 +61,29 @@ namespace sb_editor.Forms
                                 backgroundWorker1.ReportProgress((int)progress, string.Format("{0} Stream {1} For {2}", languages[i], streamsList[j], platform.Key));
 
                                 //Get Sample Data File And it's header size
-                                string audioDataFilePath;
+                                string audioDataFilePath, statesFilePath;
                                 int headerSize;
                                 switch (platform.Key.ToLower())
                                 {
                                     case "playstation2":
                                         audioDataFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "PlayStation2_VAG", Path.ChangeExtension(streamsList[j], ".vag"));
+                                        statesFilePath = string.Empty;
                                         headerSize = 48;
                                         break;
                                     case "gamecube":
                                         audioDataFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "GameCube_Software_adpcm", Path.ChangeExtension(streamsList[j], ".ssp"));
+                                        statesFilePath = Path.ChangeExtension(audioDataFilePath, ".smd");
                                         headerSize = 0;
                                         break;
                                     case "pc":
                                         audioDataFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "PC_Software_adpcm", Path.ChangeExtension(streamsList[j], ".ssp"));
+                                        statesFilePath = Path.ChangeExtension(audioDataFilePath, ".smd");
                                         headerSize = 0;
                                         break;
                                     default:
-                                        audioDataFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "XBox_Software_adpcm", Path.ChangeExtension(streamsList[j], ".ssp"));
-                                        headerSize = 0;
+                                        audioDataFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "XBox_adpcm", streamsList[j]);
+                                        statesFilePath = string.Empty;
+                                        headerSize = 48;
                                         break;
                                 }
 
@@ -95,9 +100,13 @@ namespace sb_editor.Forms
                                         string sampleDataPath = Path.Combine(outputFolder, j + ".ssd");
                                         File.WriteAllBytes(sampleDataPath, CommonFunctions.RemoveFileHeader(audioDataFilePath, headerSize));
 
+                                        //Read Marker File
+                                        MarkerTextFile[] markersData = TextFiles.ReadMarkerFile(markerFile);
+                                        UpdateMarkerPositions(platform.Key, markersData, statesFilePath);
+
                                         //Write Marker File
                                         string markerDataPath = Path.ChangeExtension(sampleDataPath, ".smf");
-                                        streamMarkers.CreateMarkerBinFile(markerFile, markerDataPath, platform.Key);
+                                        streamMarkers.BuildBinaryFile(markersData, 100, markerDataPath, platform.Key.Equals("GameCube"));
 
                                         //Add items to list
                                         itemsToBind.Add(markerDataPath);
@@ -162,6 +171,72 @@ namespace sb_editor.Forms
             Array.Sort(streamArray);
 
             return streamArray;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void UpdateMarkerPositions(string outputPlatform, MarkerTextFile[] markersList, string smdFilePath)
+        {
+            //Calculate states -- PC & GameCube Platform
+            if (outputPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("GameCube", StringComparison.OrdinalIgnoreCase))
+            {
+                //Update Markers states
+                foreach (MarkerTextFile marker in markersList)
+                {
+                    if (marker.Position > 0)
+                    {
+                        uint state = 0;
+                        using (BinaryReader breader = new BinaryReader(File.Open(smdFilePath, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                        {
+                            long offset = (marker.Position / 256) * 256;
+                            if (offset <= breader.BaseStream.Length)
+                            {
+                                breader.BaseStream.Seek(offset, SeekOrigin.Begin);
+                                state = breader.ReadUInt32();
+                            }
+                            marker.ImaStateA = state;
+                            marker.ImaStateB = state;
+                        }
+                    }
+                }
+
+                //Start markers
+                foreach (MarkerTextFile marker in markersList)
+                {
+                    //Calculate VAG offsets
+                    if (marker.Position > 0)
+                    {
+                        marker.Position = CalculusLoopOffset.GetStreamLoopOffsetPCandGC(marker.Position);
+                    }
+                }
+            }
+
+            //Update Positions PS2 Platform
+            if (outputPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase))
+            {
+                //Start markers
+                foreach (MarkerTextFile marker in markersList)
+                {
+                    //Calculate VAG offsets
+                    if (marker.Position > 0)
+                    {
+                        marker.Position = CalculusLoopOffset.GetStreamLoopOffsetPlayStation2(marker.Position);
+                    }
+                }
+            }
+
+            //Update positions for Xbox
+            if (outputPlatform.Equals("Xbox", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("X Box", StringComparison.OrdinalIgnoreCase))
+            {
+                //Start markers
+                foreach (MarkerTextFile marker in markersList)
+                {
+                    //Calculate VAG offsets
+                    if (marker.Position > 0)
+                    {
+                        marker.Position = CalculusLoopOffset.GetStreamLoopOffsetXbox(marker.Position);
+                    }
+                }
+            }
         }
     }
 
