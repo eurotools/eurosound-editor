@@ -102,7 +102,7 @@ namespace sb_editor.Forms
 
                                         //Read Marker File
                                         MarkerTextFile[] markersData = TextFiles.ReadMarkerFile(markerFile);
-                                        UpdateMarkerPositions(platform.Key, markersData, statesFilePath);
+                                        UpdateMarkerPositions(markersData);
 
                                         //Write Marker File
                                         string markerDataPath = Path.ChangeExtension(sampleDataPath, ".smf");
@@ -174,7 +174,7 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void UpdateMarkerPositions(string outputPlatform, MarkerTextFile[] markersList, string smdFilePath)
+        private void UpdateMarkerPositions(MarkerTextFile[] markersList)
         {
             //Start markers
             foreach (MarkerTextFile marker in markersList)
