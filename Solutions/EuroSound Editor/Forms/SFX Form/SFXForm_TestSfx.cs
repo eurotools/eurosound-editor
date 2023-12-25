@@ -122,9 +122,10 @@ namespace sb_editor.Forms
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.Ducker);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.MasterVolume);
                 int useDistanceCheck = Convert.ToInt32(sfxData.Value.Parameters.UseGroupDistCheck);
-                sfxWritter.Write((byte)useDistanceCheck);
                 sfxWritter.Write((short)sfxData.Value.Parameters.Group);
-                sfxWritter.Write((byte)0);
+                sfxWritter.Write((short)useDistanceCheck);
+
+                //Flags
                 int sfxFlags = sbFunctions.GetFlags(sfxData.Value);
                 for (int i = 0; i < 16; i++)
                 {
@@ -139,7 +140,7 @@ namespace sb_editor.Forms
 
                 sfxWritter.Write(sfxData.Value.Parameters.DopplerValue);
                 sfxWritter.Write((sbyte)sfxData.Value.Parameters.Alertness);
-
+                
                 //Calculate references
                 sfxWritter.Write(BytesFunctions.FlipUShort((ushort)sfxData.Value.Samples.Count, isBigEndian));
                 foreach (SfxSample sampleToCheck in sfxData.Value.Samples)
