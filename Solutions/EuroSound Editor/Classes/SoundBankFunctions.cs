@@ -232,9 +232,6 @@ namespace sb_editor.Classes
                         decimal resampledWaveSize = decimal.Divide(masterWaveSize, decimal.Divide(masterWaveFreq, formatRate));
                         switch (outputPlatform)
                         {
-                            case "PC":
-                                fileSize += CalculusLoopOffset.GetStreamLoopOffsetPCandGC((uint)resampledWaveSize / 2);
-                                break;
                             case "GameCube":
                                 decimal dspFileSize = decimal.Divide(resampledWaveSize, (decimal)3.46);
                                 fileSize += CalculusLoopOffset.GetStreamLoopOffsetPCandGC((uint)dspFileSize);
