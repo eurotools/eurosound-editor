@@ -154,8 +154,8 @@ namespace sb_editor.Forms
 
             // Create objects for handling audio markers and various audio data formats
             StreamMarkerFiles streamMarkers = new StreamMarkerFiles();
-            ImaFunctions imaClass = new ImaFunctions();
             WaveFunctions waveData = new WaveFunctions();
+            EurocomImaFunctions eurocomIma = new EurocomImaFunctions();
 
             // Iterate through the list of audio files to be processed
             for (int i = 0; i < filesQueue.Length; i++)
@@ -262,16 +262,12 @@ namespace sb_editor.Forms
                                     CommonFunctions.RunConsoleProcess(SoxPath, string.Format("\"{0}\" -c 1 -r 32000 \"{1}\" resample -qs 0.97 avg -r", wavePath, wavRightChannelData), false);
 
                                     // Convert the split wave files to Ima ADPCM
-                                    imaLeftChannelData = imaClass.Encode(waveData.GetWaveSamples(wavLeftChannelData));
-                                    imaRightChannelData = imaClass.Encode(waveData.GetWaveSamples(wavRightChannelData));
+                                    imaLeftChannelData = eurocomIma.Encode(waveData.GetWaveSamples(wavLeftChannelData));
+                                    imaRightChannelData = eurocomIma.Encode(waveData.GetWaveSamples(wavRightChannelData));
 
                                     //Update flag to false
                                     outputImaData = false;
                                 }
-
-                                // Create ASL/ASR files
-                                File.WriteAllBytes(aslFilePath, imaClass.DecodeStatesIma(imaLeftChannelData, imaLeftChannelData.Length * 2));
-                                File.WriteAllBytes(asrFilePath, imaClass.DecodeStatesIma(imaRightChannelData, imaLeftChannelData.Length * 2));
 
                                 //Update UI with the current progress
                                 backgroundWorker1.ReportProgress(100, string.Format("Making Music Stream: {0} for {1}", filesQueue[i], outputPlatforms[j]));
@@ -279,7 +275,7 @@ namespace sb_editor.Forms
                                 // Build SMD
                                 if (Directory.Exists(outputFolder))
                                 {
-                                    InterleaveAudioChannels(imaLeftChannelData, imaRightChannelData, 1, Path.Combine(outputFolder, "MFX_" + musicFileData.HashCode + ".ssd"));
+                                    InterleaveAudioChannels(imaLeftChannelData, imaRightChannelData, 32, Path.Combine(outputFolder, "MFX_" + musicFileData.HashCode + ".ssd"));
                                 }
                                 break;
                             case "x box":
@@ -290,15 +286,27 @@ namespace sb_editor.Forms
                                 string outputTempFolder = Path.Combine(GlobalPrefs.ProjectFolder, "TempOutputFolder", "X Box", "Music", "MFX_" + folderIndex);
                                 Directory.CreateDirectory(outputTempFolder);
 
-                                // Convert the wave file to the Xbox Adpcm format
-                                string soundSampleDataFile = Path.Combine(outputTempFolder, "MFX_" + musicFileData.HashCode + ".ssd");
-                                backgroundWorker1.ReportProgress(100, string.Format("Making Music Stream: {0} for {1}", filesQueue[i], outputPlatforms[j]));
-                                CommonFunctions.RunConsoleProcess(Path.Combine(Application.StartupPath, "SystemFiles", "xbadpcmencode.EXE"), string.Format("\"{0}\" \"{1}\"", wavePath, soundSampleDataFile), false);
+                                // Define the paths for the left and right channel WAV files
+                                wavLeftChannelData = Path.Combine(GlobalPrefs.ProjectFolder, "System", "TempWave.wav");
+                                wavRightChannelData = Path.Combine(GlobalPrefs.ProjectFolder, "System", "TempWave2.wav");
 
-                                //Remove Header Data and build SMD file
-                                if (File.Exists(soundSampleDataFile))
+                                // Split the wave file into left and right channels and re-sample the waves file to 32000 Hz
+                                backgroundWorker1.ReportProgress(0, string.Format("Making Music Stream: {0} for {1}", filesQueue[i], outputPlatforms[j]));
+                                CommonFunctions.RunConsoleProcess(SoxPath, string.Format("\"{0}\" -c 1 \"{1}\" avg -l", wavePath, wavLeftChannelData), false);
+                                backgroundWorker1.ReportProgress(99, string.Format("Making Music Stream: {0} for {1}", filesQueue[i], outputPlatforms[j]));
+                                CommonFunctions.RunConsoleProcess(SoxPath, string.Format("\"{0}\" -c 1 \"{1}\" avg -r", wavePath, wavRightChannelData), false);
+
+                                // Convert the split wave files to Ima ADPCM
+                                imaLeftChannelData = eurocomIma.Encode(waveData.GetWaveSamples(wavLeftChannelData));
+                                imaRightChannelData = eurocomIma.Encode(waveData.GetWaveSamples(wavRightChannelData));
+
+                                //Update UI with the current progress
+                                backgroundWorker1.ReportProgress(100, string.Format("Making Music Stream: {0} for {1}", filesQueue[i], outputPlatforms[j]));
+
+                                // Build SMD
+                                if (Directory.Exists(outputFolder))
                                 {
-                                    File.WriteAllBytes(soundSampleDataFile, CommonFunctions.RemoveFileHeader(soundSampleDataFile, 48));
+                                    InterleaveAudioChannels(imaLeftChannelData, imaRightChannelData, 32, Path.Combine(outputTempFolder, "MFX_" + musicFileData.HashCode + ".ssd"));
                                 }
                                 break;
                         }
