@@ -98,7 +98,7 @@ namespace sb_editor.Forms
 
                                         //Read Marker File
                                         MarkerTextFile[] markersData = TextFiles.ReadMarkerFile(markerFile);
-                                        UpdateMarkerPositions(markersData);
+                                        UpdateMarkerPositions(platform.Key, markersData);
 
                                         //Write Marker File
                                         string markerDataPath = Path.ChangeExtension(sampleDataPath, ".smf");
@@ -170,7 +170,7 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void UpdateMarkerPositions(MarkerTextFile[] markersList)
+        private void UpdateMarkerPositions(string outputPlatform, MarkerTextFile[] markersList)
         {
             //Start markers
             foreach (MarkerTextFile marker in markersList)
@@ -178,7 +178,7 @@ namespace sb_editor.Forms
                 //Calculate VAG offsets
                 if (marker.Position > 0)
                 {
-                    marker.Position = CalculusLoopOffset.GetEurocomImaLoopOffset(marker.Position);
+                    marker.Position = CalculusLoopOffset.GetStreamLoopOffsetPlayStation2(marker.Position);
                 }
             }
         }
