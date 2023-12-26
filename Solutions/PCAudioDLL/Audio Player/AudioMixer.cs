@@ -132,7 +132,7 @@ namespace PCAudioDLL.Audio_Player
             }
             else if (outputPlatform.IndexOf("PS2", StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                int test = 0;
+                uint test = 0;
                 SonyAdpcm vagDecoder = new SonyAdpcm();
                 decodedData = vagDecoder.Decode(streamedFile[streamIndex].EncodedData, ref test);
             }
