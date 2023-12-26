@@ -61,29 +61,25 @@ namespace sb_editor.Forms
                                 backgroundWorker1.ReportProgress((int)progress, string.Format("{0} Stream {1} For {2}", languages[i], streamsList[j], platform.Key));
 
                                 //Get Sample Data File And it's header size
-                                string audioDataFilePath, statesFilePath;
+                                string audioDataFilePath;
                                 int headerSize;
                                 switch (platform.Key.ToLower())
                                 {
                                     case "playstation2":
                                         audioDataFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "PlayStation2_VAG", Path.ChangeExtension(streamsList[j], ".vag"));
-                                        statesFilePath = string.Empty;
                                         headerSize = 48;
                                         break;
                                     case "gamecube":
                                         audioDataFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "GameCube_Software_adpcm", Path.ChangeExtension(streamsList[j], ".ssp"));
-                                        statesFilePath = Path.ChangeExtension(audioDataFilePath, ".smd");
                                         headerSize = 0;
                                         break;
                                     case "pc":
                                         audioDataFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "PC_Software_adpcm", Path.ChangeExtension(streamsList[j], ".ssp"));
-                                        statesFilePath = Path.ChangeExtension(audioDataFilePath, ".smd");
                                         headerSize = 0;
                                         break;
                                     default:
-                                        audioDataFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "XBox_adpcm", streamsList[j]);
-                                        statesFilePath = string.Empty;
-                                        headerSize = 48;
+                                        audioDataFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "XBox_Software_adpcm", Path.ChangeExtension(streamsList[j], ".ssp"));
+                                        headerSize = 0;
                                         break;
                                 }
 
