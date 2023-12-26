@@ -178,7 +178,7 @@ namespace sb_editor.Forms
                 //Calculate VAG offsets
                 if (marker.Position > 0)
                 {
-                    marker.Position = CalculusLoopOffset.GetEurocomImaLoopOffset(marker.Position);
+                    marker.Position = CalculusLoopOffset.GetStreamLoopOffsetPlayStation2(marker.Position);
                 }
             }
         }

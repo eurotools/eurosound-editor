@@ -313,7 +313,7 @@ namespace sb_editor.Forms
 
                         //Read Marker File
                         MarkerTextFile[] markersData = TextFiles.ReadMarkerFile(markerFile);
-                        UpdateMarkerPositions( markersData);
+                        UpdateMarkerPositions( markersData, outputPlatforms[j]);
 
                         //Write Marker File
                         streamMarkers.BuildBinaryFile(markersData, musicFileData.Volume, soundMarkerFilePath, outputPlatforms[j].Equals("GameCube"));
@@ -382,7 +382,7 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void UpdateMarkerPositions(MarkerTextFile[] markersList)
+        private void UpdateMarkerPositions(MarkerTextFile[] markersList, string outputPlatform)
         {
             //Update positions Start Markers
             foreach (MarkerTextFile marker in markersList)
@@ -390,7 +390,14 @@ namespace sb_editor.Forms
                 //Calculate offsets for IMA Adpcm
                 if (marker.Position > 0)
                 {
-                    marker.Position = CalculusLoopOffset.GetEurocomImaLoopOffset(marker.Position);
+                    if (outputPlatform.Equals("PlayStation2", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("PC", StringComparison.OrdinalIgnoreCase) || outputPlatform.Equals("GameCube", StringComparison.OrdinalIgnoreCase))
+                    {
+                        marker.Position = CalculusLoopOffset.GetMusicLoopOffsetPlayStation2(marker.Position);
+                    }
+                    else
+                    {
+                        marker.Position = CalculusLoopOffset.GetMusicLoopOffsetXbox(marker.Position);
+                    }
                 }
             }
         }
