@@ -29,7 +29,6 @@ namespace sb_editor.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtSoundBankFile = new System.Windows.Forms.TextBox();
             this.btnStartSFX = new System.Windows.Forms.Button();
             this.btnStopSFX = new System.Windows.Forms.Button();
             this.nudHashCode = new System.Windows.Forms.NumericUpDown();
@@ -83,6 +82,8 @@ namespace sb_editor.Forms
             this.label2 = new System.Windows.Forms.Label();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.btn_musicApp = new System.Windows.Forms.Button();
+            this.txtSoundBankFile = new System.Windows.Forms.TextBox();
+            this.btnSearchOutPath = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.nudHashCode)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudZ)).BeginInit();
@@ -106,20 +107,6 @@ namespace sb_editor.Forms
             ((System.ComponentModel.ISupportInitialize)(this.trckBarMasterVolume)).BeginInit();
             this.SuspendLayout();
             // 
-            // txtSoundBankFile
-            // 
-            this.txtSoundBankFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSoundBankFile.BackColor = System.Drawing.SystemColors.Window;
-            this.txtSoundBankFile.Location = new System.Drawing.Point(6, 19);
-            this.txtSoundBankFile.Name = "txtSoundBankFile";
-            this.txtSoundBankFile.ReadOnly = true;
-            this.txtSoundBankFile.Size = new System.Drawing.Size(378, 20);
-            this.txtSoundBankFile.TabIndex = 0;
-            this.txtSoundBankFile.Text = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Sphinx and the Cursed Mummy\\_bin_PC" +
-    "\\_Eng";
-            this.txtSoundBankFile.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TxtSoundBankFile_MouseDoubleClick);
-            // 
             // btnStartSFX
             // 
             this.btnStartSFX.Location = new System.Drawing.Point(92, 19);
@@ -136,7 +123,7 @@ namespace sb_editor.Forms
             this.btnStopSFX.Name = "btnStopSFX";
             this.btnStopSFX.Size = new System.Drawing.Size(75, 23);
             this.btnStopSFX.TabIndex = 2;
-            this.btnStopSFX.Text = "Remove";
+            this.btnStopSFX.Text = "Stop SFX";
             this.btnStopSFX.UseVisualStyleBackColor = true;
             this.btnStopSFX.Click += new System.EventHandler(this.BtnStopSFX_Click);
             // 
@@ -553,6 +540,7 @@ namespace sb_editor.Forms
             this.chxDrawCircle.TabIndex = 10;
             this.chxDrawCircle.Text = "Circle";
             this.chxDrawCircle.UseVisualStyleBackColor = true;
+            this.chxDrawCircle.CheckedChanged += new System.EventHandler(this.ChxDrawCircle_CheckedChanged);
             // 
             // chxTestPan
             // 
@@ -636,6 +624,7 @@ namespace sb_editor.Forms
             // grbxSFXsFolderPath
             // 
             this.grbxSFXsFolderPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.grbxSFXsFolderPath.Controls.Add(this.btnSearchOutPath);
             this.grbxSFXsFolderPath.Controls.Add(this.txtSoundBankFile);
             this.grbxSFXsFolderPath.Location = new System.Drawing.Point(12, 742);
             this.grbxSFXsFolderPath.Name = "grbxSFXsFolderPath";
@@ -771,6 +760,31 @@ namespace sb_editor.Forms
             this.btn_musicApp.UseVisualStyleBackColor = true;
             this.btn_musicApp.Click += new System.EventHandler(this.Btn_musicApp_Click);
             // 
+            // txtSoundBankFile
+            // 
+            this.txtSoundBankFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSoundBankFile.BackColor = System.Drawing.SystemColors.Window;
+            this.txtSoundBankFile.Location = new System.Drawing.Point(6, 19);
+            this.txtSoundBankFile.Name = "txtSoundBankFile";
+            this.txtSoundBankFile.ReadOnly = true;
+            this.txtSoundBankFile.Size = new System.Drawing.Size(346, 20);
+            this.txtSoundBankFile.TabIndex = 0;
+            this.txtSoundBankFile.Text = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Sphinx and the Cursed Mummy\\_bin_PC" +
+    "\\_Eng";
+            this.txtSoundBankFile.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TxtSoundBankFile_MouseDoubleClick);
+            // 
+            // btnSearchOutPath
+            // 
+            this.btnSearchOutPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSearchOutPath.Location = new System.Drawing.Point(358, 18);
+            this.btnSearchOutPath.Name = "btnSearchOutPath";
+            this.btnSearchOutPath.Size = new System.Drawing.Size(26, 20);
+            this.btnSearchOutPath.TabIndex = 1;
+            this.btnSearchOutPath.Text = "...";
+            this.btnSearchOutPath.UseVisualStyleBackColor = true;
+            this.btnSearchOutPath.Click += new System.EventHandler(this.BtnSearchOutPath_Click);
+            // 
             // ConsoleApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -827,8 +841,6 @@ namespace sb_editor.Forms
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox txtSoundBankFile;
         private System.Windows.Forms.Button btnStartSFX;
         private System.Windows.Forms.Button btnStopSFX;
         private System.Windows.Forms.NumericUpDown nudHashCode;
@@ -882,5 +894,7 @@ namespace sb_editor.Forms
         private System.Windows.Forms.RadioButton rbtn_PS2;
         private System.Windows.Forms.RadioButton rbtn_PC;
         private System.Windows.Forms.Button btn_musicApp;
+        private System.Windows.Forms.Button btnSearchOutPath;
+        private System.Windows.Forms.TextBox txtSoundBankFile;
     }
 }

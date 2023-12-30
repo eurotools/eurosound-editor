@@ -253,7 +253,7 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnTestLeft_Click(object sender, EventArgs e)
         {
-            nudX.Value = -100;
+            nudX.Value -= 10;
             nudY.Value = 0;
             nudZ.Value = 0;
         }
@@ -261,9 +261,15 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnTestRight_Click(object sender, EventArgs e)
         {
-            nudX.Value = 100;
+            nudX.Value += 10;
             nudY.Value = 0;
             nudZ.Value = 0;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void ChxDrawCircle_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdatePictureBoxes(sender, e);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -331,6 +337,7 @@ namespace sb_editor.Forms
         private void BtnSfxReset_Click(object sender, EventArgs e)
         {
             BtnLoadSoundbanks_Click(sender, e);
+            BtnResetPos_Click(sender, e);
         }
 
         //-------------------------------------------------------------------------------------------
@@ -353,6 +360,12 @@ namespace sb_editor.Forms
                 IniFile iniFile = new IniFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini"));
                 iniFile.Write("OutputPath", txtSoundBankFile.Text, "ConsoleApp");
             }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void BtnSearchOutPath_Click(object sender, EventArgs e)
+        {
+            TxtSoundBankFile_MouseDoubleClick(sender, null);
         }
 
         //-------------------------------------------------------------------------------------------
