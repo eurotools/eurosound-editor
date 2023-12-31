@@ -70,6 +70,8 @@ namespace sb_editor.Forms
             this.picBox_ZX = new System.Windows.Forms.PictureBox();
             this.btnOkey = new System.Windows.Forms.Button();
             this.grbxSFXsFolderPath = new System.Windows.Forms.GroupBox();
+            this.btnSearchOutPath = new System.Windows.Forms.Button();
+            this.txtSoundBankFile = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.grbxTestingGroup = new System.Windows.Forms.GroupBox();
             this.rbtn_Xbox = new System.Windows.Forms.RadioButton();
@@ -82,8 +84,10 @@ namespace sb_editor.Forms
             this.label2 = new System.Windows.Forms.Label();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.btn_musicApp = new System.Windows.Forms.Button();
-            this.txtSoundBankFile = new System.Windows.Forms.TextBox();
-            this.btnSearchOutPath = new System.Windows.Forms.Button();
+            this.grbxSoundDetails = new System.Windows.Forms.GroupBox();
+            this.btnSearchSoundDetails = new System.Windows.Forms.Button();
+            this.txtSoundDetails = new System.Windows.Forms.TextBox();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.nudHashCode)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudZ)).BeginInit();
@@ -105,6 +109,7 @@ namespace sb_editor.Forms
             this.groupBox3.SuspendLayout();
             this.grbxTestingGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trckBarMasterVolume)).BeginInit();
+            this.grbxSoundDetails.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnStartSFX
@@ -131,7 +136,7 @@ namespace sb_editor.Forms
             // 
             this.nudHashCode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.nudHashCode.Hexadecimal = true;
-            this.nudHashCode.Location = new System.Drawing.Point(57, 471);
+            this.nudHashCode.Location = new System.Drawing.Point(57, 423);
             this.nudHashCode.Maximum = new decimal(new int[] {
             -1,
             0,
@@ -263,7 +268,7 @@ namespace sb_editor.Forms
             this.grbxSfxPlay.Controls.Add(this.btnStart3dSound);
             this.grbxSfxPlay.Controls.Add(this.btnStartSFX);
             this.grbxSfxPlay.Controls.Add(this.btnStopSFX);
-            this.grbxSfxPlay.Location = new System.Drawing.Point(6, 527);
+            this.grbxSfxPlay.Location = new System.Drawing.Point(6, 479);
             this.grbxSfxPlay.Name = "grbxSfxPlay";
             this.grbxSfxPlay.Size = new System.Drawing.Size(266, 61);
             this.grbxSfxPlay.TabIndex = 5;
@@ -285,7 +290,7 @@ namespace sb_editor.Forms
             this.grbxSamplePlay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grbxSamplePlay.Controls.Add(this.btnPlaySample);
-            this.grbxSamplePlay.Location = new System.Drawing.Point(278, 527);
+            this.grbxSamplePlay.Location = new System.Drawing.Point(278, 479);
             this.grbxSamplePlay.Name = "grbxSamplePlay";
             this.grbxSamplePlay.Size = new System.Drawing.Size(106, 61);
             this.grbxSamplePlay.TabIndex = 7;
@@ -317,7 +322,7 @@ namespace sb_editor.Forms
             this.groupBox4.Controls.Add(this.grbxSamplePlay);
             this.groupBox4.Location = new System.Drawing.Point(12, 35);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(390, 594);
+            this.groupBox4.Size = new System.Drawing.Size(390, 546);
             this.groupBox4.TabIndex = 1;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Play SFX or Sample For Selected Bank";
@@ -325,7 +330,7 @@ namespace sb_editor.Forms
             // nudOuterRadius
             // 
             this.nudOuterRadius.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.nudOuterRadius.Location = new System.Drawing.Point(6, 490);
+            this.nudOuterRadius.Location = new System.Drawing.Point(6, 442);
             this.nudOuterRadius.Maximum = new decimal(new int[] {
             500,
             0,
@@ -340,7 +345,7 @@ namespace sb_editor.Forms
             // nudInnerRadius
             // 
             this.nudInnerRadius.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.nudInnerRadius.Location = new System.Drawing.Point(6, 471);
+            this.nudInnerRadius.Location = new System.Drawing.Point(6, 423);
             this.nudInnerRadius.Maximum = new decimal(new int[] {
             500,
             0,
@@ -361,7 +366,7 @@ namespace sb_editor.Forms
             this.lstbSamples.HorizontalScrollbar = true;
             this.lstbSamples.Location = new System.Drawing.Point(278, 19);
             this.lstbSamples.Name = "lstbSamples";
-            this.lstbSamples.Size = new System.Drawing.Size(106, 433);
+            this.lstbSamples.Size = new System.Drawing.Size(106, 381);
             this.lstbSamples.TabIndex = 9;
             // 
             // grbxRandomTest
@@ -369,7 +374,7 @@ namespace sb_editor.Forms
             this.grbxRandomTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.grbxRandomTest.Controls.Add(this.btnStopRandomTest);
             this.grbxRandomTest.Controls.Add(this.btnStartRandomTest);
-            this.grbxRandomTest.Location = new System.Drawing.Point(152, 471);
+            this.grbxRandomTest.Location = new System.Drawing.Point(152, 423);
             this.grbxRandomTest.Name = "grbxRandomTest";
             this.grbxRandomTest.Size = new System.Drawing.Size(120, 50);
             this.grbxRandomTest.TabIndex = 8;
@@ -404,7 +409,7 @@ namespace sb_editor.Forms
             this.lstBox_SFXs.HorizontalScrollbar = true;
             this.lstBox_SFXs.Location = new System.Drawing.Point(6, 19);
             this.lstBox_SFXs.Name = "lstBox_SFXs";
-            this.lstBox_SFXs.Size = new System.Drawing.Size(266, 433);
+            this.lstBox_SFXs.Size = new System.Drawing.Size(266, 381);
             this.lstBox_SFXs.TabIndex = 0;
             this.lstBox_SFXs.SelectedIndexChanged += new System.EventHandler(this.LstBox_SFXs_SelectedIndexChanged);
             // 
@@ -624,14 +629,38 @@ namespace sb_editor.Forms
             // grbxSFXsFolderPath
             // 
             this.grbxSFXsFolderPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.grbxSFXsFolderPath.Controls.Add(this.grbxSoundDetails);
             this.grbxSFXsFolderPath.Controls.Add(this.btnSearchOutPath);
             this.grbxSFXsFolderPath.Controls.Add(this.txtSoundBankFile);
-            this.grbxSFXsFolderPath.Location = new System.Drawing.Point(12, 742);
+            this.grbxSFXsFolderPath.Location = new System.Drawing.Point(12, 694);
             this.grbxSFXsFolderPath.Name = "grbxSFXsFolderPath";
-            this.grbxSFXsFolderPath.Size = new System.Drawing.Size(390, 53);
+            this.grbxSFXsFolderPath.Size = new System.Drawing.Size(390, 101);
             this.grbxSFXsFolderPath.TabIndex = 3;
             this.grbxSFXsFolderPath.TabStop = false;
             this.grbxSFXsFolderPath.Text = "Platform Output Folder Path";
+            // 
+            // btnSearchOutPath
+            // 
+            this.btnSearchOutPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSearchOutPath.Location = new System.Drawing.Point(358, 18);
+            this.btnSearchOutPath.Name = "btnSearchOutPath";
+            this.btnSearchOutPath.Size = new System.Drawing.Size(26, 20);
+            this.btnSearchOutPath.TabIndex = 1;
+            this.btnSearchOutPath.Text = "...";
+            this.btnSearchOutPath.UseVisualStyleBackColor = true;
+            this.btnSearchOutPath.Click += new System.EventHandler(this.BtnSearchOutPath_Click);
+            // 
+            // txtSoundBankFile
+            // 
+            this.txtSoundBankFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSoundBankFile.BackColor = System.Drawing.SystemColors.Window;
+            this.txtSoundBankFile.Location = new System.Drawing.Point(6, 19);
+            this.txtSoundBankFile.Name = "txtSoundBankFile";
+            this.txtSoundBankFile.ReadOnly = true;
+            this.txtSoundBankFile.Size = new System.Drawing.Size(346, 20);
+            this.txtSoundBankFile.TabIndex = 0;
+            this.txtSoundBankFile.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TxtSoundBankFile_MouseDoubleClick);
             // 
             // groupBox3
             // 
@@ -640,7 +669,7 @@ namespace sb_editor.Forms
             this.groupBox3.Controls.Add(this.btnStopAllSFXs);
             this.groupBox3.Controls.Add(this.trckBarMasterVolume);
             this.groupBox3.Controls.Add(this.label2);
-            this.groupBox3.Location = new System.Drawing.Point(12, 635);
+            this.groupBox3.Location = new System.Drawing.Point(12, 587);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(390, 101);
             this.groupBox3.TabIndex = 2;
@@ -760,30 +789,46 @@ namespace sb_editor.Forms
             this.btn_musicApp.UseVisualStyleBackColor = true;
             this.btn_musicApp.Click += new System.EventHandler(this.Btn_musicApp_Click);
             // 
-            // txtSoundBankFile
+            // grbxSoundDetails
             // 
-            this.txtSoundBankFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.grbxSoundDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSoundBankFile.BackColor = System.Drawing.SystemColors.Window;
-            this.txtSoundBankFile.Location = new System.Drawing.Point(6, 19);
-            this.txtSoundBankFile.Name = "txtSoundBankFile";
-            this.txtSoundBankFile.ReadOnly = true;
-            this.txtSoundBankFile.Size = new System.Drawing.Size(346, 20);
-            this.txtSoundBankFile.TabIndex = 0;
-            this.txtSoundBankFile.Text = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Sphinx and the Cursed Mummy\\_bin_PC" +
-    "\\_Eng";
-            this.txtSoundBankFile.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TxtSoundBankFile_MouseDoubleClick);
+            this.grbxSoundDetails.Controls.Add(this.btnSearchSoundDetails);
+            this.grbxSoundDetails.Controls.Add(this.txtSoundDetails);
+            this.grbxSoundDetails.Location = new System.Drawing.Point(6, 45);
+            this.grbxSoundDetails.Name = "grbxSoundDetails";
+            this.grbxSoundDetails.Size = new System.Drawing.Size(378, 50);
+            this.grbxSoundDetails.TabIndex = 2;
+            this.grbxSoundDetails.TabStop = false;
+            this.grbxSoundDetails.Text = "Sound Details File";
             // 
-            // btnSearchOutPath
+            // btnSearchSoundDetails
             // 
-            this.btnSearchOutPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSearchOutPath.Location = new System.Drawing.Point(358, 18);
-            this.btnSearchOutPath.Name = "btnSearchOutPath";
-            this.btnSearchOutPath.Size = new System.Drawing.Size(26, 20);
-            this.btnSearchOutPath.TabIndex = 1;
-            this.btnSearchOutPath.Text = "...";
-            this.btnSearchOutPath.UseVisualStyleBackColor = true;
-            this.btnSearchOutPath.Click += new System.EventHandler(this.BtnSearchOutPath_Click);
+            this.btnSearchSoundDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSearchSoundDetails.Location = new System.Drawing.Point(346, 18);
+            this.btnSearchSoundDetails.Name = "btnSearchSoundDetails";
+            this.btnSearchSoundDetails.Size = new System.Drawing.Size(26, 20);
+            this.btnSearchSoundDetails.TabIndex = 3;
+            this.btnSearchSoundDetails.Text = "...";
+            this.btnSearchSoundDetails.UseVisualStyleBackColor = true;
+            this.btnSearchSoundDetails.Click += new System.EventHandler(this.btnSearchSoundDetails_Click);
+            // 
+            // txtSoundDetails
+            // 
+            this.txtSoundDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSoundDetails.BackColor = System.Drawing.SystemColors.Window;
+            this.txtSoundDetails.Location = new System.Drawing.Point(6, 19);
+            this.txtSoundDetails.Name = "txtSoundDetails";
+            this.txtSoundDetails.ReadOnly = true;
+            this.txtSoundDetails.Size = new System.Drawing.Size(334, 20);
+            this.txtSoundDetails.TabIndex = 2;
+            this.txtSoundDetails.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.txtSoundDetails_MouseDoubleClick);
+            // 
+            // openFileDialog
+            // 
+            this.openFileDialog.Filter = "SFX File (*.sfx)|*.sfx";
+            this.openFileDialog.RestoreDirectory = true;
             // 
             // ConsoleApp
             // 
@@ -835,6 +880,8 @@ namespace sb_editor.Forms
             this.grbxTestingGroup.ResumeLayout(false);
             this.grbxTestingGroup.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trckBarMasterVolume)).EndInit();
+            this.grbxSoundDetails.ResumeLayout(false);
+            this.grbxSoundDetails.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -896,5 +943,9 @@ namespace sb_editor.Forms
         private System.Windows.Forms.Button btn_musicApp;
         private System.Windows.Forms.Button btnSearchOutPath;
         private System.Windows.Forms.TextBox txtSoundBankFile;
+        private System.Windows.Forms.GroupBox grbxSoundDetails;
+        private System.Windows.Forms.Button btnSearchSoundDetails;
+        private System.Windows.Forms.TextBox txtSoundDetails;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
     }
 }
