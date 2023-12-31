@@ -27,7 +27,7 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class SFXForm : Form
     {
-        private readonly PCAudio pcDll = new PCAudio();
+        private readonly PCAudio pcDll = new PCAudio(0x1AF00000);
         private readonly bool sfxDefaults;
         private readonly string sfxFileName;
         private Color currentColor = SystemColors.Control;
@@ -346,10 +346,10 @@ namespace sb_editor.Forms
             {
                 if (!pcDll.IsSoundBankLoaded(0xFFFE))
                 {
-                    pcDll.LoadSoundBank("PC", filePath, false);
+                    pcDll.LoadSoundBank("Testing", filePath);
                 }
-                txtDllTime.Text = string.Format("DLL Time {0:0.###}", pcDll.LoadSoundBank("PC", filePath, false));
-                pcDll.StartSound(0x1AF00000, true);
+                txtDllTime.Text = string.Format("DLL Time {0:0.###}", pcDll.LoadSoundBank("Testing", filePath));
+                pcDll.StartSound(0x1AF00000);
             }
         }
 

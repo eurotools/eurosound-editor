@@ -15,7 +15,7 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class ConsoleApp : Form
     {
-        private readonly PCAudio pcDll = new PCAudio();
+        private readonly PCAudio pcDll = new PCAudio(0x1AF00000);
         private ProjProperties projectSettings;
         private SoundPlayer audioPlayer;
 
@@ -85,7 +85,7 @@ namespace sb_editor.Forms
             string sfxFilePath = Path.Combine(txtSoundBankFile.Text, CommonFunctions.GetSfxName(Language.English, "_streamdata"));
             if (File.Exists(sfxFilePath))
             {
-                pcDll.LoadSoundBank(GetTestingPlatform(), sfxFilePath, true);
+                pcDll.LoadSoundBank(GetTestingPlatform(), sfxFilePath);
             }
         }
 
@@ -126,7 +126,7 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnStart3dSound_Click(object sender, EventArgs e)
         {
-            pcDll.StartSound3D((uint)nudHashCode.Value, new float[] { (float)nudX.Value, (float)nudY.Value, (float)nudZ.Value }, false, false, chxTestPan.Checked, trckBarMasterVolume.Value);
+            pcDll.StartSound3D((uint)nudHashCode.Value, new float[] { (float)nudX.Value, (float)nudY.Value, (float)nudZ.Value }, false, chxTestPan.Checked, trckBarMasterVolume.Value);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -221,7 +221,7 @@ namespace sb_editor.Forms
                     string soundDetails = Path.Combine(txtSoundBankFile.Text, CommonFunctions.GetSfxName(Language.English, "_sounddetails"));
                     if (File.Exists(soundDetails))
                     {
-                        pcDll.LoadSoundDetails(GetTestingPlatform(), soundDetails);
+                        pcDll.LoadSoundBank(GetTestingPlatform(), soundDetails);
                     }
                 }
             }
