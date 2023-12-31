@@ -14,7 +14,7 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class ConsoleApp : Form
     {
-        private readonly PCAudio pcDll = new PCAudio();
+        private readonly PCAudio pcDll = new PCAudio(0x1A000000);
         private ProjProperties projectSettings;
         private SoundPlayer audioPlayer;
 
@@ -82,7 +82,7 @@ namespace sb_editor.Forms
         {
             //Load SFX File
             string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, "HC00FFFF", ".SFX"));
-            pcDll.LoadSoundBank(GetTestingPlatform(), sfxFilePath, true);
+            pcDll.LoadSoundBank(GetTestingPlatform(), sfxFilePath);
         }
 
         //-------------------------------------------------------------------------------------------
