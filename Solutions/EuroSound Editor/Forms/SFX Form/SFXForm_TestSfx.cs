@@ -29,7 +29,7 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void CreateTestSfx(string outputFolder, string fileName)
         {
-            int hashCode = 65534;
+            int hashCode = 0xFFFE;
             SoundBankFunctions sbFunctions = new SoundBankFunctions();
 
             //Ensure that the debug folder exists
