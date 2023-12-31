@@ -13,7 +13,10 @@ using MusX;
 using MusX.Objects;
 using MusX.Readers;
 using NAudio.Wave;
+using PCAudioDLL.Audio_Player;
+using PCAudioDLL.Codecs;
 using PCAudioDLL.MusX_Objects;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -26,25 +29,22 @@ namespace PCAudioDLL
     //-------------------------------------------------------------------------------------------------------------------------------
     public class PCAudio
     {
-        internal Dictionary<uint, SoundBank> LoadedSoundBanks = new Dictionary<uint, SoundBank>();
-        private SoundDetails soundDetails;
-        public readonly AudioVoices audioVoices = new AudioVoices();
+        private readonly Dictionary<uint, SoundBank> LoadedSoundBanks = new Dictionary<uint, SoundBank>();
         private readonly List<StreamSample> streamedFile = new List<StreamSample>();
+        private readonly int hashCodePrefix;
+        public readonly AudioVoices audioVoices = new AudioVoices();
         private string sbOutputPlatform;
+        private int fileVersion;
+        private SoundDetails soundDetails;
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void LoadSoundDetails(string soundBankPlatform, string soundBankPath)
+        public PCAudio(int _hashcodePrefix)
         {
-            if (File.Exists(soundBankPath))
-            {
-                SoundDetailsReader soundDetailsReader = new SoundDetailsReader();
-                SfxCommonHeader soundDetailsHeaderData = soundDetailsReader.ReadCommonHeader(soundBankPath, soundBankPlatform);
-                soundDetails = soundDetailsReader.ReadSoundDetailsFile(soundBankPath, soundDetailsHeaderData);
-            }
+            hashCodePrefix = _hashcodePrefix;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public double LoadSoundBank(string soundBankPlatform, string soundBankPath, bool isStream = false)
+        public double LoadSoundBank(string soundBankPlatform, string soundBankPath)
         {
             sbOutputPlatform = soundBankPlatform;
             Stopwatch watch = Stopwatch.StartNew();
@@ -55,18 +55,29 @@ namespace PCAudioDLL
             PCAudioDebugConsole.WriteLine(string.Format("CMD_SFX_INITIALISE2 : {0}", Path.GetFileName(soundBankPath)));
             PCAudioDebugConsole.WriteLine(string.Format("AsyncOpenFile : {0}", soundBankPath));
             PCAudioDebugConsole.WriteLine("");
-            PCAudioDebugConsole.WriteLine("CMD_SFXLOADSOUNDBANK");
 
-            //Load data
-            if (isStream)
+            //Get file type and load
+            SfxFunctions.FileType fileType = Utils.GetFileType(soundBankPath);
+            if (fileType == SfxFunctions.FileType.SoundDetailsFile)
             {
+                PCAudioDebugConsole.WriteLine("CMD_SFXLOADDETAILSBANK");
+                SoundDetailsReader soundDetailsReader = new SoundDetailsReader();
+                SfxCommonHeader soundDetailsHeaderData = soundDetailsReader.ReadCommonHeader(soundBankPath, soundBankPlatform);
+                soundDetails = soundDetailsReader.ReadSoundDetailsFile(soundBankPath, soundDetailsHeaderData);
+                fileVersion = soundDetailsHeaderData.FileVersion;
+            }
+            if (fileType == SfxFunctions.FileType.StreamFile)
+            {
+                PCAudioDebugConsole.WriteLine("CMD_SFXLOADSTREAMBANK");
                 streamedFile.Clear();
                 StreamBankReader reader = new StreamBankReader();
                 StreambankHeader soundBankHeaderData = reader.ReadStreamBankHeader(soundBankPath, soundBankPlatform);
                 reader.ReadStreamBank(soundBankPath, soundBankHeaderData, streamedFile);
+                fileVersion = soundBankHeaderData.FileVersion;
             }
-            else
+            else if (fileType == SfxFunctions.FileType.SoundbankFile || fileType == SfxFunctions.FileType.TestSFX)
             {
+                PCAudioDebugConsole.WriteLine("CMD_SFXLOADSOUNDBANK");
                 //Initialize SoundBank
                 SoundBank sbData = new SoundBank
                 {
@@ -77,9 +88,10 @@ namespace PCAudioDLL
                 //Read File
                 SoundBankReader reader = new SoundBankReader();
                 SoundbankHeader soundBankHeaderData = reader.ReadSfxHeader(soundBankPath, soundBankPlatform);
-                reader.ReadSoundBank(soundBankPath, soundBankHeaderData, sbData.sfxSamples, sbData.sfxStoredData, null);
                 if (!LoadedSoundBanks.ContainsKey(soundBankHeaderData.FileHashCode))
                 {
+                    fileVersion = soundBankHeaderData.FileVersion;
+                    reader.ReadSoundBank(soundBankPath, soundBankHeaderData, sbData.sfxSamples, sbData.sfxStoredData, null);
                     LoadedSoundBanks.Add(soundBankHeaderData.FileHashCode, sbData);
                 }
             }
@@ -111,7 +123,7 @@ namespace PCAudioDLL
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void StartSound(uint SoundHashcode, bool TestingMode, bool isSubSFX = false, short defInnerRadius = 100, short defOutRadius = 200)
+        public void StartSound(uint SoundHashcode, bool isSubSFX = false)
         {
             AudioPlayer audioPlayer = new AudioPlayer();
 
@@ -124,54 +136,46 @@ namespace PCAudioDLL
                     if (soundBank.Value.sfxSamples.ContainsKey(SoundHashcode))
                     {
                         Sample sfxSample = soundBank.Value.sfxSamples[SoundHashcode];
-
-                        //Update inner and outer radius if required
-                        if (defInnerRadius != 100 || defOutRadius != 200)
+                        if ((ContainStreams(sfxSample) && streamedFile.Count > 0)|| !ContainStreams(sfxSample))
                         {
-                            foreach (SoundDetailsData sfxItem in soundDetails.sfxItems)
+                            //Check if we need to get inner & outer radius from soundDetails
+                            if (soundDetails != null)
                             {
-                                if (sfxItem.HashCode == SoundHashcode)
+                                foreach (SoundDetailsData sfxItem in soundDetails.sfxItems)
                                 {
-                                    sfxSample.InnerRadius = (short)sfxItem.InnerRadius;
-                                    sfxSample.OuterRadius = (short)sfxItem.OuterRadius;
+                                    if (sfxItem.HashCode == SoundHashcode)
+                                    {
+                                        sfxSample.InnerRadius = (short)sfxItem.InnerRadius;
+                                        sfxSample.OuterRadius = (short)sfxItem.OuterRadius;
+                                    }
                                 }
                             }
-                        }
-                        else
-                        {
-                            sfxSample.InnerRadius = defInnerRadius;
-                            sfxSample.OuterRadius = defOutRadius;
-                        }
 
-                        //Ensure that is valid
-                        if ((ContainStreams(sfxSample) && streamedFile.Count > 0) || !ContainStreams(sfxSample))
-                        {
                             //Play SFX depending on the sound type
                             if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.HasSubSfx) & 1) == 0 && sfxSample.samplesList.Count > 0)
                             {
-                                if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Polyphonic) & 1) == 1)
+                                //If false it will pick and play randomly one of the samples in the list. 
+                                if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.MultiSample) & 1) == 0)
                                 {
-                                    audioPlayer.PlayPolyphonicSfx(sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, TestingMode);
-                                }
-                                else if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Shuffled) & 1) == 1)
-                                {
-                                    audioPlayer.PlayShuffledSfx(sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, TestingMode);
+                                    audioPlayer.PlaySingleSfx(fileVersion, sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices);
                                 }
                                 else
                                 {
-                                    audioPlayer.PlaySingleSfx(sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, TestingMode);
+                                    if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Polyphonic) & 1) == 1)
+                                    {
+                                        audioPlayer.PlayPolyphonicSfx(fileVersion, sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices);
+                                    }
+                                    else
+                                    {
+                                        audioPlayer.PlayShuffledSfx(fileVersion, sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices);
+                                    }
                                 }
                             }
                             else
                             {
                                 foreach (SampleInfo sample in sfxSample.samplesList)
                                 {
-                                    uint hashCode = (uint)(0x1AF00000 + sample.FileRef);
-                                    if (hashCode == SoundHashcode)
-                                    {
-                                        break;
-                                    }
-                                    StartSound(hashCode, true);
+                                    StartSound((uint)(hashCodePrefix + sample.FileRef), true);
                                 }
                             }
                         }
@@ -181,7 +185,7 @@ namespace PCAudioDLL
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void StartSound3D(uint SoundHashcode, float[] audioPosition, bool TestingMode, bool isSubSFX = false, bool enablePanning = false, int volume = -1)
+        public void StartSound3D(uint SoundHashcode, float[] audioPosition, bool isSubSFX = false, bool enablePanning = false, int volume = -1)
         {
             AudioPlayer audioPlayer = new AudioPlayer();
 
@@ -194,46 +198,46 @@ namespace PCAudioDLL
                     if (soundBank.Value.sfxSamples.ContainsKey(SoundHashcode))
                     {
                         Sample sfxSample = soundBank.Value.sfxSamples[SoundHashcode];
-
-                        //Update inner and outer radius
-                        foreach (var sfxItem in soundDetails.sfxItems)
-                        {
-                            if (sfxItem.HashCode == SoundHashcode)
-                            {
-                                sfxSample.InnerRadius = (short)sfxItem.InnerRadius;
-                                sfxSample.OuterRadius = (short)sfxItem.OuterRadius;
-                            }
-                        }
-
-                        //Ensure that is valid
                         if ((ContainStreams(sfxSample) && streamedFile.Count > 0) || !ContainStreams(sfxSample))
                         {
+                            //Check if we need to get inner & outer radius from soundDetails
+                            if (soundDetails != null)
+                            {
+                                foreach (SoundDetailsData sfxItem in soundDetails.sfxItems)
+                                {
+                                    if (sfxItem.HashCode == SoundHashcode)
+                                    {
+                                        sfxSample.InnerRadius = (short)sfxItem.InnerRadius;
+                                        sfxSample.OuterRadius = (short)sfxItem.OuterRadius;
+                                    }
+                                }
+                            }
+
                             //Play SFX depending on the sound type
                             if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.HasSubSfx) & 1) == 0 && sfxSample.samplesList.Count > 0)
                             {
-                                if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Polyphonic) & 1) == 1)
+                                //If false it will pick and play randomly one of the samples in the list. 
+                                if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.MultiSample) & 1) == 0)
                                 {
-                                    audioPlayer.PlayPolyphonicSfx(sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, TestingMode, audioPosition, enablePanning, volume);
-                                }
-                                else if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Shuffled) & 1) == 1)
-                                {
-                                    audioPlayer.PlayShuffledSfx(sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, TestingMode, audioPosition, enablePanning, volume);
+                                    audioPlayer.PlaySingleSfx(fileVersion, sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, audioPosition, enablePanning, volume);
                                 }
                                 else
                                 {
-                                    audioPlayer.PlaySingleSfx(sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, TestingMode, audioPosition, enablePanning, volume);
+                                    if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Polyphonic) & 1) == 1)
+                                    {
+                                        audioPlayer.PlayPolyphonicSfx(fileVersion, sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, audioPosition, enablePanning, volume);
+                                    }
+                                    else
+                                    {
+                                        audioPlayer.PlayShuffledSfx(fileVersion, sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, audioPosition, enablePanning, volume);
+                                    }
                                 }
                             }
                             else
                             {
                                 foreach (SampleInfo sample in sfxSample.samplesList)
                                 {
-                                    uint hashCode = (uint)(0x1AF00000 + sample.FileRef);
-                                    if (hashCode == SoundHashcode)
-                                    {
-                                        break;
-                                    }
-                                    StartSound3D(hashCode, audioPosition, true, enablePanning, TestingMode, volume);
+                                    StartSound3D((uint)(hashCodePrefix + sample.FileRef), audioPosition, true, enablePanning, volume);
                                 }
                             }
                         }
@@ -288,7 +292,7 @@ namespace PCAudioDLL
         private bool ContainStreams(Sample sfxSample)
         {
             bool containStreams = false;
-            foreach (SampleInfo sfxSampleData in sfxSample.samplesList)
+            foreach(SampleInfo sfxSampleData in sfxSample.samplesList)
             {
                 if (sfxSampleData.FileRef < 0)
                 {
