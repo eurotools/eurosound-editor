@@ -75,7 +75,7 @@ namespace PCAudioDLL
                 reader.ReadStreamBank(soundBankPath, soundBankHeaderData, streamedFile);
                 fileVersion = soundBankHeaderData.FileVersion;
             }
-            else if (fileType == SfxFunctions.FileType.SoundbankFile)
+            else if (fileType == SfxFunctions.FileType.SoundbankFile || fileType == SfxFunctions.FileType.TestSFX)
             {
                 PCAudioDebugConsole.WriteLine("CMD_SFXLOADSOUNDBANK");
                 //Initialize SoundBank
