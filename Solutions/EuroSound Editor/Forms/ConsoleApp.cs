@@ -52,6 +52,7 @@ namespace sb_editor.Forms
             {
                 IniFile iniFile = new IniFile(systemIniFilePath);
                 txtSoundBankFile.Text = iniFile.Read("OutputPath", "ConsoleApp");
+                txtSoundDetails.Text = iniFile.Read("SoundDetails", "ConsoleApp");
                 rbtn_PC.Checked = iniFile.Read("PlatformTypePC", "ConsoleApp").Equals("1");
                 rbtn_PS2.Checked = iniFile.Read("PlatformTypePS2", "ConsoleApp").Equals("1");
                 rbtn_GameCube.Checked = iniFile.Read("PlatformTypeGC", "ConsoleApp").Equals("1");
@@ -377,6 +378,42 @@ namespace sb_editor.Forms
         private void BtnSearchOutPath_Click(object sender, EventArgs e)
         {
             TxtSoundBankFile_MouseDoubleClick(sender, null);
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void txtSoundDetails_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            //Restore selected path
+            if (!string.IsNullOrEmpty(txtSoundDetails.Text))
+            {
+                string fileDir = Path.GetDirectoryName(txtSoundDetails.Text);
+                if (Directory.Exists(fileDir))
+                {
+                    openFileDialog.InitialDirectory = fileDir;
+                }
+            }
+
+            //Open folder browser
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                txtSoundDetails.Text = openFileDialog.FileName;
+
+                //Save State
+                IniFile iniFile = new IniFile(Path.Combine(GlobalPrefs.ProjectFolder, "System", "EuroSound.ini"));
+                iniFile.Write("SoundDetails", txtSoundDetails.Text, "ConsoleApp");
+
+                //Read File
+                if (File.Exists(txtSoundDetails.Text))
+                {
+                    pcDll.LoadSoundBank(GetTestingPlatform(), txtSoundDetails.Text);
+                }
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void btnSearchSoundDetails_Click(object sender, EventArgs e)
+        {
+            txtSoundDetails_MouseDoubleClick(sender, null);
         }
 
         //-------------------------------------------------------------------------------------------
