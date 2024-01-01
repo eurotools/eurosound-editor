@@ -173,6 +173,8 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------
         private void LstBox_SFXs_SelectedIndexChanged(object sender, EventArgs e)
         {
+            lstbSamples.BeginUpdate();
+            lstbSamples.Items.Clear();
             if (lstBox_SFXs.SelectedItems.Count > 0)
             {
                 string sfxPath = Path.Combine(GlobalPrefs.ProjectFolder, "SFXs", lstBox_SFXs.SelectedItems[0].ToString() + ".txt");
@@ -181,13 +183,10 @@ namespace sb_editor.Forms
                     Objects.SFX sfxData = TextFiles.ReadSfxFile(sfxPath);
 
                     //Set Samples
-                    lstbSamples.BeginUpdate();
-                    lstbSamples.Items.Clear();
                     foreach (SfxSample sfxSample in sfxData.Samples)
                     {
                         lstbSamples.Items.Add(sfxSample.FilePath);
                     }
-                    lstbSamples.EndUpdate();
 
                     //Set SFX data for being played
                     nudInnerRadius.Value = Math.Min(Math.Max(sfxData.Parameters.InnerRadius, 0), 500);
@@ -195,6 +194,7 @@ namespace sb_editor.Forms
                     nudHashCode.Value = HashcodePrefix + sfxData.HashCode;
                 }
             }
+            lstbSamples.EndUpdate();
         }
 
         //-------------------------------------------------------------------------------------------
