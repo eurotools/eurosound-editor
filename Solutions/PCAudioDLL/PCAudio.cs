@@ -13,10 +13,7 @@ using MusX;
 using MusX.Objects;
 using MusX.Readers;
 using NAudio.Wave;
-using PCAudioDLL.Audio_Player;
-using PCAudioDLL.Codecs;
 using PCAudioDLL.MusX_Objects;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -143,7 +140,7 @@ namespace PCAudioDLL
                     if (soundBank.Value.sfxSamples.ContainsKey(SoundHashcode))
                     {
                         Sample sfxSample = soundBank.Value.sfxSamples[SoundHashcode];
-                        if ((ContainStreams(sfxSample) && streamedFile.Count > 0)|| !ContainStreams(sfxSample))
+                        if ((ContainStreams(sfxSample) && streamedFile.Count > 0) || !ContainStreams(sfxSample))
                         {
                             //Check if we need to get inner & outer radius from soundDetails
                             if (soundDetails != null)
@@ -165,6 +162,7 @@ namespace PCAudioDLL
                             }
 
                             //Play SFX depending on the sound type
+                            playingHashCode = sfxSample.HashCodeNumber;
                             if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.HasSubSfx) & 1) == 0 && sfxSample.samplesList.Count > 0)
                             {
                                 //If false it will pick and play randomly one of the samples in the list. 
@@ -192,7 +190,6 @@ namespace PCAudioDLL
                                 }
                             }
                         }
-                        playingHashCode = SoundHashcode;
                         break;
                     }
                 }
@@ -238,6 +235,7 @@ namespace PCAudioDLL
                             }
 
                             //Play SFX depending on the sound type
+                            playingHashCode = sfxSample.HashCodeNumber;
                             if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.HasSubSfx) & 1) == 0 && sfxSample.samplesList.Count > 0)
                             {
                                 //If false it will pick and play randomly one of the samples in the list. 
@@ -265,7 +263,6 @@ namespace PCAudioDLL
                                 }
                             }
                         }
-                        playingHashCode = SoundHashcode;
                         break;
                     }
                 }
@@ -320,7 +317,7 @@ namespace PCAudioDLL
         private bool ContainStreams(Sample sfxSample)
         {
             bool containStreams = false;
-            foreach(SampleInfo sfxSampleData in sfxSample.samplesList)
+            foreach (SampleInfo sfxSampleData in sfxSample.samplesList)
             {
                 if (sfxSampleData.FileRef < 0)
                 {
