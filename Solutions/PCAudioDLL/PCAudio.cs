@@ -129,9 +129,10 @@ namespace PCAudioDLL
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void StartSound(uint SoundHashcode, uint subSfxParentHashCode = 0)
+        public uint StartSound(uint SoundHashcode, uint subSfxParentHashCode = 0)
         {
             AudioPlayer audioPlayer = new AudioPlayer();
+            uint playingHashCode = 0;
 
             if (audioVoices.CanPlay() || subSfxParentHashCode > 0)
             {
@@ -191,16 +192,20 @@ namespace PCAudioDLL
                                 }
                             }
                         }
+                        playingHashCode = SoundHashcode;
                         break;
                     }
                 }
             }
+
+            return playingHashCode;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void StartSound3D(uint SoundHashcode, float[] audioPosition, uint subSfxParentHashCode = 0, bool enablePanning = false, int volume = -1)
+        public uint StartSound3D(uint SoundHashcode, float[] audioPosition, uint subSfxParentHashCode = 0, bool enablePanning = false, int volume = -1)
         {
             AudioPlayer audioPlayer = new AudioPlayer();
+            uint playingHashCode = 0;
 
             if (audioVoices.CanPlay() || subSfxParentHashCode > 0)
             {
@@ -260,10 +265,13 @@ namespace PCAudioDLL
                                 }
                             }
                         }
+                        playingHashCode = SoundHashcode;
                         break;
                     }
                 }
             }
+
+            return playingHashCode;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
