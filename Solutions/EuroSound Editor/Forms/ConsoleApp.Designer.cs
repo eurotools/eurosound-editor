@@ -88,6 +88,7 @@ namespace sb_editor.Forms
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.btn_musicApp = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.nudHashCodePlaying = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.nudHashCode)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudZ)).BeginInit();
@@ -110,6 +111,7 @@ namespace sb_editor.Forms
             this.groupBox3.SuspendLayout();
             this.grbxTestingGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trckBarMasterVolume)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudHashCodePlaying)).BeginInit();
             this.SuspendLayout();
             // 
             // btnStartSFX
@@ -265,6 +267,7 @@ namespace sb_editor.Forms
             // grbxSfxPlay
             // 
             this.grbxSfxPlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.grbxSfxPlay.Controls.Add(this.nudHashCodePlaying);
             this.grbxSfxPlay.Controls.Add(this.btnStart3dSound);
             this.grbxSfxPlay.Controls.Add(this.btnStartSFX);
             this.grbxSfxPlay.Controls.Add(this.btnStopSFX);
@@ -833,6 +836,26 @@ namespace sb_editor.Forms
             this.openFileDialog.Filter = "SFX File (*.sfx)|*.sfx";
             this.openFileDialog.RestoreDirectory = true;
             // 
+            // nudHashCodePlaying
+            // 
+            this.nudHashCodePlaying.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.nudHashCodePlaying.Hexadecimal = true;
+            this.nudHashCodePlaying.Location = new System.Drawing.Point(185, 41);
+            this.nudHashCodePlaying.Maximum = new decimal(new int[] {
+            -1,
+            0,
+            0,
+            0});
+            this.nudHashCodePlaying.Name = "nudHashCodePlaying";
+            this.nudHashCodePlaying.Size = new System.Drawing.Size(95, 20);
+            this.nudHashCodePlaying.TabIndex = 16;
+            this.nudHashCodePlaying.Value = new decimal(new int[] {
+            436207636,
+            0,
+            0,
+            0});
+            this.nudHashCodePlaying.Visible = false;
+            // 
             // ConsoleApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -885,6 +908,7 @@ namespace sb_editor.Forms
             this.grbxTestingGroup.ResumeLayout(false);
             this.grbxTestingGroup.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trckBarMasterVolume)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudHashCodePlaying)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -950,5 +974,6 @@ namespace sb_editor.Forms
         private System.Windows.Forms.Button btnSearchSoundDetails;
         private System.Windows.Forms.TextBox txtSoundDetails;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.NumericUpDown nudHashCodePlaying;
     }
 }
