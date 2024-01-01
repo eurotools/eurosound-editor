@@ -126,7 +126,7 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnStart3dSound_Click(object sender, EventArgs e)
         {
-            pcDll.StartSound3D((uint)nudHashCode.Value, new float[] { (float)nudX.Value, (float)nudY.Value, (float)nudZ.Value }, false, chxTestPan.Checked, trckBarMasterVolume.Value);
+            pcDll.StartSound3D((uint)nudHashCode.Value, new float[] { (float)nudX.Value, (float)nudY.Value, (float)nudZ.Value }, 0, chxTestPan.Checked, trckBarMasterVolume.Value);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
