@@ -2,6 +2,7 @@
 using sb_editor.Classes;
 using sb_editor.Objects;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Media;
@@ -15,6 +16,7 @@ namespace sb_editor.Forms
     public partial class ConsoleApp : Form
     {
         private readonly PCAudio pcDll = new PCAudio(0x1A000000);
+        private readonly Dictionary<string, string[]> loadedSoundBanks = new Dictionary<string, string[]>();
         private ProjProperties projectSettings;
         private SoundPlayer audioPlayer;
 
@@ -190,24 +192,31 @@ namespace sb_editor.Forms
             {
                 if (!lstbLoadedSoundBanks.Items.Contains(lstbAvailableSoundBanks.SelectedItems[i]))
                 {
-                    lstbLoadedSoundBanks.Items.Add(lstbAvailableSoundBanks.SelectedItems[i]);
-
                     //Load SoundBank Text File
-                    string sbPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks", lstbAvailableSoundBanks.SelectedItems[i].ToString() + ".txt");
+                    string sbName = lstbAvailableSoundBanks.SelectedItems[i].ToString();
+                    string sbPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks", sbName + ".txt");
                     SoundBank soundBankData = TextFiles.ReadSoundbankFile(sbPath);
 
-                    //Get SFXs
-                    string[] SFXs = sbFunctions.GetSFXs(soundBankData.DataBases, GetTestingPlatform());
-                    lstBox_SFXs.BeginUpdate();
-                    lstBox_SFXs.Items.Clear();
-                    lstBox_SFXs.Items.AddRange(SFXs);
-                    lstBox_SFXs.EndUpdate();
-
-                    //Load SFX File
+                    //Load SoundBank Data
                     string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, "HC", soundBankData.HashCode.ToString("X6"), ".SFX"));
-                    if (File.Exists(sfxFilePath))
+                    if (File.Exists(sfxFilePath) && !loadedSoundBanks.ContainsKey(sbName))
                     {
+                        //Get SFXs and add them to the list
+                        string[] SFXs = sbFunctions.GetSFXs(soundBankData.DataBases, GetTestingPlatform());
+                        lstBox_SFXs.BeginUpdate();
+                        for (int j = 0; j < SFXs.Length; j++)
+                        {
+                            if (lstBox_SFXs.Items.IndexOf(SFXs[j]) == -1)
+                            {
+                                lstBox_SFXs.Items.Add(SFXs[j]);
+                            }
+                        }
+                        lstBox_SFXs.EndUpdate();
+                        loadedSoundBanks.Add(sbName, SFXs);
+
+                        //Load Soundbank in the DLL
                         pcDll.LoadSoundBank(GetTestingPlatform(), sfxFilePath);
+                        lstbLoadedSoundBanks.Items.Add(lstbAvailableSoundBanks.SelectedItems[i]);
                     }
                     else
                     {
@@ -225,14 +234,44 @@ namespace sb_editor.Forms
             //Remove selected items
             for (int i = lstbLoadedSoundBanks.SelectedItems.Count - 1; i >= 0; i--)
             {
+                //Update SFXs List
+                string sbName = lstbLoadedSoundBanks.SelectedItems[i].ToString();
+                string[] soundBankSFXs = loadedSoundBanks[sbName];
+
+                foreach (string sfxToRemove in soundBankSFXs)
+                {
+                    bool removeSfx = true;
+                    foreach (KeyValuePair<string, string[]> soundBankToCheck in loadedSoundBanks)
+                    {
+                        if (soundBankToCheck.Key.Equals(sbName))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            if (Array.IndexOf(soundBankToCheck.Value, sfxToRemove) >= 0)
+                            {
+                                removeSfx = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (removeSfx)
+                    {
+                        lstBox_SFXs.Items.Remove(sfxToRemove);
+                    }
+                }
+
                 //Load SoundBank Text File
                 string sbPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks", lstbAvailableSoundBanks.SelectedItems[i].ToString() + ".txt");
                 SoundBank soundBankData = TextFiles.ReadSoundbankFile(sbPath);
 
-                //Unload SoundBank
+                //Remove item from list & Dictionary
+                loadedSoundBanks.Remove(lstbLoadedSoundBanks.SelectedItems[i].ToString());
+
+                //Unload SoundBank from DLL
                 pcDll.UnloadSoundbank(soundBankData.HashCode);
-                
-                //Remove item from list
                 lstbLoadedSoundBanks.Items.Remove(lstbLoadedSoundBanks.SelectedItems[i]);
             }
 
@@ -370,7 +409,7 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void txtSoundDetails_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void TxtSoundDetails_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             //Restore selected path
             if (!string.IsNullOrEmpty(txtSoundDetails.Text))
@@ -400,9 +439,9 @@ namespace sb_editor.Forms
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        private void btnSearchSoundDetails_Click(object sender, EventArgs e)
+        private void BtnSearchSoundDetails_Click(object sender, EventArgs e)
         {
-            txtSoundDetails_MouseDoubleClick(sender, null);
+            TxtSoundDetails_MouseDoubleClick(sender, null);
         }
 
         //-------------------------------------------------------------------------------------------
