@@ -125,7 +125,7 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnStart3dSound_Click(object sender, EventArgs e)
         {
-            pcDll.StartSound3D((uint)nudHashCode.Value, new float[] { (float)nudX.Value, (float)nudY.Value, (float)nudZ.Value }, false, chxTestPan.Checked, trckBarMasterVolume.Value);
+            pcDll.StartSound3D((uint)nudHashCode.Value, new float[] { (float)nudX.Value, (float)nudY.Value, (float)nudZ.Value }, 0, chxTestPan.Checked, trckBarMasterVolume.Value);
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -271,8 +271,10 @@ namespace sb_editor.Forms
                 loadedSoundBanks.Remove(lstbLoadedSoundBanks.SelectedItems[i].ToString());
 
                 //Unload SoundBank from DLL
-                pcDll.UnloadSoundbank(soundBankData.HashCode);
-                lstbLoadedSoundBanks.Items.Remove(lstbLoadedSoundBanks.SelectedItems[i]);
+                if (pcDll.UnloadSoundbank(soundBankData.HashCode))
+                {
+                    lstbLoadedSoundBanks.Items.Remove(lstbLoadedSoundBanks.SelectedItems[i]);
+                }
             }
 
             //Select next item
