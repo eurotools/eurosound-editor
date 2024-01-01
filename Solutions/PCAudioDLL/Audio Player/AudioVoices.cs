@@ -30,10 +30,12 @@ namespace PCAudioDLL
         {
             for(int i = 0; i < MAX_TOTAL_STREAMS; i++)
             {
-                MixerTable[i] = new ExVoice();
-                MixerTable[i].Active = true;
-                MixerTable[i].Looping = true;
-                MixerTable[i].Locked = true;
+                MixerTable[i] = new ExVoice
+                {
+                    Active = true,
+                    Looping = true,
+                    Locked = true
+                };
             }
         }
 
