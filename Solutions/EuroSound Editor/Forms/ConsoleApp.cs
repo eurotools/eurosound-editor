@@ -130,19 +130,27 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------
         private void BtnStartSFX_Click(object sender, EventArgs e)
         {
-            pcDll.StartSound((uint)nudHashCode.Value);
+            uint hashcode = pcDll.StartSound((uint)nudHashCode.Value);
+            if (hashcode > 0)
+            {
+                nudHashCodePlaying.Value = hashcode;
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnStart3dSound_Click(object sender, EventArgs e)
         {
-            pcDll.StartSound3D((uint)nudHashCode.Value, new float[] { (float)nudX.Value, (float)nudY.Value, (float)nudZ.Value }, 0, chxTestPan.Checked, trckBarMasterVolume.Value);
+            uint hashcode = pcDll.StartSound3D((uint)nudHashCode.Value, new float[] { (float)nudX.Value, (float)nudY.Value, (float)nudZ.Value }, 0, chxTestPan.Checked, trckBarMasterVolume.Value);
+            if (hashcode > 0)
+            {
+                nudHashCodePlaying.Value = hashcode;
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnStopSFX_Click(object sender, EventArgs e)
         {
-            pcDll.StopHashCode((uint)nudHashCode.Value);
+            pcDll.StopHashCode((uint)nudHashCodePlaying.Value);
         }
 
         //-------------------------------------------------------------------------------------------
