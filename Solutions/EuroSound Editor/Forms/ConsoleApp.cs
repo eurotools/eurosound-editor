@@ -59,6 +59,12 @@ namespace sb_editor.Forms
                 rbtn_GameCube.Checked = iniFile.Read("PlatformTypeGC", "ConsoleApp").Equals("1");
                 rbtn_Xbox.Checked = iniFile.Read("PlatformTypeXB", "ConsoleApp").Equals("1");
             }
+
+            //ReLoad Sound Details File
+            if (File.Exists(txtSoundDetails.Text))
+            {
+                pcDll.LoadSoundBank(GetTestingPlatform(), txtSoundDetails.Text);
+            }
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
