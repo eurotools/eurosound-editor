@@ -191,6 +191,7 @@ namespace PCAudioDLL
                                 }
                             }
                         }
+                        break;
                     }
                 }
             }
@@ -259,6 +260,7 @@ namespace PCAudioDLL
                                 }
                             }
                         }
+                        break;
                     }
                 }
             }
