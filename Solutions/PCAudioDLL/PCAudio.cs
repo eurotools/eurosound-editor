@@ -100,20 +100,26 @@ namespace PCAudioDLL
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void UnloadSoundbank(int sbHashCode = -1)
+        public bool UnloadSoundbank(int sbHashCode = -1)
         {
+            bool soundBankUnloaded = false;
+
             if (sbHashCode == -1)
             {
+                soundBankUnloaded = true;
                 LoadedSoundBanks.Clear();
                 PCAudioDebugConsole.WriteLine("ES-> ES_UnLoadAllSoundBanksReleaseFinished End");
                 PCAudioDebugConsole.WriteLine("pih");
             }
             else if (LoadedSoundBanks.ContainsKey((uint)sbHashCode))
             {
+                soundBankUnloaded = true;
                 LoadedSoundBanks.Remove((uint)sbHashCode);
                 PCAudioDebugConsole.WriteLine("ES-> ES_UnLoadSoundBankReleaseFinished End");
                 PCAudioDebugConsole.WriteLine("pih");
             }
+
+            return soundBankUnloaded;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -123,11 +129,11 @@ namespace PCAudioDLL
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void StartSound(uint SoundHashcode, bool isSubSFX = false)
+        public void StartSound(uint SoundHashcode, uint subSfxParentHashCode = 0)
         {
             AudioPlayer audioPlayer = new AudioPlayer();
 
-            if (audioVoices.CanPlay() || isSubSFX)
+            if (audioVoices.CanPlay() || subSfxParentHashCode > 0)
             {
                 //Iterate over all SoundBanks
                 foreach (KeyValuePair<uint, SoundBank> soundBank in LoadedSoundBanks)
@@ -175,7 +181,7 @@ namespace PCAudioDLL
                             {
                                 foreach (SampleInfo sample in sfxSample.samplesList)
                                 {
-                                    StartSound((uint)(hashCodePrefix + sample.FileRef), true);
+                                    StartSound((uint)(hashCodePrefix + sample.FileRef), SoundHashcode);
                                 }
                             }
                         }
@@ -185,11 +191,11 @@ namespace PCAudioDLL
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public void StartSound3D(uint SoundHashcode, float[] audioPosition, bool isSubSFX = false, bool enablePanning = false, int volume = -1)
+        public void StartSound3D(uint SoundHashcode, float[] audioPosition, uint subSfxParentHashCode = 0, bool enablePanning = false, int volume = -1)
         {
             AudioPlayer audioPlayer = new AudioPlayer();
 
-            if (audioVoices.CanPlay() || isSubSFX)
+            if (audioVoices.CanPlay() || subSfxParentHashCode > 0)
             {
                 //Iterate over all SoundBanks
                 foreach (KeyValuePair<uint, SoundBank> soundBank in LoadedSoundBanks)
@@ -211,6 +217,12 @@ namespace PCAudioDLL
                                         sfxSample.OuterRadius = (short)sfxItem.OuterRadius;
                                     }
                                 }
+                            }
+
+                            //Inherit parent hashcode
+                            if (subSfxParentHashCode > 0)
+                            {
+                                sfxSample.HashCodeNumber = subSfxParentHashCode;
                             }
 
                             //Play SFX depending on the sound type
@@ -237,7 +249,7 @@ namespace PCAudioDLL
                             {
                                 foreach (SampleInfo sample in sfxSample.samplesList)
                                 {
-                                    StartSound3D((uint)(hashCodePrefix + sample.FileRef), audioPosition, true, enablePanning, volume);
+                                    StartSound3D((uint)(hashCodePrefix + sample.FileRef), audioPosition, SoundHashcode, enablePanning, volume);
                                 }
                             }
                         }
