@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Media;
 using System.Windows.Forms;
+using static ESUtils.Enumerations;
 
 namespace sb_editor.Forms
 {
@@ -15,7 +16,7 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class ConsoleApp : Form
     {
-        private readonly PCAudio pcDll = new PCAudio(0x1A000000);
+        private readonly PCAudio pcDll = new PCAudio(0x1AF00000);
         private readonly Dictionary<string, string[]> loadedSoundBanks = new Dictionary<string, string[]>();
         private ProjProperties projectSettings;
         private SoundPlayer audioPlayer;
@@ -175,7 +176,7 @@ namespace sb_editor.Forms
                     //Set SFX data for being played
                     nudInnerRadius.Value = Math.Min(Math.Max(sfxData.Parameters.InnerRadius, 0), 500);
                     nudOuterRadius.Value = Math.Min(Math.Max(sfxData.Parameters.OuterRadius, 0), 500);
-                    nudHashCode.Value = 0x1A000000 + sfxData.HashCode;
+                    nudHashCode.Value = 0x1AF00000 + sfxData.HashCode;
                 }
             }
         }
@@ -198,7 +199,7 @@ namespace sb_editor.Forms
                     SoundBank soundBankData = TextFiles.ReadSoundbankFile(sbPath);
 
                     //Load SoundBank Data
-                    string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, "HC", soundBankData.HashCode.ToString("X6"), ".SFX"));
+                    string sfxFilePath = Path.Combine(txtSoundBankFile.Text, CommonFunctions.GetSfxName(Language.English, lstbAvailableSoundBanks.SelectedItems[i].ToString()));
                     if (File.Exists(sfxFilePath) && !loadedSoundBanks.ContainsKey(sbName))
                     {
                         //Get SFXs and add them to the list
