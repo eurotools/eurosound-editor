@@ -223,7 +223,7 @@ namespace PCAudioDLL.Audio_Player
             providerRight = new RawSourceWaveStream(new MemoryStream(_pcmData[1]), new WaveFormat(_soundToPlay.sampleRate, 16, 1));
             AudioLoop loopRight = new AudioLoop(providerRight, _soundToPlay.loopStartPoint * 4) { Position = _soundToPlay.startPos, EnableLooping = _soundToPlay.isLooped };
             MultiplexingWaveProvider waveProvider = new MultiplexingWaveProvider(new IWaveProvider[] { loopLeft, loopRight }, 2);
-            VolumeSampleProvider volumeProvider = new VolumeSampleProvider(waveProvider.ToSampleProvider()) { Volume =  _soundToPlay.volume };
+            VolumeSampleProvider volumeProvider = new VolumeSampleProvider(waveProvider.ToSampleProvider()) { Volume = _soundToPlay.volume };
 
             return volumeProvider.ToWaveProvider();
         }
