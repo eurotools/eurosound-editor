@@ -269,9 +269,6 @@ namespace sb_editor.Forms
             lstBox_SFXs.Items.Clear();
             for (int i = 0; i< lstbLoadedSoundBanks.Items.Count; i++)
             {
-                //Update SFXs List
-                string sbName = lstbLoadedSoundBanks.Items[i].ToString();
-
                 //Load SoundBank Text File
                 string sbPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks", lstbLoadedSoundBanks.Items[i] + ".txt");
                 SoundBank soundBankData = TextFiles.ReadSoundbankFile(sbPath);
