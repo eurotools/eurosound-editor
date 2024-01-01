@@ -28,7 +28,7 @@ namespace PCAudioDLL
         //-------------------------------------------------------------------------------------------------------------------------------
         public AudioVoices()
         {
-            for(int i = 0; i < MAX_TOTAL_STREAMS; i++)
+            for (int i = 0; i < MAX_TOTAL_STREAMS; i++)
             {
                 MixerTable[i] = new ExVoice
                 {
