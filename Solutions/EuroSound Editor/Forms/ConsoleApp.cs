@@ -15,7 +15,9 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class ConsoleApp : Form
     {
-        private readonly PCAudio pcDll = new PCAudio(0x1A000000);
+        private const int SoundBankHashcodePrefix = 0x00000000;
+        private const int HashcodePrefix = 0x1A000000;
+        private readonly PCAudio pcDll = new PCAudio(HashcodePrefix);
         private readonly Dictionary<string, string[]> loadedSoundBanks = new Dictionary<string, string[]>();
         private ProjProperties projectSettings;
         private SoundPlayer audioPlayer;
@@ -181,7 +183,7 @@ namespace sb_editor.Forms
                     //Set SFX data for being played
                     nudInnerRadius.Value = Math.Min(Math.Max(sfxData.Parameters.InnerRadius, 0), 500);
                     nudOuterRadius.Value = Math.Min(Math.Max(sfxData.Parameters.OuterRadius, 0), 500);
-                    nudHashCode.Value = 0x1A000000 + sfxData.HashCode;
+                    nudHashCode.Value = HashcodePrefix + sfxData.HashCode;
                 }
             }
         }
@@ -280,7 +282,7 @@ namespace sb_editor.Forms
                     loadedSoundBanks.Remove(sbName);
 
                     //Unload SoundBank from DLL
-                    if (pcDll.UnloadSoundbank(soundBankData.HashCode))
+                    if (pcDll.UnloadSoundbank(SoundBankHashcodePrefix + soundBankData.HashCode))
                     {
                         lstbLoadedSoundBanks.Items.Remove(lstbLoadedSoundBanks.SelectedItems[i]);
                     }
