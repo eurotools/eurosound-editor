@@ -157,6 +157,12 @@ namespace PCAudioDLL
                                 }
                             }
 
+                            //Inherit parent hashcode
+                            if (subSfxParentHashCode > 0)
+                            {
+                                sfxSample.HashCodeNumber = subSfxParentHashCode;
+                            }
+
                             //Play SFX depending on the sound type
                             if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.HasSubSfx) & 1) == 0 && sfxSample.samplesList.Count > 0)
                             {
