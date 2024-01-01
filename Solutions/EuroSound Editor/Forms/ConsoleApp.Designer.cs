@@ -647,6 +647,7 @@ namespace sb_editor.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grbxSoundDetails.Controls.Add(this.btnSearchSoundDetails);
             this.grbxSoundDetails.Controls.Add(this.txtSoundDetails);
+            this.grbxSoundDetails.Enabled = false;
             this.grbxSoundDetails.Location = new System.Drawing.Point(6, 45);
             this.grbxSoundDetails.Name = "grbxSoundDetails";
             this.grbxSoundDetails.Size = new System.Drawing.Size(378, 50);
