@@ -252,6 +252,9 @@ namespace sb_editor
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnReSampleAll_Click(object sender, EventArgs e)
         {
+            // Set cursor as hourglass
+            Cursor.Current = Cursors.WaitCursor;
+
             //Reload file
             string samplesFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Samples.txt");
             if (File.Exists(samplesFilePath))
@@ -271,11 +274,17 @@ namespace sb_editor
 
             //Save Changes
             SaveSamplesFile();
+
+            // Set cursor as default arrow
+            Cursor.Current = Cursors.Default;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
         private void BtnDeReSampleAll_Click(object sender, EventArgs e)
         {
+            // Set cursor as hourglass
+            Cursor.Current = Cursors.WaitCursor;
+
             //Reload file
             string samplesFilePath = Path.Combine(GlobalPrefs.ProjectFolder, "System", "Samples.txt");
             if (File.Exists(samplesFilePath))
@@ -295,6 +304,9 @@ namespace sb_editor
 
             //Save Changes
             SaveSamplesFile();
+
+            // Set cursor as default arrow
+            Cursor.Current = Cursors.Default;
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
