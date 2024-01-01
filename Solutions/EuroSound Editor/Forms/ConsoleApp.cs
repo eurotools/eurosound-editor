@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Media;
 using System.Windows.Forms;
+using static ESUtils.Enumerations;
 
 namespace sb_editor.Forms
 {
@@ -16,8 +17,8 @@ namespace sb_editor.Forms
     //-------------------------------------------------------------------------------------------------------------------------------
     public partial class ConsoleApp : Form
     {
-        private const int SoundBankHashcodePrefix = 0x00000000;
-        private const int HashcodePrefix = 0x1A000000;
+        private const int SoundBankHashcodePrefix = 0xE000;
+        private const int HashcodePrefix = 0x1AF00000;
         private readonly PCAudio pcDll = new PCAudio(HashcodePrefix);
         private readonly SoundBankFunctions sbFunctions = new SoundBankFunctions();
         private ProjProperties projectSettings;
@@ -93,7 +94,8 @@ namespace sb_editor.Forms
         private void ChkStreamingTest_CheckedChanged(object sender, EventArgs e)
         {
             //Load SFX File
-            string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, "HC00FFFF", ".SFX"));
+            string fileName = CommonFunctions.GetSfxName(Language.English, "_streamdata");
+            string sfxFilePath = Path.Combine(txtSoundBankFile.Text, fileName);
             pcDll.LoadSoundBank(GetTestingPlatform(), sfxFilePath);
         }
 
@@ -205,7 +207,7 @@ namespace sb_editor.Forms
                     SoundBank soundBankData = TextFiles.ReadSoundbankFile(sbPath);
 
                     //Load SoundBank Data
-                    string sfxFilePath = Path.Combine(txtSoundBankFile.Text, string.Join(string.Empty, "HC", soundBankData.HashCode.ToString("X6"), ".SFX"));
+                    string sfxFilePath = Path.Combine(txtSoundBankFile.Text, CommonFunctions.GetSfxName(Language.English, lstbAvailableSoundBanks.SelectedItems[i].ToString()));
                     if (File.Exists(sfxFilePath))
                     {
                         //Load Soundbank in the DLL
@@ -258,14 +260,14 @@ namespace sb_editor.Forms
             //Update Available SFXs List
             UpdateAvailableSFXs();
         }
-        
+
         //-------------------------------------------------------------------------------------------------------------------------------
         private void UpdateAvailableSFXs()
         {
             HashSet<string> sfxLabels = new HashSet<string>();
             lstBox_SFXs.BeginUpdate();
             lstBox_SFXs.Items.Clear();
-            for (int i = 0; i< lstbLoadedSoundBanks.Items.Count; i++)
+            for (int i = 0; i < lstbLoadedSoundBanks.Items.Count; i++)
             {
                 //Update SFXs List
                 string sbName = lstbLoadedSoundBanks.Items[i].ToString();
