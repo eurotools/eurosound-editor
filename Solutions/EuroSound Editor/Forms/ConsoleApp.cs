@@ -272,7 +272,7 @@ namespace sb_editor.Forms
                 loadedSoundBanks.Remove(lstbLoadedSoundBanks.SelectedItems[i].ToString());
 
                 //Unload SoundBank from DLL
-                pcDll.UnloadSoundbank(soundBankData.HashCode);
+                pcDll.UnloadSoundbank(0xE000 + soundBankData.HashCode);
                 lstbLoadedSoundBanks.Items.Remove(lstbLoadedSoundBanks.SelectedItems[i]);
             }
 
