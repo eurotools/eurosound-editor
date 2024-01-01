@@ -70,6 +70,9 @@ namespace sb_editor.Forms
             this.picBox_ZX = new System.Windows.Forms.PictureBox();
             this.btnOkey = new System.Windows.Forms.Button();
             this.grbxSFXsFolderPath = new System.Windows.Forms.GroupBox();
+            this.grbxSoundDetails = new System.Windows.Forms.GroupBox();
+            this.btnSearchSoundDetails = new System.Windows.Forms.Button();
+            this.txtSoundDetails = new System.Windows.Forms.TextBox();
             this.btnSearchOutPath = new System.Windows.Forms.Button();
             this.txtSoundBankFile = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -84,9 +87,6 @@ namespace sb_editor.Forms
             this.label2 = new System.Windows.Forms.Label();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.btn_musicApp = new System.Windows.Forms.Button();
-            this.grbxSoundDetails = new System.Windows.Forms.GroupBox();
-            this.btnSearchSoundDetails = new System.Windows.Forms.Button();
-            this.txtSoundDetails = new System.Windows.Forms.TextBox();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.nudHashCode)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -106,10 +106,10 @@ namespace sb_editor.Forms
             ((System.ComponentModel.ISupportInitialize)(this.picBox_XY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBox_ZX)).BeginInit();
             this.grbxSFXsFolderPath.SuspendLayout();
+            this.grbxSoundDetails.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.grbxTestingGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trckBarMasterVolume)).BeginInit();
-            this.grbxSoundDetails.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnStartSFX
@@ -410,6 +410,7 @@ namespace sb_editor.Forms
             this.lstBox_SFXs.Location = new System.Drawing.Point(6, 19);
             this.lstBox_SFXs.Name = "lstBox_SFXs";
             this.lstBox_SFXs.Size = new System.Drawing.Size(266, 381);
+            this.lstBox_SFXs.Sorted = true;
             this.lstBox_SFXs.TabIndex = 0;
             this.lstBox_SFXs.SelectedIndexChanged += new System.EventHandler(this.LstBox_SFXs_SelectedIndexChanged);
             // 
@@ -448,6 +449,7 @@ namespace sb_editor.Forms
             this.lstbAvailableSoundBanks.Name = "lstbAvailableSoundBanks";
             this.lstbAvailableSoundBanks.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.lstbAvailableSoundBanks.Size = new System.Drawing.Size(241, 212);
+            this.lstbAvailableSoundBanks.Sorted = true;
             this.lstbAvailableSoundBanks.TabIndex = 10;
             // 
             // groupBox2
@@ -639,6 +641,42 @@ namespace sb_editor.Forms
             this.grbxSFXsFolderPath.TabStop = false;
             this.grbxSFXsFolderPath.Text = "Platform Output Folder Path";
             // 
+            // grbxSoundDetails
+            // 
+            this.grbxSoundDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.grbxSoundDetails.Controls.Add(this.btnSearchSoundDetails);
+            this.grbxSoundDetails.Controls.Add(this.txtSoundDetails);
+            this.grbxSoundDetails.Location = new System.Drawing.Point(6, 45);
+            this.grbxSoundDetails.Name = "grbxSoundDetails";
+            this.grbxSoundDetails.Size = new System.Drawing.Size(378, 50);
+            this.grbxSoundDetails.TabIndex = 2;
+            this.grbxSoundDetails.TabStop = false;
+            this.grbxSoundDetails.Text = "Sound Details File";
+            // 
+            // btnSearchSoundDetails
+            // 
+            this.btnSearchSoundDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSearchSoundDetails.Location = new System.Drawing.Point(346, 18);
+            this.btnSearchSoundDetails.Name = "btnSearchSoundDetails";
+            this.btnSearchSoundDetails.Size = new System.Drawing.Size(26, 20);
+            this.btnSearchSoundDetails.TabIndex = 3;
+            this.btnSearchSoundDetails.Text = "...";
+            this.btnSearchSoundDetails.UseVisualStyleBackColor = true;
+            this.btnSearchSoundDetails.Click += new System.EventHandler(this.BtnSearchSoundDetails_Click);
+            // 
+            // txtSoundDetails
+            // 
+            this.txtSoundDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSoundDetails.BackColor = System.Drawing.SystemColors.Window;
+            this.txtSoundDetails.Location = new System.Drawing.Point(6, 19);
+            this.txtSoundDetails.Name = "txtSoundDetails";
+            this.txtSoundDetails.ReadOnly = true;
+            this.txtSoundDetails.Size = new System.Drawing.Size(334, 20);
+            this.txtSoundDetails.TabIndex = 2;
+            this.txtSoundDetails.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TxtSoundDetails_MouseDoubleClick);
+            // 
             // btnSearchOutPath
             // 
             this.btnSearchOutPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -789,42 +827,6 @@ namespace sb_editor.Forms
             this.btn_musicApp.UseVisualStyleBackColor = true;
             this.btn_musicApp.Click += new System.EventHandler(this.Btn_musicApp_Click);
             // 
-            // grbxSoundDetails
-            // 
-            this.grbxSoundDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.grbxSoundDetails.Controls.Add(this.btnSearchSoundDetails);
-            this.grbxSoundDetails.Controls.Add(this.txtSoundDetails);
-            this.grbxSoundDetails.Location = new System.Drawing.Point(6, 45);
-            this.grbxSoundDetails.Name = "grbxSoundDetails";
-            this.grbxSoundDetails.Size = new System.Drawing.Size(378, 50);
-            this.grbxSoundDetails.TabIndex = 2;
-            this.grbxSoundDetails.TabStop = false;
-            this.grbxSoundDetails.Text = "Sound Details File";
-            // 
-            // btnSearchSoundDetails
-            // 
-            this.btnSearchSoundDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSearchSoundDetails.Location = new System.Drawing.Point(346, 18);
-            this.btnSearchSoundDetails.Name = "btnSearchSoundDetails";
-            this.btnSearchSoundDetails.Size = new System.Drawing.Size(26, 20);
-            this.btnSearchSoundDetails.TabIndex = 3;
-            this.btnSearchSoundDetails.Text = "...";
-            this.btnSearchSoundDetails.UseVisualStyleBackColor = true;
-            this.btnSearchSoundDetails.Click += new System.EventHandler(this.btnSearchSoundDetails_Click);
-            // 
-            // txtSoundDetails
-            // 
-            this.txtSoundDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSoundDetails.BackColor = System.Drawing.SystemColors.Window;
-            this.txtSoundDetails.Location = new System.Drawing.Point(6, 19);
-            this.txtSoundDetails.Name = "txtSoundDetails";
-            this.txtSoundDetails.ReadOnly = true;
-            this.txtSoundDetails.Size = new System.Drawing.Size(334, 20);
-            this.txtSoundDetails.TabIndex = 2;
-            this.txtSoundDetails.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.txtSoundDetails_MouseDoubleClick);
-            // 
             // openFileDialog
             // 
             this.openFileDialog.Filter = "SFX File (*.sfx)|*.sfx";
@@ -875,13 +877,13 @@ namespace sb_editor.Forms
             ((System.ComponentModel.ISupportInitialize)(this.picBox_ZX)).EndInit();
             this.grbxSFXsFolderPath.ResumeLayout(false);
             this.grbxSFXsFolderPath.PerformLayout();
+            this.grbxSoundDetails.ResumeLayout(false);
+            this.grbxSoundDetails.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.grbxTestingGroup.ResumeLayout(false);
             this.grbxTestingGroup.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trckBarMasterVolume)).EndInit();
-            this.grbxSoundDetails.ResumeLayout(false);
-            this.grbxSoundDetails.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
