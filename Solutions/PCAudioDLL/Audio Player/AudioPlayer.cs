@@ -29,7 +29,7 @@ namespace PCAudioDLL
         private readonly AudioMixer audioPlayer = new AudioMixer();
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void PlaySingleSfx(int fileVersion, string sbPlatform, List<StreamSample> streamedFile, Sample sfxSample, SoundBank soundBank, AudioVoices pcVoices, float[] audioPosition = null, bool enablePanning = false, int fixedVolume = -1)
+        internal void PlaySingleSfx(int fileVersion, string sbPlatform, List<StreamSample> streamedFile, Sample sfxSample, SoundBank soundBank, AudioVoices pcVoices, int fixedVolume = -1, float[] audioPosition = null, bool enablePanning = false)
         {
             pcVoices.ExitSound = false;
             bool LoopFlag = ((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Loop) & 1) == 1;
@@ -105,7 +105,7 @@ namespace PCAudioDLL
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void PlayShuffledSfx(int fileVersion, string sbPlatform, List<StreamSample> streamedFile, Sample sfxSample, SoundBank soundBank, AudioVoices pcVoices, float[] audioPosition = null, bool enablePanning = false, int fixedVolume = -1)
+        internal void PlayShuffledSfx(int fileVersion, string sbPlatform, List<StreamSample> streamedFile, Sample sfxSample, SoundBank soundBank, AudioVoices pcVoices, int fixedVolume = -1, float[] audioPosition = null, bool enablePanning = false)
         {
             pcVoices.ExitSound = false;
             bool LoopFlag = ((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Loop) & 1) == 1;
@@ -193,7 +193,7 @@ namespace PCAudioDLL
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        internal void PlayPolyphonicSfx(int fileVersion, string sbPlatform, List<StreamSample> streamedFile, Sample sfxSample, SoundBank soundBank, AudioVoices pcVoices, float[] audioPosition = null, bool enablePanning = false, int fixedVolume = -1)
+        internal void PlayPolyphonicSfx(int fileVersion, string sbPlatform, List<StreamSample> streamedFile, Sample sfxSample, SoundBank soundBank, AudioVoices pcVoices, int fixedVolume = -1, float[] audioPosition = null, bool enablePanning = false)
         {
             pcVoices.ExitSound = false;
             bool LoopFlag = ((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Loop) & 1) == 1;
