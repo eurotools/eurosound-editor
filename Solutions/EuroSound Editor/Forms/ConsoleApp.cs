@@ -240,6 +240,9 @@ namespace sb_editor.Forms
                     }
                 }
             }
+
+            //Check if user can switch the platform
+            EnableOrDisablePlatformSelection();
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -254,9 +257,12 @@ namespace sb_editor.Forms
                 string sbPath = Path.Combine(GlobalPrefs.ProjectFolder, "SoundBanks", lstbLoadedSoundBanks.SelectedItems[i] + ".txt");
                 SoundBank soundBankData = TextFiles.ReadSoundbankFile(sbPath);
 
-                //Load Soundbank in the DLL
+                //Unload Soundbank in the DLL
                 pcDll.UnloadSoundbank(SoundBankHashcodePrefix + soundBankData.HashCode);
+
+                //Update UI
                 lstbLoadedSoundBanks.Items.Remove(lstbLoadedSoundBanks.SelectedItems[i]);
+                lstbSamples.Items.Clear();
             }
 
             //Select next item
@@ -267,6 +273,9 @@ namespace sb_editor.Forms
 
             //Update Available SFXs List
             UpdateAvailableSFXs();
+
+            //Check if user can switch the platform
+            EnableOrDisablePlatformSelection();
         }
         
         //-------------------------------------------------------------------------------------------------------------------------------
@@ -290,6 +299,27 @@ namespace sb_editor.Forms
             }
             lstBox_SFXs.Items.AddRange(sfxLabels.ToArray());
             lstBox_SFXs.EndUpdate();
+        }
+
+        //-------------------------------------------------------------------------------------------
+        //  Platform Type
+        //-------------------------------------------------------------------------------------------
+        private void EnableOrDisablePlatformSelection()
+        {
+            bool status = lstbLoadedSoundBanks.Items.Count == 0;
+            rbtn_GameCube.AutoCheck = status;
+            rbtn_PC.AutoCheck = status;
+            rbtn_PS2.AutoCheck = status;
+            rbtn_Xbox.AutoCheck = status;
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        private void Rbtn_platform_Click(object sender, EventArgs e)
+        {
+            if (lstbLoadedSoundBanks.Items.Count > 0)
+            {
+                MessageBox.Show("Can not change the platform type when there are soundbanks loaded!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         //-------------------------------------------------------------------------------------------

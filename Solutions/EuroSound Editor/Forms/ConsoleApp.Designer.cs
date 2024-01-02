@@ -41,6 +41,7 @@ namespace sb_editor.Forms
             this.labelListX = new System.Windows.Forms.Label();
             this.btnStart3dSound = new System.Windows.Forms.Button();
             this.grbxSfxPlay = new System.Windows.Forms.GroupBox();
+            this.nudHashCodePlaying = new System.Windows.Forms.NumericUpDown();
             this.btnPlaySample = new System.Windows.Forms.Button();
             this.grbxSamplePlay = new System.Windows.Forms.GroupBox();
             this.chkStreamingTest = new System.Windows.Forms.CheckBox();
@@ -88,13 +89,13 @@ namespace sb_editor.Forms
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.btn_musicApp = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.nudHashCodePlaying = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.nudHashCode)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudZ)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudX)).BeginInit();
             this.grbxSfxPlay.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudHashCodePlaying)).BeginInit();
             this.grbxSamplePlay.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudOuterRadius)).BeginInit();
@@ -111,7 +112,6 @@ namespace sb_editor.Forms
             this.groupBox3.SuspendLayout();
             this.grbxTestingGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trckBarMasterVolume)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudHashCodePlaying)).BeginInit();
             this.SuspendLayout();
             // 
             // btnStartSFX
@@ -277,6 +277,26 @@ namespace sb_editor.Forms
             this.grbxSfxPlay.TabIndex = 5;
             this.grbxSfxPlay.TabStop = false;
             this.grbxSfxPlay.Text = "SFX Play";
+            // 
+            // nudHashCodePlaying
+            // 
+            this.nudHashCodePlaying.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.nudHashCodePlaying.Hexadecimal = true;
+            this.nudHashCodePlaying.Location = new System.Drawing.Point(185, 41);
+            this.nudHashCodePlaying.Maximum = new decimal(new int[] {
+            -1,
+            0,
+            0,
+            0});
+            this.nudHashCodePlaying.Name = "nudHashCodePlaying";
+            this.nudHashCodePlaying.Size = new System.Drawing.Size(95, 20);
+            this.nudHashCodePlaying.TabIndex = 16;
+            this.nudHashCodePlaying.Value = new decimal(new int[] {
+            436207636,
+            0,
+            0,
+            0});
+            this.nudHashCodePlaying.Visible = false;
             // 
             // btnPlaySample
             // 
@@ -741,10 +761,10 @@ namespace sb_editor.Forms
             this.rbtn_Xbox.Name = "rbtn_Xbox";
             this.rbtn_Xbox.Size = new System.Drawing.Size(49, 17);
             this.rbtn_Xbox.TabIndex = 3;
-            this.rbtn_Xbox.TabStop = true;
             this.rbtn_Xbox.Text = "Xbox";
             this.rbtn_Xbox.UseVisualStyleBackColor = true;
             this.rbtn_Xbox.CheckedChanged += new System.EventHandler(this.Rbtn_Xbox_CheckedChanged);
+            this.rbtn_Xbox.Click += new System.EventHandler(this.Rbtn_platform_Click);
             // 
             // rbtn_GameCube
             // 
@@ -753,10 +773,10 @@ namespace sb_editor.Forms
             this.rbtn_GameCube.Name = "rbtn_GameCube";
             this.rbtn_GameCube.Size = new System.Drawing.Size(81, 17);
             this.rbtn_GameCube.TabIndex = 2;
-            this.rbtn_GameCube.TabStop = true;
             this.rbtn_GameCube.Text = "Game Cube";
             this.rbtn_GameCube.UseVisualStyleBackColor = true;
             this.rbtn_GameCube.CheckedChanged += new System.EventHandler(this.Rbtn_GameCube_CheckedChanged);
+            this.rbtn_GameCube.Click += new System.EventHandler(this.Rbtn_platform_Click);
             // 
             // rbtn_PS2
             // 
@@ -765,14 +785,15 @@ namespace sb_editor.Forms
             this.rbtn_PS2.Name = "rbtn_PS2";
             this.rbtn_PS2.Size = new System.Drawing.Size(87, 17);
             this.rbtn_PS2.TabIndex = 1;
-            this.rbtn_PS2.TabStop = true;
             this.rbtn_PS2.Text = "PlayStation 2";
             this.rbtn_PS2.UseVisualStyleBackColor = true;
             this.rbtn_PS2.CheckedChanged += new System.EventHandler(this.Rbtn_PS2_CheckedChanged);
+            this.rbtn_PS2.Click += new System.EventHandler(this.Rbtn_platform_Click);
             // 
             // rbtn_PC
             // 
             this.rbtn_PC.AutoSize = true;
+            this.rbtn_PC.Checked = true;
             this.rbtn_PC.Location = new System.Drawing.Point(6, 22);
             this.rbtn_PC.Name = "rbtn_PC";
             this.rbtn_PC.Size = new System.Drawing.Size(39, 17);
@@ -781,6 +802,7 @@ namespace sb_editor.Forms
             this.rbtn_PC.Text = "PC";
             this.rbtn_PC.UseVisualStyleBackColor = true;
             this.rbtn_PC.CheckedChanged += new System.EventHandler(this.Rbtn_PC_CheckedChanged);
+            this.rbtn_PC.Click += new System.EventHandler(this.Rbtn_platform_Click);
             // 
             // btnSfxReset
             // 
@@ -836,26 +858,6 @@ namespace sb_editor.Forms
             this.openFileDialog.Filter = "SFX File (*.sfx)|*.sfx";
             this.openFileDialog.RestoreDirectory = true;
             // 
-            // nudHashCodePlaying
-            // 
-            this.nudHashCodePlaying.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.nudHashCodePlaying.Hexadecimal = true;
-            this.nudHashCodePlaying.Location = new System.Drawing.Point(185, 41);
-            this.nudHashCodePlaying.Maximum = new decimal(new int[] {
-            -1,
-            0,
-            0,
-            0});
-            this.nudHashCodePlaying.Name = "nudHashCodePlaying";
-            this.nudHashCodePlaying.Size = new System.Drawing.Size(95, 20);
-            this.nudHashCodePlaying.TabIndex = 16;
-            this.nudHashCodePlaying.Value = new decimal(new int[] {
-            436207636,
-            0,
-            0,
-            0});
-            this.nudHashCodePlaying.Visible = false;
-            // 
             // ConsoleApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -887,6 +889,7 @@ namespace sb_editor.Forms
             ((System.ComponentModel.ISupportInitialize)(this.nudY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudX)).EndInit();
             this.grbxSfxPlay.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.nudHashCodePlaying)).EndInit();
             this.grbxSamplePlay.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.nudOuterRadius)).EndInit();
@@ -908,7 +911,6 @@ namespace sb_editor.Forms
             this.grbxTestingGroup.ResumeLayout(false);
             this.grbxTestingGroup.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trckBarMasterVolume)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudHashCodePlaying)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
