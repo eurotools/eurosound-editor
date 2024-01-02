@@ -73,6 +73,8 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------------------------------------------
         private void Form1_Shown(object sender, EventArgs e)
         {
+            btnLoadSoundbanks.Cursor = new Cursor(new MemoryStream(Properties.Resources.arrow_left));
+            btnDeLoadSoundBanks.Cursor = new Cursor(new MemoryStream(Properties.Resources.arrow_right));
             DrawGrid(picBox_ZX, 30);
             DrawGrid(picBox_XY, 50, false, true);
         }
