@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace PCAudioDLL
@@ -18,11 +19,18 @@ namespace PCAudioDLL
             {
                 if (TxtConsole.InvokeRequired)
                 {
-                    TxtConsole.Invoke((MethodInvoker)delegate
+                    try
                     {
+                        TxtConsole.Invoke((MethodInvoker)delegate
+                        {
 
-                        TxtConsole.Text += message + Environment.NewLine;
-                    });
+                            TxtConsole.Text += message + Environment.NewLine;
+                        });
+                    }
+                    catch(Exception ex)
+                    {
+                        Debug.Write(ex.Message);
+                    }
                 }
                 else
                 {
