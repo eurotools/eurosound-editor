@@ -126,7 +126,7 @@ namespace PCAudioDLL
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------
-        public uint StartSound(uint SoundHashcode, uint subSfxParentHashCode = 0)
+        public uint StartSound(uint SoundHashcode, uint subSfxParentHashCode = 0, int volume = -1)
         {
             AudioPlayer audioPlayer = new AudioPlayer();
             uint playingHashCode = 0;
@@ -168,17 +168,17 @@ namespace PCAudioDLL
                                 //If false it will pick and play randomly one of the samples in the list. 
                                 if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.MultiSample) & 1) == 0)
                                 {
-                                    audioPlayer.PlaySingleSfx(fileVersion, sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices);
+                                    audioPlayer.PlaySingleSfx(fileVersion, sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, volume);
                                 }
                                 else
                                 {
                                     if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Polyphonic) & 1) == 1)
                                     {
-                                        audioPlayer.PlayPolyphonicSfx(fileVersion, sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices);
+                                        audioPlayer.PlayPolyphonicSfx(fileVersion, sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, volume);
                                     }
                                     else
                                     {
-                                        audioPlayer.PlayShuffledSfx(fileVersion, sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices);
+                                        audioPlayer.PlayShuffledSfx(fileVersion, sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, volume);
                                     }
                                 }
                             }
@@ -241,17 +241,17 @@ namespace PCAudioDLL
                                 //If false it will pick and play randomly one of the samples in the list. 
                                 if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.MultiSample) & 1) == 0)
                                 {
-                                    audioPlayer.PlaySingleSfx(fileVersion, sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, audioPosition, enablePanning, volume);
+                                    audioPlayer.PlaySingleSfx(fileVersion, sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, volume, audioPosition, enablePanning);
                                 }
                                 else
                                 {
                                     if (((sfxSample.Flags >> (int)SoundBankReader.OldFlags.Polyphonic) & 1) == 1)
                                     {
-                                        audioPlayer.PlayPolyphonicSfx(fileVersion, sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, audioPosition, enablePanning, volume);
+                                        audioPlayer.PlayPolyphonicSfx(fileVersion, sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, volume, audioPosition, enablePanning);
                                     }
                                     else
                                     {
-                                        audioPlayer.PlayShuffledSfx(fileVersion, sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, audioPosition, enablePanning, volume);
+                                        audioPlayer.PlayShuffledSfx(fileVersion, sbOutputPlatform, streamedFile, sfxSample, soundBank.Value, audioVoices, volume, audioPosition, enablePanning);
                                     }
                                 }
                             }

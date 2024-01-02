@@ -130,7 +130,7 @@ namespace sb_editor.Forms
         //-------------------------------------------------------------------------------------------
         private void BtnStartSFX_Click(object sender, EventArgs e)
         {
-            uint hashcode = pcDll.StartSound((uint)nudHashCode.Value);
+            uint hashcode = pcDll.StartSound((uint)nudHashCode.Value, 0, trckBarMasterVolume.Value);
             if (hashcode > 0)
             {
                 nudHashCodePlaying.Value = hashcode;
